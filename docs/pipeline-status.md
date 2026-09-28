@@ -1,0 +1,29 @@
+# Pipeline status
+
+| Phase | Status | Commit |
+|---|---|---|
+| 0 Setup (BMAD v6.12.0 bmm + cursor, git, GitHub remote) | done | 4a9d259 |
+| 1a Farata teardown (`docs/competitor-farata.md`) + 1b names/RDAP (`docs/name-options.md`) | done | d6d7d63 |
+| 1c Headless bmad-brainstorming (153 ideas, 4 techniques) | done | 65bb352 |
+| 1c amend (must-have #5 + Android to MVP MUST) | done | 2a13408 |
+| 2 Product brief | **not started** (awaiting go-ahead) | — |
+
+## bmad-help answer after Phase 1 (2026-09-27 ~21:35 ET, model cursor-grok-4.6-high-fast)
+
+> **You are in BMad Method, plan phase.** Brainstorming is done. There is no `_bmad-output/planning-artifacts/` folder, so no brief, PRD, or architecture yet.
+> 
+> **Next (optional, recommended):** [CB] **Create Brief** — `bmad-product-brief`  
+> A guided conversation that captures your product idea in a brief. A gentler alternative to the PRFAQ when you are already committed to your concept.  
+> Args: `-A`
+> 
+> **Why:** The catalog’s plan sequence is brainstorm → brief (or PRFAQ) → PRD. `bmad-prd` is the next *required* skill and is preceded-by `bmad-product-brief`. You already have a committed concept plus brief bindings in `brainstorm-intent.md`, so the brief is the right next step — not `bmad-prd` yet, and not `bmad-prfaq` (that is the Working Backwards alternative when the concept still needs pressure-testing).
+> 
+> **Inputs to feed `bmad-product-brief`:**
+> - `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (`brainstorm-intent.md`, `brainstorm.html`, `.memlog.md`)
+> - `docs/system-idea.md`
+> - `docs/competitor-farata.md` (parity P1–P59, differentiators D1–D23)
+> - `docs/name-options.md`
+> 
+> **After the brief (required):** [PRD] **Create Edit and Review PRD** — `bmad-prd`
+> 
+> Run `bmad-product-brief` in a **fresh context window**.
