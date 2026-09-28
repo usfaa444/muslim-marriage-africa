@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brainstorm keepsake — Muslim Marriage Africa, 27 Sep 2026</title>
+<style>
+:root {
+  --indigo-ink: #070b18;
+  --indigo-deep: #0c1228;
+  --indigo-mid: #151d3b;
+  --indigo-lift: #1e2a4a;
+  --indigo-line: #2a3a62;
+  --sand: #e8d5b0;
+  --sand-dim: #c4a574;
+  --sand-pale: #f4ead6;
+  --gold: #d4af37;
+  --gold-soft: #c9a227;
+  --gold-green: #8b9a4a;
+  --gold-green-deep: #5c6b32;
+  --dusk-rose: #8a5a4a;
+  --cream: #f5ecd8;
+  --muted: #a89b82;
+  --risk: #9a4a3a;
+  --control: #6d8a4a;
+  --must: #c9a227;
+  --next: #6b7a9a;
+  --later: #5a4a6a;
+  --split: #8b9a4a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, #243056 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 100% 20%, #2a2410 0%, transparent 40%),
+    var(--indigo-ink);
+  color: var(--cream);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 11px, rgba(212,175,55,0.18) 11px 12px),
+    repeating-linear-gradient(90deg, transparent 0 11px, rgba(212,175,55,0.18) 11px 12px);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 0%, transparent 70%);
+  z-index: 0;
+}
+.wrap { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: 0 28px 80px; }
+
+/* —— lattice + mihrab geometry —— */
+.mihrab {
+  width: min(720px, 92%);
+  margin: 0 auto;
+  padding: 0 0 8px;
+}
+.mihrab svg { display: block; width: 100%; height: auto; }
+.hero {
+  text-align: center;
+  padding: 18px 0 36px;
+}
+.kicker {
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+h1 {
+  font-family: Palatino, "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.1rem, 4.4vw, 3.4rem);
+  line-height: 1.15;
+  color: var(--sand-pale);
+}
+h1 em { font-style: italic; color: var(--gold); font-weight: 400; }
+.lede {
+  max-width: 46em;
+  margin: 18px auto 0;
+  color: var(--sand);
+  font-size: 1.05rem;
+}
+.meta {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 18px;
+  margin-top: 22px; font-size: 13px; color: var(--muted);
+}
+.meta span { border: 1px solid var(--indigo-line); padding: 4px 10px; border-radius: 999px; }
+
+/* parity banner */
+.parity {
+  margin: 8px 0 40px;
+  padding: 18px 22px 18px 26px;
+  border: 1px solid var(--gold);
+  background: linear-gradient(180deg, rgba(212,175,55,0.12), rgba(12,18,40,0.4));
+  position: relative;
+  box-shadow: 0 0 0 6px rgba(212,175,55,0.05);
+}
+.parity::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
+  background: linear-gradient(var(--gold), var(--gold-green));
+}
+.parity strong { color: var(--gold); letter-spacing: 0.08em; font-size: 12px; text-transform: uppercase; display: block; margin-bottom: 6px; }
+.parity p { color: var(--sand-pale); }
+
+/* sira nav */
+nav.sira {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  margin: 0 0 56px;
+  position: relative;
+}
+nav.sira::before {
+  content: "";
+  position: absolute;
+  top: 18px; left: 8%; right: 8%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold-soft), var(--gold-green), var(--gold-soft), transparent);
+  z-index: 0;
+}
+nav.sira a {
+  position: relative; z-index: 1;
+  text-decoration: none; color: var(--sand);
+  text-align: center; font-size: 12px; letter-spacing: 0.04em;
+}
+nav.sira a i {
+  display: block; width: 14px; height: 14px; margin: 12px auto 8px;
+  border: 2px solid var(--gold); background: var(--indigo-deep);
+  transform: rotate(45deg);
+}
+nav.sira a:hover { color: var(--gold); }
+nav.sira a:hover i { background: var(--gold); }
+
+section { margin-bottom: 88px; }
+h2 {
+  font-family: Palatino, Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  color: var(--sand-pale);
+  margin-bottom: 8px;
+}
+h2 .n {
+  color: var(--gold); font-size: 0.7em; letter-spacing: 0.16em;
+  display: block; margin-bottom: 4px;
+}
+.sec-lead { color: var(--muted); max-width: 52em; margin-bottom: 28px; }
+
+/* first principles */
+.qibla {
+  display: grid;
+  grid-template-columns: 1fr 72px 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-bottom: 36px;
+}
+.hem {
+  background: var(--indigo-mid);
+  border: 1px solid var(--indigo-line);
+  padding: 22px 20px;
+}
+.hem.islam { border-right: none; }
+.hem.sahel { border-left: none; }
+.hem h3 {
+  font-family: Palatino, Georgia, serif;
+  color: var(--gold);
+  font-weight: 400;
+  margin-bottom: 14px;
+  font-size: 1.15rem;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  border: 1px solid var(--sand-dim);
+  color: var(--sand);
+  padding: 5px 11px;
+  font-size: 13px;
+  background: rgba(232,213,176,0.05);
+}
+.chip.reality { border-color: var(--gold-green); color: #c9d4a4; }
+.spine {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, var(--gold-soft), var(--gold-green));
+  color: var(--indigo-ink);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-weight: 700;
+}
+
+.path {
+  position: relative;
+  padding: 8px 0 8px 36px;
+  border-left: 2px dashed var(--gold-soft);
+  margin-left: 18px;
+}
+.path .stage {
+  position: relative;
+  margin-bottom: 22px;
+  background: var(--indigo-mid);
+  border: 1px solid var(--indigo-line);
+  padding: 16px 18px 16px 20px;
+}
+.path .stage::before {
+  content: "";
+  position: absolute;
+  left: -46px; top: 22px;
+  width: 18px; height: 18px;
+  background: var(--indigo-ink);
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--indigo-ink);
+}
+.path .stage:nth-child(odd) { margin-right: 12%; }
+.path .stage:nth-child(even) { margin-left: 8%; }
+.stage .step {
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 4px;
+}
+.stage h4 { font-family: Palatino, Georgia, serif; font-weight: 400; font-size: 1.2rem; color: var(--sand-pale); }
+.stage p { color: var(--sand); font-size: 0.95rem; margin-top: 6px; }
+.tag { display: inline-block; font-size: 11px; letter-spacing: 0.04em; color: var(--gold-green); margin-top: 8px; }
+
+.alcoves {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 28px;
+}
+.alcove {
+  background: var(--indigo-deep);
+  border: 1px solid var(--indigo-line);
+  padding: 16px 16px 14px;
+  position: relative;
+}
+.alcove::after {
+  content: "";
+  position: absolute; top: 0; left: 18%; right: 18%; height: 10px;
+  border: 1px solid var(--gold-soft);
+  border-top: none; border-radius: 0 0 40px 40px;
+  opacity: 0.55;
+}
+.alcove h4 { font-family: Palatino, Georgia, serif; font-weight: 400; color: var(--sand-pale); margin: 12px 0 8px; font-size: 1.02rem; }
+.alcove p { color: var(--sand); font-size: 0.9rem; }
+.alcove .tag { display: block; }
+
+/* roles */
+.roles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.role {
+  background: var(--indigo-mid);
+  border: 1px solid var(--indigo-line);
+  min-height: 100%;
+  display: flex; flex-direction: column;
+}
+.role-arch {
+  height: 42px;
+  background:
+    radial-gradient(ellipse 70% 120% at 50% 120%, var(--indigo-ink) 54%, transparent 55%),
+    linear-gradient(180deg, var(--gold-soft), var(--gold-green-deep));
+}
+.role-body { padding: 12px 12px 16px; flex: 1; }
+.role h3 {
+  font-family: Palatino, Georgia, serif;
+  font-weight: 400;
+  font-size: 1.05rem;
+  color: var(--gold);
+  margin-bottom: 10px;
+  text-align: center;
+}
+.job {
+  font-size: 12.5px;
+  color: var(--sand);
+  padding: 8px 0;
+  border-top: 1px solid var(--indigo-line);
+}
+.job .kind {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.job.fn .kind { color: var(--gold); }
+.job.em .kind { color: #d4b8a0; }
+.job.so .kind { color: var(--gold-green); }
+
+/* scamper */
+.lenses {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.lens-tab {
+  cursor: pointer;
+  border: 1px solid var(--indigo-line);
+  background: var(--indigo-mid);
+  color: var(--sand);
+  padding: 12px 6px 14px;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  clip-path: polygon(20% 0, 80% 0, 100% 50%, 80% 100%, 20% 100%, 0 50%);
+}
+.lens-tab.active, .lens-tab:hover {
+  background: linear-gradient(180deg, #3a2e14, #1e2a1a);
+  color: var(--gold);
+  border-color: var(--gold-soft);
+}
+.lens-panel {
+  display: none;
+  border: 1px solid var(--gold-soft);
+  background: rgba(21,29,59,0.85);
+  padding: 18px 20px;
+  margin-bottom: 28px;
+}
+.lens-panel.show { display: block; }
+.lens-panel h3 { font-family: Palatino, Georgia, serif; color: var(--gold); font-weight: 400; margin-bottom: 12px; }
+.idea-row {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--indigo-line);
+  font-size: 0.92rem;
+}
+.idea-row code {
+  color: var(--gold);
+  font-size: 12px;
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
+/* ribbon */
+.ribbon-wrap { margin-top: 8px; }
+.ribbon-legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+.dot { display: inline-block; width: 9px; height: 9px; margin-right: 5px; vertical-align: middle; }
+.dot.must { background: var(--must); }
+.dot.next { background: var(--next); }
+.dot.split { background: var(--split); }
+.dot.later { background: var(--later); }
+.ribbon {
+  display: flex; flex-wrap: wrap; gap: 4px;
+}
+.bead {
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 10px;
+  cursor: pointer;
+  border: 1px solid var(--indigo-line);
+  color: var(--cream);
+  position: relative;
+}
+.bead.must { background: #3a3012; border-color: var(--must); color: var(--gold); }
+.bead.next { background: #1a2238; border-color: #4a5a78; color: #b8c4d8; }
+.bead.split { background: #243018; border-color: var(--split); color: #c8d8a0; }
+.bead.later { background: #221828; border-color: #6a5080; color: #c8b4d8; }
+.bead:hover { transform: translateY(-2px); }
+.bead-tip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  background: var(--sand-pale);
+  color: var(--indigo-ink);
+  padding: 8px 10px;
+  font-size: 12px;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  z-index: 5;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+.bead:hover .bead-tip { display: block; }
+
+/* reverse / chaos */
+.night {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 0%, rgba(154,74,58,0.18), transparent 50%),
+    var(--indigo-deep);
+  border: 1px solid var(--indigo-line);
+  padding: 22px 20px 10px;
+}
+.inv {
+  display: grid;
+  grid-template-columns: 1fr 48px 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-bottom: 8px;
+}
+.inv .abuse, .inv .ctrl {
+  padding: 10px 12px;
+  font-size: 0.88rem;
+}
+.inv .abuse { background: rgba(154,74,58,0.16); border: 1px solid #5a3028; color: #f0d0c4; }
+.inv .ctrl { background: rgba(109,138,74,0.14); border: 1px solid #3a4a28; color: #d8e4b8; }
+.inv .arrow {
+  display: grid; place-items: center;
+  color: var(--gold);
+  font-size: 18px;
+}
+.inv .risk {
+  display: block; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--sand-dim); margin-bottom: 3px;
+}
+.chaos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 22px;
+}
+.storm {
+  border: 1px solid var(--indigo-line);
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(90,50,70,0.25), rgba(21,29,59,0.8));
+}
+.storm h4 { font-family: Palatino, Georgia, serif; font-weight: 400; color: #e8c4b0; margin-bottom: 6px; }
+.storm p { font-size: 0.9rem; color: var(--sand); }
+.storm .calm { color: #c8d8a0; margin-top: 8px; font-size: 0.88rem; }
+
+/* synthesis */
+.wedge {
+  position: relative;
+  padding: 36px 40px 32px;
+  text-align: center;
+  background: var(--indigo-mid);
+  border: 1px solid var(--gold);
+  clip-path: polygon(8% 0, 92% 0, 100% 18%, 100% 100%, 0 100%, 0 18%);
+  margin-bottom: 36px;
+}
+.wedge .label { letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); font-size: 11px; }
+.wedge p {
+  font-family: Palatino, Georgia, serif;
+  font-size: clamp(1.15rem, 2.2vw, 1.45rem);
+  line-height: 1.45;
+  color: var(--sand-pale);
+  margin-top: 12px;
+}
+.themes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 36px;
+}
+.theme {
+  border: 1px solid var(--indigo-line);
+  padding: 16px 14px 14px;
+  background: var(--indigo-deep);
+  text-align: center;
+}
+.theme .star {
+  width: 28px; height: 28px; margin: 0 auto 10px;
+  background: var(--gold);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+.theme h3 { font-family: Palatino, Georgia, serif; font-weight: 400; font-size: 0.98rem; color: var(--sand-pale); }
+.theme p { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+.tiers { display: grid; grid-template-columns: 1.15fr 1fr 0.75fr; gap: 12px; margin-bottom: 36px; }
+.tier { border: 1px solid var(--indigo-line); padding: 16px; background: var(--indigo-mid); }
+.tier h3 { font-family: Palatino, Georgia, serif; font-weight: 400; margin-bottom: 10px; }
+.tier.must h3 { color: var(--gold); }
+.tier.next h3 { color: #b8c4d8; }
+.tier.later h3 { color: #c8b4d8; }
+.tier ul { padding-left: 1.1em; color: var(--sand); font-size: 0.88rem; }
+.tier li { margin: 5px 0; }
+.note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+
+.constellation {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin: 8px 0 28px;
+}
+.dstar {
+  border: 1px solid var(--indigo-line);
+  padding: 7px 9px;
+  font-size: 11.5px;
+  color: var(--sand);
+  background: var(--indigo-deep);
+}
+.dstar.must { border-color: var(--must); }
+.dstar.next { border-color: var(--next); }
+.dstar.later { border-color: var(--later); }
+.dstar b { color: var(--gold); font-family: ui-monospace, Consolas, monospace; margin-right: 4px; }
+
+.names { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.namecard {
+  border: 1px solid var(--gold-soft);
+  background: linear-gradient(180deg, #2a2414, var(--indigo-mid));
+  padding: 18px 16px;
+  text-align: center;
+}
+.namecard h3 { font-family: Palatino, Georgia, serif; font-weight: 400; font-size: 1.4rem; color: var(--sand-pale); }
+.namecard .mean { color: var(--sand-dim); font-size: 13px; font-style: italic; margin: 6px 0 12px; }
+.rdap { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.seal {
+  font-size: 11px; letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border: 1px solid var(--gold-green);
+  color: #c8d8a0;
+}
+.seal.taken { border-color: var(--dusk-rose); color: #e8b8a8; }
+.wild { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+.rdap-note { font-size: 13px; color: var(--muted); }
+
+.links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 28px 0;
+}
+.link {
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  background: var(--indigo-mid);
+  font-size: 0.9rem;
+  color: var(--sand);
+}
+.qs { columns: 2; column-gap: 22px; }
+.qs p {
+  break-inside: avoid;
+  font-size: 0.88rem;
+  color: var(--sand);
+  padding: 8px 0;
+  border-top: 1px solid var(--indigo-line);
+}
+.qs p strong { color: var(--gold); font-weight: 600; }
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--indigo-line);
+}
+
+@media (max-width: 980px) {
+  .qibla, .roles, .lenses, .themes, .tiers, .names { grid-template-columns: 1fr 1fr; }
+  nav.sira { grid-template-columns: 1fr 1fr; }
+  nav.sira::before { display: none; }
+  .roles { grid-template-columns: 1fr 1fr; }
+  .alcoves { grid-template-columns: 1fr 1fr; }
+  .lenses { grid-template-columns: 1fr 1fr 1fr; }
+  .lens-tab { clip-path: none; }
+}
+@media (max-width: 700px) {
+  .qibla, .inv, .chaos-grid, .themes, .tiers, .names, .wild, .links, .roles, .alcoves { grid-template-columns: 1fr; }
+  .qs { columns: 1; }
+  .path .stage:nth-child(odd), .path .stage:nth-child(even) { margin: 0 0 22px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="mihrab" aria-hidden="true">
+    <svg viewBox="0 0 720 160" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40 158 V78 Q40 18 360 8 Q680 18 680 78 V158" fill="none" stroke="#d4af37" stroke-width="1.6"/>
+      <path d="M70 158 V86 Q70 36 360 28 Q650 36 650 86 V158" fill="none" stroke="#8b9a4a" stroke-width="1"/>
+      <path d="M360 28 V8" stroke="#d4af37" stroke-width="1.2"/>
+      <circle cx="360" cy="22" r="4" fill="#d4af37"/>
+      <path d="M200 158 Q200 100 360 70 Q520 100 520 158" fill="none" stroke="#c4a574" stroke-width="0.8" opacity="0.7"/>
+    </svg>
+  </div>
+  <p class="kicker">Brainstorm session · 27 September 2026 · Burkina Faso first</p>
+  <h1>A sira toward <em>nikah</em>,<br>not another swipe from Dakar</h1>
+  <p class="lede">Marriage-focused matrimony for African Muslim brothers and sisters — web and mobile — launching in Ouagadougou, then Bobo-Dioulasso, then the corridor. Headless run: First Principles → Jobs-to-be-Done → SCAMPER on Farata P1–P59 → Reverse Brainstorming + Chaos. Name still TBD. No brief, PRD, or architecture in this session.</p>
+  <div class="meta">
+    <span>French-first UI</span>
+    <span>Mooré + Dioula audio = D18</span>
+    <span>XOF · Orange Money BF · Moov Africa BF · Wave/Coris</span>
+    <span>Evidence labels only: Offered (seen) / Claimed / Not publicly evidenced</span>
+  </div>
+</header>
+
+<aside class="parity" id="parity">
+  <strong>Parity carry-forward</strong>
+  <p>Every item P1–P59 is a required feature for the product brief and PRD. Nothing from P1–P59 may be silently dropped. If deferred, it is marked <em>parity — deferred to NEXT/LATER</em> with a reason, never removed. Intent: implement every Farata feature. Differentiators D1–D23 are carried forward in full; this session added D24–D40. Sisters’ safety and dignity are never paywalled.</p>
+</aside>
+
+<nav class="sira" aria-label="Session path">
+  <a href="#principles"><i></i>First Principles</a>
+  <a href="#jobs"><i></i>Jobs · five roles</a>
+  <a href="#scamper"><i></i>SCAMPER · seven lenses</a>
+  <a href="#reverse"><i></i>Reverse + Chaos</a>
+  <a href="#synthesis"><i></i>Synthesis</a>
+</nav>
+
+<!-- ===================== 1 FIRST PRINCIPLES ===================== -->
+<section id="principles">
+  <h2><span class="n">Technique I</span>First Principles — Islamic norms + West African realities</h2>
+  <p class="sec-lead">Courtship as khalwa, wali, niyyah, haya, ta'aruf, khitba, mahr, consent, family, and istikhara — held against French + Mooré + Dioula, low-end Android, expensive data, mobile money, family-driven marriage, honest polygamy disclosure, and the diaspora.</p>
+
+  <div class="qibla">
+    <div class="hem islam">
+      <h3>Norms that cannot be bargained</h3>
+      <div class="chips">
+        <span class="chip">khalwa</span>
+        <span class="chip">wali</span>
+        <span class="chip">niyyah</span>
+        <span class="chip">haya</span>
+        <span class="chip">ta'aruf</span>
+        <span class="chip">khitba</span>
+        <span class="chip">mahr</span>
+        <span class="chip">consent</span>
+        <span class="chip">family</span>
+        <span class="chip">istikhara</span>
+      </div>
+    </div>
+    <div class="spine">and also</div>
+    <div class="hem sahel">
+      <h3>Realities that cannot be ignored</h3>
+      <div class="chips">
+        <span class="chip reality">French + Mooré + Dioula</span>
+        <span class="chip reality">low-end Android</span>
+        <span class="chip reality">expensive data</span>
+        <span class="chip reality">mobile money</span>
+        <span class="chip reality">family-driven marriage</span>
+        <span class="chip reality">honest polygamy disclosure</span>
+        <span class="chip reality">diaspora corridor</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="sec-lead">The productized ta'aruf path — current stage always visible so niyyah stays marriage-shaped, not dating. Extends D3.</p>
+  <div class="path">
+    <article class="stage">
+      <div class="step">Stage 1</div>
+      <h4>Invite</h4>
+      <p>Woman’s consent is first-class: a sister must explicitly accept before any chat opens. Decline is quiet — no guilt timer, no “she saw this.” The brother only sees not-accepted. Strengthens P28. Language ban: copy is mariage / ta'aruf / nikah / khitba, never dating or rencontre romantique (P44).</p>
+      <span class="tag">Islamic process · P28 · P3 niyyah lock</span>
+    </article>
+    <article class="stage">
+      <div class="step">Stage 2</div>
+      <h4>Wali-aware chat</h4>
+      <p>Khalwa-safe: no 1:1 live video or voice until a wali is present or a chaperoned family meeting is scheduled — text and async moderated voice only until then. Wali as process actor, not spectator: flag, pause, end chat, propose a meeting, later attest nikah (D1–D3). Optional, sister-initiated.</p>
+      <span class="tag">New D · D1–D3 · shared-device PIN on family Android</span>
+    </article>
+    <article class="stage">
+      <div class="step">Stage 3</div>
+      <h4>Family intro</h4>
+      <p>Haya-default media: opposite-gender photos blurred by default; voice optional and pre-moderated; GIFs and stickers only from a curated modest set (P33). Istikhara companion after N messages or before accept: discreet reminder and optional private journal — explicitly not a fatwa or AI ruling.</p>
+      <span class="tag">D8 · P33 · new D istikhara</span>
+    </article>
+    <article class="stage">
+      <div class="step">Stage 4</div>
+      <h4>Khitba planner</h4>
+      <p>Khitba is a family event. The planner exports a simple who / when / where card both families can screenshot-with-consent — not a dating calendar. Mahr conversation card: optional structured, dignified template so sadaq is discussed with family in the loop, not bargained as flirt chat (P50).</p>
+      <span class="tag">D3 · new D mahr card · ritual</span>
+    </article>
+    <article class="stage">
+      <div class="step">Stage 5</div>
+      <h4>Nikah report</h4>
+      <p>Dual-confirm marriage close: both tap we-married; optional private nikah proof; both accounts enter married state together (D11). North-star metric is chaperoned meetings plus dual-confirmed nikah — not DAU or inflated members (D3, D11, D12). Contrast: Farata scale claims versus 10k+ Play downloads — Claimed versus Offered (seen).</p>
+      <span class="tag">D11 · D12 · proof, not hype</span>
+    </article>
+  </div>
+
+  <div class="alcoves">
+    <article class="alcove">
+      <h4>USSD / SMS essential path</h4>
+      <p>Accept or decline a request and receive wali alerts without data, so 2G and family feature-phones participate. Pairs D19. Week-long data or electricity strain in Ouaga still leaves a path.</p>
+      <span class="tag">New D · West Africa access</span>
+    </article>
+    <article class="alcove">
+      <h4>Shared-device PIN</h4>
+      <p>Sister profile locked on a family Android so a brother or father cannot open her chats. Wali dashboard later needs the same lock and a session timeout.</p>
+      <span class="tag">D28 · West Africa access</span>
+    </article>
+    <article class="alcove">
+      <h4>Data-lite cards</h4>
+      <p>Text-first, one compressed photo, offline-cached browse queue of N profiles. Mooré and Dioula audio onboarding so low-literacy users complete P7 without reading French.</p>
+      <span class="tag">D19 · D18</span>
+    </article>
+    <article class="alcove">
+      <h4>Honest polygamy</h4>
+      <p>Required for brothers: single / already married + wives / open to polygyny — visible before a sister accepts (D14). Diaspora corridor filters: lives-in / origin / willing to relocate (hijra) for BF ↔ CI / Mali / SN / France (P16, P17).</p>
+      <span class="tag">D14 · P16 · P17</span>
+    </article>
+    <article class="alcove">
+      <h4>Quiet hours &amp; checkout</h4>
+      <p>Default no push between Isha and Fajr local time (modifies P35). Checkout is Orange Money BF / Moov Africa BF / Coris Money / Wave first; cards via Stripe are secondary (P58 + D17).</p>
+      <span class="tag">New D quiet hours · D17</span>
+    </article>
+    <article class="alcove">
+      <h4>Verification as a public good</h4>
+      <p>Phone OTP + liveness selfie + ID are free. Badges show phone / ID / wali-verified. Never sell a “looks verified” Premium badge — Farata Premium-bundled badge is Claimed. P8 human review of every first profile before live, with a published free SLA; paid only buys a faster queue.</p>
+      <span class="tag">D13 · P8 · P9 · trust</span>
+    </article>
+    <article class="alcove">
+      <h4>Small-city doxxing resistance</h4>
+      <p>Default pseudonym, city-level location, quartier optional and hidden until match (P27). Never use member likeness in ads or social without explicit per-use opt-in — opposite of Farata rules §07 (Offered (seen) policy) (D10). Publish only proof-backed counters (D23).</p>
+      <span class="tag">P27 · D10 · D23</span>
+    </article>
+    <article class="alcove">
+      <h4>CIL, imams, sisters free</h4>
+      <p>CIL filing and a local legal entity as a launch trust badge, not a footer footnote (D17). Named Burkina imam advisory board reviews Académie and coach sources (D21–D23). Sisters start conversations free; monetise brothers’ reach and convenience, never safety (D20; rebalances P30/P56). Optional mosque/imam attestation beside phone and ID (extends D13, D23).</p>
+      <span class="tag">D17 · D20 · D29</span>
+    </article>
+    <article class="alcove">
+      <h4>Voice that can travel</h4>
+      <p>Voice notes allowed in French, Mooré, and Dioula — always STT and audio-classified before delivery (D4 + D18). P10 photo-required-to-contact stays, but sisters may remain blurred until reveal-on-match or reveal-on-request (D8).</p>
+      <span class="tag">D4 · D8 · D18</span>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== 2 JTBD ===================== -->
+<section id="jobs">
+  <h2><span class="n">Technique II</span>Jobs-to-be-Done via Role Playing</h2>
+  <p class="sec-lead">Five arches. Functional, emotional, and social jobs — sisters, brothers, walis and mahrams, moderators and T&amp;S, married couples.</p>
+
+  <div class="roles">
+    <article class="role">
+      <div class="role-arch"></div>
+      <div class="role-body">
+        <h3>Sisters</h3>
+        <div class="job fn"><span class="kind">Functional</span>Find a practicing brother without exposing face or phone to strangers → blur-by-default + no phone/WhatsApp until mutual accept and optional wali (D8, D5).</div>
+        <div class="job fn"><span class="kind">Functional</span>Let my father or brother read the conversation so I am not in khalwa → mahram-in-chat read-all (D1).</div>
+        <div class="job fn"><span class="kind">Functional</span>Know before I invest hope whether he is already married or wants a second wife → D14 visible pre-accept.</div>
+        <div class="job fn"><span class="kind">Functional</span>Decline without drama or follow-up → P29 no-resend + silent decline + one-tap block (P42).</div>
+        <div class="job fn"><span class="kind">Functional</span>Guarantee my photo will not appear in Instagram ads → D10 per-use opt-in only.</div>
+        <div class="job fn"><span class="kind">Functional</span>“I need to use this on 1GB/month” → D19 lite + compressed images + no autoplay video.</div>
+        <div class="job em"><span class="kind">Emotional</span>Feel haya-safe and still hopeful → dignity-first free safety stack (D20).</div>
+        <div class="job em"><span class="kind">Emotional</span>Not be recognised and mocked in my quartier → P27 anonymous/discreet + coarse geo.</div>
+        <div class="job em"><span class="kind">Emotional</span>Trust that a no stays a no → post-decline no-contact + new-account fingerprint ban (D7).</div>
+        <div class="job so"><span class="kind">Social</span>My family can say this path was honorable → wali dashboard + chaperoned meeting planner (D2, D3).</div>
+        <div class="job so"><span class="kind">Social</span>Show married cousins a real Ouaga/Bobo couple, not anonymous app-experience quotes (Farata P54 Offered (seen) are not marriages) → D12.</div>
+      </div>
+    </article>
+
+    <article class="role">
+      <div class="role-arch"></div>
+      <div class="role-body">
+        <h3>Brothers</h3>
+        <div class="job fn"><span class="kind">Functional</span>See sisters who share practice / madhhab / hijra plans without endless swipe → P16–P20 with marriage-criteria first.</div>
+        <div class="job fn"><span class="kind">Functional</span>Declare polygamy intent once so I am honest and not later reported → D14 as self-serve, not only accusation.</div>
+        <div class="job fn"><span class="kind">Functional</span>Send a sincere first message, not a pickup line → P31/P32 Ice Breakers grounded in deen and family, scholar-reviewed.</div>
+        <div class="job fn"><span class="kind">Functional</span>Pay in XOF with Orange Money without a foreign card → P58 / D17.</div>
+        <div class="job fn"><span class="kind">Functional</span>Know when to involve her wali so I do not overstep → D1 presence banner + D3 meeting CTA.</div>
+        <div class="job fn"><span class="kind">Functional</span>Already married (polygyny): a path that is honest so I am not a liar before Allah → D14 + P3 pledge wording that names honesty about existing marriage.</div>
+        <div class="job em"><span class="kind">Emotional</span>Be seen as a serious suitor, not a player → P3 pledge + request quotas that punish spray-and-pray (P30).</div>
+        <div class="job em"><span class="kind">Emotional</span>Not waste months on a fake or romance-scam profile → D13 verification levels visible.</div>
+        <div class="job so"><span class="kind">Social</span>My mother will ask who her family is → family-intro fields + D3 meeting planner.</div>
+      </div>
+    </article>
+
+    <article class="role">
+      <div class="role-arch"></div>
+      <div class="role-body">
+        <h3>Walis / mahrams</h3>
+        <div class="job fn"><span class="kind">Functional</span>See all my ward’s conversations in one place without creating a dating-app identity → D2 guardian account type.</div>
+        <div class="job fn"><span class="kind">Functional</span>Pause or end a chat that becomes inappropriate → D1 controls.</div>
+        <div class="job fn"><span class="kind">Functional</span>Weekly digest, not 40 pings, because I have a shop to run → D2 digest notifications.</div>
+        <div class="job fn"><span class="kind">Functional</span>Prove I am really her father or brother so fake-wali scams fail → verified wali phone+ID + sister confirms relationship (D1).</div>
+        <div class="job fn"><span class="kind">Functional</span>Propose a mosque or family meeting both sides can accept → D3.</div>
+        <div class="job em"><span class="kind">Emotional</span>I failed if she is harmed; I need evidence if I must confront a man → wali-only exportable chat attestation.</div>
+        <div class="job so"><span class="kind">Social</span>Other fathers at the mosque will ask if this app is serious → D23 board + D12 verified marriages.</div>
+      </div>
+    </article>
+
+    <article class="role">
+      <div class="role-arch"></div>
+      <div class="role-body">
+        <h3>Moderators / T&amp;S</h3>
+        <div class="job fn"><span class="kind">Functional</span>One case with text / photo / audio + model scores + user report + device history → D7 console.</div>
+        <div class="job fn"><span class="kind">Functional</span>Catch the same phone or device opening new accounts after a ban → D7 fingerprinting (P44 multi-account).</div>
+        <div class="job fn"><span class="kind">Functional</span>Not be the only moral authority — escalate fiqh-edge cases to the advisor board → D21 deferral.</div>
+        <div class="job fn"><span class="kind">Functional</span>Be audited so I cannot peek at unblurred sister photos for curiosity → access logs + dual-control unblur. New D.</div>
+        <div class="job fn"><span class="kind">Functional</span>French macros that are respectful when I warn a member in Ouaga French → templated, reviewed sanction language.</div>
+        <div class="job em"><span class="kind">Emotional</span>Not burn out on indecent media → auto-blur in console + rotation / wellness. New D.</div>
+        <div class="job so"><span class="kind">Social</span>A wrongful ban in a small city is a reputation disaster → D6 appeal + second human review.</div>
+      </div>
+    </article>
+
+    <article class="role">
+      <div class="role-arch"></div>
+      <div class="role-body">
+        <h3>Married couples</h3>
+        <div class="job fn"><span class="kind">Functional</span>Tell the community we found each other here without exposing private chat → D11/D12 public story, private proof.</div>
+        <div class="job fn"><span class="kind">Functional</span>Close both accounts so neither stays “available” → joint married state (D11).</div>
+        <div class="job fn"><span class="kind">Functional · later</span>Optionally mentor a new sister or brother with read-only advice, not matchmaking. New D LATER.</div>
+        <div class="job em"><span class="kind">Emotional</span>Our story should help others make dua, not turn us into celebrities → faces optional / blurred, no chat excerpts.</div>
+        <div class="job so"><span class="kind">Social</span>Both families approve before a story goes public → extra consent gate on D12.</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===================== 3 SCAMPER ===================== -->
+<section id="scamper">
+  <h2><span class="n">Technique III</span>SCAMPER on Farata P1–P59</h2>
+  <p class="sec-lead">Seven lenses. Each output is tied to a P or D number. Farata statements keep only the evidence labels from the competitor document: Offered (seen), Claimed (marketing), Not publicly evidenced.</p>
+
+  <div class="lenses" role="tablist">
+    <button class="lens-tab active" data-lens="s" type="button">Substitute</button>
+    <button class="lens-tab" data-lens="c" type="button">Combine</button>
+    <button class="lens-tab" data-lens="a" type="button">Adapt</button>
+    <button class="lens-tab" data-lens="m" type="button">Modify</button>
+    <button class="lens-tab" data-lens="p" type="button">Other use</button>
+    <button class="lens-tab" data-lens="e" type="button">Eliminate</button>
+    <button class="lens-tab" data-lens="r" type="button">Reverse</button>
+  </div>
+
+  <div class="lens-panel show" id="lens-s">
+    <h3>Substitute — keep the duty, change the instrument</h3>
+    <div class="idea-row"><code>P2</code><p>Keep Google; add Apple on iOS (store compliance) and explore Orange / Moov identity where available — do not depend on Google-only in BF.</p></div>
+    <div class="idea-row"><code>P49</code><p>Replace “Cheikh Moussa / Amadou” dual persona (Farata Offered [bundle] vs store Claimed) with one grounded guide that says it is not a mufti (D21).</p></div>
+    <div class="idea-row"><code>P54</code><p>Replace the app-experience quote carousel as the hero with a verified-marriages counter (D12). P54 remains required — demote placement.</p></div>
+    <div class="idea-row"><code>P9 / P26</code><p>Verification badge is free and separate; Premium badge means paid status only (D13).</p></div>
+    <div class="idea-row"><code>P58</code><p>Lead with Orange Money BF / Moov Africa BF / Coris / Wave, not Stripe-first (D17).</p></div>
+  </div>
+  <div class="lens-panel" id="lens-c">
+    <h3>Combine — one stack, one case, one honesty</h3>
+    <div class="idea-row"><code>P28+P31+D1</code><p>First Message Flash is wali-visible from minute one if the sister already attached a mahram.</p></div>
+    <div class="idea-row"><code>P19+D14</code><p>Compatibility score cannot hide or soften marital-status / polygamy honesty fields.</p></div>
+    <div class="idea-row"><code>P40+D8+D9</code><p>One privacy stack — blur default, per-viewer reveal / revoke, per-viewer watermark, no download.</p></div>
+    <div class="idea-row"><code>P49+P50</code><p>Every coach answer cites a live, scholar-reviewed Académie article (D21+D22).</p></div>
+    <div class="idea-row"><code>P41+P37+D7</code><p>One case file from AI hold or user report through strike to ban, with evidence snapshot.</p></div>
+    <div class="idea-row"><code>P20+D1</code><p>Recommendations treat declines and wali-pauses as negative signals, not only taps.</p></div>
+    <div class="idea-row"><code>P47+D10</code><p>Cookie / ads consent never implies rights to reuse profile photos in campaigns.</p></div>
+  </div>
+  <div class="lens-panel" id="lens-a">
+    <h3>Adapt — Burkina first, Senegal-centric clones last</h3>
+    <div class="idea-row"><code>P16</code><p>Keep madhhab / confrérie / hijra (parity); add optional language (Mooré / Dioula / Fulfulde / French) — designed to avoid ethnic caste ranking. New D.</p></div>
+    <div class="idea-row"><code>P52</code><p>Ouagadougou, Bobo-Dioulasso, Burkina pages first with local imam-reviewed copy — not Senegal-centric clones (Farata S10 Offered).</p></div>
+    <div class="idea-row"><code>P36</code><p>PWA + Android-first for BF launch; native iOS / Android remain parity — deferred to NEXT because store / build cost, not dropped.</p></div>
+    <div class="idea-row"><code>P8</code><p>Human review trains on BF photo-modesty norms (hijab styles, family-in-frame), not only generic Western filters.</p></div>
+    <div class="idea-row"><code>P57</code><p>Advertise no-silent-auto-renew as a trust feature in French and Mooré / Dioula audio (D16).</p></div>
+    <div class="idea-row"><code>P1+P4+P5+P6</code><p>Email / password / pseudo / gender stay; harden with phone OTP (D13) + captcha + expiry resend + reset + remember-me.</p></div>
+    <div class="idea-row"><code>P12</code><p>Deactivate as named life-pauses (Ramadan, exams, travel, grief) with one-tap reactivate.</p></div>
+    <div class="idea-row"><code>P17+P18+P21</code><p>Lite grid of cached profiles per session; basic filters MUST, advanced filters P18 parity — deferred to NEXT (paid brother perk).</p></div>
+    <div class="idea-row"><code>P22</code><p>Favourites MUST as private list; “who favourited me” is Premium parity — deferred to NEXT (vanity, not core ta'aruf).</p></div>
+    <div class="idea-row"><code>P27</code><p>Farata anonymous-mode behaviour is Claimed / unknown; we define it — hide last-seen, hide from browse except people you requested. New D36.</p></div>
+    <div class="idea-row"><code>P39+P38</code><p>Photo rules as pictograms + French text + Mooré / Dioula audio; keep 3-strike / 24h block as floor (can tighten).</p></div>
+    <div class="idea-row"><code>P46+P47+P48</code><p>Encryption, rights, DPA, 72h breach, cookies, and a real ticketed contact form (not Gmail-only) are launch hygiene MUST; add CIL (D17).</p></div>
+    <div class="idea-row"><code>P51+P53</code><p>Blog and promo video remain parity; human-review all copy (Farata blog leaked AI-prompt text — Offered). P51 / P53 — deferred to NEXT / LATER for production cost.</p></div>
+    <div class="idea-row"><code>P55+P59</code><p>One XOF pricing page + published CGV / refunds; launch vs normal price disclosed; no homepage-vs-CGV contradiction (Farata trust gap).</p></div>
+  </div>
+  <div class="lens-panel" id="lens-m">
+    <h3>Modify / Magnify — raise the floor until it is product</h3>
+    <div class="idea-row"><code>P37 → D4</code><p>Every modality (text, chat photos, voice, profile photos, bio) moderated before delivery.</p></div>
+    <div class="idea-row"><code>P40 → D8</code><p>All-or-nothing reveal-on-acceptance becomes per-viewer reveal-on-match / reveal-on-request / never, plus revoke.</p></div>
+    <div class="idea-row"><code>P30</code><p>Tight quotas on brothers to cut harassment; sisters unlimited free requests (D20). P30 stays, rebalanced.</p></div>
+    <div class="idea-row"><code>P45</code><p>Family-involvement is policy-only on Farata (Offered as rules text, Not publicly evidenced as product) → become D1–D3 product.</p></div>
+    <div class="idea-row"><code>P13 → D15</code><p>Deletion that actually works — instant self-serve + export + status page + real ticketing (Farata Play review: deletion reported broken).</p></div>
+    <div class="idea-row"><code>P7</code><p>Split onboarding into “minimum to browse” vs “complete to send a request” to save data on cheap Androids.</p></div>
+    <div class="idea-row"><code>P15+P16</code><p>Completeness meter that names missing Islamic criteria without shaming; confrérie remains optional parity field.</p></div>
+    <div class="idea-row"><code>P35</code><p>Notification types include wali digest, reveal-requests, and moderation outcomes, plus quiet hours.</p></div>
+    <div class="idea-row"><code>P32</code><p>Ice Breaker templates MUST (deen / family); AI-personalised ice breakers are P32 parity — deferred to NEXT until coach is grounded (D21).</p></div>
+  </div>
+  <div class="lens-panel" id="lens-p">
+    <h3>Put to other use — vanity signals become T&amp;S, voice becomes ta'aruf</h3>
+    <div class="idea-row"><code>P23</code><p>Visitors list feeds a T&amp;S signal (mass-view then never request) for mods; member-facing “who viewed me” stays Premium parity.</p></div>
+    <div class="idea-row"><code>P25</code><p>Boosts cannot buy safety bypass; ranking prefers verified + complete + wali-ready profiles (D37). P25 remains purchasable.</p></div>
+    <div class="idea-row"><code>P34</code><p>Voice as Mooré / Dioula ta'aruf introductions after moderation (D18), not only a Premium flirt channel.</p></div>
+    <div class="idea-row"><code>P50</code><p>Académie track “how to be a digital mahram” for fathers and brothers (D2 onboarding).</p></div>
+    <div class="idea-row"><code>P11</code><p>Change-audit visible to current matches when marital status or photos change (D35).</p></div>
+  </div>
+  <div class="lens-panel" id="lens-e">
+    <h3>Eliminate — what we refuse to ship as Farata shipped it</h3>
+    <div class="idea-row"><code>D20</code><p>Eliminate paywall on sisters starting a chat. P30 / P56 remain as brother-side quotas and convenience perks.</p></div>
+    <div class="idea-row"><code>D10</code><p>Eliminate Farata-style default right to use profiles in ads (rules §07 Offered) → opt-in only.</p></div>
+    <div class="idea-row"><code>P49</code><p>Eliminate “Cheikh” title and dual coach names to avoid false religious authority (D21).</p></div>
+    <div class="idea-row"><code>P57 · D16</code><p>Eliminate silent auto-renew on any rail; if a processor wants it, we still require explicit repurchase.</p></div>
+    <div class="idea-row"><code>P33</code><p>Eliminate uncurated GIFs: only a modest approved pack; reactions stay.</p></div>
+    <div class="idea-row"><code>P56</code><p>Eliminate from the paid bundle: ID-verified badge, priority as the only path to safety. Keep unlimited requests / messages / coach, HD photos, voice-as-convenience, filters, boosts, badge-as-paid, priority support / validation.</p></div>
+  </div>
+  <div class="lens-panel" id="lens-r">
+    <h3>Reverse — who hunts, who pays, what the hero number is</h3>
+    <div class="idea-row"><code>P21 / P28</code><p>Offer a sister-initiated or mutual-criteria-reveal default so brothers do not only hunt a grid (D20).</p></div>
+    <div class="idea-row"><code>P27</code><p>Wali is identified to the brother; sister may stay pseudonymous (D1).</p></div>
+    <div class="idea-row"><code>P54</code><p>Hero metric is dual-confirmed marriages, not “the app felt respectful” quotes (D12).</p></div>
+    <div class="idea-row"><code>P56</code><p>Pay for reach and convenience, never for verification, blur, mahram, or report (D13, D16, D20).</p></div>
+    <div class="idea-row"><code>D6</code><p>Reverse Farata FAQ “we do not read private chats” (Claimed, contradicts homepage Claimed scan) → we pre-scan everything and say so.</p></div>
+    <div class="idea-row"><code>P24</code><p>Online-now is stalking-sensitive; keep as parity but defer to NEXT and add sister hide-online control. Reason: safety &gt; vanity.</p></div>
+  </div>
+
+  <div class="ribbon-wrap">
+    <p class="sec-lead" style="margin-bottom:10px">Parity ribbon — every bead is required in the brief and PRD. Colour marks launch readiness, never deletion.</p>
+    <div class="ribbon-legend">
+      <span><i class="dot must"></i>MUST (BF launch)</span>
+      <span><i class="dot split"></i>Split — core MUST, remainder parity-deferred</span>
+      <span><i class="dot next"></i>Parity — deferred to NEXT</span>
+      <span><i class="dot later"></i>May slide LATER if NEXT is tight</span>
+    </div>
+    <div class="ribbon" id="ribbon"></div>
+  </div>
+</section>
+
+<!-- ===================== 4 REVERSE + CHAOS ===================== -->
+<section id="reverse">
+  <h2><span class="n">Technique IV</span>Reverse Brainstorming + Chaos Engineering</h2>
+  <p class="sec-lead">How would a bad actor abuse this — then invert each abuse into a control. Night-watch pairs first; then the storms that a launch week in Ouaga can actually throw.</p>
+
+  <div class="night">
+    <div class="inv"><div class="abuse"><span class="risk">Fake profiles</span>Public faces before anyone is real.</div><div class="arrow">→</div><div class="ctrl">No public visibility until phone OTP + liveness + ID + P8 human review (D13, P9).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Romance / money scams</span>Wave / Orange Money asks in chat.</div><div class="arrow">→</div><div class="ctrl">D5 classifiers for money, phone, links; P44 ban; in-chat education card “never send money to a suitor.”</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Misrepresentation</span>Married men posing single.</div><div class="arrow">→</div><div class="ctrl">D14 required disclosure + dedicated report reason + pattern flags; never claim ID proves marital status (Not something Farata evidences).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Catfish</span>Stolen photos.</div><div class="arrow">→</div><div class="ctrl">Liveness selfie matched to profile photos + photo-moderation strikes (P9, P38).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Indecency</span>Photo or voice slips past AI (Farata voice / chat-photo moderation Not publicly evidenced).</div><div class="arrow">→</div><div class="ctrl">D4 pre-delivery hold + human review + local-language audio lists.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Leaks</span>Screenshot of blurred or revealed sister photos.</div><div class="arrow">→</div><div class="ctrl">D9 per-viewer watermark, screenshot notice, no download, revoke, blurred notification thumbs.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Fake wali</span>Boyfriend or scammer as “father.”</div><div class="arrow">→</div><div class="ctrl">Wali ID + phone, sister confirms relationship, cooling-off, wali cannot be an unmatched male friend.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Post-decline harassment</span>He will not stop.</div><div class="arrow">→</div><div class="ctrl">P29 no resend + optional auto-block + D7 new-account fingerprint.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Off-platform</span>Grooming toward WhatsApp.</div><div class="arrow">→</div><div class="ctrl">D5 detect numbers / handles; share contact only after mutual + optional wali; warning interstitial.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">False reports</span>Rival family or jilted suitor weaponizes P41.</div><div class="arrow">→</div><div class="ctrl">P43 sanctions for false reports, evidence required, rate limits, dual review.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Moderator abuse</span>Peek unblurred photos or leak a name in a small city.</div><div class="arrow">→</div><div class="ctrl">RBAC, audit log, watermarked console, dual-control unblur, staff vetting (D31).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Breach / doxxing</span>Small-community data spill.</div><div class="arrow">→</div><div class="ctrl">P46 encryption + data minimization + coarse location + 72h notice + CIL (D17).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Minors</span>Farata 19+ Claimed; stores 17+ / 18+.</div><div class="arrow">→</div><div class="ctrl">P14 age gate + ID DOB + facial-age hold on suspicion (D39).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Ban evasion</span>P44 multi-account.</div><div class="arrow">→</div><div class="ctrl">D7 device / phone / ID fingerprint and linked-account bans.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Paid boost flood</span>Money buys volume.</div><div class="arrow">→</div><div class="ctrl">Boost cannot bypass request quotas or moderation (D37).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Coercive wali</span>Abusive guardian in the loop.</div><div class="arrow">→</div><div class="ctrl">Sister can remove / report wali; emergency hide; wali cannot send messages as her (D38).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Social-engineer unblur</span>Then screenshot.</div><div class="arrow">→</div><div class="ctrl">Time-limited reveal, revoke, watermark, re-blur on report (D8+D9).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">AI jailbreak</span>Dioula / Mooré slang or code-switch.</div><div class="arrow">→</div><div class="ctrl">Local keyword lists + fail-to-human on low confidence (D4).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Gare Wave</span>“I’m stuck at the gare, send Wave.”</div><div class="arrow">→</div><div class="ctrl">Payment-talk classifier + freeze + education (D5).</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Impersonation</span>Known imam or public figure.</div><div class="arrow">→</div><div class="ctrl">Name-collision review in P8 queue + P9.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Weaponize D11</span>Success-story used to dox an ex.</div><div class="arrow">→</div><div class="ctrl">Both must confirm; either can refuse public story; proof stays private.</div></div>
+    <div class="inv"><div class="abuse"><span class="risk">Insider export</span>Staff bulk-export contact lists.</div><div class="arrow">→</div><div class="ctrl">No staff bulk export; D15 export is owner-only; need-to-know access.</div></div>
+  </div>
+
+  <div class="chaos-grid">
+    <article class="storm">
+      <h4>Chaos · payment provider down</h4>
+      <p class="calm">Invert: free-tier and all safety features stay up; never lock a sister out of blur / wali / report.</p>
+    </article>
+    <article class="storm">
+      <h4>Chaos · AI vendor down</h4>
+      <p class="calm">Invert: fail CLOSED — hold undelivered media; do not fail open (D32).</p>
+    </article>
+    <article class="storm">
+      <h4>Chaos · mosque rumor that the app is haram / dating</h4>
+      <p class="calm">Invert: D23 named board, public fiqh notes, zero dating language, working Académie (D22).</p>
+    </article>
+    <article class="storm">
+      <h4>Chaos · competitor ships a shallow “wali email digest”</h4>
+      <p class="calm">Invert: our wali is verified, sister-initiated, read-all, can pause / end (D1–D2) — the wedge stays product-deep.</p>
+    </article>
+    <article class="storm">
+      <h4>Chaos · viral indecent leak</h4>
+      <p class="calm">Invert: kill-switch, mass revoke of reveals, user notification, transparency note (D7 / D9).</p>
+    </article>
+    <article class="storm">
+      <h4>Chaos · week-long data / electricity strain in Ouaga</h4>
+      <p class="calm">Invert: SMS / USSD essential path + lite mode (D19).</p>
+    </article>
+    <article class="storm">
+      <h4>Chaos · Farata undercuts on price from Senegal</h4>
+      <p class="calm">Invert: compete on dignity, local payments, languages, verified marriages — not a race to 0 FCFA.</p>
+    </article>
+    <article class="storm">
+      <h4>Chaos · screenshot of wali dashboard left on a shared phone</h4>
+      <p class="calm">Invert: wali PIN + session timeout + D28-like lock on guardian accounts.</p>
+    </article>
+  </div>
+  <p class="note" style="margin-top:16px">How to make sisters leave in a week: paywall safety, leak photos, ignore reports, Gmail support. Invert: D13, D15, D20, and a published 24h report SLA (P41).</p>
+</section>
+
+<!-- ===================== 5 SYNTHESIS ===================== -->
+<section id="synthesis">
+  <h2><span class="n">Climax</span>Synthesis — wedge, themes, parity map, names</h2>
+
+  <div class="wedge">
+    <div class="label">The wedge</div>
+    <p>Burkina-first honorable ta'aruf — sister dignity never paywalled, optional verified mahram-in-chat, pre-delivery AI on text / photo / voice, honest polygamy disclosure, XOF mobile money, French + Mooré / Dioula audio — become THE reference for finding a Muslim spouse in Ouagadougou / Bobo, then the region. Not “another dating app from Dakar.”</p>
+  </div>
+
+  <h3 style="font-family:Palatino,Georgia,serif;font-weight:400;color:var(--gold);margin-bottom:14px;font-size:1.2rem">Eight themes</h3>
+  <div class="themes">
+    <article class="theme"><div class="star"></div><h3>Honorable ta'aruf process</h3><p>Khalwa / wali / niyyah is the same spine as sister + wali JTBD and as D1–D3.</p></article>
+    <article class="theme"><div class="star"></div><h3>Sister safety &amp; haya</h3><p>Safety is a right. Farata blur is Offered (seen) [bundle] as all-or-nothing; per-viewer reveal / revoke is Not publicly evidenced — D8 / D9 raise P40.</p></article>
+    <article class="theme"><div class="star"></div><h3>Auditable trust</h3><p>Free verification, real metrics, CIL. Never invent scale like Farata’s +247.8k vs 10k+ Play (D23).</p></article>
+    <article class="theme"><div class="star"></div><h3>All-media moderation</h3><p>Homepage Claimed “AI scans every message” vs FAQ Claimed “we do not read private chats” is gap 2. D4 + D6 win by scanning all modalities and saying so.</p></article>
+    <article class="theme"><div class="star"></div><h3>Burkina / local fit</h3><p>Farata is Senegal-first, French-only UI (Offered), BF is an SEO page (Offered). D17–D19 are the launch moat.</p></article>
+    <article class="theme"><div class="star"></div><h3>Fair freemium</h3><p>D20 + D13 reverse Premium-gated start-conversation (Offered [bundle]) and Premium-bundled verified-looking badge (Claimed). Brothers pay for reach.</p></article>
+    <article class="theme"><div class="star"></div><h3>Marriage outcomes</h3><p>P54 testimonials Offered (seen) are app-experience quotes, not marriages. Dual-confirmed nikah (D11 / D12) is Not publicly evidenced at Farata — our north-star.</p></article>
+    <article class="theme"><div class="star"></div><h3>Education without false authority</h3><p>One grounded guide, not a mufti. Scholar-reviewed Académie in Sahel context (D21, D22).</p></article>
+  </div>
+
+  <div class="links">
+    <div class="link">SCAMPER shows Farata has the policy words (P45 Offered as rules) but Not publicly evidenced as product — that is the beatable gap, evidence-labeled, not invented.</div>
+    <div class="link">Fail-closed moderation (D32), fake-wali controls, shared-device PIN (D28), and deletion-that-works (D15) are existential in small cities — a leak or a trapped account kills the mosque-trust channel.</div>
+  </div>
+
+  <div class="tiers">
+    <article class="tier must">
+      <h3>MUST — ship for BF launch</h3>
+      <ul>
+        <li>Accountable identity: P1 email+password+pseudo+gender; P2 Google sign-in (Apple with iOS when apps ship); P3 sincerity pledge; P4 email verify; P5 captcha; P6 reset+remember.</li>
+        <li>P7 guided onboarding (lite split); P8 human review + published free SLA; P9 ID+selfie verified badge FREE (D13); P10 photo required to contact (may blur); P11 edit + photo remod; P12 deactivate / reactivate; P13 self-serve delete+erasure (D15); P14 age gate (parity 19+ unless legal review says 18 — open question).</li>
+        <li>P15 core profile fields; P16 Islamic criteria (madhhab, practice, intentions; confrérie+hijra included if cheap — else mark deferred); P17 basic search filters incl. distance / location / marital / religious / life plans; P21 grid browse.</li>
+        <li>P28 invite / accept / decline + lists; P29 no resend after refuse; P30 daily request quota (brothers; sisters free D20); P31 Message Flash; P33 realtime chat: typing, reactions, photo share; P34 voice messages (because D4 is the raise); P35 push for messages / requests / visits; P36 WEB + PWA (native portion deferred).</li>
+        <li>P37 AI text moderation; P38 photo strikes; P39 published photo rules; P40 blur toggle + default blur + unblur; P41 report + SLA; P42 block; P43 sanctions ladder + false-report sanctions; P44 code of conduct; P45 family-involvement guidance in rules PLUS product D1.</li>
+        <li>P46 data protection; P47 cookie consent; P48 contact form triage + FAQ; P50 minimum 5 scholar-reviewed Académie articles (wali, mahr, rights, haya, honesty); P52 SEO pages for Ouagadougou, Bobo-Dioulasso, Burkina Faso.</li>
+        <li>P55 freemium XOF; P56 Premium structure minus paywalled safety; P57 1/3/6 months no silent auto-renew; P58 Orange Money BF, Moov Africa BF, Wave / Coris, cards; P59 published CGV / refunds.</li>
+        <li>Product cluster: wali-optional chat, pre-delivery moderation on all media, BF payments + lite + French / audio, sisters-free safety, honest polygamy, working delete, proof-not-hype landing.</li>
+      </ul>
+    </article>
+    <article class="tier next">
+      <h3>NEXT — parity, deferred, not removed</h3>
+      <ul>
+        <li>P16 confrérie+hijra fields if not in MUST — extra taxonomy.</li>
+        <li>P18 advanced filters tier — paid convenience after basic P17 works.</li>
+        <li>P19 AI compatibility suggestions + detailed score — needs grounded model (D21); ship rule-based overlap as interim.</li>
+        <li>P20 daily recs that learn — needs usage data.</li>
+        <li>P22 who-favourited-me — vanity Premium; private favourites can ship MUST.</li>
+        <li>P23 member-facing visitors list — vanity / stalking; internal T&amp;S use of visit patterns is MUST.</li>
+        <li>P24 online-now — stalking risk, add hide control.</li>
+        <li>P25 boosts — pay-to-win tension, ship after quotas proven.</li>
+        <li>P26 Premium badge — after payments live.</li>
+        <li>P27 anonymous / discreet mode — Farata behaviour unknown (Claimed); ship our D36 definition.</li>
+        <li>P32 AI-personalised Ice Breakers — wait for grounded coach; templates MUST.</li>
+        <li>P33 curated GIFs / stickers — pack design time.</li>
+        <li>P36 native iOS+Android — BF is Android / PWA-first, store presence still required.</li>
+        <li>P49 full 24/7 AI coach — scholar-review + one persona (D21).</li>
+        <li>P50 full Académie library — after seed articles.</li>
+        <li>P51 blog categories — editorial capacity.</li>
+        <li>P52 remaining city / country / intent SEO — after BF trio.</li>
+        <li>P53 promo video — production.</li>
+        <li>P54 testimonials carousel — wait for real D12 stories or modest process quotes, no invented marriages.</li>
+        <li>P56 remaining perks (HD 10 photos, unlimited coach, priority 7/7, &lt;10min validation) — after core Premium.</li>
+      </ul>
+      <p class="note">NEXT cluster: learning recs, vanity social proof, native apps, full coach / Académie / blog / video, watermarks, meeting planner polish, verified marriage showcase once couples exist.</p>
+    </article>
+    <article class="tier later">
+      <h3>LATER — still parity, still not dropped</h3>
+      <ul>
+        <li>None of P1–P59 are dropped.</li>
+        <li>P51 full blog cadence and P53 high-production video may slide LATER if NEXT capacity is tight — content production, not strategic rejection.</li>
+        <li>English UI (part of D18) is LATER vs French + audio.</li>
+        <li>D33 alumni mentorship is LATER (new, not parity).</li>
+        <li>English / Arabic full UI; diaspora-heavy features beyond hijra field; live video even with wali (khalwa-sensitive).</li>
+      </ul>
+      <p class="note">LATER cluster: alumni circle, full multilingual UI, live video, regional expansion playbooks beyond BF.</p>
+    </article>
+  </div>
+
+  <h3 style="font-family:Palatino,Georgia,serif;font-weight:400;color:var(--gold);margin-bottom:8px;font-size:1.2rem">Differentiator constellation D1–D40</h3>
+  <p class="sec-lead">D1–D23 carried in full from competitor §7. This session continued numbering D24–D40. Colour is MUST / NEXT / LATER mapping, not a drop.</p>
+  <div class="constellation">
+    <span class="dstar must"><b>D1</b> Mahram-in-chat read-all, sister-initiated, verified wali can flag / pause / end</span>
+    <span class="dstar next"><b>D2</b> Wali dashboard multi-ward + digest + priority flags</span>
+    <span class="dstar next"><b>D3</b> Chaperoned-meeting / khitba planner with wali in loop (full)</span>
+    <span class="dstar must"><b>D4</b> Every modality moderated before delivery, incl. local-language STT</span>
+    <span class="dstar must"><b>D5</b> Scam and off-platform guardrails</span>
+    <span class="dstar must"><b>D6</b> Honest consistent moderation policy + member appeal</span>
+    <span class="dstar must"><b>D7</b> Report → strike → ban pipeline, console, fingerprinting</span>
+    <span class="dstar must"><b>D8</b> Per-viewer reveal (match / request / never) + revoke</span>
+    <span class="dstar next"><b>D9</b> Anti-leak watermark, screenshot notice, no downloads</span>
+    <span class="dstar must"><b>D10</b> Never use profiles in marketing without per-use opt-in</span>
+    <span class="dstar next"><b>D11</b> We-got-married joint report, optional private nikah proof</span>
+    <span class="dstar next"><b>D12</b> Verified success-story showcase + verified-marriages counter</span>
+    <span class="dstar must"><b>D13</b> Verification free, separate from Premium, levels phone / ID / wali</span>
+    <span class="dstar must"><b>D14</b> Declared marital status honesty + polygamy intent</span>
+    <span class="dstar must"><b>D15</b> Deletion that works + export + status + ticketing</span>
+    <span class="dstar must"><b>D16</b> Transparent consistent pricing, no dark patterns</span>
+    <span class="dstar must"><b>D17</b> Burkina-first entity, CIL, Orange Money BF / Moov Africa BF / Coris / Wave, XOF</span>
+    <span class="dstar must"><b>D18</b> French first + Mooré / Dioula audio (Arabic / English later)</span>
+    <span class="dstar must"><b>D19</b> Low-bandwidth lite mode</span>
+    <span class="dstar must"><b>D20</b> Sisters start conversations free; wali / safety always free</span>
+    <span class="dstar next"><b>D21</b> Grounded coach, scholar-reviewed, not a mufti, one persona</span>
+    <span class="dstar next"><b>D22</b> Working public imam-reviewed Académie (Sahel context)</span>
+    <span class="dstar next"><b>D23</b> Trust by proof + independent imam / advisory board (board can start MUST as 2–3 names)</span>
+    <span class="dstar must"><b>D24</b> Structured ta'aruf stages (at least invite / chat / meeting / married)</span>
+    <span class="dstar next"><b>D25</b> Istikhara companion (reminder + journal, not fatwa)</span>
+    <span class="dstar next"><b>D26</b> Mahr conversation card</span>
+    <span class="dstar must"><b>D27</b> SMS alerts (USSD if feasible)</span>
+    <span class="dstar must"><b>D28</b> Shared-device PIN mode</span>
+    <span class="dstar next"><b>D29</b> Mosque / imam attestation level</span>
+    <span class="dstar next"><b>D30</b> Prayer / night quiet hours</span>
+    <span class="dstar next"><b>D31</b> Moderator dual-control / audit / wellness</span>
+    <span class="dstar must"><b>D32</b> Fail-closed when AI is down</span>
+    <span class="dstar later"><b>D33</b> Alumni mentorship (LATER)</span>
+    <span class="dstar next"><b>D34</b> Optional language filters with anti-caste design</span>
+    <span class="dstar next"><b>D35</b> Match-visible change-audit</span>
+    <span class="dstar next"><b>D36</b> Anonymous-mode defined (hide last-seen + search discretion)</span>
+    <span class="dstar next"><b>D37</b> Boosts cannot bypass safety; verified / wali-ready ranking</span>
+    <span class="dstar must"><b>D38</b> Sister can remove / report abusive wali</span>
+    <span class="dstar must"><b>D39</b> Age / liveness hold for suspected minors</span>
+    <span class="dstar must"><b>D40</b> Pictogram + audio photo rules for low literacy</span>
+  </div>
+
+  <h3 style="font-family:Palatino,Georgia,serif;font-weight:400;color:var(--gold);margin-bottom:8px;font-size:1.2rem">Name shortlist — point-in-time RDAP, not a purchase</h3>
+  <p class="rdap-note">From docs/name-options.md. RDAP 2026-09-27 ~21:10 ET. No domain bought. Next: OAPI / WIPO trademark, native-speaker check, handles, user test Ouaga / Bobo.</p>
+  <div class="names">
+    <article class="namecard">
+      <h3>Nisfuddin</h3>
+      <p class="mean">half the deen</p>
+      <div class="rdap">
+        <span class="seal">nisfuddin.com FREE</span>
+        <span class="seal">nisfuddin.net FREE</span>
+        <span class="seal">nisfdin.com FREE</span>
+        <span class="seal">nisfdin.net FREE</span>
+      </div>
+    </article>
+    <article class="namecard">
+      <h3>Nikahsira</h3>
+      <p class="mean">nikah + Jula sira — confirm Dioula with native speakers</p>
+      <div class="rdap">
+        <span class="seal">nikahsira.com FREE</span>
+        <span class="seal">nikahsira.net FREE</span>
+      </div>
+    </article>
+    <article class="namecard">
+      <h3>Sakinaa</h3>
+      <p class="mean">sakina.com / .net are taken; this spelling is not</p>
+      <div class="rdap">
+        <span class="seal">sakinaa.com FREE</span>
+        <span class="seal">sakinaa.net FREE</span>
+        <span class="seal taken">sakina.com TAKEN</span>
+        <span class="seal taken">sakina.net TAKEN</span>
+      </div>
+    </article>
+  </div>
+  <div class="wild">
+    <article class="namecard">
+      <h3>Mithaqun</h3>
+      <p class="mean">alternate</p>
+      <div class="rdap">
+        <span class="seal">mithaqun.com FREE</span>
+        <span class="seal">mithaqun.net FREE</span>
+      </div>
+    </article>
+    <article class="namecard">
+      <h3>Wildcards</h3>
+      <p class="mean">Nonglem (Mooré) · Dannaya (Jula)</p>
+      <div class="rdap">
+        <span class="seal">nonglem.com FREE</span>
+        <span class="seal">nonglem.net FREE</span>
+        <span class="seal taken">dannaya.com TAKEN</span>
+        <span class="seal">dannaya.net FREE</span>
+      </div>
+    </article>
+  </div>
+
+  <h3 style="font-family:Palatino,Georgia,serif;font-weight:400;color:var(--gold);margin:28px 0 10px;font-size:1.2rem">Open questions this session did not close</h3>
+  <div class="qs">
+    <p><strong>Age gate.</strong> Keep Farata parity 19+ (P14) or 18+ (Burkina majority) with extra protections for 18–21? Legal + fiqh + store ratings (17+ / 18+) must be decided.</p>
+    <p><strong>Native-speaker validation.</strong> Do Nikahsira (Jula sira) and Nonglem (Mooré) read as intended in Ouaga / Bobo, or is there slang / taboo?</p>
+    <p><strong>Wali verification.</strong> What documents prove father / brother / uncle without excluding orphans or converts? Who is an acceptable mahram if father is deceased?</p>
+    <p><strong>Polygamy UX.</strong> How to disclose existing wives without doxxing them? First-wife awareness is out of scope unless she consents — confirm.</p>
+    <p><strong>Data residency.</strong> Can we keep BF-user data in a place CIL accepts while still using modern hosting (Farata: Vercel / Neon USA — Claimed processors)?</p>
+    <p><strong>Fail-closed UX.</strong> How long will members tolerate held voice notes when the AI vendor is down?</p>
+    <p><strong>USSD / SMS.</strong> Which BF operators and what cost per wali alert is sustainable at launch?</p>
+    <p><strong>Trademark.</strong> OAPI + social handles for Nisfuddin / Nikahsira / Sakinaa — not done.</p>
+    <p><strong>Imam advisory.</strong> Which Ouaga / Bobo scholars will lend names, and what review SLA for Académie?</p>
+    <p><strong>P8 SLA.</strong> What free review time is honest in BF (Farata claims 12–24h / 30min / 10min Premium — numbers disagree, Claimed)?</p>
+    <p><strong>Anonymous mode.</strong> Exact rules (Farata Claimed, behaviour unknown) — confirm D36 definition with sisters.</p>
+    <p><strong>Brother photos.</strong> Should sisters ever see a brother’s clear photo before accept if he chose unblurred? Default yes if he opted out of blur; confirm.</p>
+    <p><strong>GIFs / stickers.</strong> Is a zero-GIF launch acceptable until a curated pack exists (P33 NEXT)?</p>
+    <p><strong>Later rails.</strong> Free Money / MTN MoMo (P58) — keep as parity rails for later countries; BF launch uses Orange / Moov / Wave / Coris / cards?</p>
+  </div>
+</section>
+
+<footer>
+  <p>Session complete 2026-09-27T21:16 · Headless autonomous · Artifacts: this HTML + intent · Product name TBD · Downstream: thoughtful product owner aligned with docs/system-idea.md must-haves; every P1–P59 required in brief / PRD; D1–D23 plus D24–D40 listed; do not start brief / PRD / architecture in this brainstorm run.</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  var titles = {
+    1: "email + password + pseudo + gender",
+    2: "Google + Apple sign-in (Apple with iOS when apps ship)",
+    3: "sincerity pledge",
+    4: "email verify",
+    5: "captcha",
+    6: "reset + remember",
+    7: "guided onboarding (lite split MUST)",
+    8: "human review + published free SLA; paid faster perk",
+    9: "ID + selfie Verified badge — FREE, separate from Premium",
+    10: "photo required to contact, may blur",
+    11: "edit + photo remod; change-audit to matches is D35 NEXT",
+    12: "deactivate / reactivate (named life-pauses)",
+    13: "self-serve delete + erasure (D15)",
+    14: "age gate — 19+ parity unless legal review says 18",
+    15: "core profile fields + completeness meter",
+    16: "Islamic criteria — core MUST; confrérie + hijra if cheap else deferred",
+    17: "basic search filters incl. distance / location / marital / religious / life plans",
+    18: "advanced filters tier — parity deferred to NEXT",
+    19: "AI compatibility + detailed score — NEXT; rule-based overlap interim",
+    20: "daily recs that learn — NEXT",
+    21: "grid browse (lite cached MUST)",
+    22: "private favourites MUST; who-favourited-me NEXT",
+    23: "member-facing visitors NEXT; T&S visit patterns MUST",
+    24: "online-now — NEXT, stalking-sensitive, hide control",
+    25: "boosts — NEXT after quotas proven; cannot bypass safety (D37)",
+    26: "Premium badge — NEXT after payments live",
+    27: "anonymous mode — NEXT; ship D36 definition",
+    28: "invite / accept / decline + lists",
+    29: "no resend after refuse",
+    30: "daily request quota — brothers; sisters free (D20)",
+    31: "Message Flash",
+    32: "templates MUST; AI-personalised Ice Breakers NEXT",
+    33: "realtime chat typing / reactions / photos MUST; curated GIFs NEXT",
+    34: "voice messages (D4 raise)",
+    35: "push + wali digest / reveal / moderation + quiet hours",
+    36: "WEB + PWA MUST; native iOS + Android NEXT",
+    37: "AI text moderation; all-modality raise is D4",
+    38: "photo strike rule",
+    39: "published photo rules (pictogram + audio D40)",
+    40: "blur toggle / default / unblur; per-viewer raise D8",
+    41: "report + SLA",
+    42: "block",
+    43: "sanctions + false-report sanctions",
+    44: "code of conduct",
+    45: "family-involvement guidance PLUS product D1",
+    46: "data protection",
+    47: "cookie consent (never implies photo reuse)",
+    48: "contact form triage + FAQ",
+    49: "full 24/7 AI coach — NEXT; one persona, not a mufti",
+    50: "minimum 5 Académie articles MUST; full library NEXT",
+    51: "blog — NEXT; full cadence may slide LATER",
+    52: "Ouaga / Bobo / BF SEO MUST; remaining SEO NEXT",
+    53: "promo video — NEXT; high-production may slide LATER",
+    54: "testimonials carousel — NEXT; wait for real D12",
+    55: "freemium XOF / FCFA",
+    56: "Premium structure minus paywalled safety MUST; remaining perks NEXT",
+    57: "1 / 3 / 6 months, no silent auto-renew",
+    58: "Orange Money BF, Moov Africa BF, Wave / Coris, cards; MTN later countries",
+    59: "published CGV / refunds"
+  };
+  var cls = {
+    1:"must",2:"split",3:"must",4:"must",5:"must",6:"must",7:"must",8:"must",9:"must",
+    10:"must",11:"must",12:"must",13:"must",14:"must",15:"must",16:"split",17:"must",
+    18:"next",19:"next",20:"next",21:"must",22:"split",23:"split",24:"next",25:"next",
+    26:"next",27:"next",28:"must",29:"must",30:"must",31:"must",32:"split",33:"split",
+    34:"must",35:"must",36:"split",37:"must",38:"must",39:"must",40:"must",41:"must",
+    42:"must",43:"must",44:"must",45:"must",46:"must",47:"must",48:"must",49:"next",
+    50:"split",51:"next",52:"split",53:"next",54:"next",55:"must",56:"split",57:"must",
+    58:"must",59:"must"
+  };
+  var ribbon = document.getElementById("ribbon");
+  for (var i = 1; i <= 59; i++) {
+    var b = document.createElement("div");
+    b.className = "bead " + cls[i];
+    b.innerHTML = "P" + i + "<span class=\"bead-tip\"><strong>P" + i + "</strong> — " + titles[i] + "</span>";
+    ribbon.appendChild(b);
+  }
+
+  var tabs = document.querySelectorAll(".lens-tab");
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      tabs.forEach(function (t) { t.classList.remove("active"); });
+      document.querySelectorAll(".lens-panel").forEach(function (p) { p.classList.remove("show"); });
+      tab.classList.add("active");
+      document.getElementById("lens-" + tab.getAttribute("data-lens")).classList.add("show");
+    });
+  });
+})();
+</script>
+</body>
+</html>
