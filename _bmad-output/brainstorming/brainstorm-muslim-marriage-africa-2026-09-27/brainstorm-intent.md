@@ -23,7 +23,7 @@ Bindings for the product brief (assumptions and decisions from the memlog only):
 - Publish only proof-backed counters (verified members, verified marriages, moderation stats). Never invent scale.
 - Small-community doxxing resistance: default pseudonym, city-level location; quartier optional and hidden until match.
 - Honest polygamy disclosure required for brothers (single / already married + wives / open to polygyny) and visible before a sister accepts. Never claim ID proves marital status.
-- PWA + Android-first for BF launch; native iOS/Android remain parity (NEXT).
+- Web + PWA MUST; store-listed native Android (thin wrapper / TWA / Capacitor over the PWA) MUST for Burkina launch; native iOS is parity — deferred to NEXT (Apple store/build/compliance; BF is Android-first).
 - Checkout: Orange Money BF / Moov Africa BF / Coris Money / Wave first; cards via Stripe secondary.
 - No silent auto-renew on any rail; if a processor wants it, still require explicit repurchase.
 - Boosts cannot buy safety bypass; ranking prefers verified + complete + wali-ready profiles.
@@ -75,7 +75,7 @@ Carry-forward titles from the memlog. Split items appear in both buckets; deferr
 - **P33** realtime chat typing/reactions/GIFs/stickers/photos — MUST: typing, reactions, photo share (gallery/camera); GIFs/stickers NEXT
 - **P34** voice messages — French/Mooré/Dioula; always STT + audio-classified before delivery (D4 + D18)
 - **P35** push notifications — messages/requests/visits; plus wali digest, reveal-requests, moderation outcomes, quiet hours
-- **P36** web+PWA+iOS+Android — **WEB + PWA MUST**; native portion NEXT
+- **P36** web+PWA+iOS+Android — **WEB + PWA MUST**; **store-listed native Android** (thin wrapper / TWA / Capacitor over the PWA) **MUST** for Burkina launch; native iOS NEXT
 - **P37** AI message moderation — every modality before delivery (D4)
 - **P38** photo strike rule — keep 3-strike / 24h block as floor (can tighten)
 - **P39** published photo rules — pictograms + French text + Mooré/Dioula audio (D40)
@@ -110,13 +110,13 @@ Carry-forward titles from the memlog. Split items appear in both buckets; deferr
 - **P27** anonymous mode + visibility controls — *parity — deferred to NEXT: Farata behaviour unknown (Claimed); ship our D36 definition*
 - **P32** AI-personalised Ice Breakers — *parity — deferred to NEXT: wait for grounded coach (D21); templates MUST*
 - **P33** curated GIFs/stickers — *parity — deferred to NEXT: pack design time*
-- **P36** native iOS+Android — *parity — deferred to NEXT: BF is Android/PWA-first; store presence still required*
+- **P36** native iOS — *parity — deferred to NEXT: Burkina launch is Android-first (web + PWA + store-listed Android wrapper); Apple store/build/compliance cost, not dropped*
 - **P49** AI marriage coach — *parity — deferred to NEXT: scholar-review + one persona, not a mufti (D21); no “Cheikh” title / dual coach names*
 - **P50** full Académie library — *parity — deferred to NEXT: after seed articles*
 - **P51** blog — *parity — deferred to NEXT: editorial capacity; human-review all copy (Farata blog leaked AI-prompt text — Offered)*
 - **P52** remaining city/country/intent SEO — *parity — deferred to NEXT: after BF trio*
 - **P53** promo video — *parity — deferred to NEXT: production; human-review all copy*
-- **P54** testimonials carousel — *parity — deferred to NEXT: wait for real D12 stories or modest process quotes; no invented marriages; demote placement vs verified-marriages counter*
+- **P54** testimonials carousel — *parity — deferred to NEXT: wait for real D11/D12 stories or modest process quotes; no invented marriages; demote placement vs verified-marriages counter; carousel will be fed by real D11/D12 stories*
 - **P56** remaining perks (HD 10 photos, unlimited coach, priority 7/7, &lt;10min validation) — *parity — deferred to NEXT: after core Premium*
 
 ### LATER (parity — deferred to LATER)
@@ -144,8 +144,8 @@ All required in the brief and PRD. D1–D23 from competitor §7; D24–D40 from 
 | D8 | Per-viewer reveal (match/request/never) + revoke | MUST |
 | D9 | Anti-leak watermark, screenshot notice, no downloads, blurred notification thumbs | NEXT |
 | D10 | Never use profiles in marketing without per-use opt-in | MUST |
-| D11 | We-got-married joint report, optional private nikah proof, joint married state | NEXT |
-| D12 | Verified success-story showcase + verified-marriages counter | NEXT (needs volume) |
+| D11 | We-got-married joint report, optional private nikah proof, joint married state | MUST |
+| D12 | Verified success-story showcase + verified-marriages counter | MUST (consent-based story submit + showcase page + honest counter starting at 0); NEXT (curated rich showcase polish/marketing) |
 | D13 | Verification free for everyone, separate from Premium, levels phone/ID/wali | MUST |
 | D14 | Declared marital status honesty + polygamy intent | MUST |
 | D15 | Deletion that works + export + status + ticketing | MUST |
@@ -186,15 +186,28 @@ LATER (non-parity, from D-mapping): English/Arabic full UI; diaspora-heavy featu
 
 ### MVP MUST (BF launch)
 
-Accountable identity; haya-safe profiles; invite/accept/decline; wali-optional chat; pre-delivery moderation on all media; BF payments + lite + French/audio; sisters-free safety; honest polygamy; working delete; proof-not-hype landing (Ouaga/Bobo/BF).
+Accountable identity; haya-safe profiles; invite/accept/decline; wali-optional chat; pre-delivery moderation on all media; BF payments + lite + French/audio; sisters-free safety; honest polygamy; working delete; dual-confirmed marriage close (D11); consent-based success-story page + honest verified-marriages counter starting at 0 (D12); web + PWA + store-listed Android; proof-not-hype landing (Ouaga/Bobo/BF).
 
 ### NEXT
 
-Learning recs; vanity social proof (visitors / online / boosts); native apps; full coach / Académie / blog / video; watermarks; meeting planner polish; verified marriage showcase once couples exist.
+Learning recs; vanity social proof (visitors / online / boosts); native iOS; full coach / Académie / blog / video; watermarks; meeting planner polish; curated rich marriage-showcase polish/marketing.
 
 ### LATER
 
 Alumni circle; full multilingual UI; live video; regional expansion playbooks beyond BF.
+
+## Must-have coverage check
+
+`docs/system-idea.md` must-haves override prior horizon choices. All six are MVP MUST:
+
+| # | Must-have | P / D ids | Horizon |
+| --- | --- | --- | --- |
+| 1 | Profiles: create/submit, browse, invite, accept/decline, who invited, who accepted, messaging after match | P7, P15, P21, P28, P31, P33 | MUST |
+| 2 | AI moderation of messages, photos, voice + report/ban pipeline | P37, P34, P38, D4, D7, P41, P42, P43 | MUST |
+| 3 | Photo blur with reveal-on-match / reveal-on-request | P40, D8 | MUST |
+| 4 | Mahram in chat | D1, P45 | MUST |
+| 5 | Marriage success reporting → showcase stories | D11 (full); D12 MUST slice (consent story submit + showcase page + honest counter starting at 0); P54 NEXT (fed by real D11/D12) | MUST (P54 stays NEXT parity) |
+| 6 | Security & verification | P8, P9, P41, P46, D5, D6, D13 | MUST |
 
 ## Top 8 themes
 

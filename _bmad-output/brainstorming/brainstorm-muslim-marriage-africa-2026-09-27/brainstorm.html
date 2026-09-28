@@ -489,6 +489,7 @@ h2 .n {
 }
 .dstar.must { border-color: var(--must); }
 .dstar.next { border-color: var(--next); }
+.dstar.split { border-color: var(--split); }
 .dstar.later { border-color: var(--later); }
 .dstar b { color: var(--gold); font-family: ui-monospace, Consolas, monospace; margin-right: 4px; }
 
@@ -998,11 +999,11 @@ footer {
         <li>Accountable identity: P1 email+password+pseudo+gender; P2 Google sign-in (Apple with iOS when apps ship); P3 sincerity pledge; P4 email verify; P5 captcha; P6 reset+remember.</li>
         <li>P7 guided onboarding (lite split); P8 human review + published free SLA; P9 ID+selfie verified badge FREE (D13); P10 photo required to contact (may blur); P11 edit + photo remod; P12 deactivate / reactivate; P13 self-serve delete+erasure (D15); P14 age gate (parity 19+ unless legal review says 18 — open question).</li>
         <li>P15 core profile fields; P16 Islamic criteria (madhhab, practice, intentions; confrérie+hijra included if cheap — else mark deferred); P17 basic search filters incl. distance / location / marital / religious / life plans; P21 grid browse.</li>
-        <li>P28 invite / accept / decline + lists; P29 no resend after refuse; P30 daily request quota (brothers; sisters free D20); P31 Message Flash; P33 realtime chat: typing, reactions, photo share; P34 voice messages (because D4 is the raise); P35 push for messages / requests / visits; P36 WEB + PWA (native portion deferred).</li>
+        <li>P28 invite / accept / decline + lists; P29 no resend after refuse; P30 daily request quota (brothers; sisters free D20); P31 Message Flash; P33 realtime chat: typing, reactions, photo share; P34 voice messages (because D4 is the raise); P35 push for messages / requests / visits; P36 WEB + PWA + store-listed native Android (thin wrapper / TWA / Capacitor over the PWA).</li>
         <li>P37 AI text moderation; P38 photo strikes; P39 published photo rules; P40 blur toggle + default blur + unblur; P41 report + SLA; P42 block; P43 sanctions ladder + false-report sanctions; P44 code of conduct; P45 family-involvement guidance in rules PLUS product D1.</li>
         <li>P46 data protection; P47 cookie consent; P48 contact form triage + FAQ; P50 minimum 5 scholar-reviewed Académie articles (wali, mahr, rights, haya, honesty); P52 SEO pages for Ouagadougou, Bobo-Dioulasso, Burkina Faso.</li>
         <li>P55 freemium XOF; P56 Premium structure minus paywalled safety; P57 1/3/6 months no silent auto-renew; P58 Orange Money BF, Moov Africa BF, Wave / Coris, cards; P59 published CGV / refunds.</li>
-        <li>Product cluster: wali-optional chat, pre-delivery moderation on all media, BF payments + lite + French / audio, sisters-free safety, honest polygamy, working delete, proof-not-hype landing.</li>
+        <li>Product cluster: wali-optional chat, pre-delivery moderation on all media, BF payments + lite + French / audio, sisters-free safety, honest polygamy, working delete, dual-confirmed marriage close (D11), consent-based success-story page + honest verified-marriages counter starting at 0 (D12), web + PWA + store-listed Android, proof-not-hype landing.</li>
       </ul>
     </article>
     <article class="tier next">
@@ -1020,16 +1021,16 @@ footer {
         <li>P27 anonymous / discreet mode — Farata behaviour unknown (Claimed); ship our D36 definition.</li>
         <li>P32 AI-personalised Ice Breakers — wait for grounded coach; templates MUST.</li>
         <li>P33 curated GIFs / stickers — pack design time.</li>
-        <li>P36 native iOS+Android — BF is Android / PWA-first, store presence still required.</li>
+        <li>P36 native iOS — Burkina launch is Android-first (web + PWA + store-listed Android wrapper); Apple store / build / compliance cost, not dropped.</li>
         <li>P49 full 24/7 AI coach — scholar-review + one persona (D21).</li>
         <li>P50 full Académie library — after seed articles.</li>
         <li>P51 blog categories — editorial capacity.</li>
         <li>P52 remaining city / country / intent SEO — after BF trio.</li>
         <li>P53 promo video — production.</li>
-        <li>P54 testimonials carousel — wait for real D12 stories or modest process quotes, no invented marriages.</li>
+        <li>P54 testimonials carousel — wait for real D11 / D12 stories or modest process quotes, no invented marriages; carousel will be fed by real D11 / D12 stories.</li>
         <li>P56 remaining perks (HD 10 photos, unlimited coach, priority 7/7, &lt;10min validation) — after core Premium.</li>
       </ul>
-      <p class="note">NEXT cluster: learning recs, vanity social proof, native apps, full coach / Académie / blog / video, watermarks, meeting planner polish, verified marriage showcase once couples exist.</p>
+      <p class="note">NEXT cluster: learning recs, vanity social proof, native iOS, full coach / Académie / blog / video, watermarks, meeting planner polish, curated rich marriage-showcase polish / marketing.</p>
     </article>
     <article class="tier later">
       <h3>LATER — still parity, still not dropped</h3>
@@ -1057,8 +1058,8 @@ footer {
     <span class="dstar must"><b>D8</b> Per-viewer reveal (match / request / never) + revoke</span>
     <span class="dstar next"><b>D9</b> Anti-leak watermark, screenshot notice, no downloads</span>
     <span class="dstar must"><b>D10</b> Never use profiles in marketing without per-use opt-in</span>
-    <span class="dstar next"><b>D11</b> We-got-married joint report, optional private nikah proof</span>
-    <span class="dstar next"><b>D12</b> Verified success-story showcase + verified-marriages counter</span>
+    <span class="dstar must"><b>D11</b> We-got-married joint report, optional private nikah proof, joint married state</span>
+    <span class="dstar split"><b>D12</b> MUST: consent story + showcase page + honest counter at 0 · NEXT: curated rich showcase polish</span>
     <span class="dstar must"><b>D13</b> Verification free, separate from Premium, levels phone / ID / wali</span>
     <span class="dstar must"><b>D14</b> Declared marital status honesty + polygamy intent</span>
     <span class="dstar must"><b>D15</b> Deletion that works + export + status + ticketing</span>
@@ -1087,6 +1088,17 @@ footer {
     <span class="dstar must"><b>D38</b> Sister can remove / report abusive wali</span>
     <span class="dstar must"><b>D39</b> Age / liveness hold for suspected minors</span>
     <span class="dstar must"><b>D40</b> Pictogram + audio photo rules for low literacy</span>
+  </div>
+
+  <h3 style="font-family:Palatino,Georgia,serif;font-weight:400;color:var(--gold);margin:8px 0 8px;font-size:1.2rem">Must-have coverage check</h3>
+  <p class="sec-lead"><code>docs/system-idea.md</code> must-haves override prior horizon choices. All six are MVP MUST.</p>
+  <div class="constellation">
+    <span class="dstar must"><b>#1</b> Profiles / invite / accept / decline / who-invited / who-accepted / messaging — P7 P15 P21 P28 P31 P33 MUST</span>
+    <span class="dstar must"><b>#2</b> AI mod of messages, photos, voice + report / ban — P37 P34 P38 D4 D7 P41–P43 MUST</span>
+    <span class="dstar must"><b>#3</b> Photo blur + reveal-on-match / request — P40 D8 MUST</span>
+    <span class="dstar must"><b>#4</b> Mahram in chat — D1 P45 MUST</span>
+    <span class="dstar must"><b>#5</b> Marriage success reporting — D11 MUST; D12 MUST slice (story + page + honest counter at 0); P54 NEXT (fed by D11/D12)</span>
+    <span class="dstar must"><b>#6</b> Security &amp; verification — P8 P9 P41 P46 D5 D6 D13 MUST</span>
   </div>
 
   <h3 style="font-family:Palatino,Georgia,serif;font-weight:400;color:var(--gold);margin-bottom:8px;font-size:1.2rem">Name shortlist — point-in-time RDAP, not a purchase</h3>
@@ -1162,7 +1174,7 @@ footer {
 </section>
 
 <footer>
-  <p>Session complete 2026-09-27T21:16 · Headless autonomous · Artifacts: this HTML + intent · Product name TBD · Downstream: thoughtful product owner aligned with docs/system-idea.md must-haves; every P1–P59 required in brief / PRD; D1–D23 plus D24–D40 listed; do not start brief / PRD / architecture in this brainstorm run.</p>
+  <p>Session complete 2026-09-27T21:16 · Headless amendment 2026-09-27 (owner must-haves: D11/D12 MUST split, P36 Android MUST / iOS NEXT) · Artifacts: this HTML + intent · Product name TBD · Downstream: thoughtful product owner aligned with docs/system-idea.md must-haves; every P1–P59 required in brief / PRD; D1–D23 plus D24–D40 listed; do not start brief / PRD / architecture in this brainstorm run.</p>
 </footer>
 </div>
 
@@ -1204,7 +1216,7 @@ footer {
     33: "realtime chat typing / reactions / photos MUST; curated GIFs NEXT",
     34: "voice messages (D4 raise)",
     35: "push + wali digest / reveal / moderation + quiet hours",
-    36: "WEB + PWA MUST; native iOS + Android NEXT",
+    36: "WEB + PWA + store-listed Android MUST; native iOS NEXT",
     37: "AI text moderation; all-modality raise is D4",
     38: "photo strike rule",
     39: "published photo rules (pictogram + audio D40)",
@@ -1222,7 +1234,7 @@ footer {
     51: "blog — NEXT; full cadence may slide LATER",
     52: "Ouaga / Bobo / BF SEO MUST; remaining SEO NEXT",
     53: "promo video — NEXT; high-production may slide LATER",
-    54: "testimonials carousel — NEXT; wait for real D12",
+    54: "testimonials carousel — NEXT; fed by real D11/D12",
     55: "freemium XOF / FCFA",
     56: "Premium structure minus paywalled safety MUST; remaining perks NEXT",
     57: "1 / 3 / 6 months, no silent auto-renew",
