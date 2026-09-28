@@ -6,7 +6,8 @@
 | 1a Farata teardown (`docs/competitor-farata.md`) + 1b names/RDAP (`docs/name-options.md`) | done | d6d7d63 |
 | 1c Headless bmad-brainstorming (153 ideas, 4 techniques) | done | 65bb352 |
 | 1c amend (must-have #5 + Android to MVP MUST) | done | 2a13408 |
-| 2 Product brief | **not started** (awaiting go-ahead) | — |
+| 2 Product brief (`_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/`) | done | 9e9842e |
+| 3 PRD | **not started** (awaiting go-ahead) | — |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:35 ET, model cursor-grok-4.6-high-fast)
 
@@ -27,3 +28,22 @@
 > **After the brief (required):** [PRD] **Create Edit and Review PRD** — `bmad-prd`
 > 
 > Run `bmad-product-brief` in a **fresh context window**.
+
+
+## bmad-help answer after Phase 2 (2026-09-27 ~21:35 ET, model cursor-grok-4.6-high-fast)
+
+> You are in **BMad Method, phase 2-planning**. Brainstorming and the product brief are complete. No PRD, UX, or architecture exists yet.
+> 
+> **Next (required):** [PRD] **Create Edit and Review PRD** — `bmad-prd`  
+> Create a new PRD through guided discovery. Preceded-by `bmad-product-brief`. Required before UX, architecture, and later plan/ship steps.
+> 
+> **Why:** The catalog sequence is brief → PRD → (optional UX) → architecture. The brief is `status: complete`, so the next required skill is `bmad-prd`. Skip `bmad-ux` and `bmad-architecture` until the PRD exists. `bmad-spec` is an anytime shortcut, not the required path for this launch-stakes product.
+> 
+> **Inputs for `bmad-prd` (extract, don’t ingest):**
+> - Primary: `_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/` (`brief.md`, `addendum.md`, `.memlog.md`)
+> - Also: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (`brainstorm-intent.md`, `brainstorm.html`, `.memlog.md`)
+> - Also: `docs/system-idea.md`, `docs/competitor-farata.md`, `docs/name-options.md`
+> 
+> **Optional before PRD (not required):** [RS] `bmad-deep-recon` if you want extra market/legal/user-voice research; [AE] `bmad-advanced-elicitation` if you want to harden the brief first.
+> 
+> Run `bmad-prd` in a **fresh context window**.
