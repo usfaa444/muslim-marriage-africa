@@ -1,0 +1,190 @@
+URL: https://farata.net/dpa
+
+
+Découvrir Farata
+Accueil
+Comment s'inscrire ?
+Tarifs
+Blog
+FAQ
+Contact
+Se connecter
+Se connecter
+Conforme RGPD
+Accord de Traitement 
+des Données
+Data Processing Agreement (DPA) - Document contractuel définissant les obligations en matière de protection des données personnelles.
+Engagement de conformité
+Farata s'engage à respecter le Règlement Général sur la Protection des Données (RGPD) et les lois locales applicables en matière de protection des données personnelles. Ce DPA fait partie intégrante de nos Conditions Générales d'Utilisation.
+Article 01
+Objet de l'accord
+Le présent Accord de Traitement des Données (« DPA ») régit le traitement des données personnelles effectué par Farata (« Sous-traitant ») pour le compte de ses utilisateurs (« Responsables de traitement ») dans le cadre de l'utilisation de la plateforme.
+Périmètre :
+ Cet accord s'applique à toutes les données personnelles traitées via la plateforme Farata.
+Base légale :
+ Règlement (UE) 2016/679 (RGPD) et loi sénégalaise n° 2008-12 sur la protection des données personnelles.
+Durée :
+ Cet accord est valable pendant toute la durée d'utilisation de nos services.
+Article 02
+Nature des données traitées
+Catégories de données
+Données d'identification (nom, prénom, pseudonyme)
+Coordonnées (email, localisation)
+Données de profil (âge, situation, description)
+Photos de profil
+Messages échangés entre utilisateurs
+Données de connexion et logs
+Catégories de personnes concernées
+Utilisateurs inscrits sur la plateforme
+Visiteurs du site web
+Article 03
+Obligations du sous-traitant
+Farata, en tant que sous-traitant, s'engage à :
+Traitement licite :
+ Ne traiter les données que sur instructions documentées du responsable de traitement.
+Confidentialité :
+ Garantir que les personnes autorisées à traiter les données sont soumises à une obligation de confidentialité.
+Sécurité :
+ Mettre en œuvre les mesures techniques et organisationnelles appropriées pour assurer la sécurité des données.
+Sous-traitance :
+ Ne pas faire appel à un autre sous-traitant sans autorisation préalable écrite.
+Assistance :
+ Aider le responsable de traitement à répondre aux demandes d'exercice des droits des personnes concernées.
+Notification :
+ Notifier toute violation de données dans les 72 heures suivant sa découverte.
+Article 04
+Mesures de sécurité
+Nous appliquons les mesures de sécurité suivantes conformément à l'article 32 du RGPD :
+Chiffrement :
+ Toutes les données sont chiffrées en transit (TLS 1.3) et au repos (AES-256).
+Pseudonymisation :
+ Les données sensibles sont pseudonymisées lorsque possible.
+Contrôle d'accès :
+ Accès restreint aux données selon le principe du moindre privilège.
+Sauvegardes :
+ Sauvegardes quotidiennes chiffrées avec rétention de 30 jours.
+Monitoring :
+ Surveillance continue des systèmes et détection des intrusions.
+Tests :
+ Tests de sécurité réguliers et audits de vulnérabilité.
+Article 05
+Transferts internationaux
+Les données peuvent être transférées vers des pays tiers dans les conditions suivantes :
+Hébergement :
+ Vercel (USA) - Clauses contractuelles types (CCT) de la Commission européenne.
+Base de données :
+ Neon (USA) - Certifié SOC 2 Type II, CCT en place.
+Paiements :
+ Stripe (USA) - Certifié PCI-DSS Level 1, Privacy Shield.
+Emails :
+ Resend (USA) - CCT en place.
+Article 06
+Sous-traitants ultérieurs
+Liste des sous-traitants autorisés :
+Vercel Inc. :
+ Hébergement et CDN - San Francisco, USA
+Neon Tech Inc. :
+ Base de données PostgreSQL - San Francisco, USA
+Stripe Inc. :
+ Traitement des paiements - San Francisco, USA
+Resend Inc. :
+ Envoi d'emails transactionnels - USA
+Cloudflare Inc. :
+ Protection DDoS et DNS - San Francisco, USA
+Article 07
+Durée de conservation
+Données de compte :
+ Conservées pendant la durée de l'inscription, puis supprimées sous 30 jours après suppression du compte.
+Compte banni :
+ Farata se réserve le droit de supprimer tout compte ne respectant pas les conditions d'utilisation, sans préavis ni remboursement.
+Messages :
+ Conservés pendant 2 ans après le dernier échange, puis anonymisés.
+Logs de sécurité :
+ Conservés 12 mois pour des raisons de sécurité et conformité.
+Données de paiement :
+ Conservées 10 ans conformément aux obligations comptables.
+Article 08
+Fin du traitement
+À la fin de la relation contractuelle, Farata s'engage à :
+Restitution :
+ Fournir une copie des données au format structuré sur demande.
+Suppression :
+ Supprimer définitivement toutes les données dans un délai de 30 jours.
+Attestation :
+ Fournir une attestation de suppression sur demande.
+Article 09
+Notification de violation
+En cas de violation de données personnelles :
+Délai :
+ Notification au responsable de traitement dans les 72 heures.
+Contenu :
+ Description de la nature de la violation, catégories de données concernées, mesures prises.
+Assistance :
+ Aide à la notification des personnes concernées si nécessaire.
+Documentation :
+ Tenue d'un registre de toutes les violations.
+Article 10
+Droits des personnes concernées
+Nous facilitons l'exercice des droits suivants :
+Droit d'accès :
+ Obtenir une copie de ses données personnelles.
+Droit de rectification :
+ Corriger des données inexactes ou incomplètes.
+Droit à l'effacement :
+ Demander la suppression de ses données.
+Droit à la portabilité :
+ Recevoir ses données dans un format structuré.
+Droit d'opposition :
+ S'opposer à certains traitements.
+Droit de limitation :
+ Limiter le traitement dans certains cas.
+Délégué à la Protection des Données
+Pour toute question relative à ce DPA ou à la protection de vos données, contactez-nous.
+Contacter
+Version 1.0 - Dernière mise à jour : Décembre 2024
+Ta moitie, par destin et invocation. La plateforme de rencontres halal pour musulmans serieux.
+Rejoindre Farata
+RGPD
+100% Conforme
+Navigation
+Accueil
+Comment ca marche
+Tarifs
+Blog
+FAQ
+Contact
+Rencontre
+Rencontre Dakar
+Rencontre Sénégal
+Rencontre Mali
+Rencontre Côte d'Ivoire
+Rencontre Burkina
+Rencontre Musulman
+Rencontre Gratuite
+Mariage Halal
+Femme Musulmane
+Toutes les villes
+Legal
+Reglement
+Confidentialite
+Mentions legales
+CGV
+Accord de traitement (DPA)
+Contact
+faratasn@gmail.com
+Dakar, Senegal
+© 2026 Farata. Tous droits reserves.
+Fait avec 
+ pour la Oumma
+v1.82.0
+Accord de Traitement des Données (DPA) | Farata | Farata
+Accueil
+Comment s'inscrire ?
+Tarifs
+Blog
+FAQ
+Contact
+Se connecter
+Commencer mon histoire
+بِسْمِ اللَّهِ
+Ta moitié, par destin et invocation

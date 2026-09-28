@@ -1,0 +1,147 @@
+URL: https://farata.net/confidentialite
+
+
+Découvrir Farata
+Accueil
+Comment s'inscrire ?
+Tarifs
+Blog
+FAQ
+Contact
+Se connecter
+Se connecter
+Politique de 
+confidentialité
+Ta vie privée est sacrée. Découvre comment nous protégeons tes données personnelles sur Farata.
+01
+Données collectées
+Lors de l'inscription
+Nom d'utilisateur (pseudonyme)
+Adresse email
+Mot de passe (stocké de manière chiffrée)
+Genre
+Pour ton profil
+Âge et date de naissance
+Ville et pays de résidence
+Situation matrimoniale
+Niveau d'études et profession
+Pratique religieuse
+Description personnelle
+Photos (optionnelles)
+Automatiquement
+Adresse IP lors de la connexion
+Données de navigation (pages visitées, durée)
+Type d'appareil et navigateur
+02
+Utilisation des données
+Tes données sont utilisées uniquement pour :
+Fonctionnement du service :
+ Afficher ton profil aux autres membres, permettre les échanges et gérer ton compte.
+Matching :
+ Suggérer des profils compatibles selon tes critères de recherche.
+Sécurité :
+ Détecter les comportements frauduleux, protéger les membres et modérer les contenus.
+Communication :
+ T'envoyer des notifications importantes (nouveau message, demande de contact, etc.).
+Amélioration :
+ Analyser l'utilisation du site pour améliorer nos services (statistiques anonymisées).
+03
+Partage des données
+Nous ne vendons jamais tes données. Elles peuvent être partagées uniquement avec :
+Prestataires techniques :
+ Hébergement (Vercel), base de données (Neon), paiement (Stripe), emails (Resend), protection (Cloudflare).
+Autorités :
+ Si requis par la loi ou pour protéger nos droits et la sécurité des utilisateurs.
+04
+Durée de conservation
+Compte actif :
+ Tes données sont conservées tant que ton compte est actif.
+Compte supprimé :
+ Suppression définitive sous 30 jours, sauf obligations légales.
+Compte banni :
+ Nous nous réservons le droit de supprimer tout compte ne respectant pas nos conditions d'utilisation et règlement, sans préavis ni remboursement.
+Logs de sécurité :
+ Conservés 12 mois maximum pour des raisons de sécurité.
+05
+Tes droits
+Conformément au RGPD et aux lois sénégalaises, tu disposes des droits suivants :
+Accès :
+ Demander une copie de toutes tes données personnelles.
+Rectification :
+ Corriger des informations inexactes ou incomplètes.
+Suppression :
+ Demander la suppression de ton compte et de tes données.
+Portabilité :
+ Recevoir tes données dans un format structuré et lisible.
+Opposition :
+ T'opposer à certains traitements (marketing, etc.).
+06
+Sécurité des données
+Chiffrement SSL/TLS de toutes les communications
+Mots de passe hashés avec bcrypt
+Hébergement sécurisé avec certificats SSL
+Sauvegardes quotidiennes chiffrées
+07
+Cookies
+Nous utilisons des cookies pour :
+Session :
+ Maintenir ta connexion active (essentiel).
+Préférences :
+ Sauvegarder tes choix (thème, langue).
+Statistiques :
+ Comprendre l'utilisation du site (anonymisées).
+Une question sur tes données ?
+Pour exercer tes droits ou poser une question, contacte-nous.
+Contacter
+Dernière mise à jour : Décembre 2024
+Ta moitie, par destin et invocation. La plateforme de rencontres halal pour musulmans serieux.
+Rejoindre Farata
+RGPD
+100% Conforme
+Navigation
+Accueil
+Comment ca marche
+Tarifs
+Blog
+FAQ
+Contact
+Rencontre
+Rencontre Dakar
+Rencontre Sénégal
+Rencontre Mali
+Rencontre Côte d'Ivoire
+Rencontre Burkina
+Rencontre Musulman
+Rencontre Gratuite
+Mariage Halal
+Femme Musulmane
+Toutes les villes
+Legal
+Reglement
+Confidentialite
+Mentions legales
+CGV
+Accord de traitement (DPA)
+Contact
+faratasn@gmail.com
+Dakar, Senegal
+© 2026 Farata. Tous droits reserves.
+Fait avec 
+ pour la Oumma
+v1.82.0
+Nous utilisons des cookies
+Pour améliorer ton expérience et sécuriser ta connexion. 
+En savoir plus
+Gérer
+Accepter
+Politique de confidentialité | Farata | Farata
+Accueil
+Comment s'inscrire ?
+Tarifs
+Blog
+FAQ
+Contact
+Se connecter
+Commencer mon histoire
+بِسْمِ اللَّهِ
+Ta moitié, par destin et invocation
