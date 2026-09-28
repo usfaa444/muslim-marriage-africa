@@ -8,7 +8,9 @@
 | 1c amend (must-have #5 + Android to MVP MUST) | done | 2a13408 |
 | 2 Product brief (`_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/`) | done | 9e9842e |
 | 3 PRD (`_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`) | done | 91a9b87 |
-| 4 UX (optional) / Architecture | **not started** (awaiting go-ahead) | — |
+| 4 UX (`bmad-ux`) | **skipped** by user choice (optional; may be added later) | — |
+| 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
+| 5 Epics & stories (`bmad-create-epics-and-stories`) | **not started** (awaiting go-ahead) | — |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
 
@@ -69,3 +71,23 @@
 > Inputs: the final PRD plus the UX spines. Then `bmad-create-epics-and-stories`.
 > 
 > Run `bmad-ux` in a **fresh context window**.
+
+## bmad-help after Phase 4 (architecture) — 2026-09-27 22:09 EDT
+
+UX skipped by user choice. Architecture: hexagonal modular monolith, AD-1..AD-26, Scaleway fr-par `[ASSUMPTION — legal review]`, trace FR 143/143 + NFR 9/9.
+
+> **Where you are:** BMad Method planning. Brainstorm, product brief, PRD (`status: final`), and architecture (`ARCHITECTURE-SPINE.md` `status: final` + `SOLUTION-DESIGN.md`) are done. UX was skipped on purpose. No epics/stories yet.
+>
+> **Optional (skipped, not a gate):** `[CU]` **Create UX** — `bmad-ux`. Recommended when UI is a major part of the product; `required=false`. Stay skipped unless you want design/experience docs before stories.
+>
+> **Next required:** `[CE]` **Create Epics and Stories** — `bmad-create-epics-and-stories`
+>
+> Breaks the PRD and architecture into epics and user stories with acceptance criteria. It is the next required planning skill (`preceded-by: bmad-architecture`). Sprint planning (`bmad-sprint-planning`) comes after this, not before.
+>
+> **Inputs it should take:**
+> - PRD: `_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/` (`prd.md`, plus addenda/polish)
+> - Architecture: `_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/` (`ARCHITECTURE-SPINE.md`, `SOLUTION-DESIGN.md`)
+> - No UX folder (none exists)
+> - Brief/brainstorm only as supporting context if the skill scans `planning_artifacts` / `docs`
+>
+> Run it in a **fresh context window**. After CE finishes, the next required skill is `bmad-sprint-planning`.
