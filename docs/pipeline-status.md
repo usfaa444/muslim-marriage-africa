@@ -7,7 +7,8 @@
 | 1c Headless bmad-brainstorming (153 ideas, 4 techniques) | done | 65bb352 |
 | 1c amend (must-have #5 + Android to MVP MUST) | done | 2a13408 |
 | 2 Product brief (`_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/`) | done | 9e9842e |
-| 3 PRD | **not started** (awaiting go-ahead) | — |
+| 3 PRD (`_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`) | done | 91a9b87 |
+| 4 UX (optional) / Architecture | **not started** (awaiting go-ahead) | — |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
 
@@ -47,3 +48,24 @@
 > **Optional before PRD (not required):** [RS] `bmad-deep-recon` if you want extra market/legal/user-voice research; [AE] `bmad-advanced-elicitation` if you want to harden the brief first.
 > 
 > Run `bmad-prd` in a **fresh context window**.
+
+
+## bmad-help answer after Phase 3 (2026-09-27 ~21:56 ET, model cursor-grok-4.6-high-fast)
+
+> You are in **BMad Method, phase 2-planning**. Brainstorming, the product brief, and the PRD (`status: final`) are done. No UX, architecture, or epics exist yet.
+> 
+> **Next (optional, recommended):** [CU] **Create UX** — `bmad-ux`  
+> Capture UX decisions into `DESIGN.md` (how it looks) and `EXPERIENCE.md` (how it behaves). Strongly recommended when a UI is a major part of the project. Preceded-by `bmad-prd`.
+> 
+> **Why:** The catalog sequence is PRD → UX (if UI-major) → architecture. This product is UI-major (French-first web/PWA/Android, Lite mode, blur/Reveal, Mahram-in-Chat, named journeys). Architecture is offered once a PRD exists **plus UX if present**, so UX should land first. The PRD itself defers visual direction, polygamy-disclosure UX, and fail-closed UX to this step.
+> 
+> **Inputs for `bmad-ux`:**
+> - Primary: `_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/` (`prd.md`, `addendum.md`, reconcile/review files)
+> - Also: `_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/`
+> - Also: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (visual keepsake: indigo/sand/gold, mihrab, *sira*)
+> - Also: `docs/system-idea.md`, `docs/competitor-farata.md`, `docs/name-options.md`
+> 
+> **After UX (required):** [CA] **Architecture** — `bmad-architecture`  
+> Inputs: the final PRD plus the UX spines. Then `bmad-create-epics-and-stories`.
+> 
+> Run `bmad-ux` in a **fresh context window**.
