@@ -11,7 +11,7 @@
 | 4 UX (`bmad-ux`) | **skipped** by user choice (optional; may be added later) | — |
 | 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
 | 5 Epics & stories (`bmad-create-epics-and-stories`) | **not started** (awaiting go-ahead; not started by the 2026-10-01 amendment) | — |
-| Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | (this commit) |
+| Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
 
