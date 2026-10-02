@@ -10,7 +10,8 @@
 | 3 PRD (`_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`) | done | 91a9b87 |
 | 4 UX (`_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/`) | done (was skipped; run 2026-10-01 after architecture) | d0b46c2 |
 | 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
-| 5 Epics & stories (`bmad-create-epics-and-stories`) | **not started** (awaiting go-ahead; not started by the 2026-10-01 amendment) | — |
+| 6 Epics & stories (`_bmad-output/planning-artifacts/epics.md`) | done (12 epics, 98 stories; ready for development) | (this commit) |
+| 7 Sprint planning / implementation | **not started** | — |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
@@ -110,3 +111,15 @@ BMAD rewrote the PRD (`FR-062`–`FR-068`, `NFR-003`, new `FR-144`), the archite
 > Run `bmad-ux` in a fresh context. Stop after UX. Do not start epics.
 
 UX spines are `DESIGN.md` and `EXPERIENCE.md` (status final). Passive moderation is a banned chat state. Epics were not started. Headless status was `partial` only because PRD open questions stay open.
+
+## bmad-help before Phase 6 epics — 2026-10-01 ~21:58 ET
+
+> **Next required step:** `[CE]` **Create Epics and Stories** — `bmad-create-epics-and-stories`.
+> **Output:** `_bmad-output/planning-artifacts/epics.md`
+> UX exists, so epics may start. Do not start sprint planning after it.
+
+Epics file is the build index. Recommended next skill written in the file, not run: `bmad-help`. Sprint planning was not started.
+
+## Phase 7 hand-back
+
+Planning pack is complete: brainstorm, brief, PRD, architecture, UX, epics and stories. Implementation was not started. A later build may use a Cloud Agent only if the user asks. Do not auto-start.
