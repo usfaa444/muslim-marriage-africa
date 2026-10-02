@@ -8,7 +8,7 @@
 | 1c amend (must-have #5 + Android to MVP MUST) | done | 2a13408 |
 | 2 Product brief (`_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/`) | done | 9e9842e |
 | 3 PRD (`_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`) | done | 91a9b87 |
-| 4 UX (`bmad-ux`) | **skipped** by user choice (optional; may be added later) | — |
+| 4 UX (`_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/`) | done (was skipped; run 2026-10-01 after architecture) | (this commit) |
 | 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
 | 5 Epics & stories (`bmad-create-epics-and-stories`) | **not started** (awaiting go-ahead; not started by the 2026-10-01 amendment) | — |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
@@ -100,3 +100,13 @@ Locked decision from Maitchibi Fayçal. AI moderation is passive: chat text, cha
 bmad-help (before the rewrite): use `bmad-prd` **update**, then `bmad-architecture` **update**, in the existing folders. `bmad-correct-course` does not apply before epics exist.
 
 BMAD rewrote the PRD (`FR-062`–`FR-068`, `NFR-003`, new `FR-144`), the architecture (`AD-10`, `AD-11`), and the brief. Brainstorm has no update workflow, so `brainstorm-intent.md`, `brainstorm.html`, `docs/competitor-farata.md` D4, and a banner on `docs/system-idea.md` were corrected by hand. Epics, stories, and UX were not started.
+
+## bmad-help before Phase 5 UX — 2026-10-01 ~21:44 ET
+
+> **`bmad-ux`** — **Create** (not Update). This is not `bmad-create-epics-and-stories`.
+>
+> Output folder: `_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/`
+>
+> Run `bmad-ux` in a fresh context. Stop after UX. Do not start epics.
+
+UX spines are `DESIGN.md` and `EXPERIENCE.md` (status final). Passive moderation is a banned chat state. Epics were not started. Headless status was `partial` only because PRD open questions stay open.
