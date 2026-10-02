@@ -2,10 +2,12 @@
 title: Input reconciliation — brief-muslim-marriage-africa-2026-09-27
 status: complete
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-10-01
 input: briefs/brief-muslim-marriage-africa-2026-09-27 (brief.md + addendum.md + .memlog.md)
 against: prds/prd-muslim-marriage-africa-2026-09-27 (prd.md + addendum.md)
 ---
+
+**Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows and gaps below that require fail-closed pre-delivery, hold-on-timeout, or pre-delivery block/hold rates as current PRD behavior are historical. Current `prd.md` delivers Chat immediately, then scans; SM-4 counts flags and scan-deferred events. Other gaps in this reconcile are not closed by that decision.
 
 # Reconcile: product brief → PRD
 
@@ -32,7 +34,7 @@ The brief’s “What the PRD must preserve” (brief.md §What the PRD must pre
 | Copy lexicon *mariage / ta'aruf / nikah / khitba*; ban *dating / rencontre romantique* | §7; FR-117 AC; NFR-007 |
 | Khalwa-safe: no live A/V until Mahram or chaperoned meeting; live video even with Mahram is LATER | §7; Non-Goals |
 | Woman’s consent; quiet decline; no guilt timer | FR-039, FR-041, FR-042 |
-| Fail-closed pre-delivery on every modality | FR-062–FR-067; NFR-003 |
+| Fail-closed pre-delivery on every modality *(brief spine; PRD correction 2026-10-01 delivers Chat then scans)* | FR-062–FR-067, FR-144; NFR-003 (send-first + scan-deferred) |
 | North star = chaperoned meetings + dual-confirmed nikah | §1; §15 SM-1 / SM-2 |
 | A1–A3 tagged [ASSUMPTION] and flagged for legal review | FR-011, §4.7, FR-120; §17 |
 | Open questions 1–11 from the brief | `prd.md` §16 (plus new #12 retention) |
@@ -201,15 +203,15 @@ Brief.md §Success metrics classes vs `prd.md` §15:
 | Outcome | Dual-confirmed marriages (D11); counter at 0 | **SM-1** — transferred |
 | Outcome | Chaperoned / family meetings (D24 MUST slice) | **SM-2** — transferred, but see FR-028 hole |
 | Trust | Verified members by level; never sell “looks verified” | **SM-3** — transferred |
-| Safety | **Pre-delivery block / hold / human-review rates** | **Absent from §15** |
+| Safety | **Pre-delivery block / hold / human-review rates** | **Superseded 2026-10-01.** SM-4 now counts passive-scan flags, admin warning/suspend/other-action rates, and scan-deferred events. Pre-delivery hold rates are no longer the product. |
 | Safety | Report SLA met (24h); strike → ban completions | **SM-4** — transferred |
 | Safety | Appeal overturn rate | **SM-C3** (counter-metric) — reframed, not dropped |
-| Safety | **Fail-closed incidents counted, not hidden** | Visible on FR-067 / FR-142 / UJ-6; **not a named SM** |
+| Safety | **Fail-closed incidents counted, not hidden** | **Superseded 2026-10-01.** SM-4 + FR-067 / FR-142 count **scan-deferred** events, not fail-closed holds. |
 | Dignity | Blur share; reveal-revoke; wali-attached chats; sister-initiated requests | **SM-5** — transferred |
 | Local fit | Android+PWA Ouaga then Bobo; Orange Money/Moov checkout; audio-onboarding | **SM-6** — transferred |
 | Honesty | Proof-backed counters only | **SM-C1** + FR-101 — transferred |
 
-The missing Safety rates are the ones that prove D4/D6/D32 are working in production, not just specified. Brief.md called them out as first-class; the PRD folded fail-closed into Operator telemetry and omitted pre-delivery rates entirely.
+**Superseded 2026-10-01.** D4/D6/D32 now mean deliver-then-scan, honest “AI flags a human,” and scan-deferred visibility. SM-4 names flag rates and scan-deferred counts. The brief’s pre-delivery / fail-closed safety class is no longer the product.
 
 ### 5.3 Name — shortlist transferred; decision-gate detail thinned
 
@@ -245,7 +247,7 @@ The missing Safety rates are the ones that prove D4/D6/D32 are working in produc
 1. **Visual / swipe / sanction / du'a / suitor / wali-identity feel** — §10 and journeys only; FRs would pass a dating-shaped or celebrity-shaped UX (see §2).
 2. **A3 leftover “in a product brief”** — verbatim paste is stale in the PRD (see §3).
 3. **P16 hijra/confrérie and D27 USSD** — brief MUST-if-cheap / MUST-if-feasible flattened to NEXT; Appendix A overclaims horizon match (see §4).
-4. **Safety metrics** — pre-delivery block/hold/human-review rates and fail-closed incidents not in §15 (see §5.2).
+4. **Safety metrics** — **Superseded 2026-10-01.** Pre-delivery block/hold rates are no longer required. SM-4 now tracks flags, admin actions, and scan-deferred events (see §5.2).
 5. **Name decision-gate** — RDAP/404 caveats, `.com/.net` table, `nisfdin`, three-actor user test thinned out of the PRD spine (see §5.3).
 
 Related: kill-switch + mass revoke has no FR; FR-028 has no AC for marking the MUST meeting stage.

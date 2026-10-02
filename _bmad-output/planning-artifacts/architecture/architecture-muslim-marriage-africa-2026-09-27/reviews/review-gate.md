@@ -1,13 +1,32 @@
-# Reviewer Gate — finalize
+# Reviewer Gate — 2026-10-01 correction of record
 
-**Verdict:** pass after autofix (including independent reconcile follow-up). Critical/high incompatibilities closed with AD-23–AD-26 and tightened AD-1/AD-3/AD-4/AD-8/AD-10/AD-12/AD-13/AD-16/AD-20/AD-22/AD-23/AD-24. Farata processor label now Offered (seen) (legal text).
+**Verdict:** pass after autofix. Chat is send-first and passive. The spine does not instruct a pre-delivery Chat scan or a fail-closed hold.
 
-Second-wave follow-up from independent rubric, adversarial, PRD, and brief reviews: `api`+`worker` same image; `moderation_case` owned by trust; apply path via owner ports; in-region `web` (no Vercel); A1 bound on AD-8; Lite **1GB-class**; one `SmsPort` adapter; OTel + Secret Manager + OpenTofu + GitHub Actions + FCM/Web Push; AD-22 includes NFR-008 clocks; AD-24 binds dating lexicon on rendered copy; D38 `emergencyHide`; `nisfdin`/RDAP in header.
+**Intent:** update (correction of record). AD IDs stable. AD-10 Rule amended in place. No new AD. A1–A3, name, AD-5, stack, Capacitor, AD-9 blur product, AD-12 mahram product not reopened. OQ-2 resolved 2026-10-01.
 
 Lint: `reviews/lint_spine.json` — 0 findings (re-run after autofix).
 
-Lenses: rubric, version-check, adversarial, security/privacy. Reconciles: PRD, brief, brainstorm, system-idea, competitor-farata, name-options.
+## Lenses (2026-10-01)
 
-Independent [Version-check](250919e5-93d6-42d4-b1c2-e9d77827e882) + [Security/privacy](99d5cf9f-52e3-4a67-9dc5-7fdc5047ee36) follow-up applied: managed PG 17.11 / Redis 8.6.3; Next floor 16.3.7 after 2026-09-30; media GET gateway + 60s TTL; tamper-evident audit; CIL filing inventory; staff export = cil_ticket only.
+| Lens | File | Verdict | Applied |
+| --- | --- | --- | --- |
+| Rubric walker | [review-rubric-2026-10-01.md](review-rubric-2026-10-01.md) | pass-with-findings | AD-12 leftover `pending`/`held` dropped; AD-10 case writer = trust on Report/admin action only; AD-7 realtime = Socket.IO. FR-048 Flash-to-Mahram before conversation **not** applied (would reopen AD-12). |
+| Version-check | [review-version-check-2026-10-01.md](review-version-check-2026-10-01.md) | pass-with-findings | Stack **locked** — Next 16.3.8 / Nest 12.1.2 / BullMQ 6.3.11 / TS 7 vs Nest CLI recorded only. AD-10/AD-11 Whisper `mos`/`dyu` absent confirmed live. |
+| Adversarial | [review-adversarial-2026-10-01.md](review-adversarial-2026-10-01.md) | revise → closed by tighten | Flash phones refused; `enqueueScan`; asset kinds `profile_photo\|chat_photo\|voice_note`; Flash not copied into `message`; flagged-person = `flag_queue.account_id`. |
+| Security/privacy | [review-security-privacy-2026-10-01.md](review-security-privacy-2026-10-01.md) | pass-with-findings | Local Contact-share matcher (never `ModerationPort`); Flash phones refused; events `media_id` only; push/SMS template+ids; §5.3 destinataires. Gateway caller-bind / Mahram-remove denylist **not** applied (would reopen AD-9/AD-12). |
+| PRD reconcile | [reconcile-prd-2026-10-01.md](reconcile-prd-2026-10-01.md) | pass-with-findings | D6 published honesty on AD-10; Flash `flash_id` scan key; education interstitial. FR-062–068 / FR-144 / NFR-003 retargeted. Coverage 143 prior FRs + FR-144. |
 
-Plus remaining deferred: Next.js 16.3.7 adopt when published; Node 24 vs 26 if launch slips past 2026-10-28; Redis license / PG 18 when Scaleway lists it.
+Historical 2026-09-27 reviews that asserted pre-delivery scan, hold-on-timeout, or fail-closed Chat delivery are annotated **superseded 2026-10-01** (history kept).
+
+## Unapplied (locked or out of scope)
+
+- Stack pin bumps (Next 16.3.8, Nest 12.1.2, BullMQ 6.3.11, TS/Nest CLI).
+- AD-9 gateway caller-bind; Mahram-remove `MediaPort.revokeByViewer`.
+- FR-048 Flash read before conversation (AD-12 mahram read access).
+
+## Confirmations
+
+- No Chat `pending→delivered` machine. No `hold_queue` that stops delivery. Clocks `>10s / >30s → hold` deleted.
+- AI 5xx / timeout / empty / low confidence → `scan-deferred` / `scan-failed` on `flag_queue`.
+- Profile Photo/bio stay publish-gated (FR-065).
+- Questions 1 and 3–11 plus NFR-008 stay open. Question 2 resolved.

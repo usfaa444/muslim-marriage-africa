@@ -1,11 +1,13 @@
 # Input reconciliation — `docs/system-idea.md`
 
+**Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. The 2026-09-27 gap “continuous scan vs pre-delivery” is closed in the other direction: Chat is delivered immediately, then background-scanned. Findings below that describe the PRD as a pre-delivery hold are historical. Settings-optional blur and showcase-story gaps are not closed by that decision.
+
 **Input:** `/workspace/projects/muslim-marriage-africa/docs/system-idea.md`  
 **Against:** `prd.md` §6 Must-have coverage + §4 FRs / §5 NFRs; `addendum.md` overflow  
-**Date:** 2026-09-27  
+**Date:** 2026-09-27 (annotated 2026-10-01)  
 **Question:** Are owner must-haves #1–#6 MVP FRs with testable acceptance criteria, and did the FR structure drop qualitative intent?
 
-Verdict: all six must-haves exist as MVP capabilities with Given/When/Then ACs (NFR-001 uses Target/Verification). Three wording-vs-behavior gaps remain: continuous scan vs pre-delivery; settings-optional blur vs blur-by-default; “become showcase stories” vs consent-gated empty showcase. Farata “EVERY feature” is carried as P/D IDs, not as MVP-complete parity.
+Verdict: all six must-haves exist as MVP capabilities with Given/When/Then ACs (NFR-001 uses Target/Verification). Remaining wording-vs-behavior gaps after the 2026-10-01 lock: settings-optional blur vs blur-by-default; “become showcase stories” vs consent-gated empty showcase. The former “continuous vs pre-delivery” gap is superseded — current PRD is deliver-then-scan (closer to every-send, not a sampler). Farata “EVERY feature” is carried as P/D IDs, not as MVP-complete parity.
 
 ---
 
@@ -16,7 +18,7 @@ PRD §6 header: “Owner must-haves from `docs/system-idea.md` are all MVP FRs.�
 | # | system-idea.md (verbatim) | PRD §6 table (verbatim wording + FR IDs) | MVP FRs with testable ACs? |
 | --- | --- | --- | --- |
 | 1 | “Profiles: create and submit a profile; browse profiles; send an invite/match request; accept or decline; see who invited you and who accepted; exchange messages once matched.” | Same wording. `FR-001, FR-009, FR-016, FR-017, FR-021, FR-025, FR-038, FR-039, FR-040, FR-041, FR-046, FR-050` | Yes for the loop. Table omits `FR-012` (the actual submit/review gate). `FR-050` ACs never state “text is exchanged”; that sits on `FR-062`. |
-| 2 | “AI moderation on everything: every chat message, photo and voice note/audio is scanned continuously for indecent content (immodest photos, inappropriate language/advances). It blocks or flags, enforces the rules, and feeds a report/ban pipeline. Profile photos are moderated too.” | Same wording. `FR-062, FR-063, FR-064, FR-065, FR-066, FR-067, FR-068, FR-069, FR-070, FR-083, FR-084, FR-085, FR-087, FR-088` | Modalities and pipeline are MVP with ACs. **“Continuously” is not implemented** — PRD is pre-delivery hold (`FR-062`–`FR-067`, `NFR-003`). No post-delivery re-scan FR. Table omits `FR-051` (Voice notes exist) and `FR-089` (banned advances). |
+| 2 | “AI moderation on everything: every chat message, photo and voice note/audio is scanned continuously for indecent content (immodest photos, inappropriate language/advances). It blocks or flags, enforces the rules, and feeds a report/ban pipeline. Profile photos are moderated too.” | Same wording. `FR-062, FR-063, FR-064, FR-065, FR-066, FR-067, FR-068, FR-069, FR-070, FR-083, FR-084, FR-085, FR-087, FR-088` + `FR-144` (2026-10-01) | Modalities and pipeline are MVP with ACs. **2026-10-01:** “Continuously” as every-send-then-background-scan is now the model (`FR-062`–`FR-067`, `FR-144`, `NFR-003`). The 2026-09-27 “pre-delivery hold” reading is superseded. Table still omitted `FR-051` and `FR-089` at original review time. |
 | 3 | “Photo privacy: each member (sister or brother) can choose in settings to blur their profile picture and uploaded photos for viewers (with ideas like reveal-on-match or reveal-on-request).” | Same wording. `FR-056, FR-057, FR-058, FR-059` | Reveal-on-accepted-Invite and Reveal-on-request are MVP with ACs. **“Choose in settings to blur” is not the model** — blur is default (`FR-056`); no AC that a Brother opens Settings and toggles blur; no “always unblurred to browsers” policy. Appendix A P40 title still says “Blur toggle”; FRs do not. |
 | 4 | “Mahram/wali in chat: a sister can optionally add her mahram to the conversation. He reads all messages and acts as a human safeguard and moderator if something slips past the AI, keeping the conversation within Islamic limits.” | Same wording. `FR-071, FR-072, FR-073, FR-074, FR-075, FR-076, FR-077, FR-078, FR-079, FR-080` | Optional Sister-initiated attach, read-all, flag/pause/end: MVP with ACs. **“Islamic limits” has no testable AC** — Mahram judgment is the mechanism; fiqh-edge goes to Advisory Board (`FR-116`), not a rule list. |
 | 5 | “Marriage success reporting: couples report that they got married through the platform, and these become showcase success stories.” | Same wording. `FR-095, FR-096, FR-097, FR-098, FR-099, FR-100, FR-101` | Dual-confirm report is MVP with ACs. **“These become showcase success stories” is false as written** — public card needs both spouses + family checkbox + Operator/Advisory Board publish (`FR-099`). `FR-102` testimonials are NEXT. Launch showcase is empty; hero is the counter at 0. |
@@ -38,7 +40,7 @@ Note after the table (PRD): “Must-have #5 maps to D11 full + D12 MUST slice. P
 | send invite/match request | `FR-038` + `FR-046` Message Flash | Testable. |
 | accept or decline | `FR-039`, quiet decline `FR-042` | Testable. `FR-042` not in the §6 row. |
 | see who invited you / who accepted | `FR-040` Sent / Received / Accepted | Testable. |
-| exchange messages once matched | `FR-041` Chat after Sister consent; `FR-050` Chat | `FR-050` ACs cover typing, held Photos, reactions — not a plain delivered text. Delivery of text is `FR-062`. |
+| exchange messages once matched | `FR-041` Chat after Sister consent; `FR-050` Chat | `FR-050` ACs cover typing, immediately delivered Photos, reactions. Delivery of text is `FR-062` (immediate, then background scan). *(2026-09-27 “held Photos” reading superseded 2026-10-01.)* |
 
 No dropped capability. Qualitative “match” is renamed Invite/Chat (Glossary) — consistent, not a loss.
 
@@ -46,17 +48,17 @@ No dropped capability. Qualitative “match” is renamed Invite/Chat (Glossary)
 
 | Clause | PRD | Gap? |
 | --- | --- | --- |
-| every chat message | `FR-062` hold until allow | No |
-| photo (chat) | `FR-063` | No |
-| voice note/audio | `FR-064` STT + classifier; `FR-051` send path | Table omits `FR-051` |
-| profile photos | `FR-065` + `FR-012` | No |
-| “on everything” | Vision + D4: text, Chat Photo, Voice note, Profile Photo, bio. Flash gated by `FR-046` | Flash/bio not in §6 row |
-| scanned **continuously** | Pre-delivery only. Fail-closed hold if AI down (`FR-067`) | **Yes — wording vs model** |
-| indecent / immodest / advances | Outcomes `FR-066`; Code `FR-089` (indecency, sexual talk) | `FR-089` not in §6 row |
-| blocks or flags | block / blur-and-warn / hold | No |
-| report/ban pipeline | `FR-083`–`FR-088`, `FR-085` | No |
+| every chat message | `FR-062` deliver immediately, then background scan | No *(2026-10-01)* |
+| photo (chat) | `FR-063` same | No |
+| voice note/audio | `FR-064` STT + classifier after delivery; `FR-051` send path | Table omits `FR-051` |
+| profile photos | `FR-065` + `FR-012` (still publish-gated) | No |
+| “on everything” | Vision + D4: text, Chat Photo, Voice note, Flash delivered then scanned; Profile Photo, bio publish-gated | Flash/bio not in original §6 row |
+| scanned **continuously** | **Superseded 2026-10-01.** Every send is delivered, then scanned. AI outage records scan-deferred (`FR-067`), does not hold. | Closed as pre-delivery gap; remaining honesty is flag-for-admin, not silent delete |
+| indecent / immodest / advances | Outcomes `FR-066` flag-for-admin; Code `FR-089` | `FR-089` not in §6 row |
+| blocks or flags | **Superseded 2026-10-01.** AI flags for admin; admin chooses warning / suspend / other. Contact-share block stays a product rule. | Owner “blocks” is now admin-applied, not AI-gated delivery |
+| report/ban pipeline | `FR-083`–`FR-088`, `FR-085`, `FR-144` | No |
 
-**Gap.** Owner said “scanned continuously.” PRD explicitly chose **before delivery** and says so in §1 and D4. That is a stronger honesty/fail-closed design, but it is not continuous monitoring of already-delivered Chat. A later edit that re-scans history, or a policy line that “continuously” means “every send, not a sampling job,” is missing.
+**Gap (2026-09-27, superseded 2026-10-01).** Owner said “scanned continuously.” The 2026-09-27 PRD had chosen **before delivery**. The 2026-10-01 lock delivers then scans every send. That is the continuous-every-send reading, not a pre-delivery hold.
 
 ### #3 Photo privacy — ideas kept; settings-choice dropped
 
@@ -111,7 +113,7 @@ Feel that FRs cannot hold: solemn ta'aruf, haya-default media, quiet decline, no
 
 Every FR in the §6 table has at least one Given/When/Then pair except `NFR-001` (Target + Verification method — still testable). Weakest ACs:
 
-- `FR-050` — no “message body delivered after allow.”
+- `FR-050` — *(2026-09-27: no “message body delivered after allow.” 2026-10-01: Photos and text deliver without waiting for AI.)*
 - `FR-056` / `FR-057` — no Brother Settings path.
 - `FR-066` — outcomes named; “indecent / advances” thesaurus is in `FR-089`, not here.
 - `FR-075` — pause/resume rules tagged `[ASSUMPTION]`.
@@ -121,13 +123,13 @@ Every FR in the §6 table has at least one Given/When/Then pair except `NFR-001`
 
 ## 5. Gaps to resolve before polish (actionable)
 
-1. **#2 “continuously”** — Add a one-line policy in §4.6 / Glossary: either “continuous = every outbound item, not a batch sampler” or a real post-delivery re-scan FR. Do not leave the owner word in the §6 table if the behavior is pre-delivery only.
+1. **#2 “continuously”** — **Done 2026-10-01.** §4.6 / D4 / Glossary now state deliver-immediately then background-scan every send. Not a pre-delivery hold.
 2. **#3 settings / toggle** — Add a Settings AC on `FR-056`/`FR-057` for Sister *and* Brother; decide whether unmatched viewers can ever see a clear Photo. Rename Appendix A P40 if there is no toggle.
 3. **#5 showcase** — Either accept “report ≠ story” in the §6 note (already partly there) or add an MVP AC that a dual-confirmed couple *can* reach a published card without a NEXT carousel. Empty-at-launch is a product choice; it contradicts “these become showcase success stories.”
 4. **§6 row hygiene** — Put `FR-012` on #1; `FR-051` + `FR-089` on #2; `FR-020` on #6. Avoid implying the listed IDs are the whole capability.
 5. **Farata “EVERY feature”** — Keep the P/D appendix, but state in §6 or §14 that MVP is not full Offered-seen parity (iOS especially). That sentence is missing next to the must-have table.
 
-Non-gaps (do not treat as holes): Invite vocabulary vs “match”; fail-closed vs continuous; consent-gated stories vs invented testimonials; iOS NEXT vs “mobile” if Android+PWA is the accepted reading.
+Non-gaps (do not treat as holes): Invite vocabulary vs “match”; consent-gated stories vs invented testimonials; iOS NEXT vs “mobile” if Android+PWA is the accepted reading. *(2026-09-27 “fail-closed vs continuous” is no longer a non-gap framing — fail-closed Chat hold is superseded 2026-10-01.)*
 
 ---
 

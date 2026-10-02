@@ -1,6 +1,8 @@
+> **Correction of record 2026-10-01 (Maitchibi Fayçal).** AI moderation is passive. Chat is delivered immediately; the AI flags for an admin and does not block, hold, or delay a message. D4 and D32 below are the corrected wording. Photo blur/reveal and mahram read-only are unchanged.
+
 # Brainstorm intent — Muslim marriage Africa (Burkina-first)
 
-Marriage-focused Muslim matrimony (web + mobile) for African Muslim brothers and sisters. Launch Burkina Faso first (Ouagadougou, then Bobo-Dioulasso), then CI / Mali / Senegal / wider. The product is honorable ta'aruf — not dating: sister dignity never paywalled, optional sister-initiated verified mahram-in-chat, pre-delivery AI on text/photo/voice, honest polygamy disclosure, XOF mobile money, French-first UI plus Mooré/Dioula audio. Become the reference for finding a Muslim spouse in Ouagadougou/Bobo, then the region — not another dating app from Dakar.
+Marriage-focused Muslim matrimony (web + mobile) for African Muslim brothers and sisters. Launch Burkina Faso first (Ouagadougou, then Bobo-Dioulasso), then CI / Mali / Senegal / wider. The product is honorable ta'aruf — not dating: sister dignity never paywalled, optional sister-initiated verified mahram-in-chat, passive after-send AI on text/photo/voice (delivered immediately, then flagged for an admin), honest polygamy disclosure, XOF mobile money, French-first UI plus Mooré/Dioula audio. Become the reference for finding a Muslim spouse in Ouagadougou/Bobo, then the region — not another dating app from Dakar.
 
 ## Stance & constraints
 
@@ -10,7 +12,7 @@ Bindings for the product brief (assumptions and decisions from the memlog only):
 - French-first UI. Mooré and Dioula audio (D18) is a differentiator, not a nice-to-have. English/Arabic full UI is LATER.
 - XOF pricing. Mobile money first: Orange Money BF, Moov Africa BF, Wave/Coris where available. Cards secondary.
 - Sisters' safety and dignity are never paywalled: verification, blur, mahram, reporting always free. Monetise brothers' reach/convenience only.
-- AI moderation covers text, images, and audio **before** delivery; human review for edge cases. Fail **closed** when AI is down (hold undelivered media).
+- AI moderation covers text, images, and audio **after** delivery; the AI flags an admin, who decides the action. When the AI is down the message stays delivered and a scan-deferred event is recorded. **Corrected 2026-10-01** (was: before delivery, fail closed).
 - Mahram/wali is optional and sister-initiated. Wali is a process actor (flag, pause, end, propose meeting, later attest nikah).
 - Marriage success reporting requires both parties to confirm. North-star metric: chaperoned meetings + dual-confirmed nikah — not DAU or inflated members.
 - Farata statements use **only** evidence labels from `docs/competitor-farata.md`: Offered (seen) / Claimed (marketing) / Not publicly evidenced. No invented gaps.
@@ -33,7 +35,7 @@ Bindings for the product brief (assumptions and decisions from the memlog only):
 
 ## Wedge
 
-Burkina-first honorable ta'aruf: sister dignity never paywalled, optional verified mahram-in-chat, pre-delivery AI on text/photo/voice, honest polygamy disclosure, XOF mobile money, French + Mooré/Dioula audio — become **the** reference for finding a Muslim spouse in Ouagadougou/Bobo, then the region. Not “another dating app from Dakar.”
+Burkina-first honorable ta'aruf: sister dignity never paywalled, optional verified mahram-in-chat, passive after-send AI on text/photo/voice (delivered immediately, then flagged for an admin), honest polygamy disclosure, XOF mobile money, French + Mooré/Dioula audio — become **the** reference for finding a Muslim spouse in Ouagadougou/Bobo, then the region. Not “another dating app from Dakar.”
 
 Farata has family-involvement as policy words (P45 Offered as rules; Not publicly evidenced as product). Homepage Claimed “AI scans every message” vs FAQ Claimed “we do not read private chats” is an evidenced contradiction. Blur is Offered (seen) [bundle] as all-or-nothing reveal-on-acceptance; per-viewer reveal/revoke is Not publicly evidenced. P54 testimonials Offered (seen) are app-experience quotes, not marriages. Local-fit lever: Farata is Senegal-first, French-only UI (Offered); BF is an SEO page (Offered). D17–D19 (entity, CIL, Orange Money BF/Moov BF, Mooré/Dioula audio, lite) are the launch moat.
 
@@ -73,10 +75,10 @@ Carry-forward titles from the memlog. Split items appear in both buckets; deferr
 - **P31** Message Flash — simple personalised first message
 - **P32** AI Ice Breakers — **deen/family templates MUST**; AI-personalised slice is NEXT
 - **P33** realtime chat typing/reactions/GIFs/stickers/photos — MUST: typing, reactions, photo share (gallery/camera); GIFs/stickers NEXT
-- **P34** voice messages — French/Mooré/Dioula; always STT + audio-classified before delivery (D4 + D18)
+- **P34** voice messages — French/Mooré/Dioula; delivered immediately, then STT + audio-classified in the background (D4 + D18). Mooré/Dioula: Whisper has no mos/dyu; word lists + human review are the passive scan, not a pre-delivery hold
 - **P35** push notifications — messages/requests/visits; plus wali digest, reveal-requests, moderation outcomes, quiet hours
 - **P36** web+PWA+iOS+Android — **WEB + PWA MUST**; **store-listed native Android** (thin wrapper / TWA / Capacitor over the PWA) **MUST** for Burkina launch; native iOS NEXT
-- **P37** AI message moderation — every modality before delivery (D4)
+- **P37** AI message moderation — chat text, chat photos, and voice notes are delivered immediately, then scanned in the background; a flag goes to an admin (D4). Profile photos and bio stay publish-gated
 - **P38** photo strike rule — keep 3-strike / 24h block as floor (can tighten)
 - **P39** published photo rules — pictograms + French text + Mooré/Dioula audio (D40)
 - **P40** blur toggle/default/reveal-on-accept/unblur — raise to per-viewer reveal/revoke (D8)
@@ -137,7 +139,7 @@ All required in the brief and PRD. D1–D23 from competitor §7; D24–D40 from 
 | D1 | Mahram-in-chat read-all, sister-initiated, verified wali can flag/pause/end | MUST |
 | D2 | Wali dashboard multi-ward + digest + priority flags | NEXT |
 | D3 | Chaperoned-meeting/khitba planner with wali in loop | NEXT (full) |
-| D4 | Every modality moderated before delivery (text, chat photos, voice STT+classifier incl. local languages, profile photos, bio) | MUST |
+| D4 | Chat text, chat photos, and voice notes delivered immediately, then scanned (STT+classifier; local-language word lists). A flag reports to an admin; the AI does not block or hold delivery. Profile photos and bio stay publish-gated. **Corrected 2026-10-01** (was: every modality before delivery) | MUST |
 | D5 | Scam and off-platform guardrails (money, phone, WhatsApp, links) | MUST |
 | D6 | Honest consistent moderation policy + member appeal | MUST |
 | D7 | Report→strike→ban pipeline, console, evidence, fingerprinting, transparency stats | MUST (MVP-scale) |
@@ -170,7 +172,7 @@ All required in the brief and PRD. D1–D23 from competitor §7; D24–D40 from 
 | D29 | Mosque/imam attestation level | NEXT |
 | D30 | Prayer/night quiet hours (default no push between Isha and Fajr local time) | NEXT |
 | D31 | Moderator dual-control / audit / wellness | NEXT |
-| D32 | Fail-closed when AI is down | MUST |
+| D32 | AI outage does not delay delivery. Record a scan-deferred event for the admin queue. **Corrected 2026-10-01** (was: fail-closed hold of undelivered media) | MUST |
 | D33 | Alumni mentorship (read-only advice, not matchmaking) | LATER |
 | D34 | Optional language filters with anti-caste design (Mooré/Dioula/Fulfulde/French) | NEXT |
 | D35 | Match-visible change-audit (marital status or photos) | NEXT |
@@ -186,7 +188,7 @@ LATER (non-parity, from D-mapping): English/Arabic full UI; diaspora-heavy featu
 
 ### MVP MUST (BF launch)
 
-Accountable identity; haya-safe profiles; invite/accept/decline; wali-optional chat; pre-delivery moderation on all media; BF payments + lite + French/audio; sisters-free safety; honest polygamy; working delete; dual-confirmed marriage close (D11); consent-based success-story page + honest verified-marriages counter starting at 0 (D12); web + PWA + store-listed Android; proof-not-hype landing (Ouaga/Bobo/BF).
+Accountable identity; haya-safe profiles; invite/accept/decline; wali-optional chat; passive after-send moderation on chat media; BF payments + lite + French/audio; sisters-free safety; honest polygamy; working delete; dual-confirmed marriage close (D11); consent-based success-story page + honest verified-marriages counter starting at 0 (D12); web + PWA + store-listed Android; proof-not-hype landing (Ouaga/Bobo/BF).
 
 ### NEXT
 
@@ -242,7 +244,7 @@ Point-in-time RDAP 2026-09-27 ~21:10 ET. **Not a purchase.** No domain bought.
 - Romance/money scams (Wave/Orange Money asks) → D5 classifiers; P44 ban; in-chat education “never send money to a suitor”
 - Married men posing single → D14 required disclosure + dedicated report reason + pattern flags; never claim ID proves marital status
 - Catfish / stolen photos → liveness selfie matched to profile photos + P38
-- Indecency (voice/chat-photo slips) → D4 pre-delivery hold + human review + local-language audio lists; D32 fail-closed
+- Indecency (voice/chat-photo slips) → D4 deliver-then-scan + admin flag queue + local-language word lists; D32 scan-deferred when AI is down (corrected 2026-10-01; was pre-delivery hold / fail-closed)
 - Screenshot leaks of sister photos → D8 + D9 (watermark, screenshot notice, no download, revoke, blurred thumbs)
 - Fake wali → D1 verify (ID+phone, sister confirms relationship, cooling-off; wali cannot be an unmatched male friend) + D38
 - Post-decline harassment → P29 + D7 fingerprint
@@ -258,7 +260,7 @@ Point-in-time RDAP 2026-09-27 ~21:10 ET. **Not a purchase.** No domain bought.
 - Imam/public-figure impersonation → name-collision review in P8 + P9
 - Weaponize success-story to dox an ex → both confirm; either can refuse public story; proof stays private
 - Payment provider down → free-tier and all safety features stay up
-- AI vendor down → fail closed (D32)
+- AI vendor down → message already delivered; scan-deferred for admin (D32, corrected 2026-10-01)
 - Mosque rumor that the app is haram/dating → D23 named board, public fiqh notes, zero dating language, working Académie (D22)
 - Competitor ships shallow wali digest → keep wedge product-deep (D1–D2 verified, sister-initiated, read-all, pause/end)
 - Viral indecent leak → kill-switch, mass revoke of reveals, user notification, transparency note (D7/D9)
@@ -272,7 +274,7 @@ Point-in-time RDAP 2026-09-27 ~21:10 ET. **Not a purchase.** No domain bought.
 - Wali verification in practice: what documents prove father/brother/uncle without excluding orphans or converts? Who is an acceptable mahram if father is deceased?
 - Polygamy UX: how to disclose existing wives without doxxing them? First-wife awareness is out of scope unless she consents — confirm.
 - Data residency: can we keep BF-user data in a place CIL accepts while still using modern hosting (Farata: Vercel/Neon USA — Claimed processors)?
-- Fail-closed UX: how long will members tolerate held voice notes when the AI vendor is down?
+- Fail-closed UX: **resolved 2026-10-01.** Messages are not held when the AI is down. No tolerance question remains.
 - USSD/SMS: which BF operators and what cost per wali alert is sustainable at launch?
 - OAPI trademark + social handles for Nisfuddin / Nikahsira / Sakinaa — not done.
 - Imam advisory: which Ouaga/Bobo scholars will lend names, and what review SLA for Académie?

@@ -2,7 +2,7 @@
 title: muslim-marriage-africa
 status: final
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-10-01
 ---
 
 # PRD: muslim-marriage-africa
@@ -18,7 +18,7 @@ Farata statements use **only** the evidence labels from `docs/competitor-farata.
 
 If this works, families in Ouagadougou and Bobo-Dioulasso will treat the product as a known honorable path: a Sister can search without selling her face, a father can read the Chat, a Brother can pay in Orange Money, and the public number that matters is Verified marriages — starting at zero and growing only when both spouses confirm. Then Côte d’Ivoire, Mali, Senegal, and wider Africa — still marriage-shaped.
 
-This is Burkina-first honorable ta'aruf, not another dating app from Dakar. Sister dignity is never paywalled. Mahram-in-Chat is optional and Sister-initiated. Every Chat text, Chat Photo, Voice note, Profile Photo, and bio is moderated **before delivery**. Polygamy intent is disclosed before a Sister invests hope. Pricing is in XOF on mobile money. The interface is French-first; Mooré and Dioula audio carry low-literacy Members through the path that matters.
+This is Burkina-first honorable ta'aruf, not another dating app from Dakar. Sister dignity is never paywalled. Mahram-in-Chat is optional and Sister-initiated. Every Chat text, Chat Photo, Voice note, and Message Flash is **delivered immediately**, then a background AI scan checks published red flags and may flag the person for an admin. The AI does not block, hold, refuse, or delay delivery, and it does not apply a sanction. Profile Photo and bio still must not be publicly visible until reviewed (publish gating, not a Chat hold). Polygamy intent is disclosed before a Sister invests hope. Pricing is in XOF on mobile money. The interface is French-first; Mooré and Dioula audio carry low-literacy Members through the path that matters.
 
 The thesis the rest of this document bets on: **safety and dignity are a right; reach is a product.** Brothers pay for convenience. The north star is chaperoned meetings plus dual-confirmed nikah — not DAU, not invented member counts. Farata’s “+247.8k actifs” is Claimed (marketing); Google Play shows 10k+ downloads Offered (seen). This product will not copy that honesty failure.
 
@@ -63,7 +63,7 @@ Named scenes. Each step lists the FR IDs it exercises. Protagonist names are `[A
 8. When a Brother’s Invite arrives she sees his marital-status and polygamy-intent fields **before** accept. Decline is quiet. → FR-037, FR-039, FR-040, FR-042
 9. She accepts. Chat opens. She may Reveal Photos to him only, or refuse. She can Revoke later. → FR-041, FR-050, FR-057, FR-058, FR-059
 10. Optional: she invites her Mahram by phone (UJ-3). → FR-071–FR-079
-11. Every outbound and inbound Chat text, Photo, and Voice note is held until moderation outcomes. If AI is down, media stays undelivered. → FR-062–FR-067, NFR-003
+11. Every outbound and inbound Chat text, Photo, and Voice note is delivered immediately. A background scan may later flag the person for an admin; a later flag does not unsend what was already delivered. If AI is down, delivery still happened and a scan-deferred event is recorded. → FR-062–FR-067, FR-144, NFR-003
 12. She can Report or Block from Profile or Chat. → FR-083, FR-084
 
 **Edge case:** Shared-phone — she locks the app with a PIN before handing the device to a cousin. → FR-020, NFR-001
@@ -108,17 +108,17 @@ Named scenes. Each step lists the FR IDs it exercises. Protagonist names are `[A
 #### UJ-4. Aïcha closes a report without peeking for curiosity
 
 **Persona + context:** Aïcha, Trust & Safety, French + local-language support, small team.
-**Entry state:** Authenticated Moderator. Case arrives from Member Report and/or AI hold.
-**Climax:** She issues a Strike with evidence. Appeal path exists. Unblur of a Sister Photo required a reason logged to the audit trail.
-**Resolution:** Decision is appealable and auditable.
+**Entry state:** Authenticated Moderator. Case arrives from Member Report and/or an AI flag on an already-delivered message (plus the flagged person).
+**Climax:** She issues a warning, a suspend (when too indecent), or another published action, with evidence. Appeal path exists. Unblur of a Sister Photo required a reason logged to the audit trail.
+**Resolution:** Decision is appealable and auditable. The original message stays delivered unless a later product rule (not the AI) says otherwise; the AI never unsends or auto-sanctions.
 
-1. A case file opens with Chat text / Photo / Voice note, model scores, Member Report, device/phone/ID fingerprint hints. → FR-087, FR-088
+1. A case file opens with Chat text / Photo / Voice note, model scores, Member Report, device/phone/ID fingerprint hints. → FR-087, FR-088, FR-144
 2. Console thumbnails of Sister Photos stay blurred. Unblur requires an explicit case reason and is written to the audit log. → FR-093, NFR-009
-3. She applies warning / suspension / Ban per the published ladder, or a photo Strike (3 rejections → 24h upload block as floor). → FR-069, FR-085
+3. She applies warning / suspend / another published action, or a photo Strike (3 rejections → 24h upload block as floor). The AI does not choose or apply the sanction. → FR-069, FR-085, FR-144
 4. False-report pattern can itself be sanctioned. → FR-086
-5. Member receives a published-status outcome. Report SLA clock started at submit; target 24h. → FR-083, NFR-003
+5. Member receives a published-status outcome. For a Member Report, the SLA clock started at submit; for an AI-originated flag, the clock starts when the flag enters the admin queue. Target 24h first human decision. → FR-083, FR-144, NFR-003
 6. Member can Review (appeal). A second human reviews. → FR-090
-7. If AI is unavailable, undelivered media remains held — she works the hold queue; nothing fail-opens. → FR-067, NFR-003
+7. If AI is unavailable, she works the **flag queue** of already-delivered messages plus scan-deferred / scan-failed events — delivery already happened; nothing is held for the recipient. → FR-067, FR-144, NFR-003
 
 **Edge case:** Fiqh-edge case — she escalates to the Advisory Board rather than inventing a fatwa. → FR-116, FR-141
 
@@ -143,13 +143,13 @@ Named scenes. Each step lists the FR IDs it exercises. Protagonist names are `[A
 
 **Persona + context:** Operator / admin for the BF entity. Not a Moderator.
 **Entry state:** Authenticated Operator role, separate from Moderator.
-**Climax:** She lowers a hold-threshold and publishes a 3-month XOF pack without a code release. She completes a deletion/CIL request with a status the Member can see.
+**Climax:** She lowers a flag-confidence threshold and publishes a 3-month XOF pack without a code release. She completes a deletion/CIL request with a status the Member can see.
 **Resolution:** Config is audited. Metrics on the public site remain proof-backed.
 
 1. She edits Premium pack prices and durations (1 / 3 / 6 months) on one pricing page. Auto-renew stays off. → FR-106, FR-108, FR-139
-2. She edits moderation policy text and numeric thresholds (hold confidence, photo-Strike count). New thresholds apply to subsequent messages; they do not silently rewrite old decisions. → FR-140, NFR-003
+2. She edits moderation policy text and numeric thresholds (flag confidence, photo-Strike count). New thresholds apply to subsequent messages; they do not silently rewrite old decisions. → FR-140, NFR-003
 3. She publishes or updates Advisory Board names and Académie articles (minimum five scholar-reviewed in MVP). → FR-115, FR-116, FR-141
-4. She views internal metrics (Verified Members by level, dual-confirmed marriages, report SLA, fail-closed incidents). Public counters she can promote are proof-backed only. → FR-092, FR-101, FR-142
+4. She views internal metrics (Verified Members by level, dual-confirmed marriages, report SLA, scan-deferred events). Public counters she can promote are proof-backed only. → FR-092, FR-101, FR-142
 5. She processes a Member deletion / export / CIL access request through ticketing with a status page. → FR-019, FR-143, NFR-008
 6. Hosting location is disclosed on the public privacy page. She cannot hide it. → FR-120, NFR-002
 
@@ -166,8 +166,9 @@ Downstream workflows must use these terms exactly. FRs, UJs, and SMs use them ve
 - **CIL** — Commission de l’Informatique et des Libertés, Burkina Faso’s data-protection authority.
 - **Code of conduct** — Published banned behaviours, including entertainment-seeking as non-marriage use.
 - **Contact-share** — An explicit, mutual opt-in inside a Chat after which phone numbers, WhatsApp handles, and links may be exchanged. Default is off. Mahram presence is optional, not required, for Contact-share.
-- **Fail-closed** — When moderation AI is unavailable, undelivered media is held; it is never delivered unreviewed.
+- **Flag queue** — The admin queue of already-delivered messages plus the flagged person (and scan-deferred / scan-failed events). Not a pre-delivery hold queue. The admin chooses warning, suspend, or another published action; the AI never applies the sanction.
 - **Ice Breaker** — A scholar-sensible deen/family message template a Member may use when composing a Message Flash. AI-personalised Ice Breakers are NEXT.
+- **Scan-deferred** — A recorded event when AI outage, timeout, or low confidence means the background scan did not complete. Delivery already happened. Visible on the admin flag queue and in Operator metrics.
 - **Invite** — A request from one Member to another to open a Chat. Chat opens only after the Sister accepts.
 - **Life plans** — Profile field for nikah timing and household intent. Enum: `ready_now` / `within_year` / `exploring`. `[ASSUMPTION]`
 - **Marital status** — Profile enum: `single` / `married` / `divorced` / `widowed`. Brothers who are `married` must also set Polygamy intent.
@@ -189,7 +190,7 @@ Downstream workflows must use these terms exactly. FRs, UJs, and SMs use them ve
 - **Verification** — Phone OTP + liveness selfie + ID, free, separate from Premium. Levels: phone / ID / Mahram.
 - **Verified-Mahram** — Badge on a Mahram who completed optional ID + liveness (FR-078). Member-facing French may say *wali vérifié*. Requirements use Verified-Mahram.
 - **Verified marriage** — A nikah both spouses confirmed via the joint report. The public counter counts only these.
-- **Voice note** — An asynchronous audio message in a Chat. Always speech-to-text + audio-classified before delivery.
+- **Voice note** — An asynchronous audio message in a Chat. Delivered immediately; speech-to-text + audio classification run in the background after send.
 - **XOF** — West African CFA franc. The product’s pricing currency (also written FCFA in member-facing copy only as a currency symbol, not as a second product term).
 
 ## 4. Features
@@ -590,7 +591,7 @@ An Invite may carry a personalised first message.
 **Acceptance criteria:**
 - Given an Invite with Message Flash, When the recipient opens it, Then the Flash text is visible before accept.
 - Given a Mahram already attached, When the Flash is delivered, Then he can read it (FR-048).
-- Given Flash text fails pre-delivery moderation, When the sender submits, Then the Invite is not delivered.
+- Given Flash text later fails the background scan, When the sender submits, Then the Invite and Flash are still delivered; the person is flagged for admin and the Flash is not unsent.
 
 #### FR-047: Ice Breaker templates
 
@@ -626,16 +627,16 @@ After Chat opens: typing indicator, reactions, Photo share from gallery or camer
 
 **Acceptance criteria:**
 - Given an open Chat, When a Member types, Then the other Member sees a typing indicator within 2 seconds on a median 3G connection (NFR-005).
-- Given they send a Photo, When moderation has not completed, Then the recipient does not see the Photo (FR-063).
+- Given they send a Photo, When the send is stored, Then the recipient sees the Photo without waiting for FR-063. A later flag does not unsend it.
 - Given they add a reaction, When the other views the message, Then the reaction is visible.
 
 #### FR-051: Voice notes
 
-Voice notes in French / Mooré / Dioula. Always STT + audio-classified before delivery. Not a safety paywall.
+Voice notes in French / Mooré / Dioula. Delivered immediately; STT + audio classification run in the background after send. Not a safety paywall.
 
 **Acceptance criteria:**
-- Given a Free Member in a Chat, When they send a Voice note, Then the recipient does not hear it until FR-064 completes.
-- Given classification or STT hits a banned phrase list (including local-language lists), When the outcome is block, Then it is not delivered and a Strike path may open.
+- Given a Free Member in a Chat, When they send a Voice note, Then the recipient hears it without waiting for FR-064.
+- Given classification or STT later hits a banned phrase list (including local-language lists), When the background scan flags it, Then the Voice note stays delivered, the person is flagged for admin, and a Strike path may open only after an admin action (FR-144).
 - Given Premium is inactive, When they send a Voice note, Then the action is not payment-blocked.
 
 #### FR-052: Push notifications
@@ -647,12 +648,12 @@ Pushes for messages, Invites, and (internally) visit signals as configured. Also
 - Given push enabled, When the Sister receives an Invite, Then a push is sent.
 - Given an attached Mahram pauses or ends, When the action commits, Then both Members receive a push (and SMS per FR-053).
 - Given a Reveal request, When it is created, Then the Photo owner receives a push.
-- Given a moderation block or Report outcome, When the decision is saved, Then the affected Member receives a push.
+- Given an admin sanction or Report outcome, When the decision is saved, Then the affected Member receives a push.
 - Given push permission denied, When a message arrives, Then in-app unread still increments.
 
 #### FR-053: SMS essential-path alerts
 
-SMS for essential path: Invite received (Sister), Mahram flag/pause/end, moderation outcomes that block the Member, OTP. USSD is FR-055.
+SMS for essential path: Invite received (Sister), Mahram flag/pause/end, admin sanctions that suspend or Ban the Member, OTP. USSD is FR-055.
 
 **Acceptance criteria:**
 - Given a Sister with SMS alerts on, When she receives an Invite, Then an SMS is sent without Photo payloads.
@@ -728,31 +729,36 @@ Watermark per viewer, screenshot notice, no downloads, Blurred notification thum
 - Given NEXT, When a Revealed Photo is shown, Then it carries a per-viewer watermark and download is disabled.
 - Given MVP, When a push is sent, Then thumbs are already Blurred (FR-052).
 
-### 4.6 Pre-delivery moderation and the strike pipeline
+### 4.6 Passive AI moderation and the strike pipeline
 
-**Description:** Must-have #2. Farata homepage Claimed “AI scans every message”; FAQ Claimed “we do not read private chats” (evidenced contradiction). Voice/chat-Photo moderation is Not publicly evidenced. This product scans every modality before delivery and says so (D4, D6). Realizes UJ-1, UJ-4.
+**Description:** Must-have #2. Farata homepage Claimed “AI scans every message”; FAQ Claimed “we do not read private chats” (evidenced contradiction). Voice/chat-Photo moderation is Not publicly evidenced. This product delivers Chat text, Chat Photos, Voice notes, and Message Flash immediately, then runs a background scan against published red flags (D4, D6). The AI reports a flag to an admin and marks the person; it does not block, hold, refuse, or delay delivery, and it does not auto-suspend. Honesty is that the AI flags for a human admin and does not silently delete or block. Profile Photo and bio remain publish-gated (FR-065). Realizes UJ-1, UJ-4.
 
-#### FR-062: Chat text moderated before delivery
+**Locked decision (Maitchibi Fayçal, 2026-10-01):** AI moderation is passive, not an active gate before send. This replaces every earlier requirement that scanned Chat before delivery, held on AI timeout, or fail-closed so the recipient never saw an unscanned message.
 
-**Acceptance criteria:**
-- Given a Chat text, When the sender taps send, Then the recipient does not see it until the moderator-AI (or human hold) returns allow.
-- Given a block outcome, When complete, Then the recipient never sees the text and the sender sees a blocked-state.
-
-#### FR-063: Chat Photos moderated before delivery
+#### FR-062: Chat text delivered, then passively scanned
 
 **Acceptance criteria:**
-- Given a Chat Photo, When uploaded, Then the recipient’s thread does not show the image bytes until allow.
-- Given hold-for-human, When a Moderator has not decided, Then the Photo remains undelivered.
+- Given a Chat text, When the sender taps send, Then the message is stored and the recipient sees the text without waiting for the AI.
+- Given a later flag, When the background scan reports a red flag, Then the already-delivered text is not unsent; the person is flagged for admin (FR-066, FR-144).
 
-#### FR-064: Voice notes STT + audio classifier before delivery
-
-Includes French and local-language keyword lists.
+#### FR-063: Chat Photos delivered, then passively scanned
 
 **Acceptance criteria:**
-- Given a Voice note, When STT or audio classifier returns block, Then it is not playable by the recipient.
-- Given low-confidence on Dioula/Mooré slang, When the model is below the Operator threshold (FR-140), Then the Voice note is held for a human, not delivered.
+- Given a Chat Photo, When uploaded, Then the recipient’s thread shows the image without waiting for the AI. Unauthorized viewers still never receive unblurred originals (FR-056–FR-059).
+- Given a later flag, When the background scan reports a red flag, Then the already-delivered Photo is not unsent; the person is flagged for admin (FR-066, FR-144). Blur remains the Photo-privacy control, not a moderation delivery outcome.
+
+#### FR-064: Voice notes delivered, then STT + audio classifier in background
+
+Includes French and local-language keyword lists. Current STT (Whisper-class) has no `mos` / `dyu`; word lists plus human review are how the passive scan handles Mooré and Dioula.
+
+**Acceptance criteria:**
+- Given a Voice note, When the sender sends it, Then the recipient can hear it without waiting for STT or the classifier.
+- Given Whisper (or equivalent) has no mos/dyu, When the Voice note is in Mooré or Dioula, Then the passive scan uses word lists plus human review; it does not hold the Voice note before delivery.
+- Given low-confidence on Dioula/Mooré slang, When the model is below the Operator threshold (FR-140), Then the person is flagged for admin or a scan-deferred event is recorded; the Voice note stays delivered.
 
 #### FR-065: Profile Photos and bio moderated before publish
+
+Publish gating, not Chat delivery. Unchanged: a Profile Photo or bio must not be publicly visible until reviewed.
 
 **Acceptance criteria:**
 - Given a new Profile Photo or bio edit, When review/AI has not allowed, Then other Members do not see the new content.
@@ -760,32 +766,42 @@ Includes French and local-language keyword lists.
 
 #### FR-066: Moderation outcomes
 
-Outcomes: block / blur-and-warn / hold for human review.
+Outcomes of the AI scan: **flag-for-admin** and a **flagged-person** mark. Not block, hold, or blur-and-warn as delivery outcomes. Blur-and-warn is not reused as a moderation delivery outcome. Admin actions (FR-144) are warning, suspend (when too indecent), or another published action. The AI does not choose them.
 
 **Acceptance criteria:**
-- Given **block**, When applied to any modality, Then the recipient never sees the content and the sender sees a blocked-state with the published reason.
-- Given **hold**, When 15 minutes pass without a human, Then the media stays held (Fail-closed), not auto-allowed.
-- Given **blur-and-warn** on a Photo, When applied, Then the recipient sees a Blurred Photo plus a warning, not the clear image. Blur-and-warn is **not** used for text or Voice notes in MVP (those use block or hold).
-- Given each outcome, When it is applied, Then the sender sees a distinct, published explanation (D6 honesty).
+- Given a red-flag scan result, When the background scan completes, Then the person is flagged, the already-delivered message is reported to the admin flag queue (FR-144), and the recipient still sees or hears the content.
+- Given a later flag, When applied, Then the already-delivered message is not unsent. An admin may then warn, suspend, or take another published action.
+- Given the AI scan, When it produces an outcome, Then that outcome is flag-for-admin only — not block, hold, or blur-and-warn as a delivery outcome. Blur remains the Photo-privacy control (FR-056).
+- Given D6 policy, When the Member reads it, Then it explains that messages are delivered then scanned, that the AI flags for a human admin, and that the AI does not silently delete or block.
 
-#### FR-067: Fail-closed when AI is unavailable
+#### FR-067: Scan-deferred when AI is unavailable
 
-Hold undelivered media. Do not fail open (D32).
+AI outage, timeout, or low confidence does not hold or delay the message. Delivery already happened. Record a scan-deferred / scan-failed event for the admin queue so the gap is visible. This is not fail-closed. Do not invent a latency that blocks send.
 
 **Acceptance criteria:**
-- Given the AI vendor returns 5xx or timeout beyond NFR-003, When a Member sends media, Then it is queued as held and not delivered.
-- Given Fail-closed incidents, When Operator metrics are viewed, Then the incident count is visible (FR-142) and is not hidden.
+- Given the AI vendor returns 5xx, times out, or returns low confidence, When a Member has already sent Chat text, Chat Photo, Voice note, or Flash, Then the recipient already has the content and send is not delayed.
+- Given that gap, When it is recorded, Then a scan-deferred or scan-failed event appears in the admin flag queue (FR-144) so the gap is visible.
+- Given Operator metrics, When viewed, Then scan-deferred / scan-failed events are counted (FR-142) and are not hidden.
+
+#### FR-144: Admin flag queue and admin-chosen action
+
+Already-delivered Chat items that the passive scan flags, plus scan-deferred / scan-failed events, appear in an admin flag queue with the flagged person. The admin chooses the action. The AI never applies a sanction.
+
+**Acceptance criteria:**
+- Given a passive-scan flag or a scan-deferred / scan-failed event, When it is recorded, Then the already-delivered message and the flagged person appear in the admin flag queue (not a pre-delivery hold queue).
+- Given an item in that queue, When the admin decides, Then they choose warning, suspend (when the message is too indecent), or another published action. The AI does not choose or apply the sanction.
+- Given the admin action, When saved, Then it may open or continue a Report → Strike → Ban case (FR-083, FR-085, FR-087). A later flag does not unsend what was already delivered.
 
 #### FR-068: Scam and off-platform guardrails
 
 Detect money requests, phone numbers, WhatsApp handles, and links. Romance-scam scoring (D5). In-Chat education: never send money to a suitor.
 
-**Single predicate:** phone numbers, WhatsApp handles, and outbound links are **blocked** until both Members complete Contact-share. Mahram presence is **optional**, not required. Money-request language is held or blocked even after Contact-share.
+**Single predicate:** phone numbers, WhatsApp handles, and outbound links are **blocked** until both Members complete Contact-share. That is a deterministic product rule, not the AI gate. Mahram presence is **optional**, not required. Money-request language is still a red flag: the message is delivered and the person is flagged for admin.
 
 **Acceptance criteria:**
 - Given Contact-share is still off, When a Member sends a phone number, WhatsApp handle, or http(s) link, Then the message is blocked, the recipient never sees it, and both see the education interstitial. Example: “voici mon WhatsApp 70…” after accept, no Contact-share → block.
-- Given both Members completed Contact-share and no Mahram is attached, When a Member sends a phone number, Then the message may be delivered (subject to FR-062). Example: both tapped Contact-share → allow number.
-- Given money-request language (including Wave / Orange Money ask patterns), When sent — Contact-share on or off — Then the message is held or blocked and may open a Report.
+- Given both Members completed Contact-share and no Mahram is attached, When a Member sends a phone number, Then the message is delivered immediately; FR-062 still background-scans. Example: both tapped Contact-share → allow number.
+- Given money-request language (including Wave / Orange Money ask patterns), When sent — Contact-share on or off — Then the message is delivered, the person is flagged for admin, and a Report may open. The message is not held or blocked before delivery.
 
 #### FR-069: Photo Strike rule
 
@@ -841,7 +857,7 @@ Rationale: kinship documents are uneven in BF and would block the must-have; pho
 
 **Acceptance criteria:**
 - Given an attached Mahram, When any Chat message (including Message Flash) is delivered, Then he can read it.
-- Given a message still held by moderation, When he opens the Chat, Then he does not see undelivered media.
+- Given a later AI flag on an already-delivered message, When he opens the Chat, Then he still sees the delivered content; the flag does not hide it from him.
 
 #### FR-075: Mahram can flag, pause, or end
 
@@ -972,7 +988,7 @@ Honest policy plus appeal (D6).
 
 #### FR-092: Periodic transparency stats
 
-Public periodic stats: Reports handled, SLA met rate, Bans, Fail-closed incidents. No invented scale.
+Public periodic stats: Reports handled, SLA met rate, Bans, scan-deferred events. No invented scale.
 
 **Acceptance criteria:**
 - Given a published period, When the public stats page renders, Then each number has a definition and is sourced from FR-142.
@@ -1120,7 +1136,7 @@ Pay for reach/convenience only. **MVP Premium delta (testable):** (1) Brother da
 
 **Acceptance criteria:**
 - Given Premium vs Free in MVP, When the published pricing page is compared to product behaviour, Then the only differences are quota 15 vs 3 and queue priority for FR-012.
-- Given Premium, When they try to use it to skip FR-012 human decision or FR-062 delivery scan, Then those gates still apply.
+- Given Premium, When they try to use it to skip FR-012 human decision or FR-062 background scan, Then those still apply. Premium cannot skip the admin flag queue (FR-144).
 
 #### FR-111: Boosts — NEXT
 
@@ -1333,8 +1349,8 @@ Realizes UJ-6.
 #### FR-140: Moderation policy and thresholds
 
 **Acceptance criteria:**
-- Given Operator, When they change hold-confidence or Strike-count floor, Then new messages use the new values and a versioned policy record is stored.
-- Given a Member, When they open D6 policy, Then they see the currently published explanation of what is scanned, by whom, and how long it is kept.
+- Given Operator, When they change flag-confidence or Strike-count floor, Then new messages use the new values and a versioned policy record is stored. Thresholds affect the background scan and the admin flag queue, not send latency.
+- Given a Member, When they open D6 policy, Then they see the currently published explanation of what is scanned after delivery, that the AI flags for a human admin and does not silently delete or block, and how long evidence is kept.
 
 #### FR-141: Advisory Board content publishing
 
@@ -1344,7 +1360,7 @@ Realizes UJ-6.
 
 #### FR-142: Internal metrics
 
-Verified Members by level, dual-confirmed marriages, report SLA, Fail-closed incidents, appeal overturns. Public promotion only if proof-backed.
+Verified Members by level, dual-confirmed marriages, report SLA, scan-deferred events, appeal overturns. Public promotion only if proof-backed.
 
 **Acceptance criteria:**
 - Given Operator dashboard, When opened, Then the metrics above are present for the selected period.
@@ -1370,10 +1386,10 @@ Each NFR has a measurable target and a verification method.
 **Target:** CIL compliance program in place before public launch; hosting location disclosed (FR-120); lawful basis documented; 72h breach notice to affected Members and to CIL as required; coarse geo (city-level; quartier optional and hidden until accepted Invite); no Profile marketing without FR-060.
 **Verification:** Legal checklist signed; privacy page review; breach-tabletop exercise; automated test that quartier is hidden pre-accept.
 
-#### NFR-003: Moderation latency and Fail-closed
+#### NFR-003: Send-first Chat and admin decision SLA
 
-**Target:** Allow-path text p50 < 3s, p95 < 10s when AI is up; Photo/Voice note p95 < 30s when AI is up. Report first human decision p95 ≤ 24h. If AI is down or times out (>10s text / >30s media), outcome is hold, never allow. Fail-closed incidents counted.
-**Verification:** Synthetic send pipeline in staging; chaos test that kills the AI dependency and asserts zero unreviewed deliveries; SLA dashboard on FR-083.
+**Target:** Send returns as soon as the message is stored (no AI wait). Background scan is async and must not delay send. Admin first decision on a flag stays within the existing report SLA (first human decision p95 ≤ 24h). Scan-deferred / scan-failed events counted, not fail-closed incidents. Do not invent a tighter admin clock or a send-blocking latency.
+**Verification:** Synthetic send asserts ack without waiting on AI; chaos test that kills the AI dependency still delivers and records scan-deferred; SLA dashboard on FR-083 / FR-144.
 
 #### NFR-004: Availability
 
@@ -1402,7 +1418,7 @@ Each NFR has a measurable target and a verification method.
 
 #### NFR-009: Auditability
 
-**Target:** Immutable audit events for: Moderator unblur, sanctions, appeal outcomes, Operator threshold/price changes, deletion/CIL completions, Fail-closed incidents. Retention of audit logs ≥ 12 months. Staff access is individually attributed (no shared Moderator login).
+**Target:** Immutable audit events for: Moderator unblur, sanctions, appeal outcomes, Operator threshold/price changes, deletion/CIL completions, scan-deferred / scan-failed events. Retention of audit logs ≥ 12 months. Staff access is individually attributed (no shared Moderator login).
 **Verification:** Audit-log replay test; RBAC test; quarterly access review.
 
 ## 6. Must-have coverage
@@ -1412,7 +1428,7 @@ Owner must-haves from `docs/system-idea.md` are all MVP FRs.
 | # | Must-have (system-idea wording) | P / D ids | FR IDs (MVP) |
 | --- | --- | --- | --- |
 | 1 | Profiles: create and submit a profile; browse profiles; send an invite/match request; accept or decline; see who invited you and who accepted; exchange messages once matched. | P7, P15, P21, P28, P31, P33 | FR-001, FR-009, FR-016, FR-017, FR-021, FR-025, FR-038, FR-039, FR-040, FR-041, FR-046, FR-050 |
-| 2 | AI moderation on everything: every chat message, photo and voice note/audio is scanned continuously for indecent content (immodest photos, inappropriate language/advances). It blocks or flags, enforces the rules, and feeds a report/ban pipeline. Profile photos are moderated too. | P37, P34, P38, D4, D7, P41, P42, P43 | FR-062, FR-063, FR-064, FR-065, FR-066, FR-067, FR-068, FR-069, FR-070, FR-083, FR-084, FR-085, FR-087, FR-088 |
+| 2 | AI moderation on everything: every chat message, photo and voice note/audio is scanned continuously for indecent content (immodest photos, inappropriate language/advances). It blocks or flags, enforces the rules, and feeds a report/ban pipeline. Profile photos are moderated too. | P37, P34, P38, D4, D7, P41, P42, P43 | FR-062, FR-063, FR-064, FR-065, FR-066, FR-067, FR-068, FR-069, FR-070, FR-083, FR-084, FR-085, FR-087, FR-088, FR-144 |
 | 3 | Photo privacy: each member (sister or brother) can choose in settings to blur their profile picture and uploaded photos for viewers (with ideas like reveal-on-match or reveal-on-request). | P40, D8 | FR-056, FR-057, FR-058, FR-059 |
 | 4 | Mahram/wali in chat: a sister can optionally add her mahram to the conversation. He reads all messages and acts as a human safeguard and moderator if something slips past the AI, keeping the conversation within Islamic limits. | D1, P45 | FR-071, FR-072, FR-073, FR-074, FR-075, FR-076, FR-077, FR-078, FR-079, FR-080 |
 | 5 | Marriage success reporting: couples report that they got married through the platform, and these become showcase success stories. | D11; D12 MUST slice; P54 NEXT | FR-095, FR-096, FR-097, FR-098, FR-099, FR-100, FR-101 |
@@ -1431,7 +1447,7 @@ Must-have #5 maps to D11 full + D12 MUST slice. P54 testimonials remain NEXT (FR
 
 Copy vocabulary: *mariage / ta'aruf / nikah / khitba*. Banned: *dating / rencontre romantique*.
 
-Khalwa-safe: no 1:1 live video or live voice until a Mahram is present **or** a chaperoned family meeting is scheduled. Live video even with a Mahram is **LATER**. Text + async moderated Voice notes until then.
+Khalwa-safe: no 1:1 live video or live voice until a Mahram is present **or** a chaperoned family meeting is scheduled. Live video even with a Mahram is **LATER**. Text + async Voice notes (delivered then passively scanned) until then.
 
 ## 8. Monetization
 
@@ -1439,7 +1455,7 @@ Rules are FR-104–FR-110 (XOF freemium; safety and Sister dignity never paywall
 
 **[ASSUMPTION]** Exact price points are not locked. Public reference: Farata homepage shows **5 900 FCFA/month** launch and **9 900** normal Offered (seen) (checkout amounts behind login are Claimed (marketing)). Working assumption for validation: brother Premium launch in a similar band (about 4 900–5 900 XOF/month) with cheaper 3- and 6-month packs; do not race to 0 FCFA. Validate against BF purchasing power before lock. Free-tier Brother daily Invite quota is **3/day**; Premium is **15/day** `[ASSUMPTION]`. MVP Premium does **not** include ranking (NEXT with FR-111).
 
-Boosts (P25, NEXT) cannot buy a safety bypass; ranking prefers verified + complete + Mahram-ready Profiles (D37). `[NOTE FOR PM]` Human-review-everything (FR-012) plus Fail-closed holds plus 24h Report SLA is an ops company. Launch staffing floor and the product behaviour when the free-review queue exceeds 48h (pause new public listings vs slip the SLA) must be set before Play submit.
+Boosts (P25, NEXT) cannot buy a safety bypass; ranking prefers verified + complete + Mahram-ready Profiles (D37). `[NOTE FOR PM]` Human-review-everything (FR-012) plus the admin flag queue (FR-144) plus 24h Report SLA is an ops company. Launch staffing floor and the product behaviour when the free-review queue exceeds 48h (pause new public listings vs slip the SLA) must be set before Play submit.
 
 ## 9. Why now
 
@@ -1454,7 +1470,7 @@ Farata is live at farata.net (Senegal-first, French-only UI Offered (seen); Burk
 
 ## 11. Constraints and guardrails
 
-- **Safety:** Fail-closed moderation. Woman’s consent first-class. Mahram cannot send as her.
+- **Safety:** Passive scan after delivery; AI flags for a human admin and does not silently delete, block, or auto-sanction. Woman’s consent first-class. Mahram cannot send as her.
 - **Privacy:** Coarse geo. D10 per-use opt-in. Owner-only export.
 - **Cost:** SMS is MVP; USSD deferred (FR-055). Do not race Premium to 0 XOF.
 - **Religious authority:** Product is not a mufti. Advisory Board reviews; Moderators escalate fiqh-edge cases.
@@ -1465,7 +1481,7 @@ Farata is live at farata.net (Senegal-first, French-only UI Offered (seen); Burk
 - CIL + public hosting disclosure (A3, FR-120, NFR-002). Hosting vendor pick is architecture, not this PRD.
 - 72h breach notice (P46).
 - Cookie consent does not grant Photo reuse (FR-119).
-- Launch-killing risks and controls: fake Profiles (FR-014 + FR-012); romance/money scams (FR-068); indecency including local-language jailbreak (FR-064 + FR-067); Photo leaks (FR-056–FR-059; D9 NEXT); fake/coercive Mahram (A2 + FR-077); minors (FR-011 + FR-091); AI vendor down (FR-067); mosque rumor that this is dating (FR-115, FR-116, FR-137). Full 30-row risk table: addendum.
+- Launch-killing risks and controls: fake Profiles (FR-014 + FR-012); romance/money scams (FR-068); indecency including local-language jailbreak (FR-064 + FR-067 + FR-144); Photo leaks (FR-056–FR-059; D9 NEXT); fake/coercive Mahram (A2 + FR-077); minors (FR-011 + FR-091); AI vendor down records scan-deferred, does not hold Chat (FR-067); mosque rumor that this is dating (FR-115, FR-116, FR-137). Full 30-row risk table: addendum.
 
 ## 13. Non-Goals (Explicit)
 
@@ -1478,7 +1494,7 @@ Farata is live at farata.net (Senegal-first, French-only UI Offered (seen); Burk
 - Invented member or marriage counts; invented success stories.
 - Paywalled safety or a Premium “looks verified” badge.
 - Silent auto-renew.
-- Uncurated GIFs; dual “Cheikh” coaches; fail-open moderation.
+- Uncurated GIFs; dual “Cheikh” coaches; AI that silently deletes Chat or applies a sanction without a human admin.
 - Architecture/hosting vendor selection in this document.
 - Final product name / domain purchase.
 - Starting UX, architecture, or epics from this run.
@@ -1492,7 +1508,7 @@ Farata is live at farata.net (Senegal-first, French-only UI Offered (seen); Burk
 - Every P/D slice whose Horizon is MVP in Appendix A.
 - Freemium XOF, mobile money first, no silent auto-renew.
 - French-first + Mooré/Dioula audio on the covered set.
-- Fail-closed pre-delivery moderation; Report → Strike → Ban; appeal.
+- Passive after-delivery scan; admin flag queue; Report → Strike → Ban; appeal. The trigger for an AI-originated case is the passive flag plus an admin action, not a pre-delivery hold.
 - Honest Verified-marriages counter at 0; dual-confirm close.
 - CIL stance + public hosting disclosure (location string may be filled by architecture before launch, not hidden).
 
@@ -1512,7 +1528,7 @@ North star: chaperoned meetings + dual-confirmed nikah — not DAU, not inflated
 **Secondary**
 
 - **SM-3:** Verified Members by level (phone / ID / Mahram). Never sell a “looks verified” Premium badge. Validates FR-015, FR-014.
-- **SM-4:** Report SLA met rate (target 24h); Strike → Ban completions; pre-delivery block / hold / human-review rates; Fail-closed incident count (never hidden). Validates FR-083, FR-087, FR-067, NFR-003.
+- **SM-4:** Report SLA met rate (target 24h); Strike → Ban completions; passive-scan flag rates; admin warning / suspend / other-action rates; scan-deferred event count (never hidden). Validates FR-083, FR-087, FR-067, FR-144, NFR-003.
 - **SM-5:** Share of Sister Profiles remaining Blurred; Reveal-Revoke use; Mahram-attached Chats; Sister-initiated Invites. Validates FR-056–FR-059, FR-071, FR-045.
 - **SM-6:** Android + PWA actives in Ouaga then Bobo; Orange Money / Moov checkout completion; Mooré/Dioula audio-onboarding completion. Validates FR-134, FR-107, FR-010.
 
@@ -1526,7 +1542,7 @@ North star: chaperoned meetings + dual-confirmed nikah — not DAU, not inflated
 ## 16. Open Questions
 
 1. **Polygamy disclosure UX:** how to disclose existing wives without doxxing them? First-wife awareness remains out of scope unless she consents — confirm with Sisters and counsel.
-2. **Fail-closed UX tolerance:** how long will Members tolerate held Voice notes when the AI vendor is down?
+2. **Fail-closed UX tolerance:** **Resolved 2026-10-01** (locked decision, Maitchibi Fayçal). AI moderation is passive. Messages are delivered immediately; AI outage does not hold or delay Chat. The former “how long will Members tolerate held Voice notes” question no longer applies. Scan-deferred events are recorded for the admin queue. Other open questions in this section remain open.
 3. **USSD/SMS cost:** which BF operators and what cost per Mahram alert is sustainable at launch? SMS is MUST; USSD is MUST-if-feasible (this PRD treats USSD as NEXT — FR-055).
 4. **Imam advisory:** which Ouaga/Bobo scholars will lend names, and what review SLA for Académie?
 5. **Free review SLA (P8):** what free review time is honest in BF? Farata claims 12–24h / 30 min / 10 min Premium — numbers disagree, Claimed (marketing). Working `[ASSUMPTION]`: 24h Free (FR-013).
@@ -1624,7 +1640,7 @@ Required. One row per slice. No id dropped. Horizons match the brief. Farata evi
 | P36 | Web + installable PWA | MVP | FR-132, FR-133 | |
 | P36 | Store-listed native Android | MVP | FR-134 | Required for Burkina launch |
 | P36 | Native iOS | NEXT | FR-135 | Android-first Burkina launch; Apple store/build cost; not dropped |
-| P37 | AI message moderation | MVP | FR-062 | Raised by D4 to every modality |
+| P37 | AI message moderation | MVP | FR-062, FR-144 | Raised by D4 to every Chat modality, delivered then scanned |
 | P38 | Photo Strike rule | MVP | FR-069 | |
 | P39 | Published photo rules | MVP | FR-070 | |
 | P40 | Blur toggle / default / reveal-on-accept / unblur | MVP | FR-056, FR-057, FR-059 | Raised to per-viewer (D8) |
@@ -1656,9 +1672,9 @@ Required. One row per slice. No id dropped. Horizons match the brief. Farata evi
 | D1 | Mahram-in-Chat read-all, Sister-initiated; flag/pause/end | MVP | FR-071–FR-079 | |
 | D2 | Mahram dashboard: multi-ward + digest + priority flags | NEXT | FR-081 | Depth after D1 |
 | D3 | Chaperoned-meeting / khitba planner with Mahram in the loop | NEXT | FR-082 | Full planner after stage flag |
-| D4 | Every modality moderated before delivery | MVP | FR-062–FR-066 | |
+| D4 | Every Chat modality delivered, then passively scanned; Profile Photo/bio still publish-gated | MVP | FR-062–FR-066, FR-144 | |
 | D5 | Scam and off-platform guardrails | MVP | FR-068 | |
-| D6 | Honest consistent moderation policy + Member appeal | MVP | FR-066, FR-090, FR-140 | |
+| D6 | Honest consistent moderation policy + Member appeal; AI flags for a human and does not silently delete or block | MVP | FR-066, FR-090, FR-140, FR-144 | |
 | D7 | Report → Strike → Ban pipeline, console, evidence, fingerprinting, transparency | MVP | FR-087, FR-088, FR-092 | MVP-scale |
 | D8 | Per-viewer Reveal (accepted Invite / request / never) + Revoke | MVP | FR-056–FR-059 | |
 | D9 | Anti-leak: watermark, screenshot notice, no downloads, Blurred thumbs | NEXT | FR-061 | Polish after D8; thumbs Blur already on FR-052 |
@@ -1689,7 +1705,7 @@ Required. One row per slice. No id dropped. Horizons match the brief. Farata evi
 | D29 | Mosque / imam attestation level | NEXT | FR-131 | After free ID Verification |
 | D30 | Prayer/night quiet hours (no push Isha–Fajr local) | NEXT | FR-127 | After core notifications |
 | D31 | Moderator dual-control / audit / wellness | NEXT | FR-093 | MVP ships audit floor |
-| D32 | Fail-closed when AI is down | MVP | FR-067, NFR-003 | |
+| D32 | Messages delivered then scanned; AI outage records scan-deferred and does not hold Chat; AI flags for a human admin and does not silently delete or block | MVP | FR-067, FR-144, NFR-003 | |
 | D33 | Alumni mentorship (read-only advice, not matchmaking) | LATER | FR-103 | After real Verified marriages exist |
 | D34 | Optional language filters with anti-caste design | NEXT | FR-126 | After basic filters |
 | D35 | Match-visible change-audit (marital status or Photos) | NEXT | FR-094 | After core Chat |
@@ -1726,7 +1742,8 @@ LATER rows: P51 full blog cadence, P53 high-production video, D18 full EN/AR UI,
 
 ## Document control
 
-- **Intent:** create (headless, Fast path).
+- **Intent:** update (headless). Correction of record of the same product, 2026-10-01.
+- **Locked decision (Maitchibi Fayçal, 2026-10-01):** AI moderation is passive, not a pre-delivery gate. Overrides every earlier sentence that said the AI gates Chat delivery.
 - **Workspace:** `_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`
 - **Sources:** brief + addendum + memlog (2026-09-27); brainstorm intent/html/memlog; `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`.
 - **Name:** TBD. Working title muslim-marriage-africa.

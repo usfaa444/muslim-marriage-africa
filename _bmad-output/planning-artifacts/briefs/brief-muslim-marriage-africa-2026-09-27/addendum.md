@@ -2,7 +2,7 @@
 title: muslim-marriage-africa — product brief addendum
 status: complete
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-10-01
 ---
 
 # Addendum — overflow for the muslim-marriage-africa brief
@@ -19,7 +19,7 @@ Sources: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-2
 | 2 | Romance / money scams (Wave / Orange Money asks) | D5 classifiers; P44 ban; in-chat education “never send money to a suitor” |
 | 3 | Married men posing single | D14 required disclosure + dedicated report reason + pattern flags; never claim ID proves marital status |
 | 4 | Catfish / stolen photos | Liveness selfie matched to profile photos + P38 |
-| 5 | Indecency (voice / chat-photo slips) | D4 pre-delivery hold + human review + local-language audio lists; D32 fail-closed |
+| 5 | Indecency (voice / chat-photo slips) | D4 deliver-then-scan + flag-for-admin + local-language audio lists; D32 scan-deferred (no hold) |
 | 6 | Screenshot leaks of sister photos | D8 + D9 (watermark, screenshot notice, no download, revoke, blurred thumbs) |
 | 7 | Fake wali | D1 verify (phone OTP, sister confirms relationship, cooling-off; wali cannot be an unmatched male friend) + optional ID badge; D38 |
 | 8 | Post-decline harassment | P29 + D7 fingerprint |
@@ -31,11 +31,11 @@ Sources: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-2
 | 14 | Shared-phone exposure | D28 PIN + session timeout (wali accounts too) |
 | 15 | Paid boost flood | D37 cannot bypass quotas or moderation |
 | 16 | Coercive / abusive wali | D38 sister remove/report; emergency hide; wali cannot send as her |
-| 17 | AI jailbreak via Dioula / Mooré slang | D4 local keyword lists + fail-to-human on low confidence |
+| 17 | AI jailbreak via Dioula / Mooré slang | D4 local keyword lists + flag-for-admin or scan-deferred on low confidence; voice already delivered |
 | 18 | Imam / public-figure impersonation | Name-collision review in P8 + P9 |
 | 19 | Weaponize success-story to dox an ex | Both confirm; either can refuse public story; proof stays private |
 | 20 | Payment provider down | Free-tier and all safety features stay up |
-| 21 | AI vendor down | Fail closed (D32) |
+| 21 | AI vendor down | Delivery already happened; record scan-deferred for the admin (D32) |
 | 22 | Mosque rumor that the app is haram / dating | D23 named board, public fiqh notes, zero dating language, working Académie seed (D22 / P50) |
 | 23 | Competitor ships a shallow wali digest | Keep wedge product-deep (D1–D2 verified, sister-initiated, read-all, pause/end) |
 | 24 | Viral indecent leak | Kill-switch, mass revoke of reveals, user notification, transparency note (D7 / D9) |
@@ -168,11 +168,23 @@ No decision. Shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / No
 | Invented marriage counts | Marketing | Forbidden |
 | Dual-confirm + honest counter at 0 + consent showcase | Owner must-have #5 | **Chosen** (D11 MUST; D12 MUST slice) |
 
-## 4. Binding stance carried from the brainstorm (not re-litigated)
+### 3.9 Chat AI moderation model
+
+| Option | Why considered | Disposition |
+| --- | --- | --- |
+| Before-delivery hold / fail-closed when AI is down | Original brief D4 / D32 | **Reversed 2026-10-01** (Maitchibi Fayçal). Replaced. |
+| Passive deliver-then-scan; scan-deferred on outage | Recipients should not wait; AI outage must not hold chat | **Chosen.** D4 / D32 IDs kept, reframed. AI flags a human; admin decides warning, suspend, or another action |
+| Profile photos / bio also send-first | Consistency with chat | **Rejected** — stay publish-gated |
+| AI auto-blocks or auto-sanctions delivery | Safety | **Rejected** — AI does not block, hold, refuse, or apply a sanction |
+| Drop contact-share blocks because AI is passive | Misread the reversal | **Rejected** — phone / WhatsApp / links still blocked until both members opt in; that is not the AI |
+
+## 4. Binding stance carried from the brainstorm
+
+The AI-moderation line was overridden on 2026-10-01 (see 3.9). Other items were not re-litigated.
 
 - Burkina first (Ouagadougou → Bobo-Dioulasso); then CI / Mali / Senegal / wider.
 - French-first UI; Mooré/Dioula audio is a differentiator.
-- AI moderation before delivery; fail closed when AI is down.
+- AI moderation is passive: chat delivered then scanned; AI flags a human admin and does not block, hold, or refuse delivery. AI outage records scan-deferred and does not hold media. Profile photos and bio stay publish-gated. Contact-share still blocks phone numbers, WhatsApp handles, and links until both members opt in (not the AI).
 - Mahram optional and sister-initiated.
 - Marriage report requires both parties.
 - Farata statements use only the three evidence labels.

@@ -10,6 +10,8 @@ compared: prd.md, addendum.md
 
 Extract-only. Does not add Farata facts. Does not start UX, architecture, or epics.
 
+**Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows below that treat D4 as pre-delivery block/hold are historical. Current `prd.md` delivers Chat then scans. `docs/competitor-farata.md` D4 was corrected the same day.
+
 **Input:** `/workspace/projects/muslim-marriage-africa/docs/competitor-farata.md`  
 **PRD:** `prd.md` (evidence rule §0; Vision §1; Features §4; NFRs §5; Why now §9; Appendix A)  
 **Addendum:** `addendum.md` (§1 stack note; §2 options; §4 risks; §5 binding stance)  
@@ -162,7 +164,7 @@ Horizon and FR ids from Appendix A. “Fidelity” is whether the **input’s wo
 
 ### 3.3 D24–D40 (not this document)
 
-These ids are **brainstorm**, not `docs/competitor-farata.md`. This reconcile does not score them. For the record, Appendix A currently lists D24–D40 (ta'aruf stages, istikhara, mahr card, SMS/USSD, PIN, imam attestation, quiet hours, moderator dual-control, fail-closed, alumni, language filters, change-audit, anonymous-mode definition, boost safety, abusive-Mahram, minor hold, pictogram/audio rules). Presence there is a brief/brainstorm carry, not a Farata-teardown requirement.
+These ids are **brainstorm**, not `docs/competitor-farata.md`. This reconcile does not score them. For the record, Appendix A currently lists D24–D40 (ta'aruf stages, istikhara, mahr card, SMS/USSD, PIN, imam attestation, quiet hours, moderator dual-control, deliver-then-scan / scan-deferred *(D32; was fail-closed hold, superseded 2026-10-01)*, alumni, language filters, change-audit, anonymous-mode definition, boost safety, abusive-Mahram, minor hold, pictogram/audio rules). Presence there is a brief/brainstorm carry, not a Farata-teardown requirement.
 
 ## 4. Evidence-label audit
 

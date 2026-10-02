@@ -1,5 +1,7 @@
 # Security / privacy / CIL review
 
+> **Superseded 2026-10-01.** Chat moderation is passive after delivery (AD-10 amendment; PRD FR-062–068, FR-144, NFR-003). Claims in this review of pre-delivery Chat scan, hold-on-timeout, or fail-closed Chat delivery are historical. Profile Photo/bio publish-gate (FR-065), AD-9 blur, and AD-12 mahram read-delivered-only are unchanged.
+
 **Artifact:** architecture spine + solution design (2026-09-27)  
 **Lens:** authn/z, RBAC, photo original leakage, signed-URL revoke, moderation fail-closed, payment isolation, audit immutability, CIL transfer honesty, secrets, rate limits, anti-scam predicate, staff bulk-export ban  
 **Sources read:** `ARCHITECTURE-SPINE.md`, `SOLUTION-DESIGN.md`, PRD NFR-001–NFR-009 / FR-007 / FR-019 / FR-056–FR-061 / FR-067 / FR-068 / FR-088 / FR-093 / FR-119–FR-120 / FR-143  

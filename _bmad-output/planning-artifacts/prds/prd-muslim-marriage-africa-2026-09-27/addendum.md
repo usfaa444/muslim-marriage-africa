@@ -2,7 +2,7 @@
 title: muslim-marriage-africa — PRD addendum
 status: final
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-10-01
 ---
 
 # Addendum — overflow for the muslim-marriage-africa PRD
@@ -15,7 +15,7 @@ Sources: `_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-20
 
 Architecture owns the pick. Product constraints already locked in the PRD:
 
-- Pre-delivery moderation on text, Chat Photos, Voice notes (STT + audio classifier including Mooré/Dioula lists), Profile Photos, and bio. Fail-closed when the AI path is down.
+- Passive after-delivery scan on Chat text, Chat Photos, Voice notes (STT + audio classifier including Mooré/Dioula word lists), and Message Flash. Delivery does not wait for the AI. AI outage records scan-deferred / scan-failed for the admin flag queue; it does not hold Chat. Profile Photos and bio remain publish-gated. The AI flags for a human admin and does not apply a sanction.
 - Phone OTP + liveness selfie + ID, free, separate from Premium.
 - Web + installable PWA + store-listed Android in MVP. Wrapper technology (TWA / Capacitor / thin WebView) is an architecture choice; the product requirement is a Play listing that completes UJ-1.
 - Native iOS is NEXT parity, not dropped.
@@ -29,11 +29,11 @@ Options considered for later architecture (not chosen here):
 | --- | --- | --- |
 | Android packaging | TWA vs Capacitor vs thin wrapper over PWA | Must be store-listed; share one web capability core |
 | Identity | Email+password required; Google additional; Orange/Moov identity to explore; Apple with iOS | Must not be Google-only in BF |
-| Moderation AI | Vendor vs self-host vs hybrid | Fail-closed; local-language lists; human hold queue |
+| Moderation AI | Vendor vs self-host vs hybrid | Passive after-delivery scan; local-language lists; admin flag queue of already-delivered messages (AI never applies the sanction) |
 | Liveness / ID | Any vendor that can run on low-end Android | Free; matched to Profile Photos; minor hold (D39) |
 | STT | Multilingual model + keyword lists | French + Mooré + Dioula coverage is a product requirement |
 | Mobile money | Aggregator vs direct operator | XOF; explicit repurchase; BF rails first |
-| Notifications | Web push + FCM + SMS gateway | SMS for OTP, Invite, Mahram pause/end/flag, blocking outcomes |
+| Notifications | Web push + FCM + SMS gateway | SMS for OTP, Invite, Mahram pause/end/flag, admin suspend/Ban outcomes |
 | Data store | (deferred) | Erasure clocks, no staff bulk export, audit log ≥ 12 months |
 
 Farata’s public DPA lists Vercel (USA) and Neon (USA) as processors — Offered (seen) (legal text). CIL mention is Not publicly evidenced (gap 9). Do not copy that silence; disclose hosting (A3). Their stack names are not a recommendation.
@@ -166,7 +166,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 | 2 | Romance / money scams | D5; P44; in-Chat “never send money to a suitor” |
 | 3 | Married men posing single | D14 + Report reason; never claim ID proves marital status |
 | 4 | Catfish / stolen Photos | Liveness matched to Profile Photos + P38 |
-| 5 | Indecency (voice / Chat-Photo) | D4 + local-language lists + D32 Fail-closed |
+| 5 | Indecency (voice / Chat-Photo) | D4 deliver-then-scan + local-language lists + D32 scan-deferred visibility + admin flag queue (FR-144) |
 | 6 | Screenshot leaks | D8 + D9 (NEXT polish) |
 | 7 | Fake Mahram | A2 path + D38 |
 | 8 | Post-decline harassment | P29 + D7 fingerprint |
@@ -178,11 +178,11 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 | 14 | Shared-phone exposure | D28 PIN + session timeout |
 | 15 | Paid boost flood | D37 |
 | 16 | Coercive Mahram | D38 |
-| 17 | AI jailbreak via Dioula / Mooré slang | Local lists + fail-to-human |
+| 17 | AI jailbreak via Dioula / Mooré slang | Local lists + flag-for-admin or scan-deferred; Voice note already delivered |
 | 18 | Imam impersonation | Name-collision review in P8 + P9 |
 | 19 | Weaponize success story | Both confirm; either refuses public; proof private |
 | 20 | Payment provider down | Free tier + safety stay up |
-| 21 | AI vendor down | Fail-closed |
+| 21 | AI vendor down | Delivery already happened; record scan-deferred / scan-failed on the admin flag queue |
 | 22 | Mosque rumor (haram / dating) | Board, zero dating language, Académie seed |
 | 23 | Copycat ships a shallow family-digest (Farata mahram-in-Chat is Not publicly evidenced; family text is Offered (seen) as rules §04 policy only) | Keep D1 product-deep (verified, Sister-initiated, read-all, pause/end) |
 | 24 | Viral indecent leak | Kill-switch, mass Revoke, transparency |
@@ -195,7 +195,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 
 ## 5. Binding stance (do not re-litigate in UX/architecture)
 
-Burkina first. French-first + Mooré/Dioula audio. AI before delivery, Fail-closed. Sister-initiated optional Mahram. Dual-confirm marriage. Three Farata evidence labels only. Copy vocabulary locked. Khalwa-safe (no live A/V until Mahram or chaperoned meeting). Woman’s consent first-class. Haya media. Verification is a public good. No likeness in ads without per-use opt-in. Proof-backed counters only. Pseudonym + city geo. Polygamy disclosure pre-accept. No silent auto-renew. Boosts never bypass safety. Aligned with `docs/system-idea.md`.
+Burkina first. French-first + Mooré/Dioula audio. Chat delivered immediately, then passively scanned; AI flags for a human admin and does not silently delete, block, or auto-sanction. Sister-initiated optional Mahram. Dual-confirm marriage. Three Farata evidence labels only. Copy vocabulary locked. Khalwa-safe (no live A/V until Mahram or chaperoned meeting). Woman’s consent first-class. Haya media. Verification is a public good. No likeness in ads without per-use opt-in. Proof-backed counters only. Pseudonym + city geo. Polygamy disclosure pre-accept. No silent auto-renew. Boosts never bypass safety. Aligned with `docs/system-idea.md`. **Correction of record 2026-10-01:** earlier addendum sentences that said pre-delivery scan or Fail-closed Chat delivery are superseded.
 
 Visual hint only (UX owns the system): indigo / sand / gold, mihrab geometry, *sira* as a path metaphor — solemn marriage, not swipe culture.
 

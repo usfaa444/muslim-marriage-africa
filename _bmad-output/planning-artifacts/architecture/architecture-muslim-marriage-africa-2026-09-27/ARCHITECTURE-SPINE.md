@@ -7,7 +7,7 @@ paradigm: hexagonal-modular-monolith
 scope: Initiative-altitude consistency contract for the Burkina-first muslim-marriage-africa ta'aruf platform (working title; product name undecided). Governs all feature spines and the MVP+NEXT capability surface in the 2026-09-27 PRD.
 status: final
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-10-01
 binds: [identity, verification, profiles, discovery, invites, chat, media, moderation, mahram, trust, outcomes, billing, content, operator, notifications, audit]
 sources:
   - _bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/prd.md
@@ -84,8 +84,8 @@ flowchart TB
 | likeness_grant | media |
 | invite, message_flash, invite_quota | invites |
 | conversation, message, reaction, taaruf_stage, contact_share | chat |
-| photo_asset, derivative, signed_grant, reveal_grant | media |
-| moderation_job, hold_queue | moderation |
+| photo_asset (kind `profile_photo\|chat_photo\|voice_note`), derivative, signed_grant, reveal_grant | media |
+| moderation_job, flag_queue | moderation |
 | mahram_invite, mahram_link, mahram_permission | mahram |
 | report, moderation_case, strike, sanction, ban, appeal, block, fingerprint | trust |
 | marriage_report, consent_story, marriage_counter | outcomes |
@@ -117,7 +117,7 @@ flowchart TB
 
 - **Binds:** all HTTP/WS surfaces, FR-107, NFR-001
 - **Prevents:** ad-hoc error shapes, unversioned breaks, double-charging
-- **Rule:** JSON REST under `/v1`; breaking changes go to `/v2`; WebSocket `/v1/realtime`. Auth: httpOnly session cookie on web/PWA; Bearer session token on Capacitor. Only error envelope: `{ "error": { "code", "message", "details", "request_id", "retryable" } }`. `Idempotency-Key` required on payment create and all webhook ingest. Webhooks: verify signature; reject timestamps older than 600s; persist `webhook_receipt` 30 days
+- **Rule:** JSON REST under `/v1`; breaking changes go to `/v2`; realtime is Socket.IO on `/v1/realtime` (AD-15; long-poll fallback required — do not ship a second raw-WebSocket client). Auth: httpOnly session cookie on web/PWA; Bearer session token on Capacitor. Only error envelope: `{ "error": { "code", "message", "details", "request_id", "retryable" } }`. `Idempotency-Key` required on payment create and all webhook ingest. Webhooks: verify signature; reject timestamps older than 600s; persist `webhook_receipt` 30 days
 
 ### AD-8 — Authn and RBAC
 
@@ -131,35 +131,42 @@ flowchart TB
 - **Prevents:** shipping originals to unauthorized viewers, a second client-side blur path, or a grant model that is not per-viewer
 - **Rule:** blur-by-default at ingest for opposite-gender viewers. Sister and Brother owners choose per-viewer policy `on_accept | on_request | never` (no unmatched clear-face on the grid). Only `MediaPort.sign(assetId, derivative, viewerId)` may mint a URL, and that URL is a capability token to the **media GET gateway** (not a raw bucket pre-sign). The gateway re-checks grant + denylist on every GET — that is how FR-059 stops **serving** a clear URL within 60s. `signed_url_ttl_seconds` is capped at 60. `MediaPort.sign` refuses `original` and any clear derivative (`md` included) unless a live reveal grant exists for that viewer. HTTP/WS serializers never emit `original_key`. Account/photo erase includes object-storage versions. No CSS-only or client-decode blur. Moderator unblur is an audited media grant. Android Capacitor sets `FLAG_SECURE` as deterrence (not a guarantee). Marketing/social reuse of a likeness requires a `likeness_grant` (per-use, expires with the campaign); cookie consent is not that grant
 
-### AD-10 — Moderation pipeline and message state
+### AD-10 — Passive Chat scan and Profile publish-gate
 
-- **Binds:** FR-062–FR-070, FR-083–FR-093, FR-140, NFR-003
-- **Prevents:** fail-open delivery, vendor lock-in, two conflicting state machines
-- **Rule:** every outbound item is created `pending` and becomes `delivered | held | blocked` only after the pipeline: Chat text, Message Flash (same state machine as Chat text), Chat Photo, Voice note, Profile Photo, and bio. “Continuously” on this spine means every outbound item before delivery, not a historical re-scan (a post-delivery scanner needs a new AD). Outcomes: `block`, `hold`, `blur-and-warn` (photos only). AI 5xx, timeout (>10s text / >30s media), or empty/malformed `ModerationPort` response → `hold`. Worker crash after vendor allow and before state write retries; default remains `pending`. Providers sit behind `ModerationPort` (`scanText`, `scanImage`, `transcribe`, `classifyAudio`). Image scan treats visible phone/QR as contact-share content. **Apply path:** moderation writes `moderation_job` + `hold_queue` only; the owning module applies the outcome via `ChatPort.applyModeration`, `MediaPort.applyModeration`, or `ProfilePort.applyModeration`. `blur-and-warn` maps to `delivered` plus a blur derivative (never original bytes). Human review is per-item (no bulk-allow). Threshold changes apply to **subsequent** items only. Human review queue SLA is read from `operator_config`, not code. A paid-faster-review perk shortens queue position only — it must not auto-allow. Member Reports open a `moderation_case` written only by trust; holds attach to that case by FK. Discovery omits `pending`/`held` profile photos
+- **Binds:** FR-062–FR-070, FR-083–FR-093, FR-140, FR-144, NFR-003
+- **Prevents:** a pre-delivery Chat hold, treating AI 5xx/timeout as a send block, applying the Profile publish-gate to Chat, or a second Chat state machine
+- **Rule:** Chat text, Chat Photo, Voice note, and Message Flash are persisted **`delivered` immediately**. The recipient sees them without waiting for AI. After persist, Chat (or Invites for Flash) **must** call `ModerationPort.enqueueScan({ itemId, itemKind, payload })` — that call is the only INSERT of `moderation_job`. Payload is plaintext/bytes from the owner (Chat decrypts) or `MediaPort.fetchForScan(mediaId)`; moderation does not SELECT `message`. `scanText` / `scanImage` / `transcribe` / `classifyAudio` run on the `worker` only. Only moderation INSERTs `flag_queue` (`flag-for-admin` | `scan-deferred` | `scan-failed`; no row for clean). Message Flash is invites-owned (`message_flash` / `invite.flash_id`, visible before accept) and is **not** copied into a parallel `message` row; after `ChatPort.openFromInvite`, Chat may store `flash_id` as a read-through. The job is keyed by `flash_id` | `message_id` | `asset_id`. Scan outcomes: `flag-for-admin` (the flagged-person mark is `flag_queue.account_id` only — not a `strike`, `sanction`, or `account` write, and not a send-block) or clean. A later flag does **not** unsend. The AI does not block, hold, refuse delivery, or auto-suspend. Admin chooses warning, suspend (if too indecent), or another published action (FR-144). AI 5xx, timeout, empty/malformed response, or low confidence does **not** move the item to held and does **not** delay send — record `scan-deferred` / `scan-failed` on `flag_queue`. There is **no** Chat `pending→delivered` machine and **no** `hold_queue` that stops delivery. Clocks `>10s text / >30s media → hold` are deleted. **Apply path:** moderation writes `moderation_job` + `flag_queue` only; it never writes `message.state`. Chat persist is `delivered`. Profile Photo and bio stay publish-gated (FR-065): not publicly visible until reviewed. Media-owned asset kinds are `profile_photo | chat_photo | voice_note`. `ProfilePort.applyModeration` / `MediaPort.applyModeration` are legal **only** for `profile_photo` and bio — never `chat_photo` or `voice_note`. `MediaPort.sign` for `chat_photo` / `voice_note` must not wait on applyModeration. Chat Voice is not `content.audio_asset`. Discovery omits unpublished profile photos. Blur is AD-9 (privacy), not a moderation delivery outcome. Contact-share (AD-17) is a **local deterministic matcher** in `chat` (and in `invites` for Message Flash) — regex / well-known handle patterns / URL parse. It must **not** call `ModerationPort`. `ModerationPort` 5xx exists only on the background job and only writes `flag_queue`. Image/voice phone-or-QR stays an after-delivery flag, never a persist await. Money-ask language is delivered and flagged. Image scan may treat visible phone/QR as flag content **after** delivery. Human review is per-item (no bulk-allow / no bulk-clear). Threshold changes apply to **subsequent** scans only. Human flag-queue SLA is read from `operator_config` (same 24h first-human clock as Reports; clock starts when the flag enters the queue). A paid-faster-review perk shortens queue position only — it must not skip the background scan or auto-clear a flag. Member Reports open a `moderation_case` written only by trust. The passive flag writes `flag_queue` only; trust writes `moderation_case` only when a Member Report arrives or when an admin action on a flag opens or continues a case (FR-144). The sanction is the admin action, never the flag. **D6 published honesty (FR-066, FR-140):** Operator-published Member policy (content-owned `locale_string` keys `moderation_policy_*`; operator edits the text) must state that messages are delivered then scanned, that the AI flags for a human admin, and that the AI does not silently delete, block, or hold — plus the evidence-retention sentence (AD-19 clocks). Stale pre-delivery / fail-closed copy is forbidden
+
+```mermaid
+flowchart LR
+  send[persist_delivered] --> recip[recipient_sees]
+  send --> job[background_ModerationPort]
+  job --> clean[clean]
+  job --> flag[flag_queue]
+  job --> defer[scan_deferred_or_failed]
+  flag --> admin[admin_action]
+  defer --> admin
+  admin --> sanction[warning_or_suspend_or_other]
+```
 
 ```mermaid
 stateDiagram-v2
-  [*] --> pending: send_or_upload
-  pending --> delivered: allow
-  pending --> held: low_confidence_or_ai_down_or_policy
+  [*] --> pending: profile_photo_or_bio
+  pending --> live: allow
   pending --> blocked: block
-  held --> delivered: human_allow
-  held --> blocked: human_block
-  delivered --> [*]
-  blocked --> [*]
 ```
 
 ### AD-11 — Mooré and Dioula honesty
 
 - **Binds:** FR-064, FR-010, FR-070, FR-138, NFR-003, NFR-007
 - **Prevents:** claiming ASR or classifier coverage providers do not have
-- **Rule:** official Whisper `LANGUAGES` has no `mos`/`dyu`. Community/Preview models (Griot-ASR Preview, BurkimbIA fine-tunes) may be adapters but are treated as low-confidence. Local-language path = moderator-maintained lexicon lists + hold-for-human when confidence is below `operator_config.hold_threshold` or language is `mos`/`dyu`. Measure false-negative rate on a labeled sample. French commercial ASR is allowed only for `fr`
+- **Rule:** official Whisper `LANGUAGES` has no `mos`/`dyu`. Community/Preview models (Griot-ASR Preview, BurkimbIA fine-tunes) may be adapters but are treated as low-confidence. Local-language path = moderator-maintained lexicon lists + human review on the **passive-scan** path. Low confidence (below `operator_config.flag_threshold`) or language `mos`/`dyu` **flags or records `scan-deferred`**. It is **not** a reason to hold the Voice note before delivery. Measure false-negative rate on a labeled sample. French commercial ASR is allowed only for `fr`
 
 ### AD-12 — Mahram read access and permissions `[ADOPTED]`
 
 - **Binds:** FR-071–FR-079, FR-038, A2, D38
 - **Prevents:** Mahram browsing, sending as the Sister, or retaining access after removal
-- **Rule:** Sister-initiated only. After OTP, a 1-hour cooling-off applies before pause/end (A2 working number). After confirm, Mahram has read-all of **delivered** messages on the attached conversation(s) only — not `pending` or `held` (those stay on the staff queue). Actions: flag/escalate/pause/end. Cannot compose or send as the Sister; cannot browse or Invite. Sister remove/report (D38) revokes read access within 60s and may call `ProfilePort.emergencyHide` (24h). Relationship enum `father | brother | uncle | other_mahram`; unmatched-friend rejected. No kinship documents in MVP. All attach/remove/pause/end/flag events are audited
+- **Rule:** Sister-initiated only. After OTP, a 1-hour cooling-off applies before pause/end (A2 working number). After confirm, Mahram has read-all of **delivered** messages on the attached conversation(s) only. Actions: flag/escalate/pause/end. Cannot compose or send as the Sister; cannot browse or Invite. Sister remove/report (D38) revokes read access within 60s and may call `ProfilePort.emergencyHide` (24h). Relationship enum `father | brother | uncle | other_mahram`; unmatched-friend rejected. No kinship documents in MVP. All attach/remove/pause/end/flag events are audited
 
 ### AD-13 — Verification ports, independent of Premium `[ADOPTED]`
 
@@ -177,37 +184,37 @@ stateDiagram-v2
 
 - **Binds:** FR-050–FR-052, NFR-005
 - **Prevents:** pushing undelivered media over a side channel
-- **Rule:** Socket.IO with Redis adapter on `/v1/realtime`. Handshake must present the same `AuthContext` as HTTP (cookie or Bearer). Events: `conversation.typing`, `message.pending`, `message.delivered`, `message.held`, `message.blocked`, `mahram.presence`, `reveal.changed`, `stage.changed`. Recipients never receive media bytes until `message.state=delivered`; any media URL on the socket is still minted only by `MediaPort.sign`. Long-poll fallback on broken WS (2G). No live 1:1 audio/video channel in this spine (khalwa; LATER even with Mahram)
+- **Rule:** Socket.IO with Redis adapter on `/v1/realtime`. Handshake must present the same `AuthContext` as HTTP (cookie or Bearer). Events: `conversation.typing`, `message.delivered`, `mahram.presence`, `reveal.changed`, `stage.changed`. Chat persist emits `message.delivered` immediately — there is no `message.pending` / `message.held` delivery event. Contact-share reject is HTTP `CONTACT_SHARE_REQUIRED` to the sender, not a recipient hold event. Events carry `media_id` only — never a signed URL; each reader calls `MediaPort.sign` at read time for that caller. AD-9 blur/reveal product is unchanged. Long-poll fallback on broken WS (2G). No live 1:1 audio/video channel in this spine (khalwa; LATER even with Mahram)
 
 ### AD-16 — Lite mode, derivatives, SMS fallback
 
 - **Binds:** FR-136, FR-052, FR-053, FR-055, NFR-005
 - **Prevents:** unbounded payloads on 2G and a missing essential-path when data dies
-- **Rule:** Lite default on Slow-3G or **1GB-class** devices / ~1GB/month data-saver (brief/PRD class): deferred images, derivatives `xs | sm | md | blur`, no autoplay, offline text outbox (media waits for connection + moderation). First-grid metadata+blur thumbs ≤150KB; chat first page ≤80KB. `SmsPort` for OTP, Invite-received, Mahram pause/end/flag, blocking outcomes — one live SMS adapter at a time. `UssdPort` exists and stays disabled until FR-055. Push: FCM on Capacitor Android; Web Push on PWA/web — both thumbs via `MediaPort.sign` blur derivatives only
+- **Rule:** Lite default on Slow-3G or **1GB-class** devices / ~1GB/month data-saver (brief/PRD class): deferred images, derivatives `xs | sm | md | blur`, no autoplay, offline text outbox (Chat media waits for **connection** only — not AI). First-grid metadata+blur thumbs ≤150KB; chat first page ≤80KB. `SmsPort` for OTP, Invite-received, Mahram pause/end/flag, Contact-share rejects, admin sanctions — one live SMS adapter at a time. `UssdPort` exists and stays disabled until FR-055. Push: FCM on Capacitor Android; Web Push on PWA/web. Notification and SMS payloads are template + conversation/invite ids only — no Chat/Flash body, no phone, no WhatsApp, no media URL except a `MediaPort.sign` blur thumb
 
 ### AD-17 — Security baseline
 
 - **Binds:** NFR-001, FR-007, FR-068, FR-088
 - **Prevents:** reversible passwords, staff bulk export, contact-share implemented twice
-- **Rule:** TLS 1.2+; AES-256-class at rest for photos, chat bodies, ID images, backups (same `kid` rotation as chat for ID-image keys). Chat ciphertext envelope `{v, alg, kid, iv, ct}` with `kid` in Scaleway Secret Manager (yearly rotation; session-signing, webhook HMAC, object-storage, and vendor API keys rotate on the same store, isolated per env). argon2id passwords. Web/PWA cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF on cookie POST/WS. Capacitor Bearer lives in platform secure storage, not WebView localStorage. Captcha (FR-007) on signup and login. Rate limits on auth, OTP, password-reset, Invite, Mahram-invite, Report, payment, media upload, reveal-request, browse, and `/v1/staff/*` (working numbers in `operator_config`). Contact-share is the **single** predicate: only chat writes `contact_share`; moderation/trust call `ChatPort.contactShareOpen`. Money-ask language is held or blocked even after Contact-share. Ban fingerprint is `sha256(phone_e164 | id_doc_hash | device_attestation)` owned by trust — a cookie-only id is not a Ban key. Staff list/browse/metrics endpoints never return phone or WhatsApp. The **only** staff path that emits another person’s contact is an `operator` `cil_ticket` for that subject (FR-019 / FR-143); every such export is an AD-18 event. Prod app SQL roles cannot `COPY`/`SELECT` contact columns in bulk
+- **Rule:** TLS 1.2+; AES-256-class at rest for photos, chat bodies, ID images, backups (same `kid` rotation as chat for ID-image keys). Chat ciphertext envelope `{v, alg, kid, iv, ct}` with `kid` in Scaleway Secret Manager (yearly rotation; session-signing, webhook HMAC, object-storage, and vendor API keys rotate on the same store, isolated per env). argon2id passwords. Web/PWA cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF on cookie POST/WS. Capacitor Bearer lives in platform secure storage, not WebView localStorage. Captcha (FR-007) on signup and login. Rate limits on auth, OTP, password-reset, Invite, Mahram-invite, Report, payment, media upload, reveal-request, browse, and `/v1/staff/*` (working numbers in `operator_config`). Contact-share is the **single** predicate: only chat writes `contact_share`; moderation/trust call `ChatPort.contactShareOpen`. The send-time matcher lives in `chat` (and `invites` for Flash) as a **local deterministic function** — it must not call `ModerationPort`. Flash is pre-conversation so Contact-share cannot be open: phone / WhatsApp / links in Flash are refused with `CONTACT_SHARE_REQUIRED`. A Contact-share reject returns `CONTACT_SHARE_REQUIRED` and shows the published education interstitial to **both** Members. Money-ask language is **delivered and flagged**, even after Contact-share; in-Chat education (“never send money to a suitor”) is shown after that delivery. Ban fingerprint is `sha256(phone_e164 | id_doc_hash | device_attestation)` owned by trust — a cookie-only id is not a Ban key. Staff list/browse/metrics endpoints never return phone or WhatsApp. The **only** staff path that emits another person’s contact is an `operator` `cil_ticket` for that subject (FR-019 / FR-143); every such export is an AD-18 event. Prod app SQL roles cannot `COPY`/`SELECT` contact columns in bulk
 
 ### AD-18 — Tamper-evident audit log
 
 - **Binds:** NFR-009, FR-093, FR-085, FR-090, FR-139–FR-143, FR-067
 - **Prevents:** mutable “logs” that two teams format differently, or a WORM claim a DBA can undo
-- **Rule:** `audit` module owns append-only `audit_event` (application hash-chain). This is tamper-evident at the app layer, not object-lock WORM. The audit DB role is `INSERT` + `SELECT` only (`UPDATE`/`DELETE` revoked). Nightly chain-verify job; hash copies may go to versioned object storage. `payload` stores ids + action + reason — never phones or original photo bytes. Mandatory events: moderator unblur, sanctions, appeals, operator threshold/price changes, deletion/CIL completions, fail-closed incidents, mahram attach/remove/pause/end, reveal grant/revoke, payment webhook apply, marriage dual-confirm, consent-story publish or refuse, subject-access export. Retain ≥12 months. Individual staff attribution
+- **Rule:** `audit` module owns append-only `audit_event` (application hash-chain). This is tamper-evident at the app layer, not object-lock WORM. The audit DB role is `INSERT` + `SELECT` only (`UPDATE`/`DELETE` revoked). Nightly chain-verify job; hash copies may go to versioned object storage. `payload` stores ids + action + reason — never phones or original photo bytes. Mandatory events: moderator unblur, sanctions, appeals, operator threshold/price changes, deletion/CIL completions, scan-deferred / scan-failed, admin flag actions, mahram attach/remove/pause/end, reveal grant/revoke, payment webhook apply, marriage dual-confirm, consent-story publish or refuse, subject-access export. Retain ≥12 months. Individual staff attribution
 
 ### AD-19 — Privacy, CIL, retention
 
 - **Binds:** A3, FR-019, FR-060, FR-119, FR-120, FR-143, NFR-002, NFR-008
 - **Prevents:** invented statute details and copied Farata retention
-- **Rule:** statute is Loi n°001-2021/AN (verified). Foreign hosting is a transfer under arts 42–44: CIL authorisation + confidentiality/reversibility + encryption before launch. Hosting location is public (AD-5). GDPR-grade contracts are a counsel fact pattern — they do **not** satisfy art. 42 by themselves. Filing inputs (not extra invented articles): religious fields `madhhab`/`practice` need express consent (art. 12); liveness + ID images are biometric-class treatments listed with foreign transfers under art. 31; every outbound Chat item is model-scored (counsel maps the art. 31 AI/profiling bullet); destinataires include SMS, KYC, moderation/ASR, and mobile-money vendors, not only Scaleway. Cookie consent never grants photo reuse (likeness reuse is AD-9 `likeness_grant`). Coarse geo (city; quartier hidden until accepted Invite). Delete/export is owner-only via `IdentityPort.deleteAccount` / `exportAccount` plus an `operator` `cil_ticket` status page — staff must not run a bulk contact export (AD-17). Erase includes object-storage versions. NFR-002 breach notice to Members and CIL is a product SLA of 72h (not pinned to a fabricated article). NFR-008 working clocks stay `[ASSUMPTION]` (erase ≤30d, export ≤72h, chat ≤18 months after close unless hold; payments per OHADA/tax counsel)
+- **Rule:** statute is Loi n°001-2021/AN (verified). Foreign hosting is a transfer under arts 42–44: CIL authorisation + confidentiality/reversibility + encryption before launch. Hosting location is public (AD-5). GDPR-grade contracts are a counsel fact pattern — they do **not** satisfy art. 42 by themselves. Filing inputs (not extra invented articles): religious fields `madhhab`/`practice` need express consent (art. 12); liveness + ID images are biometric-class treatments listed with foreign transfers under art. 31; every outbound Chat item is model-scored after delivery (counsel maps the art. 31 AI/profiling bullet); destinataires include SMS, KYC, moderation/ASR, and mobile-money vendors, not only Scaleway. Cookie consent never grants photo reuse (likeness reuse is AD-9 `likeness_grant`). Coarse geo (city; quartier hidden until accepted Invite). Delete/export is owner-only via `IdentityPort.deleteAccount` / `exportAccount` plus an `operator` `cil_ticket` status page — staff must not run a bulk contact export (AD-17). Erase includes object-storage versions. NFR-002 breach notice to Members and CIL is a product SLA of 72h (not pinned to a fabricated article). NFR-008 working clocks stay `[ASSUMPTION]` (erase ≤30d, export ≤72h, chat ≤18 months after close unless hold; payments per OHADA/tax counsel)
 
 ### AD-20 — Environments, CI/CD, observability, DR
 
 - **Binds:** NFR-004, launch ops
-- **Prevents:** one shared prod/staging database, unobserved fail-closed, unrestorable backups
-- **Rule:** isolated `dev | staging | prod`. IaC is OpenTofu in `infra/` targeting Scaleway `fr-par`. CI host is GitHub Actions (lint, types, unit, integration, migration check). CD: staging auto; prod manual approve. Secrets live in Scaleway Secret Manager (or any in-region secrets manager — never images/git). Observability is OpenTelemetry into an in-region stack (logs/traces/metrics); vendor SKU may change, the OTel contract must not. Metrics include moderation latency, fail-closed count, report SLA, webhook lag, dual-confirmed marriages (internal; public counter is AD-25). PG PITR (daily + WAL); object-storage versioning; quarterly restore drill. Launch assumption: 10k MAU BF, single-region, 2 `api` + 1 `worker` + 1 `web` replica, PG primary + 1 replica. Drizzle Kit is the only migration runner
+- **Prevents:** one shared prod/staging database, unobserved scan-deferred gaps, unrestorable backups
+- **Rule:** isolated `dev | staging | prod`. IaC is OpenTofu in `infra/` targeting Scaleway `fr-par`. CI host is GitHub Actions (lint, types, unit, integration, migration check). CD: staging auto; prod manual approve. Secrets live in Scaleway Secret Manager (or any in-region secrets manager — never images/git). Observability is OpenTelemetry into an in-region stack (logs/traces/metrics); vendor SKU may change, the OTel contract must not. Metrics include moderation latency, scan-deferred / scan-failed count (never hidden), flag-queue age, report SLA, webhook lag, dual-confirmed marriages (internal; public counter is AD-25). PG PITR (daily + WAL); object-storage versioning; quarterly restore drill. Launch assumption: 10k MAU BF, single-region, 2 `api` + 1 `worker` + 1 `web` replica, PG primary + 1 replica. Drizzle Kit is the only migration runner
 
 ### AD-21 — Billing isolation from safety
 
@@ -217,9 +224,9 @@ stateDiagram-v2
 
 ### AD-22 — Open PRD questions stay open
 
-- **Binds:** PRD §16 questions 1–11 and the NFR-008 retention clocks (PRD §16 item 12)
+- **Binds:** PRD §16 questions 1 and 3–11 and the NFR-008 retention clocks (PRD §16 item 12)
 - **Prevents:** silently closing product/legal questions in code defaults that cannot change
-- **Rule:** each open question is a config flag, policy-table row, or disabled port (see SOLUTION-DESIGN.md). Builders must not bake a closed answer into schema enums unless the PRD already locked the enum. Retention clocks stay `[ASSUMPTION]` until counsel replaces them (AD-19)
+- **Rule:** each **open** question is a config flag, policy-table row, or disabled port (see SOLUTION-DESIGN.md). Question 2 (fail-closed UX tolerance) is **resolved 2026-10-01** — Chat is send-first and passive (AD-10); do not keep a hold-timeout UX. Builders must not bake a closed answer into schema enums unless the PRD already locked the enum. Retention clocks stay `[ASSUMPTION]` until counsel replaces them (AD-19)
 
 ### AD-23 — Cross-module commands
 
@@ -253,10 +260,10 @@ stateDiagram-v2
 | IDs | UUID v7 generated in `packages/kernel` (host managed PG 17 has no native `uuidv7`); prefix optional in APIs (`acc_`, `msg_`, `pay_`) |
 | Time | UTC ISO-8601 in APIs and DB; display in `Africa/Ouagadougou`; quota and quiet-hours windows use that civil day |
 | Locale | `fr` default UI; audio keys `mos`, `dyu`; rendered Member/SEO/store/audio strings use *mariage / ta'aruf / nikah / khitba* only (AD-24) |
-| Errors | AD-7 envelope only; `code` is machine (`CONTACT_SHARE_REQUIRED`, `MODERATION_HELD`, `PAY_UNAVAILABLE`) |
+| Errors | AD-7 envelope only; `code` is machine (`CONTACT_SHARE_REQUIRED`, `PAY_UNAVAILABLE`) |
 | Auth context | `AuthContext { accountId, roles[], gender?, mahramWardId? }` set by identity; downstream trusts it, does not re-parse tokens |
 | Mutation | Commands in the owning module via AD-23 ports; no cross-module SQL writes |
-| Config | Required `operator_config` keys: `hold_threshold`, `free_review_sla_hours`, `report_sla_hours`, `photo_strike_count`, `photo_strike_block_hours`, `brother_invite_quota_free`, `brother_invite_quota_premium`, `signed_url_ttl_seconds` (max 60), `pack_prices_xof`, `min_age`, `rl_auth_per_min`, `rl_otp_per_hour`, `rl_invite_per_day`, `rl_report_per_hour`, `rl_pay_per_min`, `rl_browse_per_min`. Types: number unless `_xof` is integer XOF. Audited on change |
+| Config | Required `operator_config` keys: `flag_threshold`, `free_review_sla_hours`, `report_sla_hours`, `photo_strike_count`, `photo_strike_block_hours`, `brother_invite_quota_free`, `brother_invite_quota_premium`, `signed_url_ttl_seconds` (max 60), `pack_prices_xof`, `min_age`, `rl_auth_per_min`, `rl_otp_per_hour`, `rl_invite_per_day`, `rl_report_per_hour`, `rl_pay_per_min`, `rl_browse_per_min`. Types: number unless `_xof` is integer XOF. Audited on change |
 | Feature flags | `gif_picker`, `ussd`, `anonymous_mode`, `ios_apple_signin`, `who_favourited_me`, `visitors_list`, `online_now`, `boosts`, extra payment methods. Member-facing who-favourited / visitors / online-now / boosts stay **off** until their NEXT FR ships. `profile_visit` reads for T&S remain on |
 | Evidence | Farata statements keep labels Offered (seen) / Claimed (marketing) / Not publicly evidenced |
 
@@ -308,11 +315,13 @@ erDiagram
   PHOTO_ASSET ||--o{ REVEAL_GRANT : grants
   ACCOUNT ||--o{ INVITE : sends
   INVITE ||--o| CONVERSATION : opens_after_sister_consent
+  INVITE ||--o| MODERATION_JOB : flash_scanned_after
   CONVERSATION ||--o{ MESSAGE : contains
   CONVERSATION ||--o| CONTACT_SHARE : may_unlock
   CONVERSATION ||--o{ MAHRAM_LINK : watched_by
   ACCOUNT ||--o{ MAHRAM_LINK : as_guardian
-  MESSAGE ||--o| MODERATION_JOB : scanned_by
+  MESSAGE ||--o| MODERATION_JOB : scanned_after
+  MODERATION_JOB ||--o| FLAG_QUEUE : may_open
   ACCOUNT ||--o{ REPORT : files
   REPORT ||--o| MODERATION_CASE : opens
   ACCOUNT ||--o{ STRIKE : receives
@@ -370,10 +379,10 @@ flowchart LR
 | Phone OTP, liveness, ID | verification | AD-13 |
 | Profiles, fields, completeness, emergency hide | profiles | AD-3, AD-23, AD-26 |
 | Browse, filters, favourites, visits | discovery | AD-16, AD-23 |
-| Invites, quotas, Message Flash | invites | AD-23, AD-21, AD-26 |
+| Invites, quotas, Message Flash | invites | AD-23, AD-21, AD-26, AD-10, AD-17 |
 | Chat, stages, reactions, contact-share | chat | AD-15, AD-10, AD-23 |
 | Media, derivatives, Reveal, signed URLs, likeness | media | AD-9 |
-| Pre-delivery scan, hold queue | moderation | AD-10, AD-11, AD-17 |
+| Passive after-delivery scan, flag queue | moderation | AD-10, AD-11, AD-17 |
 | Mahram invite / read / pause | mahram | AD-12, AD-23 |
 | Report, case, strike, ban, appeal, block | trust | AD-10, AD-18, AD-17 |
 | Marriage report, story, counter | outcomes | AD-25, AD-18 |

@@ -2,7 +2,7 @@
 title: muslim-marriage-africa — product brief
 status: complete
 created: 2026-09-27
-updated: 2026-09-27
+updated: 2026-10-01
 ---
 
 # Product Brief: muslim-marriage-africa
@@ -15,7 +15,7 @@ Read the narrative sections first (problem through pricing), then the two featur
 
 Muslim brothers and sisters in francophone West Africa who want a spouse need a path that is marriage-shaped, haya-safe, and locally usable. Today they improvise across family networks, WhatsApp, and Senegal-first apps. Farata (farata.net) is already live and is the primary comparable: French-only UI (Offered (seen)), Senegal-centric, family involvement as rules text (Offered (seen) policy; mahram-in-chat Not publicly evidenced), blur as all-or-nothing reveal-on-acceptance (Offered (seen) [bundle]; per-viewer reveal/revoke Not publicly evidenced), and homepage Claimed “AI scans every message” versus FAQ Claimed “we do not read private chats.” Testimonials Offered (seen) are app-experience quotes, not marriages. Marriage-success reporting is Not publicly evidenced.
 
-This product is Burkina-first honorable ta'aruf: sister dignity never paywalled; optional sister-initiated verified mahram-in-chat; pre-delivery AI on text, photos, and voice; honest polygamy disclosure; XOF mobile money; French-first UI plus Mooré/Dioula audio. Become the reference for finding a Muslim spouse in Ouagadougou and Bobo-Dioulasso, then the region — not another dating app from Dakar.
+This product is Burkina-first honorable ta'aruf: sister dignity never paywalled; optional sister-initiated verified mahram-in-chat; passive AI on chat text, chat photos, and voice (delivered then scanned; profile photos and bio stay publish-gated); honest polygamy disclosure; XOF mobile money; French-first UI plus Mooré/Dioula audio. Become the reference for finding a Muslim spouse in Ouagadougou and Bobo-Dioulasso, then the region — not another dating app from Dakar.
 
 MVP ships web + installable PWA + store-listed Android. Native iOS is parity — deferred to NEXT (Android-first Burkina launch; Apple build/store cost), not dropped. All six owner must-haves from `docs/system-idea.md` are MVP. Every P1–P59 ships or is marked “parity — deferred to NEXT/LATER” with a reason. Nothing is dropped.
 
@@ -60,14 +60,14 @@ Cost of the status quo: sisters pay with dignity (photos reused, blur that canno
 
 ## Positioning and wedge vs Farata
 
-**Wedge:** Burkina-first honorable ta'aruf — sister dignity never paywalled, optional verified mahram-in-chat, pre-delivery AI on text/photo/voice, honest polygamy disclosure, XOF mobile money, French + Mooré/Dioula audio. The reference for a Muslim spouse in Ouagadougou/Bobo, then the region. Not “another dating app from Dakar.”
+**Wedge:** Burkina-first honorable ta'aruf — sister dignity never paywalled, optional verified mahram-in-chat, passive AI on chat text/photo/voice (delivered then scanned), honest polygamy disclosure, XOF mobile money, French + Mooré/Dioula audio. The reference for a Muslim spouse in Ouagadougou/Bobo, then the region. Not “another dating app from Dakar.”
 
 Farata statements below use **only** evidence labels from `docs/competitor-farata.md`. No invented gaps.
 
 | Lever | Farata (labeled) | Our raise |
 | --- | --- | --- |
 | Family involvement | Rules §04 Offered (seen) as policy; mahram-in-chat **Not publicly evidenced** | D1 product: sister-initiated, verified, read-all, flag/pause/end |
-| AI moderation | Homepage Claimed “AI scans every message”; FAQ Claimed “we do not read private chats” (evidenced contradiction). Voice/chat-photo moderation **Not publicly evidenced** | D4 + D6: every modality before delivery, and we say so |
+| AI moderation | Homepage Claimed “AI scans every message”; FAQ Claimed “we do not read private chats” (evidenced contradiction). Voice/chat-photo moderation **Not publicly evidenced** | D4 + D6: chat delivered then scanned; we say the AI flags a human and does not block |
 | Photo blur | Offered (seen) [bundle]: all-or-nothing reveal-on-acceptance. Per-viewer reveal/revoke **Not publicly evidenced** | D8: per-viewer match / request / never + revoke |
 | Success stories | P54 testimonials Offered (seen) are app-experience quotes, not marriages. Couples reporting marriage **Not publicly evidenced** | D11 dual-confirm + D12 honest counter starting at 0 |
 | Dignity / paywall | Starting a conversation Premium-gated Offered (seen) [bundle]; “Badge Premium vérifié” bundled with Premium (Claimed) | D20 + D13: safety and sister-initiated chat are free; Premium is reach/convenience |
@@ -77,15 +77,15 @@ Farata statements below use **only** evidence labels from `docs/competitor-farat
 
 Copy language is *mariage / ta'aruf / nikah / khitba*. Ban “dating / rencontre romantique.” Entertainment-seeking is non-marriage use (P44).
 
-The launch advantage is execution of dignity and local fit, not a secret model. Farata already occupies the category. We raise the places their public evidence is weak or contradictory: mahram as a product (D1), pre-delivery moderation on all media stated honestly (D4/D6), per-viewer blur/revoke (D8), dual-confirmed marriages as the hero metric (D11/D12), free verification (D13), sisters starting conversations free (D20), and Burkina payments, languages, and CIL (D17–D19).
+The launch advantage is execution of dignity and local fit, not a secret model. Farata already occupies the category. We raise the places their public evidence is weak or contradictory: mahram as a product (D1), deliver-then-scan on chat media stated honestly (D4/D6), per-viewer blur/revoke (D8), dual-confirmed marriages as the hero metric (D11/D12), free verification (D13), sisters starting conversations free (D20), and Burkina payments, languages, and CIL (D17–D19).
 
 ## The solution
 
 A web + PWA + Android matrimony product that makes ta'aruf a visible process, not a swipe feed.
 
-A sister creates a verified profile (phone OTP + liveness selfie + ID, free). Photos are blurred by default for the opposite gender; she reveals per viewer on match or on request, and can revoke. She browses, sends or receives invites, accepts or declines quietly. Chat opens only after she accepts. She may invite a mahram by phone; he reads everything and can flag, pause, or end. Every text, photo, and voice note is moderated **before** delivery; holds feed a report → strike → ban pipeline with human review. When both confirm “we got married,” accounts move to a joint married state; a public story is opt-in; the verified-marriages counter stays honest (starts at 0).
+A sister creates a verified profile (phone OTP + liveness selfie + ID, free). Photos are blurred by default for the opposite gender; she reveals per viewer on match or on request, and can revoke. She browses, sends or receives invites, accepts or declines quietly. Chat opens only after she accepts. She may invite a mahram by phone; he reads everything and can flag, pause, or end. Chat text, chat photos, and voice notes send immediately. After send, a passive AI background-checks red flags and, if it flags, reports to an admin and flags the person. The admin decides suspend (if too indecent), a warning, or another action. The AI does not block, hold, or refuse delivery. Profile photos and bio stay publish-gated. Contact-share still blocks phone numbers, WhatsApp handles, and links until both members opt in (that is a product rule, not the AI). When both confirm “we got married,” accounts move to a joint married state; a public story is opt-in; the verified-marriages counter stays honest (starts at 0).
 
-Khalwa-safe: no 1:1 live video/voice until a wali is present or a chaperoned family meeting is scheduled; text + async moderated voice until then. Live video even with wali is LATER. Woman’s consent is first-class: decline is quiet (no guilt timer; brother sees not-accepted only). Haya-default media; GIFs/stickers only from a curated modest set (pack is NEXT). Small-community doxxing resistance: default pseudonym, city-level location; quartier optional and hidden until match.
+Khalwa-safe: no 1:1 live video/voice until a wali is present or a chaperoned family meeting is scheduled; text + async voice notes (delivered then scanned) until then. Live video even with wali is LATER. Woman’s consent is first-class: decline is quiet (no guilt timer; brother sees not-accepted only). Haya-default media; GIFs/stickers only from a curated modest set (pack is NEXT). Small-community doxxing resistance: default pseudonym, city-level location; quartier optional and hidden until match.
 
 ## Launch market and platforms
 
@@ -102,7 +102,7 @@ These six are the owner must-haves from `docs/system-idea.md`. All are MVP MUST,
 | # | Must-have | P / D ids | Horizon |
 | --- | --- | --- | --- |
 | 1 | **Profiles:** create/submit, browse, send invite/match request, accept/decline, see who invited you and who accepted, messaging once matched | P7, P15, P21, P28, P31, P33 | MUST |
-| 2 | **AI moderation of text, photos, and voice notes BEFORE delivery** (plus profile photos/bio), feeding a report → strike → ban pipeline with human review | P37, P34, P38, D4, D7, P41, P42, P43 | MUST |
+| 2 | **Passive AI moderation of chat text, chat photos, and voice notes AFTER delivery** (profile photos/bio stay publish-gated), feeding a report → strike → ban pipeline with human review | P37, P34, P38, D4, D7, P41, P42, P43 | MUST |
 | 3 | **Photo blur** with per-viewer reveal-on-match / reveal-on-request and revoke | P40, D8 | MUST |
 | 4 | **Optional, sister-initiated mahram/wali in chat** (read-all; can flag/pause/end) | D1, P45 | MUST |
 | 5 | **Marriage success reporting** — joint “we got married,” both confirm — plus consent-based showcase and an honest verified-marriages counter. D11 full; D12 MUST slice (consent story submit + showcase page + counter starting at 0). P54 stays NEXT (fed by real D11/D12 stories) | D11; D12 MUST slice; P54 NEXT | MUST (P54 stays NEXT parity) |
@@ -165,7 +165,7 @@ User requirement: implement **every** Farata feature. Nothing in P1–P59 may be
 | P32 | AI-personalised Ice Breakers | **parity — deferred to NEXT** | Wait for grounded coach (D21) |
 | P33 | Real-time chat — typing, reactions, photo share (gallery/camera) | MVP | |
 | P33 | Curated GIFs / stickers | **parity — deferred to NEXT** | Pack design time; modest curated set only |
-| P34 | Voice messages | MVP | French / Mooré / Dioula; always STT + audio-classified before delivery (D4 + D18). Not a safety paywall |
+| P34 | Voice messages | MVP | French / Mooré / Dioula; delivered immediately, then STT + audio-classified in the background (D4 + D18). Not a safety paywall. AI outage does not hold the voice note |
 | P35 | Push notifications | MVP | Messages / requests / visits; plus wali digest, reveal-requests, moderation outcomes, quiet hours (quiet-hours default is D30 NEXT) |
 | P36 | Web + installable PWA | MVP | |
 | P36 | Store-listed native Android (thin wrapper / TWA / Capacitor over the PWA) | MVP | Required for Burkina launch |
@@ -175,7 +175,7 @@ User requirement: implement **every** Farata feature. Nothing in P1–P59 may be
 
 | ID | Title | Horizon | Notes / reason if deferred |
 | --- | --- | --- | --- |
-| P37 | AI message moderation | MVP | Raised by D4 to every modality before delivery |
+| P37 | AI message moderation | MVP | Raised by D4 to every chat modality, delivered then scanned |
 | P38 | Photo strike rule | MVP | Keep 3-strike / 24h block as floor (can tighten) |
 | P39 | Published photo rules | MVP | Pictograms + French text + Mooré/Dioula audio (D40) |
 | P40 | Blur toggle / default / reveal-on-accept / unblur | MVP | Raised to per-viewer reveal/revoke (D8) |
@@ -228,8 +228,8 @@ D1–D23 from `docs/competitor-farata.md` §7; D24–D40 from the 2026-09-27 bra
 | 3 | P0 | D1 | Mahram-in-chat read-all, sister-initiated; verified wali can flag/pause/end | MUST |
 | 27 | P2 | D2 | Wali dashboard: multi-ward + digest + priority flags | NEXT |
 | 28 | P2 | D3 | Chaperoned-meeting / khitba planner with wali in the loop | NEXT (full) |
-| 1 | P0 | D4 | Every modality moderated **before delivery** (text, chat photos, voice STT+classifier incl. local languages, profile photos, bio) | MUST |
-| 8 | P1 | D5 | Scam and off-platform guardrails (money, phone, WhatsApp, links) | MUST |
+| 1 | P0 | D4 | Every chat modality delivered, then passively scanned (text, chat photos, voice STT+classifier incl. local languages); profile photos and bio stay publish-gated | MUST |
+| 8 | P1 | D5 | Scam and off-platform guardrails; contact-share still blocks phone, WhatsApp, and links until both members opt in (not the AI) | MUST |
 | 9 | P1 | D6 | Honest consistent moderation policy + member appeal | MUST |
 | 7 | P0 | D7 | Report → strike → ban pipeline, console, evidence, fingerprinting, transparency stats | MUST (MVP-scale) |
 | 2 | P0 | D8 | Per-viewer reveal (match / request / never) + revoke | MUST |
@@ -266,7 +266,7 @@ D1–D23 from `docs/competitor-farata.md` §7; D24–D40 from the 2026-09-27 bra
 | 36 | P2 | D29 | Mosque / imam attestation level | NEXT |
 | 37 | P2 | D30 | Prayer/night quiet hours (default no push between Isha and Fajr local time) | NEXT |
 | 38 | P2 | D31 | Moderator dual-control / audit / wellness | NEXT |
-| 19 | P1 | D32 | Fail-closed when AI is down (hold undelivered media) | MUST |
+| 19 | P1 | D32 | AI outage records a scan-deferred event for the admin; it does not hold undelivered media | MUST |
 | 45 | P3 | D33 | Alumni mentorship (read-only advice, not matchmaking) | LATER |
 | 39 | P2 | D34 | Optional language filters with anti-caste design (Mooré / Dioula / Fulfulde / French) | NEXT |
 | 40 | P2 | D35 | Match-visible change-audit (marital status or photos) | NEXT |
@@ -297,7 +297,7 @@ Boosts (P25, NEXT) cannot buy a safety bypass; ranking prefers verified + comple
 | Outcome | Dual-confirmed marriages (D11) | Public counter starts at 0; proof-backed only (D12, D23) |
 | Outcome | Chaperoned / family meetings proposed and accepted (D3 full is NEXT; a lightweight “meeting” stage in D24 is MUST) | |
 | Trust | Verified members (phone / ID / wali levels) | Never sell a “looks verified” Premium badge |
-| Safety | Pre-delivery block / hold / human-review rates; report SLA met (target 24h); strike → ban completions; appeal overturn rate | Fail-closed incidents counted, not hidden |
+| Safety | Passive-scan flag rates; admin warning / suspend / other-action rates; report SLA met (target 24h); strike → ban completions; appeal overturn rate | Scan-deferred events counted, not hidden |
 | Dignity | Share of sister profiles remaining blurred; reveal-revoke use; wali-attached chats; sister-initiated requests | |
 | Local fit | Android + PWA actives in Ouaga then Bobo; Orange Money / Moov checkout completion; audio-onboarding completion (Mooré/Dioula) | |
 | Honesty | Publish only proof-backed counters. Never invent scale | Contrast: Farata “+247.8k actifs” Claimed vs Play 10k+ Offered (seen) |
@@ -310,11 +310,11 @@ Full table is in `addendum.md`. The launch-killing eight:
 | --- | --- |
 | Fake profiles / catfish | D13 + P8 + P9: no public visibility until phone OTP + liveness + ID + human review; liveness matched to profile photos |
 | Romance / money scams | D5 classifiers; P44 ban; in-chat “never send money to a suitor” |
-| Indecent media (incl. Mooré/Dioula slang jailbreak) | D4 pre-delivery + local lists + fail-to-human; D32 fail-closed |
+| Indecent media (incl. Mooré/Dioula slang jailbreak) | D4 deliver-then-scan + local lists + flag-for-admin; D32 scan-deferred (no hold) |
 | Photo leaks / small-city doxxing | D8 + D9 (NEXT polish); coarse geo; D10; kill-switch + mass revoke |
 | Fake or coercive wali | Invite-by-phone + OTP + declared relationship + sister confirm; D38 remove/report; wali cannot send as her |
 | Minors | P14 19+ + ID DOB + D39 facial-age hold |
-| AI vendor down | D32 fail-closed — hold undelivered media |
+| AI vendor down | D32 scan-deferred event for the admin — does not hold undelivered media |
 | Mosque rumor that this is dating/haram | Zero dating language; D23 named board; working seed Académie (P50); proof-backed metrics |
 
 ## Out of scope / not-now
@@ -357,10 +357,10 @@ Rationale: kinship documents are uneven in BF and would block the must-have; pho
 
 ## Open questions
 
-Unresolved items from the brainstorm. Not silently closed.
+Items from the brainstorm. One was closed by the 2026-10-01 locked decision; the rest stay open.
 
 - **Polygamy disclosure UX:** how to disclose existing wives without doxxing them? First-wife awareness remains out of scope unless she consents — confirm with sisters and counsel.
-- **Fail-closed UX tolerance:** how long will members tolerate held voice notes when the AI vendor is down?
+- **Fail-closed UX tolerance:** **Resolved 2026-10-01** (locked decision, Maitchibi Fayçal). AI moderation is passive. Messages send immediately; AI outage does not hold or delay chat. Scan-deferred events are recorded for the admin. The former “how long will members tolerate held voice notes” question no longer applies.
 - **USSD/SMS cost:** which BF operators and what cost per wali alert is sustainable at launch? SMS is MUST; USSD is MUST-if-feasible.
 - **Imam advisory:** which Ouaga/Bobo scholars will lend names, and what review SLA for Académie?
 - **Free review SLA (P8):** what free review time is honest in BF? Farata claims 12–24h / 30 min / 10 min Premium — numbers disagree, Claimed.
@@ -381,7 +381,7 @@ Unresolved items from the brainstorm. Not silently closed.
 6. Platforms: web + PWA + store-listed Android in MVP; native iOS parity — deferred to NEXT, not dropped.
 7. Age 19+, wali-invite-by-phone (no kinship papers in MVP), CIL + public hosting disclosure — all tagged **[ASSUMPTION]** and queued for legal review.
 8. North star = chaperoned meetings + dual-confirmed nikah. Proof-backed counters only. No dating language.
-9. Fail-closed moderation. Khalwa-safe (no live A/V until wali or chaperoned meeting). Woman’s consent first-class.
+9. Passive deliver-then-scan moderation. Profile photos and bio stay publish-gated. Contact-share still blocks phone/WhatsApp/links until both opt in (not the AI). Khalwa-safe (no live A/V until wali or chaperoned meeting). Woman’s consent first-class.
 10. Name remains TBD until native-speaker + trademark work. Do not start architecture from this brief.
 
 ## Vision
@@ -390,8 +390,8 @@ If this works, Ouagadougou and Bobo families will treat the product as a known h
 
 ## Document control
 
-- **Intent:** create (headless, Fast path).
-- **Sources:** `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`; `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (intent, html, memlog).
+- **Intent:** update (headless). Correction of record 2026-10-01: AI moderation is passive.
+- **Sources:** `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`; `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (intent, html, memlog). Locked decision already applied to the PRD and architecture; this run does not edit those artifacts.
 - **Overflow:** `addendum.md` (full risk table, personas/job maps, options considered).
 - **Audit:** `.memlog.md` (via `memlog.py` only).
-- **Not started:** PRD, architecture, other skills.
+- **This run:** does not edit the PRD or architecture; does not start UX, epics, or implementation.

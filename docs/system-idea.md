@@ -1,3 +1,5 @@
+> **Amendment 2026-10-01 (Maitchibi Fayçal).** Must-have #2 is passive. People send messages immediately. The AI then flags red flags for an admin, who decides suspend, a warning, or another action. The AI does not block, hold, or delay delivery. The sentence below that says the AI “blocks or flags” is the original 2026-09-27 idea and is superseded for chat messages. Profile-photo moderation and mahram read access are unchanged.
+
 # System idea (verbatim from the user, via coordinator)
 
 A marriage-focused Muslim matrimony platform (web app + mobile), not casual dating. It targets African Muslim brothers and sisters and launches in Africa (francophone West Africa first, e.g. Burkina Faso, then wider). The goal is to become THE reference for finding a Muslim spouse online.

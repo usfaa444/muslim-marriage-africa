@@ -1,5 +1,7 @@
 # Input reconciliation — architecture spine vs brainstorm intent
 
+> **Superseded 2026-10-01.** Chat moderation is passive after delivery (AD-10 amendment; PRD FR-062–068, FR-144, NFR-003). Claims in this review of pre-delivery Chat scan, hold-on-timeout, or fail-closed Chat delivery are historical. Profile Photo/bio publish-gate (FR-065), AD-9 blur, and AD-12 mahram read-delivered-only are unchanged.
+
 **Input:** Brainstorm session `brainstorm-muslim-marriage-africa-2026-09-27`  
 **Source read:** `brainstorm-intent.md` only (this review does not start other BMAD skills)  
 **Compared to:** `ARCHITECTURE-SPINE.md` (initiative-altitude consistency contract). Companion `SOLUTION-DESIGN.md` is cited only to show what the spine itself does *not* lock.  

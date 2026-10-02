@@ -285,7 +285,7 @@
 - D3. **Chaperoned-meeting planner**: when both sides agree, propose a family meeting / *khitba* step with the wali in the loop (time, place, attendees), not an off-app DM.
 
 **AI moderation on everything (must-have #2; gap 2)**
-- D4. **Every modality moderated before delivery**: text, **chat photos**, **voice notes** (speech-to-text + audio classifier, including French and local-language keyword lists), profile photos, bio text. Outcomes: block / blur-and-warn / hold for human review.
+- D4. **Chat delivered, then scanned** (corrected 2026-10-01; was “every modality moderated before delivery”): text, **chat photos**, and **voice notes** are delivered immediately, then speech-to-text + audio classification (French, plus moderator word lists for Mooré/Dioula — Whisper has no mos/dyu). A flag goes to an admin, who chooses warning, suspend, or another action. The AI does not block, hold, or refuse delivery. Profile photos and bio stay publish-gated. Blur/reveal is photo privacy, not a moderation outcome.
 - D5. **Scam and off-platform guardrails**: detect money requests, phone numbers/WhatsApp/links before mutual consent + wali presence; romance-scam pattern scoring.
 - D6. **Honest, consistent moderation policy**: say exactly what is scanned, by whom, and how long it is kept (fixes Farata's homepage-vs-FAQ contradiction); a member-visible appeal flow.
 - D7. **Report → strike → ban pipeline** with a moderator console, evidence snapshots, repeat-offender device/ID fingerprinting (ban evasion), and public periodic transparency stats.

@@ -1,12 +1,14 @@
 # Ad-hoc review: must-have & traceability completeness
 
-**Artifact:** `prd.md` (2026-09-27)  
+**Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Chat is delivered immediately, then background-scanned. Findings or table rows below that treat NFR-003 / FR-067 as fail-closed hold-before-delivery, or that assume a pre-delivery gate, are historical. Current `prd.md` uses deliver-then-scan, scan-deferred events, and FR-144 (admin flag queue). Other findings in this review are not closed by that decision.
+
+**Artifact:** `prd.md` (2026-09-27; correction of record 2026-10-01)  
 **Sources:** `docs/system-idea.md`; brief `brief-muslim-marriage-africa-2026-09-27/brief.md` (P1–P59, D1–D40)  
 **Reviewer:** ad-hoc PRD reviewer (must-have + traceability gate)  
 **Date:** 2026-09-27  
 **Verdict:** **Pass with findings**
 
-All eight structural gates hold: six owner must-haves are MVP FRs with FR IDs; every FR-001–FR-143 has an Acceptance criteria block; six named journeys exist; Appendix A has one row per P/D slice (118 rows, 99 unique IDs, none dropped); horizon totals follow the table; A1–A3 body text matches the brief; platforms keep iOS as NEXT; nine NFR categories have a target and a verification method. Findings below are completeness and testability gaps, not silent drops.
+All eight structural gates hold: six owner must-haves are MVP FRs with FR IDs; every FR-001–FR-144 has an Acceptance criteria block *(FR-144 added 2026-10-01)*; six named journeys exist; Appendix A has one row per P/D slice (118 rows, 99 unique IDs, none dropped); horizon totals follow the table; A1–A3 body text matches the brief; platforms keep iOS as NEXT; nine NFR categories have a target and a verification method. Findings below are completeness and testability gaps, not silent drops.
 
 Severity: **critical** = gate fail (dropped must-have, missing P/D id, rewritten assumption, dropped iOS). **high** = MVP/MUST capability claimed without a testable AC. **medium** = incomplete AC or weak slice mapping. **low** = annotation / fidelity nits.
 
@@ -48,7 +50,7 @@ Wording in the table is the system-idea text, not a paraphrase. No must-have is 
 
 ## 2. Acceptance criteria
 
-FR-001 through FR-143 each have an `**Acceptance criteria:**` block. Most MVP FRs use Given/When/Then. No FR is AC-less.
+FR-001 through FR-144 each have an `**Acceptance criteria:**` block *(FR-144 added 2026-10-01)*. Most MVP FRs use Given/When/Then. No FR is AC-less.
 
 ### FRs with non-concrete or incomplete ACs
 
@@ -178,7 +180,7 @@ All nine required themes exist as NFR-001–NFR-009 with a **Target** and a **Ve
 | --- | --- | --- | --- |
 | NFR-001 | Security | Visibility gates; hashed passwords; rate-limit; 15 min idle PIN sessions (assumption); no staff bulk contact export | Pen test + automated ACL / search-omit tests |
 | NFR-002 | Privacy / CIL | CIL program before launch; hosting disclosed; 72h breach; city-level geo; no marketing reuse | Legal checklist, tabletop, quartier automated test |
-| NFR-003 | Moderation latency + fail-closed | Text p50 &lt; 3s / p95 &lt; 10s; media p95 &lt; 30s; report p95 ≤ 24h; timeout ⇒ hold never allow | Synthetic pipeline + chaos kill of AI |
+| NFR-003 | Send-first Chat + admin decision SLA *(was: Moderation latency + fail-closed; superseded 2026-10-01)* | Send returns when stored (no AI wait); admin first decision on a flag within report SLA p95 ≤ 24h; count scan-deferred, not hold-on-timeout | Synthetic send without AI wait + chaos kill of AI still delivers and records scan-deferred |
 | NFR-004 | Availability | Core path ≥ 99.5% monthly; payment outage must not take down Free/safety | Uptime checks + payment-rail game-day |
 | NFR-005 | Low-end Android / 2G–3G | 2GB-class + Slow 3G: grid ≤ 8s, thread ≤ 4s, send ack ≤ 2s; no autoplay | Lab throttle + Ouaga/Bobo RUM |
 | NFR-006 | A11y / low-literacy | WCAG 2.1 AA; pictogram+audio completable; touch ≥ 44px | Audit + 5-sister moderated test |
@@ -222,7 +224,7 @@ All nine required themes exist as NFR-001–NFR-009 with a **Target** and a **Ve
 - P1–P59 and D1–D40 are complete; splits and horizons match the brief; iOS and P54 stay NEXT with reasons.
 - Unique totals 74 / 24 / 1 and row totals 75 / 39 / 4 are correct.
 - A1 19+, A2 wali-by-phone (no kinship papers), A3 CIL + public hosting disclosure are the brief text.
-- Fail-closed (NFR-003, FR-067), 24h report SLA, low-end Android budgets, French + audio coverage, deletion clocks, and audit-log retention are measurable.
+- 24h report SLA, low-end Android budgets, French + audio coverage, deletion clocks, and audit-log retention are measurable. *(2026-10-01: Fail-closed hold-before-delivery on NFR-003 / FR-067 is superseded; current measurable is scan-deferred event count plus send-without-AI-wait.)*
 - Six actor journeys exist in the required shape.
 
 ## Recommended fixes (not in scope for this review to apply)

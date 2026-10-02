@@ -1,5 +1,7 @@
 # Input reconciliation — brainstorm 2026-09-27
 
+**Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows below that treat FR-051 as a pre-delivery scan or D32 as a fail-closed hold of Voice notes are historical. Current `prd.md` delivers then scans; D32 is scan-deferred visibility. Other qualitative gaps in this reconcile are not closed by that decision.
+
 **Input:** Brainstorm session `brainstorm-muslim-marriage-africa-2026-09-27`  
 **Sources read:** `brainstorm-intent.md`, `brainstorm.html`, `.memlog.md`  
 **Compared to:** `prd.md` + `addendum.md` (same PRD workspace)  
@@ -66,7 +68,7 @@ PRD §10 correctly refuses to become a UX spec, then **delegates the keepsake to
 | --- | --- | --- |
 | “Not another **swipe** from Dakar” | “Not another **dating app** from Dakar” | Swipe-as-interaction banned; grid-as-hunt vs criteria-first |
 | Niyyah stays marriage-shaped because **current stage is always visible** | FR-028 stage flags exist | No copy/UX rule that the stage *reads as a ritual path*, not a chat status |
-| Voice notes as **Mooré/Dioula ta'aruf introductions**, not a Premium flirt channel | FR-051: languages + pre-delivery scan | Cultural *use* (introduction, not flirt) is not an AC |
+| Voice notes as **Mooré/Dioula ta'aruf introductions**, not a Premium flirt channel | FR-051: languages + deliver-then-scan *(was pre-delivery scan; superseded 2026-10-01)* | Cultural *use* (introduction, not flirt) is not an AC |
 | Ice Breakers: “sincere first message, **not a pickup line**” | FR-047: deen/family templates | No banned-pickup-line / scholar-reviewed template bar in AC |
 | Discovery: **sister-initiated or mutual-criteria-reveal default** so brothers do not only hunt a grid | Sisters may start Invites free (FR-045) | No default that de-centers the hunt-the-grid interaction |
 | Moderator macros: **respectful Ouaga French**, templated, reviewed | §10 one line; addendum persona | No FR that sanction copy is a reviewed corpus (tone can go bureaucratic or shaming) |
@@ -174,7 +176,7 @@ Intent + memlog required **every D24–D40 listed** in brief and PRD. Appendix A
 | **D29** | NEXT | FR-131 | Extra Verification level | Stub. Mosque/imam as *community trust* (extends D13/D23) is not described. |
 | **D30** | NEXT | FR-127 | Isha–Fajr local; OTP may still send | Landed for a NEXT stub. |
 | **D31** | NEXT (MVP audit floor) | FR-093 | Reasoned unblur + audit; dual-control NEXT | Wellness / rotation / auto-blur-in-console (moderator *emotional* job) is addendum-only. |
-| **D32** | MVP | FR-067, NFR-003 | Fail-closed hold | Landed. Open Q remains on *how long* members tolerate held voice. |
+| **D32** | MVP | FR-067, FR-144, NFR-003 | **Superseded 2026-10-01.** No longer fail-closed hold. Messages delivered then scanned; AI outage records scan-deferred. Open Q on held-voice tolerance is resolved. |
 | **D33** | LATER | FR-103 | Read-only, not matchmaking | Landed as LATER. |
 | **D34** | NEXT | FR-126 | Mooré/Dioula/Fulfulde/French + anti-caste rule | Anti-caste AC exists — good. |
 | **D35** | NEXT | FR-094 | Marital status / Photos notice to Chat partners | Landed as NEXT. |

@@ -1,5 +1,7 @@
 # Rubric-walker review — Architecture Spine
 
+> **Superseded 2026-10-01.** Chat moderation is passive after delivery (AD-10 amendment; PRD FR-062–068, FR-144, NFR-003). Claims in this review of pre-delivery Chat scan, hold-on-timeout, or fail-closed Chat delivery are historical. Profile Photo/bio publish-gate (FR-065), AD-9 blur, and AD-12 mahram read-delivered-only are unchanged.
+
 - **Artifact:** `ARCHITECTURE-SPINE.md`
 - **Altitude:** initiative / build-substrate
 - **Reviewed:** 2026-09-27
