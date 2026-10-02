@@ -8,7 +8,7 @@
 | 1c amend (must-have #5 + Android to MVP MUST) | done | 2a13408 |
 | 2 Product brief (`_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/`) | done | 9e9842e |
 | 3 PRD (`_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`) | done | 91a9b87 |
-| 4 UX (`_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/`) | done (was skipped; run 2026-10-01 after architecture) | (this commit) |
+| 4 UX (`_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/`) | done (was skipped; run 2026-10-01 after architecture) | d0b46c2 |
 | 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
 | 5 Epics & stories (`bmad-create-epics-and-stories`) | **not started** (awaiting go-ahead; not started by the 2026-10-01 amendment) | — |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
