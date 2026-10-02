@@ -10,7 +10,7 @@
 | 3 PRD (`_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`) | done | 91a9b87 |
 | 4 UX (`_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/`) | done (was skipped; run 2026-10-01 after architecture) | d0b46c2 |
 | 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
-| 6 Epics & stories (`_bmad-output/planning-artifacts/epics.md`) | done (12 epics, 98 stories; ready for development) | (this commit) |
+| 6 Epics & stories (`_bmad-output/planning-artifacts/epics.md`) | done (12 epics, 98 stories; ready for development) | b67d789 |
 | 7 Sprint planning / implementation | **not started** | — |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
 
