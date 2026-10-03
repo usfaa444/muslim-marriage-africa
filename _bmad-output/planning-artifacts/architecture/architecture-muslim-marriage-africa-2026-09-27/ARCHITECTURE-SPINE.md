@@ -7,7 +7,7 @@ paradigm: hexagonal-modular-monolith
 scope: Initiative-altitude consistency contract for the Burkina-first muslim-marriage-africa ta'aruf platform (working title; product name undecided). Governs all feature spines and the MVP+NEXT capability surface in the 2026-09-27 PRD.
 status: final
 created: 2026-09-27
-updated: 2026-10-02
+updated: 2026-10-03
 binds: [identity, verification, profiles, discovery, invites, chat, media, moderation, mahram, trust, outcomes, billing, content, operator, notifications, audit]
 sources:
   - _bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/prd.md
@@ -81,7 +81,7 @@ flowchart TB
 | account, credential, session, pin_lock, cookie_consent | identity |
 | verification_record | verification |
 | profile, profile_field, completeness | profiles |
-| favourite, profile_visit | discovery |
+| favourite, profile_visit, discovery_exclusion | discovery |
 | mahram_thread_grant | mahram |
 | likeness_grant | media |
 | invite, message_flash, invite_quota | invites |
@@ -96,6 +96,8 @@ flowchart TB
 | operator_config, cil_ticket | operator |
 | notification, sms_dispatch | notifications |
 | audit_event | audit |
+
+Field-level columns live in SOLUTION-DESIGN.md `## 6. Entity catalog`. This table is ownership only.
 
 ### AD-4 — One shared web UI plus Capacitor Android
 
@@ -338,10 +340,11 @@ erDiagram
   INVITE ||--o| MODERATION_JOB : flash_scanned_after
   CONVERSATION ||--o{ MESSAGE : contains
   CONVERSATION ||--o| CONTACT_SHARE : may_unlock
-  CONVERSATION ||--o{ MAHRAM_LINK : watched_by
-  ACCOUNT ||--o{ MAHRAM_LINK : as_guardian
-  CONVERSATION ||--o{ MAHRAM_THREAD_GRANT : granted_to
+  ACCOUNT ||--o{ MAHRAM_LINK : sister
+  ACCOUNT ||--o{ MAHRAM_LINK : mahram
+  CONVERSATION ||--o{ MAHRAM_THREAD_GRANT : watched_by
   ACCOUNT ||--o{ MESSAGE_QUOTA : sends_on_free
+  ACCOUNT ||--o{ DISCOVERY_EXCLUSION : pass_excludes
   MESSAGE ||--o| MODERATION_JOB : scanned_after
   MODERATION_JOB ||--o| FLAG_QUEUE : may_open
   ACCOUNT ||--o{ REPORT : files

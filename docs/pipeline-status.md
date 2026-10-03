@@ -14,6 +14,7 @@
 | 7 Sprint planning / implementation | **not started** (not started by the 2026-10-02 card/cap/grant amendment) | — |
 | Amendment 2026-10-02: sister reach mode (`sister_reach_mode`, FR-145, AD-27, story 4.7) | done | c9cfdde |
 | Amendment 2026-10-02: one card, message cap, mahram grants (FR-146, AD-28, AD-29, stories 3.13 / 5.11 / 7.8) | done | 8c784b6 |
+| Amendment 2026-10-03: entity catalog (SOLUTION-DESIGN.md §6, 53 stored entities) | done | pending |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
@@ -147,3 +148,9 @@ bmad-help: update in place, brief → PRD → UX → architecture → epics. `bm
 BMAD updated those five artifacts (FR-146, AD-28, AD-29, amended AD-12, stories 3.13, 5.11, 7.8). Commit `8c784b6`. UX “next AD” lines were pointed at AD-12 / AD-28 / AD-29 by hand after architecture assigned the numbers. Brainstorm, `docs/system-idea.md`, and `docs/competitor-farata.md` D1 were annotated by hand (no update workflow). Sprint planning and implementation were not started.
 
 The sister-reach note above that says “chat-after-accept stay free” is superseded for volume by this amendment. `sister_reach_mode` itself is unchanged.
+
+## Amendment 2026-10-03 — entity catalog (ET)
+
+bmad-help: `bmad-architecture` update on the existing folder. `bmad-correct-course` does not apply. No new architecture folder.
+
+SOLUTION-DESIGN.md `## 6. Entity catalog` lists every stored entity with field, type, nullability, meaning, and relationships. Spine AD-3 stays ownership-only and points at that section. No kids/children profile column. Epics got one link to the catalog; stories were not rewritten. Sprint planning and implementation were not started.

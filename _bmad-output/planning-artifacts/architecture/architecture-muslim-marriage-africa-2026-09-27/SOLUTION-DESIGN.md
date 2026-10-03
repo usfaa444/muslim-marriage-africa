@@ -2,7 +2,7 @@
 title: muslim-marriage-africa — solution design
 status: final
 created: 2026-09-27
-updated: 2026-10-02
+updated: 2026-10-03
 audience: future build team + legal/CIL reviewer
 spine: ARCHITECTURE-SPINE.md
 open_questions:
@@ -130,37 +130,894 @@ Do not invent further articles. Do not claim GDPR = art. 42 adequacy.
 | Categories | Account/contact; profile (including `madhhab`/`practice` — religious, art. 12 express consent); photos; chat; liveness + ID images (biometric-class + foreign transfer, art. 31); model scores on every outbound Chat item (art. 31 AI/profiling bullet — counsel decides); payments |
 | Transfers | France (host) plus each vendor’s country; list them on the privacy page, not only Scaleway |
 
-## 6. Data model (invariants)
+## 6. Entity catalog
 
-Spine ERD is the shape. Fields and invariants the code must not invent twice:
+This is the implementation catalog. Spine AD-3 is ownership only. Shared traits on the card are computed from existing profile columns; they are not a table.
 
-| Entity | Key fields | Invariants |
-| --- | --- | --- |
-| account | id, email unique, password_hash, pseudonym unique, gender `sister\|brother`, roles, status, age_attested, pin_hash | No public visibility until verification+review. Gender immutable after first set without operator+audit |
-| session | id, account_id, kind `web\|capacitor\|mahram\|staff`, expires_at | PIN sessions idle-timeout 15 min (NFR-001 working number). Staff MFA. No member+staff on one session |
-| verification_record | id, account_id, kind `phone_otp\|liveness\|id_document`, status, vendor, evidence_uri | Independent of entitlement. Liveness matched to profile photos |
-| profile | account_id, dob, city, marital_status, polygamy_intent, madhhab, practice, life_plans, bio_live, bio_pending, visibility | `married` brother **must** set polygamy_intent. Bio swaps only on allow. **No new columns** for kids or card traits (AD-28). Shared traits on the card are computed from fields that already exist |
-| photo_asset | id, owner_id, kind `profile_photo\|chat_photo\|voice_note`, original_key, blur_key, moderation_state | `original_key` is storage-only. `applyModeration` only on `profile_photo`. `chat_photo` / `voice_note` sign without waiting on review. Not `content.audio_asset` |
-| reveal_grant | photo_id or owner_id, viewer_id, policy, revoked_at | Per viewer. Gateway + denylist stop **serving** clear bytes ≤60s. Policy `on_accept\|on_request\|never` |
-| likeness_grant | owner_id, campaign_id, expires_at | Per-use marketing/social reuse only; cookie consent is not this grant |
-| invite | id, from_id, to_id, flash_id, state, sister_accepted_at | Chat exists only after Sister accept (or she sent). No resend after refuse. Brother daily Invite quota from config (working **3** Free `[ASSUMPTION]`; Premium = unlimited Invites — no cap of 15). Sister Invite quota follows AD-27 (`sister_reach_mode`). Flash is delivered immediately (AD-10) and counts against FR-146 |
-| invite_quota | account_id, civil_day, sent_count | Written only by invites, and only when the sender is Invite-quota-capped (Brothers always; Sisters iff `same_quota_as_brothers`). Day = `Africa/Ouagadougou`. Cap from `operator_config` + `BillingPort.isEntitled`. Billing never writes this row. Not the message cap |
-| message_quota | account_id, civil_day_ouaga, sent_count | Written **only by chat** when the sender is not Premium. Grain `{ account_id, civil_day_ouaga, sent_count }`. Day = `Africa/Ouagadougou`. Counts chat text, chat photo, voice note, message flash (card quick-message is that Flash — once). Invites Flash call `ChatPort.consumeMessageQuota` before persist; `openFromInvite` must not increment. Live `isEntitled` + live `daily_message_cap` every persist. Cap change: `sent_count` stays; remaining = `max(0, new_cap − sent_count)`. Over-cap is not stored |
-| operator_config | key, value | Operator is the only writer. Required keys include `sister_reach_mode`: `free_unlimited` (DEFAULT) \| `same_quota_as_brothers`, and `daily_message_cap` (number; seed **10** `[ASSUMPTION — admin-configurable, not a product lock]`). Both reach-mode values and the cap key seeded day one. Change is an AD-18 event; subsequent invites / Free-tier sends only |
-| conversation | id, invite_id, stage `invite\|chat\|meeting\|married`, paused_by, ended_at | Ended is terminal. Brother cannot resume a Mahram pause. Inserted only by `ChatPort.openFromInvite`. Mahram must not INSERT. New conversation does **not** insert a grant |
-| contact_share | conversation_id, opened_at, opened_by_a, opened_by_b | Both members must opt in. Only chat writes. Moderation reads `ChatPort.contactShareOpen` |
-| message | id, conversation_id, sender_id, kind `text\|photo\|voice`, state `delivered`, body_enc, media_id | Created `delivered` only after the FR-146 cap allows the send. No Chat `pending`/`held`. Over-cap is not stored. Mahram reads delivered only on an active grant. Ciphertext `{v, alg, kid, iv, ct}` |
-| mahram_invite / mahram_link | sister_id, phone, relationship, confirmed_at, verified_badge, removed_at | Enum `father\|brother\|uncle\|other_mahram`. No kinship doc. One confirmed guardian set per sister in MVP (dashboard multi-ward is NEXT). After confirm the grant list is empty |
-| mahram_thread_grant | sister_account_id, mahram_account_id, conversation_id, granted_at, revoked_at nullable | Unique **active** (`revoked_at IS NULL`) grant per `{ mahram_account_id, conversation_id }`. Grant requires an existing conversation. No `invite_id` grant; Flash / pre-accept is not grantable. New conversation does not insert or inherit a grant. Only the ward Sister writes grants. Revoke-one sets `revoked_at` on that row (do not DELETE). Removing the mahram sets `revoked_at` on every active grant in the same unit of work |
-| moderation_job | message_id or asset_id or flash_id, scores, outcome, vendor, latency_ms | Outcome `flag-for-admin` \| clean \| `scan-deferred` \| `scan-failed`. Never writes `message.state`. Flash uses `flash_id` (pre-conversation) |
-| flag_queue | job_id, account_id, item_id, reason, entered_at | Already-delivered Chat items plus scan-deferred / scan-failed. Does not stop delivery. Replaces `hold_queue` |
-| report / case | target, reason, sla_started_at, first_human_at | Report clock starts at submit; AI-flag clock starts when the flag enters the queue |
-| strike / sanction / ban / appeal | account_id, ladder, evidence | Photo floor: 3 rejects → 24h upload block (config) |
-| marriage_report | initiator_id, spouse_id, confirmed_at, proof_key | Counter increments **only** on dual confirm. Proof never published |
-| consent_story | report_id, public_ok_a, public_ok_b, family_ok, faces | Either spouse can refuse public |
-| favourite / profile_visit | account_id, target_id, created_at | Discovery-owned. Pass/dismiss may reuse a discovery exclusion row if one already exists. **Do not invent a likes table.** Pass is not a like and not a public counter (AD-28) |
-| pack / payment / entitlement | duration_days 30/90/180, amount_xof, provider, provider_ref, ends_at, idempotency_key | `ends_at` set; **no** `renew_at`. Webhook applied once |
-| audit_event | actor_id, action, payload, prev_hash, hash | Tamper-evident hash-chain. INSERT/SELECT-only role. Payload = ids + action + reason |
+**Not stored:** likes; kids/children/`has_children`/`accepts_partner_with_kids` columns; `hold_queue`; `sharedTraits` DTO; completeness (computed from profile columns); `taaruf_stage` (it is `conversation.stage`, not a table); `profile_field` (the profile columns, not an EAV table); `mahram_permission` (AD-3 name — the permission is `mahram_link` + `mahram_thread_grant`, not a table).
+
+IDs are UUID v7 from `packages/kernel` unless a natural key is specified (`operator_config.key`; `invite_quota` and `message_quota` grain). NFR-008 clocks stay `[ASSUMPTION]`.
+
+### account
+
+Owner module: identity
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| email | text | NO | Unique. Unused email required to create (FR-001) |
+| pseudonym | text | NO | Unique. Unused pseudonym required to create (FR-001) |
+| gender | enum `sister\|brother` | NO | Immutable after first set without operator+audit. Roles are not gender |
+| roles | text[] | NO | `member\|mahram\|moderator\|operator\|system`. Not gender |
+| status | text | NO | Active / deactivated / held. No public listing until verification+review (`profile.visibility` is the browse gate) |
+| age_attested | boolean | NO | Product age gate is 19+ (`operator_config.min_age` defaults to 19) |
+
+- credential 1:N account via `credential.account_id`
+- session N:1 account via `session.account_id`
+- pin_lock 1:1 account via `pin_lock.account_id`
+- cookie_consent N:1 account via `cookie_consent.account_id`
+- profile 1:1 account via `profile.account_id`
+- verification_record N:1 account via `verification_record.account_id`
+
+Invariants: Identity is the only writer of `account.gender`. Ban, password change, and Mahram remove call `IdentityPort.revokeSessions`. Password hash lives on `credential`; PIN hash lives on `pin_lock`.
+
+### credential
+
+Owner module: identity
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Owning account |
+| kind | enum `password\|google_oidc\|apple` | NO | Google OIDC is additional, never the only path. Apple with iOS |
+| secret_hash | text | YES | argon2id password hash. Null for OIDC |
+| provider_subject | text | YES | OIDC subject when `kind` is not password |
+| email_verified_at | timestamptz | YES | FR-006 email verification. Null until the link succeeds |
+
+- credential N:1 account via `credential.account_id`
+
+Invariants: argon2id passwords. Password change revokes other sessions.
+
+### session
+
+Owner module: identity
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Session owner |
+| kind | enum `web\|capacitor\|mahram\|staff` | NO | Staff MFA. No member+staff on one session. `kind=mahram` must not hit browse / invite / chat write |
+| expires_at | timestamptz | NO | Session expiry |
+| last_seen_at | timestamptz | NO | PIN idle clock. Idle-timeout 15 min (NFR-001 working number) |
+
+- session N:1 account via `session.account_id`
+
+Invariants: Web/PWA uses httpOnly session cookie; Capacitor uses Bearer. `AuthContext.gender` is required on `member` sessions.
+
+### pin_lock
+
+Owner module: identity
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Unique per account. Shared-device PIN (FR-020) |
+| pin_hash | text | NO | argon2id PIN. Not stored on `account` |
+
+- pin_lock 1:1 account via `pin_lock.account_id`
+- pin_lock idle is enforced against `session.last_seen_at` (15 min, NFR-001 working number)
+
+### cookie_consent
+
+Owner module: identity
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Consenting account |
+| granted_at | timestamptz | NO | When cookie categories were recorded |
+| categories | text | NO | Cookie categories only |
+
+- cookie_consent N:1 account via `cookie_consent.account_id`
+
+Invariants: Cookie consent is not a `likeness_grant` and never grants photo reuse (AD-9, AD-19).
+
+### verification_record
+
+Owner module: verification
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Subject account |
+| kind | enum `phone_otp\|liveness\|id_document` | NO | Independent of entitlement |
+| status | text | NO | Granted / pending / rejected / held |
+| vendor | text | YES | Adapter SKU. Domain does not hard-wire vendors |
+| evidence_uri | text | YES | Encrypted ID-image / liveness evidence. Not a public URL |
+| phone_e164 | text | YES | Member phone for `kind=phone_otp` only (FR-002). This is the only Member `phone_e164` column. Staff list/browse/metrics never return it. `fingerprint.hash` hashes it and does not store plaintext |
+
+- verification_record N:1 account via `verification_record.account_id`
+
+Invariants: Verification is free. Liveness is matched to Profile Photos. Suspected-minor hold: verification writes the hold; profiles applies `visibility=held`. ID badge is not marital-status proof (AD-26). Notifications/SMS resolve Member phone through `VerificationPort`, not a second phone column on `account` or `credential`.
+
+### profile
+
+Owner module: profiles
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| account_id | uuid v7 | NO | Primary key. 1:1 with account |
+| dob | date | NO | FR-021 age/DOB. Age gate 19+ (`min_age` 19) |
+| city | text | NO | FR-021. Coarse geo; quartier hidden until accepted Invite |
+| country | text | NO | FR-021 city/country |
+| origin | text | YES | FR-021 origin |
+| marital_status | text | YES | FR-021 / AD-26. Required on the Invite decision surface before Sister accept |
+| polygamy_intent | text | YES | Required when brother is `married` (AD-26). Not a kids column |
+| education | text | YES | FR-021 |
+| profession | text | YES | FR-021 |
+| madhhab | text | YES | FR-022. Religious; art. 12 express consent |
+| practice | text | YES | FR-021 / FR-022. Religious; art. 12 express consent |
+| life_plans | text | YES | Intentions (FR-021 / FR-022). Filterable as life plans (FR-024) |
+| bio_live | text | YES | Public description only after allow (FR-065) |
+| bio_pending | text | YES | Unpublished until reviewed. Previous live bio stays if pending is blocked |
+| visibility | enum `unpublished\|public\|held\|emergency_hidden` | NO | Browse gate. `held` = suspected-minor (AD-13). `emergency_hidden` = `ProfilePort.emergencyHide` (24h). Unhide must not lift `held`. Clock is the hide command, not a new FR-021 column |
+
+- profile 1:1 account via `profile.account_id`
+- photo_asset N:1 profile owner via `photo_asset.owner_id` (kind `profile_photo`)
+
+Invariants: Bio swaps only on allow. **No** kids / children / `has_children` / `accepts_partner_with_kids` column. Shared traits on the card are computed from these columns; they are not a table (AD-28). Completeness is computed from these columns (FR-023). Confrérie and hijra stay NEXT (FR-029).
+
+### photo_asset
+
+Owner module: media
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| owner_id | uuid v7 | NO | Owning account |
+| kind | enum `profile_photo\|chat_photo\|voice_note` | NO | Chat Voice is not `content.audio_asset` |
+| original_key | text | NO | Storage-only. Serializers never emit it |
+| blur_key | text | YES | Ingest default opposite-gender object. Same object as `derivative` where `size=blur` — not a second blur |
+| moderation_state | enum `pending\|live\|blocked` | YES | Profile Photo / bio publish-gate only (AD-10). Null / unused for `chat_photo` and `voice_note` |
+
+- photo_asset N:1 account via `photo_asset.owner_id`
+- derivative N:1 photo_asset via `derivative.photo_asset_id`
+- reveal_grant N:1 photo_asset via `reveal_grant.photo_id`
+- signed_grant N:1 photo_asset via `signed_grant.photo_asset_id`
+- message N:1 photo_asset via `message.media_id` when kind is photo/voice
+
+Invariants: `chat_photo` / `voice_note` sign without waiting on review. Discovery omits unpublished profile photos.
+
+### derivative
+
+Owner module: media
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| photo_asset_id | uuid v7 | NO | Parent asset |
+| size | enum `xs\|sm\|md\|blur` | NO | Lite derivatives (AD-16) |
+| object_key | text | NO | Private bucket key. When `size=blur`, this is `photo_asset.blur_key` |
+
+- derivative N:1 photo_asset via `derivative.photo_asset_id`
+
+Invariants: List/grid/push thumbs are blur derivatives only. Clear `md` requires a live reveal grant. Media is the only writer of both `blur_key` and this row.
+
+### reveal_grant
+
+Owner module: media
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| photo_id | uuid v7 | YES | Per-photo grant when set |
+| owner_id | uuid v7 | NO | Photo owner |
+| viewer_id | uuid v7 | NO | Per-viewer. No unmatched clear-face on the grid |
+| policy | enum `on_accept\|on_request\|never` | NO | Owner-chosen |
+| revoked_at | timestamptz | YES | Gateway + denylist stop **serving** clear bytes ≤60s |
+
+- reveal_grant N:1 photo_asset via `reveal_grant.photo_id`
+- reveal_grant N:1 account (owner) via `reveal_grant.owner_id`
+- reveal_grant N:1 account (viewer) via `reveal_grant.viewer_id`
+
+Invariants: `MediaPort.sign` refuses `original` and clear `md` unless a live grant exists for that viewer.
+
+### signed_grant
+
+Owner module: media
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| photo_asset_id | uuid v7 | NO | Asset being signed |
+| viewer_id | uuid v7 | NO | Capability is per viewer |
+| derivative | text | NO | Size signed. Not a raw bucket pre-sign |
+| expires_at | timestamptz | NO | `signed_url_ttl_seconds` capped at 60 |
+| revoked_at | timestamptz | YES | Gateway re-checks grant + denylist on every GET |
+
+- signed_grant N:1 photo_asset via `signed_grant.photo_asset_id`
+- signed_grant N:1 account via `signed_grant.viewer_id`
+
+Invariants: Only `MediaPort.sign` may mint a URL. Token is to the media GET gateway.
+
+### likeness_grant
+
+Owner module: media
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| owner_id | uuid v7 | NO | Likeness owner |
+| campaign_id | text | NO | Per-use marketing/social reuse |
+| expires_at | timestamptz | NO | Expires with the campaign |
+
+- likeness_grant N:1 account via `likeness_grant.owner_id`
+
+Invariants: Cookie consent is not this grant.
+
+### invite
+
+Owner module: invites
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| from_id | uuid v7 | NO | Sender account |
+| to_id | uuid v7 | NO | Recipient account |
+| flash_id | uuid v7 | YES | Optional Message Flash. Not a `message` row |
+| state | text | NO | Pending / accepted / declined. No resend after refuse |
+| sister_accepted_at | timestamptz | YES | Chat exists only after Sister accept (or she sent) |
+
+- invite N:1 account (sender) via `invite.from_id`
+- invite N:1 account (recipient) via `invite.to_id`
+- invite 0..1:1 message_flash via `invite.flash_id`
+- conversation 0..1:1 invite via `conversation.invite_id`
+
+Invariants: Brother daily Invite quota from config (working **3** Free `[ASSUMPTION]`; Premium = unlimited Invites — no cap of 15). Sister Invite quota follows AD-27 (`sister_reach_mode`). Flash is delivered immediately (AD-10) and counts against FR-146. Invite + Flash is one command: over-cap persists neither.
+
+### message_flash
+
+Owner module: invites
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| author_id | uuid v7 | NO | Counted sender for FR-146 |
+| body | jsonb | NO | Ciphertext envelope `{v, alg, kid, iv, ct}`. Visible before accept |
+| created_at | timestamptz | NO | Persist time |
+
+- message_flash 1:0..1 invite via `invite.flash_id`
+- moderation_job 0..1:1 message_flash via `moderation_job.flash_id`
+
+Invariants: Not copied into a parallel `message` row. Card quick-message **is** Message Flash (AD-23, AD-28). After `ChatPort.openFromInvite`, Chat may store `flash_id` as a read-through and must not increment `message_quota`. Phone / WhatsApp / links in Flash are refused (`CONTACT_SHARE_REQUIRED`).
+
+### invite_quota
+
+Owner module: invites
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| account_id | uuid v7 | NO | Grain PK with `civil_day_ouaga`. No UUID id |
+| civil_day_ouaga | date | NO | Grain PK. Civil day `Africa/Ouagadougou`, not UTC |
+| sent_count | int | NO | Increment only on successful send persist. Never on accept. No refund on decline |
+
+- invite_quota N:1 account via `invite_quota.account_id`
+
+Invariants: Written only by invites when the sender is Invite-quota-capped (Brothers always; Sisters iff `same_quota_as_brothers`). Billing never writes this row. Cap computed live from `operator_config` + `BillingPort.isEntitled`. Not the message cap. Free brother Invite cap **3** `[ASSUMPTION]`.
+
+### message_quota
+
+Owner module: chat
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| account_id | uuid v7 | NO | Grain PK with `civil_day_ouaga`. No UUID id |
+| civil_day_ouaga | date | NO | Grain PK. Civil day `Africa/Ouagadougou` |
+| sent_count | int | NO | Increment only on successful persist of a counted kind when the sender is **not** entitled |
+
+- message_quota N:1 account via `message_quota.account_id`
+
+Invariants: Chat is the only writer. Counts chat text, chat photo, voice note, message flash (card quick-message is that Flash — once). Invites Flash call `ChatPort.consumeMessageQuota` before persist; `openFromInvite` must not increment. Live `isEntitled` + live `daily_message_cap` every persist. Cap change: `sent_count` stays; remaining = `max(0, new_cap − sent_count)`. Over-cap is not stored. Seed cap **10** `[ASSUMPTION — admin-configurable, not a product lock]`.
+
+### conversation
+
+Owner module: chat
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| invite_id | uuid v7 | NO | Inserted only by `ChatPort.openFromInvite` |
+| stage | enum `invite\|chat\|meeting\|married` | NO | This **is** taaruf_stage. Not a table |
+| paused_by | uuid v7 | YES | Mahram / Sister / Moderator pause. Brother cannot resume |
+| ended_at | timestamptz | YES | Ended is terminal. End does **not** revoke a grant |
+| flash_id | uuid v7 | YES | Sole Flash read-through after `openFromInvite`. Must not increment `message_quota`. Not stored on `message` |
+
+- conversation N:1 invite via `conversation.invite_id`
+- message N:1 conversation via `message.conversation_id`
+- contact_share 0..1:1 conversation via `contact_share.conversation_id`
+- mahram_thread_grant N:1 conversation via `mahram_thread_grant.conversation_id`
+- marriage_report 0..1:1 conversation via `marriage_report.conversation_id`
+
+Invariants: Mahram must not INSERT. New conversation does **not** insert or inherit a grant. Decline creates no conversation.
+
+### contact_share
+
+Owner module: chat
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| conversation_id | uuid v7 | NO | Primary key |
+| opened_at | timestamptz | YES | When both have opted in |
+| opened_by_a | timestamptz | YES | First member opt-in |
+| opened_by_b | timestamptz | YES | Second member opt-in |
+
+- contact_share 1:1 conversation via `contact_share.conversation_id`
+
+Invariants: Both members must opt in. Only chat writes. Moderation/trust call `ChatPort.contactShareOpen`. `taaruf_stage` must not encode contact-share. Matcher is local deterministic — must not call `ModerationPort`.
+
+### message
+
+Owner module: chat
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| conversation_id | uuid v7 | NO | Must exist. Chat refuses messages without this FK |
+| sender_id | uuid v7 | NO | Member sender. Never a Mahram impersonating the Sister |
+| kind | enum `text\|photo\|voice` | NO | Counted kinds for FR-146 |
+| state | enum `delivered` | NO | **Only** `delivered`. No `pending` / `held` |
+| body | jsonb | NO | Ciphertext envelope `{v, alg, kid, iv, ct}`. Not plaintext |
+| media_id | uuid v7 | YES | Chat photo or voice note asset |
+
+- message N:1 conversation via `message.conversation_id`
+- message N:1 account via `message.sender_id`
+- message 0..1:1 photo_asset via `message.media_id`
+- reaction N:1 message via `reaction.message_id`
+- moderation_job 0..1:1 message via `moderation_job.message_id`
+
+Invariants: Created `delivered` only after the FR-146 cap allows the send. Over-cap is not stored. Mahram reads delivered only on an active grant. Later flag does not unsend. Moderation never writes `message.state`.
+
+### reaction
+
+Owner module: chat
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| message_id | uuid v7 | NO | Reacted message |
+| account_id | uuid v7 | NO | Member who reacted |
+| emoji | text | NO | Visible to the other party (FR-050) |
+
+- reaction N:1 message via `reaction.message_id`
+- reaction N:1 account via `reaction.account_id`
+
+Invariants: Mahram cannot write reactions.
+
+### discovery_exclusion
+
+Owner module: discovery
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| viewer_id | uuid v7 | NO | Grain PK with `target_id`. Viewer-scoped pass (AD-28) |
+| target_id | uuid v7 | NO | Grain PK. Dismissed profile account |
+| created_at | timestamptz | NO | When this viewer passed this card |
+
+- discovery_exclusion N:1 account (viewer) via `discovery_exclusion.viewer_id`
+- discovery_exclusion N:1 account (target) via `discovery_exclusion.target_id`
+
+Invariants: Pass is a dismiss of this card for this viewer, not a like and not a public counter. Not `favourite`. Do not invent a likes table. Reuse an existing row if one exists.
+
+### favourite
+
+Owner module: discovery
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| account_id | uuid v7 | NO | Grain PK with `target_id`. Private list owner |
+| target_id | uuid v7 | NO | Grain PK. Favourited profile |
+| created_at | timestamptz | NO | When saved |
+
+- favourite N:1 account (owner) via `favourite.account_id`
+- favourite N:1 account (target) via `favourite.target_id`
+
+Invariants: Private in MVP. Do not overload this row as a pass. `who_favourited_me` stays off until NEXT.
+
+### profile_visit
+
+Owner module: discovery
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| account_id | uuid v7 | NO | Viewer |
+| target_id | uuid v7 | NO | Viewed profile |
+| created_at | timestamptz | NO | Visit time. T&S reads remain on |
+
+- profile_visit N:1 account (viewer) via `profile_visit.account_id`
+- profile_visit N:1 account (target) via `profile_visit.target_id`
+
+Invariants: Member-facing visitors list stays off (`visitors_list` flag). Not a like.
+
+### mahram_invite
+
+Owner module: mahram
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| sister_id | uuid v7 | NO | Sister-initiated only |
+| phone | text | NO | Invite by phone number (A2). Staff list/browse never returns phone |
+| relationship | enum `father\|brother\|uncle\|other_mahram` | YES | Declared at OTP. Unmatched-friend rejected |
+| expires_at | timestamptz | NO | Pending invite expiry 7 days `[ASSUMPTION]` |
+| confirmed_at | timestamptz | YES | Sister confirm. After confirm the grant list is empty |
+
+- mahram_invite N:1 account (sister) via `mahram_invite.sister_id`
+- mahram_link 0..1:1 mahram_invite (confirm creates the link)
+
+Invariants: No kinship documents in MVP. Cooling-off 1 hour after OTP before pause/end (A2 working number).
+
+### mahram_link
+
+Owner module: mahram
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| sister_id | uuid v7 | NO | Ward Sister. One confirmed guardian set per sister in MVP |
+| mahram_account_id | uuid v7 | NO | Guardian account after OTP |
+| relationship | enum `father\|brother\|uncle\|other_mahram` | NO | Same enum as invite |
+| confirmed_at | timestamptz | NO | After OTP + Sister confirm |
+| verified_badge | boolean | NO | Optional ID → verified wali. Not marital-status proof |
+| removed_at | timestamptz | YES | Sister remove/report. Revokes every active grant in the same unit of work |
+| cooling_off_until | timestamptz | YES | 1 hour after OTP (A2 working number) |
+| mahram_invite_id | uuid v7 | YES | Confirm creates the link from this invite |
+
+- mahram_link N:1 account (sister) via `mahram_link.sister_id`
+- mahram_link N:1 account (mahram) via `mahram_link.mahram_account_id`
+- mahram_link 0..1:1 mahram_invite via `mahram_link.mahram_invite_id`
+- mahram_thread_grant N:1 mahram_link via the same `sister_account_id` + `mahram_account_id` pair (no second link id)
+
+Invariants: This is sister account to mahram account — not a conversation watch. After confirm the grant list is empty. Dashboard multi-ward is NEXT.
+
+### mahram_thread_grant
+
+Owner module: mahram
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| sister_account_id | uuid v7 | NO | Ward Sister (`accountId === link.sister_id`, `role=member`) |
+| mahram_account_id | uuid v7 | NO | Guardian |
+| conversation_id | uuid v7 | NO | Existing conversation from `ChatPort.openFromInvite`. No `invite_id` |
+| granted_at | timestamptz | NO | When the Sister granted this thread |
+| revoked_at | timestamptz | YES | Active means `revoked_at IS NULL`. Revoke-one sets this (do not DELETE) |
+
+- mahram_thread_grant N:1 conversation via `mahram_thread_grant.conversation_id`
+- mahram_thread_grant N:1 account (sister) via `mahram_thread_grant.sister_account_id`
+- mahram_thread_grant N:1 account (mahram) via `mahram_thread_grant.mahram_account_id`
+
+Invariants: Unique **active** grant per `{ mahram_account_id, conversation_id }`. Flash / pre-accept is not grantable. New conversation never inherits a grant. Only the ward Sister INSERTs or revoke-ones. Conversation `end` does **not** revoke. Remove sets `revoked_at` on every active grant for that link in the same unit of work.
+
+### moderation_job
+
+Owner module: moderation
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| message_id | uuid v7 | YES | Keyed by `flash_id` \| `message_id` \| `asset_id` |
+| asset_id | uuid v7 | YES | Profile photo or chat media |
+| flash_id | uuid v7 | YES | Pre-conversation Flash |
+| scores | jsonb | YES | Vendor scores. Never phones or original photo bytes in audit |
+| outcome | enum `flag-for-admin\|clean\|scan-deferred\|scan-failed` | NO | Never writes `message.state` |
+| vendor | text | YES | Adapter |
+| latency_ms | int | YES | Observed latency. Not a send-block clock |
+
+- moderation_job 0..1:1 message via `moderation_job.message_id`
+- moderation_job 0..1:1 message_flash via `moderation_job.flash_id`
+- moderation_job 0..1:1 photo_asset via `moderation_job.asset_id`
+- flag_queue N:1 moderation_job via `flag_queue.job_id`
+
+Invariants: Only moderation INSERTs this row (`ModerationPort.enqueueScan`). No row path that holds delivery. Clocks `>10s text / >30s media → hold` are deleted. There is **no** `hold_queue`.
+
+### flag_queue
+
+Owner module: moderation
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| job_id | uuid v7 | NO | Parent job |
+| account_id | uuid v7 | NO | Flagged-person mark only — not a `strike`, `sanction`, or `account` write |
+| item_id | uuid v7 | NO | Delivered message / flash / asset |
+| reason | enum `flag-for-admin\|scan-deferred\|scan-failed` | NO | No row for clean |
+| entered_at | timestamptz | NO | Human flag-queue SLA clock starts here (same 24h first-human clock as Reports) |
+
+- flag_queue N:1 moderation_job via `flag_queue.job_id`
+- flag_queue N:1 account via `flag_queue.account_id`
+
+Invariants: Already-delivered Chat items plus scan-deferred / scan-failed. Does not stop delivery. Replaces `hold_queue`. The sanction is the admin action, never the flag.
+
+### report
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| reporter_id | uuid v7 | NO | Filing member |
+| target | uuid v7 | NO | Reported profile or message target (FR-083) |
+| reason | text | NO | Published reason |
+| sla_started_at | timestamptz | NO | Report clock starts at submit |
+| first_human_at | timestamptz | YES | First human decision |
+
+- report N:1 account (reporter) via `report.reporter_id`
+- moderation_case 0..1:1 report via `moderation_case.report_id`
+
+Invariants: Member Reports open a `moderation_case` written only by trust.
+
+### moderation_case
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| report_id | uuid v7 | YES | Set when a Member Report arrives |
+| flag_queue_id | uuid v7 | YES | Set when an admin action on a flag opens or continues a case (FR-144) |
+| sla_started_at | timestamptz | NO | Report clock at submit; AI-flag clock when the flag entered the queue |
+| first_human_at | timestamptz | YES | First human decision |
+
+- moderation_case 0..1:1 report via `moderation_case.report_id`
+- moderation_case 0..1:1 flag_queue via `moderation_case.flag_queue_id`
+- strike N:1 moderation_case via `strike.case_id`
+
+Invariants: Trust writes `moderation_case` only. The passive flag writes `flag_queue` only.
+
+### strike
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Subject |
+| case_id | uuid v7 | YES | Evidence snapshot stays on the case |
+| ladder | text | NO | Strike step. Photo floor: 3 rejects → 24h upload block from `operator_config.photo_strike_count` / `photo_strike_block_hours` |
+| evidence | text | YES | Immutable snapshot reference |
+
+- strike N:1 account via `strike.account_id`
+- strike N:1 moderation_case via `strike.case_id`
+
+### sanction
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Subject |
+| kind | enum `warning\|suspension\|ban` | NO | Admin action (FR-144 / FR-085). Never the flag |
+| evidence | text | YES | Case evidence reference |
+
+- sanction N:1 account via `sanction.account_id`
+- appeal N:1 sanction via `appeal.sanction_id`
+
+### ban
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Banned account |
+| fingerprint_id | uuid v7 | YES | Repeat-offender link (FR-088) |
+| evidence | text | YES | Case evidence |
+
+- ban N:1 account via `ban.account_id`
+- ban N:1 fingerprint via `ban.fingerprint_id`
+
+### appeal
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Appellant |
+| sanction_id | uuid v7 | NO | Suspension or Ban under appeal |
+| status | text | NO | Second human, not the original decider (FR-090) |
+
+- appeal N:1 account via `appeal.account_id`
+- appeal N:1 sanction via `appeal.sanction_id`
+
+### block
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| blocker_id | uuid v7 | NO | Blocker |
+| blocked_id | uuid v7 | NO | Blocked member. Cannot see or contact the blocker |
+
+- block N:1 account (blocker) via `block.blocker_id`
+- block N:1 account (blocked) via `block.blocked_id`
+
+### fingerprint
+
+Owner module: trust
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Linked account |
+| hash | text | NO | `sha256(phone_e164 \| id_doc_hash \| device_attestation)`. A cookie-only id is not a Ban key |
+
+- fingerprint N:1 account via `fingerprint.account_id`
+- ban N:1 fingerprint via `ban.fingerprint_id`
+
+### marriage_report
+
+Owner module: outcomes
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| initiator_id | uuid v7 | NO | First confirmer |
+| spouse_id | uuid v7 | NO | Named spouse. Requires an accepted Chat |
+| conversation_id | uuid v7 | NO | Accepted conversation. Outcomes never INSERT/DELETE conversation |
+| confirmed_at | timestamptz | YES | Set only after both named spouses confirm |
+| proof_key | text | YES | Optional private nikah proof. Never a public URL |
+
+- marriage_report N:1 account (initiator) via `marriage_report.initiator_id`
+- marriage_report N:1 account (spouse) via `marriage_report.spouse_id`
+- marriage_report N:1 conversation via `marriage_report.conversation_id`
+- consent_story 0..1:1 marriage_report via `consent_story.report_id`
+
+Invariants: `marriage_counter` increments by 1 only after dual confirm. One-sided report does not increment.
+
+### consent_story
+
+Owner module: outcomes
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| report_id | uuid v7 | NO | Dual-confirmed marriage_report |
+| public_ok_a | boolean | NO | First spouse public consent |
+| public_ok_b | boolean | NO | Second spouse public consent |
+| family_ok | boolean | YES | Extra family-ok flag if set |
+| faces | text | YES | Optional/blurred faces. City/date allowed; no Chat excerpts |
+
+- consent_story 1:1 marriage_report via `consent_story.report_id`
+
+Invariants: Goes public only if both spouses (and family-ok if set) consent. Either refuse keeps the showcase empty of their faces. `content` must not auto-publish.
+
+### marriage_counter
+
+Owner module: outcomes
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Singleton row |
+| confirmed_count | int | NO | Starts at 0. Increment by 1 only after both named spouses confirm the same `marriage_report` |
+
+- Relationships: none. No foreign key. One singleton row; outcomes increments `confirmed_count` when a `marriage_report` is dual-confirmed.
+
+Invariants: `content` must not write this row. Public metrics are proof-backed only — no DAU or invented member counts.
+
+### pack
+
+Owner module: billing
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| duration_days | int | NO | **30 / 90 / 180** only (1/3/6 months). No `renew_at` |
+| amount_xof | int | NO | Catalog amount. Live prices also in `operator_config.pack_prices_xof` |
+
+- payment N:1 pack via `payment.pack_id`
+
+Invariants: Sisters can buy the same packs in **both** `sister_reach_mode` values. No silent auto-renew.
+
+### payment
+
+Owner module: billing
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Payer |
+| pack_id | uuid v7 | NO | Purchased pack |
+| amount_xof | int | NO | Charged XOF |
+| provider | text | NO | Orange Money BF / Moov / Wave/Coris / hosted card |
+| provider_ref | text | YES | Provider reference |
+| ends_at | timestamptz | NO | Explicit end. **No** `renew_at` |
+| idempotency_key | text | NO | Required on payment create |
+| status | enum `created\|applied` | NO | Webhook apply once (AD-7). `entitlement` may exist only when `applied` |
+
+- payment N:1 account via `payment.account_id`
+- payment N:1 pack via `payment.pack_id`
+- entitlement 1:1 payment via `entitlement.payment_id`
+- webhook_receipt N:1 payment (apply once)
+
+### entitlement
+
+Owner module: billing
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Entitled account |
+| payment_id | uuid v7 | NO | Granting payment |
+| ends_at | timestamptz | NO | Pack presence only. `isEntitled` must not read `sister_reach_mode` or gender |
+
+- entitlement N:1 account via `entitlement.account_id`
+- entitlement 1:1 payment via `entitlement.payment_id`
+
+Invariants: Any live pack → unlimited Invites and unlimited messages. `unavailable` maps to the Free cap. Insert only after `payment.status=applied`. One live entitlement per account; a later applied pack replaces `ends_at`, it does not stack concurrent packs.
+
+### webhook_receipt
+
+Owner module: billing
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| idempotency_key | text | NO | Apply once. Reject timestamps older than 600s |
+| received_at | timestamptz | NO | Ingest time |
+| expires_at | timestamptz | NO | Persist 30 days (AD-7) |
+| payment_id | uuid v7 | YES | Payment this receipt applied. Null if rejected before apply |
+
+- webhook_receipt N:1 payment via `webhook_receipt.payment_id`
+
+### article
+
+Owner module: content
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| slug | text | NO | Académie article |
+| reviewer_name | text | NO | Advisory Board or recorded delegate (FR-115) |
+| published_at | timestamptz | YES | Public when set |
+
+- Relationships: none. No foreign key. `reviewer_name` is text, not `board_member.id`.
+
+Invariants: Member-facing copy uses *mariage / ta'aruf / nikah / khitba* only.
+
+### board_member
+
+Owner module: content
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| name | text | NO | Named person (FR-116). No fictional board |
+| role | text | NO | Public trust-page role |
+
+- Relationships: none. No foreign key.
+
+### locale_string
+
+Owner module: content
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| key | text | NO | Grain PK with `locale`. Includes `moderation_policy_*` (AD-10 D6 honesty) |
+| locale | text | NO | Grain PK. `fr` default UI |
+| value | text | NO | Operator-editable Member policy text. Stale pre-delivery / fail-closed copy is forbidden |
+
+- Relationships: none. No foreign key.
+
+Invariants: Operator edits the text; content owns the row. Dating / *rencontre romantique* forbidden in shipped strings (AD-24).
+
+### audio_asset
+
+Owner module: content
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| key | text | NO | Onboarding / photo-rules / pricing-trust audio key |
+| locale | enum `mos\|dyu` | NO | Mooré / Dioula audio. Not Chat Voice |
+| object_key | text | NO | Stored object |
+
+- Relationships: none. No foreign key. Not `photo_asset`.
+
+Invariants: Chat Voice is `photo_asset.kind=voice_note`, not this table.
+
+### ice_breaker_template
+
+Owner module: content
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| body | text | NO | Scholar-sensible deen/family template (FR-047). Member edits before send |
+| locale | text | NO | Template language |
+
+- Relationships: none. No foreign key. A sent Flash does not store this id.
+
+Invariants: AI-personalised Ice Breakers are FR-049 NEXT. Not a `message` and not a `message_flash` until the Member sends.
+
+### operator_config
+
+Owner module: operator
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| key | text | NO | Primary key. Natural key. Not one column per setting |
+| value | text | NO | Typed by key: number unless `_xof` is integer XOF or `sister_reach_mode` is that enum. Required keys: `flag_threshold`; `free_review_sla_hours`; `report_sla_hours`; `photo_strike_count` (photo floor **3**); `photo_strike_block_hours` (**24h**); `brother_invite_quota_free` (working **3** `[ASSUMPTION]`); `brother_invite_quota_premium` (Premium Invite volume is unlimited when `isEntitled` — not a lock of 15); `sister_reach_mode` (`free_unlimited` DEFAULT \| `same_quota_as_brothers`; both seeded day one); `daily_message_cap` (number; seed **10** `[ASSUMPTION — admin-configurable, not a product lock]`); `signed_url_ttl_seconds` (max 60); `pack_prices_xof`; `min_age` (defaults to 19); `rl_auth_per_min`; `rl_otp_per_hour`; `rl_invite_per_day`; `rl_report_per_hour`; `rl_pay_per_min`; `rl_browse_per_min` |
+
+- Relationships: none. No foreign key. Callers read by `key`.
+
+Invariants: Only `operator` may write `sister_reach_mode` and `daily_message_cap`. Change is an AD-18 event in the same unit of work (`from`, `to`, `staffId`, key). Not a compile-out flag.
+
+### cil_ticket
+
+Owner module: operator
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| subject_account_id | uuid v7 | NO | Data subject. The **only** staff path that emits another person’s contact (AD-17) |
+| kind | enum `export\|erase\|access` | NO | Owner-only delete/export plus operator status page |
+| status | text | NO | Status-page state. NFR-008 clocks `[ASSUMPTION]` (erase ≤30d, export ≤72h) |
+
+- cil_ticket N:1 account via `cil_ticket.subject_account_id`
+
+Invariants: Every such export is an AD-18 event. Staff must not run a bulk contact export.
+
+### notification
+
+Owner module: notifications
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | NO | Recipient |
+| template | text | NO | Template id only |
+| conversation_id | uuid v7 | YES | Id payload — no Chat/Flash body |
+| invite_id | uuid v7 | YES | Id payload |
+| media_id | uuid v7 | YES | Blur thumb via `MediaPort.sign` only. No media URL except that |
+
+- notification N:1 account via `notification.account_id`
+
+Invariants: No phone, no WhatsApp, no Chat/Flash body on FCM / Web Push.
+
+### sms_dispatch
+
+Owner module: notifications
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| account_id | uuid v7 | YES | Recipient account when known |
+| template | text | NO | OTP, Invite-received, Mahram pause/end/flag, Contact-share rejects, admin sanctions |
+| created_at | timestamptz | NO | Dispatch time |
+
+- sms_dispatch N:1 account via `sms_dispatch.account_id`
+
+Invariants: One live SMS adapter at a time. Payload is template + ids — no Chat/Flash body, no phone in the stored payload.
+
+### audit_event
+
+Owner module: audit
+
+| Field | Type | Null | Meaning |
+| --- | --- | --- | --- |
+| id | uuid v7 | NO | Primary key |
+| actor_id | uuid v7 | YES | Individual staff or member attribution |
+| action | text | NO | Mandatory events include moderator unblur, sanctions, appeals, operator `sister_reach_mode` / `daily_message_cap` / threshold / price changes, deletion/CIL completions, scan-deferred / scan-failed, admin flag actions, mahram attach/grant/revoke-one/remove/pause/end, reveal grant/revoke, payment webhook apply, marriage dual-confirm, consent-story publish or refuse, subject-access export |
+| payload | jsonb | NO | ids + action + reason — **never** phones or original photo bytes |
+| prev_hash | text | NO | Hash chain |
+| hash | text | NO | Tamper-evident at the app layer, not object-lock WORM |
+
+- audit_event N:1 account via `audit_event.actor_id` when attributed
+
+Invariants: INSERT/SELECT-only DB role. Nightly chain-verify. Retain ≥12 months. NFR-008 working clocks stay `[ASSUMPTION]`.
 
 ## 7. APIs
 

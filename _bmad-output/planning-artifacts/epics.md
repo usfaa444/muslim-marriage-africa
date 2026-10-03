@@ -38,6 +38,8 @@ This document provides the complete epic and story breakdown for muslim-marriage
 
 Working title only. Product name is TBD. This file is the build index. Sprint planning is a later skill.
 
+Entity fields, nullability, and relationships: [SOLUTION-DESIGN.md §6 Entity catalog](architecture/architecture-muslim-marriage-africa-2026-09-27/SOLUTION-DESIGN.md). Spine AD-3 is ownership only.
+
 ## Requirements Inventory
 
 ### Functional Requirements

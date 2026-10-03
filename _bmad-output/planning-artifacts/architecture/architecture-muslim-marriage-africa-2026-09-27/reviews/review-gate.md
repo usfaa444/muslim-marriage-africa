@@ -1,31 +1,29 @@
-# Reviewer Gate — 2026-10-02 card / message-cap / mahram-grant
+# Reviewer Gate — 2026-10-03 entity catalog
 
-**Verdict:** pass after autofix. People lists default to one focused card (AD-28). Free-tier messages are daily-capped (AD-29). Mahram reads only granted, delivered threads (AD-12). Sisters can buy 1/3/6 packs in both `sister_reach_mode` values. Passive Chat (AD-10) unchanged. Brothers stay Invite-capped.
+**Verdict:** pass after catalog autofix. Implementation catalog is SOLUTION-DESIGN.md `## 6. Entity catalog`. AD-3 remains ownership only. Product rules unchanged.
 
-**Intent:** update. AD IDs stable. AD-12 / AD-14 / AD-21 / AD-8 / AD-17 / AD-23 amended in place. AD-28 and AD-29 added. AD-27 Invite-reach core not reopened (checkout + compose remaining scoped only). AD-5 / AD-10 / AD-11 not reopened.
+**Intent:** update. AD IDs stable. No AD-30. AD-10 / AD-11 / AD-12 / AD-27 / AD-28 / AD-29 not reopened. `discovery_exclusion` added to AD-3 ownership. erDiagram watch edge is conversation → `mahram_thread_grant`.
 
-Lint: `reviews/lint_spine.json` — 0 findings (re-run after autofix).
+Lint: `reviews/lint_spine.json` — 0 findings.
 
-## Lenses (2026-10-02 card-cap)
+## Lenses (2026-10-03 entity catalog)
 
 | Lens | File | Verdict | Applied |
 | --- | --- | --- | --- |
-| Rubric walker | [review-rubric-card-cap-2026-10-02.md](review-rubric-card-cap-2026-10-02.md) | pass-with-findings | H1 AD-27 remaining/cap scoped to Invite + reach-pack; H2 Invite+Flash fail-together; M1 `message_quota` grain / live read / ChatPort remaining. L3 stack drift recorded only. |
-| Version-check | [review-version-check-card-cap-2026-10-02.md](review-version-check-card-cap-2026-10-02.md) | pass-with-findings | Stack **locked**. AD-28 / AD-29 added no new vendor tech. Whisper `mos`/`dyu` absent confirmed. |
-| Adversarial | [review-adversarial-card-cap-2026-10-02.md](review-adversarial-card-cap-2026-10-02.md) | revise → closed by tighten | P1 card quick-message = Flash; P2 consume once at Flash persist; P3 grain + live `isEntitled`; P4 grant grain / `revoked_at` / same-unit drop; P5 Invite-quota then message-cap. No AD-30. |
-| Security/privacy | [review-security-privacy-card-cap-2026-10-02.md](review-security-privacy-card-cap-2026-10-02.md) | pass-with-findings | SEC-1 grant filter on HTTP/WS; SEC-2 60s is WS deadline; SEC-3 Sister-only grant writer; SEC-4 `isEntitled` send-only; SEC-5 omit kids if no field. AD-9 media denylist not reopened. |
-| PRD reconcile | [reconcile-prd-card-cap-2026-10-02.md](reconcile-prd-card-cap-2026-10-02.md) | pass-with-findings | FR-024/025/044/045/050/051/074/076/077/105/145/146 landed. Coverage 146/146 FRs, 9/9 NFRs. NEXT ids stay NEXT. |
+| Rubric walker | [review-rubric-entity-catalog-2026-10-03.md](review-rubric-entity-catalog-2026-10-03.md) | pass-with-residual | H1 Member `phone_e164` homed on `verification_record` (phone_otp only). M1 emergency hide stays `visibility=emergency_hidden` (no new FR-021 column). M2 `photo_asset.moderation_state` = `pending\|live\|blocked` for profile_photo. |
+| Version-check | [review-version-check-entity-catalog-2026-10-03.md](review-version-check-entity-catalog-2026-10-03.md) | pass-with-residual | Stack **locked**. Catalog added no new vendor tech. Drift recorded only. |
+| Adversarial | [review-adversarial-entity-catalog-2026-10-03.md](review-adversarial-entity-catalog-2026-10-03.md) | pass-with-residual | P1 phone home (above). P2 visibility enum + `held` must not lift on unhide. P3 Flash read-through only on `conversation.flash_id`. P4 `payment.status` `created\|applied`; entitlement only when applied. P5 `blur_key` = `derivative.size=blur` same object. No AD-30. |
 
 ## Unapplied (locked or residual)
 
 - Stack pin bumps (Next 16.3.8, Nest 12.1.2, BullMQ 6.3.11, TS/Nest CLI).
 - AD-9 gateway caller-bind / Mahram-remove media denylist (locked).
-- Flash / pre-accept is **not grantable** (conversation-scoped grant; FR-048 before conversation stays unapplied — would invent `invite_id` grants).
+- No `emergency_hidden_until` column (FR-021 lock; hide clock is the command).
 
 ## Confirmations
 
-- AD-28 and AD-29 are separate IDs.
+- 53 stored entities, each with owner + Field \| Type \| Null \| Meaning + relationships.
+- Not stored: likes; kids/children columns; `hold_queue`; `sharedTraits` DTO; completeness; `taaruf_stage`; `profile_field`; `mahram_permission`.
+- `message.state` is only `delivered`. Pack has no `renew_at`.
 - Seed `daily_message_cap` **10** is `[ASSUMPTION — admin-configurable, not a product lock]`.
-- Premium = unlimited Invites and unlimited messages. No Premium Invite cap of 15.
 - Free Brothers keep daily Invite cap **3** `[ASSUMPTION]`.
-- Safety paths still must not call `BillingPort`. Allowed messages still deliver immediately (AD-10). Over-cap is rejected, not held.
