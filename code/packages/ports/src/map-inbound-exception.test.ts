@@ -7,6 +7,15 @@ import { mapInboundException } from './map-inbound-exception.js'
 
 const srcDir = dirname(fileURLToPath(import.meta.url))
 
+function expectUnhandled(mapped: ReturnType<typeof mapInboundException>) {
+  const serialized = JSON.parse(JSON.stringify(mapped)) as {
+    error: { code: string; details: unknown; request_id: string }
+  }
+  expect(serialized.error.code).toBe(ERROR_CODES.UNHANDLED)
+  expect(serialized.error.details).toBeNull()
+  expect(serialized.error.request_id.trim().length).toBeGreaterThan(0)
+}
+
 function nestException(status: number, response: unknown, message = 'Error') {
   const error = new Error(message)
   error.stack = `Error: ${message}\n    at hidden (/app/secret.ts:1:1)`
@@ -149,6 +158,61 @@ describe('mapInboundException', () => {
       retryable: true,
     })
     expect(mapInboundException(nestException(403, envelope))).toEqual(envelope)
+  })
+
+  it('locks thrown envelopes and Nest error-body pass-through', () => {
+    const emptyEnvelope = {
+      error: {
+        code: '',
+        message: 'x',
+        details: undefined,
+        request_id: '  ',
+        retryable: false,
+      },
+    }
+    expectUnhandled(mapInboundException(emptyEnvelope))
+    expectUnhandled(mapInboundException(nestException(500, emptyEnvelope)))
+    expect(
+      mapInboundException({
+        error: {
+          code: 'A'.repeat(65),
+          message: 'x',
+          details: null,
+          request_id: 'req-env',
+          retryable: false,
+        },
+      }).error.code,
+    ).toBe(ERROR_CODES.UNHANDLED)
+
+    expectUnhandled(
+      mapInboundException(
+        nestException(400, {
+          code: '',
+          message: 'No',
+          details: undefined,
+          request_id: '  ',
+          retryable: false,
+        }),
+      ),
+    )
+
+    const kept = mapInboundException(
+      nestException(400, {
+        code: ERROR_CODES.FORBIDDEN,
+        message: 'No',
+        details: undefined,
+        request_id: '  ',
+        retryable: false,
+      }),
+    )
+    const serialized = JSON.parse(JSON.stringify(kept)) as {
+      error: { code: string; details: unknown; request_id: string }
+    }
+    expect(serialized.error.code).toBe(ERROR_CODES.FORBIDDEN)
+    expect(serialized.error.details).toBeNull()
+    expect(serialized.error.request_id.trim().length).toBeGreaterThan(0)
+
+    expect(mapInboundException(nestException(500, { message: ['   '] })).error.message).toBe('Request failed')
   })
 
   it('does not copy an internal error message or a throwing getter', () => {
