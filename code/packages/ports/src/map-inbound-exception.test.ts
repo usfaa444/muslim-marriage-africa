@@ -82,6 +82,66 @@ describe('mapInboundException', () => {
     expect(mapInboundException({ ...envelope, statusCode: 503 })).toEqual(envelope)
   })
 
+  it('rebuilds a pass-through body through the envelope', () => {
+    const blank = mapInboundException({
+      code: '',
+      message: '   ',
+      details: undefined,
+      request_id: '  ',
+      retryable: false,
+    })
+    expect(blank.error.code).toBe(ERROR_CODES.UNHANDLED)
+    expect(JSON.parse(JSON.stringify(blank)).error.details).toBeNull()
+    expect(blank.error.request_id.trim().length).toBeGreaterThan(0)
+
+    const kept = mapInboundException({
+      code: ERROR_CODES.FORBIDDEN,
+      message: 'No',
+      details: undefined,
+      request_id: 'req-keep',
+      retryable: false,
+    })
+    expect(JSON.parse(JSON.stringify(kept))).toEqual({
+      error: {
+        code: ERROR_CODES.FORBIDDEN,
+        message: 'No',
+        details: null,
+        request_id: 'req-keep',
+        retryable: false,
+      },
+    })
+  })
+
+  it('locks Nest mapping cases from QA', () => {
+    expect(
+      mapInboundException(
+        nestException(400, {
+          message: 'later',
+          retryable: true,
+        }),
+      ).error.retryable,
+    ).toBe(true)
+
+    const leaked = mapInboundException(nestException(500, { message: 'boom\nsecret' }))
+    expect(leaked.error.message).toBe('Request failed')
+    expect(JSON.stringify(leaked)).not.toContain('secret')
+
+    expect(mapInboundException(nestException(500, { message: '   ' })).error.message).toBe('Request failed')
+
+    expect(
+      mapInboundException(nestException(400, { code: 'not-a-machine-code', message: 'x' })).error.code,
+    ).toBe(ERROR_CODES.UNHANDLED)
+
+    const envelope = errorEnvelope({
+      code: ERROR_CODES.REVEAL_DENIED,
+      message: 'No reveal',
+      details: { reason: 'grant' },
+      requestId: 'req-reveal',
+      retryable: true,
+    })
+    expect(mapInboundException(nestException(403, envelope))).toEqual(envelope)
+  })
+
   it('does not copy an internal error message or a throwing getter', () => {
     const leaked = mapInboundException(new Error('duplicate key value violates unique constraint account_phone_key'))
     expect(leaked.error.code).toBe(ERROR_CODES.UNHANDLED)

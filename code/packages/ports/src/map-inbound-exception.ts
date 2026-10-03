@@ -1,9 +1,9 @@
 import {
-  copyErrorBody,
   ERROR_CODES,
   errorEnvelope,
   isErrorBody,
   isErrorEnvelope,
+  type ErrorBody,
   type ErrorEnvelope,
 } from '@ankanu/kernel'
 
@@ -25,7 +25,7 @@ function hasControlCharacter(value: string): boolean {
 
 function safeMessage(value: unknown): string | undefined {
   if (typeof value === 'string') {
-    if (value.length === 0 || value.length > 400 || hasControlCharacter(value)) {
+    if (value.length > 400 || hasControlCharacter(value) || value.trim().length === 0) {
       return undefined
     }
     return value
@@ -37,7 +37,7 @@ function safeMessage(value: unknown): string | undefined {
     return undefined
   }
   const joined = value.join('; ')
-  if (joined.length === 0 || joined.length > 400) {
+  if (joined.length > 400 || joined.trim().length === 0) {
     return undefined
   }
   return joined
@@ -103,6 +103,17 @@ function fromParts(response: unknown, status: number, requestId: string | undefi
   })
 }
 
+function throughEnvelope(body: ErrorBody): ErrorEnvelope {
+  const requestId = body.request_id.trim()
+  return errorEnvelope({
+    code: body.code,
+    message: body.message,
+    details: body.details,
+    ...(requestId ? { requestId } : {}),
+    retryable: body.retryable,
+  })
+}
+
 function unhandled(requestId: string | undefined): ErrorEnvelope {
   return errorEnvelope({
     code: ERROR_CODES.UNHANDLED,
@@ -128,20 +139,20 @@ export function mapInboundException(thrown: unknown, requestId?: string): ErrorE
 
 function mapKnown(thrown: unknown, requestId: string | undefined): ErrorEnvelope {
   if (isErrorEnvelope(thrown)) {
-    return { error: copyErrorBody(thrown.error) }
+    return throughEnvelope(thrown.error)
   }
 
   if (isErrorBody(thrown)) {
-    return { error: copyErrorBody(thrown) }
+    return throughEnvelope(thrown)
   }
 
   const nest = readNest(thrown)
   if (nest) {
     if (isErrorEnvelope(nest.response)) {
-      return { error: copyErrorBody(nest.response.error) }
+      return throughEnvelope(nest.response.error)
     }
     if (isErrorBody(nest.response)) {
-      return { error: copyErrorBody(nest.response) }
+      return throughEnvelope(nest.response)
     }
     return fromParts(nest.response, nest.status, requestId)
   }

@@ -28,6 +28,10 @@ describe('ids', () => {
     expect(() => newId(new Date('1960-01-01T00:00:00.000Z'))).toThrow(RangeError)
   })
 
+  it('rejects a UUID v4', () => {
+    expect(isUuidV7('550e8400-e29b-41d4-a716-446655440000')).toBe(false)
+  })
+
   it('mints distinct ids', () => {
     const ids = new Set(Array.from({ length: 50 }, () => newId()))
     expect(ids.size).toBe(50)
@@ -43,7 +47,9 @@ describe('clocks', () => {
   })
 
   it('formats the pre-standard Ouagadougou offset', () => {
-    expect(toOuagadougouDisplay(new Date('1900-01-01T00:00:00.000Z'))).toContain('-00:16:08')
+    const instant = new Date('1900-01-01T00:00:00.000Z')
+    expect(toOuagadougouDisplay(instant)).toBe('1899-12-31T23:43:52-00:16:08')
+    expect(civilDayOuagadougou(instant)).toBe('1899-12-31')
   })
 
   it('rejects an invalid date', () => {
@@ -83,6 +89,13 @@ describe('AuthContext', () => {
         gender: 'brother',
       }),
     ).toThrow(/must not include member/)
+    expect(() =>
+      assertAuthContext({
+        accountId: accountId(),
+        roles: ['moderator', 'member'],
+        gender: 'sister',
+      }),
+    ).toThrow(/must not include member/)
   })
 
   it('rejects mahram combined with member', () => {
@@ -93,6 +106,48 @@ describe('AuthContext', () => {
         gender: 'sister',
       }),
     ).toThrow(/must not include member/)
+  })
+
+  it('rejects system combined with another role and mahram combined with staff', () => {
+    expect(() =>
+      assertAuthContext({
+        accountId: accountId(),
+        roles: ['member', 'system'],
+        gender: 'sister',
+      }),
+    ).toThrow(/system must be the only role/)
+    expect(() =>
+      assertAuthContext({
+        accountId: accountId(),
+        roles: ['mahram', 'operator'],
+      }),
+    ).toThrow(/must not include staff/)
+  })
+
+  it('stores lowercase UUID v7 ids and rejects a non-v7 id', () => {
+    const id = accountId().toUpperCase()
+    const ward = accountId().toUpperCase()
+    const context = assertAuthContext({
+      accountId: id,
+      roles: ['mahram'],
+      mahramWardId: ward,
+    })
+    expect(context.accountId).toBe(id.toLowerCase())
+    expect(context.mahramWardId).toBe(ward.toLowerCase())
+    const v4 = '550e8400-e29b-41d4-a716-446655440000'
+    expect(() =>
+      assertAuthContext({
+        accountId: v4,
+        roles: ['mahram'],
+      }),
+    ).toThrow(/accountId must be a UUID v7/)
+    expect(() =>
+      assertAuthContext({
+        accountId: accountId(),
+        roles: ['mahram'],
+        mahramWardId: v4,
+      }),
+    ).toThrow(/mahramWardId must be a UUID v7/)
   })
 
   it('accepts a mahram ward id and rejects an entitlement field', () => {

@@ -70,6 +70,14 @@ export function assertAuthContext(value: unknown): AuthContext {
     fail('A mahram session must not include member')
   }
 
+  if (roles.includes('system') && (roles.length !== 1 || roles[0] !== 'system')) {
+    fail('system must be the only role')
+  }
+
+  if (roles.includes('mahram') && roles.some((role) => STAFF_ROLES.has(role))) {
+    fail('A mahram session must not include staff')
+  }
+
   const mahramWardId = value.mahramWardId
   if (mahramWardId !== undefined) {
     if (typeof mahramWardId !== 'string' || !isUuidV7(mahramWardId)) {
@@ -77,12 +85,12 @@ export function assertAuthContext(value: unknown): AuthContext {
     }
   }
 
-  const context: AuthContext = { accountId, roles: Object.freeze([...roles]) }
+  const context: AuthContext = { accountId: accountId.toLowerCase(), roles: Object.freeze([...roles]) }
   if (gender !== undefined) {
     context.gender = gender as Gender
   }
   if (typeof mahramWardId === 'string') {
-    context.mahramWardId = mahramWardId
+    context.mahramWardId = mahramWardId.toLowerCase()
   }
   return Object.freeze(context)
 }
