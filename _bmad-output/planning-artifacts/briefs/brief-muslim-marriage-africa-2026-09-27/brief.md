@@ -15,7 +15,7 @@ Read the narrative sections first (problem through pricing), then the two featur
 
 Muslim brothers and sisters in francophone West Africa who want a spouse need a path that is marriage-shaped, haya-safe, and locally usable. Today they improvise across family networks, WhatsApp, and Senegal-first apps. Farata (farata.net) is already live and is the primary comparable: French-only UI (Offered (seen)), Senegal-centric, family involvement as rules text (Offered (seen) policy; mahram-in-chat Not publicly evidenced), blur as all-or-nothing reveal-on-acceptance (Offered (seen) [bundle]; per-viewer reveal/revoke Not publicly evidenced), and homepage Claimed “AI scans every message” versus FAQ Claimed “we do not read private chats.” Testimonials Offered (seen) are app-experience quotes, not marriages. Marriage-success reporting is Not publicly evidenced.
 
-This product is Burkina-first honorable ta'aruf: sister dignity never paywalled (safety stays free in both sister-access modes); sister reach defaults free and unlimited (`free_unlimited`), and the admin can apply the same invite quota as brothers (`same_quota_as_brothers`); optional sister-initiated verified mahram-in-chat; passive AI on chat text, chat photos, and voice (delivered then scanned; profile photos and bio stay publish-gated); honest polygamy disclosure; XOF mobile money; French-first UI plus Mooré/Dioula audio. Become the reference for finding a Muslim spouse in Ouagadougou and Bobo-Dioulasso, then the region — not another dating app from Dakar.
+This product is Burkina-first honorable ta'aruf: sister dignity never paywalled (safety stays free in both sister-access modes); sister reach defaults free and unlimited (`free_unlimited`), and the admin can apply the same invite quota as brothers (`same_quota_as_brothers`); free-tier messages are daily-capped by the admin, and Premium unlocks unlimited invites and unlimited messages; people lists default to one focused card (optional grid); optional sister-initiated verified mahram-in-chat on threads she grants; passive AI on chat text, chat photos, and voice (delivered then scanned; profile photos and bio stay publish-gated); honest polygamy disclosure; XOF mobile money; French-first UI plus Mooré/Dioula audio. Become the reference for finding a Muslim spouse in Ouagadougou and Bobo-Dioulasso, then the region — not another dating app from Dakar.
 
 MVP ships web + installable PWA + store-listed Android. Native iOS is parity — deferred to NEXT (Android-first Burkina launch; Apple build/store cost), not dropped. All six owner must-haves from `docs/system-idea.md` are MVP. Every P1–P59 ships or is marked “parity — deferred to NEXT/LATER” with a reason. Nothing is dropped.
 
@@ -52,38 +52,44 @@ Cost of the status quo: sisters pay with dignity (photos reused, blur that canno
 
 | Actor | Who | What they need | Success |
 | --- | --- | --- | --- |
-| **Sisters** (primary) | Practicing Muslim women in BF, often on shared/low-end Androids, 1GB-class data, French ± Mooré/Dioula | Find a practicing brother without exposing face or phone; decline quietly; optional wali in the chat; never pay for safety; reach free by default (admin can apply brother invite quotas) | A chaperoned path to nikah; photos stay under her control |
+| **Sisters** (primary) | Practicing Muslim women in BF, often on shared/low-end Androids, 1GB-class data, French ± Mooré/Dioula | Find a practicing brother without exposing face or phone; decline quietly; optional wali on threads she grants; never pay for safety; reach free by default (admin can apply brother invite quotas); free-tier messages capped unless Premium | A chaperoned path to nikah; photos stay under her control |
 | **Brothers** (primary) | Practicing Muslim men, including those who must disclose existing marriage / polygyny intent | Honest criteria search; sincere first message; pay in XOF on Orange Money / Moov; be seen as a suitor, not a player | Accepted requests that become family meetings, then dual-confirmed nikah |
-| **Walis / mahrams** (process actors) | Fathers, brothers, uncles, or other mahrams invited by the sister | Read-all, flag/pause/end; prove they are who they say; weekly digest later; not a dating-app identity | Ward is not in digital khalwa; they can stop a chat |
+| **Walis / mahrams** (process actors) | Fathers, brothers, uncles, or other mahrams invited by the sister | Read-only on threads she grants; flag/pause/end those threads; she can revoke one or all; prove they are who they say; weekly digest later; not a dating-app identity | Ward is not in digital khalwa on the chats she opens to him; they can stop a granted chat |
 | **Moderators / T&S** | Small trusted team, French + local-language support | One case file (text/photo/audio + scores + report + device); cannot peek unblurred photos for curiosity | Fast, appealable, auditable decisions |
 | **Married couples** (outcome actors) | Members who completed nikah through the product | Joint close; optional private proof; consent-based public story; faces optional | Help others make du'a without becoming celebrities |
 
 ## Positioning and wedge vs Farata
 
-**Wedge:** Burkina-first honorable ta'aruf — sister dignity never paywalled, sister reach free by default with an admin switch to the same invite quota as brothers, optional verified mahram-in-chat, passive AI on chat text/photo/voice (delivered then scanned), honest polygamy disclosure, XOF mobile money, French + Mooré/Dioula audio. The reference for a Muslim spouse in Ouagadougou/Bobo, then the region. Not “another dating app from Dakar.”
+**Wedge:** Burkina-first honorable ta'aruf — sister dignity never paywalled, sister reach free by default with an admin switch to the same invite quota as brothers, free-tier messages daily-capped (Premium unlocks unlimited invites and messages), people lists one card at a time by default, optional verified mahram-in-chat on sister-granted threads, passive AI on chat text/photo/voice (delivered then scanned), honest polygamy disclosure, XOF mobile money, French + Mooré/Dioula audio. The reference for a Muslim spouse in Ouagadougou/Bobo, then the region. Not “another dating app from Dakar.”
 
 Farata statements below use **only** evidence labels from `docs/competitor-farata.md`. No invented gaps.
 
 | Lever | Farata (labeled) | Our raise |
 | --- | --- | --- |
-| Family involvement | Rules §04 Offered (seen) as policy; mahram-in-chat **Not publicly evidenced** | D1 product: sister-initiated, verified, read-all, flag/pause/end |
+| Family involvement | Rules §04 Offered (seen) as policy; mahram-in-chat **Not publicly evidenced** | D1 product: sister-initiated, verified, grant-scoped read-only, flag/pause/end on granted threads |
 | AI moderation | Homepage Claimed “AI scans every message”; FAQ Claimed “we do not read private chats” (evidenced contradiction). Voice/chat-photo moderation **Not publicly evidenced** | D4 + D6: chat delivered then scanned; we say the AI flags a human and does not block |
 | Photo blur | Offered (seen) [bundle]: all-or-nothing reveal-on-acceptance. Per-viewer reveal/revoke **Not publicly evidenced** | D8: per-viewer match / request / never + revoke |
 | Success stories | P54 testimonials Offered (seen) are app-experience quotes, not marriages. Couples reporting marriage **Not publicly evidenced** | D11 dual-confirm + D12 honest counter starting at 0 |
-| Dignity / paywall | Starting a conversation Premium-gated Offered (seen) [bundle]; “Badge Premium vérifié” bundled with Premium (Claimed) | D20 + D13: safety always free; sister reach defaults `free_unlimited`; admin can switch to `same_quota_as_brothers`; Premium is reach/convenience |
+| Dignity / paywall | Starting a conversation Premium-gated Offered (seen) [bundle]; “Badge Premium vérifié” bundled with Premium (Claimed) | D20 + D13: safety always free; sister reach defaults `free_unlimited`; admin can switch to `same_quota_as_brothers`; free-tier messages daily-capped; Premium unlocks unlimited invites and unlimited messages |
 | Local fit | Senegal-first, French-only UI Offered (seen); BF is an SEO page Offered (seen) | D17–D19: CIL, Orange Money BF / Moov Africa BF, Mooré/Dioula audio, lite |
 | Profile marketing | Rules §07 Offered (seen): profiles may be used in ads; opt-out on request | D10: never, without per-use opt-in |
 | Deletion | Claimed; Play review reported broken (Offered (seen) as a user report) | D15: instant delete + export + status + ticketing |
 
 Copy language is *mariage / ta'aruf / nikah / khitba*. Ban “dating / rencontre romantique.” Entertainment-seeking is non-marriage use (P44).
 
-The launch advantage is execution of dignity and local fit, not a secret model. Farata already occupies the category. We raise the places their public evidence is weak or contradictory: mahram as a product (D1), deliver-then-scan on chat media stated honestly (D4/D6), per-viewer blur/revoke (D8), dual-confirmed marriages as the hero metric (D11/D12), free verification (D13), sister reach free by default with an admin-switchable quota (D20), and Burkina payments, languages, and CIL (D17–D19).
+The launch advantage is execution of dignity and local fit, not a secret model. Farata already occupies the category. We raise the places their public evidence is weak or contradictory: mahram as a product on sister-granted threads (D1), deliver-then-scan on chat media stated honestly (D4/D6), per-viewer blur/revoke (D8), dual-confirmed marriages as the hero metric (D11/D12), free verification (D13), sister reach free by default with an admin-switchable invite quota (D20), free-tier message caps with Premium unlocking unlimited invites and messages, one-card people lists by default, and Burkina payments, languages, and CIL (D17–D19).
 
 ## The solution
 
-A web + PWA + Android matrimony product that makes ta'aruf a visible process, not a swipe feed.
+A web + PWA + Android matrimony product that makes ta'aruf a visible process. People lists default to one focused card, not a grid of many faces. A one-at-a-time card is not a rejected dating-app pattern; what is rejected is dishonest chrome only — fake presence (“online now”) and invented scale (“+247.8k actifs”).
 
-A sister creates a verified profile (phone OTP + liveness selfie + ID, free). Photos are blurred by default for the opposite gender; she reveals per viewer on match or on request, and can revoke. She browses, sends or receives invites, accepts or declines quietly. Invites she sends are unlimited and free unless the admin has switched sisters onto the same invite quota as brothers. Chat opens only after she accepts and stays free after accept. She may invite a mahram by phone; he reads everything and can flag, pause, or end. Chat text, chat photos, and voice notes send immediately. After send, a passive AI background-checks red flags and, if it flags, reports to an admin and flags the person. The admin decides suspend (if too indecent), a warning, or another action. The AI does not block, hold, or refuse delivery. Profile photos and bio stay publish-gated. Contact-share still blocks phone numbers, WhatsApp handles, and links until both members opt in (that is a product rule, not the AI). When both confirm “we got married,” accounts move to a joint married state; a public story is opt-in; the verified-marriages counter stays honest (starts at 0).
+A sister creates a verified profile (phone OTP + liveness selfie + ID, free). Photos are blurred by default for the opposite gender; she reveals per viewer on match or on request, and can revoke. Discover, search, and every list of people open on one focused card. Under the photo, lightweight traits in common with the viewer (open to polygamy, same town, kids / accepts a partner with kids, and the other shared profile traits already in the product). Tap opens the full profile. On the card: pass (dismiss / swipe away), swipe or act to send an invite, or send a quick message. Those actions obey invite and message quotas. She can switch to a grid on every such screen; a many-filter search may open on the grid, but the single-card toggle stays.
+
+Invites she sends are unlimited and free unless the admin has switched sisters onto the same invite quota as brothers. Chat opens only after she accepts. Free-tier messages are daily-capped by the platform admin; Premium unlocks unlimited invites and unlimited messages.
+
+She may invite a mahram by phone; after OTP he does not receive every conversation — she chooses which brother threads he may read, and she can revoke one thread or his entire permission. He is read-only on granted, delivered messages and can flag, pause, or end those threads. He cannot send as her.
+
+Chat text, chat photos, and voice notes send immediately. After send, a passive AI background-checks red flags and, if it flags, reports to an admin and flags the person. The admin decides suspend (if too indecent), a warning, or another action. The AI does not block, hold, or refuse delivery. Profile photos and bio stay publish-gated. Contact-share still blocks phone numbers, WhatsApp handles, and links until both members opt in (that is a product rule, not the AI). When both confirm “we got married,” accounts move to a joint married state; a public story is opt-in; the verified-marriages counter stays honest (starts at 0).
 
 Khalwa-safe: no 1:1 live video/voice until a wali is present or a chaperoned family meeting is scheduled; text + async voice notes (delivered then scanned) until then. Live video even with wali is LATER. Woman’s consent is first-class: decline is quiet (no guilt timer; brother sees not-accepted only). Haya-default media; GIFs/stickers only from a curated modest set (pack is NEXT). Small-community doxxing resistance: default pseudonym, city-level location; quartier optional and hidden until match.
 
@@ -101,10 +107,10 @@ These six are the owner must-haves from `docs/system-idea.md`. All are MVP MUST,
 
 | # | Must-have | P / D ids | Horizon |
 | --- | --- | --- | --- |
-| 1 | **Profiles:** create/submit, browse, send invite/match request, accept/decline, see who invited you and who accepted, messaging once matched | P7, P15, P21, P28, P31, P33 | MUST |
+| 1 | **Profiles:** create/submit, browse (one focused card by default; optional grid), send invite/match request, accept/decline, see who invited you and who accepted, messaging once matched | P7, P15, P21, P28, P31, P33 | MUST |
 | 2 | **Passive AI moderation of chat text, chat photos, and voice notes AFTER delivery** (profile photos/bio stay publish-gated), feeding a report → strike → ban pipeline with human review | P37, P34, P38, D4, D7, P41, P42, P43 | MUST |
 | 3 | **Photo blur** with per-viewer reveal-on-match / reveal-on-request and revoke | P40, D8 | MUST |
-| 4 | **Optional, sister-initiated mahram/wali in chat** (read-all; can flag/pause/end) | D1, P45 | MUST |
+| 4 | **Optional, sister-initiated mahram/wali in chat** (grant-scoped read-only; can flag/pause/end granted threads; she revokes one or all) | D1, P45 | MUST |
 | 5 | **Marriage success reporting** — joint “we got married,” both confirm — plus consent-based showcase and an honest verified-marriages counter. D11 full; D12 MUST slice (consent story submit + showcase page + counter starting at 0). P54 stays NEXT (fed by real D11/D12 stories) | D11; D12 MUST slice; P54 NEXT | MUST (P54 stays NEXT parity) |
 | 6 | **Strong verification/security:** phone OTP + liveness selfie + ID, free and separate from Premium; reporting; blocking; sanctions | P8, P9, P41, P46, D5, D6, D13 | MUST |
 
@@ -139,11 +145,11 @@ User requirement: implement **every** Farata feature. Nothing in P1–P59 may be
 | P15 | Profile fields (age/DOB, city/country, origin, marital status, education, profession, practice, intentions, description, photos) | MVP | Completeness meter that names missing Islamic criteria without shaming |
 | P16 | Islamic criteria — madhhab, practice, intentions | MVP | Core religious criteria for ta'aruf |
 | P16 | Islamic criteria — confrérie + hijra fields | **parity — deferred to NEXT** if not cheap enough for MUST | Extra taxonomy. Include in MVP if cheap |
-| P17 | Search filters incl. distance | MVP | Basic filters: location / marital / religious / life plans; lite grid of cached profiles per session |
+| P17 | Search filters incl. distance | MVP | Basic filters: location / marital / religious / life plans. Default result is one focused card; optional grid. A many-filter search may open on the grid; the single-card toggle stays. |
 | P18 | Advanced filters tier | **parity — deferred to NEXT** | Paid convenience after basic P17 works |
 | P19 | AI compatibility + detailed score | **parity — deferred to NEXT** | Needs grounded model (D21); ship rule-based overlap as interim |
 | P20 | Daily recommendations that learn | **parity — deferred to NEXT** | Needs usage data |
-| P21 | Grid browse | MVP | |
+| P21 | Grid browse | MVP | Default on discover and every people list (including search): one focused card with shared traits under the photo; pass / invite / quick message (quotas apply); tap opens the full profile. Optional grid toggle on every such screen. A many-filter search may open on the grid. One-at-a-time is not rejected dating chrome. |
 | P22 | Favourites — private list | MVP | Core save-for-later |
 | P22 | Who favourited me | **parity — deferred to NEXT** | Vanity Premium; private favourites can ship MUST |
 | P23 | Visit patterns — internal T&S use | MVP | Mass-view-then-never-request signal for mods |
@@ -159,14 +165,14 @@ User requirement: implement **every** Farata feature. Nothing in P1–P59 may be
 | --- | --- | --- | --- |
 | P28 | Contact request accept/decline + lists (sent / received / accepted) | MVP | Chat opens only after sister accepts. First Message Flash is wali-visible from minute one if she already attached a mahram |
 | P29 | No resend after refuse | MVP | |
-| P30 | Daily request quota by tier | MVP | Brothers always on paid quota. Sisters default `free_unlimited` (no invite quota, no paid pack). Admin can switch to `same_quota_as_brothers` (same 1/3/6 packs and Free/Premium daily caps). Mode change applies to subsequent invites only (D20). |
-| P31 | Message Flash (personalised first message) | MVP | Simple personalised first message |
+| P30 | Daily request quota by tier | MVP | Brothers always on a Free-tier daily invite cap. Sisters default `free_unlimited` (no invite quota). Admin can switch to `same_quota_as_brothers` (same Free-tier daily invite cap as brothers). Premium 1/3/6 packs unlock unlimited invites AND unlimited messages (replaces a Premium invite cap such as 15). Mode change applies to subsequent invites only (D20). |
+| P31 | Message Flash (personalised first message) | MVP | Simple personalised first message. Card-level quick message and Flash obey the sender's message quota. |
 | P32 | Ice Breakers — deen/family templates | MVP | Scholar-sensible templates |
 | P32 | AI-personalised Ice Breakers | **parity — deferred to NEXT** | Wait for grounded coach (D21) |
-| P33 | Real-time chat — typing, reactions, photo share (gallery/camera) | MVP | |
+| P33 | Real-time chat — typing, reactions, photo share (gallery/camera) | MVP | Free tier: daily message cap set by the platform admin (same kind of operator setting as `sister_reach_mode`; do not lock a number). Premium unlocks unlimited messages. A free sister must not be able to chat forever with a free brother. Passive deliver-then-scan stays. |
 | P33 | Curated GIFs / stickers | **parity — deferred to NEXT** | Pack design time; modest curated set only |
 | P34 | Voice messages | MVP | French / Mooré / Dioula; delivered immediately, then STT + audio-classified in the background (D4 + D18). Not a safety paywall. AI outage does not hold the voice note |
-| P35 | Push notifications | MVP | Messages / requests / visits; plus wali digest, reveal-requests, moderation outcomes, quiet hours (quiet-hours default is D30 NEXT) |
+| P35 | Push notifications | MVP | Messages / requests / visits; plus wali digest of granted threads only, reveal-requests, moderation outcomes, quiet hours (quiet-hours default is D30 NEXT) |
 | P36 | Web + installable PWA | MVP | |
 | P36 | Store-listed native Android (thin wrapper / TWA / Capacitor over the PWA) | MVP | Required for Burkina launch |
 | P36 | Native iOS | **parity — deferred to NEXT** | Android-first Burkina launch; Apple store/build/compliance cost; not dropped |
@@ -208,7 +214,7 @@ User requirement: implement **every** Farata feature. Nothing in P1–P59 may be
 | ID | Title | Horizon | Notes / reason if deferred |
 | --- | --- | --- | --- |
 | P55 | Freemium in XOF / FCFA | MVP | One XOF pricing page; launch vs normal price disclosed |
-| P56 | Premium structure minus paywalled safety | MVP | Pay for reach/convenience only (requests, ranking, convenience). Safety, blur, mahram, report, block, and verification stay free in both sister-access modes. Chat after an accepted invite stays free. Sister invite/reach is free and unlimited by default; paid only when the admin sets `same_quota_as_brothers` (D20). |
+| P56 | Premium structure minus paywalled safety | MVP | Pay for reach/convenience (unlimited invites, unlimited messages, ranking, convenience). Safety, blur, mahram, report, block, and verification stay free in both sister-access modes. Free-tier messages stay daily-capped unless that person has Premium. Sister invite/reach is free and unlimited by default; paid only when the admin sets `same_quota_as_brothers` (D20). |
 | P56 | Remaining Premium perks (HD 10 photos, unlimited coach, priority 7/7, &lt;10 min validation) | **parity — deferred to NEXT** | After core Premium |
 | P57 | 1 / 3 / 6 month plans, no silent auto-renew | MVP | Advertise as a trust feature in French and Mooré/Dioula audio (D16) |
 | P58 | Payment rails — BF launch | MVP | Orange Money BF, Moov Africa BF, Wave/Coris, cards |
@@ -225,7 +231,7 @@ D1–D23 from `docs/competitor-farata.md` §7; D24–D40 from the 2026-09-27 bra
 
 | Rank | Tier | ID | Title | Horizon |
 | --- | --- | --- | --- | --- |
-| 3 | P0 | D1 | Mahram-in-chat read-all, sister-initiated; verified wali can flag/pause/end | MUST |
+| 3 | P0 | D1 | Mahram-in-chat, sister-initiated; she grants which brother threads he may read (revoke one or all); verified wali is read-only on granted, delivered messages and can flag/pause/end those threads | MUST |
 | 27 | P2 | D2 | Wali dashboard: multi-ward + digest + priority flags | NEXT |
 | 28 | P2 | D3 | Chaperoned-meeting / khitba planner with wali in the loop | NEXT (full) |
 | 1 | P0 | D4 | Every chat modality delivered, then passively scanned (text, chat photos, voice STT+classifier incl. local languages); profile photos and bio stay publish-gated | MUST |
@@ -246,7 +252,7 @@ D1–D23 from `docs/competitor-farata.md` §7; D24–D40 from the 2026-09-27 bra
 | 13 | P1 | D18 | French first + Mooré/Dioula audio | MUST |
 | 44 | P3 | D18 | Full Arabic + English UI for diaspora | LATER |
 | 14 | P1 | D19 | Low-bandwidth lite mode | MUST |
-| 11 | P1 | D20 | Sister reach defaults free/unlimited; admin can apply the same invite quota as brothers; wali/safety always free | MUST |
+| 11 | P1 | D20 | Sister reach defaults free/unlimited; admin can apply the same invite quota as brothers; wali/safety always free. Free-tier messages stay capped in both modes unless that person has Premium. | MUST |
 | 31 | P2 | D21 | Grounded coach, scholar-reviewed, not a mufti, one persona | NEXT |
 | 26 | P1 | D22 | Seed articles MUST via P50 (5 scholar-reviewed) | MUST (via P50) |
 | 32 | P2 | D22 | Working public imam-reviewed Académie (Sahel context) | NEXT |
@@ -282,18 +288,20 @@ LATER (non-parity, from D-mapping): English/Arabic full UI; diaspora-heavy featu
 
 ## Pricing stance
 
-Freemium in **XOF**. Safety and dignity are **never paywalled** in either sister-access mode: verification, blur/reveal, mahram, report, and block stay free. Chat after an accepted invite stays free for both genders (brothers do not pay for that).
+Freemium in **XOF**. Safety and dignity are **never paywalled** in either sister-access mode: verification, blur/reveal, mahram, report, and block stay free.
 
-**Sister access** is admin-configurable and ships both modes on day one (not hardcoded):
+**Messages are quotaed, not only invites.** Free tier: a daily message cap set by the platform admin (the same kind of operator setting as `sister_reach_mode`). Do not lock a number here; any seed is an admin-configurable placeholder only. **Premium** (paid **1 / 3 / 6 month** packs) unlocks **unlimited invites AND unlimited messages**. This replaces a Premium invite cap such as 15. Free brothers keep a daily invite cap. Sisters in `free_unlimited` still have unlimited invites, but free-tier messages stay capped unless that person has Premium. A free sister must not be able to chat forever with a free brother.
 
-- Default **`free_unlimited`**: sisters send invites with no quota and no paid pack. They do not pay for the reach actions brothers pay for.
-- Admin can switch to **`same_quota_as_brothers`**: sisters use the same **1 / 3 / 6 month** packs (no silent auto-renew) and the same Free-tier and Premium daily invite caps as brothers.
+**Sister access** (`sister_reach_mode`) is admin-configurable and ships both modes on day one (not hardcoded):
+
+- Default **`free_unlimited`**: sisters send invites with no quota and no paid pack for reach. They do not pay for the invite-quota actions brothers pay for. Free-tier messages stay capped unless they have Premium.
+- Admin can switch to **`same_quota_as_brothers`**: sisters use the same **1 / 3 / 6 month** packs (no silent auto-renew) and the same Free-tier daily invite cap as brothers. Premium, if purchased, unlocks unlimited invites and unlimited messages.
 - Brothers stay on the paid quota subscription. There is no mode that makes brothers free.
 - Switching the mode applies to **subsequent** invites. It does not delete invites already sent.
 
-Brothers pay for reach and convenience (higher request quotas, ranking, convenience perks). One transparent pricing page. Plans of **1 / 3 / 6 months** with **no silent auto-renew** on any rail; if a processor wants auto-renew, still require explicit repurchase. Mobile money first: Orange Money BF, Moov Africa BF, Wave/Coris where available; cards secondary.
+Brothers pay for reach and convenience (unlimited invites and messages on Premium, ranking, convenience perks). One transparent pricing page. Plans of **1 / 3 / 6 months** with **no silent auto-renew** on any rail; if a processor wants auto-renew, still require explicit repurchase. Mobile money first: Orange Money BF, Moov Africa BF, Wave/Coris where available; cards secondary.
 
-**[ASSUMPTION]** Exact price points are not locked. Public reference: Farata **5 900 FCFA/month** launch, **9 900** normal — Claimed (marketing). Working assumption for validation: brother Premium launch in a similar band (about 4 900–5 900 XOF/month) with cheaper 3- and 6-month packs; do not race to 0 FCFA. Validate against BF purchasing power before lock. Free-tier brother daily request quota is a number the PRD must set; **[ASSUMPTION]** start from a tight quota (about 3/day) so free brothers can participate without spray-and-pray.
+**[ASSUMPTION]** Exact price points are not locked. Public reference: Farata **5 900 FCFA/month** launch, **9 900** normal — Claimed (marketing). Working assumption for validation: brother Premium launch in a similar band (about 4 900–5 900 XOF/month) with cheaper 3- and 6-month packs; do not race to 0 FCFA. Validate against BF purchasing power before lock. Free-tier brother daily request quota is a number the PRD must set; **[ASSUMPTION]** start from a tight quota (about 3/day) so free brothers can participate without spray-and-pray. The free-tier daily **message** cap is admin-configurable and is **not** locked in this brief.
 
 Boosts (P25, NEXT) cannot buy a safety bypass; ranking prefers verified + complete + wali-ready profiles (D37).
 
@@ -307,7 +315,7 @@ Boosts (P25, NEXT) cannot buy a safety bypass; ranking prefers verified + comple
 | Outcome | Chaperoned / family meetings proposed and accepted (D3 full is NEXT; a lightweight “meeting” stage in D24 is MUST) | |
 | Trust | Verified members (phone / ID / wali levels) | Never sell a “looks verified” Premium badge |
 | Safety | Passive-scan flag rates; admin warning / suspend / other-action rates; report SLA met (target 24h); strike → ban completions; appeal overturn rate | Scan-deferred events counted, not hidden |
-| Dignity | Share of sister profiles remaining blurred; reveal-revoke use; wali-attached chats; sister-initiated requests | |
+| Dignity | Share of sister profiles remaining blurred; reveal-revoke use; sister-granted wali threads; sister-initiated requests | |
 | Local fit | Android + PWA actives in Ouaga then Bobo; Orange Money / Moov checkout completion; audio-onboarding completion (Mooré/Dioula) | |
 | Honesty | Publish only proof-backed counters. Never invent scale | Contrast: Farata “+247.8k actifs” Claimed vs Play 10k+ Offered (seen) |
 
@@ -321,7 +329,7 @@ Full table is in `addendum.md`. The launch-killing eight:
 | Romance / money scams | D5 classifiers; P44 ban; in-chat “never send money to a suitor” |
 | Indecent media (incl. Mooré/Dioula slang jailbreak) | D4 deliver-then-scan + local lists + flag-for-admin; D32 scan-deferred (no hold) |
 | Photo leaks / small-city doxxing | D8 + D9 (NEXT polish); coarse geo; D10; kill-switch + mass revoke |
-| Fake or coercive wali | Invite-by-phone + OTP + declared relationship + sister confirm; D38 remove/report; wali cannot send as her |
+| Fake or coercive wali | Invite-by-phone + OTP + declared relationship + sister confirm; he sees only threads she grants; she can revoke one or all; D38 remove/report; wali cannot send as her |
 | Minors | P14 19+ + ID DOB + D39 facial-age hold |
 | AI vendor down | D32 scan-deferred event for the admin — does not hold undelivered media |
 | Mosque rumor that this is dating/haram | Zero dating language; D23 named board; working seed Académie (P50); proof-backed metrics |
@@ -337,7 +345,7 @@ Full table is in `addendum.md`. The launch-killing eight:
 - **First-wife awareness / notification** — out of scope unless she consents (open question to confirm in PRD research).
 - **Document proof of kinship** for wali — not in MVP (see Assumptions).
 - **PRD, architecture, and other skills** — not started by this brief run.
-- **Invented scale, invented marriages, dating-app copy, paywalled safety.**
+- **Invented scale, invented marriages, dating-app copy, paywalled safety, fake presence chrome.** A one-at-a-time people card is in scope.
 
 ## Assumptions and decisions for legal review
 
@@ -366,7 +374,7 @@ Rationale: kinship documents are uneven in BF and would block the must-have; pho
 
 ## Open questions
 
-Items from the brainstorm. One was closed by the 2026-10-01 locked decision; the rest stay open. A 2026-10-02 locked decision reframes D20 (sister-access modes) and is not an open-question close.
+Items from the brainstorm. One was closed by the 2026-10-01 locked decision; the rest stay open. The 2026-10-02 locked decisions (D20 sister-access modes; one-card people lists; message quotas; mahram thread grant) are not open-question closes.
 
 - **Polygamy disclosure UX:** how to disclose existing wives without doxxing them? First-wife awareness remains out of scope unless she consents — confirm with sisters and counsel.
 - **Fail-closed UX tolerance:** **Resolved 2026-10-01** (locked decision, Maitchibi Fayçal). AI moderation is passive. Messages send immediately; AI outage does not hold or delay chat. Scan-deferred events are recorded for the admin. The former “how long will members tolerate held voice notes” question no longer applies.
@@ -386,21 +394,23 @@ Items from the brainstorm. One was closed by the 2026-10-01 locked decision; the
 2. The **complete P1–P59 list** (every id, both slices, horizons + reasons). None dropped.
 3. The **complete D1–D40 list** (horizons + tiers). D11 MUST. D12 MUST slice + NEXT polish. D1 MUST. D4 MUST. D8 MUST.
 4. Evidence discipline: Farata claims only as Offered (seen) / Claimed (marketing) / Not publicly evidenced.
-5. Freemium XOF; safety and dignity never paywalled (both sister-access modes); sister reach default `free_unlimited`, admin-switchable to `same_quota_as_brothers`; chat after accept stays free; no silent auto-renew; mobile money first.
+5. Freemium XOF; safety and dignity never paywalled (both sister-access modes); sister reach default `free_unlimited`, admin-switchable to `same_quota_as_brothers`; free-tier daily message cap (admin-set, number not locked); Premium unlocks unlimited invites and unlimited messages; no silent auto-renew; mobile money first.
 6. Platforms: web + PWA + store-listed Android in MVP; native iOS parity — deferred to NEXT, not dropped.
 7. Age 19+, wali-invite-by-phone (no kinship papers in MVP), CIL + public hosting disclosure — all tagged **[ASSUMPTION]** and queued for legal review.
 8. North star = chaperoned meetings + dual-confirmed nikah. Proof-backed counters only. No dating language.
 9. Passive deliver-then-scan moderation. Profile photos and bio stay publish-gated. Contact-share still blocks phone/WhatsApp/links until both opt in (not the AI). Khalwa-safe (no live A/V until wali or chaperoned meeting). Woman’s consent first-class.
 10. Name remains TBD until native-speaker + trademark work. Do not start architecture from this brief.
+11. People lists default to one focused card with shared traits and pass / invite / quick-message; optional grid on every such screen; many-filter search may open on the grid. Reject dishonest chrome (fake presence, invented scale), not the one-at-a-time card.
+12. Mahram sees only sister-granted, delivered threads; she can revoke one thread or his entire permission; read-only; he cannot send as her.
 
 ## Vision
 
-If this works, Ouagadougou and Bobo families will treat the product as a known honorable path: a sister can search without selling her face, a father can read the chat, a brother can pay in Orange Money, and the public number that matters is verified marriages — starting at zero and growing only when both spouses confirm. Then CI / Mali / Senegal / wider, still marriage-shaped.
+If this works, Ouagadougou and Bobo families will treat the product as a known honorable path: a sister can search one profile at a time without selling her face, a father can read the chats she grants, a brother can pay in Orange Money, and the public number that matters is verified marriages — starting at zero and growing only when both spouses confirm. Then CI / Mali / Senegal / wider, still marriage-shaped.
 
 ## Document control
 
-- **Intent:** update (headless). Correction of record 2026-10-02: sister access is admin-configurable (D20 reframed).
-- **Sources:** `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`; `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (intent, html, memlog). Passive-AI locked decision of 2026-10-01 stays. This run does not edit the PRD, architecture, UX, or epics.
+- **Intent:** update (headless). Correction of record 2026-10-02: one-card people lists by default; messages quotaed (Premium unlimited invites and messages); mahram grant-scoped (D1 reframed). D20 sister-access modes and passive AI stay except where message quotas change chat volume.
+- **Sources:** `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`; `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (intent, html, memlog). Passive-AI locked decision of 2026-10-01 stays. D20 locked decision of 2026-10-02 stays. This run does not edit the PRD, architecture, UX, or epics.
 - **Overflow:** `addendum.md` (full risk table, personas/job maps, options considered).
 - **Audit:** `.memlog.md` (via `memlog.py` only).
 - **This run:** does not edit the PRD, architecture, UX, or epics; does not start implementation.

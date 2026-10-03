@@ -1,3 +1,5 @@
+> **Correction of record 2026-10-02 (Maitchibi Fayçal).** D1 “read-all” is superseded. After confirm the mahram grant list is empty; the sister grants individual threads and can revoke one or all. One-at-a-time pass/invite is the browse default, not a rejected dating pattern. Free-tier messages are admin-capped; Premium is unlimited invites and unlimited messages. Rows below that still say read-all are the 2026-09-27 brainstorm.
+
 > **Correction of record 2026-10-01 (Maitchibi Fayçal).** AI moderation is passive. Chat is delivered immediately; the AI flags for an admin and does not block, hold, or delay a message. D4 and D32 below are the corrected wording. Photo blur/reveal and mahram read-only are unchanged.
 
 # Brainstorm intent — Muslim marriage Africa (Burkina-first)

@@ -90,11 +90,15 @@ Farata’s public DPA lists Vercel (USA) and Neon (USA) as processors — Offere
 | Admin-configurable sister access: default `free_unlimited`; switchable to `same_quota_as_brothers`; both modes day one | Owner locked decision | **Chosen.** Mode change applies to subsequent Invites only. |
 | A mode that makes brothers free | Symmetry | **Rejected** — Brothers stay on paid quota |
 | Paywall safety (verification, blur, mahram, report, block) when sisters are on quota | Revenue | **Rejected** — do not paywall dignity |
-| Charge sisters for Chat after an accepted Invite | Revenue | **Rejected** — Brothers do not pay for that |
+| Charge sisters for Chat after an accepted Invite as a safety paywall | Revenue | **Rejected** — safety is not a message |
+| Free-tier daily message cap (`daily_message_cap`); Premium unlocks unlimited Invites and unlimited messages | Owner locked decision 2026-10-02 | **Chosen.** Applies to both genders. A Sister in `free_unlimited` still hits the Free message cap unless she has Premium. Over-cap send is not sent and is not held for scanning. |
+| Premium daily Invite cap of 15 | Earlier reviewer autofix | **Reversed 2026-10-02** — Premium is unlimited Invites |
 | Retroactive apply / delete sent Invites on mode change | Clean slate | **Rejected** — subsequent Invites only |
 | Paywall Verification | Revenue | Rejected (D13) |
 | Race to 0 FCFA | Undercut Farata 5 900/9 900 Claimed (marketing) | Rejected |
-| Freemium XOF; Brothers pay reach | Dignity-first | **Chosen**; sister reach is admin-configurable (D20) |
+| Freemium XOF; Brothers pay reach | Dignity-first | **Chosen**; sister Invite reach is admin-configurable (D20). Brothers are never made free. |
+| People lists default to one focused card; optional grid toggle on every people list | Owner locked decision 2026-10-02 | **Chosen.** A one-at-a-time card is not rejected dating chrome. Rejected chrome is “online now” and invented “+247.8k actifs” only. FR-030 stays NEXT. |
+| Mahram attached to every conversation after confirm (read-all) | Earlier D1 reading | **Reversed 2026-10-02** — Sister grants which Brother threads he may read; revoke one or all; new Chats not auto-granted |
 
 ### 2.7 Name
 
@@ -115,7 +119,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 ### Sisters (Fatim)
 
 - **Functional:** find a practicing Brother without exposing face or phone → Blur-by-default + no phone/WhatsApp until mutual accept and optional Mahram (D8, D5).
-- **Functional:** let father/brother read the Chat → Mahram read-all (D1).
+- **Functional:** let father/brother read the Chat → Mahram grant-scoped read on threads she chooses (D1).
 - **Functional:** know marital/polygamy status before hope → D14 visible pre-accept.
 - **Functional:** decline without drama → P29 + quiet decline + Block.
 - **Functional:** photo never in ads without per-use opt-in → D10.
@@ -130,7 +134,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 - **Functional:** filter by practice/madhhab/intentions.
 - **Functional:** declare polygamy once (D14).
 - **Functional:** sincere first message (Message Flash + templates).
-- **Functional:** pay XOF on Orange Money.
+- **Functional:** pay XOF on Orange Money. Premium = unlimited Invites and unlimited messages.
 - **Functional:** see Mahram presence so he does not overstep.
 - **Emotional:** serious suitor, not a player → pledge + quotas.
 - **Emotional:** not waste months on a fake → free Verification levels.
@@ -138,7 +142,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 
 ### Mahrams (Ousmane)
 
-- **Functional:** read ward Chats without a dating-app identity.
+- **Functional:** read only granted ward threads without a dating-app identity.
 - **Functional:** pause/end; SMS not 40 pings (digest is NEXT).
 - **Functional:** phone OTP + declared relationship + Sister confirm; no kinship papers.
 - **Emotional:** evidence if he must confront a man.
@@ -161,7 +165,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 
 ### Operators (Kadiatou)
 
-- **Functional:** price/packs, `sister_reach_mode`, thresholds, Board/Académie publish, proof-backed metrics, deletion/CIL tickets.
+- **Functional:** price/packs, `sister_reach_mode`, `daily_message_cap`, thresholds, Board/Académie publish, proof-backed metrics, deletion/CIL tickets.
 - **Constraint:** cannot hide hosting location; cannot invent public counters.
 
 ## 4. Full risk table (from brief addendum)
@@ -190,7 +194,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 | 20 | Payment provider down | Free tier + safety stay up |
 | 21 | AI vendor down | Delivery already happened; record scan-deferred / scan-failed on the admin flag queue |
 | 22 | Mosque rumor (haram / dating) | Board, zero dating language, Académie seed |
-| 23 | Copycat ships a shallow family-digest (Farata mahram-in-Chat is Not publicly evidenced; family text is Offered (seen) as rules §04 policy only) | Keep D1 product-deep (verified, Sister-initiated, read-all, pause/end) |
+| 23 | Copycat ships a shallow family-digest (Farata mahram-in-Chat is Not publicly evidenced; family text is Offered (seen) as rules §04 policy only) | Keep D1 product-deep (verified, Sister-initiated, grant-scoped read, pause/end) |
 | 24 | Viral indecent leak | Kill-switch, mass Revoke, transparency |
 | 25 | Ouaga power/data strain | SMS + Lite |
 | 26 | Farata price undercut | Compete on dignity/local fit/outcomes, not 0 FCFA |
@@ -202,7 +206,7 @@ Condensed from the brief addendum / brainstorm JTBD pass. Not a research sample.
 
 ## 5. Binding stance (do not re-litigate in UX/architecture)
 
-Burkina first. French-first + Mooré/Dioula audio. Chat delivered immediately, then passively scanned; AI flags for a human admin and does not silently delete, block, or auto-sanction. Sister-initiated optional Mahram. Dual-confirm marriage. Three Farata evidence labels only. Copy vocabulary locked. Khalwa-safe (no live A/V until Mahram or chaperoned meeting). Woman’s consent first-class. Haya media. Verification is a public good. No likeness in ads without per-use opt-in. Proof-backed counters only. Pseudonym + city geo. Polygamy disclosure pre-accept. No silent auto-renew. Boosts never bypass safety. Sister access is admin-configurable on day one: default `free_unlimited`; Operator can switch to `same_quota_as_brothers`. Brothers stay paid. Safety stays free in both modes. Chat after an accepted Invite stays free. Mode change applies to subsequent Invites only. Aligned with `docs/system-idea.md`. **Correction of record 2026-10-01:** earlier addendum sentences that said pre-delivery scan or Fail-closed Chat delivery are superseded. **Correction of record 2026-10-02:** earlier addendum sentences that said Sisters never pay for reach or that Invites are always unlimited are superseded.
+Burkina first. French-first + Mooré/Dioula audio. Chat delivered immediately, then passively scanned; AI flags for a human admin and does not silently delete, block, or auto-sanction. A send over the Free message cap is not sent and is not held for scanning. Sister-initiated optional Mahram on threads she grants. Dual-confirm marriage. Three Farata evidence labels only. Copy vocabulary locked. Khalwa-safe (no live A/V until Mahram or chaperoned meeting). Woman’s consent first-class. Haya media. Verification is a public good. No likeness in ads without per-use opt-in. Proof-backed counters only. Pseudonym + city geo. Polygamy disclosure pre-accept. No silent auto-renew. Boosts never bypass safety. People lists default to one focused card; optional grid. Sister Invite reach is admin-configurable on day one: default `free_unlimited`; Operator can switch to `same_quota_as_brothers`. Brothers stay paid. Safety stays free in both modes. Free-tier messages are daily-capped (`daily_message_cap`); Premium unlocks unlimited Invites and unlimited messages. Mode change applies to subsequent Invites only. Aligned with `docs/system-idea.md`. **Correction of record 2026-10-01:** earlier addendum sentences that said pre-delivery scan or Fail-closed Chat delivery are superseded. **Correction of record 2026-10-02:** earlier addendum sentences that said Sisters never pay for reach, that Invites are always unlimited, that Chat after accept is always free of any cap, that browse is only a grid, or that a Mahram reads all chats are superseded.
 
 Visual hint only (UX owns the system): indigo / sand / gold, mihrab geometry, *sira* as a path metaphor — solemn marriage, not swipe culture.
 

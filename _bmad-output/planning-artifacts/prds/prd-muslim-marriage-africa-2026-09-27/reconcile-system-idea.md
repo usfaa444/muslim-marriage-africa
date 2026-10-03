@@ -2,6 +2,8 @@
 
 **Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. The 2026-09-27 gap “continuous scan vs pre-delivery” is closed in the other direction: Chat is delivered immediately, then background-scanned. Findings below that describe the PRD as a pre-delivery hold are historical. Settings-optional blur and showcase-story gaps are not closed by that decision.
 
+**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): browse is one focused card by default (optional grid), not a Lite-grid-only UI. Mahram does not read all chats — grant-scoped threads only (FR-074). Chat after accept is not unconditionally unlimited (FR-146). Rows below that say `FR-025` Lite grid is the browse UI, or “read-all including Flash,” are historical.
+
 **Input:** `/workspace/projects/muslim-marriage-africa/docs/system-idea.md`  
 **Against:** `prd.md` §6 Must-have coverage + §4 FRs / §5 NFRs; `addendum.md` overflow  
 **Date:** 2026-09-27 (annotated 2026-10-01)  

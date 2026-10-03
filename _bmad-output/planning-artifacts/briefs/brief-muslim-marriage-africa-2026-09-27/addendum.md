@@ -21,7 +21,7 @@ Sources: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-2
 | 4 | Catfish / stolen photos | Liveness selfie matched to profile photos + P38 |
 | 5 | Indecency (voice / chat-photo slips) | D4 deliver-then-scan + flag-for-admin + local-language audio lists; D32 scan-deferred (no hold) |
 | 6 | Screenshot leaks of sister photos | D8 + D9 (watermark, screenshot notice, no download, revoke, blurred thumbs) |
-| 7 | Fake wali | D1 verify (phone OTP, sister confirms relationship, cooling-off; wali cannot be an unmatched male friend) + optional ID badge; D38 |
+| 7 | Fake wali | D1 verify (phone OTP, sister confirms relationship, cooling-off; wali cannot be an unmatched male friend) + optional ID badge; grant-scoped threads; D38 |
 | 8 | Post-decline harassment | P29 + D7 fingerprint |
 | 9 | Off-platform grooming to WhatsApp | D5 detect numbers/handles; share contact only after mutual + optional wali |
 | 10 | False-report weaponization | P43 sanctions, evidence required, rate limits, dual review |
@@ -37,7 +37,7 @@ Sources: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-2
 | 20 | Payment provider down | Free-tier and all safety features stay up |
 | 21 | AI vendor down | Delivery already happened; record scan-deferred for the admin (D32) |
 | 22 | Mosque rumor that the app is haram / dating | D23 named board, public fiqh notes, zero dating language, working Académie seed (D22 / P50) |
-| 23 | Competitor ships a shallow wali digest | Keep wedge product-deep (D1–D2 verified, sister-initiated, read-all, pause/end) |
+| 23 | Competitor ships a shallow wali digest | Keep wedge product-deep (D1–D2 verified, sister-initiated, grant-scoped read-only, pause/end) |
 | 24 | Viral indecent leak | Kill-switch, mass revoke of reveals, user notification, transparency note (D7 / D9) |
 | 25 | Week-long data / electricity strain in Ouaga | SMS / USSD essential path + lite mode (D19, D27) |
 | 26 | Farata undercuts on price from Senegal | Compete on dignity, local payments, languages, verified marriages — not a race to 0 FCFA |
@@ -46,6 +46,8 @@ Sources: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-2
 | 29 | Screenshot of wali dashboard on a shared phone | Wali PIN + session timeout + D28-like lock on guardian accounts |
 | 30 | Social-engineer an unblur then screenshot | Time-limited reveal, revoke, watermark, re-blur on report (D8 + D9) |
 | 31 | Admin switches sisters onto brother quota after launch | Mode applies to subsequent invites only; safety stays free; do not delete sent invites (D20) |
+| 32 | Free sister chats forever with a free brother | Free-tier daily message cap (admin-set) applies to both; Premium unlocks unlimited messages; `free_unlimited` does not lift the message cap |
+| 33 | Mahram receives every conversation after OTP | After phone invite + OTP he sees only threads she grants; she can revoke one thread or his entire permission; read-only on delivered messages; he cannot send as her (D1) |
 
 ## 2. Personas and job maps
 
@@ -53,11 +55,12 @@ Condensed from the brainstorm JTBD / role-playing pass. Functional / emotional /
 
 ### Sisters
 
-- **Functional:** find a practicing brother without exposing face or phone → blur-by-default + no phone/WhatsApp until mutual accept and optional wali (D8, D5).
-- **Functional:** let my father/brother read the conversation so I am not in khalwa → mahram-in-chat read-all (D1).
+- **Functional:** find a practicing brother without exposing face or phone → blur-by-default + no phone/WhatsApp until mutual accept and optional wali (D8, D5). Discover and people lists default to one focused card with shared traits; optional grid (P21).
+- **Functional:** let my father/brother read the conversations I grant so I am not in khalwa → mahram-in-chat grant-scoped (D1).
+- **Functional:** revoke one brother thread or the mahram's entire permission → D1 + D38.
 - **Functional:** know before I invest hope whether he is already married or wants a second wife → D14 visible pre-accept.
 - **Functional:** decline without drama or follow-up → P29 no-resend + silent decline + one-tap block (P42).
-- **Functional:** start a conversation without buying Premium by default → D20 `free_unlimited`; if the admin has switched to `same_quota_as_brothers`, same invite caps as brothers.
+- **Functional:** start a conversation without buying Premium by default → D20 `free_unlimited`; if the admin has switched to `same_quota_as_brothers`, same Free-tier invite cap as brothers. Free-tier messages stay capped unless she has Premium.
 - **Functional:** guarantee my photo will not appear in Instagram ads → D10 per-use opt-in only.
 - **Functional:** use this on ~1GB/month → D19 lite + compressed images + no autoplay video.
 - **Emotional:** feel haya-safe and still hopeful → dignity-first free safety stack (D20).
@@ -68,19 +71,19 @@ Condensed from the brainstorm JTBD / role-playing pass. Functional / emotional /
 
 ### Brothers
 
-- **Functional:** see sisters who share practice / madhhab / hijra plans without endless swipe → P16–P20 with marriage-criteria first.
+- **Functional:** see sisters who share practice / madhhab / hijra plans one profile at a time → P16–P21 default one focused card with shared traits; optional grid.
 - **Functional:** declare polygamy intent once so I am honest and not later reported → D14 as self-serve.
 - **Functional:** send a sincere first message, not a pickup line → P31 / P32 Ice Breakers grounded in deen and family.
 - **Functional:** pay in XOF with Orange Money without a foreign card → P58 / D17.
 - **Functional:** know when to involve her wali so I do not overstep → D1 presence banner + later D3 meeting CTA.
-- **Emotional:** be seen as a serious suitor, not a player → P3 pledge + request quotas (P30).
+- **Emotional:** be seen as a serious suitor, not a player → P3 pledge + invite quotas (P30) + free-tier message cap (P33).
 - **Emotional:** not waste months on a fake or romance-scam profile → D13 verification levels visible.
 - **Social:** my mother will ask who her family is → family-intro fields + D3 meeting planner (NEXT).
 - **Brother already married (polygyny):** a path that is honest so I am not a liar before Allah → D14 + P3 pledge wording that names honesty about existing marriage.
 
 ### Walis / mahrams
 
-- **Functional:** see my ward’s conversations without creating a dating-app identity → D1 now; D2 guardian dashboard NEXT.
+- **Functional:** see the conversations my ward grants me, without creating a dating-app identity → D1 now (grant-scoped); D2 guardian dashboard NEXT.
 - **Functional:** pause or end a chat that becomes inappropriate → D1.
 - **Functional:** weekly digest, not 40 pings → D2 NEXT.
 - **Functional:** prove I am really her father/brother → phone OTP + declared relationship + sister confirm; optional ID badge. No kinship papers in MVP (brief A2).
@@ -153,16 +156,18 @@ Condensed from the brainstorm JTBD / role-playing pass. Functional / emotional /
 
 | Option | Why considered | Disposition |
 | --- | --- | --- |
-| Farata: free users can only reply; start-chat is Premium (Offered (seen) [bundle]) | Known pattern | Rejected as the only model. Brothers stay on paid quota. Sisters default free/unlimited; admin can switch to the same quota (D20). |
+| Farata: free users can only reply; start-chat is Premium (Offered (seen) [bundle]) | Known pattern | Rejected as the only model. Brothers stay on paid quota. Sisters default free/unlimited invites; admin can switch to the same invite quota (D20). |
 | Hardcode sisters always free / never pay for reach | Original D20 | **Reversed 2026-10-02** (Maitchibi Fayçal). Replaced. |
-| Admin-configurable sister access: default `free_unlimited`; switchable to `same_quota_as_brothers`; both modes day one | Owner locked decision | **Chosen.** Mode change applies to subsequent invites only. |
+| Admin-configurable sister access: default `free_unlimited`; switchable to `same_quota_as_brothers`; both modes day one | Owner locked decision | **Chosen** for invites. Mode change applies to subsequent invites only. |
 | A mode that makes brothers free | Symmetry | **Rejected** — brothers stay on paid quota |
 | Paywall safety (verification, blur, mahram, report, block) when sisters are on quota | Revenue | **Rejected** — do not paywall dignity |
-| Charge sisters for chat after an accepted invite | Revenue | **Rejected** — brothers do not pay for that |
+| Chat after an accepted invite stays free for both genders | Prior brief (2026-10-02 D20 run) | **Reversed 2026-10-02** (Maitchibi Fayçal). Replaced by free-tier daily message caps. |
+| Free-tier daily message cap (admin-set; number not locked); Premium unlocks unlimited invites AND unlimited messages | Owner locked decision | **Chosen.** Replaces a Premium invite cap such as 15. A free sister must not chat forever with a free brother. `free_unlimited` does not lift the message cap. |
+| Lock a free-tier message-cap number in the brief | Convenience | **Rejected** — same kind of operator setting as `sister_reach_mode`; seed is admin-configurable placeholder only |
 | Retroactive apply / delete sent invites on mode change | Clean slate | **Rejected** — subsequent invites only |
 | Paywall verification | Revenue | Rejected — D13; never sell a “looks verified” badge |
 | Race Farata to 0 FCFA | Acquisition | Rejected — compete on dignity and local fit |
-| Freemium XOF, brothers pay for reach, 1/3/6 mo, no silent auto-renew | Trust + BF rails | **Chosen**; sister reach is admin-configurable (D20); exact prices [ASSUMPTION] |
+| Freemium XOF, brothers pay for reach, 1/3/6 mo, no silent auto-renew | Trust + BF rails | **Chosen**; sister invite reach is admin-configurable (D20); messages quotaed on free tier; exact prices [ASSUMPTION] |
 
 ### 3.7 Name
 
@@ -186,21 +191,39 @@ No decision. Shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / No
 | AI auto-blocks or auto-sanctions delivery | Safety | **Rejected** — AI does not block, hold, refuse, or apply a sanction |
 | Drop contact-share blocks because AI is passive | Misread the reversal | **Rejected** — phone / WhatsApp / links still blocked until both members opt in; that is not the AI |
 
+### 3.10 People-list presentation
+
+| Option | Why considered | Disposition |
+| --- | --- | --- |
+| Grid of many faces as the default (P21 / P17 lite grid) | Farata-like browse; prior brief | **Reversed 2026-10-02** (Maitchibi Fayçal). Grid stays optional. |
+| One focused card by default on discover and every people list, including search; shared traits under the photo; pass / invite / quick message (quotas apply); tap opens full profile; optional grid toggle on every such screen; many-filter search may open on the grid | Owner locked decision | **Chosen** for MVP day one |
+| Treat one-at-a-time as a rejected dating-app pattern | Prior “not a swipe feed” line | **Rejected** — dishonest chrome only is rejected (fake presence, invented scale) |
+| Fake presence (“online now”) or invented scale (“+247.8k actifs”) | Growth chrome | **Rejected** |
+
+### 3.11 Mahram thread grant
+
+| Option | Why considered | Disposition |
+| --- | --- | --- |
+| After phone invite + OTP, mahram reads every conversation (D1 read-all) | Prior brief / competitor teardown wording | **Reversed 2026-10-02** (Maitchibi Fayçal). Replaced. |
+| She chooses which brother threads he may read; revoke one thread or his entire permission; read-only on granted, delivered messages; he cannot send as her | Owner locked decision | **Chosen.** D1 ID kept, reframed. |
+| He can send as her | Convenience | **Rejected** — D38 unchanged |
+
 ## 4. Binding stance carried from the brainstorm
 
-The AI-moderation line was overridden on 2026-10-01 (see 3.9). Sister reach (D20) was overridden on 2026-10-02 (see 3.6). Other items were not re-litigated.
+The AI-moderation line was overridden on 2026-10-01 (see 3.9). Sister reach (D20) was overridden on 2026-10-02 (see 3.6). People-list default, message quotas, and mahram thread grant were overridden on 2026-10-02 (see 3.6, 3.10, 3.11). Other items were not re-litigated.
 
 - Burkina first (Ouagadougou → Bobo-Dioulasso); then CI / Mali / Senegal / wider.
 - French-first UI; Mooré/Dioula audio is a differentiator.
 - AI moderation is passive: chat delivered then scanned; AI flags a human admin and does not block, hold, or refuse delivery. AI outage records scan-deferred and does not hold media. Profile photos and bio stay publish-gated. Contact-share still blocks phone numbers, WhatsApp handles, and links until both members opt in (not the AI).
-- Mahram optional and sister-initiated.
+- Mahram optional and sister-initiated. After phone invite and OTP he sees only threads she grants; she can revoke one thread or his entire permission; read-only on granted, delivered messages; he cannot send as her.
 - Marriage report requires both parties.
 - Farata statements use only the three evidence labels.
 - Product copy: mariage / ta'aruf / nikah / khitba.
 - Khalwa-safe: no 1:1 live A/V until wali present or chaperoned meeting scheduled.
 - Woman’s consent first-class; quiet decline.
 - Haya-default media; curated GIFs only.
-- Sister access is admin-configurable on day one. Default `free_unlimited` (no invite quota, no paid pack for sisters). Admin can switch to `same_quota_as_brothers` (same 1/3/6 packs and Free/Premium daily caps). Brothers stay paid. Safety (verification, blur/reveal, mahram, report, block) stays free in both modes. Chat after an accepted invite stays free. Mode change applies to subsequent invites only.
+- Sister access is admin-configurable on day one. Default `free_unlimited` (no invite quota, no paid pack for sister reach). Admin can switch to `same_quota_as_brothers` (same 1/3/6 packs and Free-tier daily invite cap). Brothers stay paid. Safety (verification, blur/reveal, mahram, report, block) stays free in both modes. Free-tier messages are daily-capped by the admin (number not locked). Premium unlocks unlimited invites AND unlimited messages. `free_unlimited` does not lift the message cap. Mode change applies to subsequent invites only.
+- People lists default to one focused card (shared traits; pass / invite / quick message; quotas apply). Optional grid on every such screen. Many-filter search may open on the grid. Rejected chrome is fake presence and invented scale, not the one-at-a-time card.
 - Verification is a public good; never sell a “looks verified” Premium badge.
 - Never use member likeness in ads without per-use opt-in.
 - Publish only proof-backed counters.

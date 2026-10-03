@@ -2,6 +2,8 @@
 
 **Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Chat is delivered immediately, then background-scanned. Findings or table rows below that treat NFR-003 / FR-067 as fail-closed hold-before-delivery, or that assume a pre-delivery gate, are historical. Current `prd.md` uses deliver-then-scan, scan-deferred events, and FR-144 (admin flag queue). Other findings in this review are not closed by that decision.
 
+**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): people lists default to one focused card (optional grid). AC-2’s “changes the grid” wording and NFR-005 “grid ≤ 8s” as the only browse UI are historical. Chat after accept is not unconditionally unlimited (FR-146). Mahram reads only granted threads. FR-146 added; FR-001–FR-145 numbering unchanged.
+
 **Artifact:** `prd.md` (2026-09-27; correction of record 2026-10-01)  
 **Sources:** `docs/system-idea.md`; brief `brief-muslim-marriage-africa-2026-09-27/brief.md` (P1–P59, D1–D40)  
 **Reviewer:** ad-hoc PRD reviewer (must-have + traceability gate)  

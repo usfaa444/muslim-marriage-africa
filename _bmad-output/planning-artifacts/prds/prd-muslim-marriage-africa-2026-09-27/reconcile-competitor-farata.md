@@ -12,7 +12,9 @@ Extract-only. Does not add Farata facts. Does not start UX, architecture, or epi
 
 **Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows below that treat D4 as pre-delivery block/hold are historical. Current `prd.md` delivers Chat then scans. `docs/competitor-farata.md` D4 was corrected the same day.
 
-**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Rows below that treat D20 as “Sisters unlimited / never pay / start Invites free” as a hardcoded rule are historical. Safety and Chat after accept stay free. D20 stays, reframed (FR-045, FR-105, FR-145).
+**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Rows below that treat D20 as “Sisters unlimited / never pay / start Invites free” as a hardcoded rule are historical. Safety stays free. D20 stays, reframed (FR-045, FR-105, FR-145).
+
+**Superseded in part on 2026-10-02 (later lock).** People lists default to one focused card (optional grid). Free-tier messages are daily-capped (FR-146); Premium is unlimited Invites and unlimited messages (Premium Invite cap of 15 deleted). Mahram reads only granted threads (FR-074). Sentences below that say browse is only a grid, Chat after accept is always free of any cap, or a Mahram reads all chats are historical.
 
 **Input:** `/workspace/projects/muslim-marriage-africa/docs/competitor-farata.md`  
 **PRD:** `prd.md` (evidence rule §0; Vision §1; Features §4; NFRs §5; Why now §9; Appendix A)  

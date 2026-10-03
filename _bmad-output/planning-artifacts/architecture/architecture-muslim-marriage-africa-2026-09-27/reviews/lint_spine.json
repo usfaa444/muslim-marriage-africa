@@ -4,6 +4,5 @@
   "total_findings": 0,
   "by_severity": {},
   "findings": [],
-  "date": "2026-10-02",
-  "note": "re-run after gate autofix"
+  "run": "2026-10-02-card-cap-mahram-grant-after-autofix"
 }

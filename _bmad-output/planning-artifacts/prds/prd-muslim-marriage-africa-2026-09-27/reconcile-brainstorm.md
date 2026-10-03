@@ -4,6 +4,8 @@
 
 **Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Sentences below that treat Sisters’ Invites as always free/unlimited or “never pay” are historical. Safety stays free. D20 stays, reframed.
 
+**Superseded in part on 2026-10-02 (later lock).** People lists default to one focused card; optional grid toggle on every people list. A one-at-a-time card is not rejected dating chrome. Sentences below that treat browse as only a grid, or that treat swipe/card as a banned anti-pattern (rather than dishonest chrome only), are historical. Chat after accept is not unconditionally unlimited (FR-146). Mahram reads only granted threads.
+
 **Input:** Brainstorm session `brainstorm-muslim-marriage-africa-2026-09-27`  
 **Sources read:** `brainstorm-intent.md`, `brainstorm.html`, `.memlog.md`  
 **Compared to:** `prd.md` + `addendum.md` (same PRD workspace)  

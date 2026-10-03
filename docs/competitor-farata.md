@@ -280,7 +280,7 @@
 > Each one comes from the system idea's must-haves and/or a gap from §5. **These must also be carried into the brief and PRD as explicit features.**
 
 **Mahram / wali (must-have #4; gap 1)**
-- D1. **Mahram-in-chat**: a sister can invite her mahram/wali (verified phone + identity) into any conversation as a **read-all participant**. He can flag messages, pause the chat, or end the chat. The brother sees clearly that a wali is present.
+- D1. **Mahram-in-chat** (corrected 2026-10-02; the 2026-09-27 line said read-all on any conversation): a sister can invite her mahram/wali (verified phone + identity). After confirm she chooses which brother threads he may read. He can flag, pause, or end a granted thread. He cannot send as her. The brother sees a wali only on a granted thread. Revoke one thread, or revoke his entire permission.
 - D2. **Wali dashboard**: one wali can watch several of his wards' conversations, get digest notifications, and take a human-moderator role (his flags go to our moderation queue with priority).
 - D3. **Chaperoned-meeting planner**: when both sides agree, propose a family meeting / *khitba* step with the wali in the loop (time, place, attendees), not an off-app DM.
 

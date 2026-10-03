@@ -44,6 +44,8 @@ From the 2026-09-27 PRD and brief, inherited silently, then **corrected 2026-10-
 - Web + installable PWA + store-listed Android in MVP. Native iOS is NEXT, not dropped.
 - Freemium XOF. Safety and Sister dignity never paywalled. 1/3/6-month packs. No silent auto-renew.
 - Sister Invite reach is operator-configurable on day one: `sister_reach_mode` `free_unlimited` (DEFAULT) | `same_quota_as_brothers` (FR-044, FR-045, FR-105, FR-145). Brothers always stay on the paid quota. Locked 2026-10-02.
+- Free-tier messages are daily-capped for both genders, including a Sister in `free_unlimited` (FR-146). Premium = unlimited Invites **and** unlimited messages. No Premium Invite cap of 15. Sisters can buy the same 1/3/6 packs in **both** reach modes. Locked 2026-10-02.
+- People lists default to one focused card; grid is optional via toggle (FR-024, FR-025). After OTP + Sister confirm, the Mahram grant list is empty; she grants individual Brother threads (FR-074, FR-076, FR-077). Locked 2026-10-02.
 - Farata statements use only **Offered (seen)** / **Claimed (marketing)** / **Not publicly evidenced**.
 
 ### A1 — Minimum age 19+ `[ASSUMPTION]` — legal review
@@ -71,7 +73,7 @@ The pick below is **AD-5**, not a rewrite of A3.
 
 Hexagonal modular monolith (AD-1, AD-2). One API product: `api` + `worker` from the same image, plus in-region `web`. Each row in the spine ownership table is the **only writer** of that entity (AD-3).
 
-Dependency direction: clients → inbound adapters → application → domain; outbound vendor I/O only in adapters. Billing cannot sit on the path of identity, verification, media, moderation, mahram, report, block, or Chat after accept (AD-21). Sister invite send may call `BillingPort` only when `sister_reach_mode` is `same_quota_as_brothers` (AD-27).
+Dependency direction: clients → inbound adapters → application → domain; outbound vendor I/O only in adapters. Billing cannot sit on the path of identity, verification, media, moderation, mahram attach, report, block, browse, or Invite accept (AD-21). A Free-tier Chat / Flash / card quick-message send may call `BillingPort.isEntitled` only to decide the FR-146 cap (AD-29). Sister invite send may call `BillingPort` only when `sister_reach_mode` is `same_quota_as_brothers` (AD-27). Sister checkout may call `BillingPort` in both reach modes (AD-14).
 
 ## 4. Stack (verified 2026-09-27)
 
@@ -137,23 +139,26 @@ Spine ERD is the shape. Fields and invariants the code must not invent twice:
 | account | id, email unique, password_hash, pseudonym unique, gender `sister\|brother`, roles, status, age_attested, pin_hash | No public visibility until verification+review. Gender immutable after first set without operator+audit |
 | session | id, account_id, kind `web\|capacitor\|mahram\|staff`, expires_at | PIN sessions idle-timeout 15 min (NFR-001 working number). Staff MFA. No member+staff on one session |
 | verification_record | id, account_id, kind `phone_otp\|liveness\|id_document`, status, vendor, evidence_uri | Independent of entitlement. Liveness matched to profile photos |
-| profile | account_id, dob, city, marital_status, polygamy_intent, madhhab, practice, life_plans, bio_live, bio_pending, visibility | `married` brother **must** set polygamy_intent. Bio swaps only on allow |
+| profile | account_id, dob, city, marital_status, polygamy_intent, madhhab, practice, life_plans, bio_live, bio_pending, visibility | `married` brother **must** set polygamy_intent. Bio swaps only on allow. **No new columns** for kids or card traits (AD-28). Shared traits on the card are computed from fields that already exist |
 | photo_asset | id, owner_id, kind `profile_photo\|chat_photo\|voice_note`, original_key, blur_key, moderation_state | `original_key` is storage-only. `applyModeration` only on `profile_photo`. `chat_photo` / `voice_note` sign without waiting on review. Not `content.audio_asset` |
 | reveal_grant | photo_id or owner_id, viewer_id, policy, revoked_at | Per viewer. Gateway + denylist stop **serving** clear bytes ≤60s. Policy `on_accept\|on_request\|never` |
 | likeness_grant | owner_id, campaign_id, expires_at | Per-use marketing/social reuse only; cookie consent is not this grant |
-| invite | id, from_id, to_id, flash_id, state, sister_accepted_at | Chat exists only after Sister accept (or she sent). No resend after refuse. Brother daily quota from config (working 3/15) always. Sister quota follows AD-27 (`sister_reach_mode`). Flash is delivered immediately (AD-10) |
-| invite_quota | account_id, civil_day, sent_count | Written only by invites, and only when the sender is quota-capped (Brothers always; Sisters iff `same_quota_as_brothers`). Day = `Africa/Ouagadougou`. Cap from `operator_config` + `BillingPort.isEntitled`. Billing never writes this row |
-| operator_config | key, value | Operator is the only writer. Required key `sister_reach_mode`: `free_unlimited` (DEFAULT) \| `same_quota_as_brothers`. Both seeded day one. Change is an AD-18 event; subsequent invites only |
-| conversation | id, invite_id, stage `invite\|chat\|meeting\|married`, paused_by, ended_at | Ended is terminal. Brother cannot resume a Mahram pause. Inserted only by `ChatPort.openFromInvite` |
+| invite | id, from_id, to_id, flash_id, state, sister_accepted_at | Chat exists only after Sister accept (or she sent). No resend after refuse. Brother daily Invite quota from config (working **3** Free `[ASSUMPTION]`; Premium = unlimited Invites — no cap of 15). Sister Invite quota follows AD-27 (`sister_reach_mode`). Flash is delivered immediately (AD-10) and counts against FR-146 |
+| invite_quota | account_id, civil_day, sent_count | Written only by invites, and only when the sender is Invite-quota-capped (Brothers always; Sisters iff `same_quota_as_brothers`). Day = `Africa/Ouagadougou`. Cap from `operator_config` + `BillingPort.isEntitled`. Billing never writes this row. Not the message cap |
+| message_quota | account_id, civil_day_ouaga, sent_count | Written **only by chat** when the sender is not Premium. Grain `{ account_id, civil_day_ouaga, sent_count }`. Day = `Africa/Ouagadougou`. Counts chat text, chat photo, voice note, message flash (card quick-message is that Flash — once). Invites Flash call `ChatPort.consumeMessageQuota` before persist; `openFromInvite` must not increment. Live `isEntitled` + live `daily_message_cap` every persist. Cap change: `sent_count` stays; remaining = `max(0, new_cap − sent_count)`. Over-cap is not stored |
+| operator_config | key, value | Operator is the only writer. Required keys include `sister_reach_mode`: `free_unlimited` (DEFAULT) \| `same_quota_as_brothers`, and `daily_message_cap` (number; seed **10** `[ASSUMPTION — admin-configurable, not a product lock]`). Both reach-mode values and the cap key seeded day one. Change is an AD-18 event; subsequent invites / Free-tier sends only |
+| conversation | id, invite_id, stage `invite\|chat\|meeting\|married`, paused_by, ended_at | Ended is terminal. Brother cannot resume a Mahram pause. Inserted only by `ChatPort.openFromInvite`. Mahram must not INSERT. New conversation does **not** insert a grant |
 | contact_share | conversation_id, opened_at, opened_by_a, opened_by_b | Both members must opt in. Only chat writes. Moderation reads `ChatPort.contactShareOpen` |
-| message | id, conversation_id, sender_id, kind `text\|photo\|voice`, state `delivered`, body_enc, media_id | Created `delivered`. No Chat `pending`/`held`. Mahram reads delivered only. Ciphertext `{v, alg, kid, iv, ct}` |
-| mahram_invite / mahram_link | sister_id, phone, relationship, confirmed_at, verified_badge, removed_at | Enum `father\|brother\|uncle\|other_mahram`. No kinship doc. One confirmed guardian set per sister in MVP (dashboard multi-ward is NEXT) |
+| message | id, conversation_id, sender_id, kind `text\|photo\|voice`, state `delivered`, body_enc, media_id | Created `delivered` only after the FR-146 cap allows the send. No Chat `pending`/`held`. Over-cap is not stored. Mahram reads delivered only on an active grant. Ciphertext `{v, alg, kid, iv, ct}` |
+| mahram_invite / mahram_link | sister_id, phone, relationship, confirmed_at, verified_badge, removed_at | Enum `father\|brother\|uncle\|other_mahram`. No kinship doc. One confirmed guardian set per sister in MVP (dashboard multi-ward is NEXT). After confirm the grant list is empty |
+| mahram_thread_grant | sister_account_id, mahram_account_id, conversation_id, granted_at, revoked_at nullable | Unique **active** (`revoked_at IS NULL`) grant per `{ mahram_account_id, conversation_id }`. Grant requires an existing conversation. No `invite_id` grant; Flash / pre-accept is not grantable. New conversation does not insert or inherit a grant. Only the ward Sister writes grants. Revoke-one sets `revoked_at` on that row (do not DELETE). Removing the mahram sets `revoked_at` on every active grant in the same unit of work |
 | moderation_job | message_id or asset_id or flash_id, scores, outcome, vendor, latency_ms | Outcome `flag-for-admin` \| clean \| `scan-deferred` \| `scan-failed`. Never writes `message.state`. Flash uses `flash_id` (pre-conversation) |
 | flag_queue | job_id, account_id, item_id, reason, entered_at | Already-delivered Chat items plus scan-deferred / scan-failed. Does not stop delivery. Replaces `hold_queue` |
 | report / case | target, reason, sla_started_at, first_human_at | Report clock starts at submit; AI-flag clock starts when the flag enters the queue |
 | strike / sanction / ban / appeal | account_id, ladder, evidence | Photo floor: 3 rejects → 24h upload block (config) |
 | marriage_report | initiator_id, spouse_id, confirmed_at, proof_key | Counter increments **only** on dual confirm. Proof never published |
 | consent_story | report_id, public_ok_a, public_ok_b, family_ok, faces | Either spouse can refuse public |
+| favourite / profile_visit | account_id, target_id, created_at | Discovery-owned. Pass/dismiss may reuse a discovery exclusion row if one already exists. **Do not invent a likes table.** Pass is not a like and not a public counter (AD-28) |
 | pack / payment / entitlement | duration_days 30/90/180, amount_xof, provider, provider_ref, ends_at, idempotency_key | `ends_at` set; **no** `renew_at`. Webhook applied once |
 | audit_event | actor_id, action, payload, prev_hash, hash | Tamper-evident hash-chain. INSERT/SELECT-only role. Payload = ids + action + reason |
 
@@ -172,20 +177,26 @@ Idempotency: `Idempotency-Key` on `POST /v1/payments` and all `POST /v1/webhooks
 | identity | `/v1/accounts`, `/v1/sessions`, `/v1/password-resets`, `/v1/pin` | — |
 | verification | `/v1/verifications/otp`, `/liveness`, `/id` | — |
 | profiles | `/v1/me/profile`, `/v1/profiles/:id` | — |
-| discovery | `/v1/browse`, `/v1/favourites`, `/v1/filters` | — |
+| discovery | `/v1/browse` (`view=card\|grid`, default `card` unless client sent `grid`; card payload includes `sharedTraits` from existing Profile fields only), `/v1/browse/pass` (viewer-scoped exclusion; **not** a likes table), `/v1/favourites`, `/v1/filters` | — |
 | invites | `/v1/invites`, `/v1/invites/:id/accept\|decline`, `/v1/invites/quota` | `invite.received` |
-| chat | `/v1/conversations`, `/v1/conversations/:id/messages`, `/v1/conversations/:id/contact-share` | `message.*`, `conversation.typing`, `stage.changed` |
+| chat | `/v1/conversations`, `/v1/conversations/:id/messages`, `/v1/conversations/:id/contact-share`, `/v1/me/message-remaining` | `message.*`, `conversation.typing`, `stage.changed` |
 | media | `/v1/media` (upload init; never returns `original_key`), `/v1/media/get` (grant-checked gateway), `/v1/reveals` | `reveal.changed` |
-| mahram | `/v1/mahram/invites`, `/v1/mahram/links/:id/pause\|end\|flag\|remove` | `mahram.presence` |
+| mahram | `/v1/mahram/invites`, `/v1/mahram/links/:id/grants` (Sister grant thread / revoke one), `/v1/mahram/links/:id/remove` (revoke all), `/v1/mahram/links/:id/pause\|end\|flag`, `/v1/mahram/threads` (list/read **only** where an active grant exists; delivered messages only; **no** mahram send) | `mahram.presence` |
 | moderation | staff `/v1/staff/flags`, `/v1/staff/cases` | — |
 | trust | `/v1/reports`, `/v1/blocks`, `/v1/appeals` | — |
 | outcomes | `/v1/marriage-reports`, `/v1/stories`, public `/v1/public/marriage-count` | — |
-| billing | `/v1/packs`, `/v1/payments` (Sister reach-pack list/create only when `sister_reach_mode` is `same_quota_as_brothers`; `free_unlimited` Sister → empty list / `FORBIDDEN`), `/v1/webhooks/payments` | — |
+| billing | `/v1/packs`, `/v1/payments` (Sister checkout catalog exists in **both** `sister_reach_mode` values; in `free_unlimited` the pack is not required for Invite reach), `/v1/webhooks/payments` | — |
 | content | `/v1/academie`, `/v1/board` | — |
-| operator | `/v1/staff/config` (`GET`/`PATCH`; `PATCH` may set `sister_reach_mode`), `/v1/staff/cil-tickets`, `/v1/staff/metrics` | — |
+| operator | `/v1/staff/config` (`GET`/`PATCH`; `PATCH` may set `sister_reach_mode` and `daily_message_cap`; both audited), `/v1/staff/cil-tickets`, `/v1/staff/metrics` | — |
 | notifications | `/v1/devices`, `/v1/notification-prefs` | push/SMS side effects |
 
-Error envelope only (AD-7). Typical codes: `UNAUTHENTICATED`, `FORBIDDEN`, `CONTACT_SHARE_REQUIRED`, `REVEAL_DENIED`, `QUOTA_EXCEEDED`, `PAY_UNAVAILABLE`, `IDEMPOTENCY_REPLAY`.
+Error envelope only (AD-7). Typical codes: `UNAUTHENTICATED`, `FORBIDDEN`, `CONTACT_SHARE_REQUIRED`, `REVEAL_DENIED`, `QUOTA_EXCEEDED` (Invite cap), `MESSAGE_CAP_EXCEEDED` (Free-tier message cap), `PAY_UNAVAILABLE`, `IDEMPOTENCY_REPLAY`.
+
+People-list `GET /v1/browse?view=card|grid` (default `card` unless the client sent `view=grid`) returns one profile (`card`) or a page (`grid`). Card payload includes `sharedTraits` computed for the viewer from Profile fields that already exist; omit a trait if the field does not exist (no kids column, no bio parse). Pass writes a viewer-scoped discovery exclusion (not a likes table, not `favourite`). Invite and card quick-message are existing Invite / Message Flash commands and return Invite-quota / message-cap results (`QUOTA_EXCEEDED` first if Invite-capped, else `MESSAGE_CAP_EXCEEDED`). Invite + Flash is one command: cap refuse persists neither.
+
+`GET /v1/me/message-remaining` is the Member read model from **chat** only (billing must not expose a remaining-int): `{ capped, remaining, cap, resets_at }` when Free (`cap` is the live `daily_message_cap`; `remaining = max(0, cap − sent_count)`); `{ capped: false }` when Premium (`isEntitled` true). `unavailable` maps to the Free cap.
+
+Sister grant: `POST /v1/mahram/links/:id/grants` `{ conversation_id }` — writer must be the ward Sister (`accountId === link.sister_id`, `role=member`). Revoke one: `DELETE` that grant. Revoke all = remove mahram (sets `revoked_at` on every active grant in the same unit of work). Mahram list/read 404/`FORBIDDEN` when no active grant. Chat HTTP / Socket.IO when `roles ∋ mahram` use the same predicate. No mahram send route. `session.kind=mahram` must not hit browse / invite / chat write.
 
 `GET /v1/invites/quota` (and the `POST /v1/invites` success/error body) return the same quota predicate the sender is under:
 
@@ -195,7 +206,7 @@ Error envelope only (AD-7). Typical codes: `UNAUTHENTICATED`, `FORBIDDEN`, `CONT
 | Sister | `free_unlimited` | `{ capped: false, sister_reach_mode: "free_unlimited" }` — no remaining/cap; `POST` never returns `QUOTA_EXCEEDED` |
 | Sister | `same_quota_as_brothers` | `{ capped: true, remaining, cap, resets_at, sister_reach_mode: "same_quota_as_brothers" }` — same numbers as a Brother with the same entitlement. Over-cap `POST` → `QUOTA_EXCEEDED` with reset time. Missing pack or `isEntitled=unavailable` → Free cap |
 
-`PATCH /v1/staff/config` with `sister_reach_mode` is **operator**-only (`roles ∋ operator`; `moderator` / `system` / env / SQL must not write it). The write and the AD-18 event are one unit of work (`from`, `to`, `staffId`). The new value applies to the next Sister invite send; past invites are not deleted; already-sent invites that day do not count toward a newly applied cap. There is no brother-free field.
+`PATCH /v1/staff/config` with `sister_reach_mode` or `daily_message_cap` is **operator**-only (`roles ∋ operator`; `moderator` / `system` / env / SQL must not write them). The write and the AD-18 event are one unit of work (`from`, `to`, `staffId`, key). A `sister_reach_mode` change applies to the next Sister invite send; past invites are not deleted; already-sent invites that day do not count toward a newly applied cap. A `daily_message_cap` change applies to subsequent Free-tier sends; already-delivered messages stay. There is no brother-free field. `daily_message_cap` seed **10** is `[ASSUMPTION — admin-configurable, not a product lock]`.
 
 ## 8. Moderation pipeline (honest)
 
@@ -203,7 +214,7 @@ Farata homepage Claimed (marketing) “AI scans every message”; FAQ Claimed (m
 
 **Chat path (FR-062–FR-064, FR-066–FR-068, FR-144, NFR-003):**
 
-1. Client sends → message row `delivered`. Recipient (and Mahram, if attached) can read it immediately. Send does not wait on AI.
+1. Client sends. Chat consults the FR-146 cap **before** insert (AD-29). Over-cap → `MESSAGE_CAP_EXCEEDED`; nothing is stored and nothing is held. An allowed send → message row `delivered`. Recipient (and Mahram, if this thread has an active grant) can read it immediately. Send does not wait on AI.
 2. After persist, Chat (or Invites for Flash) calls `ModerationPort.enqueueScan`. The worker then runs `scanText` / `scanImage` / `transcribe` / `classifyAudio`. Only moderation INSERTs `moderation_job` and `flag_queue`.
 3. Text: background classifier + money-ask lexicon (FR/local lists). Phone / WhatsApp / links are a **local deterministic** Contact-share matcher in `chat` (and `invites` for Flash) — regex / handle patterns / URL parse — **not** `ModerationPort.scanText`. If Contact-share is off (Flash: it cannot be open), persist is refused with `CONTACT_SHARE_REQUIRED` and **both** Members see the education interstitial. Money-ask language is delivered and flagged, not held; in-Chat education (“never send money to a suitor”) is shown after delivery. `ModerationPort` 5xx never runs on this matcher.
 4. Image: visual classifier after delivery. Visible phone/QR may flag the person; it does not unsend the Photo. Blur remains AD-9 privacy, not a moderation delivery outcome.
@@ -220,11 +231,11 @@ Ingest → original + blur derivatives in a private bucket. `MediaPort.sign` min
 
 ## 10. Mahram
 
-Read-all of the **attached conversation(s)** only. Flag / escalate / pause / end. Cannot send as the Sister. Cannot browse or Invite. Sister can remove (D38); access gone within 60s; SMS to both sides. Audit trail on every action. Optional verified-wali badge via the same VerificationPort. A2 unchanged.
+After OTP + Sister confirm, the grant list is **empty**. She grants individual Brother threads. New chats are not auto-granted. Mahram reads only **granted, delivered** messages. He cannot compose or send as her. He cannot browse or Invite. Revoke-one drops that thread only. Sister remove/report (FR-077) revokes the entire permission and drops every thread grant within 60s; SMS to both sides; may call `ProfilePort.emergencyHide` (24h). Flag / pause / end are rejected on a thread that is not granted. All grant / revoke-one / remove events are audited (AD-18). Optional verified-wali badge via the same VerificationPort. A2 unchanged. Mahram must not INSERT `conversation`.
 
 ## 11. Payments
 
-`MobileMoneyPort`. MVP methods: Orange Money BF, Moov Africa BF, Wave/Coris where available; cards secondary via hosted checkout only (PAN never touches `apps/api`). Aggregators that **document** BF rails today: CinetPay (`OM_BF`, `MOOV_BF`, `WAVE_BF`), PayDunya (`orange-money-burkina`, `moov-burkina-faso`), FedaPay (BF Orange/Moov). No SKU bound. Time-boxed 1/3/6 months. **No stored recurring mandate. No silent auto-renew.** Webhook verify + idempotency. `isEntitled` returns `true | false | unavailable` and must not throw into safety paths. Payment outage must not affect Free/safety (NFR-004, AD-21). Brothers always see these packs. Sisters see and buy the same packs only when `sister_reach_mode` is `same_quota_as_brothers` (AD-27). In `free_unlimited`, Sister invite send does not call `BillingPort`.
+`MobileMoneyPort`. MVP methods: Orange Money BF, Moov Africa BF, Wave/Coris where available; cards secondary via hosted checkout only (PAN never touches `apps/api`). Aggregators that **document** BF rails today: CinetPay (`OM_BF`, `MOOV_BF`, `WAVE_BF`), PayDunya (`orange-money-burkina`, `moov-burkina-faso`), FedaPay (BF Orange/Moov). No SKU bound. Time-boxed 1/3/6 months. **No stored recurring mandate. No silent auto-renew.** Webhook verify + idempotency. `isEntitled` returns `true | false | unavailable` and must not throw into safety paths. Payment outage must not affect Free/safety (NFR-004, AD-21). Brothers always see these packs. Sisters can buy the same 1/3/6 packs in **both** `sister_reach_mode` values (AD-14, AD-29) because Free-tier messages are capped (FR-146). Premium = unlimited Invites **and** unlimited messages. In `free_unlimited` the pack is not required for Invite reach; Sister invite send still does not call `BillingPort` (AD-27). Do not accept a brother-free mode.
 
 ## 12. Low bandwidth and notifications
 
@@ -259,7 +270,7 @@ PRD §16 questions 1 and 3–11 stay **open**. Question 2 (fail-closed UX) is **
 
 ## 16. Traceability — every FR and NFR
 
-Ranges are used only when the same AD **and** module govern the slice. Coverage: **FR-001–FR-145 = 145/145**. **NFR-001–NFR-009 = 9/9**.
+Ranges are used only when the same AD **and** module govern the slice. Coverage: **FR-001–FR-146 = 146/146**. **NFR-001–NFR-009 = 9/9**.
 
 | IDs | Horizon | Module(s) | Governing AD(s) |
 | --- | --- | --- | --- |
@@ -273,14 +284,14 @@ Ranges are used only when the same AD **and** module govern the slice. Coverage:
 | FR-019 | MVP | identity, operator | AD-19, AD-18 |
 | FR-020 | MVP | identity | AD-8, AD-17 |
 | FR-021–FR-023 | MVP | profiles | AD-3 |
-| FR-024–FR-027 | MVP | discovery | AD-3, AD-16 |
+| FR-024–FR-027 | MVP | discovery | AD-3, AD-16, AD-28 |
 | FR-028 | MVP | chat | AD-15, AD-12 |
 | FR-029–FR-036 | NEXT | profiles, discovery | AD-3, AD-22 |
 | FR-037 | MVP | profiles, invites | AD-26, AD-22 |
 | FR-038–FR-043 | MVP | invites, mahram, chat | AD-23, AD-21, AD-10, AD-27 |
-| FR-044–FR-045 | MVP | invites, billing, operator | AD-27, AD-21, AD-23 |
-| FR-046–FR-049 | MVP (FR-049 NEXT) | invites, mahram, chat | AD-23, AD-21, AD-10 |
-| FR-050–FR-052 | MVP | chat, notifications, media | AD-15, AD-9, AD-16 |
+| FR-044–FR-045 | MVP | invites, billing, operator | AD-27, AD-21, AD-23, AD-29 |
+| FR-046–FR-049 | MVP (FR-049 NEXT) | invites, mahram, chat | AD-23, AD-21, AD-10, AD-29 |
+| FR-050–FR-052 | MVP | chat, notifications, media | AD-15, AD-9, AD-16, AD-29 |
 | FR-053 | MVP | notifications | AD-16 |
 | FR-054 | NEXT | chat | AD-22 |
 | FR-055 | NEXT | notifications | AD-16, AD-22 |
@@ -293,7 +304,7 @@ Ranges are used only when the same AD **and** module govern the slice. Coverage:
 | FR-094 | NEXT | trust, chat | AD-18, AD-22 |
 | FR-095–FR-101 | MVP | outcomes | AD-25, AD-18 |
 | FR-102–FR-103 | NEXT / LATER | outcomes, content | AD-22 |
-| FR-104–FR-110 | MVP | billing | AD-14, AD-21, AD-27 |
+| FR-104–FR-110 | MVP | billing | AD-14, AD-21, AD-27, AD-29 |
 | FR-111–FR-114 | NEXT | billing, discovery | AD-14, AD-21, AD-22 |
 | FR-115–FR-116 | MVP | content | AD-22 |
 | FR-117 | MVP | content | AD-24, AD-22 |
@@ -303,10 +314,11 @@ Ranges are used only when the same AD **and** module govern the slice. Coverage:
 | FR-132–FR-135 | MVP (FR-135 NEXT) | apps/web, apps/android | AD-4 |
 | FR-136 | MVP | apps/web, media | AD-16 |
 | FR-137–FR-138 | MVP | content, apps/web | AD-24, AD-16, AD-11 |
-| FR-139–FR-142 | MVP | operator | AD-10, AD-14, AD-20, AD-18 |
+| FR-139–FR-142 | MVP | operator | AD-10, AD-14, AD-20, AD-18, AD-29 |
 | FR-143 | MVP | operator, identity | AD-19, AD-18 |
 | FR-144 | MVP | trust, moderation | AD-10, AD-18 |
 | FR-145 | MVP | operator, invites, billing | AD-27, AD-18, AD-14, AD-21 |
+| FR-146 | MVP | chat, operator, billing | AD-29, AD-21, AD-23, AD-18 |
 | NFR-001 | — | identity, media, verification | AD-8, AD-9, AD-13, AD-17 |
 | NFR-002 | — | operator, media | AD-5, AD-19 |
 | NFR-003 | — | chat, moderation, trust | AD-10, AD-11 |
@@ -317,7 +329,7 @@ Ranges are used only when the same AD **and** module govern the slice. Coverage:
 | NFR-008 | — | identity, operator, chat | AD-19 |
 | NFR-009 | — | audit | AD-18 |
 
-**Coverage totals:** 145 / 145 FRs mapped (144 prior + FR-145). 9 / 9 NFRs mapped. 0 missing. Ranges share a governing AD+module; NEXT/LATER ids inside a range stay horizon-NEXT (FR-004, FR-029–FR-036, FR-049, FR-054–FR-055, FR-061, FR-081–FR-082, FR-094, FR-102–FR-103, FR-111–FR-114, FR-121–FR-131, FR-135) — dual-control unblur (D31) remains Deferred, not an MVP AD.
+**Coverage totals:** 146 / 146 FRs mapped (145 prior + FR-146). 9 / 9 NFRs mapped. 0 missing. Ranges share a governing AD+module; NEXT/LATER ids inside a range stay horizon-NEXT (FR-004, FR-029–FR-036, FR-049, FR-054–FR-055, FR-061, FR-081–FR-082, FR-094, FR-102–FR-103, FR-111–FR-114, FR-121–FR-131, FR-135) — dual-control unblur (D31) remains Deferred, not an MVP AD.
 
 ## 17. What this is not
 

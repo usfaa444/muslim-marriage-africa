@@ -9,7 +9,9 @@ against: prds/prd-muslim-marriage-africa-2026-09-27 (prd.md + addendum.md)
 
 **Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows and gaps below that require fail-closed pre-delivery, hold-on-timeout, or pre-delivery block/hold rates as current PRD behavior are historical. Current `prd.md` delivers Chat immediately, then scans; SM-4 counts flags and scan-deferred events. Other gaps in this reconcile are not closed by that decision.
 
-**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Sentences below that treat sister reach as always free, unlimited, or “never pay” are historical. Safety and Chat after accept stay free. D20 stays, reframed.
+**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Sentences below that treat sister reach as always free, unlimited, or “never pay” are historical. Safety stays free. D20 stays, reframed.
+
+**Superseded in part on 2026-10-02 (later lock).** §2.2 “grid-only implication” and the finding that FR-025 specifies a grid as the browse UI are historical: default is one focused card; grid is optional (FR-024 / FR-025). Sentences that say Chat after accept stays free of any cap, or that Flash is always wali-visible from minute one without a thread grant, are historical (FR-146, FR-048, FR-074). Premium Invite cap of 15 is deleted.
 
 # Reconcile: product brief → PRD
 
