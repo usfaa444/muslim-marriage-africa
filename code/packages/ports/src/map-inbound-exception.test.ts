@@ -101,6 +101,15 @@ describe('mapInboundException', () => {
       request_id: 'req-keep',
       retryable: false,
     })
+    const tooLong = mapInboundException({
+      code: 'A'.repeat(65),
+      message: 'No',
+      details: null,
+      request_id: 'req-long',
+      retryable: false,
+    })
+    expect(tooLong.error.code).toBe(ERROR_CODES.UNHANDLED)
+
     expect(JSON.parse(JSON.stringify(kept))).toEqual({
       error: {
         code: ERROR_CODES.FORBIDDEN,
