@@ -29,15 +29,15 @@
   --color-surface-container: #f4ede0;
   --color-secondary: #755b18;
   --color-primary: #032448;
-  --font-serif: var(--font-source-serif), Georgia, serif;
-  --font-sans: var(--font-source-sans), system-ui, sans-serif;
-  --font-display: var(--font-source-serif), Georgia, serif;
-  --font-title: var(--font-source-serif), Georgia, serif;
-  --font-heading: var(--font-source-serif), Georgia, serif;
-  --font-body: var(--font-source-sans), system-ui, sans-serif;
-  --font-body-strong: var(--font-source-sans), system-ui, sans-serif;
-  --font-meta: var(--font-source-sans), system-ui, sans-serif;
-  --font-caption: var(--font-source-sans), system-ui, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --font-sans: "Source Sans 3", system-ui, sans-serif;
+  --font-display: "Source Serif 4", Georgia, serif;
+  --font-title: "Source Serif 4", Georgia, serif;
+  --font-heading: "Source Serif 4", Georgia, serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+  --font-body-strong: "Source Sans 3", system-ui, sans-serif;
+  --font-meta: "Source Sans 3", system-ui, sans-serif;
+  --font-caption: "Source Sans 3", system-ui, sans-serif;
   --text-display: 28px;
   --text-display--line-height: 1.2;
   --text-display--letter-spacing: -0.01em;
@@ -52,6 +52,7 @@
   --text-meta: 13px;
   --text-meta--line-height: 1.4;
   --text-meta--letter-spacing: 0.01em;
+  --text-meta--font-weight: 500;
   --text-caption: 12px;
   --text-caption--line-height: 1.4;
   --radius-sm: 6px;
@@ -80,6 +81,27 @@
 
 .text-body-strong {
   font-weight: 600;
+}
+
+/* The Stitch CDN keeps the text-3xl / text-4xl / text-5xl line-height when leading-[1.2] is also set. */
+h1.text-3xl {
+  line-height: 2.25rem;
+}
+
+@media (min-width: 640px) {
+  h1.sm\:text-4xl {
+    line-height: 2.5rem;
+  }
+
+  p.sm\:text-xl {
+    line-height: 1.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  h1.md\:text-5xl {
+    line-height: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

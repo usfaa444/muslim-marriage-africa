@@ -47,10 +47,10 @@ Expected: HTTP 403, `content-type` JSON, body `error.code` `FORBIDDEN`, message 
 
 | Case | Input | Expected |
 | --- | --- | --- |
-| Landing | `GET /` at 360px | French. Product name AnKanu. Text `Mariages confirmés : 0`. Mihrab wash on the hero. No member bottom nav. No `dating`. No `rencontre romantique`. |
-| Landing desktop | `GET /` wide | Header links: La Vision, Académie, Board consultatif, Médiation & Tuteur, Tarifs transparents. Primary `Commencer l'inscription` is at least 48px tall. |
+| Landing | `GET /` at 360px | French. Product name AnKanu. Text `Mariages confirmés : 0`. Mihrab wash on the hero. No member bottom nav. No `dating`. No `rencontre romantique`. Hero `h1` is 3 lines, font-size 30px, line-height 36px. |
+| Landing desktop | `GET /` wide | Header links: La Vision, Académie, Board consultatif, Médiation & Tuteur, Tarifs transparents. Primary `Commencer l'inscription` is at least 48px tall. Hero line-height is 40px at 640px and 48px at 768px and 1280px. |
 | Cookie control | Click `Accepter les paramètres stricts` | The banner leaves the page. No consent record is stored. |
-| Splash | `GET /splash` | AnKanu, the Mihrab mark, `Continuer vers le sanctuaire` with `href="#prochaine-etape"`. First paint says `Vérification du sanctuaire sécurisé`. After about 1.4s the title becomes `Sanctuaire vérifié & session active`. |
+| Splash | `GET /splash` | AnKanu, the Mihrab mark, `Continuer vers le sanctuaire` with `href="#prochaine-etape"`. First paint says `Vérification du sanctuaire sécurisé`. After about 1.4s the title becomes `Sanctuaire vérifié & session active`. `#status-subtitle` is 13px with font-weight 500. |
 | Splash install | Click `Installer` | The line becomes `Raccourci PWA prêt sur votre terminal Android.` No browser install prompt. |
 | Staff cookie | `Cookie: ankanu_session=staff` on `/decouvrir`, `/invitations`, `/discussions`, `/profil` | 403 JSON `FORBIDDEN` and the staff message. No member screen. |
 | Mahram cookie | `ankanu_session=mahram` on `/decouvrir`, `/invitations`, `/discussions` | 403 JSON `FORBIDDEN` and `Une session mahram ne peut pas ouvrir cet espace.` |
@@ -58,7 +58,7 @@ Expected: HTTP 403, `content-type` JSON, body `error.code` `FORBIDDEN`, message 
 | Other sessions | No cookie, `web`, or `capacitor` on a member path | 401 JSON `UNAUTHENTICATED`. |
 | Tokens | `code/apps/web/app/globals.css` and `layout.tsx` | Hex values `#F4EDE0`, `#1F3A5F`, `#C4A35A`, `#6B3D2E`, `#C8BBA6`. Fonts Source Serif 4 and Source Sans 3. `html lang="fr"`. |
 | Components | Render `ButtonPrimary`, `EmptyState`, `ErrorBanner` | Primary includes `min-h-[48px]` and `bg-indigo`. Empty state is one sentence and one action. `PAY_UNAVAILABLE` copy is `Le paiement est indisponible.` Report, Blur, Mahram, Verification, Block, and browse stay enabled. |
-| Chrome | Render each shell | Member labels are Découvrir, Invitations, Discussions, Profil. Mahram omits the first two. Staff shows `Équipe seulement` and no member nav. Public pages do not render these shells. |
+| Chrome | Render each shell | Member labels are Découvrir, Invitations, Discussions, Profil. Mahram shows Discussions and Profil and omits Découvrir and Invitations. Staff shows `Équipe seulement` and no member nav. Public pages do not render these shells. |
 | Reduced motion | `prefers-reduced-motion: reduce` | Splash spinner animation is disabled. The status still reaches the verified line. |
 
 ## Test data
@@ -67,9 +67,9 @@ Cookie name `ankanu_session`. Values used: `staff`, `mahram`, `web`, `capacitor`
 
 ## My results
 
-`npx vitest run apps/web/src/member-route.test.ts apps/web/src/shell.test.tsx` — 11 passed. `npm run typecheck` passed. `npm run lint` passed. `npx next build` compiled `/`, `/splash`, and the four member routes.
+`npx vitest run apps/web/src/shell.test.tsx` — 5 passed after the QA fixes. `npm run typecheck` passed. `npm run lint` passed. `npx next build` compiled `/`, `/splash`, and the four member routes.
 
-Chromium at 360px and 1280px: landing showed AnKanu, `Mariages confirmés : 0`, and no banned lexicon. The cookie button removed the banner. Splash continue href was `#prochaine-etape`. The splash title moved from the checking line to `Sanctuaire vérifié & session active`. `GET /decouvrir` with `ankanu_session=staff` returned 403. No page errors in the console.
+Chromium against the Stitch files: the hero `h1` is 30px / 36px and 108px tall at 360px (3 lines), 40px line-height at 640px, and 48px line-height at 768px and 1280px. The primary button bottom matches the Stitch file at those four widths. `#status-subtitle` is 13px with font-weight 500. `MahramChrome` renders Discussions and Profil and omits Découvrir and Invitations.
 
 ## Three validation passes
 

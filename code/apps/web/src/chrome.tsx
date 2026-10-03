@@ -28,7 +28,12 @@ export function MemberChrome(): ReactNode {
 }
 
 export function MahramChrome(): ReactNode {
-  return <div aria-label="Mahram" data-shell="mahram" />
+  return (
+    <nav aria-label="Mahram" data-shell="mahram">
+      <a href="/discussions">Discussions</a>
+      <a href="/profil">Profil</a>
+    </nav>
+  )
 }
 
 export function StaffChrome(): ReactNode {
