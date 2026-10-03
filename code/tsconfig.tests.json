@@ -3,8 +3,20 @@
   "compilerOptions": {
     "noEmit": true,
     "rootDir": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["packages/*/src/**/*.test.ts", "apps/api/src/**/*.test.ts", "vitest.config.ts"]
+  "include": [
+    "packages/*/src/**/*.test.ts",
+    "apps/api/src/**/*.test.ts",
+    "apps/web/src/**/*.test.ts",
+    "apps/web/src/**/*.test.tsx",
+    "apps/web/src/**/*.ts",
+    "apps/web/src/**/*.tsx",
+    "vitest.config.ts"
+  ]
 }

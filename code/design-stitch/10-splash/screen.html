@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Splash</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#e9e2d5",
+            "on-tertiary": "#ffffff",
+            "surface-sand": "#F4EDE0",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-dim": "#e0d9cd",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "indigo-deep": "#15283F",
+            "indigo": "#1F3A5F",
+            "on-primary-container": "#8ba4cf",
+            "on-tertiary-container": "#88a5ce",
+            "surface-container-lowest": "#ffffff",
+            "inverse-surface": "#333028",
+            "on-surface-variant": "#43474e",
+            "mihrab": "#2C4A6E",
+            "ink-primary": "#1B2433",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-container": "#f4ede0",
+            "on-error-container": "#93000a",
+            "danger": "#8B3A3A",
+            "surface-bright": "#fff9ee",
+            "success": "#3D5C45",
+            "gold-soft": "#E8D5A3",
+            "on-background": "#1e1b14",
+            "staff-soft": "#EFE4DC",
+            "primary-fixed-dim": "#aec8f4",
+            "primary-fixed": "#d5e3ff",
+            "on-primary": "#ffffff",
+            "border-strong": "#6F624C",
+            "secondary-fixed-dim": "#e5c276",
+            "on-surface": "#1e1b14",
+            "on-tertiary-fixed": "#001c38",
+            "surface-indigo": "#15283F",
+            "gold": "#C4A35A",
+            "on-secondary-container": "#785d1b",
+            "staff": "#6B3D2E",
+            "on-secondary-fixed": "#251a00",
+            "focus-ring": "#1F3A5F",
+            "ink-secondary": "#5C5346",
+            "tertiary-fixed": "#d3e4ff",
+            "ink-on-indigo": "#F4EDE0",
+            "tertiary": "#002546",
+            "on-primary-fixed": "#001c3b",
+            "surface-container-high": "#eee7db",
+            "tertiary-container": "#1b3b5e",
+            "disabled": "#B5A894",
+            "primary": "#032448",
+            "danger-soft": "#F3E0DC",
+            "outline": "#74777f",
+            "outline-variant": "#c4c6cf",
+            "error-container": "#ffdad6",
+            "blur-wash": "#C8BBA6",
+            "background": "#fff9ee",
+            "on-primary-fixed-variant": "#2d476d",
+            "secondary": "#755b18",
+            "error": "#ba1a1a",
+            "inverse-primary": "#aec8f4",
+            "primary-container": "#1f3a5f",
+            "surface-container-highest": "#e9e2d5",
+            "surface-tint": "#465f86",
+            "on-error": "#ffffff",
+            "border-hairline": "#D9CDB8",
+            "on-secondary-fixed-variant": "#5b4300",
+            "success-soft": "#DCE6DE",
+            "surface": "#fff9ee",
+            "secondary-fixed": "#ffdf9c",
+            "surface-container-low": "#faf3e6",
+            "secondary-container": "#fdd88a",
+            "surface-raised": "#FFFBF4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem",
+            "screen-pad": "16px",
+            "7": "48px",
+            "1": "4px",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem",
+            "6": "32px",
+            "4": "16px",
+            "gutter": "16px",
+            "2": "8px",
+            "5": "24px",
+            "3": "12px"
+          },
+          "fontFamily": {
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    
+    /* Subtle geometric tactile frame backdrop mimicking Sahelian earthen courtyards */
+    .courtyard-texture {
+      background-color: #F4EDE0;
+      background-image: radial-gradient(#D9CDB8 0.75px, transparent 0.75px);
+      background-size: 24px 24px;
+    }
+
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 0.85; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.99); }
+    }
+    .animate-gentle-pulse {
+      animation: pulse-subtle 2.4s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-indigo-deep flex flex-col justify-between courtyard-texture min-h-screen">
+<!-- Top Minimalist Brand Header (Dignified Architectural Anchor) -->
+<header class="w-full pt-8 pb-4 px-screen-pad">
+<div class="max-w-[760px] mx-auto flex items-center justify-between border-b border-border-hairline pb-4">
+<div class="flex items-center space-x-2">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-gold"></span>
+<span class="font-meta text-meta text-ink-secondary tracking-widest uppercase text-caption">Sanctuaire de Ta'aruf &amp; Nikah</span>
+</div>
+<div class="flex items-center space-x-4 text-ink-secondary">
+<span class="font-meta text-meta flex items-center gap-1 text-ink-secondary">
+<span class="material-symbols-outlined text-[16px] text-gold" data-icon="verified_user">verified_user</span>
+          Ouagadougou • FR-BF
+        </span>
+</div>
+</div>
+</header>
+<!-- Main Folio Canvas (Centered Courtyard Composition: 680px narrow manuscript structure) -->
+<main class="w-full flex-grow flex items-center justify-center px-4 py-8">
+<div class="w-full max-w-[660px] bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-10 shadow-none relative">
+<!-- Top Decorative Mihrab Arch Badge -->
+<div class="flex justify-center -mt-16 sm:-mt-20 mb-6">
+<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-t-full rounded-b-xl bg-surface-indigo border-2 border-gold flex flex-col items-center justify-center shadow-sm relative">
+<!-- Subtle Inner Sacred Arch Line -->
+<div class="absolute inset-1 rounded-t-full rounded-b-lg border border-gold/30 pointer-events-none"></div>
+<span class="material-symbols-outlined text-gold text-3xl sm:text-4xl" data-icon="wb_shade">wb_shade</span>
+<span class="font-caption text-[9px] uppercase tracking-widest text-ink-on-indigo mt-0.5 font-medium">Mihrab</span>
+</div>
+</div>
+<!-- Brand Title & Solemn Epithet -->
+<div class="text-center space-y-2 mb-8">
+<h1 class="font-display text-display sm:text-[32px] text-indigo font-bold tracking-tight">
+          AnKanu
+        </h1>
+<p class="font-meta text-meta text-secondary tracking-wider uppercase font-semibold">
+          L'Alliance Noble &amp; Sincère
+        </p>
+<p class="font-body text-body text-ink-secondary max-w-md mx-auto pt-1 leading-relaxed">
+          Engagement matrimonial pieux sous la bienveillance des tuteurs (<span class="italic font-display text-indigo-deep">Wali</span>) et dans le respect inviolable des traditions burkinabè.
+        </p>
+</div>
+<!-- Verification & Cryptographic Vault Check State (FR-132, FR-133, AD-4) -->
+<div class="mb-6 p-4 rounded-lg bg-surface-sand border border-border-hairline transition-all duration-300" id="auth-status-container">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Animated Spinner or Shield -->
+<div class="relative flex items-center justify-center w-8 h-8 rounded-full bg-surface-raised border border-border-hairline" id="check-spinner">
+<span class="material-symbols-outlined text-indigo text-lg animate-spin" data-icon="progress_activity">progress_activity</span>
+</div>
+<div class="hidden flex items-center justify-center w-8 h-8 rounded-full bg-success-soft border border-success" id="check-success-icon">
+<span class="material-symbols-outlined text-success text-lg" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<p class="font-body-strong text-body-strong text-ink-primary" id="status-title">
+                Vérification du sanctuaire sécurisé
+              </p>
+<p class="font-meta text-meta text-ink-secondary" id="status-subtitle">
+                Attestation du jeton de session &amp; intégrité souveraine (≤ 2s)
+              </p>
+</div>
+</div>
+<!-- Micro-badge latency -->
+<div class="text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full font-caption text-caption bg-surface-variant text-ink-secondary border border-border-hairline">
+              256-bit TLS
+            </span>
+</div>
+</div>
+<!-- Skeleton line progress bar -->
+<div class="mt-3 w-full bg-surface-variant h-1 rounded-full overflow-hidden">
+<div class="bg-indigo h-full w-2/5 transition-all duration-1000 ease-out" id="vault-progress-bar"></div>
+</div>
+</div>
+<!-- Interactive Contextual Notice: Error Demonstration Preview (FR-132 / UNAUTHENTICATED handling) -->
+<div class="hidden mb-6 p-4 rounded-lg bg-danger-soft border border-danger/30 text-danger transition-all" id="error-alert-box">
+<div class="flex items-start justify-between space-x-3">
+<div class="flex items-start space-x-2">
+<span class="material-symbols-outlined text-danger text-xl mt-0.5" data-icon="gpp_bad">gpp_bad</span>
+<div>
+<p class="font-body-strong text-body-strong text-danger">Session non authentifiée ou tuteur requis</p>
+<p class="font-meta text-meta text-danger/90 mt-0.5">
+                Code : <code class="font-mono text-caption">UNAUTHENTICATED_SESSION</code>. Veuillez poursuivre vers l'étape de certification ou recommencer.
+              </p>
+</div>
+</div>
+<button class="font-caption text-caption uppercase tracking-wider text-danger underline hover:opacity-80 pt-1" onclick="resetVerification()" type="button">
+            Réessayer
+          </button>
+</div>
+</div>
+<!-- Continuing / Opening State Action Zone -->
+<div class="space-y-3 pt-2">
+<!-- Primary Action Button: "Continuer" -->
+<a class="w-full min-h-[48px] px-6 py-3 rounded-xl bg-indigo hover:bg-indigo-deep text-ink-on-indigo font-body-strong text-body-strong flex items-center justify-center space-x-2 border border-indigo-deep focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-colors duration-200" href="#prochaine-etape" id="btn-continuer">
+<span>Continuer vers le sanctuaire</span>
+<span class="material-symbols-outlined text-lg" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<!-- Secondary Consultation Link -->
+<div class="flex items-center justify-between pt-2 px-1">
+<a class="font-meta text-meta text-ink-secondary hover:text-indigo flex items-center space-x-1.5 transition-colors" href="#charte-pudeur">
+<span class="material-symbols-outlined text-[16px] text-gold" data-icon="menu_book">menu_book</span>
+<span>Consulter la Charte de Pudeur &amp; Wali</span>
+</a>
+<span class="font-caption text-caption text-ink-secondary">Édition 1446H</span>
+</div>
+</div>
+<!-- Guardian & Chaperone Institutional Strip (Mandatory Safety Framing) -->
+<div class="mt-8 pt-5 border-t border-border-hairline">
+<div class="p-3.5 rounded-lg bg-surface-sand/70 border border-border-hairline flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-staff-soft text-staff flex items-center justify-center shrink-0 border border-border-hairline">
+<span class="material-symbols-outlined text-base" data-icon="handshake">handshake</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary leading-relaxed">
+<strong class="text-ink-primary font-semibold">Médiation surveillée :</strong> Aucun échange n'a lieu hors de la visibilité des tuteurs légaux désignés et du comité éthique consultatif.
+          </p>
+</div>
+</div>
+<!-- PWA Installation Affordance (FR-134 Discrète invitation PWA Android / Web) -->
+<div class="mt-4 pt-3 flex items-center justify-between px-2 text-ink-secondary border-t border-border-hairline/60" id="pwa-install-banner">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-gold text-lg" data-icon="install_mobile">install_mobile</span>
+<span class="font-meta text-meta text-ink-secondary">Installer l'application AnKanu sur votre écran d'accueil</span>
+</div>
+<button class="px-3 py-1 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-meta text-caption transition-colors" onclick="triggerPwaPrompt()" type="button">
+          Installer
+        </button>
+</div>
+</div>
+</main>
+<!-- Editorial & Institutional Footer Anchor -->
+<footer class="w-full bg-surface-container border-t border-secondary/20 py-8 px-screen-pad">
+<div class="max-w-[760px] mx-auto flex flex-col gap-4 text-center sm:text-left">
+<div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-ink-secondary">
+<div class="flex items-center space-x-2">
+<span class="font-display text-heading text-indigo font-bold">AnKanu</span>
+<span class="text-border-strong">•</span>
+<span class="font-caption text-caption text-ink-secondary">ankanu.com</span>
+</div>
+<div class="flex flex-wrap justify-center sm:justify-end gap-x-4 gap-y-1 font-body text-caption text-ink-secondary">
+<a class="hover:text-primary transition-colors" href="#charte">Charte Éthique &amp; Wali</a>
+<a class="hover:text-primary transition-colors" href="#securite">Hébergement Souverain</a>
+<a class="hover:text-primary transition-colors" href="#deontologie">Conseil Consultatif Ouagadougou</a>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-center justify-between gap-2 pt-2 border-t border-border-hairline/60">
+<p class="font-body text-caption text-ink-secondary">
+          © 2025 AnKanu. Tous droits réservés. L'alliance noble et sincère, sous le regard des tuteurs et dans le respect des valeurs de foi.
+        </p>
+<div class="shrink-0 flex items-center gap-1.5 font-meta text-caption text-secondary">
+<span class="inline-block w-2 h-2 rounded-full bg-success"></span>
+<span>Serveurs Régionaux Chiffrés</span>
+</div>
+</div>
+</div>
+</footer>
+<!-- Light Vanilla Script for Splash Lifecycle, Demonstration Checks, and PWA handling -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const progressBar = document.getElementById("vault-progress-bar");
+      const statusTitle = document.getElementById("status-title");
+      const statusSubtitle = document.getElementById("status-subtitle");
+      const checkSpinner = document.getElementById("check-spinner");
+      const checkSuccessIcon = document.getElementById("check-success-icon");
+      const btnContinuer = document.getElementById("btn-continuer");
+
+      // Simulated Verification Protocol (FR-132, FR-133: Bearer token & session latency check <= 2s)
+      setTimeout(() => {
+        if (progressBar) progressBar.style.width = "75%";
+      }, 500);
+
+      setTimeout(() => {
+        if (progressBar) progressBar.style.width = "100%";
+        if (checkSpinner) checkSpinner.classList.add("hidden");
+        if (checkSuccessIcon) checkSuccessIcon.classList.remove("hidden");
+        if (statusTitle) statusTitle.textContent = "Sanctuaire vérifié & session active";
+        if (statusSubtitle) statusSubtitle.textContent = "Intégrité cryptographique validée sous juridiction locale";
+      }, 1400);
+    });
+
+    function triggerPwaPrompt() {
+      const pwaBanner = document.getElementById("pwa-install-banner");
+      if (pwaBanner) {
+        pwaBanner.innerHTML = `
+          <div class="flex items-center space-x-2 text-success py-1">
+            <span class="material-symbols-outlined text-lg" data-icon="task_alt">task_alt</span>
+            <span class="font-meta text-meta">Raccourci PWA prêt sur votre terminal Android.</span>
+          </div>
+        `;
+      }
+    }
+
+    function resetVerification() {
+      const errorBox = document.getElementById("error-alert-box");
+      const checkSpinner = document.getElementById("check-spinner");
+      const checkSuccessIcon = document.getElementById("check-success-icon");
+      const progressBar = document.getElementById("vault-progress-bar");
+      const statusTitle = document.getElementById("status-title");
+      
+      if (errorBox) errorBox.classList.add("hidden");
+      if (checkSuccessIcon) checkSuccessIcon.classList.add("hidden");
+      if (checkSpinner) checkSpinner.classList.remove("hidden");
+      if (progressBar) progressBar.style.width = "40%";
+      if (statusTitle) statusTitle.textContent = "Re-vérification du sanctuaire sécurisé...";
+
+      setTimeout(() => {
+        if (progressBar) progressBar.style.width = "100%";
+        if (checkSpinner) checkSpinner.classList.add("hidden");
+        if (checkSuccessIcon) checkSuccessIcon.classList.remove("hidden");
+        if (statusTitle) statusTitle.textContent = "Sanctuaire vérifié & session active";
+      }, 1000);
+    }
+  </script>
+</body></html>

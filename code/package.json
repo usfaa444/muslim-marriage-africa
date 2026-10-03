@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json && tsc -p tsconfig.tests.json",
+    "typecheck": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.tests.json",
     "build": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json",
     "lint": "oxlint packages apps"
   },
