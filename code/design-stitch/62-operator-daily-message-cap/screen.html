@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Operator daily message cap — Console AnKanu</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error-container": "#ffdad6",
+            "gold-soft": "#E8D5A3",
+            "disabled": "#B5A894",
+            "indigo": "#1F3A5F",
+            "focus-ring": "#1F3A5F",
+            "secondary": "#755b18",
+            "danger": "#8B3A3A",
+            "tertiary-container": "#1b3b5e",
+            "mihrab": "#2C4A6E",
+            "surface-container": "#f4ede0",
+            "on-error-container": "#93000a",
+            "tertiary": "#002546",
+            "indigo-deep": "#15283F",
+            "ink-primary": "#1B2433",
+            "surface-raised": "#FFFBF4",
+            "staff": "#6B3D2E",
+            "on-tertiary": "#ffffff",
+            "secondary-fixed": "#ffdf9c",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-surface-variant": "#43474e",
+            "on-error": "#ffffff",
+            "surface-sand": "#F4EDE0",
+            "outline-variant": "#c4c6cf",
+            "surface-indigo": "#15283F",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface": "#fff9ee",
+            "secondary-fixed-dim": "#e5c276",
+            "ink-secondary": "#5C5346",
+            "tertiary-fixed": "#d3e4ff",
+            "danger-soft": "#F3E0DC",
+            "surface-container-lowest": "#ffffff",
+            "staff-soft": "#EFE4DC",
+            "secondary-container": "#fdd88a",
+            "outline": "#74777f",
+            "on-secondary-fixed-variant": "#5b4300",
+            "inverse-primary": "#aec8f4",
+            "border-strong": "#6F624C",
+            "inverse-surface": "#333028",
+            "on-background": "#1e1b14",
+            "surface-dim": "#e0d9cd",
+            "primary-fixed-dim": "#aec8f4",
+            "surface-variant": "#e9e2d5",
+            "success-soft": "#DCE6DE",
+            "gold": "#C4A35A",
+            "success": "#3D5C45",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-container-highest": "#e9e2d5",
+            "on-primary-fixed-variant": "#2d476d",
+            "surface-container-low": "#faf3e6",
+            "primary-fixed": "#d5e3ff",
+            "primary": "#032448",
+            "on-secondary-container": "#785d1b",
+            "on-primary-fixed": "#001c3b",
+            "surface-tint": "#465f86",
+            "on-tertiary-fixed": "#001c38",
+            "on-secondary-fixed": "#251a00",
+            "border-hairline": "#D9CDB8",
+            "primary-container": "#1f3a5f",
+            "on-tertiary-container": "#88a5ce",
+            "surface-bright": "#fff9ee",
+            "blur-wash": "#C8BBA6",
+            "on-primary-container": "#8ba4cf",
+            "surface-container-high": "#eee7db",
+            "on-primary": "#ffffff",
+            "error": "#ba1a1a",
+            "background": "#fff9ee",
+            "on-surface": "#1e1b14",
+            "ink-on-indigo": "#F4EDE0"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "screen-pad": "16px",
+            "space-xs": "0.25rem",
+            "2": "8px",
+            "7": "48px",
+            "space-lg": "1.5rem",
+            "margin": "1rem",
+            "5": "24px",
+            "1": "4px",
+            "space-sm": "0.5rem",
+            "3": "12px",
+            "gutter": "16px",
+            "4": "16px",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "6": "32px"
+          },
+          "fontFamily": {
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary min-h-screen flex flex-col font-body selection:bg-gold-soft selection:text-indigo-deep">
+<!-- ================= TOP INSTITUTIONAL APP BAR ================= -->
+<header class="w-full bg-surface-raised border-b border-border-hairline">
+<div class="max-w-7xl mx-auto px-6 py-3 flex flex-wrap items-center justify-between gap-4">
+<!-- Brand & Context -->
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-indigo flex items-center justify-center border border-gold/40 text-gold shadow-none">
+<span class="material-symbols-outlined text-2xl">shield_lock</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-heading text-heading text-indigo-deep tracking-tight">AnKanu Administration</span>
+<span class="bg-staff text-surface-raised font-meta text-caption px-2 py-0.5 rounded-[6px] tracking-wide inline-flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-xs">lock</span>
+              Équipe seulement
+            </span>
+</div>
+<p class="font-caption text-caption text-ink-secondary">
+            Console Régulation &amp; Politiques Opérateurs • Juridiction CIL Burkina Faso
+          </p>
+</div>
+</div>
+<!-- Navigation & Secondary Info -->
+<div class="flex items-center gap-5">
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-body text-ink-secondary hover:text-primary transition-colors text-sm" href="#">Dossiers de Ta'aruf</a>
+<a class="font-body text-ink-secondary hover:text-primary transition-colors text-sm" href="#">Médiations &amp; Wali</a>
+<a class="font-body-strong text-primary border-b-2 border-primary pb-1 text-sm" href="#">Conformité CIL BF</a>
+<a class="font-body text-ink-secondary hover:text-primary transition-colors text-sm" href="#">Registres d'Audit</a>
+</nav>
+<div class="h-6 w-px bg-border-hairline hidden md:block"></div>
+<!-- Trailing actions & Inspector state -->
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<div class="font-meta text-caption text-primary font-semibold flex items-center justify-end gap-1">
+<span class="material-symbols-outlined text-sm text-gold">verified_user</span>
+              Session Inspecteur CIL
+            </div>
+<div class="font-caption text-caption text-ink-secondary">
+              GMT+0 (Ouagadougou) • Scaleway Chiffré
+            </div>
+</div>
+<div class="flex items-center gap-1 text-ink-secondary">
+<button class="p-1.5 rounded hover:bg-surface-sand transition-colors" title="Juridiction légale">
+<span class="material-symbols-outlined text-xl">gavel</span>
+</button>
+<button class="p-1.5 rounded hover:bg-surface-sand transition-colors relative" title="Notifications critiques">
+<span class="material-symbols-outlined text-xl">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-danger"></span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full bg-mihrab/15 border border-border-hairline flex items-center justify-center text-xs font-semibold text-primary">
+            IB
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- ================= SUB-HEADER BREADCRUMB & CONTEXT BANNER ================= -->
+<div class="bg-surface-sand border-b border-border-hairline px-6 py-2.5">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-caption font-caption">
+<div class="flex items-center gap-2 text-ink-secondary">
+<span class="material-symbols-outlined text-sm">tune</span>
+<a class="hover:underline text-ink-secondary" href="#">Operator pricing / policy</a>
+<span>/</span>
+<a class="hover:underline text-ink-secondary" href="#">sister_reach_mode (FR-145)</a>
+<span>/</span>
+<span class="text-indigo-deep font-semibold">daily_message_cap (FR-146)</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 text-ink-secondary">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+          Nœud de validation : <span class="font-meta font-medium text-ink-primary">bf-central-sec-01</span>
+</span>
+<span class="text-border-strong">•</span>
+<span class="text-ink-secondary">Référence révision : <code class="font-mono text-xs text-indigo">CAP-2025-04A</code></span>
+</div>
+</div>
+</div>
+<!-- ================= MAIN WORKSPACE ================= -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 w-full flex-1 flex flex-col gap-6">
+<!-- 1. SIMULATION TESTBENCH / STATE SELECTOR -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-surface-sand rounded-lg border border-border-hairline text-indigo-deep">
+<span class="material-symbols-outlined text-xl">science</span>
+</div>
+<div>
+<h2 class="font-heading text-heading text-primary">Banc d'essai de validation d'état — Console Opérateur</h2>
+<p class="font-caption text-caption text-ink-secondary">Simulez le cycle de modification et le comportement du registre d'audit pour le cap FR-146.</p>
+</div>
+</div>
+<!-- State Pills -->
+<div class="flex flex-wrap items-center gap-2">
+<button class="px-3 py-1.5 rounded-full text-caption font-meta border border-border-strong bg-indigo text-ink-on-indigo transition-all" id="btn-state-nominal" onclick="setScreenState('nominal')">
+          État 1 : Nominal (Actif en base)
+        </button>
+<button class="px-3 py-1.5 rounded-full text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-primary transition-all" id="btn-state-loading" onclick="setScreenState('loading')">
+          État 2 : Enregistrement en vol
+        </button>
+<button class="px-3 py-1.5 rounded-full text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-primary transition-all" id="btn-state-error" onclick="setScreenState('error')">
+          État 3 : Rejet 403 / Hors-bornes
+        </button>
+<button class="px-3 py-1.5 rounded-full text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-primary transition-all" id="btn-state-success" onclick="setScreenState('success')">
+          État 4 : Succès scellé CIL
+        </button>
+</div>
+</div>
+<!-- 2. NOTIFICATION / STATUS FLASH BARS (STATE-DRIVEN) -->
+<div class="p-4 bg-surface-raised border border-border-hairline rounded-xl flex items-center justify-between" id="state-banner-nominal">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-success">verified</span>
+<div>
+<p class="font-body-strong text-sm text-primary">Politique en vigueur stable</p>
+<p class="font-caption text-caption text-ink-secondary">Le cap actuel est validé par la délibération CIL BF #2024-89. La partition Ouagadougou opère sans anomalie.</p>
+</div>
+</div>
+<span class="font-caption text-caption text-ink-secondary bg-surface-sand px-2.5 py-1 rounded border border-border-hairline">Règle active : 3 msg/jour/profil</span>
+</div>
+<div class="hidden p-4 bg-surface-indigo text-ink-on-indigo rounded-xl items-center justify-between border border-gold/30 animate-pulse" id="state-banner-loading">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined animate-spin text-gold">sync</span>
+<div>
+<p class="font-body-strong text-sm text-gold-soft">Chiffrement et propagation du nouveau quota en cours...</p>
+<p class="font-caption text-caption text-surface-sand">Apposition du certificat de l'officier instructeur dans le nœud immuable AD-27.</p>
+</div>
+</div>
+<span class="font-meta text-caption text-gold uppercase tracking-wider">Synchronisation Scaleway BF</span>
+</div>
+<div class="hidden p-4 bg-danger-soft border border-danger/40 rounded-xl items-center justify-between text-ink-primary" id="state-banner-error">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-danger text-2xl">error_circle_rounded</span>
+<div>
+<p class="font-body-strong text-sm text-danger">Rejet de validation déontologique (Code 403-CIL)</p>
+<p class="font-caption text-caption text-ink-secondary">La valeur demandée dépasse la borne haute légale burkinabè (Plafond maximal admissible : 10 messages d'initiation / 24h).</p>
+</div>
+</div>
+<button class="font-meta text-caption text-danger hover:underline font-semibold" onclick="resetToCanon()">Réinitialiser aux bornes canoniques</button>
+</div>
+<div class="hidden p-4 bg-success-soft border border-success/40 rounded-xl items-center justify-between text-ink-primary" id="state-banner-success">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-success text-2xl">task_alt</span>
+<div>
+<p class="font-body-strong text-sm text-success">Quota homologué avec succès &amp; Scellé au Registre National CIL</p>
+<p class="font-caption text-caption text-ink-secondary">Signature cryptographique <code class="font-mono text-xs">SHA-256:7f4d...30c1</code> générée. Application non-rétroactive à minuit GMT+0.</p>
+</div>
+</div>
+<span class="bg-success text-surface-raised font-meta text-caption px-2 py-1 rounded">Consigné AD-14</span>
+</div>
+<!-- 3. MAIN WORKFLOW: 2/3 (CONTROLS) + 1/3 (AUDIT & TELEMETRY) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- ================= LEFT COLUMN : 8 COLS ================= -->
+<div class="lg:col-span-8 flex flex-col gap-6">
+<!-- Core Control Card -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8 relative">
+<!-- Header of section -->
+<div class="flex flex-wrap items-center justify-between gap-3 pb-5 border-b border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="bg-staff text-surface-raised font-meta text-caption px-2.5 py-0.5 rounded-[6px] tracking-wide font-semibold inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">shield</span>
+                Équipe seulement
+              </span>
+<span class="bg-surface-sand text-ink-secondary font-caption text-caption px-2 py-0.5 rounded border border-border-hairline">
+                Norme FR-146
+              </span>
+<span class="bg-surface-sand text-ink-secondary font-caption text-caption px-2 py-0.5 rounded border border-border-hairline">
+                Protocole AD-14
+              </span>
+</div>
+<div class="text-caption font-caption text-ink-secondary">
+              Emprise : <span class="font-semibold text-primary">Comptes Accès Libre (Hors Forfait)</span>
+</div>
+</div>
+<!-- Section Canonical Title & Philosophical Intent -->
+<div class="pt-6">
+<h1 class="font-display text-display text-indigo-deep tracking-tight">
+              Operator daily message cap
+            </h1>
+<p class="font-heading text-heading text-secondary mt-1">
+              Plafond de messages quotidiens d'initiation (daily_message_cap)
+            </p>
+<div class="mt-4 p-4 bg-surface-sand/70 rounded-lg border border-border-hairline/80">
+<p class="font-body text-ink-secondary text-sm leading-relaxed">
+<strong class="text-primary font-semibold">Fondement déontologique AnKanu :</strong>
+                Ajustement du volume strict d'échanges de courtoisie journaliers autorisés aux candidats avant l'accord bilatéral exprès du tuteur légal (<em class="italic">Wali</em>). Cette retenue technique prévient le bavardage intempestif et vain (<em class="italic">kalam fariq</em>), protégeant l'honneur des familles et contraignant l'interaction vers une démarche noble, réfléchie et concertée.
+              </p>
+</div>
+</div>
+<!-- Component: {components.operator-message-cap} -->
+<div class="mt-8 p-6 bg-surface-sand/40 border border-border-strong rounded-xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<label class="block font-meta text-meta text-ink-secondary uppercase tracking-wider font-semibold" for="cap-input">
+                  Nombre de messages autorisés par période de 24h
+                </label>
+<p class="font-caption text-caption text-ink-secondary mt-0.5">
+                  Intervalle réglementaire canonique : <span class="text-primary font-medium">1 à 10 messages</span> par jour et par compte demandeur.
+                </p>
+</div>
+<!-- Live Badge of Current Active DB Value -->
+<div class="text-right">
+<span class="font-caption text-caption text-ink-secondary block">Valeur active en base</span>
+<span class="inline-block bg-primary text-ink-on-indigo font-mono font-bold text-sm px-2.5 py-0.5 rounded">
+<span id="label-active-val">3</span> msg/jour
+                </span>
+</div>
+</div>
+<!-- Stepper Component -->
+<div class="mt-6 flex flex-col sm:flex-row items-center gap-4">
+<div class="flex items-center border border-border-strong rounded-lg bg-surface-raised overflow-hidden w-full sm:w-auto">
+<button class="h-12 w-14 flex items-center justify-center text-primary hover:bg-surface-sand active:bg-surface-dim transition-colors border-r border-border-hairline" onclick="decrementCap()" title="Diminuer le plafond" type="button">
+<span class="material-symbols-outlined text-xl">remove</span>
+</button>
+<div class="relative flex-1 sm:w-28 text-center">
+<input class="w-full h-12 text-center font-display text-2xl font-bold text-indigo-deep bg-transparent border-0 focus:ring-2 focus:ring-focus-ring focus:outline-none" id="cap-input" max="10" min="1" oninput="validateInputDirect(this.value)" type="number" value="3"/>
+</div>
+<button class="h-12 w-14 flex items-center justify-center text-primary hover:bg-surface-sand active:bg-surface-dim transition-colors border-l border-border-hairline" onclick="incrementCap()" title="Augmenter le plafond" type="button">
+<span class="material-symbols-outlined text-xl">add</span>
+</button>
+</div>
+<div class="text-caption font-caption text-ink-secondary flex-1">
+<span class="flex items-center gap-1.5 text-success font-medium" id="quota-feedback-text">
+<span class="material-symbols-outlined text-base">check_circle</span>
+                  Conforme à la doctrine de pondération des premiers échanges.
+                </span>
+<span class="text-ink-secondary block mt-0.5">
+                  Réinitialisation automatique : <span class="font-semibold text-primary">00:00 GMT+0</span> (Heure légale du Burkina Faso).
+                </span>
+</div>
+</div>
+<!-- Clarification regarding Paid Plans vs Free Daily Cap -->
+<div class="mt-6 pt-5 border-t border-border-hairline/80 flex items-start gap-3 bg-surface-raised p-4 rounded-lg border">
+<span class="material-symbols-outlined text-gold text-2xl mt-0.5">workspace_premium</span>
+<div>
+<h4 class="font-heading text-sm text-primary font-semibold">
+                  Distinction impérative avec les forfaits certifiés
+                </h4>
+<p class="font-body text-xs text-ink-secondary mt-1 leading-normal">
+<strong class="text-ink-primary font-semibold">Accès Forfait Engagement : Illimité</strong> (aucun plafonnement journalier / levée totale de la restriction numérique FR-146). Ce régulateur s'applique exclusivement aux candidatures en accès gratuit afin d'éviter le démarchage de masse non qualifié. Les membres titulaires d'un forfait d'engagement sont audités directement par le Wali sans barrière de quota unitaire.
+                </p>
+</div>
+</div>
+</div>
+<!-- Rule of Inviolable Non-Retroactivity (AD-14) -->
+<div class="mt-6 flex items-start gap-3 p-4 bg-staff-soft/60 rounded-xl border border-staff/20">
+<span class="material-symbols-outlined text-staff text-2xl">history_toggle_off</span>
+<div>
+<span class="font-meta text-xs text-staff uppercase font-bold tracking-wide block">
+                Règle de Non-Rétroactivité Inviolable (Protocole AD-14)
+              </span>
+<p class="font-caption text-caption text-ink-primary mt-1">
+                Tout message préalablement envoyé ou consigné sous un quota antérieur demeure intégralement délivré et inaltérable. La modification du cap est exclusivement prospective et prendra effet technique le lendemain dès <strong>00:00 UTC+0</strong>, sans pénaliser les échanges débutés dans la journée en cours.
+              </p>
+</div>
+</div>
+<!-- Action Footer of Card -->
+<div class="mt-8 pt-6 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto h-12 px-6 rounded-full border-1.5 border-border-strong text-ink-primary hover:bg-surface-sand font-body-strong text-sm transition-all flex items-center justify-center gap-2" onclick="resetToCanon()" type="button">
+<span class="material-symbols-outlined text-lg">restart_alt</span>
+              Rétablir la valeur canonique (3)
+            </button>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="w-full sm:w-auto h-12 px-8 rounded-full bg-indigo text-ink-on-indigo hover:bg-indigo-deep font-body-strong text-sm transition-all flex items-center justify-center gap-2 shadow-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo" id="btn-submit-action" onclick="applyCapSave()" type="button">
+<span class="material-symbols-outlined text-lg text-gold">verified</span>
+<span>Enregistrer &amp; Sceller au Registre CIL</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Secondary Information / Cross-Reference Banner (sister_reach_mode) -->
+<div class="bg-surface-sand border border-border-hairline rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">swap_calls</span>
+<div>
+<p class="font-body-strong text-sm text-indigo-deep">Continuité fonctionnelle : `sister_reach_mode` (FR-145)</p>
+<p class="font-caption text-caption text-ink-secondary">Le cap quotidien interagit directement avec le mode d'initiation réservé aux postulantes et la médiation préalable.</p>
+</div>
+</div>
+<a class="inline-flex items-center gap-1 font-meta text-xs text-primary hover:text-indigo-deep font-semibold underline underline-offset-4" href="#">
+            Accéder à FR-145
+            <span class="material-symbols-outlined text-xs">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- ================= RIGHT COLUMN : 4 COLS (AUDIT, STATUS, SOVEREIGNTY) ================= -->
+<div class="lg:col-span-4 flex flex-col gap-6">
+<!-- CARD 1: Statut Actif en Base -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5">
+<div class="flex items-center justify-between pb-3 border-b border-border-hairline">
+<span class="bg-staff text-surface-raised font-meta text-caption px-2 py-0.5 rounded-[6px] font-semibold text-xs inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">lock</span>
+              Équipe seulement
+            </span>
+<span class="text-caption font-caption text-ink-secondary">Nœud PostgreSQL Primaire</span>
+</div>
+<h3 class="font-title text-title text-indigo-deep mt-3">Statut Actif en Base</h3>
+<div class="mt-4 space-y-3 font-caption text-caption">
+<div class="flex justify-between py-2 border-b border-border-hairline/60">
+<span class="text-ink-secondary">Valeur en vigueur :</span>
+<span class="font-bold text-primary font-mono text-sm" id="sidebar-active-val">3 messages/jour</span>
+</div>
+<div class="flex justify-between py-2 border-b border-border-hairline/60">
+<span class="text-ink-secondary">Dernière homologation :</span>
+<span class="text-ink-primary font-medium">Aujourd'hui, 08:34 GMT</span>
+</div>
+<div class="flex justify-between py-2 border-b border-border-hairline/60">
+<span class="text-ink-secondary">Officier instructeur :</span>
+<span class="text-primary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-gold">badge</span>
+                Insp. Traoré O. (Mat. 981)
+              </span>
+</div>
+<div class="flex justify-between py-2 border-b border-border-hairline/60">
+<span class="text-ink-secondary">Périmètre d'application :</span>
+<span class="text-ink-primary font-medium text-right">Comptes standard sans engagement</span>
+</div>
+<div class="flex justify-between py-2">
+<span class="text-ink-secondary">État du cache Redis :</span>
+<span class="text-success font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+                Synchronisé (TTL 3600s)
+              </span>
+</div>
+</div>
+</div>
+<!-- CARD 2: Cadre Déontologique & Souveraineté Burkinabè -->
+<div class="bg-surface-indigo text-ink-on-indigo border border-border-strong rounded-xl p-5 relative overflow-hidden">
+<!-- Subtle watermark icon -->
+<span class="material-symbols-outlined text-surface-raised/5 text-8xl absolute -right-6 -bottom-6 select-none pointer-events-none">
+            balance
+          </span>
+<div class="flex items-center gap-2 text-gold">
+<span class="material-symbols-outlined">gavel</span>
+<span class="font-meta text-xs uppercase tracking-wider font-semibold">Législation &amp; Déontologie</span>
+</div>
+<h3 class="font-heading text-heading text-gold-soft mt-2">
+            Cadre de Souveraineté CIL BF
+          </h3>
+<p class="font-body text-xs text-surface-sand mt-2 leading-relaxed">
+            Conformément aux décrets de la Commission de l'Informatique et des Libertés (CIL) du Burkina Faso et à la charte morale AnKanu :
+          </p>
+<ul class="mt-4 space-y-2.5 font-caption text-caption text-surface-sand">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-gold text-sm mt-0.5">arrow_right</span>
+<span><strong class="text-gold-soft">FR-146 :</strong> Préservation de la pudeur (<em class="italic">Haya</em>) par l'interdiction de flux continus non contrôlés.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-gold text-sm mt-0.5">arrow_right</span>
+<span><strong class="text-gold-soft">AD-14 :</strong> Non-rétroactivité des restrictions contractuelles sur les échanges déjà initiés.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-gold text-sm mt-0.5">arrow_right</span>
+<span><strong class="text-gold-soft">FR-044 :</strong> Gratuité absolue et sacralisée de la protection des données personnelles et du canal Wali.</span>
+</li>
+</ul>
+<div class="mt-5 pt-4 border-t border-gold/20 flex items-center justify-between text-xs text-gold">
+<span>Certificat CIL : BF-2024-C78</span>
+<span class="underline cursor-pointer hover:text-white">Texte légal</span>
+</div>
+</div>
+<!-- CARD 3: Traces d'Audit Récentes (Registre CIL AD-27) -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5">
+<div class="flex items-center justify-between pb-3 border-b border-border-hairline">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-primary">history_edu</span>
+<span class="font-heading text-sm text-primary">Registre d'Audit Immuable</span>
+</div>
+<span class="font-mono text-caption text-ink-secondary text-xs">AD-27</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-2">
+            Historique scellé des cinq dernières révisions d'opérateurs pour le cap de messages.
+          </p>
+<div class="mt-4 space-y-3 font-caption text-caption">
+<!-- Event 1 -->
+<div class="p-2.5 rounded bg-surface-sand/50 border border-border-hairline/60">
+<div class="flex justify-between items-center text-xs">
+<span class="font-semibold text-primary">Modification du cap : 4 → 3</span>
+<span class="text-ink-secondary font-mono">14 Nov 2024</span>
+</div>
+<p class="text-ink-secondary text-xs mt-1">Par : Op. Sawadogo R. • Visa Wali National</p>
+<div class="mt-1 font-mono text-[10px] text-ink-secondary/70 truncate">
+                Hash: a9f8e43d12...c890 (Signé CIL)
+              </div>
+</div>
+<!-- Event 2 -->
+<div class="p-2.5 rounded bg-surface-sand/50 border border-border-hairline/60">
+<div class="flex justify-between items-center text-xs">
+<span class="font-semibold text-primary">Audit de conformité périodique</span>
+<span class="text-ink-secondary font-mono">01 Oct 2024</span>
+</div>
+<p class="text-ink-secondary text-xs mt-1">Par : Inspecteur CIL BF • Statut Validé</p>
+<div class="mt-1 font-mono text-[10px] text-ink-secondary/70 truncate">
+                Hash: 4b22c710aa...e551 (Non-altéré)
+              </div>
+</div>
+<!-- Event 3 -->
+<div class="p-2.5 rounded bg-surface-sand/50 border border-border-hairline/60">
+<div class="flex justify-between items-center text-xs">
+<span class="font-semibold text-primary">Initialisation canonique : 4</span>
+<span class="text-ink-secondary font-mono">15 Août 2024</span>
+</div>
+<p class="text-ink-secondary text-xs mt-1">Mise en production plateforme Ouagadougou</p>
+<div class="mt-1 font-mono text-[10px] text-ink-secondary/70 truncate">
+                Hash: 0021bde79f...31a4 (Genèse AD-14)
+              </div>
+</div>
+</div>
+<button class="w-full mt-4 py-2 border border-border-hairline rounded font-meta text-xs text-primary hover:bg-surface-sand transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-sm">download</span>
+            Exporter le journal complet CIL (PDF Scellé)
+          </button>
+</div>
+</div>
+</div>
+</main>
+<!-- ================= INSTITUTIONAL FOOTER ================= -->
+<footer class="mt-12 bg-surface-raised border-t border-border-hairline py-6 text-xs text-ink-secondary">
+<div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-6 h-6 rounded bg-primary flex items-center justify-center text-gold text-xs font-bold">
+          AK
+        </div>
+<p class="font-caption">
+          © 2025 AnKanu Technologies S.A. — Console de Régulation Interne sous supervision de la <strong>Commission de l'Informatique et des Libertés (CIL)</strong> de la République du Burkina Faso.
+        </p>
+</div>
+<div class="flex items-center gap-4 font-meta">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-success">lock</span>
+          Hébergement souverain Scaleway (Chiffrement AES-256)
+        </span>
+<span>•</span>
+<span>Protocole FR-146 / AD-14 v4.2</span>
+<span>•</span>
+<a class="hover:underline text-primary" href="#">Journal de Sécurité</a>
+</div>
+</div>
+</footer>
+<!-- ================= JAVASCRIPT FOR TESTBENCH & STEPPER ================= -->
+<script>
+    let activeCapValue = 3;
+    const minCap = 1;
+    const maxCap = 10;
+    const inputEl = document.getElementById('cap-input');
+    const labelActiveEl = document.getElementById('label-active-val');
+    const sidebarActiveEl = document.getElementById('sidebar-active-val');
+    const feedbackTextEl = document.getElementById('quota-feedback-text');
+
+    function updateStepperUI(val) {
+      inputEl.value = val;
+      if (val > maxCap || val < minCap) {
+        feedbackTextEl.innerHTML = `<span class="material-symbols-outlined text-base text-danger">cancel</span> <span class="text-danger font-medium">Valeur hors des limites autorisées CIL (1 à 10).</span>`;
+      } else if (val >= 1 && val <= 3) {
+        feedbackTextEl.innerHTML = `<span class="material-symbols-outlined text-base text-success">check_circle</span> <span class="text-success font-medium">Recommandé : Pudeur stricte et invitation diligente du Wali.</span>`;
+      } else if (val <= 6) {
+        feedbackTextEl.innerHTML = `<span class="material-symbols-outlined text-base text-primary">info</span> <span class="text-primary font-medium">Tolérance modérée : Adapté aux périodes de congés ou fêtes.</span>`;
+      } else {
+        feedbackTextEl.innerHTML = `<span class="material-symbols-outlined text-base text-secondary">warning</span> <span class="text-secondary font-medium">Plafond haut : Risque de dispersion d'attention identifié.</span>`;
+      }
+    }
+
+    function incrementCap() {
+      let current = parseInt(inputEl.value, 10) || minCap;
+      if (current < maxCap) {
+        current += 1;
+        updateStepperUI(current);
+      }
+    }
+
+    function decrementCap() {
+      let current = parseInt(inputEl.value, 10) || minCap;
+      if (current > minCap) {
+        current -= 1;
+        updateStepperUI(current);
+      }
+    }
+
+    function validateInputDirect(val) {
+      let num = parseInt(val, 10);
+      if (!isNaN(num)) {
+        updateStepperUI(num);
+      }
+    }
+
+    function resetToCanon() {
+      setScreenState('nominal');
+      updateStepperUI(3);
+      activeCapValue = 3;
+      labelActiveEl.innerText = "3";
+      sidebarActiveEl.innerText = "3 messages/jour";
+    }
+
+    function applyCapSave() {
+      const val = parseInt(inputEl.value, 10);
+      if (val < minCap || val > maxCap) {
+        setScreenState('error');
+        return;
+      }
+      setScreenState('loading');
+      setTimeout(() => {
+        activeCapValue = val;
+        labelActiveEl.innerText = val;
+        sidebarActiveEl.innerText = val + " messages/jour";
+        setScreenState('success');
+      }, 1200);
+    }
+
+    function setScreenState(state) {
+      const banners = {
+        nominal: document.getElementById('state-banner-nominal'),
+        loading: document.getElementById('state-banner-loading'),
+        error: document.getElementById('state-banner-error'),
+        success: document.getElementById('state-banner-success')
+      };
+
+      const buttons = {
+        nominal: document.getElementById('btn-state-nominal'),
+        loading: document.getElementById('btn-state-loading'),
+        error: document.getElementById('btn-state-error'),
+        success: document.getElementById('btn-state-success')
+      };
+
+      // Reset all banners
+      Object.keys(banners).forEach(key => {
+        banners[key].classList.add('hidden');
+        banners[key].classList.remove('flex');
+      });
+
+      // Show selected banner
+      banners[state].classList.remove('hidden');
+      banners[state].classList.add('flex');
+
+      // Update testbench buttons
+      Object.keys(buttons).forEach(key => {
+        buttons[key].className = "px-3 py-1.5 rounded-full text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-primary transition-all";
+      });
+      buttons[state].className = "px-3 py-1.5 rounded-full text-caption font-meta border border-border-strong bg-indigo text-ink-on-indigo transition-all font-semibold";
+
+      // If error state requested directly, set input to out of bounds
+      if (state === 'error') {
+        inputEl.value = 15;
+        updateStepperUI(15);
+      }
+    }
+
+    // Initial boot
+    updateStepperUI(3);
+  </script>
+</body></html>

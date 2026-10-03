@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Profil en revue (FR-012)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom theme config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-container": "#8ba4cf",
+            "surface-bright": "#fff9ee",
+            "on-error-container": "#93000a",
+            "surface-variant": "#e9e2d5",
+            "on-tertiary-fixed": "#001c38",
+            "primary-fixed": "#d5e3ff",
+            "surface-tint": "#465f86",
+            "ink-secondary": "#5C5346",
+            "on-tertiary-container": "#88a5ce",
+            "background": "#fff9ee",
+            "surface-indigo": "#15283F",
+            "on-secondary-container": "#785d1b",
+            "indigo": "#1F3A5F",
+            "blur-wash": "#C8BBA6",
+            "tertiary": "#002546",
+            "primary-container": "#1f3a5f",
+            "gold": "#C4A35A",
+            "outline-variant": "#c4c6cf",
+            "error-container": "#ffdad6",
+            "border-hairline": "#D9CDB8",
+            "on-error": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed": "#001c3b",
+            "focus-ring": "#1F3A5F",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-container-high": "#eee7db",
+            "tertiary-fixed": "#d3e4ff",
+            "indigo-deep": "#15283F",
+            "border-strong": "#6F624C",
+            "surface-container-lowest": "#ffffff",
+            "surface-raised": "#FFFBF4",
+            "staff": "#6B3D2E",
+            "ink-primary": "#1B2433",
+            "disabled": "#B5A894",
+            "on-surface": "#1e1b14",
+            "surface": "#fff9ee",
+            "primary-fixed-dim": "#aec8f4",
+            "success-soft": "#DCE6DE",
+            "on-background": "#1e1b14",
+            "danger-soft": "#F3E0DC",
+            "secondary-fixed-dim": "#e5c276",
+            "mihrab": "#2C4A6E",
+            "error": "#ba1a1a",
+            "surface-dim": "#e0d9cd",
+            "primary": "#032448",
+            "staff-soft": "#EFE4DC",
+            "ink-on-indigo": "#F4EDE0",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "surface-container-highest": "#e9e2d5",
+            "success": "#3D5C45",
+            "secondary-container": "#fdd88a",
+            "secondary-fixed": "#ffdf9c",
+            "surface-container-low": "#faf3e6",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed-variant": "#5b4300",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-sand": "#F4EDE0",
+            "on-secondary-fixed": "#251a00",
+            "surface-container": "#f4ede0",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-primary": "#ffffff",
+            "danger": "#8B3A3A",
+            "inverse-surface": "#333028",
+            "tertiary-container": "#1b3b5e",
+            "inverse-primary": "#aec8f4",
+            "secondary": "#755b18",
+            "on-secondary": "#ffffff",
+            "outline": "#74777f",
+            "gold-soft": "#E8D5A3"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "1": "4px",
+            "2": "8px",
+            "screen-pad": "16px",
+            "space-sm": "0.5rem",
+            "gutter": "16px",
+            "space-xl": "2rem",
+            "space-xs": "0.25rem",
+            "5": "24px",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "7": "48px",
+            "4": "16px",
+            "6": "32px",
+            "3": "12px",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-surface text-ink-primary flex flex-col font-body selection:bg-gold-soft selection:text-ink-primary antialiased">
+<!-- TOP APP BAR (from Shared Components JSON) -->
+<header class="bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab sticky top-0 z-40">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<a class="flex flex-col" href="#home">
+<span class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold">AnKanu</span>
+<span class="font-caption text-caption text-ink-secondary tracking-normal">Ta'aruf Honorable &amp; Mariage Noble</span>
+</a>
+</div>
+<!-- Center navigation links from JSON & Contextual Shell mapping -->
+<nav class="hidden md:flex items-center space-x-6">
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#charte">Charte d'Honneur</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#assistance">Assistance</a>
+</nav>
+<!-- Trailing Action -->
+<div class="flex items-center space-x-4">
+<a class="font-meta text-meta text-primary dark:text-gold hover:underline flex items-center gap-1" href="#connexion">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Retour à la Connexion</span>
+</a>
+</div>
+</div>
+<!-- Secondary Member Navigation Sub-bar (Solemn ta'aruf flow with 'Profil' active) -->
+<div class="bg-surface-sand border-t border-border-hairline">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-2 flex items-center justify-between">
+<div class="flex items-center space-x-6 overflow-x-auto text-meta">
+<a class="text-ink-secondary hover:text-ink-primary whitespace-nowrap py-1" href="#decouvrir">Découvrir</a>
+<a class="text-ink-secondary hover:text-ink-primary whitespace-nowrap py-1" href="#invitations">Invitations</a>
+<a class="text-ink-secondary hover:text-ink-primary whitespace-nowrap py-1" href="#discussions">Discussions Protégées</a>
+<a class="text-primary font-body-strong border-b-2 border-primary pb-0.5 whitespace-nowrap flex items-center gap-1.5" href="#profil">
+<span class="material-symbols-outlined text-[16px]">account_circle</span>
+<span>Profil Personnel</span>
+</a>
+</div>
+<div class="hidden sm:flex items-center gap-2 text-ink-secondary font-meta text-[12px]">
+<span class="w-2 h-2 rounded-full bg-gold"></span>
+<span>Protocole d'homologation FR-012</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN WRAPPER -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col gap-6">
+<!-- GUARDIAN & CHAPERONE BANNER (Editorial Dignity & Institutional Restraint) -->
+<section class="bg-surface-indigo text-ink-on-indigo rounded-xl p-5 border border-mihrab shadow-none flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-mihrab flex items-center justify-center text-gold shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[22px]">verified_user</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-title text-[18px] text-ink-on-indigo font-semibold">Comité d'Homologation &amp; Modération Matrimoniale</h1>
+<span class="px-2 py-0.5 rounded text-[11px] font-meta bg-primary tracking-wide text-gold border border-gold/30">FR-012 / AD-10</span>
+</div>
+<p class="font-body text-[14px] text-ink-on-indigo/80 mt-1 max-w-2xl">
+            Toute modification iconographique et textuelle est soumise à l'évaluation préalable d'un officier de convenance burkinabè pour garantir la décence, l'intégrité de l'intention et le respect du tuteur légal (<em>wali</em>).
+          </p>
+</div>
+</div>
+<div class="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto shrink-0 border-t sm:border-t-0 border-white/10 pt-3 sm:pt-0">
+<span class="font-meta text-[11px] text-gold-soft uppercase tracking-wider">Délai d'instruction</span>
+<span class="font-heading text-heading text-white">24h à 48h ouvrées</span>
+</div>
+</section>
+<!-- INTERACTIVE STATE SIMULATOR / INSPECTOR TABS -->
+<!-- Architectural tool for assessing state transitions without breaking aesthetic sobriety -->
+<div class="bg-surface-sand rounded-xl p-2.5 border border-border-hairline flex flex-col gap-2">
+<div class="flex items-center justify-between px-2 pt-1 pb-1">
+<span class="font-meta text-[12px] uppercase text-ink-secondary tracking-wider flex items-center gap-1.5 font-semibold">
+<span class="material-symbols-outlined text-[16px] text-primary">tune</span>
+          Simulateur d'états d'homologation (Vérification UX)
+        </span>
+<span class="font-caption text-caption text-ink-secondary">Bascule de démonstration interactive</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-1.5">
+<button class="state-tab-btn py-2 px-3 rounded-lg text-left text-meta transition-all bg-surface-raised border border-border-strong text-ink-primary shadow-sm font-body-strong flex items-center gap-2" id="tab-pending" onclick="switchState('pending')">
+<span class="w-2.5 h-2.5 rounded-full bg-gold shrink-0"></span>
+<span class="truncate">1. En revue</span>
+</button>
+<button class="state-tab-btn py-2 px-3 rounded-lg text-left text-meta transition-all bg-surface-sand hover:bg-surface-raised border border-border-hairline text-ink-secondary flex items-center gap-2" id="tab-approved" onclick="switchState('approved')">
+<span class="w-2.5 h-2.5 rounded-full bg-success shrink-0"></span>
+<span class="truncate">2. Homologation accordée</span>
+</button>
+<button class="state-tab-btn py-2 px-3 rounded-lg text-left text-meta transition-all bg-surface-sand hover:bg-surface-raised border border-border-hairline text-ink-secondary flex items-center gap-2" id="tab-rejected" onclick="switchState('rejected')">
+<span class="w-2.5 h-2.5 rounded-full bg-danger shrink-0"></span>
+<span class="truncate">3. Refus motivé (FR-070)</span>
+</button>
+<button class="state-tab-btn py-2 px-3 rounded-lg text-left text-meta transition-all bg-surface-sand hover:bg-surface-raised border border-border-hairline text-ink-secondary flex items-center gap-2" id="tab-clean" onclick="switchState('clean')">
+<span class="w-2.5 h-2.5 rounded-full bg-disabled shrink-0"></span>
+<span class="truncate">4. Sans révision active</span>
+</button>
+</div>
+</div>
+<!-- STATE 1: EN REVUE (DEFAULT ACTIVE) -->
+<div class="state-container flex flex-col gap-6" id="state-pending-view">
+<!-- POLICY CALLOUT NOTIFICATION -->
+<div class="bg-surface-raised border-l-4 border-gold border-t border-r border-b border-border-hairline rounded-r-xl p-4 flex items-start gap-3.5">
+<span class="material-symbols-outlined text-gold text-[24px] shrink-0 mt-0.5">hourglass_top</span>
+<div class="flex-1">
+<div class="flex flex-wrap items-center gap-2 mb-1">
+<span class="font-heading text-[16px] text-ink-primary">Dossier en cours d'instruction morale</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-meta bg-gold-soft/50 text-secondary border border-gold/40">
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+              Photo en revue — pas encore publique
+            </span>
+</div>
+<p class="font-body text-[14px] text-ink-secondary leading-relaxed">
+            Votre nouveau cliché et vos ajouts biographiques sont examinés avec bienveillance par le comité d'admission humaine sous 24h à 48h ouvrées (FR-012). Votre ancien profil demeure actif auprès de vos correspondances établies jusqu'à homologation complète.
+          </p>
+<div class="mt-2 text-[12px] font-meta text-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">policy</span>
+<span><strong>Règle canonique AnKanu :</strong> Un profil non approuvé n'apparaît dans la liste de convenance d'aucun membre.</span>
+</div>
+</div>
+</div>
+<!-- MAIN EDITORIAL FOLIO COMPARISON CARD -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl overflow-hidden shadow-none">
+<!-- Folio Card Header -->
+<div class="border-b border-border-hairline px-6 py-4 bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<span class="font-caption text-caption text-ink-secondary uppercase tracking-wider">Folio Matrimonial N° BF-2025-0841</span>
+<h2 class="font-title text-title text-primary">Comparatif des pièces biographiques</h2>
+</div>
+<div class="text-meta text-[13px] text-ink-secondary">
+            Soumis le 24 octobre 2025 à 16:42 (Heure de Ouagadougou)
+          </div>
+</div>
+<!-- Comparative Columns -->
+<div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border-hairline">
+<!-- Column A: Version Actuellement en Vigueur -->
+<div class="p-6 flex flex-col justify-between bg-surface-raised">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-meta text-meta uppercase tracking-wider text-ink-secondary">Version en vigueur</span>
+<span class="px-2.5 py-0.5 rounded-full text-caption font-meta bg-success-soft text-success border border-success/30 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] fill-icon">check_circle</span>
+                  Visible par vos correspondants
+                </span>
+</div>
+<!-- Portrait Area: Approved Active -->
+<div class="flex items-center gap-4 mb-6 pb-6 border-b border-border-hairline">
+<div class="relative w-24 h-28 rounded-lg overflow-hidden border border-border-strong shrink-0 bg-surface-sand">
+<!-- Legitimate, modest portrait representation with strict data-alt compliance -->
+<img class="w-full h-full object-cover grayscale-[15%]" data-alt="A dignified medium close-up portrait of a West African Burkinabè man in his early thirties dressed in an elegant traditional woven cotton boubou in warm sand and cream tones. Soft natural morning sunlight illuminates his face with calm and respectful composure. The background is a clean, neutral textured earth wall typical of Sahelian architecture. Deep indigo accents and warm terracotta tones create a peaceful and solemn atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuACv8WDt2P5J-2wgTMEkZNyc_gWN68XkLyCfE71e2a7MmFjUEfxKPIWdBnysqBWZSRpuGdt1Pj-fnu57Wbt05R09-JAc2KyBGLzh4Zzqgo8DFXF4NPnV8mT4KQSjKLszM1ynCaLUpgfMpRSMfdo7l7cv0oVeZgM5KBMtVzKhxSafoITMh2Y5E331tsUXgcFtJ8P84VU_R0loMfRGBtmvs-psp_gJZAZv-x7VX7PxZrd8HzUkiPSLLJdYJVWEr8TLy1Mcpga7Om-jNQR"/>
+<div class="absolute bottom-1 right-1 bg-surface-indigo/90 text-gold text-[10px] px-1 rounded font-meta">
+                    Certifié
+                  </div>
+</div>
+<div>
+<h3 class="font-heading text-heading text-ink-primary">Ibrahim O. Traoré</h3>
+<p class="font-meta text-meta text-ink-secondary">31 ans · Ouagadougou (Koulouba)</p>
+<p class="font-caption text-caption text-ink-secondary mt-1">Homologué le 12 Juin 2024</p>
+</div>
+</div>
+<!-- Attributes in Live Version -->
+<div class="space-y-4">
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1">Intention matrimoniale déclarée</label>
+<p class="font-body text-[15px] text-ink-primary bg-surface-sand/40 p-3 rounded-lg border border-border-hairline">
+                    « Recherche d'un mariage honorable conforme aux traditions mossi et aux préceptes islamiques, dans les 12 prochains mois. »
+                  </p>
+</div>
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1">Activité &amp; Dignité professionnelle</label>
+<p class="font-body text-[15px] text-ink-primary bg-surface-sand/40 p-3 rounded-lg border border-border-hairline">
+                    Ingénieur agronome territorial — Développement des filières céréalières.
+                  </p>
+</div>
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1">Médiation familiale (Wali référencé)</label>
+<div class="flex items-center gap-2 p-3 bg-surface-sand/40 rounded-lg border border-border-hairline">
+<span class="material-symbols-outlined text-[18px] text-ink-secondary">supervisor_account</span>
+<span class="font-body text-[14px] text-ink-primary">El Hadj Moussa Traoré (Oncle paternel &amp; tuteur)</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-border-hairline text-caption text-ink-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>Ce volet demeure immuable jusqu'au terme de l'évaluation légale.</span>
+</div>
+</div>
+<!-- Column B: Modifications Soumises en Revue -->
+<div class="p-6 flex flex-col justify-between bg-surface-container-low/40">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="font-meta text-meta uppercase tracking-wider text-primary font-semibold">Modifications soumises</span>
+<span class="px-2.5 py-0.5 rounded-full text-caption font-meta bg-gold-soft/70 text-secondary border border-gold/50 flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">lock_clock</span>
+                  Confidentialité stricte
+                </span>
+</div>
+<!-- Photographic Restraint: Flat Blur-Wash with Covered-Face Pictogram (STRICT SPEC) -->
+<div class="flex items-center gap-4 mb-6 pb-6 border-b border-border-hairline">
+<div class="relative w-24 h-28 rounded-lg overflow-hidden border-2 border-dashed border-border-strong shrink-0 bg-blur-wash flex flex-col items-center justify-center text-ink-primary shadow-none">
+<!-- Mandatory covered-face / veil pictogram (SVG) -->
+<svg class="w-10 h-10 text-ink-secondary mb-1" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24">
+<circle cx="12" cy="7" r="4"></circle>
+<path d="M5.5 21v-2a6.5 6.5 0 0 1 13 0v2"></path>
+<line stroke-dasharray="2 2" x1="4" x2="20" y1="12" y2="12"></line>
+<path d="M8 12c0 2 2 3 4 3s4-1 4-3"></path>
+</svg>
+<span class="font-caption text-[10px] text-ink-primary tracking-tight font-semibold bg-surface-raised/80 px-1 rounded">FR-012</span>
+</div>
+<div>
+<span class="inline-block px-2 py-0.5 rounded bg-surface-indigo text-ink-on-indigo text-[11px] font-meta mb-1">
+                    Photo en revue — pas encore publique
+                  </span>
+<h3 class="font-heading text-heading text-ink-primary">Nouvel autoportrait sous voile</h3>
+<p class="font-meta text-meta text-ink-secondary">Format 4:5 · Cliché sans artifice ni filtre</p>
+<p class="font-caption text-caption text-secondary mt-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+                    Strictement inaccessible aux tiers
+                  </p>
+</div>
+</div>
+<!-- Modified Field Details -->
+<div class="space-y-4">
+<div class="relative">
+<div class="flex items-center justify-between mb-1">
+<label class="font-meta text-meta text-ink-secondary">Intention matrimoniale révisée</label>
+<span class="text-[11px] font-meta text-gold bg-surface-indigo px-1.5 py-0.2 rounded">Révisé</span>
+</div>
+<p class="font-body text-[15px] text-ink-primary bg-surface-raised p-3 rounded-lg border border-gold">
+                    « Recherche d'un mariage honorable conforme aux traditions burkinabè. Disponibilité pour rencontres encadrées en présence du wali à Ouagadougou ou Bobo-Dioulasso dès le premier trimestre. »
+                  </p>
+</div>
+<div class="relative">
+<div class="flex items-center justify-between mb-1">
+<label class="font-meta text-meta text-ink-secondary">Activité &amp; Dignité professionnelle</label>
+<span class="text-[11px] font-meta text-gold bg-surface-indigo px-1.5 py-0.2 rounded">Révisé</span>
+</div>
+<p class="font-body text-[15px] text-ink-primary bg-surface-raised p-3 rounded-lg border border-gold">
+                    Chef de projet développement rural &amp; irrigation villageoise (ONG Sahel Vert).
+                  </p>
+</div>
+<div>
+<div class="flex items-center justify-between mb-1">
+<label class="font-meta text-meta text-ink-secondary">Médiation familiale (Wali)</label>
+<span class="text-[11px] font-meta text-ink-secondary">Inchangé</span>
+</div>
+<div class="flex items-center gap-2 p-3 bg-surface-sand/20 rounded-lg border border-border-hairline text-ink-secondary">
+<span class="material-symbols-outlined text-[18px]">check</span>
+<span class="font-body text-[14px]">Attestation de consentement déposée et valide</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Reviewer Queue Status -->
+<div class="mt-6 pt-4 border-t border-border-hairline bg-surface-sand/50 -mx-6 -mb-6 p-4 rounded-b-xl flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">manage_search</span>
+<span class="font-meta text-[13px] text-ink-secondary">
+                  Rang dans la file : <strong class="text-ink-primary">N° 14</strong> (Estimation : demain avant 12h)
+                </span>
+</div>
+<span class="font-caption text-[11px] text-ink-secondary bg-surface-raised px-2 py-0.5 rounded border border-border-hairline">Officier d'astreinte : K. Sanon</span>
+</div>
+</div>
+</div>
+</section>
+<!-- STATUS TRACKER: STEPPER (FR-012 Workflow) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6">
+<h3 class="font-heading text-heading text-primary mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">timeline</span>
+          Progression de l'instruction canonique
+        </h3>
+<div class="grid grid-cols-1 sm:grid-cols-4 gap-4 relative">
+<!-- Step 1 (Completed) -->
+<div class="flex flex-col gap-1.5 p-3 rounded-lg bg-surface-sand/40 border border-border-hairline">
+<div class="flex items-center justify-between">
+<span class="w-6 h-6 rounded-full bg-success text-white flex items-center justify-center text-[12px] font-bold">✓</span>
+<span class="font-caption text-caption text-success font-meta">Accompli</span>
+</div>
+<span class="font-body-strong text-[14px] text-ink-primary mt-1">1. Dépôt des pièces</span>
+<span class="font-caption text-[12px] text-ink-secondary">Fichiers horodatés et cryptés sur serveur national</span>
+</div>
+<!-- Step 2 (In Progress) -->
+<div class="flex flex-col gap-1.5 p-3 rounded-lg bg-surface-raised border-2 border-gold shadow-sm">
+<div class="flex items-center justify-between">
+<span class="w-6 h-6 rounded-full bg-gold text-surface-indigo flex items-center justify-center text-[12px] font-bold">2</span>
+<span class="font-caption text-caption text-secondary font-meta font-semibold">En cours</span>
+</div>
+<span class="font-body-strong text-[14px] text-primary mt-1">2. Examen de pudeur &amp; conformité</span>
+<span class="font-caption text-[12px] text-ink-secondary">Vérification de cadrage individuel et absence d'artifice (FR-070)</span>
+</div>
+<!-- Step 3 (Pending) -->
+<div class="flex flex-col gap-1.5 p-3 rounded-lg bg-surface-sand/20 border border-border-hairline opacity-75">
+<div class="flex items-center justify-between">
+<span class="w-6 h-6 rounded-full bg-border-hairline text-ink-secondary flex items-center justify-center text-[12px] font-bold">3</span>
+<span class="font-caption text-caption text-ink-secondary font-meta">En attente</span>
+</div>
+<span class="font-body-strong text-[14px] text-ink-secondary mt-1">3. Validation par l'officier</span>
+<span class="font-caption text-[12px] text-ink-secondary">Signature cryptographique et conformité légale Wali</span>
+</div>
+<!-- Step 4 (Pending) -->
+<div class="flex flex-col gap-1.5 p-3 rounded-lg bg-surface-sand/20 border border-border-hairline opacity-75">
+<div class="flex items-center justify-between">
+<span class="w-6 h-6 rounded-full bg-border-hairline text-ink-secondary flex items-center justify-center text-[12px] font-bold">4</span>
+<span class="font-caption text-caption text-ink-secondary font-meta">Finalisation</span>
+</div>
+<span class="font-body-strong text-[14px] text-ink-secondary mt-1">4. Déploiement au sanctuaire</span>
+<span class="font-caption text-[12px] text-ink-secondary">Visibilité effective dans le cercle matrimonial restreint</span>
+</div>
+</div>
+</section>
+<!-- ACTION CONTROLS -->
+<section class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<!-- Primary Indigo Button -->
+<button class="w-full sm:w-auto px-6 py-3 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-[15px] hover:bg-primary-container transition-colors flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">edit_note</span>
+<span>Modifier la soumission</span>
+</button>
+<button class="w-full sm:w-auto px-5 py-3 rounded-full border border-border-strong text-ink-primary font-body-strong text-[15px] hover:bg-surface-sand transition-colors flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Retourner à mon profil</span>
+</button>
+</div>
+<!-- Quiet Decline / Cancel Button -->
+<button class="font-meta text-meta text-danger hover:text-danger/80 hover:underline flex items-center gap-1.5 py-2" onclick="confirmCancelRev()" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span>Annuler la demande de révision et conserver la version active</span>
+</button>
+</section>
+</div>
+<!-- STATE 2: APPROBATION ACCORDÉE (SUCCESS STATE PREVIEW) -->
+<div class="state-container hidden flex-col gap-6" id="state-approved-view">
+<div class="bg-success-soft/50 border border-success/40 rounded-xl p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-success text-white flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[28px] fill-icon">verified</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-title text-title text-success">Homologation accordée avec succès</h2>
+<span class="px-2.5 py-0.5 rounded-full text-caption font-meta bg-success text-white">Actif en ligne</span>
+</div>
+<p class="font-body text-[15px] text-ink-primary mt-1">
+              Votre nouvel autoportrait et vos déclarations ont été validés par l'officier de modération. L'ancien folio a été archivé et votre fiche est désormais visible selon vos critères de convenance.
+            </p>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+              Décision rendue sous le sceau de convenance N° HOM-2025-449.
+            </p>
+</div>
+</div>
+<button class="px-6 py-2.5 rounded-full bg-gold text-surface-indigo font-body-strong text-[14px] shrink-0 hover:bg-gold-soft transition-colors">
+          Consulter mon profil public
+        </button>
+</div>
+<!-- Live Replaced Folio Display -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6">
+<div class="flex items-center justify-between border-b border-border-hairline pb-4 mb-4">
+<span class="font-heading text-heading text-primary">Folio officiel déployé au sanctuaire AnKanu</span>
+<span class="font-caption text-caption text-success font-meta flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-success"></span> Conformité FR-070 attestée
+          </span>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-6">
+<div class="w-32 h-40 rounded-xl overflow-hidden border border-border-strong shrink-0 bg-surface-sand shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A dignified and modest photographic portrait of a West African Burkinabè man smiling gently, captured in authentic natural lighting. He is wearing a crisp white traditional collar shirt with subtle embroidery along the neckline. The background features warm terracotta architecture under the warm Sahelian afternoon sky, presenting an aura of sincerity, honor, and readiness for marriage." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH0a4a85KQk6RbDX9sKY1VbWEQY0ffnzg8vhUjV92DvkTg1wmaQQo2brJr2SzTllNHhu6K_hpmVvFC3HVu36MtzGlFLMFC7kfV7-HQU1wRP7ug1xAS8Y1Ka04l0fZ_n1rHpscTgfD6-HtW-8JIqaMhb5KEoRDQOW1RY7LuwvF9IcqNDfX9ehJNWHM2QUQJZreNnfOWvxqfOsnFXpRKtFBSMvb93tW-3TGOqaxxL8Kv08m-O4Fgt9KSt5zlV-sGCyTWjD2EBlYuDuGo"/>
+</div>
+<div class="space-y-3 flex-1">
+<div>
+<h3 class="font-title text-[20px] text-ink-primary">Ibrahim O. Traoré</h3>
+<p class="font-body text-[14px] text-ink-secondary">Chef de projet développement rural &amp; irrigation villageoise (ONG Sahel Vert)</p>
+</div>
+<p class="font-body text-[14px] text-ink-primary bg-surface-sand/30 p-3 rounded-lg border border-border-hairline">
+              « Recherche d'un mariage honorable conforme aux traditions burkinabè. Disponibilité pour rencontres encadrées en présence du wali à Ouagadougou ou Bobo-Dioulasso dès le premier trimestre. »
+            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- STATE 3: REFUS MOTIVÉ (ERROR STATE MAPPED TO FR-070 RULES) -->
+<div class="state-container hidden flex-col gap-6" id="state-rejected-view">
+<!-- Rejection Alert Banner -->
+<div class="bg-danger-soft/60 border border-danger/40 rounded-xl p-5 flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-danger text-white flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[24px]">gavel</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h2 class="font-title text-[18px] text-danger">Mise en conformité requise (Notification FR-070)</h2>
+<span class="px-2 py-0.5 rounded text-[11px] font-meta bg-danger text-white">Refus motivé</span>
+</div>
+<p class="font-body text-[14px] text-ink-primary mt-1">
+            L'officier d'admission n'a pas pu homologuer votre soumission du 24 octobre. Votre profil antérieur reste actuellement le seul en vigueur pour préserver la sécurité de vos correspondances.
+          </p>
+</div>
+</div>
+<!-- Detail of Non-Conformance -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6">
+<h3 class="font-heading text-heading text-primary mb-3">Motifs de non-conformité relevés</h3>
+<div class="space-y-3">
+<!-- Refusal Item 1: Multi-person crop or filter -->
+<div class="p-4 rounded-lg bg-surface-sand/40 border border-border-hairline flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-[22px] shrink-0 mt-0.5">filter_vintage</span>
+<div>
+<h4 class="font-body-strong text-[15px] text-ink-primary">Photographie non conforme à l'article FR-070.B</h4>
+<p class="font-body text-[13px] text-ink-secondary mt-0.5">
+                Le cliché transmis présente l'application d'un filtre numérique altérant la carnation naturelle et un cadrage partagé suggérant la présence d'une tierce personne rognée.
+              </p>
+<div class="mt-2 text-[12px] font-meta text-primary bg-surface-raised p-2 rounded border border-border-hairline">
+<strong>Conseil de remédiation :</strong> Déposez un portrait individuel, net, de face, sans lunettes solaires ni retouche artificielle, pris en lumière naturelle.
+              </div>
+</div>
+</div>
+<!-- Refusal Item 2: Missing Wali Consent Flag -->
+<div class="p-4 rounded-lg bg-surface-sand/40 border border-border-hairline flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-[22px] shrink-0 mt-0.5">person_alert</span>
+<div>
+<h4 class="font-body-strong text-[15px] text-ink-primary">Confirmation du Tuteur Légal (Wali) incomplète</h4>
+<p class="font-body text-[13px] text-ink-secondary mt-0.5">
+                La mise à jour de votre disponibilité géographique pour les entrevues exige la confirmation formelle par SMS ou appel du tuteur référencé (El Hadj Moussa Traoré).
+              </p>
+<div class="mt-2 text-[12px] font-meta text-primary bg-surface-raised p-2 rounded border border-border-hairline">
+<strong>Procédure requise :</strong> Invitez votre tuteur à valider le lien reçu sur son contact certifié ou joignez notre assistance d'homologation.
+              </div>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-3">
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-[14px] hover:bg-primary-container transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">upload</span>
+<span>Déposer une nouvelle photo conforme</span>
+</button>
+<a class="font-meta text-meta text-primary hover:underline flex items-center gap-1" href="#assistance">
+<span class="material-symbols-outlined text-[16px]">contact_support</span>
+<span>Solliciter l'assistance du médiateur</span>
+</a>
+</div>
+</div>
+</div>
+<!-- STATE 4: AUCUNE RÉVISION EN COURS (CLEAN PROFILE) -->
+<div class="state-container hidden flex-col gap-6" id="state-clean-view">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-8 text-center flex flex-col items-center max-w-xl mx-auto my-4">
+<div class="w-16 h-16 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined text-[32px]">folder_special</span>
+</div>
+<h2 class="font-title text-title text-primary">Aucun élément en attente d'homologation</h2>
+<p class="font-body text-body text-ink-secondary mt-2 max-w-md">
+          Votre profil public est parfaitement à jour et validé par nos services. Aucune révision iconographique ou textuelle n'est actuellement en file d'attente.
+        </p>
+<div class="mt-6 flex flex-col sm:flex-row items-center gap-3">
+<button class="px-6 py-2.5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-[14px]">
+            Proposer une modification de profil
+          </button>
+<button class="px-5 py-2.5 rounded-full border border-border-strong text-ink-primary font-body-strong text-[14px]">
+            Retour au tableau de bord
+          </button>
+</div>
+</div>
+</div>
+<!-- CULTURAL / LEGAL RESPECT NOTICE -->
+<div class="p-4 bg-surface-sand/60 rounded-xl border border-border-hairline text-[13px] text-ink-secondary flex items-start gap-3">
+<span class="material-symbols-outlined text-border-strong text-[20px] shrink-0 mt-0.5">verified</span>
+<p class="leading-relaxed">
+<strong>Engagement éthique AnKanu :</strong> Nos processus excluent tout système de notation superficielle, d'instantanéité consumériste ou de mise en concurrence visuelle. L'instruction humaine garantit la paix des familles, la sincérité des déclarations et la sauvegarde de l'honneur des prétendants selon les coutumes et règles de convenance burkinabè.
+      </p>
+</div>
+</main>
+<!-- FOOTER (Exact Match to Shared Components JSON) -->
+<footer class="bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-12">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex flex-col items-center md:items-start text-center md:text-left">
+<span class="font-heading text-heading text-primary dark:text-ink-on-indigo">AnKanu</span>
+<p class="font-caption text-caption text-ink-secondary dark:text-outline-variant mt-1 max-w-md">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+<span class="font-caption text-[11px] text-ink-secondary/70 mt-1">
+          Hébergement souverain Scaleway France · Enregistré auprès de la CIL Burkina Faso · Strictement sans exploitation commerciale.
+        </span>
+</div>
+<!-- Links from JSON -->
+<div class="flex items-center flex-wrap justify-center gap-4 text-meta">
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#confidentialite">Confidentialité &amp; Données</a>
+<span class="text-border-hairline">·</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#wali">Tuteurs Légaux (Wali)</a>
+<span class="text-border-hairline">·</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#ethique">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- SCRIPT FOR STATE SIMULATION & INTERACTIONS -->
+<script>
+    function switchState(stateName) {
+      // Hide all states
+      const states = ['pending', 'approved', 'rejected', 'clean'];
+      states.forEach(s => {
+        const el = document.getElementById('state-' + s + '-view');
+        if (el) {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
+        
+        // Reset tab button style
+        const btn = document.getElementById('tab-' + s);
+        if (btn) {
+          btn.classList.remove('bg-surface-raised', 'border-border-strong', 'text-ink-primary', 'font-body-strong', 'shadow-sm');
+          btn.classList.add('bg-surface-sand', 'border-border-hairline', 'text-ink-secondary');
+        }
+      });
+
+      // Show selected state
+      const target = document.getElementById('state-' + stateName + '-view');
+      if (target) {
+        target.classList.remove('hidden');
+        target.classList.add('flex');
+      }
+
+      // Highlight active tab
+      const activeBtn = document.getElementById('tab-' + stateName);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-surface-raised', 'border-border-strong', 'text-ink-primary', 'font-body-strong', 'shadow-sm');
+        activeBtn.classList.remove('bg-surface-sand', 'border-border-hairline', 'text-ink-secondary');
+      }
+    }
+
+    function confirmCancelRev() {
+      if (confirm("Voulez-vous annuler votre demande de révision ? Votre photo et vos textes en attente seront définitivement supprimés et votre version en vigueur restera inchangée.")) {
+        switchState('clean');
+      }
+    }
+  </script>
+</body></html>

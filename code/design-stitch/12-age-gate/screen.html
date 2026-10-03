@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Confirmation de Maturité &amp; Âge Légal</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Typography Fonts (Source Serif 4 & Source Sans 3) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config JSON verbatim as provided in Style Guidance -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-container": "#785d1b",
+            "secondary": "#755b18",
+            "on-tertiary-container": "#88a5ce",
+            "blur-wash": "#C8BBA6",
+            "surface-container": "#f4ede0",
+            "outline-variant": "#c4c6cf",
+            "focus-ring": "#1F3A5F",
+            "on-primary": "#ffffff",
+            "outline": "#74777f",
+            "primary-fixed": "#d5e3ff",
+            "mihrab": "#2C4A6E",
+            "primary": "#032448",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-error": "#ffffff",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#251a00",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-indigo": "#15283F",
+            "surface-tint": "#465f86",
+            "gold-soft": "#E8D5A3",
+            "staff": "#6B3D2E",
+            "on-background": "#1e1b14",
+            "error-container": "#ffdad6",
+            "disabled": "#B5A894",
+            "surface-raised": "#FFFBF4",
+            "tertiary-container": "#1b3b5e",
+            "gold": "#C4A35A",
+            "surface-dim": "#e0d9cd",
+            "primary-fixed-dim": "#aec8f4",
+            "surface-bright": "#fff9ee",
+            "success-soft": "#DCE6DE",
+            "on-error-container": "#93000a",
+            "ink-secondary": "#5C5346",
+            "staff-soft": "#EFE4DC",
+            "secondary-fixed-dim": "#e5c276",
+            "primary-container": "#1f3a5f",
+            "indigo": "#1F3A5F",
+            "on-primary-fixed": "#001c3b",
+            "tertiary": "#002546",
+            "danger": "#8B3A3A",
+            "border-hairline": "#D9CDB8",
+            "inverse-primary": "#aec8f4",
+            "border-strong": "#6F624C",
+            "ink-on-indigo": "#F4EDE0",
+            "indigo-deep": "#15283F",
+            "danger-soft": "#F3E0DC",
+            "tertiary-fixed": "#d3e4ff",
+            "ink-primary": "#1B2433",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-tertiary-fixed": "#001c38",
+            "secondary-fixed": "#ffdf9c",
+            "surface-container-highest": "#e9e2d5",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-sand": "#F4EDE0",
+            "inverse-surface": "#333028",
+            "surface-container-low": "#faf3e6",
+            "error": "#ba1a1a",
+            "on-primary-container": "#8ba4cf",
+            "secondary-container": "#fdd88a",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "success": "#3D5C45",
+            "on-tertiary": "#ffffff",
+            "on-surface": "#1e1b14",
+            "background": "#fff9ee",
+            "surface-container-high": "#eee7db",
+            "surface-variant": "#e9e2d5",
+            "surface": "#fff9ee"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "3": "12px",
+            "screen-pad": "16px",
+            "7": "48px",
+            "6": "32px",
+            "space-md": "1rem",
+            "gutter": "16px",
+            "4": "16px",
+            "1": "4px",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "5": "24px",
+            "space-xl": "2rem",
+            "margin": "1rem",
+            "2": "8px"
+          },
+          "fontFamily": {
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body antialiased min-h-screen flex flex-col justify-between selection:bg-gold-soft selection:text-ink-primary">
+<!-- Micro Brand Header with Sahelian Crest Seal -->
+<header class="w-full pt-8 pb-4 px-screen-pad flex flex-col items-center text-center">
+<div class="inline-flex items-center justify-center space-x-2 mb-2">
+<!-- Authentic Geometric Burkina Arch / Mihrab Crest -->
+<div class="w-10 h-10 rounded-full border border-border-hairline bg-surface-raised flex items-center justify-center text-primary shadow-none">
+<span class="material-symbols-outlined text-primary" data-icon="token" style="font-size: 22px;">token</span>
+</div>
+<div class="text-left pl-1">
+<span class="block font-title text-title text-primary tracking-tight leading-none">AnKanu</span>
+<span class="block font-meta text-caption text-ink-secondary tracking-wider uppercase mt-0.5">Ta'aruf Honorable</span>
+</div>
+</div>
+<div class="flex items-center space-x-2 text-ink-secondary font-meta text-caption">
+<span>Ouagadougou</span>
+<span class="inline-block w-1 h-1 rounded-full bg-border-strong"></span>
+<span>Bobo-Dioulasso</span>
+<span class="inline-block w-1 h-1 rounded-full bg-border-strong"></span>
+<span class="text-gold font-body-strong">Protocole FR-011</span>
+</div>
+</header>
+<!-- Main Canvas: Solemn Age Gate Sanctuary Card -->
+<main class="w-full flex-grow flex items-center justify-center px-screen-pad py-4">
+<div class="w-full max-w-[560px] bg-surface-raised border border-border-hairline rounded-xl p-6 md:p-8 flex flex-col relative">
+<!-- Breadcrumb & Step Context Indicator -->
+<div class="flex items-center justify-between border-b border-border-hairline pb-4 mb-6">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-gold"></span>
+<span class="font-meta text-meta text-ink-secondary">Étape 2 sur 4 — Déclaration d'Éligibilité</span>
+</div>
+<span class="font-meta text-caption text-ink-secondary tracking-tight bg-surface-sand px-2 py-0.5 rounded border border-border-hairline">
+          Confidentialité Garantie
+        </span>
+</div>
+<!-- Dignified Framing & Headline -->
+<div class="mb-5 text-center">
+<h1 class="font-display text-display text-primary mb-2">
+          Sanctuaire de l'Âge Admissible
+        </h1>
+<p class="font-meta text-meta text-ink-secondary leading-relaxed max-w-md mx-auto">
+          Un cadre structuré pour les personnes conscientes de la solennité de l'engagement matrimonial et du respect familial.
+        </p>
+</div>
+<!-- Sacred Commitment Notice Banner -->
+<div class="bg-surface-sand border border-border-hairline rounded-lg p-3.5 mb-6 flex items-start space-x-3">
+<span class="material-symbols-outlined text-primary flex-shrink-0 mt-0.5" data-icon="verified_user" style="font-size: 20px;">verified_user</span>
+<div class="text-left">
+<p class="font-body-strong text-meta text-ink-primary">Cheminement sous égide éthique</p>
+<p class="font-meta text-caption text-ink-secondary mt-0.5">
+            AnKanu ne propose ni divertissement ni mise en relation éphémère. Chaque démarche honore la concertation du tuteur (wali) et l'intégrité de la communauté.
+          </p>
+</div>
+</div>
+<!-- Age Gate Form Component -->
+<form class="space-y-6" id="ageGateForm" onsubmit="event.preventDefault(); handleContinue();">
+<!-- Strict Dignified Copy (FR-011 / A1 Open Compliance) -->
+<div class="border-l-2 border-gold pl-3 py-0.5 bg-surface-sand/40 rounded-r">
+<p class="font-body-strong text-body text-ink-primary">
+            Ce cheminement vers le mariage honorable est réservé aux adultes âgés de 19 ans et plus.
+          </p>
+</div>
+<!-- Date of Birth Triplet Inputs: Jour, Mois, Année -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-2 text-left">
+            Date de naissance officielle (selon pièce d'identité) <span class="text-danger">*</span>
+</label>
+<div class="grid grid-cols-3 gap-3">
+<!-- Jour (Day) -->
+<div>
+<label class="sr-only" for="dobDay">Jour de naissance</label>
+<select class="w-full h-12 bg-surface-raised border border-border-strong rounded-xl px-3 font-body text-body text-ink-primary focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-all cursor-pointer" id="dobDay" name="dobDay">
+<option disabled="" selected="" value="">Jour</option>
+<!-- Generated dynamically or listed statically for precision -->
+<script>
+                  for (let i = 1; i <= 31; i++) {
+                    const val = i < 10 ? '0' + i : i;
+                    document.write(`<option value="${val}">${val}</option>`);
+                  }
+                </script>
+</select>
+</div>
+<!-- Mois (Month) -->
+<div>
+<label class="sr-only" for="dobMonth">Mois de naissance</label>
+<select class="w-full h-12 bg-surface-raised border border-border-strong rounded-xl px-3 font-body text-body text-ink-primary focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-all cursor-pointer" id="dobMonth" name="dobMonth">
+<option disabled="" selected="" value="">Mois</option>
+<option value="01">Janvier</option>
+<option value="02">Février</option>
+<option value="03">Mars</option>
+<option value="04">Avril</option>
+<option value="05">Mai</option>
+<option value="06">Juin</option>
+<option value="07">Juillet</option>
+<option value="08">Août</option>
+<option value="09">Septembre</option>
+<option value="10">Octobre</option>
+<option value="11">Novembre</option>
+<option value="12">Décembre</option>
+</select>
+</div>
+<!-- Année (Year) -->
+<div>
+<label class="sr-only" for="dobYear">Année de naissance</label>
+<select class="w-full h-12 bg-surface-raised border border-border-strong rounded-xl px-3 font-body text-body text-ink-primary focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-all cursor-pointer" id="dobYear" name="dobYear">
+<option disabled="" selected="" value="">Année</option>
+<script>
+                  const currentYear = new Date().getFullYear();
+                  for (let y = currentYear - 15; y >= currentYear - 85; y--) {
+                    document.write(`<option value="${y}">${y}</option>`);
+                  }
+                </script>
+</select>
+</div>
+</div>
+</div>
+<!-- Dynamic Feedback States -->
+<div class="min-h-[44px]" id="statusContainer">
+<!-- Default Empty / Guidance State -->
+<div class="flex items-center space-x-2 text-ink-secondary font-meta text-caption" id="stateEmpty">
+<span class="material-symbols-outlined text-border-strong" data-icon="info" style="font-size: 18px;">info</span>
+<span>Renseignez votre jour, mois et année de naissance pour débloquer l'étape suivante.</span>
+</div>
+<!-- Dignified Rejection: Under 19 State -->
+<div class="hidden bg-danger-soft border border-danger/30 text-danger rounded-lg p-3.5 flex items-start space-x-3" id="stateUnderage">
+<span class="material-symbols-outlined text-danger flex-shrink-0 mt-0.5" data-icon="gpp_bad" style="font-size: 20px;">gpp_bad</span>
+<div>
+<p class="font-body-strong text-meta">Inscription non admissible</p>
+<p class="font-meta text-caption mt-0.5 text-danger leading-relaxed">
+                Le sanctuaire AnKanu est réservé aux personnes majeures de 19 ans et plus. Le compte ne peut être ouvert.
+              </p>
+</div>
+</div>
+<!-- Success State: >= 19 Eligible -->
+<div class="hidden bg-success-soft border border-success/30 text-success rounded-lg p-3 flex items-center space-x-3" id="stateEligible">
+<span class="material-symbols-outlined text-success flex-shrink-0" data-icon="check_circle" style="font-size: 20px;">check_circle</span>
+<div class="text-left">
+<span class="font-body-strong text-meta block">Condition de maturité confirmée</span>
+<span class="font-meta text-caption block text-ink-secondary">Vous pouvez poursuivre vers la validation d'accès sécurisée.</span>
+</div>
+</div>
+</div>
+<!-- Primary Action Button -->
+<div class="pt-1">
+<button class="w-full min-h-[48px] rounded-xl flex items-center justify-center space-x-2 transition-all duration-200 bg-disabled text-ink-secondary cursor-not-allowed font-body-strong text-body px-6 select-none" disabled="" id="submitBtn" type="submit">
+<span class="material-symbols-outlined text-current" data-icon="sms" style="font-size: 20px;">sms</span>
+<span id="btnLabelText">Continuer vers la vérification (SMS / OTP)</span>
+</button>
+</div>
+<!-- Sovereign Discrepancy Cross-Check Warning (FR-014, FR-091) -->
+<div class="pt-1 border-t border-border-hairline text-left">
+<div class="flex items-start space-x-2 pt-2 text-ink-secondary">
+<span class="material-symbols-outlined text-border-strong flex-shrink-0 mt-0.5" data-icon="gavel" style="font-size: 16px;">gavel</span>
+<p class="font-meta text-caption leading-relaxed">
+<strong class="text-ink-primary font-body-strong">Audit d'intégrité souveraine :</strong> La date de naissance fera l'objet d'un recoupement formel lors de la vérification d'identité souveraine (CNIB / Passeport). Toute discordance entraînera la mise en retenue immédiate du profil sous examen du comité de modération.
+            </p>
+</div>
+</div>
+<!-- Secondary Quiet Navigation -->
+<div class="text-center pt-1">
+<a class="inline-flex items-center justify-center h-[44px] px-4 rounded-lg font-meta text-meta text-ink-secondary hover:text-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined mr-1" data-icon="arrow_back" style="font-size: 18px;">arrow_back</span>
+            Retour à l'identification
+          </a>
+</div>
+</form>
+</div>
+</main>
+<!-- Institutional Sahelian Trust Seal & Sovereign Hosting Footer -->
+<footer class="w-full py-6 px-screen-pad border-t border-border-hairline bg-surface-sand mt-6">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+<!-- Institutional Marriage Metrics (FR-091) -->
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-surface-raised border border-border-hairline flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="history_edu" style="font-size: 16px;">history_edu</span>
+</div>
+<div>
+<span class="font-body-strong text-caption text-ink-primary block leading-none">Registres Institutionnels</span>
+<span class="font-meta text-caption text-ink-secondary">Mariages homologués documentés : <strong class="text-primary font-body-strong">0</strong> (Phase pilote initiale)</span>
+</div>
+</div>
+<!-- Sovereign Hosting & Local Moderation References -->
+<div class="flex flex-col md:items-end text-ink-secondary font-meta text-caption space-y-0.5">
+<div class="flex items-center space-x-1.5 justify-center md:justify-end">
+<span class="material-symbols-outlined text-gold" data-icon="cloud_done" style="font-size: 16px;">cloud_done</span>
+<span>Hébergement souverain chiffré Scaleway • Conforme Loi 010-2004/AN</span>
+</div>
+<span class="text-ink-secondary/80">Supervision éthique communautaire Ouagadougou &amp; Bobo-Dioulasso</span>
+</div>
+</div>
+</footer>
+<!-- Interactive Age Logic Implementation -->
+<script>
+    (function initAgeGate() {
+      const daySelect = document.getElementById('dobDay');
+      const monthSelect = document.getElementById('dobMonth');
+      const yearSelect = document.getElementById('dobYear');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnLabelText = document.getElementById('btnLabelText');
+
+      const stateEmpty = document.getElementById('stateEmpty');
+      const stateUnderage = document.getElementById('stateUnderage');
+      const stateEligible = document.getElementById('stateEligible');
+
+      function calculateAge(day, month, year) {
+        const today = new Date();
+        const birthDate = new Date(year, month - 1, day);
+        
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const m = today.getMonth() - birthDate.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age;
+      }
+
+      function evaluateInputs() {
+        const d = parseInt(daySelect.value, 10);
+        const m = parseInt(monthSelect.value, 10);
+        const y = parseInt(yearSelect.value, 10);
+
+        // Hide all message states initially
+        stateEmpty.classList.add('hidden');
+        stateUnderage.classList.add('hidden');
+        stateEligible.classList.add('hidden');
+
+        // Check if any field is not yet chosen
+        if (isNaN(d) || isNaN(m) || isNaN(y)) {
+          stateEmpty.classList.remove('hidden');
+          setButtonDisabled();
+          return;
+        }
+
+        // Validate valid date (e.g. leap years, 30 vs 31 days)
+        const dateTest = new Date(y, m - 1, d);
+        if (dateTest.getFullYear() !== y || dateTest.getMonth() !== (m - 1) || dateTest.getDate() !== d) {
+          stateEmpty.classList.remove('hidden');
+          setButtonDisabled();
+          return;
+        }
+
+        const age = calculateAge(d, m, y);
+
+        if (age < 19) {
+          // Reject state
+          stateUnderage.classList.remove('hidden');
+          setButtonDisabled();
+        } else {
+          // Success / Eligible state (>= 19)
+          stateEligible.classList.remove('hidden');
+          setButtonActive();
+        }
+      }
+
+      function setButtonDisabled() {
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full min-h-[48px] rounded-xl flex items-center justify-center space-x-2 transition-all duration-200 bg-disabled text-ink-secondary cursor-not-allowed font-body-strong text-body px-6 select-none";
+        btnLabelText.textContent = "Continuer vers la vérification (SMS / OTP)";
+      }
+
+      function setButtonActive() {
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full min-h-[48px] rounded-xl flex items-center justify-center space-x-2 transition-all duration-200 bg-indigo hover:bg-primary text-ink-on-indigo cursor-pointer shadow-sm font-body-strong text-body px-6";
+        btnLabelText.textContent = "Poursuivre vers l'envoi du code OTP";
+      }
+
+      daySelect.addEventListener('change', evaluateInputs);
+      monthSelect.addEventListener('change', evaluateInputs);
+      yearSelect.addEventListener('change', evaluateInputs);
+
+      window.handleContinue = function() {
+        if (!submitBtn.disabled) {
+          submitBtn.innerHTML = `
+            <span class="material-symbols-outlined animate-spin text-current" data-icon="progress_activity" style="font-size: 20px;">progress_activity</span>
+            <span>Génération du jeton SMS sécurisé...</span>
+          `;
+          submitBtn.disabled = true;
+          setTimeout(() => {
+            alert("Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.");
+            setButtonActive();
+          }, 1200);
+        }
+      };
+    })();
+  </script>
+</body></html>

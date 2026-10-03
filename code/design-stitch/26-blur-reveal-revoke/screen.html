@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-surface-sand">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnKanu — Protocole de Pudeur : Voile, Dévoilement & Révocation</title>
+  <!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS v3 -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'surface-sand': '#F4EDE0',
+            'surface-raised': '#FFFBF4',
+            'surface-indigo': '#15283F',
+            'ink-primary': '#1B2433',
+            'ink-secondary': '#5C5346',
+            'ink-on-indigo': '#F4EDE0',
+            'indigo': '#1F3A5F',
+            'indigo-deep': '#15283F',
+            'gold': '#C4A35A',
+            'gold-soft': '#E8D5A3',
+            'mihrab': '#2C4A6E',
+            'border-hairline': '#D9CDB8',
+            'border-strong': '#6F624C',
+            'focus-ring': '#1F3A5F',
+            'blur-wash': '#C8BBA6',
+            'danger': '#8B3A3A',
+            'danger-soft': '#F3E0DC',
+            'success': '#3D5C45',
+            'success-soft': '#DCE6DE',
+            'staff': '#6B3D2E',
+            'disabled': '#B5A894'
+          },
+          fontFamily: {
+            display: ['"Source Serif 4"', 'Georgia', 'serif'],
+            title: ['"Source Serif 4"', 'Georgia', 'serif'],
+            heading: ['"Source Serif 4"', 'Georgia', 'serif'],
+            body: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            meta: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            caption: ['"Source Sans 3"', 'system-ui', 'sans-serif']
+          },
+          borderRadius: {
+            'card': '12px',
+            'bubble': '20px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Material symbols helper */
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body text-base min-h-full flex flex-col selection:bg-gold-soft selection:text-ink-primary antialiased">
+
+  <!-- TOP HEADER (Canonical AnKanu Web Header) -->
+  <header class="w-full bg-surface-raised border-b border-border-hairline sticky top-0 z-40">
+    <div class="w-full max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="#" class="font-title text-xl text-indigo tracking-tight font-semibold flex items-center gap-2">
+          <span>AnKanu</span>
+          <span class="hidden sm:inline-block font-meta text-xs text-ink-secondary font-normal border-l border-border-hairline pl-3">
+            Ta'aruf Honorable &amp; Mariage Noble
+          </span>
+        </a>
+      </div>
+      <!-- Member Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-7 font-meta text-sm text-ink-secondary">
+        <a href="#" class="hover:text-indigo transition-colors">Découvrir</a>
+        <a href="#" class="hover:text-indigo transition-colors">Invitations</a>
+        <a href="#" class="hover:text-indigo transition-colors flex items-center gap-1.5">
+          <span>Discussions</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+        </a>
+        <a href="#" class="text-indigo font-semibold border-b-2 border-indigo pb-0.5">Profil &amp; Pudeur</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <div class="px-2.5 py-1 rounded bg-surface-sand border border-border-hairline text-xs font-meta text-ink-secondary flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm text-gold">verified_user</span>
+          <span class="hidden sm:inline">Wali notifié :</span> <strong>Oumar O.</strong>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUB-NAV / CONTEXTUAL PATH (Reached from: Profile detail / Chat) -->
+  <nav class="w-full bg-surface-sand/80 border-b border-border-hairline" aria-label="Fil d'Ariane">
+    <div class="w-full max-w-5xl mx-auto px-4 py-2 flex flex-wrap items-center justify-between gap-3 font-meta text-xs">
+      <div class="flex items-center gap-2 text-ink-secondary">
+        <a href="#" class="hover:text-indigo flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span>Retour à la fiche de Tahir_Ouaga</span>
+        </a>
+        <span class="text-border-hairline">/</span>
+        <a href="#" class="hover:text-indigo">Discussion en cours</a>
+        <span class="text-border-hairline">/</span>
+        <span class="text-ink-primary font-semibold">Gouvernance du Sceau de Pudeur</span>
+      </div>
+      <div class="flex items-center gap-2 text-ink-secondary">
+        <span class="material-symbols-outlined text-sm text-indigo">lock</span>
+        <span>Norme CIL-BF / FR-056, FR-057, FR-058, FR-059, AD-9</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PROTOCOL ANNOUNCEMENT BANNER (Dynamic Live State Feedback) -->
+  <div id="live-announcement-region" aria-live="polite" class="w-full bg-surface-raised border-b border-border-hairline transition-all">
+    <div class="w-full max-w-5xl mx-auto px-4 py-2.5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-2.5 text-xs font-meta text-ink-primary" id="announcement-content">
+        <span class="w-2 h-2 rounded-full bg-gold" id="announcement-dot"></span>
+        <span class="font-medium" id="announcement-badge">État actif :</span>
+        <span class="text-ink-secondary" id="announcement-text">Flou souverain en vigueur pour les visiteurs. Sceau inviolable par tout forfait payant.</span>
+      </div>
+      <span class="text-[11px] font-caption text-ink-secondary uppercase tracking-wider" id="announcement-time">TTL Réflexion : &le;60s</span>
+    </div>
+  </div>
+
+  <!-- INTERACTIVE SIMULATION DOCK (Demonstrating canonical states, loading, error, prompt) -->
+  <aside class="w-full bg-surface-raised/60 border-b border-border-hairline py-2">
+    <div class="w-full max-w-5xl mx-auto px-4 flex flex-wrap items-center justify-between gap-2 text-xs font-meta">
+      <span class="text-ink-secondary flex items-center gap-1 font-medium">
+        <span class="material-symbols-outlined text-sm text-indigo">tune</span>
+        <span>Simulateur d'états canoniques (FR-056 à FR-059) :</span>
+      </span>
+      <div class="flex flex-wrap items-center gap-1.5">
+        <button type="button" onclick="simState('initial')" class="px-2 py-1 rounded bg-surface-sand hover:bg-surface-raised border border-border-hairline text-ink-primary">
+          1. Initial (Flou)
+        </button>
+        <button type="button" onclick="simState('request_pending')" class="px-2 py-1 rounded bg-gold-soft/50 hover:bg-gold-soft border border-gold/40 text-ink-primary">
+          2. Requête en attente (1 max)
+        </button>
+        <button type="button" onclick="simState('granted')" class="px-2 py-1 rounded bg-success-soft hover:bg-success-soft/80 border border-success/30 text-success font-medium">
+          3. Dévoilé (Visible pour Tahir_Ouaga)
+        </button>
+        <button type="button" onclick="simState('revoking')" class="px-2 py-1 rounded bg-danger-soft/50 hover:bg-danger-soft border border-danger/30 text-danger">
+          4. Révocation (&le;60s denylist)
+        </button>
+        <button type="button" onclick="simState('network_fail')" class="px-2 py-1 rounded bg-danger-soft border border-danger/50 text-danger font-medium">
+          5. Erreur réseau passerelle
+        </button>
+        <button type="button" onclick="openIncomingPromptModal()" class="px-2 py-1 rounded bg-indigo text-ink-on-indigo font-medium hover:bg-indigo-deep">
+          6. Dialogue d'autorisation reçu
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN EDITORIAL CONTENT -->
+  <main class="flex-1 w-full max-w-5xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- PAGE HERO HEADER -->
+    <header class="space-y-2 border-b border-border-hairline pb-5">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-meta text-ink-secondary uppercase tracking-widest block font-semibold">
+            Confidentialité Matrimoniale &amp; Nadhar Légitime
+          </span>
+          <h1 class="font-display text-2xl sm:text-3xl text-indigo tracking-tight mt-1 font-semibold">
+            Blur / Reveal / Revoke
+          </h1>
+          <p class="font-body text-ink-secondary text-sm sm:text-base max-w-3xl mt-1">
+            Gouvernance de la visibilité de votre portrait sous l'autorité du tuteur (Wali). La pudeur est une fiducie (*Amanah*) : aucune souscription payante ne peut octroyer un dévoilement, et aucun survol fugace n'affiche le visage en clair.
+          </p>
+        </div>
+        <!-- Integrity Pillar Pill -->
+        <div class="bg-surface-raised border border-border-hairline rounded-card p-3 text-right hidden sm:block">
+          <div class="font-meta text-xs text-ink-secondary">Principe inviolable</div>
+          <div class="font-body text-xs font-semibold text-indigo flex items-center justify-end gap-1 mt-0.5">
+            <span class="material-symbols-outlined text-sm text-gold">gavel</span>
+            <span>Refus de toute commercialisation du regard</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- FOCUSED CANONICAL CARD -->
+    <section class="bg-surface-raised border border-border-hairline rounded-card overflow-hidden shadow-none" aria-labelledby="card-heading">
+      <div class="p-6 md:p-8 space-y-8">
+
+        <!-- SECTION TITLE & ACTOR PAIR -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-hairline pb-4">
+          <div>
+            <h2 id="card-heading" class="font-title text-xl text-ink-primary font-semibold">
+              Contrôle Bilatéral de Révélation · Paire active
+            </h2>
+            <p class="font-meta text-xs text-ink-secondary mt-0.5">
+              Correspondance en cours avec le prétendant <strong>Tahir_Ouaga</strong> (29 ans, Ouagadougou).
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded bg-surface-sand border border-border-hairline text-xs font-meta text-ink-secondary flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-success"></span>
+              <span>Lien Chat établi (Sister acceptée)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- VISUAL COMPARISON GRID: PHOTO WASH VS REVEAL CONTROL ENGINE -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- LEFT COL: The Blur-Photo Trust Container (AD-9 flat wash, not glassmorphism) -->
+          <div class="lg:col-span-5 space-y-3">
+            <div class="relative w-full aspect-[4/5] rounded-card border border-border-strong overflow-hidden bg-blur-wash flex flex-col items-center justify-center p-6 text-center select-none" id="visual-port-container">
+              
+              <!-- STATE 1: Default Flat Wash + Covered-Face Pictogram (Amanah, no sneak peek) -->
+              <div id="visual-state-veiled" class="flex flex-col items-center justify-center space-y-3">
+                <div class="w-20 h-20 rounded-full bg-surface-raised/90 border border-border-hairline flex items-center justify-center text-indigo">
+                  <!-- Covered-face / Modesty pictogram -->
+                  <span class="material-symbols-outlined text-4xl" data-icon="face_retouching_off">face_retouching_off</span>
+                </div>
+                <div class="space-y-1">
+                  <span class="font-heading text-lg text-ink-primary block font-semibold" id="visual-veiled-title">Cliché Voilé (Sceau Actif)</span>
+                  <p class="font-caption text-xs text-ink-secondary max-w-xs leading-relaxed" id="visual-veiled-desc">
+                    Silhouettage cryptographique dérivé du serveur (CIL-BF). Aucun filtre client ne conserve l'image originale en mémoire.
+                  </p>
+                </div>
+                <div class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-raised/95 border border-border-hairline text-xs font-meta text-ink-secondary">
+                  <span class="material-symbols-outlined text-xs text-gold">lock</span>
+                  <span id="visual-status-tag">Flou souverain en vigueur</span>
+                </div>
+              </div>
+
+              <!-- STATE 2: Unveiled / Granted State (Displayed strictly when Reveal active) -->
+              <div id="visual-state-unveiled" class="hidden absolute inset-0 w-full h-full flex flex-col justify-end bg-surface-raised">
+                <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAklms7bG9gI-q2c4QsKRveEa2Y8CLprVlxbtFk9TqddYE-SCaLLbP6wNwmHBQUzlL4syjIO_Tg_7JT6Q-imhxMXDefAzGPLlybm6cMOzVy8P_M9ob81TefHGbH6e0Ub7q59WiquvBM8CBWrBWfw656bypwOUz0hzdJeADPnaWAn3GXF4sramBMNgwOCcrDwIA2exjWtJyoIwEbwarsQ0O9d3BvfCU41RQXRcTbN8iE25uDaDbSrkHJKS_KwYmTxTTUkCh2IpD1r3ZC" 
+                     alt="Portrait matrimonial modeste et digne de la postulante Aminata_O sous voile sobre en lumière naturelle sahélienne"
+                     class="w-full h-full object-cover">
+                <div class="absolute bottom-0 inset-x-0 bg-surface-indigo/90 backdrop-blur-none p-3 text-center text-ink-on-indigo font-caption text-xs space-y-0.5 border-t border-gold/40">
+                  <div class="font-semibold flex items-center justify-center gap-1.5 text-gold-soft">
+                    <span class="material-symbols-outlined text-sm">visibility</span>
+                    <span>Visible pour Tahir_Ouaga</span>
+                  </div>
+                  <div class="text-[11px] opacity-80">Autorisation bilatérale d'examen pieux (Nadhar)</div>
+                </div>
+              </div>
+
+              <!-- Top Floating Badge: Never Hover Only -->
+              <div class="absolute top-3 left-3 px-2 py-0.5 rounded bg-surface-raised/95 border border-border-hairline text-ink-primary font-caption text-[11px] flex items-center gap-1 shadow-none">
+                <span class="material-symbols-outlined text-xs text-gold">verified</span>
+                <span>Refus de survol fugace</span>
+              </div>
+            </div>
+
+            <!-- Clarification beneath photo -->
+            <p class="font-caption text-xs text-ink-secondary leading-normal flex items-start gap-1.5">
+              <span class="material-symbols-outlined text-sm text-indigo mt-0.5 shrink-0">info</span>
+              <span>Le floutage est une fiducie canonique : un fond monochrome et un pictogramme de visage couvert remplacent toute exposition non agréée. Aucun survol à la souris ne dévoile l'image.</span>
+            </p>
+          </div>
+
+          <!-- RIGHT COL: CONTROLS, POLICIES & ACTIONS -->
+          <div class="lg:col-span-7 space-y-6">
+
+            <!-- CONTROL 1: REVEAL-CONTROL COMPONENT (44px, role+pressed/disabled) -->
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <label for="main-reveal-control" class="font-heading text-base font-semibold text-ink-primary flex items-center gap-2">
+                  <span>Action de Révélation Immédiate</span>
+                  <span class="font-caption text-xs font-normal text-ink-secondary">(Interrupteur par prétendant)</span>
+                </label>
+                <span id="reveal-control-state-badge" class="px-2.5 py-0.5 rounded-full text-xs font-meta bg-surface-sand text-ink-secondary border border-border-hairline">
+                  Verrouillé
+                </span>
+              </div>
+
+              <!-- {components.reveal-control} specification:
+                   min-height 44px, background gold-soft, color indigo-deep, radius md (12px), role="button", aria-pressed -->
+              <div class="p-4 rounded-card bg-surface-sand/50 border border-border-hairline space-y-3">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div class="space-y-0.5">
+                    <div class="font-body text-sm font-semibold text-ink-primary flex items-center gap-1.5">
+                      <!-- Covered face pictogram -->
+                      <span id="reveal-pictogram" class="material-symbols-outlined text-lg text-indigo">face_retouching_off</span>
+                      <span id="reveal-caption-label">Statut actuel : Cliché masqué</span>
+                    </div>
+                    <div class="font-caption text-xs text-ink-secondary" id="reveal-subtext">
+                      Tahir_Ouaga n'a pas accès à votre visage. Le flou intégral est maintenu.
+                    </div>
+                  </div>
+
+                  <!-- The Official Component Button -->
+                  <button type="button" 
+                          id="main-reveal-control"
+                          role="button"
+                          aria-pressed="false"
+                          disabled
+                          onclick="toggleRevealControl()"
+                          class="min-h-[44px] px-5 py-2 rounded-card bg-disabled text-ink-secondary font-body font-semibold text-sm inline-flex items-center justify-center gap-2 transition-all cursor-not-allowed border border-border-hairline focus:outline-none focus:ring-2 focus:ring-focus-ring"
+                          title="Le contrôle s'active lorsque la politique ou la demande bilatérale le requiert">
+                    <span class="material-symbols-outlined text-lg" id="btn-reveal-icon">visibility</span>
+                    <span id="btn-reveal-text">Dévoiler le cliché</span>
+                  </button>
+                </div>
+
+                <!-- Color is not the only signal: Explicit text label & pictogram feedback -->
+                <div class="pt-2 border-t border-border-hairline flex flex-wrap items-center justify-between text-xs font-caption text-ink-secondary">
+                  <span>Indicateur dual : Pictogramme de pudeur + Intitulé explicite</span>
+                  <span class="text-indigo font-medium" id="policy-bound-indicator">Lié à la politique bilatérale</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CONTROL 2: PER-VIEWER POLICY SELECTOR (on_accept / on_request / never) -->
+            <fieldset class="space-y-3">
+              <div class="flex items-center justify-between">
+                <legend class="font-heading text-base font-semibold text-ink-primary">
+                  Politique d'Accès pour ce Prétendant
+                </legend>
+                <span class="text-xs font-meta text-ink-secondary">Également accessible aux Frères</span>
+              </div>
+              <p class="font-caption text-xs text-ink-secondary">
+                Définissez la règle canonique applicable exclusivement à Tahir_Ouaga. Chaque prétendant dispose d'une politique isolée.
+              </p>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                
+                <!-- Option A: on_accept -->
+                <label class="relative flex flex-col p-3.5 rounded-card border-2 cursor-pointer transition-all bg-surface-raised border-border-hairline hover:border-indigo" id="label-policy-on_accept">
+                  <div class="flex items-center justify-between mb-2">
+                    <input type="radio" name="viewer_policy" value="on_accept" class="h-4 w-4 text-indigo focus:ring-focus-ring border-border-strong" onchange="changePolicy('on_accept')">
+                    <span class="material-symbols-outlined text-lg text-indigo">handshake</span>
+                  </div>
+                  <span class="font-body text-sm font-semibold text-ink-primary">on_accept</span>
+                  <span class="font-caption text-xs text-ink-secondary mt-1">
+                    Dévoilement dès acceptation formelle de l'invitation par les deux parties.
+                  </span>
+                </label>
+
+                <!-- Option B: on_request (Default Active) -->
+                <label class="relative flex flex-col p-3.5 rounded-card border-2 cursor-pointer transition-all bg-gold-soft/20 border-gold" id="label-policy-on_request">
+                  <div class="flex items-center justify-between mb-2">
+                    <input type="radio" name="viewer_policy" value="on_request" checked class="h-4 w-4 text-indigo focus:ring-focus-ring border-border-strong" onchange="changePolicy('on_request')">
+                    <span class="material-symbols-outlined text-lg text-indigo">contact_support</span>
+                  </div>
+                  <span class="font-body text-sm font-semibold text-ink-primary">on_request</span>
+                  <span class="font-caption text-xs text-ink-secondary mt-1">
+                    Requiert une demande expresse et l'agrément cas par cas de la titulaire.
+                  </span>
+                </label>
+
+                <!-- Option C: never (Always blur) -->
+                <label class="relative flex flex-col p-3.5 rounded-card border-2 cursor-pointer transition-all bg-surface-raised border-border-hairline hover:border-indigo" id="label-policy-never">
+                  <div class="flex items-center justify-between mb-2">
+                    <input type="radio" name="viewer_policy" value="never" class="h-4 w-4 text-indigo focus:ring-focus-ring border-border-strong" onchange="changePolicy('never')">
+                    <span class="material-symbols-outlined text-lg text-danger">lock</span>
+                  </div>
+                  <span class="font-body text-sm font-semibold text-ink-primary">never</span>
+                  <span class="font-caption text-xs text-ink-secondary mt-1">
+                    Maintien absolu du flou. Aucun dévoilement avant la rencontre physique chaperonnée.
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- CONTROL 3: REQUEST CAP & PENDING STATE (1 Pending Max per pair) -->
+            <div class="p-4 rounded-card border border-border-hairline bg-surface-sand/40 space-y-3" id="pending-state-box">
+              <div class="flex items-start justify-between gap-3">
+                <div class="space-y-1">
+                  <div class="flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-gold animate-pulse" id="request-cap-dot"></span>
+                    <h3 class="font-body text-sm font-semibold text-ink-primary">
+                      Plafond de Sollicitation : 1 Requête en Instance Max
+                    </h3>
+                  </div>
+                  <p class="font-caption text-xs text-ink-secondary leading-relaxed" id="request-cap-desc">
+                    Pour préserver la quiétude morale et bannir tout harcèlement visuel, une seule demande de dévoilement peut être active simultanément par paire de correspondants.
+                  </p>
+                </div>
+                <span class="px-2 py-1 rounded bg-surface-raised border border-border-hairline text-xs font-meta text-ink-secondary font-medium shrink-0" id="pending-counter-badge">
+                  1 / 1 requête active
+                </span>
+              </div>
+
+              <!-- Pending Request Banner (Owner view: Approve / Ignore / Deny) -->
+              <div id="pending-request-interactive" class="bg-surface-raised border border-gold/40 rounded p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-0.5">
+                  <div class="text-xs font-semibold text-ink-primary flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-sm text-gold">notifications_active</span>
+                    <span>Demande de dévoilement reçue de Tahir_Ouaga</span>
+                  </div>
+                  <div class="text-[11px] font-caption text-ink-secondary">
+                    Transmise aujourd'hui à 15:42 · Notification push émise au tuteur Oumar O.
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button type="button" onclick="denyRevealRequest()" class="min-h-[36px] px-3 py-1.5 rounded-card border border-border-strong text-ink-secondary hover:text-danger hover:border-danger text-xs font-body font-medium transition-colors">
+                    Refuser
+                  </button>
+                  <button type="button" onclick="ignoreRevealRequest()" class="min-h-[36px] px-3 py-1.5 rounded-card text-ink-secondary hover:text-ink-primary text-xs font-body font-medium transition-colors">
+                    Ignorer
+                  </button>
+                  <button type="button" onclick="approveRevealRequest()" class="min-h-[36px] px-4 py-1.5 rounded-card bg-indigo hover:bg-indigo-deep text-ink-on-indigo text-xs font-body font-semibold transition-colors">
+                    Autoriser
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- CONTROL 4: REVOKE ENGINE (<=60s Denylist + TTL, not client-side hide) -->
+            <div class="p-4 rounded-card border border-border-hairline bg-surface-raised space-y-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-0.5">
+                  <h3 class="font-body text-sm font-semibold text-ink-primary flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base text-danger">undo</span>
+                    <span>Révocation Instantanée du Droit d'Accès</span>
+                  </h3>
+                  <p class="font-caption text-xs text-ink-secondary max-w-md">
+                    Rétablit immédiatement le voilement sur la passerelle centrale. Inscription dans la denylist d'infrastructure sous &le;60s.
+                  </p>
+                </div>
+
+                <button type="button" 
+                        id="btn-revoke-action"
+                        onclick="triggerRevocation()"
+                        class="min-h-[44px] px-5 py-2 rounded-card bg-surface-sand hover:bg-danger-soft border border-border-strong hover:border-danger text-ink-primary hover:text-danger font-body text-xs font-semibold inline-flex items-center justify-center gap-2 transition-colors">
+                  <span class="material-symbols-outlined text-base">lock_reset</span>
+                  <span>Révoquer l'accès</span>
+                </button>
+              </div>
+
+              <!-- Real-time TTL & Denylist Pipeline Status -->
+              <div class="pt-2 border-t border-border-hairline flex flex-wrap items-center justify-between gap-2 text-xs font-caption text-ink-secondary">
+                <div class="flex items-center gap-1.5">
+                  <span class="material-symbols-outlined text-sm text-success">cloud_done</span>
+                  <span>Passerelle d'autorité : Scaleway CIL Paris/Ouaga</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-ink-primary font-mono text-[11px]" id="revoke-ttl-clock">Délai max d'éviction : 60s</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-success" id="gateway-status-pill"></span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- DOCTRINAL & ARCHITECTURAL FOOTER NOTE -->
+        <div class="pt-4 border-t border-border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-xs font-caption text-ink-secondary">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-sm text-gold">shield</span>
+            <span>Règle d'inviolabilité : Aucun abonnement payant n'achète le droit de lever le flou. Le consentement du titulaire et du Wali est souverain.</span>
+          </div>
+          <div class="text-right shrink-0">
+            Protocole FR-057 / TTL Cache 60s
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- NETWORK ERROR RETRY CALLOUT (Shown on gateway failure) -->
+    <div id="network-error-callout" class="hidden rounded-card bg-danger-soft border-2 border-danger p-4 space-y-3" role="alert">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-2xl text-danger mt-0.5">wifi_off</span>
+        <div class="space-y-1">
+          <h3 class="font-heading text-base font-semibold text-danger">Échec Réseau de la Révocation — Nouvel essai automatique en cours</h3>
+          <p class="font-body text-xs text-ink-primary leading-relaxed">
+            La requête de révocation n'a pas pu joindre le relais immédiat. Conformément à la norme FR-058, le système réitère l'inscription sur la <em>denylist</em> de la passerelle souveraine, qui demeure la source unique de vérité. Le cache local refuse d'ores et déjà l'affichage.
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button type="button" onclick="retryRevocationNetwork()" class="min-h-[44px] px-5 py-2 rounded-card bg-danger text-white font-body text-xs font-semibold hover:bg-danger/90 transition-colors inline-flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-sm">refresh</span>
+          <span>Forcer la synchronisation passerelle</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- DIALOG 1: REVEAL-ON-REQUEST PROMPT TO PHOTO OWNER (FR-057 / FR-059) -->
+  <dialog id="reveal-request-dialog" class="backdrop:bg-ink-primary/50 backdrop:backdrop-blur-none p-0 rounded-card border border-border-strong bg-surface-raised max-w-lg w-full text-ink-primary shadow-none">
+    <div class="p-6 space-y-5">
+      <!-- Dialog Header -->
+      <div class="flex items-start justify-between border-b border-border-hairline pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-gold-soft/50 border border-gold/40 flex items-center justify-center text-indigo">
+            <span class="material-symbols-outlined text-xl">gavel</span>
+          </div>
+          <div>
+            <h2 class="font-heading text-lg font-semibold text-ink-primary">Demande de Dévoilement Reçue</h2>
+            <span class="font-caption text-xs text-ink-secondary">Plafond strict : 1 requête active par pair</span>
+          </div>
+        </div>
+        <button type="button" onclick="closeModal('reveal-request-dialog')" class="text-ink-secondary hover:text-ink-primary p-1">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <!-- Content -->
+      <div class="space-y-3 font-body text-sm text-ink-secondary leading-relaxed">
+        <p>
+          Le prétendant <strong class="text-ink-primary">Tahir_Ouaga</strong> sollicite l'accès à votre portrait matrimonial dans le cadre strict du <em>Nadhar</em> prophétique.
+        </p>
+        <div class="bg-surface-sand p-3.5 rounded-card border border-border-hairline space-y-2 text-xs">
+          <div class="flex items-center justify-between text-ink-primary font-semibold">
+            <span>Notification conjointe</span>
+            <span class="text-success flex items-center gap-1">
+              <span class="material-symbols-outlined text-xs">check_circle</span>
+              <span>Push transmis au Wali Oumar O.</span>
+            </span>
+          </div>
+          <p class="text-ink-secondary leading-normal">
+            Le dévoilement n'octroie aucun droit de téléchargement ni de copie d'écran. Vous conservez la faculté de révoquer cet accès à tout instant sous un délai effectif &le;60s.
+          </p>
+        </div>
+        <p class="text-xs italic text-ink-secondary">
+          Vous disposez de trois options canoniques : approuver la levée du sceau, ignorer temporairement la sollicitation ou la refuser définitivement.
+        </p>
+      </div>
+
+      <!-- Dialog Actions: Approve / Ignore / Deny -->
+      <div class="pt-3 border-t border-border-hairline flex flex-wrap items-center justify-end gap-2.5">
+        <button type="button" onclick="dialogDeny()" class="min-h-[44px] px-4 py-2 rounded-card border border-border-strong text-ink-secondary hover:text-danger hover:border-danger font-body text-xs font-semibold transition-colors">
+          Refuser (Deny)
+        </button>
+        <button type="button" onclick="dialogIgnore()" class="min-h-[44px] px-4 py-2 rounded-card text-ink-secondary hover:text-ink-primary font-body text-xs font-semibold transition-colors">
+          Ignorer (Ignore)
+        </button>
+        <button type="button" onclick="dialogApprove()" class="min-h-[44px] px-5 py-2 rounded-card bg-indigo hover:bg-indigo-deep text-ink-on-indigo font-body text-xs font-semibold transition-colors flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-base">check</span>
+          <span>Autoriser (Approve)</span>
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- CANONICAL ANKANU FOOTER -->
+  <footer class="w-full bg-surface-sand border-t border-border-hairline mt-12">
+    <div class="w-full max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-meta text-ink-secondary">
+      <div class="text-center md:text-left">
+        <p>&copy; 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.</p>
+        <p class="text-ink-secondary/80 mt-0.5">Données souveraines chiffrées selon les directives de la Commission de l'Informatique et des Libertés (CIL-BF).</p>
+      </div>
+      <nav class="flex items-center gap-6">
+        <a href="#" class="hover:text-indigo transition-colors">Charte d'Honneur</a>
+        <a href="#" class="hover:text-indigo transition-colors">Tuteurs Légaux (Wali)</a>
+        <a href="#" class="hover:text-indigo transition-colors">Sécurité &amp; Pudeur</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIC FOR STATE MACHINE & DOM EVENTS -->
+  <script>
+    // System State
+    const state = {
+      isRevealed: false,
+      policy: 'on_request', // on_accept | on_request | never
+      pendingRequests: 1, // max 1 per pair
+      networkError: false,
+      viewerName: 'Tahir_Ouaga'
+    };
+
+    // DOM Elements Cache
+    const visualVeiled = document.getElementById('visual-state-veiled');
+    const visualUnveiled = document.getElementById('visual-state-unveiled');
+    const visualStatusTag = document.getElementById('visual-status-tag');
+    const revealPictogram = document.getElementById('reveal-pictogram');
+    const revealCaptionLabel = document.getElementById('reveal-caption-label');
+    const revealSubtext = document.getElementById('reveal-subtext');
+    const mainRevealControl = document.getElementById('main-reveal-control');
+    const btnRevealText = document.getElementById('btn-reveal-text');
+    const btnRevealIcon = document.getElementById('btn-reveal-icon');
+    const revealControlStateBadge = document.getElementById('reveal-control-state-badge');
+    const announcementBadge = document.getElementById('announcement-badge');
+    const announcementText = document.getElementById('announcement-text');
+    const announcementDot = document.getElementById('announcement-dot');
+    const announcementTime = document.getElementById('announcement-time');
+    const pendingStateBox = document.getElementById('pending-state-box');
+    const pendingCounterBadge = document.getElementById('pending-counter-badge');
+    const requestCapDot = document.getElementById('request-cap-dot');
+    const networkErrorCallout = document.getElementById('network-error-callout');
+    const modalDialog = document.getElementById('reveal-request-dialog');
+
+    // Policy change handler
+    function changePolicy(newPolicy) {
+      state.policy = newPolicy;
+      updatePolicyRadioStyles();
+
+      if (newPolicy === 'never') {
+        state.isRevealed = false;
+        state.pendingRequests = 0;
+        updateUI();
+        setAnnouncement('Flou rétabli', 'Politique NEVER active : le cliché reste voilé sans exception pour ' + state.viewerName, 'gold');
+      } else if (newPolicy === 'on_accept') {
+        // In on_accept, since Chat is already established (Sister accepted), reveal becomes active
+        state.isRevealed = true;
+        state.pendingRequests = 0;
+        updateUI();
+        setAnnouncement('Visible pour ' + state.viewerName, 'Politique ON_ACCEPT : accès ouvert suite à l\'acceptation mutuelle de l\'invitation', 'success');
+      } else if (newPolicy === 'on_request') {
+        // on_request requires individual approval
+        updateUI();
+        setAnnouncement('Flou sous condition', 'Politique ON_REQUEST : requiert une demande expresse et validation cas par cas', 'gold');
+      }
+    }
+
+    function updatePolicyRadioStyles() {
+      const labels = ['on_accept', 'on_request', 'never'];
+      labels.forEach(p => {
+        const el = document.getElementById('label-policy-' + p);
+        if (p === state.policy) {
+          el.className = 'relative flex flex-col p-3.5 rounded-card border-2 cursor-pointer transition-all bg-gold-soft/20 border-gold';
+        } else {
+          el.className = 'relative flex flex-col p-3.5 rounded-card border-2 cursor-pointer transition-all bg-surface-raised border-border-hairline hover:border-indigo';
+        }
+      });
+    }
+
+    // Toggle reveal control button
+    function toggleRevealControl() {
+      if (state.policy === 'never') return;
+      state.isRevealed = !state.isRevealed;
+      if (state.isRevealed) {
+        setAnnouncement('Visible pour ' + state.viewerName, 'Accès accordé manuellement par le titulaire du compte', 'success');
+      } else {
+        setAnnouncement('Flou rétabli', 'Accès suspendu manuellement par le titulaire du compte', 'danger');
+      }
+      updateUI();
+    }
+
+    // Revocation trigger (<=60s denylist)
+    function triggerRevocation() {
+      state.isRevealed = false;
+      state.pendingRequests = 0;
+      setAnnouncement('Flou rétabli', 'Révocation effective. Inscription sur la passerelle denylist (délai d\'éviction ≤60s)', 'danger');
+      updateUI();
+    }
+
+    // Modal helpers
+    function openIncomingPromptModal() {
+      modalDialog.showModal();
+    }
+    function closeModal(id) {
+      document.getElementById(id).close();
+    }
+    function dialogApprove() {
+      closeModal('reveal-request-dialog');
+      state.isRevealed = true;
+      state.pendingRequests = 0;
+      setAnnouncement('Visible pour ' + state.viewerName, 'Demande approuvée : le visage est accessible pour examen légitime', 'success');
+      updateUI();
+    }
+    function dialogIgnore() {
+      closeModal('reveal-request-dialog');
+      setAnnouncement('Requête ignorée', 'La demande reste en attente sans octroi de visibilité', 'gold');
+      updateUI();
+    }
+    function dialogDeny() {
+      closeModal('reveal-request-dialog');
+      state.isRevealed = false;
+      state.pendingRequests = 0;
+      setAnnouncement('Flou rétabli', 'Demande refusée formellement : le flou est scellé pour cette session', 'danger');
+      updateUI();
+    }
+
+    // Interactive button actions from pending box
+    function approveRevealRequest() { dialogApprove(); }
+    function ignoreRevealRequest() { dialogIgnore(); }
+    function denyRevealRequest() { dialogDeny(); }
+
+    function retryRevocationNetwork() {
+      networkErrorCallout.classList.add('hidden');
+      state.networkError = false;
+      triggerRevocation();
+    }
+
+    // Simulation presets
+    function simState(mode) {
+      networkErrorCallout.classList.add('hidden');
+      state.networkError = false;
+
+      if (mode === 'initial') {
+        state.isRevealed = false;
+        state.policy = 'on_request';
+        state.pendingRequests = 0;
+        setAnnouncement('Flou rétabli', 'État initial : voilement total actif, aucun accès consenti', 'gold');
+      } else if (mode === 'request_pending') {
+        state.isRevealed = false;
+        state.policy = 'on_request';
+        state.pendingRequests = 1;
+        setAnnouncement('Demande en attente', 'Une sollicitation active de ' + state.viewerName + ' attend votre arbitrage', 'gold');
+      } else if (mode === 'granted') {
+        state.isRevealed = true;
+        state.policy = 'on_accept';
+        state.pendingRequests = 0;
+        setAnnouncement('Visible pour ' + state.viewerName, 'Le prétendant a été autorisé à contempler le portrait matrimonial', 'success');
+      } else if (mode === 'revoking') {
+        state.isRevealed = false;
+        state.policy = 'never';
+        state.pendingRequests = 0;
+        setAnnouncement('Flou rétabli', 'Révocation enclenchée : transmission à la passerelle TTL ≤60s', 'danger');
+      } else if (mode === 'network_fail') {
+        state.networkError = true;
+        networkErrorCallout.classList.remove('hidden');
+        setAnnouncement('Erreur réseau de révocation', 'Passerelle denylist en attente d\'acquittement — cache local verrouillé', 'danger');
+      }
+
+      // Sync radio buttons
+      const radio = document.querySelector(`input[name="viewer_policy"][value="${state.policy}"]`);
+      if (radio) radio.checked = true;
+      updatePolicyRadioStyles();
+      updateUI();
+    }
+
+    function setAnnouncement(badge, text, tone) {
+      announcementBadge.textContent = badge + ' :';
+      announcementText.textContent = text;
+      if (tone === 'success') {
+        announcementDot.className = 'w-2 h-2 rounded-full bg-success';
+        announcementBadge.className = 'font-medium text-success';
+      } else if (tone === 'danger') {
+        announcementDot.className = 'w-2 h-2 rounded-full bg-danger';
+        announcementBadge.className = 'font-medium text-danger';
+      } else {
+        announcementDot.className = 'w-2 h-2 rounded-full bg-gold';
+        announcementBadge.className = 'font-medium text-ink-primary';
+      }
+    }
+
+    // Core UI sync
+    function updateUI() {
+      // 1. Visual Photo Container
+      if (state.isRevealed) {
+        visualVeiled.classList.add('hidden');
+        visualUnveiled.classList.remove('hidden');
+      } else {
+        visualVeiled.classList.remove('hidden');
+        visualUnveiled.classList.add('hidden');
+      }
+
+      // 2. Main Reveal Control
+      if (state.policy === 'never') {
+        mainRevealControl.disabled = true;
+        mainRevealControl.setAttribute('aria-pressed', 'false');
+        mainRevealControl.className = 'min-h-[44px] px-5 py-2 rounded-card bg-disabled text-ink-secondary font-body font-semibold text-sm inline-flex items-center justify-center gap-2 transition-all cursor-not-allowed border border-border-hairline';
+        btnRevealText.textContent = 'Politique NEVER (Verrouillé)';
+        btnRevealIcon.textContent = 'lock';
+        revealControlStateBadge.textContent = 'Verrouillé par politique';
+        revealControlStateBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-meta bg-danger-soft text-danger border border-danger/30';
+        revealPictogram.textContent = 'face_retouching_off';
+        revealCaptionLabel.textContent = 'Statut actuel : Cliché masqué perpétuel';
+        revealSubtext.textContent = 'La politique interdit tout affichage pour ce prétendant.';
+      } else if (state.isRevealed) {
+        mainRevealControl.disabled = false;
+        mainRevealControl.setAttribute('aria-pressed', 'true');
+        // Styled as active {components.reveal-control} (gold-soft, indigo-deep text)
+        mainRevealControl.className = 'min-h-[44px] px-5 py-2 rounded-card bg-gold-soft hover:bg-gold text-indigo-deep font-body font-semibold text-sm inline-flex items-center justify-center gap-2 transition-all cursor-pointer border border-gold focus:outline-none focus:ring-2 focus:ring-focus-ring';
+        btnRevealText.textContent = 'Rétablir le voilement';
+        btnRevealIcon.textContent = 'visibility_off';
+        revealControlStateBadge.textContent = 'Visible pour ' + state.viewerName;
+        revealControlStateBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-meta bg-success-soft text-success border border-success/30';
+        revealPictogram.textContent = 'face';
+        revealCaptionLabel.textContent = 'Statut actuel : Dévoilé pour ' + state.viewerName;
+        revealSubtext.textContent = 'Le prétendant a accès au portrait pour son étude matrimoniale.';
+      } else {
+        mainRevealControl.disabled = false;
+        mainRevealControl.setAttribute('aria-pressed', 'false');
+        mainRevealControl.className = 'min-h-[44px] px-5 py-2 rounded-card bg-surface-raised hover:bg-surface-sand text-indigo font-body font-semibold text-sm inline-flex items-center justify-center gap-2 transition-all cursor-pointer border border-border-strong focus:outline-none focus:ring-2 focus:ring-focus-ring';
+        btnRevealText.textContent = 'Dévoiler le cliché';
+        btnRevealIcon.textContent = 'visibility';
+        revealControlStateBadge.textContent = 'Voilé (En attente)';
+        revealControlStateBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-meta bg-surface-sand text-ink-secondary border border-border-hairline';
+        revealPictogram.textContent = 'face_retouching_off';
+        revealCaptionLabel.textContent = 'Statut actuel : Cliché masqué';
+        revealSubtext.textContent = 'Le portrait n\'est pas accessible. Cliquez pour lever le sceau.';
+      }
+
+      // 3. Pending requests box
+      if (state.pendingRequests > 0) {
+        document.getElementById('pending-request-interactive').classList.remove('hidden');
+        pendingCounterBadge.textContent = '1 / 1 requête active';
+        pendingCounterBadge.className = 'px-2 py-1 rounded bg-gold-soft/50 border border-gold/40 text-xs font-meta text-ink-primary font-medium shrink-0';
+        requestCapDot.className = 'w-2.5 h-2.5 rounded-full bg-gold animate-pulse';
+      } else {
+        document.getElementById('pending-request-interactive').classList.add('hidden');
+        pendingCounterBadge.textContent = '0 / 1 requête active';
+        pendingCounterBadge.className = 'px-2 py-1 rounded bg-surface-raised border border-border-hairline text-xs font-meta text-ink-secondary font-medium shrink-0';
+        requestCapDot.className = 'w-2.5 h-2.5 rounded-full bg-border-hairline';
+      }
+    }
+
+    // Initial mount
+    updateUI();
+  </script>
+</body>
+</html>

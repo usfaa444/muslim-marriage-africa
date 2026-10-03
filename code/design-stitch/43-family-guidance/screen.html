@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Guidance Familiale &amp; Présence Tutélaire — AnKanu</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "ink-secondary": "#5C5346",
+            "outline": "#74777f",
+            "on-tertiary-container": "#88a5ce",
+            "primary-fixed-dim": "#aec8f4",
+            "staff": "#6B3D2E",
+            "on-secondary-fixed-variant": "#5b4300",
+            "primary-fixed": "#d5e3ff",
+            "secondary-container": "#fdd88a",
+            "blur-wash": "#C8BBA6",
+            "on-surface": "#1e1b14",
+            "surface-dim": "#e0d9cd",
+            "primary": "#032448",
+            "error": "#ba1a1a",
+            "tertiary-container": "#1b3b5e",
+            "inverse-primary": "#aec8f4",
+            "gold": "#C4A35A",
+            "on-tertiary-fixed": "#001c38",
+            "tertiary-fixed-dim": "#abc9f3",
+            "secondary-fixed-dim": "#e5c276",
+            "ink-primary": "#1B2433",
+            "success-soft": "#DCE6DE",
+            "secondary-fixed": "#ffdf9c",
+            "surface": "#fff9ee",
+            "indigo": "#1F3A5F",
+            "error-container": "#ffdad6",
+            "indigo-deep": "#15283F",
+            "inverse-surface": "#333028",
+            "surface-tint": "#465f86",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#d3e4ff",
+            "tertiary": "#002546",
+            "surface-container-high": "#eee7db",
+            "on-primary-container": "#8ba4cf",
+            "surface-raised": "#FFFBF4",
+            "surface-sand": "#F4EDE0",
+            "staff-soft": "#EFE4DC",
+            "focus-ring": "#1F3A5F",
+            "primary-container": "#1f3a5f",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-secondary": "#ffffff",
+            "border-hairline": "#D9CDB8",
+            "border-strong": "#6F624C",
+            "surface-container": "#f4ede0",
+            "mihrab": "#2C4A6E",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-container": "#785d1b",
+            "surface-variant": "#e9e2d5",
+            "success": "#3D5C45",
+            "surface-indigo": "#15283F",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#e9e2d5",
+            "background": "#fff9ee",
+            "on-background": "#1e1b14",
+            "inverse-on-surface": "#f7f0e3",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-bright": "#fff9ee",
+            "danger-soft": "#F3E0DC",
+            "on-primary-fixed-variant": "#2d476d",
+            "gold-soft": "#E8D5A3",
+            "surface-container-low": "#faf3e6",
+            "on-primary-fixed": "#001c3b",
+            "on-secondary-fixed": "#251a00",
+            "on-error": "#ffffff",
+            "outline-variant": "#c4c6cf",
+            "secondary": "#755b18",
+            "on-surface-variant": "#43474e",
+            "disabled": "#B5A894",
+            "danger": "#8B3A3A",
+            "on-tertiary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "4": "16px",
+            "gutter": "16px",
+            "7": "48px",
+            "space-lg": "1.5rem",
+            "5": "24px",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem",
+            "1": "4px",
+            "2": "8px",
+            "margin": "1rem",
+            "6": "32px",
+            "screen-pad": "16px",
+            "space-xs": "0.25rem",
+            "3": "12px"
+          },
+          "fontFamily": {
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "meta": ["13px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+            "display": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "heading": ["18px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "body": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "title": ["22px", {"lineHeight": "1.25", "fontWeight": "600"}],
+            "body-strong": ["16px", {"lineHeight": "1.5", "fontWeight": "600"}],
+            "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-surface text-ink-primary font-body text-body selection:bg-gold-soft selection:text-ink-primary">
+<!-- Top Navigation Bar (Shared Component Anchor) -->
+<header class="border-b border-border-hairline bg-surface sticky top-0 z-30">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand & Main Navigation -->
+<div class="flex items-center gap-8">
+<a class="font-title text-title text-primary font-bold tracking-tight hover:opacity-95 transition-opacity" href="#">
+          AnKanu
+        </a>
+<nav aria-label="Navigation principale" class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Invitations</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Discussions</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Profil</a>
+</nav>
+</div>
+<!-- Trailing Status & Actions -->
+<div class="flex items-center gap-3 sm:gap-4">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-soft text-success font-meta text-meta border border-border-hairline">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="hidden sm:inline">Wali notifié : Oumar O.</span>
+<span class="sm:hidden">Wali : Oumar</span>
+</div>
+<button class="inline-flex items-center gap-1 text-ink-secondary hover:text-primary font-body text-body py-1.5 px-2.5 rounded-lg border border-border-hairline transition-colors duration-150 bg-surface-raised" type="button">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span class="font-meta text-meta">Assistance</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Editorial Canvas Area -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+<!-- Context Breadcrumb / Meta Anchor -->
+<nav aria-label="Fil d'Ariane" class="mb-6 flex items-center justify-between text-ink-secondary">
+<a class="inline-flex items-center gap-1.5 font-meta text-meta hover:text-primary transition-colors group" href="#">
+<span class="material-symbols-outlined text-[16px] transition-transform group-hover:-translate-x-0.5">arrow_back</span>
+<span>Retour à l'accueil / Onboarding</span>
+</a>
+<span class="font-meta text-meta px-2.5 py-0.5 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline">
+        Aide &amp; Accompagnement familial · FR-080
+      </span>
+</nav>
+<!-- Editorial Hero Section -->
+<section class="mb-10 text-center max-w-2xl mx-auto">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-sand border border-border-hairline mb-4 text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-[16px] text-gold" style="font-variation-settings: 'FILL' 1;">spa</span>
+<span>Tradition Matrimoniale Burkinabè &amp; Sincérité</span>
+</div>
+<h1 class="font-display text-display text-primary tracking-tight mb-3">
+        Guidance Familiale &amp; Présence Tutélaire
+      </h1>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+        L'implication des familles est une source d'honneur et de bénédiction dans la tradition du mariage honorable. Définissez librement et sereinement votre rythme d'accompagnement.
+      </p>
+</section>
+<!-- FR-080 Interactive Guidance Simulator Switcher -->
+<section aria-label="Sélecteur thématique de guidance" class="mb-10 bg-surface-sand p-2 sm:p-2.5 rounded-xl border border-border-hairline">
+<p class="px-2 pt-1 pb-2 font-caption text-caption text-ink-secondary uppercase tracking-wider font-semibold">
+        Consulter les clauses et cas d'usage FR-080 :
+      </p>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-1.5" role="tablist">
+<button class="tab-btn px-3 py-2.5 rounded-lg text-left font-meta text-meta transition-all duration-150 border bg-surface-raised border-border-strong text-primary shadow-sm font-semibold" id="tab-1" onclick="switchTab(1)">
+          1. Rôle &amp; Bénédiction
+        </button>
+<button class="tab-btn px-3 py-2.5 rounded-lg text-left font-meta text-meta transition-all duration-150 border border-transparent text-ink-secondary hover:bg-surface-raised hover:text-primary" id="tab-2" onclick="switchTab(2)">
+          2. Mahram &amp; Souveraineté
+        </button>
+<button class="tab-btn px-3 py-2.5 rounded-lg text-left font-meta text-meta transition-all duration-150 border border-transparent text-ink-secondary hover:bg-surface-raised hover:text-primary" id="tab-3" onclick="switchTab(3)">
+          3. Salon (Initiative Sœur)
+        </button>
+<button class="tab-btn px-3 py-2.5 rounded-lg text-left font-meta text-meta transition-all duration-150 border border-transparent text-ink-secondary hover:bg-surface-raised hover:text-primary" id="tab-4" onclick="switchTab(4)">
+          4. Éloignement &amp; Délégation
+        </button>
+<button class="tab-btn px-3 py-2.5 rounded-lg text-left font-meta text-meta transition-all duration-150 border border-transparent text-ink-secondary hover:bg-surface-raised hover:text-primary" id="tab-5" onclick="switchTab(5)">
+          5. État : Absence de tuteur
+        </button>
+<button class="tab-btn px-3 py-2.5 rounded-lg text-left font-meta text-meta transition-all duration-150 border border-transparent text-ink-secondary hover:bg-surface-raised hover:text-primary" id="tab-6" onclick="switchTab(6)">
+          6. État : Erreur de liaison
+        </button>
+</div>
+</section>
+<!-- CONTENT PANELS -->
+<!-- TAB PANEL 1: Rôle & Bénédiction de la Famille -->
+<div class="tab-panel space-y-6" id="panel-1">
+<article class="bg-surface-raised rounded-xl p-6 sm:p-8 border border-border-hairline">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-sand border border-border-hairline flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[26px]">groups</span>
+</div>
+<div>
+<span class="font-meta text-meta text-gold font-semibold uppercase tracking-wider">Pilier Fondateur</span>
+<h2 class="font-title text-title text-primary mt-1 mb-3">L'Honneur de la Démarche Familiale</h2>
+<p class="font-body text-body text-ink-secondary leading-relaxed mb-4">
+              Dans la tradition sahélienne et les principes de la <em>Sira</em> prophétique, le projet matrimonial n'est jamais un acte clandestin ou isolé. Impliquer les parents ou un tuteur bienveillant (*Wali*) apporte la baraka (bénédiction), confère une clarté sincère dès les premières intentions et protège l'intégrité morale de chaque foyer.
+            </p>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+              La plateforme AnKanu a été conçue pour réconcilier les outils contemporains et l'exigence sacrée de transparence : aucun profil n'est exposé de manière triviale, et le respect mutuel des lignées constitue le socle de chaque mise en relation.
+            </p>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-border-hairline grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline">
+<div class="flex items-center gap-2 mb-2 text-primary font-body-strong text-body-strong">
+<span class="material-symbols-outlined text-[20px] text-gold">verified</span>
+<span>Préservation de la Haya</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+              Les échanges conservent une pudeur naturelle, garantissant que chacun chemine avec dignité et sérieux.
+            </p>
+</div>
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline">
+<div class="flex items-center gap-2 mb-2 text-primary font-body-strong text-body-strong">
+<span class="material-symbols-outlined text-[20px] text-gold">shield_with_heart</span>
+<span>Protection &amp; Sérénité</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+              La caution familiale écarte toute ambiguïté, protégeant la sœur ainsi que le frère contre les faux engagements.
+            </p>
+</div>
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline">
+<div class="flex items-center gap-2 mb-2 text-primary font-body-strong text-body-strong">
+<span class="material-symbols-outlined text-[20px] text-gold">handshake</span>
+<span>Alliance Durable</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+              Le mariage unit deux familles : instaurer le dialogue familial dès le début assure un mariage harmonieux.
+            </p>
+</div>
+</div>
+</article>
+</div>
+<!-- TAB PANEL 2: Mahram Optionnel & Souveraineté -->
+<div class="tab-panel hidden space-y-6" id="panel-2">
+<article class="bg-surface-raised rounded-xl p-6 sm:p-8 border border-border-hairline">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-sand border border-border-hairline flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[26px]">account_balance</span>
+</div>
+<div>
+<span class="font-meta text-meta text-gold font-semibold uppercase tracking-wider">Autonomie &amp; Cadre</span>
+<h2 class="font-title text-title text-primary mt-1 mb-3">Le Tuteur (Mahram / Wali) : Un Appui Bienveillant et Optionnel</h2>
+<p class="font-body text-body text-ink-secondary leading-relaxed mb-4">
+              Sur AnKanu, l'inscription d'un Mahram ou Wali n'est pas un obstacle administratif rigide, mais un appui protecteur et rassurant. Sa désignation est encouragée mais modulable selon la situation personnelle de chaque candidate.
+            </p>
+</div>
+</div>
+<div class="mt-4 space-y-4">
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">lock_person</span>
+<div>
+<h3 class="font-body-strong text-body-strong text-primary">Souveraineté des coordonnées</h3>
+<p class="font-body text-body text-ink-secondary">
+                Le contact de votre tuteur (père, frère, oncle ou représentant) demeure strictement confidentiel. Il n'est jamais divulgué publiquement ni transmis à un prétendant sans consentement mutuel formalisé.
+              </p>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">how_to_reg</span>
+<div>
+<h3 class="font-body-strong text-body-strong text-primary">Notification par SMS / WhatsApp sobre</h3>
+<p class="font-body text-body text-ink-secondary">
+                Lorsque configuré, le Wali reçoit uniquement des résumés périodiques d'avancement d'étapes solennelles, sans intrusion dans les échanges intimes ou les réflexions personnelles.
+              </p>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- TAB PANEL 3: Mahram dans les Échanges (Initiative de la Sœur) -->
+<div class="tab-panel hidden space-y-6" id="panel-3">
+<article class="bg-surface-raised rounded-xl p-6 sm:p-8 border border-border-hairline">
+<span class="font-meta text-meta text-gold font-semibold uppercase tracking-wider">Prérogative Exclusivité Sœur</span>
+<h2 class="font-title text-title text-primary mt-1 mb-3">Présence Tutélaire dans le Salon de Discussion</h2>
+<p class="font-body text-body text-ink-secondary leading-relaxed mb-6">
+          Il revient <strong>exclusivement à la sœur</strong> de décider du moment où son Mahram ou Wali rejoint le salon de discussion. Cette prérogative garantit qu'aucune pression prématurée n'est exercée, tout en assurant aux deux parties un cadre honorable dès que la volonté d'approfondir est confirmée.
+        </p>
+<!-- Preview Card of the Mahram Banner in Chat -->
+<div class="p-4 sm:p-5 rounded-xl bg-surface-indigo text-ink-on-indigo mb-6 border border-border-strong">
+<div class="flex items-center justify-between pb-3 mb-3 border-b border-white/10">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-body-strong text-body-strong text-gold">Aperçu du bandeau tutélaire en salon</span>
+</div>
+<span class="px-2 py-0.5 rounded text-xs bg-white/10 text-ink-on-indigo font-meta">Actif en salon</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[20px] text-gold shrink-0 mt-0.5">visibility</span>
+<div>
+<p class="font-body-strong text-body-strong text-white">Un tuteur légal (Wali) a accès à cette discussion</p>
+<p class="font-meta text-meta text-ink-on-indigo/80 mt-1">
+                « En vertu de l'invitation formulée par la candidate, Oumar O. (tuteur désigné) peut consulter les messages échangés. Que la politesse et la courtoisie guident vos paroles. »
+              </p>
+</div>
+</div>
+</div>
+<div class="bg-surface-sand p-4 rounded-lg border border-border-hairline flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">toggle_on</span>
+<span class="font-body-strong text-body-strong text-ink-primary">Statut par défaut à l'ouverture d'un dialogue :</span>
+</div>
+<span class="font-meta text-meta px-3 py-1 rounded-full bg-surface-raised border border-border-hairline text-ink-secondary">
+            Non invité (Démarche directe préliminaire)
+          </span>
+</div>
+</article>
+</div>
+<!-- TAB PANEL 4: Cas d'Éloignement ou Tuteur Délégué -->
+<div class="tab-panel hidden space-y-6" id="panel-4">
+<article class="bg-surface-raised rounded-xl p-6 sm:p-8 border border-border-hairline">
+<span class="font-meta text-meta text-gold font-semibold uppercase tracking-wider">Adaptabilité Contextuelle</span>
+<h2 class="font-title text-title text-primary mt-1 mb-3">Diaspora, Éloignement Géographique ou Représentant Délégué</h2>
+<p class="font-body text-body text-ink-secondary leading-relaxed mb-4">
+          Que votre famille réside en région (Bobo-Dioulasso, Koudougou, Ouahigouya) ou que vous viviez à l'étranger (Diaspora en Côte d'Ivoire, France, Canada), la plateforme prend en compte la distance :
+        </p>
+<ul class="space-y-3 font-body text-body text-ink-secondary mb-6">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold mt-1 text-[18px]">check_circle</span>
+<span><strong>Délégation formelle (*Wikala*) :</strong> Possibilité de nommer un oncle maternel/paternel ou un doyen résidant dans la ville de rencontre.</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold mt-1 text-[18px]">check_circle</span>
+<span><strong>Suivi numérique à distance :</strong> Le Wali reçoit les récapitulatifs par SMS international ou canal sécurisé sans contrainte de déplacement immédiat.</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold mt-1 text-[18px]">check_circle</span>
+<span><strong>Accompagnement par une autorité morale reconnue :</strong> En cas d'éloignement absolu, le recours à un imam de confiance ou un médiateur certifié AnKanu est documenté.</span>
+</li>
+</ul>
+</article>
+</div>
+<!-- TAB PANEL 5: État vide / Absence de tuteur direct -->
+<div class="tab-panel hidden space-y-6" id="panel-5">
+<!-- Empty state container ({components.empty-state}) -->
+<article class="bg-surface-raised rounded-xl p-8 sm:p-12 border border-border-hairline text-center max-w-lg mx-auto">
+<div class="w-16 h-16 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center mx-auto mb-4 text-ink-secondary">
+<span class="material-symbols-outlined text-[32px]">person_off</span>
+</div>
+<h3 class="font-title text-title text-primary mb-2">Aucun tuteur n'est configuré pour le moment</h3>
+<p class="font-body text-body text-ink-secondary mb-6 leading-relaxed">
+          Votre compte fonctionne actuellement en démarche autonome sans référent tutélaire enregistré.
+        </p>
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 h-12 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body-strong hover:bg-indigo-deep transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+<span>Désigner un tuteur référent</span>
+</button>
+</article>
+</div>
+<!-- TAB PANEL 6: Erreur de liaison tuteur -->
+<div class="tab-panel hidden space-y-6" id="panel-6">
+<!-- Error banner ({components.error-banner}) -->
+<div class="rounded-xl border border-danger/30 bg-danger-soft p-4 sm:p-5 flex items-start gap-4" role="alert">
+<div class="w-10 h-10 rounded-lg bg-danger/10 text-danger flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[22px]">error_outline</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h4 class="font-body-strong text-body-strong text-danger">Échec de confirmation des coordonnées du tuteur</h4>
+<span class="font-meta text-meta text-danger/80">Code ERR-FR080-VAL</span>
+</div>
+<p class="font-body text-body text-ink-primary mt-1 mb-3">
+            Le numéro de téléphone fourni (+226 70 00 00 00) n'a pas répondu à l'attestation de consentement par SMS. Le lien de liaison temporaire a expiré après 48 heures.
+          </p>
+<div class="flex flex-wrap items-center gap-3">
+<button class="px-4 py-2 rounded-lg bg-danger text-white font-meta text-meta font-semibold hover:opacity-90 transition-opacity" type="button">
+              Renvoyer le code d'attestation
+            </button>
+<button class="px-4 py-2 rounded-lg bg-surface-raised border border-border-hairline text-ink-primary font-meta text-meta hover:bg-surface-sand transition-colors" type="button">
+              Corriger le contact tutélaire
+            </button>
+</div>
+</div>
+</div>
+<article class="bg-surface-raised rounded-xl p-6 border border-border-hairline">
+<h3 class="font-heading text-heading text-primary mb-2">Pourquoi cette vérification est-elle requise ?</h3>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+          Pour préserver l'authenticité de la plateforme, AnKanu s'assure que tout tuteur désigné a explicitement validé sa mission de protection morale avant d'être associé à votre profil matrimonial.
+        </p>
+</article>
+</div>
+<!-- Action Section / Primary & Quiet CTA -->
+<section class="mt-12 pt-8 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto inline-flex items-center justify-center px-8 h-12 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body-strong hover:bg-indigo-deep transition-colors duration-150 shadow-sm" type="button">
+<span>Définir mes préférences de tutelle</span>
+<span class="material-symbols-outlined ml-2 text-[20px]">arrow_forward</span>
+</button>
+<button class="w-full sm:w-auto inline-flex items-center justify-center px-6 h-11 text-ink-secondary hover:text-primary font-body text-body underline decoration-border-hairline hover:decoration-primary transition-colors" type="button">
+        Consulter la charte déontologique
+      </button>
+</section>
+</main>
+<!-- Footer Component (Shared Component Anchor) -->
+<footer class="border-t border-border-hairline bg-surface-sand mt-auto">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Legal Notice & Sovereign Hosting -->
+<div class="text-center md:text-left space-y-1.5 max-w-2xl">
+<p class="font-title text-title text-primary font-bold">AnKanu</p>
+<p class="font-meta text-meta text-ink-secondary leading-relaxed">
+          © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+</div>
+<!-- Links Cluster -->
+<nav aria-label="Liens légaux" class="flex flex-wrap items-center justify-center gap-6">
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">
+          Confidentialité &amp; Données
+        </a>
+<a class="text-primary font-meta text-meta underline decoration-border-hairline transition-colors duration-150" href="#">
+          Tuteurs Légaux (Wali)
+        </a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">
+          Éthique &amp; Respect
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Tab Switcher Vanilla Script -->
+<script>
+    function switchTab(index) {
+      // Hide all panels
+      const panels = document.querySelectorAll('.tab-panel');
+      panels.forEach(p => p.classList.add('hidden'));
+
+      // Show selected panel
+      const targetPanel = document.getElementById('panel-' + index);
+      if (targetPanel) {
+        targetPanel.classList.remove('hidden');
+      }
+
+      // Reset all buttons style
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-surface-raised', 'border-border-strong', 'text-primary', 'shadow-sm', 'font-semibold');
+        btn.classList.add('border-transparent', 'text-ink-secondary');
+      });
+
+      // Highlight active button
+      const activeBtn = document.getElementById('tab-' + index);
+      if (activeBtn) {
+        activeBtn.classList.remove('border-transparent', 'text-ink-secondary');
+        activeBtn.classList.add('bg-surface-raised', 'border-border-strong', 'text-primary', 'shadow-sm', 'font-semibold');
+      }
+    }
+  </script>
+</body></html>

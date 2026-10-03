@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Autorisations accordées au Tuteur (FR-074)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Typography: Source Serif 4 (Display/Headings) & Source Sans 3 (Body/Meta) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed": "#d5e3ff",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-indigo": "#15283F",
+            "success": "#3D5C45",
+            "tertiary-container": "#1b3b5e",
+            "background": "#fff9ee",
+            "outline-variant": "#c4c6cf",
+            "danger-soft": "#F3E0DC",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#d3e4ff",
+            "error-container": "#ffdad6",
+            "secondary-fixed": "#ffdf9c",
+            "on-secondary": "#ffffff",
+            "surface-raised": "#FFFBF4",
+            "focus-ring": "#1F3A5F",
+            "mihrab": "#2C4A6E",
+            "surface-tint": "#465f86",
+            "indigo": "#1F3A5F",
+            "danger": "#8B3A3A",
+            "secondary": "#755b18",
+            "surface-container-high": "#eee7db",
+            "border-strong": "#6F624C",
+            "surface-container-lowest": "#ffffff",
+            "border-hairline": "#D9CDB8",
+            "inverse-on-surface": "#f7f0e3",
+            "on-error-container": "#93000a",
+            "secondary-container": "#fdd88a",
+            "on-primary-fixed": "#001c3b",
+            "surface-variant": "#e9e2d5",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "ink-secondary": "#5C5346",
+            "on-secondary-container": "#785d1b",
+            "primary-container": "#1f3a5f",
+            "inverse-surface": "#333028",
+            "surface-sand": "#F4EDE0",
+            "on-tertiary-container": "#88a5ce",
+            "on-tertiary": "#ffffff",
+            "surface-dim": "#e0d9cd",
+            "blur-wash": "#C8BBA6",
+            "disabled": "#B5A894",
+            "indigo-deep": "#15283F",
+            "surface": "#fff9ee",
+            "staff-soft": "#EFE4DC",
+            "on-primary-container": "#8ba4cf",
+            "surface-container-highest": "#e9e2d5",
+            "on-tertiary-fixed": "#001c38",
+            "ink-on-indigo": "#F4EDE0",
+            "on-error": "#ffffff",
+            "primary": "#032448",
+            "outline": "#74777f",
+            "on-secondary-fixed": "#251a00",
+            "on-primary": "#ffffff",
+            "ink-primary": "#1B2433",
+            "staff": "#6B3D2E",
+            "tertiary": "#002546",
+            "gold": "#C4A35A",
+            "inverse-primary": "#aec8f4",
+            "gold-soft": "#E8D5A3",
+            "secondary-fixed-dim": "#e5c276",
+            "surface-container-low": "#faf3e6",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-secondary-fixed-variant": "#5b4300",
+            "surface-container": "#f4ede0",
+            "on-background": "#1e1b14",
+            "primary-fixed-dim": "#aec8f4",
+            "success-soft": "#DCE6DE",
+            "on-surface": "#1e1b14",
+            "on-surface-variant": "#43474e",
+            "surface-bright": "#fff9ee"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "6": "32px",
+            "1": "4px",
+            "screen-pad": "16px",
+            "4": "16px",
+            "2": "8px",
+            "space-xl": "2rem",
+            "5": "24px",
+            "3": "12px",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "7": "48px",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "gutter": "16px",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"]
+          },
+          "fontSize": {
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-ink-primary">
+<!-- ================= TOP APP BAR (Shared Component JSON Conformance) ================= -->
+<header class="border-b border-border-hairline bg-surface sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand Anchor & Identity -->
+<div class="flex items-center gap-6">
+<a aria-label="AnKanu Accueil" class="flex items-center gap-3 group focus:outline-none" href="#">
+<img alt="AnKanu" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XT71GSWnbOJt_CQi1DUvv4OW0K5SEJY_79ODEJ_F1YJK5llxVS3rjCqCmMEy6S9g_3-imJ0QkSSORiCIR6h0HbatDNrCM1wTP0NVB2Q-a1LWVCYqdsb7-i2f1xwQR8ApZZE2gnEdnDZamJRIxu9ZbE4jgetgouQU2Cv1R2-2S6slOfu6vCQuf0pvK3NT85Xyamb393v2NxjudldhTfP2MFTzn8HnjzwwLJUnYsBxF_6aqrqas5PVNKFEGs"/>
+</a>
+<!-- Desktop Navigation Items -->
+<nav aria-label="Navigation principale" class="hidden md:flex items-center space-x-6 ml-4">
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Invitations</a>
+<!-- ACTIVE: Discussions (Chaperonnage context) -->
+<a aria-current="page" class="text-primary font-body-strong text-body-strong border-b-2 border-primary pb-1 flex items-center gap-1.5" href="#">
+<span>Discussions</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-caption font-caption bg-mihrab text-ink-on-indigo text-[11px]" title="Protocole Wali actif">FR-074</span>
+</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Profil</a>
+</nav>
+</div>
+<!-- Trailing Chaperone Anchor & Support Action -->
+<div class="flex items-center gap-3 sm:gap-4">
+<!-- Chaperone Indicator Pill -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-sand border border-border-hairline text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-[18px] text-primary" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="hidden sm:inline font-body-strong text-ink-primary">Wali notifié : Oumar O.</span>
+<span class="sm:hidden font-body-strong text-ink-primary">Wali : Oumar</span>
+</div>
+<a class="inline-flex items-center gap-1 text-ink-secondary font-meta text-meta hover:text-primary transition-colors duration-150 px-2 py-1" href="#" title="Besoin d'assistance éthique">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+<span class="hidden sm:inline">Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- ================= MAIN VIEW CANVAS ================= -->
+<main class="flex-grow w-full max-w-[840px] mx-auto px-4 sm:px-6 py-6 md:py-10">
+<!-- 1. BREADCRUMB & TAXONOMY -->
+<nav aria-label="Fil d'Ariane" class="flex items-center gap-2 font-meta text-meta text-ink-secondary mb-4">
+<a class="hover:text-primary transition-colors" href="#">Discussions</a>
+<span class="text-border-strong text-xs">/</span>
+<a class="hover:text-primary transition-colors" href="#">Chaperonnage</a>
+<span class="text-border-strong text-xs">/</span>
+<span class="text-ink-primary font-body-strong">Autorisations accordées au Tuteur (FR-074)</span>
+</nav>
+<!-- HEADER TITLE & STATUT -->
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-border-hairline pb-4 mb-6">
+<div>
+<h1 class="font-display text-display text-primary tracking-tight">Délégation de regard du tuteur</h1>
+<p class="font-body text-body text-ink-secondary mt-1">
+          Gestion souveraine des accès conférés à votre tuteur légal (<span class="font-body-strong text-ink-primary">Oumar Ouedraogo</span>, Wali confirmé).
+        </p>
+</div>
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-mihrab/10 text-primary border border-mihrab/20 font-meta text-caption self-start sm:self-auto">
+<span class="material-symbols-outlined text-[15px]" data-icon="lock_person">lock_person</span>
+<span>Souveraineté sœur</span>
+</div>
+</div>
+<!-- 2. STATE DEMO SWITCHER / SIMULATEUR INTERACTIF (FR-074 Prototype Control) -->
+<div class="mb-8 p-3 rounded-lg bg-surface-raised border border-border-hairline shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="tune">tune</span>
+<span class="font-meta text-caption uppercase tracking-wider text-ink-secondary font-bold">Simulateur de statut (FR-074) :</span>
+</div>
+<div class="flex flex-wrap gap-1.5">
+<button class="state-btn px-2.5 py-1 rounded text-caption font-meta transition-all border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary" id="btn-state-empty" onclick="setState('empty')" type="button">
+            1. Initial (Vide)
+          </button>
+<button class="state-btn px-2.5 py-1 rounded text-caption font-meta transition-all bg-indigo text-ink-on-indigo font-semibold" id="btn-state-active" onclick="setState('active')" type="button">
+            2. Accordé (2 Actifs)
+          </button>
+<button class="state-btn px-2.5 py-1 rounded text-caption font-meta transition-all border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary" id="btn-state-revoking" onclick="setState('revoking')" type="button">
+            3. Révocation unitaire
+          </button>
+<button class="state-btn px-2.5 py-1 rounded text-caption font-meta transition-all border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary" id="btn-state-global-revoked" onclick="setState('global-revoked')" type="button">
+            4. Révocation globale (FR-077)
+          </button>
+<button class="state-btn px-2.5 py-1 rounded text-caption font-meta transition-all border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary" id="btn-state-error" onclick="setState('error')" type="button">
+            5. Erreur réseau
+          </button>
+</div>
+</div>
+</div>
+<!-- 3. INSTITUTIONAL PROTOCOL BANNER (FR-074) -->
+<div class="mb-6 rounded-lg bg-surface-indigo text-ink-on-indigo p-5 border border-mihrab/40 relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-gold/10 pointer-events-none blur-xl"></div>
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-gold/20 border border-gold/40 flex items-center justify-center shrink-0 text-gold-soft mt-0.5">
+<span class="material-symbols-outlined text-[22px]" data-icon="gavel" style="font-variation-settings: 'FILL' 1;">gavel</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<div class="flex items-center gap-2">
+<h2 class="font-heading text-heading text-white">Règle canonique d'étanchéité — Protocole FR-074</h2>
+<span class="px-2 py-0.5 rounded text-[11px] font-meta bg-gold text-indigo-deep font-semibold">Inviolable</span>
+</div>
+<p class="font-body text-meta text-surface-sand/90 leading-relaxed">
+            Par décret de pudeur et de dignité, <strong class="text-white">aucun salon de discussion n'est partagé par défaut</strong>. Votre tuteur légal (Wali) n'a accès qu'aux correspondances que vous cochez personnellement et explicitement ci-dessous. Tout nouvel échange demeure sous votre sceau privé jusqu'à votre aval explicite.
+          </p>
+<div class="pt-1 flex items-center gap-4 text-xs font-meta text-gold-soft">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+              Droit de regard consultatif uniquement
+            </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="shield">shield</span>
+              Chiffrement de bout en bout
+            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- NOTIFICATION BAR (DYNAMIQUE SELON ÉTAT) -->
+<div class="hidden mb-6 p-4 rounded-lg border transition-all duration-200" id="status-toast">
+<!-- Rempli par JavaScript -->
+</div>
+<!-- ================= CONTENU PRINCIPAL (Dossier & Liste de Threads) ================= -->
+<section class="space-y-6">
+<!-- SECTION HEADER -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary">Salons de correspondances fraternelles</h2>
+<span class="px-2 py-0.5 rounded-full text-caption font-body-strong bg-primary text-white" id="active-badge-count">2 accordés</span>
+</div>
+<span class="font-meta text-meta text-ink-secondary">3 prétendants actifs</span>
+</div>
+<!-- 4. CONTENEUR ÉTAT VIDE (Affiché si State == 'empty' ou 'global-revoked') -->
+<div class="hidden rounded-lg bg-surface-raised border border-border-hairline p-8 text-center" id="view-empty">
+<div class="w-16 h-16 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center mx-auto mb-4 text-ink-secondary">
+<span class="material-symbols-outlined text-[32px]" data-icon="lock_clock">lock_clock</span>
+</div>
+<h3 class="font-heading text-title text-ink-primary mb-2">Aucune discussion accordée</h3>
+<p class="font-body text-body text-ink-secondary max-w-lg mx-auto mb-6">
+          Sélectionnez les salons de discussion que vous autorisez votre tuteur légal à consulter dans le cadre de sa bienveillance et du ta'aruf honorable.
+        </p>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-gold-soft/30 border border-gold/40 text-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-[16px]" data-icon="info">info</span>
+          Vos discussions restent strictement confidentielles entre vous et vos interlocuteurs.
+        </div>
+</div>
+<!-- 5. LISTE DES THREADS FRÈRES (Components: mahram-grant-row) -->
+<div class="space-y-3" id="threads-container">
+<!-- THREAD 1: Tahir_Ouaga (Accordé) -->
+<article class="thread-row rounded-lg bg-surface-raised border border-border-hairline p-4 sm:p-5 transition-all hover:border-border-strong" id="thread-row-1">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<!-- Left Info Block -->
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center shrink-0 font-heading text-primary font-bold text-lg">
+                TO
+              </div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<h3 class="font-body-strong text-body-strong text-ink-primary">Tahir_Ouaga</h3>
+<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-meta bg-success-soft text-success" title="Identité vérifiée via CNIB / CIL">
+<span class="material-symbols-outlined text-[13px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    Vérifié
+                  </span>
+<span class="text-caption text-ink-secondary font-meta">• Arr. 12 (Ouaga 2000)</span>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-meta text-caption text-ink-secondary">
+<span>Dernier échange : Hier à 20:45</span>
+<span class="hidden sm:inline">|</span>
+<span>Ingénieur génie civil (31 ans)</span>
+</div>
+<!-- Chaperone Indicator Tag in thread -->
+<div class="pt-1 status-chaperone-tag">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-mihrab/10 text-mihrab font-meta text-[12px] border border-mihrab/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span>Un wali lit cette discussion (Oumar O.)</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Right Grant Action Toggle / Button -->
+<div class="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-border-hairline">
+<div class="text-right sm:block hidden">
+<span class="block font-meta text-caption font-semibold text-primary grant-status-label">Accès accordé</span>
+<span class="block font-meta text-[11px] text-ink-secondary">Depuis le 14 Octobre</span>
+</div>
+<button aria-label="Révoquer l'accès pour Tahir_Ouaga" class="grant-action-btn inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full font-meta text-meta transition-colors duration-150 bg-danger-soft text-danger hover:bg-danger hover:text-white border border-danger/30" id="grant-btn-1" onclick="toggleGrant(1)" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock_open">lock_open</span>
+<span>Révoquer l'accès</span>
+</button>
+</div>
+</div>
+</article>
+<!-- THREAD 2: Ibrahim_Kdg (Accordé) -->
+<article class="thread-row rounded-lg bg-surface-raised border border-border-hairline p-4 sm:p-5 transition-all hover:border-border-strong" id="thread-row-2">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center shrink-0 font-heading text-primary font-bold text-lg">
+                IK
+              </div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<h3 class="font-body-strong text-body-strong text-ink-primary">Ibrahim_Kdg</h3>
+<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-meta bg-success-soft text-success" title="Identité vérifiée">
+<span class="material-symbols-outlined text-[13px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    Vérifié
+                  </span>
+<span class="text-caption text-ink-secondary font-meta">• Koudougou (Secteur 3)</span>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-meta text-caption text-ink-secondary">
+<span>Dernier échange : Il y a 3 jours</span>
+<span class="hidden sm:inline">|</span>
+<span>Enseignant chercheur (34 ans)</span>
+</div>
+<div class="pt-1 status-chaperone-tag">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-mihrab/10 text-mihrab font-meta text-[12px] border border-mihrab/20">
+<span class="material-symbols-outlined text-[14px]" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span>Un wali lit cette discussion (Oumar O.)</span>
+</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-border-hairline">
+<div class="text-right sm:block hidden">
+<span class="block font-meta text-caption font-semibold text-primary grant-status-label">Accès accordé</span>
+<span class="block font-meta text-[11px] text-ink-secondary">Depuis le 22 Octobre</span>
+</div>
+<button aria-label="Révoquer l'accès pour Ibrahim_Kdg" class="grant-action-btn inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full font-meta text-meta transition-colors duration-150 bg-danger-soft text-danger hover:bg-danger hover:text-white border border-danger/30" id="grant-btn-2" onclick="toggleGrant(2)" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock_open">lock_open</span>
+<span>Révoquer l'accès</span>
+</button>
+</div>
+</div>
+</article>
+<!-- THREAD 3: Moussa_B (Non accordé / Confidentiel) -->
+<article class="thread-row rounded-lg bg-surface-raised border border-border-hairline p-4 sm:p-5 transition-all hover:border-border-strong opacity-95" id="thread-row-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-12 h-12 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center shrink-0 font-heading text-ink-secondary font-bold text-lg">
+                MB
+              </div>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<h3 class="font-body-strong text-body-strong text-ink-primary">Moussa_B</h3>
+<span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[11px] font-meta bg-surface-sand text-ink-secondary border border-border-hairline">
+                    En attente vérification
+                  </span>
+<span class="text-caption text-ink-secondary font-meta">• Bobo-Dioulasso</span>
+</div>
+<div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-meta text-caption text-ink-secondary">
+<span>Dernier échange : Ce matin (10:12)</span>
+<span class="hidden sm:inline">|</span>
+<span>Pharmacien (29 ans)</span>
+</div>
+<!-- Tag non accordé -->
+<div class="pt-1 status-chaperone-tag">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-sand text-ink-secondary font-meta text-[12px] border border-border-hairline">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span>
+<span>Confidentiel — Non accordé au Wali</span>
+</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-border-hairline">
+<div class="text-right sm:block hidden">
+<span class="block font-meta text-caption font-semibold text-ink-secondary grant-status-label">Sous votre sceau</span>
+<span class="block font-meta text-[11px] text-ink-secondary">Privé</span>
+</div>
+<button aria-label="Accorder l'accès au Wali pour Moussa_B" class="grant-action-btn inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full font-meta text-meta transition-colors duration-150 bg-indigo text-ink-on-indigo hover:bg-surface-indigo active:opacity-90 min-h-[44px]" id="grant-btn-3" onclick="toggleGrant(3)" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_moderator">add_moderator</span>
+<span>Accorder l'accès au Wali</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+<!-- 6. GLOBAL SOVEREIGN RESET / REVOCATION (FR-077) -->
+<div class="mt-10 pt-6 border-t border-border-hairline">
+<div class="rounded-lg bg-surface-raised border border-border-hairline p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="space-y-1 max-w-xl">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-[20px]" data-icon="warning">warning</span>
+<h3 class="font-heading text-heading text-ink-primary">Révocation souveraine totale (Protocole FR-077)</h3>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+              En cas de réserve, d'inconfort ou de suspension de votre démarche, ce contrôle coupe immédiatement et irrévocablement tous les accès conférés à votre tuteur sur l'ensemble de vos correspondances.
+            </p>
+</div>
+<button class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-full font-body-strong text-body text-danger bg-danger-soft hover:bg-danger hover:text-white border border-danger/30 transition-colors duration-150 shrink-0 min-h-[48px] active:opacity-90" id="btn-global-revoke" onclick="triggerGlobalRevoke()" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="gavel">gavel</span>
+<span>Tout révoquer (FR-077)</span>
+</button>
+</div>
+</div>
+<!-- PEDAGOGICAL ACCORDION: Comment fonctionne la bienveillance du Wali ? -->
+<div class="rounded-lg border border-border-hairline bg-surface p-4 sm:p-5">
+<details class="group cursor-pointer">
+<summary class="flex items-center justify-between font-heading text-heading text-primary select-none list-none">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" data-icon="menu_book">menu_book</span>
+              Comment votre Wali consulte-t-il les échanges autorisés ?
+            </span>
+<span class="material-symbols-outlined transition-transform duration-200 group-open:rotate-180 text-ink-secondary" data-icon="expand_more">expand_more</span>
+</summary>
+<div class="mt-4 pt-3 border-t border-border-hairline text-ink-secondary font-body text-meta space-y-2 leading-relaxed">
+<p>
+              1. <strong>Lecture seule sans intervention directe :</strong> Le Wali dispose d'une vue d'honneur épurée. Il ne peut ni envoyer de message sous votre nom, ni modifier l'historique des échanges.
+            </p>
+<p>
+              2. <strong>Notification de transparence au frère :</strong> Dès qu'un accès est accordé, le badge solennel <em>« Un tuteur légal assiste à cette conversation »</em> apparaît en tête du fil du frère.
+            </p>
+<p>
+              3. <strong>Retrait immédiat :</strong> La révocation est synchrone. Si vous retirez un accès, l'écran du tuteur est instantanément expiré et les données effacées du cache local de son terminal.
+            </p>
+</div>
+</details>
+</div>
+</section>
+</main>
+<!-- ================= FOOTER (Shared Component JSON Conformance) ================= -->
+<footer class="border-t border-border-hairline bg-surface-sand mt-12">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Mentions d'engagement & Souveraineté -->
+<div class="space-y-1 text-center md:text-left max-w-2xl">
+<div class="flex items-center justify-center md:justify-start gap-2 mb-2">
+<span class="font-title text-title text-primary font-bold">AnKanu</span>
+<span class="text-caption font-meta px-2 py-0.5 rounded bg-surface-raised border border-border-hairline text-ink-secondary">Faso Matrimonial Ta'aruf</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary leading-relaxed">
+          © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+</div>
+<!-- Liens institutionnels & éthiques -->
+<nav aria-label="Liens légaux" class="flex flex-wrap justify-center items-center gap-6">
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">Confidentialité &amp; Données</a>
+<a class="text-primary font-meta text-meta underline decoration-border-hairline transition-colors duration-150" href="#">Tuteurs Légaux (Wali)</a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">Éthique &amp; Respect</a>
+</nav>
+</div>
+</footer>
+<!-- ================= SCRIPT INTERACTIF DE SIMULATION D'ÉTATS ================= -->
+<script>
+    // État courant des permissions
+    const grantsState = {
+      1: true,  // Tahir_Ouaga
+      2: true,  // Ibrahim_Kdg
+      3: false  // Moussa_B
+    };
+
+    const threadMeta = {
+      1: { name: 'Tahir_Ouaga', initials: 'TO' },
+      2: { name: 'Ibrahim_Kdg', initials: 'IK' },
+      3: { name: 'Moussa_B', initials: 'MB' }
+    };
+
+    function updateView() {
+      const activeCount = Object.values(grantsState).filter(Boolean).length;
+      const countBadge = document.getElementById('active-badge-count');
+      const emptyView = document.getElementById('view-empty');
+      const threadsContainer = document.getElementById('threads-container');
+      const globalRevokeBtn = document.getElementById('btn-global-revoke');
+
+      if (countBadge) {
+        countBadge.innerText = activeCount + ' accordé' + (activeCount > 1 ? 's' : '');
+      }
+
+      // Gestion visuelle de chaque rangée
+      for (let id in grantsState) {
+        const row = document.getElementById(`thread-row-${id}`);
+        const btn = document.getElementById(`grant-btn-${id}`);
+        const chaperoneTag = row ? row.querySelector('.status-chaperone-tag') : null;
+        const statusLabel = row ? row.querySelector('.grant-status-label') : null;
+
+        if (grantsState[id]) {
+          // Accordé
+          if (btn) {
+            btn.className = "grant-action-btn inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full font-meta text-meta transition-colors duration-150 bg-danger-soft text-danger hover:bg-danger hover:text-white border border-danger/30";
+            btn.innerHTML = `<span class="material-symbols-outlined text-[18px]" data-icon="lock_open">lock_open</span><span>Révoquer l'accès</span>`;
+          }
+          if (chaperoneTag) {
+            chaperoneTag.innerHTML = `
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-mihrab/10 text-mihrab font-meta text-[12px] border border-mihrab/20">
+                <span class="material-symbols-outlined text-[14px]" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+                <span>Un wali lit cette discussion (Oumar O.)</span>
+              </span>`;
+          }
+          if (statusLabel) {
+            statusLabel.textContent = "Accès accordé";
+            statusLabel.className = "block font-meta text-caption font-semibold text-primary grant-status-label";
+          }
+        } else {
+          // Non accordé / Confidentiel
+          if (btn) {
+            btn.className = "grant-action-btn inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full font-meta text-meta transition-colors duration-150 bg-indigo text-ink-on-indigo hover:bg-surface-indigo active:opacity-90 min-h-[44px]";
+            btn.innerHTML = `<span class="material-symbols-outlined text-[18px]" data-icon="add_moderator">add_moderator</span><span>Accorder l'accès au Wali</span>`;
+          }
+          if (chaperoneTag) {
+            chaperoneTag.innerHTML = `
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-sand text-ink-secondary font-meta text-[12px] border border-border-hairline">
+                <span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span>
+                <span>Confidentiel — Non accordé au Wali</span>
+              </span>`;
+          }
+          if (statusLabel) {
+            statusLabel.textContent = "Sous votre sceau";
+            statusLabel.className = "block font-meta text-caption font-semibold text-ink-secondary grant-status-label";
+          }
+        }
+      }
+
+      // Si tous les accès sont coupés
+      if (activeCount === 0) {
+        if (emptyView) emptyView.classList.remove('hidden');
+        if (globalRevokeBtn) {
+          globalRevokeBtn.setAttribute('disabled', 'true');
+          globalRevokeBtn.classList.add('opacity-50', 'pointer-events-none');
+        }
+      } else {
+        if (emptyView) emptyView.classList.add('hidden');
+        if (globalRevokeBtn) {
+          globalRevokeBtn.removeAttribute('disabled');
+          globalRevokeBtn.classList.remove('opacity-50', 'pointer-events-none');
+        }
+      }
+    }
+
+    // Toggle unitaire
+    function toggleGrant(id) {
+      grantsState[id] = !grantsState[id];
+      showToast(
+        grantsState[id] 
+          ? `Accès accordé pour le salon avec ${threadMeta[id].name}. Le Wali Oumar O. en est notifié.`
+          : `Accès révoqué pour ${threadMeta[id].name}. La discussion redevient confidentielle.`,
+        grantsState[id] ? 'success' : 'info'
+      );
+      updateView();
+    }
+
+    // Révocation globale FR-077
+    function triggerGlobalRevoke() {
+      if (confirm("Confirmation solennelle (FR-077) :\nSouhaitez-vous fermer instantanément l'accès de votre tuteur à toutes vos correspondances sans exception ?")) {
+        for (let key in grantsState) {
+          grantsState[key] = false;
+        }
+        showToast("Révocation totale FR-077 exécutée : tous les regards chaperonnés ont été coupés immédiatement.", "danger");
+        updateView();
+      }
+    }
+
+    // Switcher de démo institutionnel
+    function setState(mode) {
+      document.querySelectorAll('.state-btn').forEach(b => {
+        b.className = "state-btn px-2.5 py-1 rounded text-caption font-meta transition-all border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary";
+      });
+
+      const activeBtn = document.getElementById(`btn-state-${mode}`);
+      if (activeBtn) {
+        activeBtn.className = "state-btn px-2.5 py-1 rounded text-caption font-meta transition-all bg-indigo text-ink-on-indigo font-semibold";
+      }
+
+      const toast = document.getElementById('status-toast');
+
+      if (mode === 'empty') {
+        grantsState[1] = false;
+        grantsState[2] = false;
+        grantsState[3] = false;
+        showToast("État initial FR-074 : Aucune discussion n'a été déléguée. Votre souveraineté est intacte.", "info");
+      } else if (mode === 'active') {
+        grantsState[1] = true;
+        grantsState[2] = true;
+        grantsState[3] = false;
+        showToast("État actif nominal : 2 salons accordés au Wali Oumar O., 1 salon privé.", "success");
+      } else if (mode === 'revoking') {
+        grantsState[1] = true;
+        grantsState[2] = false;
+        grantsState[3] = false;
+        showToast("Révocation unitaire appliquée sur Ibrahim_Kdg. Statut mis à jour sur les serveurs.", "info");
+      } else if (mode === 'global-revoked') {
+        grantsState[1] = false;
+        grantsState[2] = false;
+        grantsState[3] = false;
+        showToast("Protocole FR-077 déclenché : Verrouillage immédiat de tous les salons.", "danger");
+      } else if (mode === 'error') {
+        showToast("Échec de synchronisation avec le registre de tutelle (CIL Ouagadougou). Veuillez ré-essayer.", "error");
+      }
+
+      updateView();
+    }
+
+    function showToast(message, type) {
+      const toast = document.getElementById('status-toast');
+      if (!toast) return;
+
+      toast.classList.remove('hidden', 'bg-success-soft', 'text-success', 'border-success', 'bg-danger-soft', 'text-danger', 'border-danger', 'bg-surface-raised', 'text-ink-primary', 'border-border-hairline');
+
+      let icon = 'info';
+      if (type === 'success') {
+        toast.className = 'mb-6 p-4 rounded-lg border border-success/40 bg-success-soft text-success flex items-center justify-between';
+        icon = 'verified';
+      } else if (type === 'danger') {
+        toast.className = 'mb-6 p-4 rounded-lg border border-danger/40 bg-danger-soft text-danger flex items-center justify-between';
+        icon = 'gavel';
+      } else if (type === 'error') {
+        toast.className = 'mb-6 p-4 rounded-lg border border-error/50 bg-error-container text-error flex items-center justify-between';
+        icon = 'error_outline';
+      } else {
+        toast.className = 'mb-6 p-4 rounded-lg border border-border-hairline bg-surface-raised text-ink-primary flex items-center justify-between';
+        icon = 'shield';
+      }
+
+      toast.innerHTML = `
+        <div class="flex items-center gap-2.5">
+          <span class="material-symbols-outlined text-[20px]" data-icon="${icon}">${icon}</span>
+          <span class="font-meta text-meta font-medium">${message}</span>
+        </div>
+        <button onclick="document.getElementById('status-toast').classList.add('hidden')" class="opacity-70 hover:opacity-100 p-1">
+          <span class="material-symbols-outlined text-[18px]" data-icon="close">close</span>
+        </button>
+      `;
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      updateView();
+    });
+  </script>
+</body></html>

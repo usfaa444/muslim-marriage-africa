@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Paramètres &amp; Souveraineté du Compte</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom theme config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#1e1b14",
+            "danger-soft": "#F3E0DC",
+            "on-primary-fixed-variant": "#2d476d",
+            "surface-container": "#f4ede0",
+            "primary-container": "#1f3a5f",
+            "surface-container-high": "#eee7db",
+            "inverse-primary": "#aec8f4",
+            "surface-bright": "#fff9ee",
+            "surface": "#fff9ee",
+            "success": "#3D5C45",
+            "border-hairline": "#D9CDB8",
+            "tertiary-fixed": "#d3e4ff",
+            "on-primary-fixed": "#001c3b",
+            "ink-on-indigo": "#F4EDE0",
+            "indigo-deep": "#15283F",
+            "surface-container-highest": "#e9e2d5",
+            "ink-secondary": "#5C5346",
+            "on-secondary": "#ffffff",
+            "surface-variant": "#e9e2d5",
+            "secondary-container": "#fdd88a",
+            "danger": "#8B3A3A",
+            "on-tertiary-fixed": "#001c38",
+            "disabled": "#B5A894",
+            "surface-container-low": "#faf3e6",
+            "surface-indigo": "#15283F",
+            "primary-fixed": "#d5e3ff",
+            "on-secondary-fixed": "#251a00",
+            "inverse-surface": "#333028",
+            "blur-wash": "#C8BBA6",
+            "surface-sand": "#F4EDE0",
+            "surface-raised": "#FFFBF4",
+            "gold": "#C4A35A",
+            "background": "#fff9ee",
+            "on-secondary-container": "#785d1b",
+            "tertiary-container": "#1b3b5e",
+            "outline": "#74777f",
+            "focus-ring": "#1F3A5F",
+            "surface-tint": "#465f86",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "ink-primary": "#1B2433",
+            "outline-variant": "#c4c6cf",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed-variant": "#5b4300",
+            "tertiary-fixed-dim": "#abc9f3",
+            "secondary-fixed": "#ffdf9c",
+            "success-soft": "#DCE6DE",
+            "secondary": "#755b18",
+            "tertiary": "#002546",
+            "on-surface-variant": "#43474e",
+            "gold-soft": "#E8D5A3",
+            "error-container": "#ffdad6",
+            "primary": "#032448",
+            "staff-soft": "#EFE4DC",
+            "on-primary-container": "#8ba4cf",
+            "inverse-on-surface": "#f7f0e3",
+            "border-strong": "#6F624C",
+            "staff": "#6B3D2E",
+            "secondary-fixed-dim": "#e5c276",
+            "on-error": "#ffffff",
+            "surface-dim": "#e0d9cd",
+            "on-tertiary-container": "#88a5ce",
+            "error": "#ba1a1a",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#aec8f4",
+            "on-surface": "#1e1b14",
+            "indigo": "#1F3A5F",
+            "mihrab": "#2C4A6E",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "16px",
+            "1": "4px",
+            "space-xs": "0.25rem",
+            "6": "32px",
+            "space-lg": "1.5rem",
+            "5": "24px",
+            "2": "8px",
+            "space-sm": "0.5rem",
+            "3": "12px",
+            "margin": "1rem",
+            "space-md": "1rem",
+            "screen-pad": "16px",
+            "7": "48px",
+            "4": "16px",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 20px;
+      vertical-align: middle;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-surface-sand text-ink-primary font-body text-body antialiased selection:bg-gold-soft selection:text-indigo-deep">
+<!-- ========================================== -->
+<!-- TOP APP BAR (from Shared Components JSON)  -->
+<!-- ========================================== -->
+<header class="w-full bg-surface dark:bg-surface border-b border-border-hairline dark:border-border-hairline sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand Logo & Identity Anchor -->
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-lg py-1 px-1" href="#profil">
+<img alt="AnKanu" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XT71GSWnbOJt_CQi1DUvv4OW0K5SEJY_79ODEJ_F1YJK5llxVS3rjCqCmMEy6S9g_3-imJ0QkSSORiCIR6h0HbatDNrCM1wTP0NVB2Q-a1LWVCYqdsb7-i2f1xwQR8ApZZE2gnEdnDZamJRIxu9ZbE4jgetgouQU2Cv1R2-2S6slOfu6vCQuf0pvK3NT85Xyamb393v2NxjudldhTfP2MFTzn8HnjzwwLJUnYsBxF_6aqrqas5PVNKFEGs"/>
+</a>
+<!-- Desktop Navigation Links -->
+<nav aria-label="Navigation principale" class="hidden md:flex items-center space-x-6 ml-4">
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#decouvrir">Découvrir</a>
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#invitations">Invitations</a>
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#discussions">Discussions</a>
+<!-- Active tab mapped semantically to Profil -->
+<a class="text-primary dark:text-primary font-body-strong text-body-strong border-b-2 border-primary dark:border-primary pb-1" href="#profil">Profil</a>
+</nav>
+</div>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-3">
+<!-- Chaperone Indicator Chip -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-sand border border-border-hairline text-ink-secondary">
+<span class="material-symbols-outlined text-primary text-base" data-icon="verified_user">verified_user</span>
+<span class="font-meta text-meta font-medium tracking-tight">Wali notifié : Oumar O.</span>
+</div>
+<!-- Assistance Trailing Action -->
+<a class="hidden sm:inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-border-hairline text-ink-secondary hover:text-primary hover:border-border-strong font-meta text-meta transition-colors duration-150" href="#assistance">
+<span class="material-symbols-outlined text-base" data-icon="help_outline">help_outline</span>
+<span>Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- MAIN FOLIO CANVAS                           -->
+<!-- ========================================== -->
+<main class="flex-grow w-full py-8 md:py-12">
+<div class="max-w-[840px] mx-auto px-4 sm:px-6">
+<!-- Breadcrumbs & Dignified Return -->
+<nav aria-label="Fil d'ariane" class="flex items-center gap-2 mb-6 font-meta text-meta text-ink-secondary">
+<a class="hover:text-primary transition-colors duration-150 flex items-center gap-1" href="#profil">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+<span>Profil</span>
+</a>
+<span class="text-border-hairline">/</span>
+<span class="text-primary font-body-strong">Paramètres &amp; Sanctuaire Privé</span>
+</nav>
+<!-- Editorial Header -->
+<header class="mb-10 pb-6 border-b border-border-hairline">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-raised border border-border-hairline mb-3">
+<span class="w-2 h-2 rounded-full bg-gold"></span>
+<span class="font-meta text-meta text-ink-secondary">Gouvernance, Haya &amp; CIL Burkina Faso</span>
+</div>
+<h1 class="font-display text-display text-primary tracking-tight mb-3">Paramètres &amp; Souveraineté du Compte</h1>
+<p class="font-body text-body text-ink-secondary leading-relaxed max-w-2xl">
+          Espace dédié à la préservation de votre intimité matrimoniale (<em class="italic">Haya</em>), à la sobriété technique et au contrôle souverain de vos empreintes civiles, sous l’égide éthique des tuteurs légaux.
+        </p>
+</header>
+<!-- Settings Sections Dossier Container -->
+<div class="space-y-8">
+<!-- ======================================================= -->
+<!-- 1. MODE ALLÉGÉ / CONNEXION RÉSILIENTE (FR-136 Lite Mode) -->
+<!-- ======================================================= -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-7">
+<div class="flex items-start justify-between gap-4 mb-4">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="signal_cellular_alt">signal_cellular_alt</span>
+<h2 class="font-heading text-heading text-primary">Mode Allégé &amp; Bande Passante Résiliente</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-1">Spécification technique FR-136 • Optimisé pour réseaux 2G / EDGE &amp; provinces</p>
+</div>
+<span class="px-2.5 py-1 rounded bg-success-soft text-success font-meta text-meta font-semibold">Actif</span>
+</div>
+<p class="font-body text-body text-ink-secondary mb-5">
+            Plafonne strictement la taille des folios à <strong>≤ 150 Ko</strong> en différant le chargement des galeries photographiques et en éliminant les requêtes superflues. Conçu pour garantir un échange noble et ininterrompu à Ouagadougou, Bobo-Dioulasso et dans les zones rurales.
+          </p>
+<fieldset class="space-y-3">
+<legend class="sr-only">Choix du mode de connectivité</legend>
+<label class="flex items-start p-4 rounded-lg border-2 border-border-strong bg-surface-sand cursor-pointer transition-colors duration-150">
+<input checked="" class="mt-1 text-indigo focus:ring-focus-ring" name="connectivity_mode" type="radio" value="lite"/>
+<div class="ml-3">
+<div class="flex items-center gap-2">
+<span class="font-body-strong text-body-strong text-primary">Mode Allégé (2G / EDGE Sobriété)</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-caption bg-gold-soft text-indigo-deep font-semibold">Recommandé</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+                  Folios textuels directs, typographie native, transmission prioritaire des requêtes familiales.
+                </p>
+</div>
+</label>
+<label class="flex items-start p-4 rounded-lg border border-border-hairline bg-surface-raised hover:bg-surface-sand/40 cursor-pointer transition-colors duration-150">
+<input class="mt-1 text-indigo focus:ring-focus-ring" name="connectivity_mode" type="radio" value="standard"/>
+<div class="ml-3">
+<span class="font-body-strong text-body-strong text-ink-primary">Mode Standard (Fibre / 4G)</span>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+                  Pré-chargement des portraits complets et transitions typographiques fluides.
+                </p>
+</div>
+</label>
+</fieldset>
+</section>
+<!-- ======================================================= -->
+<!-- 2. DIRECTIVES VOCALES & AUDIO (FR-105 Oral Tradition)   -->
+<!-- ======================================================= -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-7">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="record_voice_over">record_voice_over</span>
+<h2 class="font-heading text-heading text-primary">Langue des Directives Vocales &amp; Audio</h2>
+</div>
+<p class="font-body text-body text-ink-secondary mb-6">
+            Conformément à la tradition orale et pour assurer l’accessibilité aux aînés et tuteurs, les protocoles de bienséance matrimoniale et les notifications solennelles disposent d'un accompagnement parlé (FR-105).
+          </p>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<!-- Mooré -->
+<label class="relative flex flex-col p-4 rounded-lg border-2 border-primary bg-surface-sand cursor-pointer">
+<input checked="" class="sr-only" name="audio_language" type="radio" value="mos"/>
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-strong text-body-strong text-primary">Mooré</span>
+<span class="material-symbols-outlined text-primary text-base" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary">mos • Burkina central</span>
+<span class="font-meta text-meta text-primary mt-2">Voix narrative certifiée</span>
+</label>
+<!-- Dioula -->
+<label class="relative flex flex-col p-4 rounded-lg border border-border-hairline bg-surface-raised hover:bg-surface-sand/40 cursor-pointer">
+<input class="sr-only" name="audio_language" type="radio" value="dyu"/>
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-strong text-body-strong text-ink-primary">Dioula</span>
+<span class="w-4 h-4 rounded-full border border-border-hairline"></span>
+</div>
+<span class="font-caption text-caption text-ink-secondary">dyu • Région Ouest</span>
+<span class="font-meta text-meta text-ink-secondary mt-2">Directives de bienséance</span>
+</label>
+<!-- Français -->
+<label class="relative flex flex-col p-4 rounded-lg border border-border-hairline bg-surface-raised hover:bg-surface-sand/40 cursor-pointer">
+<input class="sr-only" name="audio_language" type="radio" value="fr"/>
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-strong text-body-strong text-ink-primary">Français</span>
+<span class="w-4 h-4 rounded-full border border-border-hairline"></span>
+</div>
+<span class="font-caption text-caption text-ink-secondary">fr • Langue d'usage officiel</span>
+<span class="font-meta text-meta text-ink-secondary mt-2">Dossier civil &amp; textes</span>
+</label>
+</div>
+</section>
+<!-- ======================================================= -->
+<!-- 3. SÉCURITÉ DU SANCTUAIRE & CODE PIN (FR-020, FR-120)  -->
+<!-- ======================================================= -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-7">
+<div class="flex items-center justify-between gap-4 mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="lock">lock</span>
+<h2 class="font-heading text-heading text-primary">Sécurité du Sanctuaire &amp; Code PIN</h2>
+</div>
+<span class="font-meta text-meta text-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-base" data-icon="shield">shield</span>
+              Chiffrement actif
+            </span>
+</div>
+<p class="font-body text-body text-ink-secondary mb-6">
+            Protection stricte de vos correspondances contre les regards indiscrets lors du partage occasionnel de l'appareil. Dès verrouillage, <strong>aucune image ni transcription familiale n’est conservée dans la mémoire vive</strong> de votre navigateur.
+          </p>
+<div class="space-y-5 border-t border-border-hairline pt-5">
+<!-- PIN Toggle Row -->
+<div class="flex items-center justify-between">
+<div>
+<span class="font-body-strong text-body-strong text-ink-primary block">Code PIN d’accès direct (4 chiffres)</span>
+<span class="font-meta text-meta text-ink-secondary">Code personnel demandé à l'ouverture de l'espace sanctuaire</span>
+</div>
+<button class="px-4 py-2 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-sand transition-colors duration-150" type="button">
+                Modifier le PIN (••••)
+              </button>
+</div>
+<!-- Auto-lock selector -->
+<div class="pt-2">
+<label class="block font-meta text-meta text-ink-secondary mb-2" for="lock-timeout">Verrouillage automatique d'inactivité</label>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-border-hairline bg-surface-sand cursor-pointer">
+<input checked="" class="text-indigo focus:ring-focus-ring" name="pin_timeout" type="radio" value="immediate"/>
+<span class="font-body-strong text-body-strong text-primary">Immédiat à la fermeture</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-border-hairline bg-surface-raised cursor-pointer">
+<input class="text-indigo focus:ring-focus-ring" name="pin_timeout" type="radio" value="5min"/>
+<span class="font-body text-body text-ink-primary">Après 5 minutes</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-border-hairline bg-surface-raised cursor-pointer">
+<input class="text-indigo focus:ring-focus-ring" name="pin_timeout" type="radio" value="15min"/>
+<span class="font-body text-body text-ink-primary">Après 15 minutes</span>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================= -->
+<!-- 4. FORMULE D'ENGAGEMENT & FORFAITS (Transparent pack)   -->
+<!-- ======================================================= -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-7 relative overflow-hidden">
+<!-- Subtle gold hairline marker -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gold"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="workspace_premium">workspace_premium</span>
+<h2 class="font-heading text-heading text-primary">Formule d’Engagement &amp; Forfaits</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-1">Engagement transparent sans prélèvement tacite ni renouvellement automatique</p>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-meta text-meta text-ink-secondary block">Statut actuel</span>
+<span class="font-body-strong text-body-strong text-primary">Accès Libre Sanctuaire</span>
+</div>
+</div>
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline mb-5">
+<div class="flex items-center justify-between text-ink-secondary font-meta text-meta mb-1.5">
+<span>Quota de dialogue quotidien :</span>
+<span class="font-body-strong text-primary">1 / 3 démarche initiée aujourd'hui</span>
+</div>
+<div class="w-full h-2 bg-surface-raised rounded-full overflow-hidden border border-border-hairline">
+<div class="bg-indigo h-full w-1/3 rounded-full"></div>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-2">
+              Le quota journalier favorise la pondération, la retenue et la consultation préalable des familles, évitant l'éparpillement.
+            </p>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+<p class="font-meta text-meta text-ink-secondary">
+              Paiements souverains par Orange Money Burkina, Moov Money ou carte bancaire locale.
+            </p>
+<a class="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-gold hover:bg-gold/90 text-indigo-deep font-body-strong text-body-strong transition-colors duration-150 text-center" href="#forfaits-taaruf">
+              Consulter les Forfaits d'Engagement Ta'aruf
+            </a>
+</div>
+</section>
+<!-- ======================================================= -->
+<!-- 5. DROITS CIL, EXPORTATION & SUPPRESSION CANONIQUE     -->
+<!-- ======================================================= -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-7">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="policy">policy</span>
+<h2 class="font-heading text-heading text-primary">Droits CIL &amp; Souveraineté des Données</h2>
+</div>
+<p class="font-body text-body text-ink-secondary mb-6">
+            Conformément à la réglementation de la Commission de l'Informatique et des Libertés (CIL Burkina Faso) et aux impératifs d'honneur, vous disposez d'un contrôle absolu sur votre archive biographique et de l'exercice inconditionnel du droit à l'oubli.
+          </p>
+<div class="space-y-4">
+<!-- Data Export Action -->
+<div class="p-4 rounded-lg border border-border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-sand/50">
+<div>
+<span class="font-body-strong text-body-strong text-ink-primary block">Archive Intégrale Chiffrée (Dossier Civil CIL)</span>
+<span class="font-meta text-meta text-ink-secondary">Génère une archive scellée contenant vos échanges, attestations et notes de bienséance.</span>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full border border-border-strong text-primary hover:bg-surface-sand font-meta text-meta whitespace-nowrap transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-base" data-icon="download">download</span>
+<span>Exporter mon dossier civil</span>
+</button>
+</div>
+<!-- Danger Zone / Account Erasure Card -->
+<div class="p-5 rounded-lg border border-danger/30 bg-danger-soft/30 space-y-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-2xl mt-0.5" data-icon="warning">warning</span>
+<div>
+<h3 class="font-body-strong text-body-strong text-danger">Suppression Définitive &amp; Scellage Canonique (FR-019)</h3>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+                    La radiation de votre dossier révoque immédiatement toute invitation en cours, purge les photographies et notes familiales sous 48h, et transmet une attestation formelle de clôture au Wali référent (<strong class="text-ink-primary">Oumar O.</strong>).
+                  </p>
+</div>
+</div>
+<!-- Inline Confirmation Trigger -->
+<div class="pt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-danger/20">
+<span class="font-caption text-caption text-ink-secondary">Un identifiant de ticket CIL horodaté vous sera délivré pour suivi opposable.</span>
+<button class="px-5 py-2 rounded-full bg-danger text-surface-bright hover:bg-danger/90 font-meta text-meta font-medium transition-colors duration-150" onclick="document.getElementById('modal-deletion').classList.remove('hidden')" type="button">
+                  Demande de suppression définitive
+                </button>
+</div>
+</div>
+</div>
+</section>
+<!-- ======================================================= -->
+<!-- 6. ATTESTATION D'HÉBERGEMENT & CONFORMITÉ CIL           -->
+<!-- ======================================================= -->
+<aside aria-label="Attestation d'hébergement légal" class="p-5 rounded-xl bg-surface-indigo text-ink-on-indigo border border-mihrab/40">
+<div class="flex items-start gap-3.5">
+<span class="material-symbols-outlined text-gold text-2xl mt-0.5" data-icon="assured_workload">assured_workload</span>
+<div class="space-y-1">
+<h3 class="font-heading text-heading text-gold">Hébergement Souverain &amp; Inviolabilité Éthique (AD-5)</h3>
+<p class="font-meta text-meta text-ink-on-indigo/80 leading-relaxed">
+                Hébergement souverain certifié Scaleway (Paris / Île-de-France) avec réplication locale chiffrée. Traitement des données placé sous la conformité stricte de la <strong>Commission de l'Informatique et des Libertés (CIL Burkina Faso)</strong> et aux principes immuables de retenue et de pudeur islamique (<em class="italic">Haya</em>).
+              </p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+<!-- ======================================================= -->
+<!-- MODAL / CARTE DE CONFIRMATION SUPPRESSION (FR-019)     -->
+<!-- ======================================================= -->
+<div aria-labelledby="modal-title" aria-modal="true" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink-primary/60 backdrop-blur-sm" id="modal-deletion" role="dialog">
+<div class="bg-surface-raised border border-border-hairline rounded-xl max-w-lg w-full p-6 sm:p-7 shadow-none space-y-4">
+<div class="flex items-center gap-2 text-danger">
+<span class="material-symbols-outlined text-2xl" data-icon="gavel">gavel</span>
+<h2 class="font-heading text-heading text-danger" id="modal-title">Confirmation de Révocation &amp; Droit à l'Oubli</h2>
+</div>
+<p class="font-body text-body text-ink-primary">
+        Vous êtes sur le point d'initier la clôture irrévocable de votre compte AnKanu. Cette procédure canonique applique scrupuleusement les exigences suivantes :
+      </p>
+<ul class="space-y-2 font-meta text-meta text-ink-secondary border-y border-border-hairline py-3">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base text-primary mt-0.5" data-icon="check">check</span>
+<span>Notification officielle de clôture transmise par SMS/email au Wali : <strong>Oumar O.</strong></span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base text-primary mt-0.5" data-icon="check">check</span>
+<span>Annulation immédiate de toutes les invitations et demandes de mise en relation ouvertes.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base text-primary mt-0.5" data-icon="check">check</span>
+<span>Purge technique définitive des données non chiffrées sous 48 heures ouvrées.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-base text-primary mt-0.5" data-icon="check">check</span>
+<span>Émission d’un ticket CIL de clôture vérifiable publiquement.</span>
+</li>
+</ul>
+<div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2">
+<button class="w-full sm:w-auto px-5 py-2.5 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-sand transition-colors duration-150" onclick="document.getElementById('modal-deletion').classList.add('hidden')" type="button">
+          Conserver mon sanctuaire
+        </button>
+<button class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-danger text-surface-bright font-meta text-meta font-medium hover:bg-danger/90 transition-colors duration-150" onclick="alert('Demande de scellage enregistrée. Ticket CIL #BF-2025-0891 généré. Le Wali Oumar O. a été notifié.'); document.getElementById('modal-deletion').classList.add('hidden')" type="button">
+          Confirmer le scellage définitif
+        </button>
+</div>
+</div>
+</div>
+<!-- ========================================== -->
+<!-- FOOTER (from Shared Components JSON)       -->
+<!-- ========================================== -->
+<footer class="w-full bg-surface-sand dark:bg-surface-sand border-t border-border-hairline dark:border-border-hairline mt-auto">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Copyright & Mandate -->
+<div class="text-ink-secondary dark:text-ink-secondary font-caption text-caption max-w-2xl text-center md:text-left leading-relaxed">
+        © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+      </div>
+<!-- Links from JSON -->
+<div class="flex flex-wrap justify-center items-center gap-6">
+<a class="text-ink-secondary dark:text-ink-secondary font-meta text-meta hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#confidentialite">
+          Confidentialité &amp; Données
+        </a>
+<a class="text-ink-secondary dark:text-ink-secondary font-meta text-meta hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#tuteurs">
+          Tuteurs Légaux (Wali)
+        </a>
+<a class="text-ink-secondary dark:text-ink-secondary font-meta text-meta hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#ethique">
+          Éthique &amp; Respect
+        </a>
+</div>
+</div>
+</footer>
+</body></html>

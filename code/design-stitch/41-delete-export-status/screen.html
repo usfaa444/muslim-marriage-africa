@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Suivi d'exportation &amp; Suppression définitive</title>
+<!-- Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#abc9f3",
+            "on-primary": "#ffffff",
+            "secondary": "#755b18",
+            "on-tertiary": "#ffffff",
+            "on-surface-variant": "#43474e",
+            "surface-raised": "#FFFBF4",
+            "surface": "#fff9ee",
+            "danger-soft": "#F3E0DC",
+            "danger": "#8B3A3A",
+            "tertiary-fixed": "#d3e4ff",
+            "primary-fixed": "#d5e3ff",
+            "staff-soft": "#EFE4DC",
+            "surface-indigo": "#15283F",
+            "outline": "#74777f",
+            "inverse-surface": "#333028",
+            "mihrab": "#2C4A6E",
+            "on-secondary": "#ffffff",
+            "background": "#fff9ee",
+            "surface-sand": "#F4EDE0",
+            "gold-soft": "#E8D5A3",
+            "border-strong": "#6F624C",
+            "surface-container-high": "#eee7db",
+            "error-container": "#ffdad6",
+            "tertiary": "#002546",
+            "secondary-fixed": "#ffdf9c",
+            "blur-wash": "#C8BBA6",
+            "surface-container-highest": "#e9e2d5",
+            "gold": "#C4A35A",
+            "ink-on-indigo": "#F4EDE0",
+            "on-primary-container": "#8ba4cf",
+            "primary": "#032448",
+            "surface-tint": "#465f86",
+            "border-hairline": "#D9CDB8",
+            "on-tertiary-container": "#88a5ce",
+            "disabled": "#B5A894",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "surface-container": "#f4ede0",
+            "surface-container-lowest": "#ffffff",
+            "outline-variant": "#c4c6cf",
+            "surface-bright": "#fff9ee",
+            "on-secondary-fixed": "#251a00",
+            "inverse-on-surface": "#f7f0e3",
+            "tertiary-container": "#1b3b5e",
+            "staff": "#6B3D2E",
+            "surface-variant": "#e9e2d5",
+            "on-surface": "#1e1b14",
+            "on-secondary-fixed-variant": "#5b4300",
+            "surface-container-low": "#faf3e6",
+            "indigo": "#1F3A5F",
+            "success": "#3D5C45",
+            "on-background": "#1e1b14",
+            "on-secondary-container": "#785d1b",
+            "inverse-primary": "#aec8f4",
+            "primary-container": "#1f3a5f",
+            "indigo-deep": "#15283F",
+            "secondary-fixed-dim": "#e5c276",
+            "on-tertiary-fixed": "#001c38",
+            "on-primary-fixed": "#001c3b",
+            "on-error-container": "#93000a",
+            "ink-primary": "#1B2433",
+            "secondary-container": "#fdd88a",
+            "focus-ring": "#1F3A5F",
+            "on-primary-fixed-variant": "#2d476d",
+            "primary-fixed-dim": "#aec8f4",
+            "success-soft": "#DCE6DE",
+            "on-error": "#ffffff",
+            "error": "#ba1a1a",
+            "ink-secondary": "#5C5346",
+            "surface-dim": "#e0d9cd"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "3": "12px",
+            "space-lg": "1.5rem",
+            "margin": "1rem",
+            "gutter": "16px",
+            "7": "48px",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "1": "4px",
+            "4": "16px",
+            "2": "8px",
+            "space-xl": "2rem",
+            "screen-pad": "16px",
+            "6": "32px",
+            "space-sm": "0.5rem",
+            "5": "24px"
+          },
+          "fontFamily": {
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface text-ink-primary font-body text-body min-h-screen flex flex-col antialiased selection:bg-gold-soft selection:text-ink-primary">
+<!-- TopNavBar (Shared Component JSON Blueprint) -->
+<header class="w-full bg-surface border-b border-border-hairline sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand anchor -->
+<div class="flex items-center gap-3">
+<a class="flex flex-col" href="#">
+<span class="font-title text-title text-primary font-bold tracking-tight">AnKanu</span>
+<span class="font-caption text-caption text-ink-secondary -mt-1 hidden sm:inline">Ta'aruf Honorable &amp; Mariage Noble</span>
+</a>
+</div>
+<!-- Navigation links (Desktop) -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Invitations</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Discussions</a>
+<!-- Active destination: Profil (as this page resides in settings) -->
+<a class="text-primary font-body-strong text-body-strong border-b-2 border-primary pb-1" href="#">Profil</a>
+</nav>
+<!-- Trailing actions: Wali pill & assistance -->
+<div class="flex items-center gap-3">
+<div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-staff-soft rounded-full text-staff border border-border-hairline">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-meta text-meta">Wali notifié : Oumar O.</span>
+</div>
+<a class="flex items-center gap-1 text-ink-secondary hover:text-primary font-meta text-meta transition-colors duration-150 px-2 py-1" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+<span class="hidden sm:inline">Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Breadcrumbs & Canonical Sanctuary Context -->
+<nav aria-label="Fil d'Ariane" class="w-full max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-2">
+<ol class="flex items-center flex-wrap gap-2 font-meta text-meta text-ink-secondary">
+<li>
+<a class="hover:text-primary transition-colors" href="#">Paramètres du sanctuaire</a>
+</li>
+<li class="flex items-center">
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+</li>
+<li>
+<a class="hover:text-primary transition-colors" href="#">Confidentialité &amp; Pudeur</a>
+</li>
+<li class="flex items-center">
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+</li>
+<li aria-current="page" class="text-primary font-medium">
+        Suivi d'exportation &amp; Suppression définitive
+      </li>
+</ol>
+</nav>
+<!-- Interactive UX State Simulator (For review & canonical testing) -->
+<section class="w-full max-w-4xl mx-auto px-4 sm:px-6 my-3">
+<div class="p-3 bg-surface-sand rounded-xl border border-border-hairline flex flex-col md:flex-row md:items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" data-icon="tune">tune</span>
+<span class="font-meta text-meta font-medium text-ink-primary">Simulateur d'états CIL / RGPD :</span>
+</div>
+<div class="flex flex-wrap gap-1.5" id="state-selector-group">
+<button class="px-2.5 py-1 rounded text-xs font-meta border border-border-strong bg-surface-raised text-primary font-semibold transition-all" id="btn-state-ready" onclick="setState('ready')" type="button">
+          1. Export prêt (Succès)
+        </button>
+<button class="px-2.5 py-1 rounded text-xs font-meta border border-border-hairline bg-surface text-ink-secondary hover:text-ink-primary transition-all" id="btn-state-processing" onclick="setState('processing')" type="button">
+          2. Chiffrement en cours
+        </button>
+<button class="px-2.5 py-1 rounded text-xs font-meta border border-border-hairline bg-surface text-ink-secondary hover:text-ink-primary transition-all" id="btn-state-purging" onclick="setState('purging')" type="button">
+          3. Purge programmée
+        </button>
+<button class="px-2.5 py-1 rounded text-xs font-meta border border-border-hairline bg-surface text-ink-secondary hover:text-ink-primary transition-all" id="btn-state-incident" onclick="setState('incident')" type="button">
+          4. Incident file opérateur
+        </button>
+</div>
+</div>
+</section>
+<!-- Main Editorial Container (Folio Layout) -->
+<main class="w-full max-w-4xl mx-auto px-4 sm:px-6 py-4 flex-grow space-y-6">
+<!-- Top Summary Banner -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6 space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-border-hairline">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full text-xs font-meta bg-success-soft text-success border border-border-hairline flex items-center gap-1" id="global-badge">
+<span class="material-symbols-outlined text-xs" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span id="global-badge-text">Dossier sous mandat CIL-BF</span>
+</span>
+<span class="font-meta text-meta text-ink-secondary">Protocole FR-019 / FR-143</span>
+</div>
+<h1 class="font-display text-display text-primary pt-1">
+            Statut de la demande d'export et d'effacement solennel
+          </h1>
+<p class="font-body text-body text-ink-secondary">
+            Suivi officiel de l'exercice de vos prérogatives de sainteté des données et de séparation honorable.
+          </p>
+</div>
+<div class="sm:text-right shrink-0">
+<span class="font-caption text-caption text-ink-secondary uppercase tracking-wider block">Référence légale</span>
+<span class="font-heading text-heading text-primary font-semibold tracking-wide">Ticket n° CIL-BF-2025-0894</span>
+<span class="block font-meta text-meta text-ink-secondary mt-0.5">Assistance centralisée Ouagadougou</span>
+</div>
+</div>
+<!-- Secure Tracking URL strip -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface-sand p-3.5 rounded-lg border border-border-hairline">
+<div class="flex items-center gap-2 overflow-hidden">
+<span class="material-symbols-outlined text-gold shrink-0" data-icon="link">link</span>
+<div class="truncate">
+<span class="font-caption text-caption text-ink-secondary block">URL souveraine de suivi direct (accès réservé au titulaire &amp; wali)</span>
+<span class="font-meta text-meta text-ink-primary font-mono select-all">https://ankanu.com/privacy/status/req-894-bf</span>
+</div>
+</div>
+<button class="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-surface-raised border border-border-strong rounded-lg text-ink-primary font-meta text-meta hover:bg-surface transition-colors shrink-0" onclick="navigator.clipboard.writeText('https://ankanu.com/privacy/status/req-894-bf'); alert('Lien souverain copié dans le presse-papiers.');" type="button">
+<span class="material-symbols-outlined text-base" data-icon="content_copy">content_copy</span>
+<span>Copier le lien</span>
+</button>
+</div>
+</section>
+<!-- Incident / Operator File Escalation Banner (Empty/Error state) -->
+<section class="hidden bg-danger-soft border border-danger/30 rounded-xl p-5 space-y-3" id="incident-banner">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-2xl shrink-0" data-icon="shield_with_heart">shield_with_heart</span>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<h2 class="font-heading text-heading text-danger">Notification de relai assermenté</h2>
+<span class="px-2 py-0.5 bg-surface-raised text-staff border border-staff text-xs font-meta rounded">Équipe seulement</span>
+</div>
+<p class="font-body text-body text-ink-primary">
+            En cas d'échec de téléchargement ou de lien corrompu : Votre dossier est automatiquement pris en charge par l'Équipe seulement pour régénération manuelle sous 24h ouvrées. Aucune action supplémentaire requise de votre part.
+          </p>
+<div class="font-meta text-meta text-ink-secondary pt-1 flex items-center gap-3">
+<span>Agent d'astreinte : Cellule CIL Ouagadougou</span>
+<span>•</span>
+<span>File prioritaire #INC-4492</span>
+</div>
+</div>
+</div>
+</section>
+<!-- PRIMARY SECTION: Export de l'Archive Personnelle (FR-019 / NFR-008) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 space-y-5">
+<div class="flex items-start justify-between gap-4 border-b border-border-hairline pb-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="inventory_2">inventory_2</span>
+<span class="font-meta text-meta text-ink-secondary uppercase tracking-wider">Norme CIL FR-019</span>
+</div>
+<h2 class="font-title text-title text-primary">
+            Archive intégrale du folio et des échanges sous chaperonnage
+          </h2>
+<p class="font-body text-body text-ink-secondary">
+            Archive ZIP scellée cryptographiquement (AES-256), comprenant le folio biographique, les déclarations d'honneur, les justificatifs CNIB vérifiés et l'historique des correspondances supervisées par le Wali.
+          </p>
+</div>
+</div>
+<!-- State dynamic card -->
+<div class="bg-surface-sand rounded-xl p-5 border border-border-hairline space-y-4" id="export-state-content">
+<!-- READY STATE CONTENT -->
+<div class="space-y-4" id="content-ready">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-surface-raised rounded-lg border border-border-hairline">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-success-soft flex items-center justify-center shrink-0 text-success">
+<span class="material-symbols-outlined" data-icon="folder_zip">folder_zip</span>
+</div>
+<div>
+<span class="font-body-strong text-body-strong text-ink-primary block">ankanu_export_folio_20250894.zip</span>
+<span class="font-meta text-meta text-ink-secondary">Taille : 4.8 Mo • Chiffrement souverain AES-256 • Valide pendant 7 jours</span>
+</div>
+</div>
+<div class="sm:text-right shrink-0">
+<span class="inline-flex items-center gap-1 text-xs font-meta text-success font-medium bg-success-soft px-2.5 py-1 rounded-full">
+<span class="material-symbols-outlined text-xs" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Sceau apposé
+              </span>
+</div>
+</div>
+<!-- PRIMARY ACTION BUTTON (Solemn Indigo Button) -->
+<div class="flex flex-col sm:flex-row items-center gap-4 pt-1">
+<button class="w-full sm:w-auto px-7 py-3 min-h-[48px] bg-indigo hover:bg-primary text-ink-on-indigo rounded-full font-body-strong text-body-strong inline-flex items-center justify-center gap-2.5 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" type="button">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+<span>Télécharger l'archive d'exportation (ZIP)</span>
+</button>
+<div class="flex items-center gap-2 text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-sm text-gold" data-icon="pin">pin</span>
+<span>Déverrouillage requis par votre code PIN sanctuaire lors de l'extraction.</span>
+</div>
+</div>
+</div>
+<!-- PROCESSING STATE CONTENT -->
+<div class="hidden space-y-4" id="content-processing">
+<div class="flex items-center gap-3 p-4 bg-surface-raised rounded-lg border border-border-hairline">
+<div class="w-10 h-10 rounded-full bg-surface-sand flex items-center justify-center shrink-0 text-primary animate-spin">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+</div>
+<div class="space-y-1">
+<span class="font-body-strong text-body-strong text-primary">Génération de l'archive et scellement en cours</span>
+<p class="font-meta text-meta text-ink-secondary">
+                Agrégation des déclarations d'honneur et chiffrement à clé asymétrique via les coffres sécurisés Scaleway. Durée estimée : moins de 4 minutes.
+              </p>
+</div>
+</div>
+<div class="w-full bg-border-hairline h-2 rounded-full overflow-hidden">
+<div class="bg-gold h-full rounded-full transition-all duration-500" style="width: 68%;"></div>
+</div>
+</div>
+<!-- PURGE ONLY / INACTIVE STATE -->
+<div class="hidden space-y-3" id="content-purging">
+<div class="p-4 bg-surface-raised rounded-lg border border-border-hairline flex items-start gap-3">
+<span class="material-symbols-outlined text-gold text-2xl shrink-0" data-icon="timer">timer</span>
+<div class="space-y-1">
+<span class="font-body-strong text-body-strong text-primary">Archive téléchargée &amp; Période d'attente de purge</span>
+<p class="font-meta text-meta text-ink-secondary">
+                L'archive a été générée avec succès le 24 octobre 2025. Le protocole de purge définitive des données est maintenant enclenché selon les délais stricts fixés par la CIL.
+              </p>
+</div>
+</div>
+</div>
+<!-- INCIDENT STATE -->
+<div class="hidden space-y-3" id="content-incident">
+<div class="p-4 bg-danger-soft/60 rounded-lg border border-danger/30 flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-2xl shrink-0" data-icon="report">report</span>
+<div class="space-y-1">
+<span class="font-body-strong text-body-strong text-danger">Génération interrompue — Transfert en file supervisée</span>
+<p class="font-meta text-meta text-ink-secondary">
+                Le scellement automatisé a rencontré une incohérence de signature sur les justificatifs CNIB. L'officier de conformité assermenté réémet l'archive manuellement.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION CLOCKS & SLA NFR-008 (Explicit Assumptions) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 space-y-4">
+<div class="border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="history_toggle_off">history_toggle_off</span>
+<span class="font-meta text-meta text-ink-secondary uppercase tracking-wider">Engagements temporels &amp; Rétention NFR-008</span>
+</div>
+<h2 class="font-title text-title text-primary pt-1">
+          Registre des délais de grâce et de destruction des données
+        </h2>
+</div>
+<!-- Bento-style SLA Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Metric 1 -->
+<div class="p-4 rounded-xl bg-surface-sand border border-border-hairline space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-ink-secondary">[ASSUMPTION] Clôture et suspension immédiate</span>
+<span class="px-2 py-0.5 rounded text-xs font-meta bg-success-soft text-success font-semibold">Exécuté</span>
+</div>
+<p class="font-heading text-heading text-ink-primary">Déjà appliquée (0 min)</p>
+<p class="font-meta text-meta text-ink-secondary">
+            Visibilité publique et recherche matrimoniale révoquées dès la soumission du mandat.
+          </p>
+</div>
+<!-- Metric 2 -->
+<div class="p-4 rounded-xl bg-surface-sand border border-border-hairline space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-ink-secondary">[ASSUMPTION] Rétention de l'archive</span>
+<span class="px-2 py-0.5 rounded text-xs font-meta bg-gold-soft text-ink-primary font-semibold">7 jours</span>
+</div>
+<p class="font-heading text-heading text-ink-primary">168 heures restantes</p>
+<p class="font-meta text-meta text-ink-secondary">
+            L'archive ZIP demeure disponible sur le stockage sécurisé Scaleway avant effacement physique.
+          </p>
+</div>
+<!-- Metric 3 -->
+<div class="p-4 rounded-xl bg-surface-sand border border-border-hairline space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-ink-secondary">[ASSUMPTION] Purge clichés &amp; Sceau (AD-19)</span>
+<span class="px-2 py-0.5 rounded text-xs font-meta bg-danger-soft text-danger font-semibold">SLA 48h</span>
+</div>
+<p class="font-heading text-heading text-danger">Dans 31h 14m (Purge irréversible)</p>
+<p class="font-meta text-meta text-ink-secondary">
+            Écrasement cryptographique à zéros triples de l'ensemble des photographies de pudeur et pièces d'identité.
+          </p>
+</div>
+<!-- Metric 4 -->
+<div class="p-4 rounded-xl bg-surface-sand border border-border-hairline space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-caption text-caption text-ink-secondary">[ASSUMPTION] Logs serveurs Scaleway</span>
+<span class="px-2 py-0.5 rounded text-xs font-meta bg-surface-raised text-ink-secondary font-semibold">Obligation légale</span>
+</div>
+<p class="font-heading text-heading text-ink-primary">30 jours calendaires</p>
+<p class="font-meta text-meta text-ink-secondary">
+            Conservation chiffrée des traces d'accès aux serveurs Paris / Ouagadougou requise par la CIL du Burkina Faso.
+          </p>
+</div>
+</div>
+</section>
+<!-- SECONDARY SECTION: Procédure de Suppression Définitive (FR-143 / AD-19) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 space-y-5">
+<div class="flex items-start justify-between gap-4 border-b border-border-hairline pb-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-xl" data-icon="delete_forever">delete_forever</span>
+<span class="font-meta text-meta text-ink-secondary uppercase tracking-wider">Norme FR-143 / AD-19</span>
+</div>
+<h2 class="font-title text-title text-primary">
+            Demande de dissolution de compte actée sous le regard du tuteur
+          </h2>
+<p class="font-body text-body text-ink-secondary">
+            La rupture des liens d'engagement est engagée. À l'échéance du compte à rebours, l'ensemble des correspondances chaperonnées, folios d'honneur et données biométriques seront définitivement anéantis du cluster de bases de données, sans aucune réversibilité possible.
+          </p>
+</div>
+</div>
+<!-- Chaperone / Wali reassurance notice -->
+<div class="bg-surface-sand p-4 rounded-xl border border-border-hairline flex items-start gap-3.5">
+<span class="material-symbols-outlined text-staff text-2xl shrink-0 mt-0.5" data-icon="family_restroom">family_restroom</span>
+<div class="space-y-1">
+<span class="font-body-strong text-body-strong text-staff">Information transmise au Wali (Tuteur légal)</span>
+<p class="font-meta text-meta text-ink-secondary">
+            Un courrier d'attestation a été délivré à <strong>Oumar O.</strong> l'informant de la cessation des pourparlers matrimoniaux en cours. Aucune nouvelle mise en relation ne pourra être requise sous ce dossier.
+          </p>
+</div>
+</div>
+<!-- Grace period & cancel action -->
+<div class="p-4 rounded-xl border border-border-strong bg-surface-sand/50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="space-y-1">
+<span class="font-body-strong text-body-strong text-ink-primary">Droit solennel de rétractation</span>
+<p class="font-meta text-meta text-ink-secondary">
+            Tant que le délai de 31h 14m n'est pas expiré, vous pouvez annuler la procédure et restituer votre folio sanctuaire intact.
+          </p>
+</div>
+<button class="px-5 py-2.5 bg-surface-raised border border-border-strong rounded-full text-ink-primary font-body-strong text-body-strong hover:bg-surface-sand transition-colors shrink-0" onclick="confirmCancelPurge()" type="button">
+          Annuler la suppression et réactiver mon compte
+        </button>
+</div>
+<!-- Ticket Helpdesk status footer -->
+<div class="pt-2 flex items-center justify-between text-ink-secondary font-meta text-meta border-t border-border-hairline">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+<span>Statut du ticket : Traité par l'officier de conformité CIL</span>
+</div>
+<span class="hidden sm:inline">Transféré automatiquement à la file opérateur assermentée en cas de blocage</span>
+</div>
+</section>
+</main>
+<!-- Sovereign Footer (Shared Component JSON Blueprint) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline mt-12">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand & Sovereign hosting pledge -->
+<div class="space-y-2 text-center md:text-left max-w-2xl">
+<div class="flex items-center justify-center md:justify-start gap-2">
+<span class="font-title text-title text-primary font-bold">AnKanu</span>
+<span class="text-xs px-2 py-0.5 rounded bg-surface-raised text-primary border border-border-hairline font-meta">Souveraineté BF</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary leading-relaxed">
+          © 2025 AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+</div>
+<!-- Legal links with standard JSON style -->
+<div class="flex flex-wrap items-center justify-center gap-6 shrink-0">
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">
+          Confidentialité &amp; Données
+        </a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">
+          Tuteurs Légaux (Wali)
+        </a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">
+          Éthique &amp; Respect
+        </a>
+</div>
+</div>
+</footer>
+<!-- Vanilla State Simulation Logic -->
+<script>
+    function setState(state) {
+      // Elements
+      const contentReady = document.getElementById('content-ready');
+      const contentProcessing = document.getElementById('content-processing');
+      const contentPurging = document.getElementById('content-purging');
+      const contentIncident = document.getElementById('content-incident');
+      const incidentBanner = document.getElementById('incident-banner');
+      const globalBadge = document.getElementById('global-badge');
+      const globalBadgeText = document.getElementById('global-badge-text');
+
+      // Buttons
+      const btns = {
+        ready: document.getElementById('btn-state-ready'),
+        processing: document.getElementById('btn-state-processing'),
+        purging: document.getElementById('btn-state-purging'),
+        incident: document.getElementById('btn-state-incident')
+      };
+
+      // Reset button styles
+      Object.keys(btns).forEach(key => {
+        btns[key].className = "px-2.5 py-1 rounded text-xs font-meta border border-border-hairline bg-surface text-ink-secondary hover:text-ink-primary transition-all";
+      });
+
+      // Highlight active button
+      btns[state].className = "px-2.5 py-1 rounded text-xs font-meta border border-border-strong bg-surface-raised text-primary font-semibold transition-all";
+
+      // Hide all contents
+      contentReady.classList.add('hidden');
+      contentProcessing.classList.add('hidden');
+      contentPurging.classList.add('hidden');
+      contentIncident.classList.add('hidden');
+      incidentBanner.classList.add('hidden');
+
+      // State switches
+      if (state === 'ready') {
+        contentReady.classList.remove('hidden');
+        globalBadge.className = "px-2 py-0.5 rounded-full text-xs font-meta bg-success-soft text-success border border-border-hairline flex items-center gap-1";
+        globalBadgeText.textContent = "Archive scellée & prête";
+      } else if (state === 'processing') {
+        contentProcessing.classList.remove('hidden');
+        globalBadge.className = "px-2 py-0.5 rounded-full text-xs font-meta bg-gold-soft text-ink-primary border border-border-hairline flex items-center gap-1";
+        globalBadgeText.textContent = "Chiffrement asymétrique en cours";
+      } else if (state === 'purging') {
+        contentPurging.classList.remove('hidden');
+        globalBadge.className = "px-2 py-0.5 rounded-full text-xs font-meta bg-danger-soft text-danger border border-border-hairline flex items-center gap-1";
+        globalBadgeText.textContent = "Délai de grâce 48h engagé";
+      } else if (state === 'incident') {
+        contentIncident.classList.remove('hidden');
+        incidentBanner.classList.remove('hidden');
+        globalBadge.className = "px-2 py-0.5 rounded-full text-xs font-meta bg-danger-soft text-danger border border-border-hairline flex items-center gap-1";
+        globalBadgeText.textContent = "File opérateur assermentée active";
+      }
+    }
+
+    function confirmCancelPurge() {
+      if (confirm("Confirmez-vous l'annulation de la dissolution de votre sanctuaire ? Votre wali en sera immédiatement notifié et votre folio redeviendra accessible.")) {
+        alert("Demande d'annulation transmise avec succès à l'officier de conformité CIL-BF. Votre sanctuaire est maintenu.");
+      }
+    }
+  </script>
+</body></html>

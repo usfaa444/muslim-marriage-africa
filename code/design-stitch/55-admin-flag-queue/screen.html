@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin flag queue — AnKanu Modération & Déontologie</title>
+  
+  <!-- Polices système AnKanu : Source Serif 4 & Source Sans 3 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <!-- Tailwind CSS avec Tokens AnKanu stricts -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-sand": "#F4EDE0",
+            "surface-raised": "#FFFBF4",
+            "surface-indigo": "#15283F",
+            "ink-primary": "#1B2433",
+            "ink-secondary": "#5C5346",
+            "ink-on-indigo": "#F4EDE0",
+            "indigo": "#1F3A5F",
+            "indigo-deep": "#15283F",
+            "gold": "#C4A35A",
+            "gold-soft": "#E8D5A3",
+            "mihrab": "#2C4A6E",
+            "border-hairline": "#D9CDB8",
+            "border-strong": "#6F624C",
+            "focus-ring": "#1F3A5F",
+            "blur-wash": "#C8BBA6",
+            "danger": "#8B3A3A",
+            "danger-soft": "#F3E0DC",
+            "success": "#3D5C45",
+            "success-soft": "#DCE6DE",
+            "staff": "#6B3D2E",
+            "staff-soft": "#EFE4DC",
+            "disabled": "#B5A894"
+          },
+          fontFamily: {
+            display: ['"Source Serif 4"', 'Georgia', 'serif'],
+            title: ['"Source Serif 4"', 'Georgia', 'serif'],
+            heading: ['"Source Serif 4"', 'Georgia', 'serif'],
+            body: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            meta: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            caption: ['"Source Sans 3"', 'system-ui', 'sans-serif']
+          },
+          borderRadius: {
+            sm: "6px",
+            md: "12px",
+            lg: "20px",
+            full: "9999px"
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Style scrollbar sobre pour la liste d'audit */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F4EDE0;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D9CDB8;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6F624C;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-indigo">
+
+  <!-- TOP BARRE DÉONTOLOGIQUE STAFF (STRICTEMENT STAFF - AUCUN CHROME MEMBRE) -->
+  <header class="w-full bg-surface-indigo text-ink-on-indigo border-b border-border-hairline/20 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Titre Pupitre Staff -->
+      <div class="flex items-center space-x-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+          <span class="font-title text-xl font-bold tracking-tight text-ink-on-indigo">AnKanu</span>
+          <span class="text-gold-soft font-meta text-xs tracking-wider uppercase border-l border-border-hairline/30 pl-2">Console Déontologique</span>
+        </div>
+        <!-- Staff-only badge requis au niveau pupitre -->
+        <span class="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-caption bg-staff text-surface-raised font-medium border border-border-strong/40">
+          Équipe seulement
+        </span>
+      </div>
+
+      <!-- Navigation Staff (Staff Home, Files de révision, Journal d'audit) -->
+      <nav class="hidden md:flex items-center space-x-1">
+        <a href="#staff-home" class="px-3 py-1.5 rounded-sm text-sm font-meta text-ink-on-indigo/80 hover:text-ink-on-indigo hover:bg-mihrab/50 transition-colors">
+          Accueil Staff
+        </a>
+        <a href="#flag-queue" class="px-3 py-1.5 rounded-sm text-sm font-meta font-semibold text-ink-on-indigo bg-mihrab border-b-2 border-gold transition-colors flex items-center gap-1.5">
+          <span>File des signalements</span>
+          <span class="w-5 h-5 rounded-full bg-gold text-indigo font-bold text-xs flex items-center justify-center" id="global-badge-count">3</span>
+        </a>
+        <a href="#audit-log" class="px-3 py-1.5 rounded-sm text-sm font-meta text-ink-on-indigo/80 hover:text-ink-on-indigo hover:bg-mihrab/50 transition-colors">
+          Registre d'Assermentation
+        </a>
+        <a href="#cil-registry" class="px-3 py-1.5 rounded-sm text-sm font-meta text-ink-on-indigo/80 hover:text-ink-on-indigo hover:bg-mihrab/50 transition-colors">
+          Contrôle CIL-BF
+        </a>
+      </nav>
+
+      <!-- Profil Officier Assermenté & Heure GMT Ouagadougou -->
+      <div class="flex items-center space-x-3">
+        <div class="hidden sm:flex flex-col text-right font-caption text-xs leading-tight">
+          <span class="text-ink-on-indigo font-medium">Officier Modérateur (Ouaga)</span>
+          <span class="text-gold-soft">Horodatage GMT+0 • Conforme AD-10</span>
+        </div>
+        <div class="w-8 h-8 rounded-full bg-mihrab border border-gold-soft/40 flex items-center justify-center text-gold-soft text-sm font-bold">
+          OM
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANDEAU DE COMMUTATION D'ÉTATS DU BANC D'AUDIT TECHNIQUE (Pour inspecter Nominal / File Vide / Chargement / Erreur Auth) -->
+  <aside class="w-full bg-surface-raised border-b border-border-hairline py-2 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 text-ink-secondary text-xs font-meta">
+        <span class="material-symbols-outlined text-sm text-staff">tune</span>
+        <span class="font-semibold text-ink-primary uppercase tracking-wider text-[11px]">Banc d'audit des états techniques (FR-067 / FR-144) :</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-1.5" id="state-toggles">
+        <button type="button" onclick="setQueueState('success')" id="btn-state-success" class="px-2.5 py-1 rounded-sm text-xs font-meta font-semibold bg-indigo text-ink-on-indigo border border-border-strong transition-all">
+          1. Succès (Items qualifiés)
+        </button>
+        <button type="button" onclick="setQueueState('empty')" id="btn-state-empty" class="px-2.5 py-1 rounded-sm text-xs font-meta text-ink-secondary bg-surface-sand border border-border-hairline hover:border-border-strong transition-all">
+          2. File vide (« File vide »)
+        </button>
+        <button type="button" onclick="setQueueState('loading')" id="btn-state-loading" class="px-2.5 py-1 rounded-sm text-xs font-meta text-ink-secondary bg-surface-sand border border-border-hairline hover:border-border-strong transition-all">
+          3. Chargement (Queue fetch)
+        </button>
+        <button type="button" onclick="setQueueState('error')" id="btn-state-error" class="px-2.5 py-1 rounded-sm text-xs font-meta text-ink-secondary bg-surface-sand border border-border-hairline hover:border-border-strong transition-all">
+          4. Erreur (Staff auth fail)
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- CONTENU PRINCIPAL : LAYOUT TWO-PANE DEPUIS 768px (MD) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex flex-col space-y-4">
+    
+    <!-- EN-TÊTE DE SECTION STAFF & RAPPEL DE CADRAGE CANONIQUE -->
+    <div class="bg-surface-raised border border-border-hairline rounded-md p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1 class="font-title text-2xl font-bold text-ink-primary">Admin flag queue</h1>
+          <span class="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-caption bg-staff text-surface-raised font-medium border border-border-strong/40">
+            Équipe seulement
+          </span>
+          <span class="px-2 py-0.5 rounded-sm text-xs font-meta bg-surface-sand text-ink-secondary border border-border-hairline">
+            Implements: FR-067 · FR-144 · AD-10
+          </span>
+        </div>
+        <p class="font-body text-sm text-ink-secondary leading-relaxed max-w-3xl">
+          Modération <em>a posteriori</em> des échanges d'alliance. En vertu des règles déontologiques d'AnKanu, les messages 
+          <strong>ont déjà été délivrés au destinataire et au tuteur légal (Wali)</strong> sans mise en rétention préalable. 
+          L'ouverture ou la consultation d'une ligne d'audit <strong>ne modifie jamais l'état <code class="text-xs bg-surface-sand px-1 py-0.5 rounded border border-border-hairline text-ink-primary font-mono">message.state</code></strong>.
+        </p>
+      </div>
+
+      <!-- Actions de filtre rapide de la file staff -->
+      <div class="flex items-center gap-2 shrink-0">
+        <div class="text-right hidden xl:block font-caption text-xs text-ink-secondary">
+          <div>File d'instruction active</div>
+          <div class="font-semibold text-ink-primary" id="queue-counter-text">3 dossiers à traiter</div>
+        </div>
+        <button type="button" onclick="refreshQueue()" class="h-10 px-3 rounded-sm border border-border-strong bg-surface-raised hover:bg-surface-sand text-ink-primary font-meta text-sm font-semibold transition-colors flex items-center gap-1.5" title="Actualiser la file">
+          <span class="material-symbols-outlined text-base">refresh</span>
+          <span>Actualiser</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ÉTAT D'ERREUR TECHNIQUE : STAFF AUTH FAIL (Masqué par défaut) -->
+    <div id="state-view-error" class="hidden bg-danger-soft border border-danger/40 rounded-md p-6 text-center space-y-3">
+      <div class="w-12 h-12 rounded-full bg-danger/10 text-danger mx-auto flex items-center justify-center">
+        <span class="material-symbols-outlined text-2xl">gavel</span>
+      </div>
+      <div class="space-y-1">
+        <h2 class="font-heading text-lg font-bold text-danger">Échec d'authentification Staff (Staff auth fail)</h2>
+        <p class="font-body text-sm text-ink-secondary max-w-lg mx-auto">
+          Vos privilèges d'assermentation déontologique n'ont pas pu être confirmés auprès du serveur central Ouagadougou. 
+          Veuillez renouveler votre session sécurisée ou contacter l'administrateur du registre CIL.
+        </p>
+      </div>
+      <div class="pt-2">
+        <button type="button" onclick="setQueueState('success')" class="h-10 px-4 rounded-sm bg-indigo text-ink-on-indigo font-body-strong text-sm hover:bg-indigo-deep transition-all">
+          Réauthentifier le certificat staff
+        </button>
+      </div>
+    </div>
+
+    <!-- ÉTAT DE CHARGEMENT : QUEUE FETCH (Masqué par défaut) -->
+    <div id="state-view-loading" class="hidden bg-surface-raised border border-border-hairline rounded-md p-12 text-center space-y-4">
+      <div class="w-10 h-10 border-3 border-indigo border-t-transparent rounded-full animate-spin mx-auto"></div>
+      <div class="space-y-1">
+        <div class="flex items-center justify-center gap-2">
+          <span class="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-caption bg-staff text-surface-raised font-medium">
+            Équipe seulement
+          </span>
+          <h2 class="font-heading text-base font-semibold text-ink-primary">Récupération des signalements en cours (Queue fetch)...</h2>
+        </div>
+        <p class="font-caption text-xs text-ink-secondary">Synchronisation chiffrée avec le registre souverain Scaleway • FR-144</p>
+      </div>
+    </div>
+
+    <!-- ÉTAT 1 : WORKSPACE STAFF TWO-PANE (FILE GAUCHE, DOSSIER/CASE DROITE DEPUIS 768px) -->
+    <div id="state-view-content" class="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+      
+      <!-- PANNEAU GAUCHE : FILE DES ITEMS SIGNALÉS (QUEUE) - 5 COLS SUR DESKTOP -->
+      <section class="md:col-span-5 bg-surface-raised border border-border-hairline rounded-md flex flex-col overflow-hidden shadow-xs">
+        
+        <!-- En-tête de la file avec filtres par typologie canonique {components.admin-flag-row} -->
+        <div class="p-3.5 border-b border-border-hairline bg-surface-sand/40 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-heading text-sm font-bold text-ink-primary uppercase tracking-wide flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-staff">format_list_bulleted</span>
+              <span>Dossiers délivrés &amp; signalés</span>
+            </span>
+            <span class="text-xs font-caption text-ink-secondary bg-surface-raised px-2 py-0.5 rounded-sm border border-border-hairline font-mono" id="queue-items-count">
+              3 éléments
+            </span>
+          </div>
+          
+          <!-- Filtres de catégorie : flag-for-admin | scan-deferred | scan-failed -->
+          <div class="flex items-center gap-1 text-xs font-meta">
+            <button type="button" onclick="filterQueueKind('all')" id="filter-all" class="px-2 py-0.5 rounded-sm bg-indigo text-ink-on-indigo font-semibold border border-indigo">
+              Tous (3)
+            </button>
+            <button type="button" onclick="filterQueueKind('flag-for-admin')" id="filter-flag" class="px-2 py-0.5 rounded-sm bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline">
+              flag-for-admin (1)
+            </button>
+            <button type="button" onclick="filterQueueKind('scan-deferred')" id="filter-deferred" class="px-2 py-0.5 rounded-sm bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline">
+              scan-deferred (1)
+            </button>
+            <button type="button" onclick="filterQueueKind('scan-failed')" id="filter-failed" class="px-2 py-0.5 rounded-sm bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline">
+              scan-failed (1)
+            </button>
+          </div>
+        </div>
+
+        <!-- ZONE D'AFFICHAGE "FILE VIDE" SI 0 ITEM -->
+        <div id="queue-empty-box" class="hidden p-12 text-center space-y-3">
+          <div class="w-12 h-12 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center mx-auto text-ink-secondary">
+            <span class="material-symbols-outlined text-2xl">check_circle</span>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-heading text-lg font-bold text-ink-primary">File vide</h3>
+            <p class="font-caption text-xs text-ink-secondary max-w-xs mx-auto">
+              (delivery still happened in the world).<br/>
+              Aucun nouveau manquement déontologique en attente de révision. Toutes les correspondances poursuivent leur cours sous la bienveillance des tuteurs légaux.
+            </p>
+          </div>
+        </div>
+
+        <!-- LISTE D'ITEMS {components.admin-flag-row} -->
+        <div id="queue-items-container" class="divide-y divide-border-hairline max-h-[720px] overflow-y-auto">
+          
+          <!-- ITEM 1 : KIND = flag-for-admin (Sélectionné par défaut) -->
+          <article onclick="selectCase(1)" id="queue-row-1" class="queue-item cursor-pointer p-3.5 bg-surface-sand/80 border-l-4 border-l-staff transition-colors hover:bg-surface-sand space-y-2">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <!-- Staff-only badge obligatoire sur chaque row -->
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[11px] font-caption bg-staff text-surface-raised font-semibold">
+                  Équipe seulement
+                </span>
+                <span class="px-1.5 py-0.5 rounded-sm text-[11px] font-mono font-semibold bg-danger-soft text-danger border border-danger/30">
+                  flag-for-admin
+                </span>
+                <span class="text-xs font-caption text-ink-secondary">
+                  Dossier #FLAG-2025-091
+                </span>
+              </div>
+              <span class="text-[11px] font-caption text-ink-secondary font-mono">
+                Il y a 24 min
+              </span>
+            </div>
+
+            <!-- Personne signalée & Destination (Flagged person is on the row) -->
+            <div class="flex items-center justify-between text-xs font-meta">
+              <div class="flex items-center gap-1.5 text-ink-primary font-semibold">
+                <span class="material-symbols-outlined text-sm text-staff">person_alert</span>
+                <span>Personne signalée : <strong class="text-danger">Moussa_B (Prétendant)</strong></span>
+              </div>
+              <span class="text-ink-secondary text-[11px]">Pupille : Aminata_O</span>
+            </div>
+
+            <!-- Extrait déjà délivré (Already-delivered excerpt) -->
+            <p class="font-body text-xs text-ink-primary bg-surface-raised p-2 rounded-sm border border-border-hairline/70 italic line-clamp-2">
+              « Voici mon numéro direct +226 70 12 34 56 écrivez-moi sur WhatsApp directement pour contourner le temps d'attente du tuteur... »
+            </p>
+
+            <div class="flex items-center justify-between text-[11px] font-caption text-ink-secondary pt-0.5">
+              <span class="inline-flex items-center gap-1 text-staff font-medium">
+                <span class="material-symbols-outlined text-xs">hourglass_top</span>
+                <span>SLA : 3h36 restantes (AD-10)</span>
+              </span>
+              <span class="text-ink-secondary">Déjà délivré • Saisie a posteriori</span>
+            </div>
+          </article>
+
+          <!-- ITEM 2 : KIND = scan-deferred -->
+          <article onclick="selectCase(2)" id="queue-row-2" class="queue-item cursor-pointer p-3.5 bg-surface-raised transition-colors hover:bg-surface-sand/50 space-y-2">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <!-- Staff-only badge obligatoire sur chaque row -->
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[11px] font-caption bg-staff text-surface-raised font-semibold">
+                  Équipe seulement
+                </span>
+                <span class="px-1.5 py-0.5 rounded-sm text-[11px] font-mono font-semibold bg-gold-soft/40 text-ink-primary border border-gold/40">
+                  scan-deferred
+                </span>
+                <span class="text-xs font-caption text-ink-secondary">
+                  Dossier #SCAN-2025-144
+                </span>
+              </div>
+              <span class="text-[11px] font-caption text-ink-secondary font-mono">
+                Il y a 1h12
+              </span>
+            </div>
+
+            <!-- Flagged person is on the row -->
+            <div class="flex items-center justify-between text-xs font-meta">
+              <div class="flex items-center gap-1.5 text-ink-primary font-semibold">
+                <span class="material-symbols-outlined text-sm text-staff">person_search</span>
+                <span>Personne signalée : <strong class="text-ink-primary">Ibrahim_Kdg (Prétendant)</strong></span>
+              </div>
+              <span class="text-ink-secondary text-[11px]">Pupille : Fatoumata_S</span>
+            </div>
+
+            <!-- Extrait déjà délivré -->
+            <p class="font-body text-xs text-ink-primary bg-surface-sand/40 p-2 rounded-sm border border-border-hairline/70 italic line-clamp-2">
+              « Note vocale enregistrée en Dioula (durée 0:42) — Analyse asynchrone différée suite à saturation temporaire passerelle transcription... »
+            </p>
+
+            <div class="flex items-center justify-between text-[11px] font-caption text-ink-secondary pt-0.5">
+              <span class="inline-flex items-center gap-1 text-ink-secondary font-medium">
+                <span class="material-symbols-outlined text-xs">schedule</span>
+                <span>SLA : 12h restantes</span>
+              </span>
+              <span class="text-ink-secondary">Audio délivré en salon</span>
+            </div>
+          </article>
+
+          <!-- ITEM 3 : KIND = scan-failed -->
+          <article onclick="selectCase(3)" id="queue-row-3" class="queue-item cursor-pointer p-3.5 bg-surface-raised transition-colors hover:bg-surface-sand/50 space-y-2">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <!-- Staff-only badge obligatoire sur chaque row -->
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded-sm text-[11px] font-caption bg-staff text-surface-raised font-semibold">
+                  Équipe seulement
+                </span>
+                <span class="px-1.5 py-0.5 rounded-sm text-[11px] font-mono font-semibold bg-danger-soft/60 text-danger border border-danger/30">
+                  scan-failed
+                </span>
+                <span class="text-xs font-caption text-ink-secondary">
+                  Dossier #SCAN-2025-088
+                </span>
+              </div>
+              <span class="text-[11px] font-caption text-ink-secondary font-mono">
+                Il y a 3h05
+              </span>
+            </div>
+
+            <!-- Flagged person is on the row -->
+            <div class="flex items-center justify-between text-xs font-meta">
+              <div class="flex items-center gap-1.5 text-ink-primary font-semibold">
+                <span class="material-symbols-outlined text-sm text-staff">contact_page</span>
+                <span>Personne signalée : <strong class="text-danger">Souleymane_T (Postulant)</strong></span>
+              </div>
+              <span class="text-ink-secondary text-[11px]">Pupille : Nafissatou_D</span>
+            </div>
+
+            <!-- Extrait déjà délivré -->
+            <p class="font-body text-xs text-ink-primary bg-surface-sand/40 p-2 rounded-sm border border-border-hairline/70 italic line-clamp-2">
+              « Pièce jointe image illisible ou flux corrompu lors du téléversement en 2G rurale — Nécessite confirmation d'intégrité manuelle... »
+            </p>
+
+            <div class="flex items-center justify-between text-[11px] font-caption text-ink-secondary pt-0.5">
+              <span class="inline-flex items-center gap-1 text-danger font-medium">
+                <span class="material-symbols-outlined text-xs">warning</span>
+                <span>Échec de vérification passerelle</span>
+              </span>
+              <span class="text-ink-secondary">Délivrance effectuée</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- Pied de liste / mention d'invariance d'état -->
+        <div class="p-3 bg-surface-sand border-t border-border-hairline text-center">
+          <p class="font-caption text-xs text-ink-secondary">
+            Règle FR-067 : Cliquer sur un dossier pour examen ne modifie en aucun cas son état technique en base.
+          </p>
+        </div>
+      </section>
+
+      <!-- PANNEAU DROIT : CASE VIEW / DÉTAIL DU DOSSIER D'INSTRUCTION (7 COLS SUR DESKTOP) -->
+      <section class="md:col-span-7 bg-surface-raised border border-border-hairline rounded-md p-5 space-y-5 shadow-xs">
+        
+        <!-- En-tête du Case actif -->
+        <div class="border-b border-border-hairline pb-4 space-y-2">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <!-- Staff-only badge obligatoire sur chaque vue d'instruction -->
+              <span class="inline-flex items-center px-2 py-0.5 rounded-sm text-xs font-caption bg-staff text-surface-raised font-medium">
+                Équipe seulement
+              </span>
+              <span class="font-mono text-xs font-bold text-ink-primary" id="case-ref">RÉF : FLAG-2025-091</span>
+              <span class="px-2 py-0.5 rounded-sm text-xs font-mono font-semibold bg-danger-soft text-danger border border-danger/30" id="case-kind-badge">
+                flag-for-admin
+              </span>
+            </div>
+            
+            <div class="flex items-center gap-1.5 text-xs font-caption text-ink-secondary">
+              <span class="w-2 h-2 rounded-full bg-success"></span>
+              <span>Message state : <strong class="text-ink-primary font-mono" id="case-message-state">delivered (immédiat)</strong></span>
+            </div>
+          </div>
+
+          <h2 class="font-title text-xl font-bold text-ink-primary" id="case-title">
+            Signalement pour tentative de contournement tutélaire
+          </h2>
+          <div class="flex flex-wrap items-center gap-4 text-xs font-meta text-ink-secondary">
+            <span>Salon d'alliance : <strong>Tahir_Ouaga &amp; Aminata_O</strong></span>
+            <span>Tuteur référencé : <strong>Oumar O. Sawadogo (Wali)</strong></span>
+            <span>Localisation : <strong>Ouagadougou (Baskuy)</strong></span>
+          </div>
+        </div>
+
+        <!-- MENTION CANONIQUE INVIOLABLE : ALREADY-DELIVERED & NON-ALTERATION MESSAGE.STATE -->
+        <div class="p-3.5 rounded-sm bg-staff-soft/60 border border-border-hairline flex items-start gap-3">
+          <span class="material-symbols-outlined text-staff text-xl shrink-0 mt-0.5">policy</span>
+          <div class="space-y-1 text-xs font-body text-ink-secondary leading-relaxed">
+            <p class="font-body-strong text-staff">
+              Garantie d'inviolabilité &amp; Modération a posteriori (FR-067 / FR-144 / AD-10)
+            </p>
+            <p>
+              Ce message a déjà été délivré dans le fil du membre et notifié au tuteur légal. 
+              <strong>L'examen staff n'interrompt pas rétroactivement la transmission</strong> et l'ouverture de ce dossier conserve strictement la valeur <code class="font-mono bg-surface-raised px-1 py-0.2 rounded text-ink-primary">message.state = DELIVERED</code>.
+            </p>
+          </div>
+        </div>
+
+        <!-- FICHE D'IDENTITÉ DE LA PERSONNE SIGNALÉE (Flagged person on the row/case) -->
+        <div class="bg-surface-sand/40 border border-border-hairline rounded-sm p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-border-hairline/60 pb-2">
+            <span class="font-meta text-xs font-bold uppercase tracking-wider text-ink-secondary flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-staff">badge</span>
+              <span>Personne faisant l'objet du signalement</span>
+            </span>
+            <span class="text-xs font-meta text-ink-secondary">Statut : Membre actif</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-meta">
+            <div>
+              <span class="text-ink-secondary block">Pseudonyme / Genre légal :</span>
+              <span class="font-body-strong text-ink-primary" id="case-person-name">Moussa_B (Frère / Prétendant)</span>
+            </div>
+            <div>
+              <span class="text-ink-secondary block">Identité d'état civil auditée :</span>
+              <span class="font-body-strong text-ink-primary" id="case-person-cnib">CNIB validée n° B11029482 (Faso)</span>
+            </div>
+            <div>
+              <span class="text-ink-secondary block">Antécédents déontologiques :</span>
+              <span class="text-success font-semibold" id="case-person-history">0 avertissement antérieur • Profil vierge</span>
+            </div>
+            <div>
+              <span class="text-ink-secondary block">Statut de la démarche :</span>
+              <span class="text-ink-primary" id="case-person-context">Salon chaperonné • Accès accordé le 14 Oct.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENU DU MESSAGE DELIVRÉ FAISANT L'OBJET DE L'AUDIT -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between text-xs font-meta">
+            <span class="font-bold text-ink-primary flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-indigo">chat</span>
+              <span>Transcription de l'élément délivré sous contrôle du Wali</span>
+            </span>
+            <span class="text-ink-secondary font-mono">Horodaté : 24 Oct. 14:15 GMT</span>
+          </div>
+
+          <div class="p-4 rounded-sm bg-surface-sand border border-border-strong/40 space-y-2">
+            <p class="font-body text-sm text-ink-primary leading-relaxed" id="case-excerpt-full">
+              « Salam aleykoum ma sœur. Afin d'éviter la lenteur des échanges avec les aînés, voici mon numéro direct <strong>+226 70 12 34 56</strong>. Écrivez-moi sur WhatsApp directement afin que nous discutions seuls à seuls sans que votre tuteur n'ait à valider chaque mot. »
+            </p>
+            <div class="flex items-center gap-2 pt-2 border-t border-border-hairline text-[11px] font-caption text-ink-secondary">
+              <span class="material-symbols-outlined text-xs text-staff">warning</span>
+              <span>Détection automatique du protocole de partage anticipé de coordonnées (FR-068 / AD-17).</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTIFICATION ASSOCIÉE AU WALI / TUTEUR -->
+        <div class="p-3 rounded-sm bg-surface-sand/60 border border-border-hairline text-xs font-meta space-y-1">
+          <div class="flex items-center justify-between text-ink-primary font-semibold">
+            <span class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm text-indigo">verified_user</span>
+              <span>Information transmise au Wali (Tuteur légal)</span>
+            </span>
+            <span class="text-success font-caption">Transmis par SMS protocolaire</span>
+          </div>
+          <p class="font-caption text-ink-secondary">
+            Le tuteur légal Oumar O. Sawadogo a été avisé avec mesure et retenue, conformément aux coutumes sahéliennes de préservation de la paix familiale.
+          </p>
+        </div>
+
+        <!-- PANOPLIE DES CONTRÔLES DE RÉSOLUTION DÉONTOLOGIQUE ({components.sanction-action}) -->
+        <div class="border-t border-border-hairline pt-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-meta text-xs font-bold uppercase tracking-wider text-ink-secondary">
+              Décision d'instruction de l'officier assermenté
+            </span>
+            <span class="text-[11px] font-caption text-ink-secondary">Action consignée au registre CIL</span>
+          </div>
+
+          <!-- Contrôles spécifiques du design system AnKanu : Avertissement (staff) | Suspension (danger) | Autre action / Clôture sans suite -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            
+            <!-- 1. Avertissement (staff) -->
+            <button type="button" onclick="applyResolution('warning')" class="min-h-[48px] px-3 py-2 rounded-sm bg-surface-raised border border-staff text-staff font-body-strong text-xs hover:bg-staff-soft transition-colors flex items-center justify-center gap-1.5 text-center">
+              <span class="material-symbols-outlined text-base">report</span>
+              <span>1. Avertissement (Staff)</span>
+            </button>
+
+            <!-- 2. Suspension (danger) -->
+            <button type="button" onclick="applyResolution('suspend')" class="min-h-[48px] px-3 py-2 rounded-sm bg-danger text-surface-raised font-body-strong text-xs hover:bg-danger/90 transition-colors flex items-center justify-center gap-1.5 text-center">
+              <span class="material-symbols-outlined text-base">block</span>
+              <span>2. Suspension (Danger)</span>
+            </button>
+
+            <!-- 3. Autre action publiée / Sans suite (secondary) -->
+            <button type="button" onclick="applyResolution('dismiss')" class="min-h-[48px] px-3 py-2 rounded-sm bg-surface-raised border border-border-strong text-indigo font-body-strong text-xs hover:bg-surface-sand transition-colors flex items-center justify-center gap-1.5 text-center">
+              <span class="material-symbols-outlined text-base">check</span>
+              <span>3. Classer sans suite</span>
+            </button>
+          </div>
+
+          <!-- Bouton primaire unique d'enregistrement solennel -->
+          <div class="pt-2 flex items-center justify-between gap-4">
+            <span class="font-caption text-xs text-ink-secondary">
+              L'arbitrage engage la responsabilité morale de l'officier instructeur devant le Conseil des Sages.
+            </span>
+            <button type="button" onclick="confirmResolution()" class="min-h-[48px] px-6 py-2.5 rounded-sm bg-indigo text-ink-on-indigo font-body-strong text-sm hover:bg-indigo-deep transition-all shadow-xs flex items-center gap-2 shrink-0">
+              <span class="material-symbols-outlined text-base">gavel</span>
+              <span>Sceller la décision d'arbitrage</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+  </main>
+
+  <!-- PIED DE PAGE STRICTEMENT STAFF & CONFORMITÉ CIL BURKINA FASO -->
+  <footer class="w-full bg-surface-sand border-t border-border-hairline mt-auto py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-caption text-ink-secondary">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-gold"></span>
+        <span class="font-bold text-ink-primary">AnKanu — Console d'Administration &amp; Déontologie</span>
+        <span class="inline-flex items-center px-1.5 py-0.2 rounded-sm text-[10px] bg-staff text-surface-raised font-medium">
+          Équipe seulement
+        </span>
+      </div>
+      <div>
+        Infrastructure souveraine hébergée Scaleway (Paris / Réplication Ouagadougou) • Conforme Loi 010-2004/AN CIL Burkina Faso
+      </div>
+      <div class="flex items-center space-x-4">
+        <span class="text-ink-primary font-semibold">Protocole FR-067 / FR-144 / AD-10</span>
+        <span class="text-border-strong">|</span>
+        <span>Zéro algorithme marchand</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT LOGIQUE POUR LA SIMULATION DES ÉTATS ET LA MANIPULATION DU CASE VIEW -->
+  <script>
+    // Données des dossiers
+    const caseData = {
+      1: {
+        ref: "FLAG-2025-091",
+        kind: "flag-for-admin",
+        badgeClass: "bg-danger-soft text-danger border-danger/30",
+        title: "Signalement pour tentative de contournement tutélaire",
+        person: "Moussa_B (Frère / Prétendant)",
+        cnib: "CNIB validée n° B11029482 (Faso)",
+        history: "0 avertissement antérieur • Profil vierge",
+        context: "Salon chaperonné • Accès accordé le 14 Oct.",
+        excerpt: "« Salam aleykoum ma sœur. Afin d'éviter la lenteur des échanges avec les aînés, voici mon numéro direct +226 70 12 34 56. Écrivez-moi sur WhatsApp directement afin que nous discutions seuls à seuls sans que votre tuteur n'ait à valider chaque mot. »"
+      },
+      2: {
+        ref: "SCAN-2025-144",
+        kind: "scan-deferred",
+        badgeClass: "bg-gold-soft/40 text-ink-primary border-gold/40",
+        title: "Traitement asynchrone différé de note vocale",
+        person: "Ibrahim_Kdg (Prétendant)",
+        cnib: "CNIB validée n° B8810291 (Bobo-Dioulasso)",
+        history: "1 concertation familiale réussie",
+        context: "Démarche d'introduction formelle en cours",
+        excerpt: "« Note vocale enregistrée en Dioula et Français (durée 0:42) : Le prétendant formule ses respects envers la maisonnée et confirme sa disposition pour une rencontre protocolaire en présence des anciens à Bobo-Dioulasso. Aucune anomalie sémantique relevée lors de l'écoute différée. »"
+      },
+      3: {
+        ref: "SCAN-2025-088",
+        kind: "scan-failed",
+        badgeClass: "bg-danger-soft/60 text-danger border-danger/30",
+        title: "Échec de contrôle technique de document téléversé",
+        person: "Souleymane_T (Postulant)",
+        cnib: "Passeport ordinaire n° BF-9921029",
+        history: "Vérification préliminaire en cours",
+        context: "Inscription récente • Réseau 2G province",
+        excerpt: "« Erreur de compression d'image transmise : la pièce jointe contenant le récépissé de domicile local n'a pas pu être déchiffrée par l'automate de validation sans perte de contraste. Le fichier a été délivré sous séquestre d'intégrité en attendant inspection visuelle de l'officier assermenté. »"
+      }
+    };
+
+    let activeCaseId = 1;
+
+    // Sélection d'un dossier
+    function selectCase(id) {
+      activeCaseId = id;
+      // Mise à jour visuelle des rangées de la liste
+      for (let i = 1; i <= 3; i++) {
+        const row = document.getElementById('queue-row-' + i);
+        if (row) {
+          if (i === id) {
+            row.className = "queue-item cursor-pointer p-3.5 bg-surface-sand/80 border-l-4 border-l-staff transition-colors space-y-2";
+          } else {
+            row.className = "queue-item cursor-pointer p-3.5 bg-surface-raised transition-colors hover:bg-surface-sand/50 space-y-2";
+          }
+        }
+      }
+
+      // Mise à jour de la vue détaillée
+      const data = caseData[id];
+      if (data) {
+        document.getElementById('case-ref').innerText = "RÉF : " + data.ref;
+        const kindBadge = document.getElementById('case-kind-badge');
+        kindBadge.innerText = data.kind;
+        kindBadge.className = "px-2 py-0.5 rounded-sm text-xs font-mono font-semibold border " + data.badgeClass;
+        document.getElementById('case-title').innerText = data.title;
+        document.getElementById('case-person-name').innerText = data.person;
+        document.getElementById('case-person-cnib').innerText = data.cnib;
+        document.getElementById('case-person-history').innerText = data.history;
+        document.getElementById('case-person-context').innerText = data.context;
+        document.getElementById('case-excerpt-full').innerText = data.excerpt;
+      }
+    }
+
+    // Filtrer par typologie de contrôles
+    function filterQueueKind(kind) {
+      const kinds = ['all', 'flag', 'deferred', 'failed'];
+      kinds.forEach(k => {
+        const btn = document.getElementById('filter-' + k);
+        if (btn) {
+          if ((kind === 'all' && k === 'all') || 
+              (kind === 'flag-for-admin' && k === 'flag') || 
+              (kind === 'scan-deferred' && k === 'deferred') || 
+              (kind === 'scan-failed' && k === 'failed')) {
+            btn.className = "px-2 py-0.5 rounded-sm bg-indigo text-ink-on-indigo font-semibold border border-indigo";
+          } else {
+            btn.className = "px-2 py-0.5 rounded-sm bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline";
+          }
+        }
+      });
+
+      const row1 = document.getElementById('queue-row-1');
+      const row2 = document.getElementById('queue-row-2');
+      const row3 = document.getElementById('queue-row-3');
+
+      if (row1) row1.style.display = (kind === 'all' || kind === 'flag-for-admin') ? 'block' : 'none';
+      if (row2) row2.style.display = (kind === 'all' || kind === 'scan-deferred') ? 'block' : 'none';
+      if (row3) row3.style.display = (kind === 'all' || kind === 'scan-failed') ? 'block' : 'none';
+
+      // Basculer automatiquement le case affiché si nécessaire
+      if (kind === 'flag-for-admin') selectCase(1);
+      if (kind === 'scan-deferred') selectCase(2);
+      if (kind === 'scan-failed') selectCase(3);
+    }
+
+    // Gestion des états du banc d'audit
+    function setQueueState(state) {
+      const states = ['success', 'empty', 'loading', 'error'];
+      states.forEach(s => {
+        const btn = document.getElementById('btn-state-' + s);
+        if (btn) {
+          if (s === state) {
+            btn.className = "px-2.5 py-1 rounded-sm text-xs font-meta font-semibold bg-indigo text-ink-on-indigo border border-border-strong transition-all";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-sm text-xs font-meta text-ink-secondary bg-surface-sand border border-border-hairline hover:border-border-strong transition-all";
+          }
+        }
+      });
+
+      const viewContent = document.getElementById('state-view-content');
+      const viewLoading = document.getElementById('state-view-loading');
+      const viewError = document.getElementById('state-view-error');
+      const emptyBox = document.getElementById('queue-empty-box');
+      const itemsContainer = document.getElementById('queue-items-container');
+      const counterText = document.getElementById('queue-counter-text');
+      const itemsCount = document.getElementById('queue-items-count');
+      const globalBadge = document.getElementById('global-badge-count');
+
+      // Masquer toutes les vues d'état
+      viewContent.classList.remove('hidden');
+      viewLoading.classList.add('hidden');
+      viewError.classList.add('hidden');
+
+      if (state === 'success') {
+        emptyBox.classList.add('hidden');
+        itemsContainer.classList.remove('hidden');
+        counterText.innerText = "3 dossiers à traiter";
+        itemsCount.innerText = "3 éléments";
+        globalBadge.innerText = "3";
+        globalBadge.classList.remove('hidden');
+        selectCase(activeCaseId || 1);
+      } else if (state === 'empty') {
+        emptyBox.classList.remove('hidden');
+        itemsContainer.classList.add('hidden');
+        counterText.innerText = "0 dossier (File vide)";
+        itemsCount.innerText = "0 élément";
+        globalBadge.innerText = "0";
+        // Vider ou indiquer le case
+        document.getElementById('case-ref').innerText = "AUCUN DOSSIER";
+        document.getElementById('case-title').innerText = "File d'arbitrage totalement purgée";
+        document.getElementById('case-excerpt-full').innerText = "Aucun dossier n'est en attente de décision. Les échanges poursuivent leur cours dans la sérénité.";
+      } else if (state === 'loading') {
+        viewContent.classList.add('hidden');
+        viewLoading.classList.remove('hidden');
+      } else if (state === 'error') {
+        viewContent.classList.add('hidden');
+        viewError.classList.remove('hidden');
+      }
+    }
+
+    function refreshQueue() {
+      setQueueState('loading');
+      setTimeout(() => {
+        setQueueState('success');
+      }, 700);
+    }
+
+    function applyResolution(type) {
+      let msg = "";
+      if (type === 'warning') msg = "Option choisie : 1. Avertissement (Staff) notifié au postulant sans suppression d'accès.";
+      if (type === 'suspend') msg = "Option choisie : 2. Suspension conservatoire temporaire (72h) avec notification au tuteur légal.";
+      if (type === 'dismiss') msg = "Option choisie : 3. Classement sans suite. Aucune déviation déontologique retenue.";
+      alert(msg + "\n\nRappel : Le scellement final requiert de cliquer sur « Sceller la décision d'arbitrage ».");
+    }
+
+    function confirmResolution() {
+      alert("Décision scellée avec succès sous sceau d'intégrité déontologique AnKanu.\nLe registre CIL-BF a été horodaté.");
+    }
+  </script>
+</body>
+</html>

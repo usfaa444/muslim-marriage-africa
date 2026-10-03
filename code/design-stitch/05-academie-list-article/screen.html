@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Académie AnKanu — Savoir, Fiqh et Pudeur pour le Mariage Honorable</title>
+<!-- Fonts: Source Serif 4 & Source Sans 3 strictly -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#032448",
+            "on-primary-container": "#8ba4cf",
+            "secondary-container": "#fdd88a",
+            "on-secondary": "#ffffff",
+            "surface-container": "#f4ede0",
+            "surface": "#fff9ee",
+            "surface-container-highest": "#e9e2d5",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c4c6cf",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-tertiary-fixed-variant": "#683b2c",
+            "tertiary": "#3e190c",
+            "on-tertiary-container": "#d29582",
+            "on-surface": "#1e1b14",
+            "error-container": "#ffdad6",
+            "surface-container-low": "#faf3e6",
+            "primary-fixed": "#d5e3ff",
+            "outline": "#74777f",
+            "surface-container-lowest": "#ffffff",
+            "on-background": "#1e1b14",
+            "tertiary-fixed": "#ffdbd0",
+            "secondary": "#755b18",
+            "inverse-primary": "#aec8f4",
+            "tertiary-fixed-dim": "#f9b7a3",
+            "surface-bright": "#fff9ee",
+            "on-secondary-fixed": "#251a00",
+            "surface-dim": "#e0d9cd",
+            "primary-container": "#1f3a5f",
+            "primary-fixed-dim": "#aec8f4",
+            "on-tertiary-fixed": "#341106",
+            "on-surface-variant": "#43474e",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#785d1b",
+            "on-primary": "#ffffff",
+            "surface-container-high": "#eee7db",
+            "inverse-surface": "#333028",
+            "on-primary-fixed-variant": "#2d476d",
+            "tertiary-container": "#582e20",
+            "surface-variant": "#e9e2d5",
+            "on-primary-fixed": "#001c3b",
+            "surface-tint": "#465f86",
+            "secondary-fixed-dim": "#e5c276",
+            "on-error": "#ffffff",
+            "inverse-on-surface": "#f7f0e3",
+            "background": "#fff9ee",
+            "error": "#ba1a1a",
+            "secondary-fixed": "#ffdf9c"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "gutter-mobile": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "margin-mobile": "1.25rem",
+            "margin": "2.5rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "gutter": "1.5rem"
+          },
+          "fontFamily": {
+            "body-md": ["\"Source Sans 3\"", "sans-serif"],
+            "headline-lg": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "body-sm": ["\"Source Sans 3\"", "sans-serif"],
+            "headline-sm": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "headline-md": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "label-sm": ["\"Source Sans 3\"", "sans-serif"],
+            "title-lg": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "body-lg": ["\"Source Sans 3\"", "sans-serif"],
+            "label-md": ["\"Source Sans 3\"", "sans-serif"],
+            "display-lg-mobile": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "display-lg": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "title-md": ["\"Source Sans 3\"", "sans-serif"],
+            "label-lg": ["\"Source Sans 3\"", "sans-serif"]
+          },
+          "fontSize": {
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-lg": ["17px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Architectural Parchment & Keyline Rules */
+    body {
+      background-color: #F4EDE0;
+      color: #1B2433;
+      font-family: 'Source Sans 3', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #F4EDE0;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #D9CDB8;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #6F624C;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-surface-container flex flex-col justify-between selection:bg-secondary-container selection:text-on-secondary-fixed-variant">
+<!-- ========================================================================= -->
+<!-- Top Navigation Bar (Shared Component Anchor)                              -->
+<!-- ========================================================================= -->
+<header class="w-full bg-surface border-b border-[#D9CDB8] sticky top-0 z-40">
+<div class="max-w-[1140px] mx-auto px-6 py-3.5 flex items-center justify-between">
+<!-- Brand Logo / Identity -->
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-2.5 text-primary text-headline-md font-headline-md font-bold tracking-tight" href="#home">
+<span class="w-8 h-8 rounded-md bg-primary-container text-surface-container flex items-center justify-center border border-[#6F624C]/40">
+<span class="material-symbols-outlined text-lg" data-icon="menu_book">menu_book</span>
+</span>
+<span>Académie AnKanu</span>
+</a>
+<span class="hidden lg:inline-block text-[11px] font-semibold tracking-wider text-secondary uppercase bg-[#E8D5A3] px-2 py-0.5 rounded-md border border-[#C4A35A]/60 ml-2">
+          Pôle Fiqh &amp; Déontologie
+        </span>
+</div>
+<!-- Institutional Navigation Links -->
+<nav class="hidden md:flex items-center gap-7">
+<a class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors duration-150" href="#principes">
+          Principes de Ta'aruf
+        </a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors duration-150" href="#cadre">
+          Cadre Juridique &amp; Mahr
+        </a>
+<a class="text-primary border-b-2 border-primary pb-1 font-semibold font-label-md text-label-md" href="#wali">
+          Rôle du Wali
+        </a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors duration-150" href="#haya">
+          Pudeur &amp; Haya
+        </a>
+<a class="text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors duration-150" href="#bibliotheque">
+          Bibliothèque
+        </a>
+</nav>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-3">
+<a class="hidden sm:inline-flex items-center text-label-md font-label-md text-secondary hover:text-primary transition-colors duration-150 px-2.5 py-1.5 rounded-md border border-[#D9CDB8]" href="#comite">
+<span class="material-symbols-outlined text-[16px] mr-1.5" data-icon="account_balance">account_balance</span>
+          Comité des Savants
+        </a>
+<a class="inline-flex items-center justify-center bg-primary-container hover:bg-[#15283F] text-surface-container px-4 py-2 rounded-xl text-label-md font-label-md tracking-wide border border-[#6F624C]/30 transition-all duration-150" href="#portail">
+<span class="material-symbols-outlined text-[16px] mr-1.5" data-icon="lock">lock</span>
+          Accès Portail Famille
+        </a>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- Architectural Header Banner (Subtle West African Mihrab Motif)           -->
+<!-- ========================================================================= -->
+<section class="w-full bg-[#FFFBF4] border-b border-[#D9CDB8] relative overflow-hidden">
+<div class="max-w-[1140px] mx-auto px-6 py-10 relative z-10">
+<!-- Back Portal Link & Status Pill -->
+<div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+<a class="inline-flex items-center text-body-sm font-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#portail-principal">
+<span class="material-symbols-outlined text-sm mr-1.5" data-icon="arrow_back">arrow_back</span>
+          Retour vers le Portail Principal AnKanu
+        </a>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 bg-[#E8D5A3]/60 text-primary border border-[#C4A35A] px-2.5 py-1 rounded-md text-label-sm font-label-sm uppercase">
+<span class="material-symbols-outlined text-[14px] text-[#755b18]" data-icon="verified_user">verified_user</span>
+            Exégèse &amp; Droit Matrimonial Burkinabè
+          </span>
+<span class="text-body-sm font-body-sm text-[#5C5346]">Enregistrement Ouagadougou</span>
+</div>
+</div>
+<!-- Main Headline and Subtitle -->
+<div class="max-w-3xl">
+<h1 class="text-display-lg-mobile md:text-display-lg font-headline-lg text-[#1B2433] tracking-tight leading-tight">
+          L'Académie AnKanu : Savoir, Fiqh et Pudeur pour le Mariage
+        </h1>
+<p class="mt-3 text-body-lg font-body-lg text-[#5C5346] leading-relaxed">
+          Articles de référence examinés collégialement pour éclairer le cheminement vers le nikah honorable. Une documentation canonique rigoureuse au service des époux, des tuteurs (wali) et des lignées familiales.
+        </p>
+</div>
+<!-- Institutional Metrics Bar -->
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-[#D9CDB8]">
+<div>
+<span class="block text-label-sm font-label-sm text-[#5C5346] uppercase">Comités collégiaux</span>
+<span class="text-headline-sm font-headline-sm text-primary">03 Collèges assermentés</span>
+</div>
+<div>
+<span class="block text-label-sm font-label-sm text-[#5C5346] uppercase">Homologation</span>
+<span class="text-headline-sm font-headline-sm text-secondary">100% Révision paritaire</span>
+</div>
+<div>
+<span class="block text-label-sm font-label-sm text-[#5C5346] uppercase">Transparence</span>
+<span class="text-headline-sm font-headline-sm text-primary">Zéro algorithme marchand</span>
+</div>
+<div>
+<span class="block text-label-sm font-label-sm text-[#5C5346] uppercase">Orientation</span>
+<span class="text-headline-sm font-headline-sm text-[#3E190C]">Sunnah &amp; Droit Burkinabè</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- PRD Topic Filter Bar                                                      -->
+<!-- ========================================================================= -->
+<section class="w-full bg-[#FAF3E6] border-b border-[#D9CDB8] sticky top-[57px] z-30 shadow-[0_1px_2px_rgba(27,36,51,0.03)]">
+<div class="max-w-[1140px] mx-auto px-6 py-3">
+<div class="flex items-center justify-between gap-4 overflow-x-auto custom-scroll pb-1 sm:pb-0">
+<div class="flex items-center gap-2 shrink-0">
+<span class="text-label-sm font-label-sm text-[#5C5346] uppercase mr-1">Thématiques canoniques :</span>
+<!-- Topic 1: Mahram & Tutelle (Active) -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-label-md font-label-md bg-[#1F3A5F] text-[#F4EDE0] border border-[#15283F] shadow-sm">
+<span class="material-symbols-outlined text-[15px]" data-icon="shield_person">shield_person</span>
+            1. Mahram &amp; Tutelle
+          </button>
+<!-- Topic 2: Mahr & Dot -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-label-md font-label-md bg-[#FFFBF4] text-[#1B2433] hover:bg-[#EFE6D5] border border-[#D9CDB8] transition-colors">
+<span class="material-symbols-outlined text-[15px] text-[#755b18]" data-icon="payments">payments</span>
+            2. Mahr &amp; Dot
+          </button>
+<!-- Topic 3: Droits & Devoirs -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-label-md font-label-md bg-[#FFFBF4] text-[#1B2433] hover:bg-[#EFE6D5] border border-[#D9CDB8] transition-colors">
+<span class="material-symbols-outlined text-[15px] text-[#755b18]" data-icon="balance">balance</span>
+            3. Droits &amp; Devoirs
+          </button>
+<!-- Topic 4: Haya & Pudeur -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-label-md font-label-md bg-[#FFFBF4] text-[#1B2433] hover:bg-[#EFE6D5] border border-[#D9CDB8] transition-colors">
+<span class="material-symbols-outlined text-[15px] text-[#755b18]" data-icon="visibility_off">visibility_off</span>
+            4. Haya &amp; Pudeur
+          </button>
+<!-- Topic 5: Honnêteté & Vérité -->
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-label-md font-label-md bg-[#FFFBF4] text-[#1B2433] hover:bg-[#EFE6D5] border border-[#D9CDB8] transition-colors">
+<span class="material-symbols-outlined text-[15px] text-[#755b18]" data-icon="handshake">handshake</span>
+            5. Honnêteté &amp; Vérité
+          </button>
+</div>
+<!-- Search in articles -->
+<div class="relative shrink-0 hidden lg:block">
+<input class="w-64 bg-[#FFFBF4] border border-[#D9CDB8] rounded-xl px-3 py-1.5 text-body-sm font-body-sm placeholder:text-[#5C5346]/60 focus:outline-none focus:border-[#1F3A5F] text-[#1B2433]" placeholder="Rechercher un terme canonique..." type="text"/>
+<span class="material-symbols-outlined absolute right-2.5 top-2 text-[#5C5346] text-sm pointer-events-none" data-icon="search">search</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE: Unified Split View (List on Left + Reader on Right)       -->
+<!-- ========================================================================= -->
+<main class="w-full max-w-[1140px] mx-auto px-6 py-8 flex-grow">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- ===================================================================== -->
+<!-- LEFT COLUMN: Master Dossier / Article Ledger (4 Cols)                 -->
+<!-- ===================================================================== -->
+<aside class="lg:col-span-4 space-y-4">
+<div class="flex items-center justify-between pb-2 border-b border-[#D9CDB8]">
+<h2 class="text-title-lg font-headline-sm text-[#1B2433]">Articles Homologués</h2>
+<span class="text-label-sm font-label-sm text-[#5C5346] bg-[#E9E2D5] px-2 py-0.5 rounded-md font-semibold">5 Manuscrits</span>
+</div>
+<!-- Ledger Description -->
+<p class="text-body-sm font-body-sm text-[#5C5346] leading-relaxed">
+          Sélectionnez un folio pour consulter le texte de référence, ses attendus juridiques et les avis collégiaux correspondants.
+        </p>
+<!-- Article List Stack -->
+<div class="space-y-3">
+<!-- Article 1 (ACTIVE / SELECTED) -->
+<article class="p-4 rounded-xl bg-[#FFFBF4] border-2 border-[#1F3A5F] relative transition-all shadow-[0_1px_3px_rgba(27,36,51,0.06)] cursor-pointer">
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-2">
+<span class="text-[#755b18] uppercase tracking-wider font-semibold flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#1F3A5F]"></span>
+                Mahram &amp; Tutelle
+              </span>
+<span class="text-[#1F3A5F] font-bold">Actif • #01</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-[#1B2433] leading-snug mb-2">
+              Le rôle protecteur du Wali et le protocole canonique de délégation
+            </h3>
+<p class="text-body-sm font-body-sm text-[#5C5346] line-clamp-2 mb-3">
+              L'accompagnement bienveillant du tuteur légal comme garant d'honneur et la proscription de toute khalwa isolée.
+            </p>
+<div class="pt-2.5 border-t border-[#D9CDB8]/70 flex items-center justify-between text-[11px] text-[#5C5346]">
+<span class="font-medium text-[#1B2433] flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-[#C4A35A]" data-icon="verified">verified</span>
+                Pôle Fiqh de la Famille
+              </span>
+<span>7 min</span>
+</div>
+</article>
+<!-- Article 2 -->
+<article class="p-4 rounded-xl bg-[#FFFBF4] border border-[#D9CDB8] hover:border-[#1F3A5F]/60 hover:bg-[#FAF3E6] transition-all cursor-pointer group">
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-2">
+<span class="text-[#755b18] uppercase tracking-wider font-semibold">Mahr &amp; Dot</span>
+<span class="text-[#5C5346]">#02</span>
+</div>
+<h3 class="text-title-lg font-headline-sm text-[#1B2433] group-hover:text-[#1F3A5F] leading-snug mb-2 transition-colors">
+              La dot (Mahr) selon la Sunnah : entre mesure, facilité et engagement sacré
+            </h3>
+<p class="text-body-sm font-body-sm text-[#5C5346] line-clamp-2 mb-3">
+              Clarté patrimoniale, récusation des surenchères ostentatoires et respect strict des droits de la future épouse.
+            </p>
+<div class="pt-2.5 border-t border-[#D9CDB8]/70 flex items-center justify-between text-[11px] text-[#5C5346]">
+<span class="font-medium text-[#1B2433]">Commission Théologique AnKanu</span>
+<span>9 min</span>
+</div>
+</article>
+<!-- Article 3 -->
+<article class="p-4 rounded-xl bg-[#FFFBF4] border border-[#D9CDB8] hover:border-[#1F3A5F]/60 hover:bg-[#FAF3E6] transition-all cursor-pointer group">
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-2">
+<span class="text-[#755b18] uppercase tracking-wider font-semibold">Droits &amp; Devoirs</span>
+<span class="text-[#5C5346]">#03</span>
+</div>
+<h3 class="text-title-lg font-headline-sm text-[#1B2433] group-hover:text-[#1F3A5F] leading-snug mb-2 transition-colors">
+              Droits mutuels des conjoints : construire la Mawadda et la Rahma
+            </h3>
+<p class="text-body-sm font-body-sm text-[#5C5346] line-clamp-2 mb-3">
+              L'édification du foyer sur la bienveillance partagée, l'écoute mutuelle et le désintéressement de l'égo.
+            </p>
+<div class="pt-2.5 border-t border-[#D9CDB8]/70 flex items-center justify-between text-[11px] text-[#5C5346]">
+<span class="font-medium text-[#1B2433]">Conseil Consultatif &amp; Médiation</span>
+<span>11 min</span>
+</div>
+</article>
+<!-- Article 4 -->
+<article class="p-4 rounded-xl bg-[#FFFBF4] border border-[#D9CDB8] hover:border-[#1F3A5F]/60 hover:bg-[#FAF3E6] transition-all cursor-pointer group">
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-2">
+<span class="text-[#755b18] uppercase tracking-wider font-semibold">Haya &amp; Pudeur</span>
+<span class="text-[#5C5346]">#04</span>
+</div>
+<h3 class="text-title-lg font-headline-sm text-[#1B2433] group-hover:text-[#1F3A5F] leading-snug mb-2 transition-colors">
+              Le principe de Haya dans les correspondances écrites du Ta'aruf
+            </h3>
+<p class="text-body-sm font-body-sm text-[#5C5346] line-clamp-2 mb-3">
+              Garder la décence dans le choix des mots, éviter les flatteries prématurées et préserver le regard intérieur.
+            </p>
+<div class="pt-2.5 border-t border-[#D9CDB8]/70 flex items-center justify-between text-[11px] text-[#5C5346]">
+<span class="font-medium text-[#1B2433]">Collège Éthique &amp; Déontologie</span>
+<span>6 min</span>
+</div>
+</article>
+<!-- Article 5 -->
+<article class="p-4 rounded-xl bg-[#FFFBF4] border border-[#D9CDB8] hover:border-[#1F3A5F]/60 hover:bg-[#FAF3E6] transition-all cursor-pointer group">
+<div class="flex items-center justify-between text-label-sm font-label-sm mb-2">
+<span class="text-[#755b18] uppercase tracking-wider font-semibold">Honnêteté &amp; Vérité</span>
+<span class="text-[#5C5346]">#05</span>
+</div>
+<h3 class="text-title-lg font-headline-sm text-[#1B2433] group-hover:text-[#1F3A5F] leading-snug mb-2 transition-colors">
+              La totale transparence sur le statut matrimonial et les charges familiales
+            </h3>
+<p class="text-body-sm font-body-sm text-[#5C5346] line-clamp-2 mb-3">
+              Le devoir moral d'énoncer clairement ses engagements antérieurs, sa situation d'enfants et ses dettes.
+            </p>
+<div class="pt-2.5 border-t border-[#D9CDB8]/70 flex items-center justify-between text-[11px] text-[#5C5346]">
+<span class="font-medium text-[#1B2433]">Comité d'Homologation Canonique</span>
+<span>8 min</span>
+</div>
+</article>
+</div>
+<!-- Archival Ledger Box: Consultation Advisory -->
+<div class="p-4 rounded-xl bg-[#FAF3E6] border border-[#D9CDB8] text-[#5C5346] space-y-2 mt-6">
+<div class="flex items-center gap-2 text-primary font-semibold text-label-md">
+<span class="material-symbols-outlined text-sm" data-icon="policy">policy</span>
+<span>Protocole d'Usage Familial</span>
+</div>
+<p class="text-body-sm font-body-sm">
+            Ces manuscrits peuvent être partagés librement aux conseils de famille et tuteurs dans le cadre d'une conciliation ou d'une préparation au mariage.
+          </p>
+</div>
+</aside>
+<!-- ===================================================================== -->
+<!-- RIGHT COLUMN: Detailed Article Reader View (8 Cols)                   -->
+<!-- ===================================================================== -->
+<article class="lg:col-span-8 bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] p-6 sm:p-10 shadow-sm relative">
+<!-- Breadcrumb Bar -->
+<nav class="flex items-center gap-2 text-body-sm font-body-sm text-[#5C5346] pb-5 border-b border-[#D9CDB8]">
+<a class="hover:text-primary transition-colors" href="#academie">Académie</a>
+<span class="text-[#D9CDB8]">/</span>
+<a class="hover:text-primary transition-colors" href="#mahram">Mahram &amp; Tutelle</a>
+<span class="text-[#D9CDB8]">/</span>
+<span class="text-[#1B2433] font-semibold">Article de référence #01</span>
+</nav>
+<!-- Verified Scholar Review Banner -->
+<div class="my-6 p-4 rounded-xl bg-[#FAF3E6] border border-[#C4A35A] flex items-start gap-3.5">
+<div class="p-2 bg-[#E8D5A3] text-primary rounded-md shrink-0 border border-[#C4A35A]">
+<span class="material-symbols-outlined text-xl" data-icon="verified">verified</span>
+</div>
+<div class="flex-grow">
+<div class="flex items-center justify-between flex-wrap gap-2">
+<span class="text-label-md font-label-md text-[#755b18] uppercase tracking-wider font-bold">
+                Article examiné et homologué
+              </span>
+<span class="text-label-sm font-label-sm text-[#5C5346] bg-[#FFFBF4] px-2 py-0.5 rounded border border-[#D9CDB8]">
+                Sceau de conformité canonique
+              </span>
+</div>
+<p class="mt-1 text-body-sm font-body-sm text-[#1B2433]">
+              Texte certifié conforme aux délibérations collégiales du <strong>Pôle Fiqh de la Famille &amp; Déontologie</strong> en coordination avec les autorités consultatives de l'Académie AnKanu à Ouagadougou.
+            </p>
+</div>
+</div>
+<!-- Article Headline & Meta -->
+<div class="space-y-4 mb-8">
+<h1 class="text-headline-lg font-headline-lg text-[#1B2433] leading-snug">
+            Le rôle protecteur du Wali et le protocole canonique de délégation
+          </h1>
+<div class="flex flex-wrap items-center gap-y-2 gap-x-6 text-body-sm font-body-sm text-[#5C5346] pt-2 border-t border-[#D9CDB8]/60">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="groups">groups</span>
+<span class="font-medium text-[#1B2433]">Comité d'Érudits et Juristes Référents</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_month">calendar_month</span>
+<span>Révision : Djoumada II 1445 / Décembre</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+<span>Lecture : 7 minutes</span>
+</div>
+<div class="flex items-center gap-1.5 text-secondary">
+<span class="material-symbols-outlined text-[16px]" data-icon="bookmark">bookmark</span>
+<span>Dossier Mahram &amp; Fiqh</span>
+</div>
+</div>
+</div>
+<!-- Visual Anchor (Subtle Islamic Archival Engraving Mood) -->
+<div class="w-full mb-8 rounded-xl overflow-hidden border border-[#D9CDB8] bg-[#FAF3E6]">
+<img class="w-full h-56 sm:h-72 object-cover" data-alt="An austere, dignified still life capturing archival parchment manuscripts, hand-bound leather ledgers, and brass calligraphy compasses on a heavy dark walnut table. The atmosphere is warm, serene, and scholarly, bathed in directional soft golden morning sunlight. The color palette centers on sand beige, deep indigo, warm gold, and rich earth tones, conveying heritage and institutional solemnity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjToPx3dzW76PR3SZKMvbG7IKjOMZfeHb25DcEN2WKGRpJPgHms7PETvi1q_HhaphQ0UVcwknIKi1uqyo7vWw8qUTDC5DYdkOfWijWL60PUDCRQDlp6asRloJ6fv9gAddFvpKd0xV2sqUUT0Chum1kly9OzKSEGfz5y0W6GwIr7nxMRYlY1o54H8EDk7s3OwKAlgAYg9cylCr5kI4OE5rxW_jY-L_ScgH8zVdrhzZCOqj7HsNVx2CuAXM6JL_uOjTZRg2nsNqusldm"/>
+<div class="px-4 py-2 bg-[#FFFBF4] border-t border-[#D9CDB8] flex items-center justify-between text-label-sm font-label-sm text-[#5C5346]">
+<span>Folio N° 41-B — Protocole de la Wilayah en droit matrimonial sunnite</span>
+<span>Archives AnKanu — Ouagadougou</span>
+</div>
+</div>
+<!-- =================================================================== -->
+<!-- Editorial Prose Body (Source Serif 4 titles & Source Sans 3 body)  -->
+<!-- =================================================================== -->
+<div class="space-y-8 text-[#1B2433] leading-relaxed">
+<!-- Introduction Paragraph -->
+<p class="text-body-lg font-body-lg text-[#1B2433] leading-8 font-normal first-letter:text-4xl first-letter:font-headline-lg first-letter:text-primary first-letter:mr-2 first-letter:float-left">
+            Dans la tradition canonique musulmane et l'éthique séculaire ouest-africaine, le mariage n'est point l'agrégation fortuite de deux volontés fugaces, mais un pacte solennel (<em>mithaqan ghalidha</em>) engageant deux lignées, leur honneur et leur responsabilité spirituelle devant le Créateur. C'est en vertu de cette gravité que l'institution de la tutelle matrimoniale (<em>al-Wilayah</em>) se dresse, non comme une contrainte castratrice, mais comme un rempart bienveillant destiné à préserver la dignité de la postulante.
+          </p>
+<!-- Section 1 -->
+<section class="space-y-3">
+<h2 class="text-headline-md font-headline-md text-primary flex items-center gap-2">
+<span class="text-secondary text-headline-sm">I.</span> 
+              Le tuteur légal (Wali), sentinelle bienveillante et garant de l'honneur
+            </h2>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7">
+              Le tuteur n'exerce en aucun cas un pouvoir despotique ou arbitraire. En droit islamique, la contrainte (<em>al-Idhlal</em>) ou le refus injustifié d'un prétendant pieux et honorable (<em>al-'Adhl</em>) sont expressément réprouvés par l'ensemble des jurisconsultes. Le rôle du Wali est avant tout celui d'un bouclier moral : il met à l'épreuve la réputation du prétendant, vérifie la constance de ses moyens d'existence, ses attaches familiales réelles et la sincérité de ses intentions matrimoniales.
+            </p>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7">
+              Cette surveillance fraternelle ou paternelle décharge la femme de la pression des promesses non éprouvées et assure que les négociations initiales s'accomplissent dans la retenue et le respect sacré de sa personne.
+            </p>
+</section>
+<!-- Section 2 -->
+<section class="space-y-3">
+<h2 class="text-headline-md font-headline-md text-primary flex items-center gap-2">
+<span class="text-secondary text-headline-sm">II.</span> 
+              Pourquoi AnKanu exclut tout tête-à-tête secret (khalwa numérique)
+            </h2>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7">
+              À l'opposé des plateformes contemporaines incitant aux conversations nocturnes clandestines et à l'illusion sentimentale hors de tout cadre parental, AnKanu institue dès le premier échange la présence formelle du tuteur ou d'un mandataire agréé au sein du cercle épistolaire.
+            </p>
+<!-- Canonical Quote Block -->
+<div class="my-4 p-5 border-l-4 border-[#C4A35A] bg-[#FAF3E6] rounded-r-xl">
+<p class="text-title-lg font-headline-sm italic text-[#1B2433] leading-7">
+                « Quiconque croit en Allah et au Jour Dernier, qu'il ne s'isole point avec une femme sans qu'un Mahram ne soit présent à leurs côtés. »
+              </p>
+<span class="block mt-2 text-label-sm font-label-sm text-[#755b18] uppercase tracking-wider font-semibold">
+                — Hadith authentifié, rapporté par Al-Boukhari &amp; Mouslim
+              </span>
+</div>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7">
+              La <em>khalwa numérique</em> — l'isolement textuel prolongé entre personnes non unies par les liens sacrés — génère un climat de familiarité factice, propice aux promesses illusoires et aux déconvenues amères. En instaurant un témoin d'honneur et la supervision du tuteur dans chaque échange, la démarche conserve sa rectitude, sa pudeur et sa finalité exclusive : la fondation d'un foyer stable.
+            </p>
+</section>
+<!-- Section 3 -->
+<section class="space-y-3">
+<h2 class="text-headline-md font-headline-md text-primary flex items-center gap-2">
+<span class="text-secondary text-headline-sm">III.</span> 
+              Conditions d'une délégation légitime en cas d'éloignement géographique
+            </h2>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7">
+              Dans le contexte particulier du Burkina Faso, des flux migratoires de la sous-région ouest-africaine (Côte d'Ivoire, Sénégal, Mali) et de la diaspora établie au-delà des mers, l'éloignement physique du tuteur légal (père, frère germain ou oncle paternel) constitue une réalité fréquente.
+            </p>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7">
+              Le fiqh prévoit expressément la <em>Tawkîl</em> (délégation de tutelle). Les conditions de validité retenues par notre Collège Juridique sont les suivantes :
+            </p>
+<!-- Numbered Structural List -->
+<ul class="space-y-3 pl-2">
+<li class="flex items-start gap-3 text-body-md font-body-md">
+<span class="w-6 h-6 rounded bg-[#E8D5A3] text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-[#C4A35A]">1</span>
+<div>
+<strong class="font-semibold text-[#1B2433]">Consentement explicite et écrit :</strong> Le tuteur de premier rang doit formuler son accord sans ambiguïté quant à l'identité du mandataire désigné.
+                </div>
+</li>
+<li class="flex items-start gap-3 text-body-md font-body-md">
+<span class="w-6 h-6 rounded bg-[#E8D5A3] text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-[#C4A35A]">2</span>
+<div>
+<strong class="font-semibold text-[#1B2433]">Proximité géographique et honorabilité du mandataire :</strong> Le délégué doit résider à proximité de la postulante, jouir d'une moralité irréprochable et pouvoir la rencontrer physiquement en présence de son entourage.
+                </div>
+</li>
+<li class="flex items-start gap-3 text-body-md font-body-md">
+<span class="w-6 h-6 rounded bg-[#E8D5A3] text-primary flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 border border-[#C4A35A]">3</span>
+<div>
+<strong class="font-semibold text-[#1B2433]">Compte-rendu régulier :</strong> Aucune décision ferme de khitba (fiançailles) ou de fixation de Mahr ne saurait être conclue sans consultation préalable du tuteur principal d'origine.
+                </div>
+</li>
+</ul>
+</section>
+<!-- Section 4 -->
+<section class="space-y-3">
+<h2 class="text-headline-md font-headline-md text-primary flex items-center gap-2">
+<span class="text-secondary text-headline-sm">IV.</span> 
+              Hadiths et sources canoniques authentiques appuyant la démarche
+            </h2>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7">
+              La jurisprudence majoritaire des écoles sunnites s'accorde sur la portée de la parole prophétique transmise selon des voies authentiques concordantes :
+            </p>
+<div class="space-y-3 pt-2">
+<div class="p-4 bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] shadow-sm">
+<p class="text-body-md font-body-md italic text-[#1B2433]">
+                  « Pas de mariage sans l'accord du tuteur (Wali). »
+                </p>
+<div class="mt-2 text-label-sm font-label-sm text-[#5C5346]">
+                  Rapporté par Abou Daoud (2085), At-Tirmidhi (1101), Ibn Majah (1881) — Jugé authentique par Al-Albani.
+                </div>
+</div>
+<div class="p-4 bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] shadow-sm">
+<p class="text-body-md font-body-md italic text-[#1B2433]">
+                  « La femme ne marie point la femme, et la femme ne se marie point d'elle-même. Car certes, la dévergondée est celle qui se donne en mariage d'elle-même. »
+                </p>
+<div class="mt-2 text-label-sm font-label-sm text-[#5C5346]">
+                  Rapporté par Ibn Majah (1882) selon Abou Hourayrah — Recueil canonique vérifié.
+                </div>
+</div>
+</div>
+<p class="text-body-md font-body-md text-[#1B2433]/90 leading-7 pt-2">
+              C'est sur ces assises inébranlables que la plateforme AnKanu a bâti l'ensemble de son protocole technique et humain, récusant tout compromis commercial qui viendrait brader la pudeur ou évincer les pères de famille de leur fonction divine de sentinelles.
+            </p>
+</section>
+<!-- =============================================================== -->
+<!-- ENCADRÉ D'ÉTHIQUE PRATIQUE (Summary Box with Warm Border)        -->
+<!-- =============================================================== -->
+<div class="p-6 rounded-xl bg-[#FAF3E6] border-2 border-[#C4A35A] space-y-4 my-8">
+<div class="flex items-center gap-2.5 pb-3 border-b border-[#C4A35A]/50">
+<span class="material-symbols-outlined text-[#755b18] text-2xl" data-icon="lightbulb">lightbulb</span>
+<h3 class="text-title-lg font-headline-sm text-primary">
+                Encadré d'Éthique Pratique : Synthèse pour les Candidats et Familles
+              </h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-body-sm font-body-sm">
+<div class="p-3 bg-[#FFFBF4] rounded-lg border border-[#D9CDB8]">
+<strong class="block text-primary font-semibold mb-1">Pour le Postulant Masculin :</strong>
+                Présentez-vous sans délai au tuteur. Toute tentative d'échange privé sans son assentiment préalable disqualifie l'intention honorable et clôt le dossier.
+              </div>
+<div class="p-3 bg-[#FFFBF4] rounded-lg border border-[#D9CDB8]">
+<strong class="block text-primary font-semibold mb-1">Pour la Postulante :</strong>
+                Faites du Wali votre premier confident. Sa présence protège votre réputation et éprouve la sincérité du prétendant dès les premiers pas.
+              </div>
+<div class="p-3 bg-[#FFFBF4] rounded-lg border border-[#D9CDB8]">
+<strong class="block text-primary font-semibold mb-1">Pour le Tuteur Légal (Wali) :</strong>
+                Agissez avec justice. Enquêtez avec discernement sans imposer de fardeaux financiers excessifs contraires à la simplicité de la Sunnah.
+              </div>
+<div class="p-3 bg-[#FFFBF4] rounded-lg border border-[#D9CDB8]">
+<strong class="block text-primary font-semibold mb-1">En Cas de Désaccord Familial :</strong>
+                Sollicitez la Commission de Conciliation AnKanu afin qu'un juriste référent éclaire les parties selon l'esprit du droit malékite en vigueur.
+              </div>
+</div>
+</div>
+<!-- Formal Action Buttons Section -->
+<div class="pt-6 border-t border-[#D9CDB8] flex flex-col sm:flex-row items-center justify-between gap-4">
+<!-- Quiet Actions (min 44px) -->
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="min-h-[44px] px-4 py-2 rounded-xl bg-transparent hover:bg-[#EFE6D5] text-[#5C5346] border border-[#D9CDB8] text-body-sm font-body-sm font-medium flex items-center justify-center gap-2 transition-colors w-full sm:w-auto">
+<span class="material-symbols-outlined text-base" data-icon="picture_as_pdf">picture_as_pdf</span>
+                Télécharger le Folio PDF
+              </button>
+<button class="min-h-[44px] px-4 py-2 rounded-xl bg-transparent hover:bg-[#EFE6D5] text-[#5C5346] border border-[#D9CDB8] text-body-sm font-body-sm font-medium flex items-center justify-center gap-2 transition-colors w-full sm:w-auto">
+<span class="material-symbols-outlined text-base" data-icon="share">share</span>
+                Partager au Tuteur (Wali)
+              </button>
+</div>
+<!-- Primary Action: Continue Study Journey -->
+<button class="min-h-[48px] px-6 py-2.5 rounded-xl bg-primary-container hover:bg-[#15283F] text-[#F4EDE0] font-label-md text-label-md tracking-wider uppercase border border-[#6F624C]/40 flex items-center justify-center gap-2 transition-all w-full sm:w-auto shadow-sm">
+<span>Examiner l'Article Suivant (#02)</span>
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</main>
+<!-- ========================================================================= -->
+<!-- INSTITUTIONAL SOLEMN FOOTER (Shared Component Anchor)                     -->
+<!-- ========================================================================= -->
+<footer class="w-full border-t border-[#D9CDB8] bg-surface-container mt-16 pt-12 pb-8">
+<div class="max-w-[1140px] mx-auto px-6">
+<!-- Upper Section: Strict Honesty Counters & Attestation -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-10 border-b border-[#D9CDB8]">
+<div class="md:col-span-5 space-y-3">
+<div class="text-title-lg font-headline-sm font-bold text-primary">
+            Académie AnKanu
+          </div>
+<p class="text-body-sm font-body-sm text-[#5C5346] leading-relaxed max-w-sm">
+            Institution consacrée à l'instruction canonique, au ta'aruf intègre et à la dignité du mariage honorable en Afrique de l'Ouest. Enregistrement légal Ouagadougou, Burkina Faso.
+          </p>
+<div class="pt-2 text-label-sm font-label-sm text-[#3E190C] font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-[#6B3D2E]" data-icon="gavel">gavel</span>
+            Avis juridiques régis selon le rite malékite et le consensus savant
+          </div>
+</div>
+<!-- Honest Real-World Metrics Box -->
+<div class="md:col-span-4 p-4 rounded-xl bg-[#FFFBF4] border border-[#D9CDB8] space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm text-[#5C5346] uppercase font-semibold">Mariages confirmés :</span>
+<span class="text-headline-sm font-headline-sm text-primary font-bold">0</span>
+</div>
+<p class="text-body-sm font-body-sm text-[#5C5346] italic">
+            Exactitude stricte : zéro simulation promotionnelle, zéro données artificielles, zéro profil de complaisance. Chaque dossier engagé fait l'objet d'un suivi physique par son conseil familial.
+          </p>
+</div>
+<div class="md:col-span-3 space-y-2">
+<span class="text-label-sm font-label-sm text-[#1B2433] uppercase font-bold tracking-wider block">Garantie Déontologique</span>
+<ul class="space-y-1.5 text-body-sm font-body-sm text-[#5C5346]">
+<li class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-[#755b18]" data-icon="check_circle">check_circle</span>
+              Zéro algorithme marchand
+            </li>
+<li class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-[#755b18]" data-icon="check_circle">check_circle</span>
+              Zéro faux profil
+            </li>
+<li class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-[#755b18]" data-icon="check_circle">check_circle</span>
+              Modération humaine assermentée
+            </li>
+</ul>
+</div>
+</div>
+<!-- Links Row -->
+<div class="py-6 flex flex-wrap items-center justify-between gap-4 border-b border-[#D9CDB8]/60 text-body-sm font-body-sm text-[#5C5346]">
+<div class="flex flex-wrap items-center gap-6">
+<a class="hover:text-primary transition-colors" href="#charte">Charte Éthique &amp; Serment</a>
+<a class="hover:text-primary transition-colors" href="#statuts">Statuts Juridiques &amp; Fiqh</a>
+<a class="hover:text-primary transition-colors" href="#protocole">Protocole du Mahram</a>
+<a class="hover:text-primary transition-colors" href="#protection">Protection des Données &amp; Familles</a>
+<a class="hover:text-primary transition-colors" href="#contact">Contact Secrétariat de l'Académie</a>
+</div>
+<div class="text-label-sm font-label-sm text-[#755b18] uppercase">
+          Siège social : Secteur 15, Ouagadougou
+        </div>
+</div>
+<!-- Bottom Legal Copyright (Exact String Preserved) -->
+<div class="pt-6 flex flex-col md:flex-row items-center justify-between text-body-sm font-body-sm text-[#5C5346] gap-4 text-center md:text-left">
+<p>
+          © 2024 Académie AnKanu — Institution de Ta'aruf et de Mariage Honorable en Afrique de l'Ouest. Enregistrement légal Ouagadougou, Burkina Faso. 0 unions contractées en simulation (zéro donnée artificielle).
+        </p>
+<span class="text-label-sm font-label-sm text-primary font-semibold tracking-wider uppercase shrink-0">
+          Sceau d'Honneur &amp; Vérité
+        </span>
+</div>
+</div>
+</footer>
+</body></html>

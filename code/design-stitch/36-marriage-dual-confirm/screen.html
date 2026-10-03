@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Marriage dual-confirm</title>
+<!-- Google Fonts : Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config verbatim matching Design Tokens -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "ink-secondary": "#5C5346",
+            "on-secondary-container": "#785d1b",
+            "tertiary-fixed-dim": "#abc9f3",
+            "outline-variant": "#c4c6cf",
+            "surface-variant": "#e9e2d5",
+            "border-strong": "#6F624C",
+            "secondary": "#755b18",
+            "on-surface": "#1e1b14",
+            "tertiary-fixed": "#d3e4ff",
+            "indigo-deep": "#15283F",
+            "inverse-surface": "#333028",
+            "surface-container": "#f4ede0",
+            "primary-fixed": "#d5e3ff",
+            "staff-soft": "#EFE4DC",
+            "blur-wash": "#C8BBA6",
+            "border-hairline": "#D9CDB8",
+            "surface-container-high": "#eee7db",
+            "surface-tint": "#465f86",
+            "surface-container-low": "#faf3e6",
+            "staff": "#6B3D2E",
+            "on-error": "#ffffff",
+            "success-soft": "#DCE6DE",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#e9e2d5",
+            "inverse-primary": "#aec8f4",
+            "secondary-fixed-dim": "#e5c276",
+            "on-primary-fixed": "#001c3b",
+            "disabled": "#B5A894",
+            "primary": "#032448",
+            "background": "#fff9ee",
+            "surface-container-lowest": "#ffffff",
+            "on-error-container": "#93000a",
+            "danger-soft": "#F3E0DC",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-tertiary-fixed": "#001c38",
+            "ink-on-indigo": "#F4EDE0",
+            "error-container": "#ffdad6",
+            "on-primary": "#ffffff",
+            "on-tertiary-container": "#88a5ce",
+            "tertiary": "#002546",
+            "primary-container": "#1f3a5f",
+            "indigo": "#1F3A5F",
+            "surface-dim": "#e0d9cd",
+            "on-secondary-fixed": "#251a00",
+            "secondary-container": "#fdd88a",
+            "on-background": "#1e1b14",
+            "danger": "#8B3A3A",
+            "gold-soft": "#E8D5A3",
+            "surface": "#fff9ee",
+            "surface-raised": "#FFFBF4",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "focus-ring": "#1F3A5F",
+            "tertiary-container": "#1b3b5e",
+            "on-surface-variant": "#43474e",
+            "gold": "#C4A35A",
+            "secondary-fixed": "#ffdf9c",
+            "outline": "#74777f",
+            "primary-fixed-dim": "#aec8f4",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#f7f0e3",
+            "success": "#3D5C45",
+            "on-primary-fixed-variant": "#2d476d",
+            "mihrab": "#2C4A6E",
+            "ink-primary": "#1B2433",
+            "surface-bright": "#fff9ee",
+            "on-primary-container": "#8ba4cf",
+            "surface-indigo": "#15283F",
+            "surface-sand": "#F4EDE0",
+            "on-tertiary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "5": "24px",
+            "3": "12px",
+            "2": "8px",
+            "gutter": "16px",
+            "1": "4px",
+            "4": "16px",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "7": "48px",
+            "6": "32px",
+            "screen-pad": "16px"
+          },
+          "fontFamily": {
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body text-body min-h-full flex flex-col antialiased selection:bg-gold-soft selection:text-indigo-deep">
+<!-- TopNavBar (Shared Component from JSON) -->
+<header class="border-b border-border-hairline dark:border-border-hairline bg-surface dark:bg-surface sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand Logo Anchor -->
+<div class="flex items-center gap-8">
+<a class="font-title text-title text-primary dark:text-primary font-bold tracking-tight flex items-center gap-2" href="#">
+<span>AnKanu</span>
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-gold"></span>
+</a>
+<!-- Desktop Navigation Links (Shared Component Specs) -->
+<nav aria-label="Navigation Principale" class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Invitations</a>
+<a class="text-primary dark:text-primary font-body-strong text-body-strong border-b-2 border-primary dark:border-primary pb-1" href="#">Discussions</a>
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Profil</a>
+</nav>
+</div>
+<!-- Trailing Chaperone & Assistance Actions -->
+<div class="flex items-center gap-3">
+<!-- Guardian Banner Status Token -->
+<div class="hidden sm:flex items-center gap-2 bg-staff-soft border border-border-hairline px-3 py-1.5 rounded-full text-staff">
+<span class="material-symbols-outlined text-staff" data-icon="verified_user" style="font-size: 17px; font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-meta text-meta font-medium tracking-tight">Wali notifié : Oumar O.</span>
+</div>
+<a class="inline-flex items-center gap-1.5 text-ink-secondary hover:text-primary font-meta text-meta px-3 py-1.5 rounded-lg border border-border-hairline bg-surface-raised transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-ink-secondary" data-icon="help_outline" style="font-size: 16px;">help_outline</span>
+<span>Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Fil d'Ariane & Contexte d'Origine (Chat chaperonné) -->
+<aside class="bg-surface-container-low border-b border-border-hairline py-2.5">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between text-ink-secondary font-meta text-meta gap-2">
+<div class="flex items-center gap-2">
+<a class="inline-flex items-center gap-1 hover:text-primary underline decoration-border-hairline transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="arrow_back" style="font-size: 15px;">arrow_back</span>
+<span>Retour au salon de discussion agréé</span>
+</a>
+<span class="text-border-strong opacity-50">/</span>
+<span class="text-ink-primary font-medium">Salon : Tahir_Ouaga &amp; Aminata_O</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-success-soft text-success border border-border-hairline">
+          Agrément Wali actif
+        </span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-ink-secondary">
+<span class="material-symbols-outlined text-gold" data-icon="lock" style="font-size: 14px;">lock</span>
+<span>Protocole d'homologation canonique • Normes FR-095 à FR-098 &amp; AD-25</span>
+</div>
+</div>
+</aside>
+<!-- Interactive State Inspection Bar (Audit des règles canoniques AnKanu) -->
+<nav aria-label="Simulateur d'états d'audit" class="bg-surface-indigo text-ink-on-indigo py-3 px-4">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" data-icon="tune" style="font-size: 18px;">tune</span>
+<span class="font-meta text-meta uppercase tracking-wider text-gold-soft font-semibold">Simulateur d'Audit Canonique :</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-1.5 font-meta text-meta">
+<button class="px-2.5 py-1 rounded bg-gold text-indigo-deep font-semibold transition-colors duration-150" id="btn-state-init" onclick="setAuditState('init')">
+          1. Démarrage conjoint
+        </button>
+<button class="px-2.5 py-1 rounded bg-indigo-deep text-ink-on-indigo border border-border-strong hover:bg-mihrab transition-colors duration-150" id="btn-state-waiting" onclick="setAuditState('waiting')">
+          2. Attente 2nd époux (0 comp.)
+        </button>
+<button class="px-2.5 py-1 rounded bg-indigo-deep text-ink-on-indigo border border-border-strong hover:bg-mihrab transition-colors duration-150" id="btn-state-received" onclick="setAuditState('received')">
+          3. Requête reçue par l'épouse
+        </button>
+<button class="px-2.5 py-1 rounded bg-indigo-deep text-ink-on-indigo border border-border-strong hover:bg-mihrab transition-colors duration-150" id="btn-state-success" onclick="setAuditState('success')">
+          4. Double confirmation scellée (+1)
+        </button>
+<button class="px-2.5 py-1 rounded bg-indigo-deep text-ink-on-indigo border border-border-strong hover:bg-mihrab transition-colors duration-150" id="btn-state-expired" onclick="setAuditState('expired')">
+          5. Caducité 30 jours
+        </button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas (Narrow Folio Manuscript Layout: max-w-2xl ~ 680px) -->
+<main class="flex-grow w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+<!-- Grand Sceau Supérieur d'Inviolabilité -->
+<header class="text-center mb-8">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-raised border border-border-hairline mb-3 text-gold">
+<span class="material-symbols-outlined" data-icon="verified" style="font-size: 26px; font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<p class="font-meta text-meta text-border-strong uppercase tracking-widest font-semibold mb-1">
+        Sceau de Clôture Matrimoniale &amp; Homologation
+      </p>
+<h1 class="font-display text-display text-primary tracking-tight font-semibold">
+        Marriage dual-confirm
+      </h1>
+<p class="font-body text-body text-ink-secondary mt-2 max-w-xl mx-auto">
+        L'aboutissement honorable du ta'aruf. Deux déclarations bilatérales indispensables pour sceller l'union sacrée, clôturer la recherche et honorer le serment devant Dieu et les familles.
+      </p>
+</header>
+<!-- Canon Rules Badge Summary (AD-25 / FR-096 Rule Card) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-4 mb-6 flex items-start gap-3.5">
+<div class="mt-0.5 text-gold shrink-0">
+<span class="material-symbols-outlined" data-icon="policy" style="font-size: 22px;">policy</span>
+</div>
+<div class="space-y-1">
+<h2 class="font-heading text-heading text-primary">Règle canonique de la double déclaration (Norme AD-25)</h2>
+<p class="font-body text-body text-ink-secondary text-sm">
+          Tant qu'un seul époux déclare l'union, <strong class="text-ink-primary font-semibold">le compteur public de mariages reste rigoureusement à 0</strong> et aucun statut public n'est modifié. L'union ne produit ses effets que lorsque les deux époux ont formellement apposé leur confirmation. En l'absence de confirmation conjointe sous 30 jours, la déclaration est frappée de caducité.
+        </p>
+</div>
+</section>
+<!-- ======================================================== -->
+<!-- ÉTAT 1 : DÉMARRAGE CONJOINT (Joint Start) -->
+<!-- ======================================================== -->
+<div class="space-y-6" id="view-init">
+<!-- Fiche Dossier Principale -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8">
+<!-- En-tête Lignée & Accord Wali -->
+<div class="border-b border-border-hairline pb-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<span class="font-caption text-caption text-ink-secondary uppercase tracking-wider">Lignée d'Alliance Reconnue</span>
+<h2 class="font-title text-title text-primary mt-0.5">Tahir_Ouaga &amp; Aminata_O</h2>
+<p class="font-meta text-meta text-ink-secondary">Ouagadougou • Salon d'échange agréé sous le regard du Wali Oumar O.</p>
+</div>
+<span class="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-staff-soft text-staff border border-border-hairline">
+<span class="material-symbols-outlined" data-icon="family_restroom" style="font-size: 15px;">family_restroom</span>
+            Tuteurs informés
+          </span>
+</div>
+<!-- Déclaration Centrale Obligatoire (FR-096) -->
+<div class="bg-surface-sand border border-border-hairline rounded-xl p-5 mb-6 text-center">
+<p class="font-caption text-caption uppercase tracking-wider text-border-strong font-semibold mb-2">Formule Canonique d'Engagement</p>
+<blockquote class="font-heading text-heading text-primary italic max-w-lg mx-auto">
+            « Déclarer solennellement : nous nous sommes mariés avec Aminata_O »
+          </blockquote>
+<p class="font-meta text-meta text-ink-secondary mt-2">
+            Initiée par Tahir_Ouaga. Cette démarche exige l'agrément bilatéral d'Aminata_O.
+          </p>
+</div>
+<!-- Module Facultatif de Preuve Privée (FR-097: Optional private nikah proof) -->
+<div class="space-y-3 mb-8">
+<div class="flex items-center justify-between">
+<label class="font-heading text-heading text-primary flex items-center gap-1.5" for="nikah-proof-input">
+<span>Attestation de mariage ou certificat religieux (Nikah)</span>
+<span class="font-meta text-meta font-normal text-ink-secondary">(Optionnel)</span>
+</label>
+<span class="font-caption text-caption text-ink-secondary bg-surface-sand px-2 py-0.5 rounded border border-border-hairline">Facultatif</span>
+</div>
+<!-- Dropzone Document -->
+<div class="border-2 border-dashed border-border-hairline hover:border-border-strong rounded-xl p-6 text-center bg-surface transition-colors cursor-pointer group" onclick="document.getElementById('file-chosen').classList.remove('hidden')">
+<input aria-label="Téléverser l'acte de mariage ou attestation du tuteur (facultatif)" class="sr-only" id="nikah-proof-input" type="file"/>
+<div class="w-10 h-10 rounded-full bg-surface-sand mx-auto flex items-center justify-center text-primary mb-2 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined" data-icon="upload_file" style="font-size: 22px;">upload_file</span>
+</div>
+<p class="font-body-strong text-body-strong text-primary">Déposer l'attestation signée par l'Imam ou le Wali</p>
+<p class="font-meta text-meta text-ink-secondary mt-1">Formats PDF, JPG ou PNG (Max 10 Mo)</p>
+<div class="hidden mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-success-soft text-success text-xs font-medium border border-border-hairline" id="file-chosen">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-size: 16px;">check_circle</span>
+<span>Attestation_Nikah_Tahir_Aminata.pdf sélectionné (Chiffré AES-256)</span>
+</div>
+</div>
+<!-- Mention stricte de confidentialité CIL -->
+<div class="flex items-start gap-2 text-xs text-ink-secondary pt-1">
+<span class="material-symbols-outlined text-border-strong shrink-0 mt-0.5" data-icon="encrypted" style="font-size: 15px;">encrypted</span>
+<p>
+<strong class="text-ink-primary font-medium">Document strictement confidentiel :</strong> conservé sous séquestre chiffré souverain Scaleway, jamais publié publiquement ni transmis à des tiers. Même si vous omettez cette pièce (<em class="italic">skip proof</em>), votre mariage sera homologué dès la double confirmation réciproque.
+            </p>
+</div>
+</div>
+<!-- Serment & Consentement -->
+<div class="border-t border-border-hairline pt-5 mb-6 space-y-3">
+<label class="flex items-start gap-3 cursor-pointer">
+<input checked="" class="mt-1 rounded border-border-hairline text-indigo focus:ring-focus-ring" id="oath-check" type="checkbox"/>
+<span class="font-body text-body text-ink-primary text-sm leading-relaxed">
+              J'atteste par serment sincère devant Dieu que notre alliance a été conclue dans le respect des préceptes, avec le consentement mutuel de nos familles respectives et la tutelle de notre Wali.
+            </span>
+</label>
+</div>
+<!-- Actions Principales (Bouton Indigo 48px min height, Pill shape) -->
+<div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+<button class="w-full sm:flex-1 h-12 rounded-full bg-indigo hover:bg-primary-container text-ink-on-indigo font-body-strong text-body-strong px-6 flex items-center justify-center gap-2 transition-colors duration-150 active:opacity-90 shadow-none" onclick="setAuditState('waiting')" type="button">
+<span class="material-symbols-outlined" data-icon="handshake" style="font-size: 20px;">handshake</span>
+<span>Déclarer : nous nous sommes mariés</span>
+</button>
+<a class="w-full sm:w-auto h-11 px-5 rounded-full border border-border-strong bg-transparent text-ink-primary hover:bg-surface-sand font-body text-body flex items-center justify-center transition-colors" href="#">
+            Différer la confirmation
+          </a>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- ÉTAT 2 : EN ATTENTE DU SECOND ÉPOUX (Waiting 2nd confirm) -->
+<!-- ======================================================== -->
+<div class="hidden space-y-6" id="view-waiting">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8">
+<!-- Alerte Canonique Compteur Public = 0 -->
+<div class="bg-surface-sand border-l-4 border-gold p-4 rounded-r-xl mb-6">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-gold shrink-0 mt-0.5" data-icon="hourglass_top" style="font-size: 22px;">hourglass_top</span>
+<div class="space-y-1">
+<h3 class="font-heading text-heading text-primary">Démarche unilatérale enregistrée — Compteur public : 0</h3>
+<p class="font-body text-body text-ink-secondary text-sm">
+                Conformément à la règle de tempérance AD-25, le mariage n'est pas encore validé. 
+                <strong class="text-ink-primary font-semibold">Le registre public d'AnKanu reste inchangé à 0 union supplémentaire</strong> jusqu'à ce qu'Aminata_O confirme à son tour depuis son espace personnel.
+              </p>
+</div>
+</div>
+</div>
+<!-- Jauge Bilatérale de Double Assentiment -->
+<div class="border border-border-hairline rounded-xl p-5 mb-6 bg-surface">
+<div class="flex items-center justify-between mb-4">
+<span class="font-heading text-heading text-primary">État du serment bilatéral</span>
+<span class="font-caption text-caption text-ink-secondary bg-surface-sand px-2.5 py-1 rounded-full border border-border-hairline">
+              Délai restant : 29 jours 14h
+            </span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Conjoint 1 (Initié) -->
+<div class="p-4 rounded-lg bg-surface-raised border border-border-hairline">
+<div class="flex items-center justify-between mb-2">
+<span class="font-meta text-meta text-ink-secondary">Époux demandeur</span>
+<span class="inline-flex items-center gap-1 text-xs font-medium text-success bg-success-soft px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" data-icon="check" style="font-size: 14px;">check</span>
+                  Déclaré
+                </span>
+</div>
+<p class="font-body-strong text-body-strong text-primary">Tahir_Ouaga</p>
+<p class="font-caption text-caption text-ink-secondary mt-1">Déclaration signée le 24 Oct. 2024</p>
+</div>
+<!-- Conjoint 2 (En attente) -->
+<div class="p-4 rounded-lg bg-surface-raised border border-gold-soft border-dashed">
+<div class="flex items-center justify-between mb-2">
+<span class="font-meta text-meta text-ink-secondary">Épouse appelée</span>
+<span class="inline-flex items-center gap-1 text-xs font-medium text-on-secondary-container bg-gold-soft px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined" data-icon="pending" style="font-size: 14px;">pending</span>
+                  En attente
+                </span>
+</div>
+<p class="font-body-strong text-body-strong text-primary">Aminata_O</p>
+<p class="font-caption text-caption text-ink-secondary mt-1">Notification transmise avec alerte Wali</p>
+</div>
+</div>
+<!-- Règle de péremption 30 jours (FR-096) -->
+<div class="mt-4 pt-3 border-t border-border-hairline flex items-center gap-2 text-xs text-ink-secondary">
+<span class="material-symbols-outlined text-border-strong" data-icon="timer" style="font-size: 16px;">timer</span>
+<span>Règle FR-096 : En l'absence de confirmation conjointe sous 30 jours, la demande est frappée de caducité sans incrémentation.</span>
+</div>
+</div>
+<!-- Actions d'attente -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto h-11 px-5 rounded-full bg-mihrab hover:bg-primary-container text-ink-on-indigo font-body text-body flex items-center justify-center gap-2 transition-colors" onclick="setAuditState('received')" type="button">
+<span class="material-symbols-outlined" data-icon="visibility" style="font-size: 18px;">visibility</span>
+<span>Simuler la vue d'Aminata_O (Receveur)</span>
+</button>
+<button class="text-ink-secondary hover:text-danger font-meta text-meta flex items-center gap-1" onclick="setAuditState('init')" type="button">
+<span class="material-symbols-outlined" data-icon="close" style="font-size: 16px;">close</span>
+<span>Annuler ma déclaration d'union</span>
+</button>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- ÉTAT 3 : DIALOGUE DE CONFIRMATION REÇU PAR LE CONJOINT -->
+<!-- ======================================================== -->
+<div class="hidden space-y-6" id="view-received">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8">
+<div class="flex items-center gap-3 mb-6 pb-4 border-b border-border-hairline">
+<div class="w-10 h-10 rounded-full bg-gold-soft flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined" data-icon="mail" style="font-size: 20px;">mail</span>
+</div>
+<div>
+<h2 class="font-heading text-heading text-primary">Invitation solennelle de double confirmation</h2>
+<p class="font-meta text-meta text-ink-secondary">Vous êtes connectée en tant qu'<strong>Aminata_O</strong></p>
+</div>
+</div>
+<div class="bg-surface-sand border border-border-hairline rounded-xl p-5 mb-6 space-y-3">
+<p class="font-body text-body text-ink-primary">
+            Votre prétendant <strong class="font-semibold text-primary">Tahir_Ouaga</strong> a formellement déposé la déclaration matrimoniale suivante :
+          </p>
+<blockquote class="p-3 bg-surface-raised border-l-2 border-primary rounded font-heading text-heading text-primary italic">
+            « Déclarer solennellement : nous nous sommes mariés avec Aminata_O »
+          </blockquote>
+<p class="font-meta text-meta text-ink-secondary">
+            Wali averti : Oumar O. • Déposé avec respect et engagement d'alliance éternelle.
+          </p>
+</div>
+<div class="space-y-4 mb-6">
+<div class="flex items-start gap-3 p-3.5 bg-surface-container-low rounded-lg border border-border-hairline">
+<span class="material-symbols-outlined text-gold mt-0.5" data-icon="info" style="font-size: 18px;">info</span>
+<div class="text-xs text-ink-secondary space-y-1">
+<p><strong class="text-ink-primary font-medium">Conséquence immédiate de votre confirmation bilatérale :</strong></p>
+<ul class="list-disc pl-4 space-y-0.5">
+<li>Votre statut d'étape devient solennellement « married ».</li>
+<li>Retrait immédiat et définitif de vos deux profils de la Découverte et clôture des invitations.</li>
+<li>Le registre officiel d'AnKanu est incrémenté de +1 mariage honorable.</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Choix d'assentiment pour Aminata -->
+<div class="flex flex-col sm:flex-row items-center gap-3">
+<button class="w-full sm:flex-1 h-12 rounded-full bg-gold hover:bg-secondary text-primary font-body-strong text-body-strong px-6 flex items-center justify-center gap-2 transition-colors duration-150" onclick="setAuditState('success')" type="button">
+<span class="material-symbols-outlined" data-icon="check_circle" style="font-size: 20px;">check_circle</span>
+<span>Oui, je confirme notre union sacrée</span>
+</button>
+<button class="w-full sm:w-auto h-11 px-5 rounded-full border border-border-strong bg-transparent text-ink-secondary hover:text-danger hover:border-danger font-body text-body flex items-center justify-center transition-colors" onclick="setAuditState('init')" type="button">
+            Contester / Réfuter
+          </button>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- ÉTAT 4 : SUCCÈS CANONIQUE - BOTH CONFIRM (FR-098) -->
+<!-- ======================================================== -->
+<div class="hidden space-y-6" id="view-success">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8 text-center relative overflow-hidden">
+<!-- Couronne cérémoniale or sobre -->
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold-soft border border-gold mb-4 text-primary">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-size: 32px; font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<p class="font-meta text-meta uppercase tracking-widest text-border-strong font-semibold">Alliance Sacrée Homologuée</p>
+<h2 class="font-title text-title text-primary font-semibold mt-1 mb-2">
+          Mubarak ! Union Scellée avec Honneur
+        </h2>
+<p class="font-body text-body text-ink-secondary max-w-lg mx-auto mb-6">
+          La double confirmation a été apposée par Tahir_Ouaga et Aminata_O sous le regard bienveillant du Wali Oumar O. Votre foyer est désormais reconnu.
+        </p>
+<!-- Effets du Succès Canonique Réalisés (FR-098) -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left mb-6 max-w-2xl mx-auto">
+<div class="p-3.5 bg-surface-sand rounded-xl border border-border-hairline">
+<span class="material-symbols-outlined text-success" data-icon="verified" style="font-size: 20px; font-variation-settings: 'FILL' 1;">verified</span>
+<p class="font-caption text-caption text-ink-secondary mt-2">Statut Canonique</p>
+<p class="font-body-strong text-body-strong text-primary">Étape : « married »</p>
+</div>
+<div class="p-3.5 bg-surface-sand rounded-xl border border-border-hairline">
+<span class="material-symbols-outlined text-gold" data-icon="counter_1" style="font-size: 20px;">counter_1</span>
+<p class="font-caption text-caption text-ink-secondary mt-2">Registre National</p>
+<p class="font-body-strong text-body-strong text-primary">Compteur officiel : +1</p>
+</div>
+<div class="p-3.5 bg-surface-sand rounded-xl border border-border-hairline">
+<span class="material-symbols-outlined text-mihrab" data-icon="door_front" style="font-size: 20px;">door_front</span>
+<p class="font-caption text-caption text-ink-secondary mt-2">Sortie Sanctuaire</p>
+<p class="font-body-strong text-body-strong text-primary">Découverte clôturée</p>
+</div>
+</div>
+<!-- Attestation d'archive -->
+<div class="bg-surface-indigo text-ink-on-indigo p-4 rounded-xl text-left flex items-start gap-3 mb-6 max-w-2xl mx-auto">
+<span class="material-symbols-outlined text-gold shrink-0 mt-0.5" data-icon="history_edu" style="font-size: 22px;">history_edu</span>
+<div class="text-xs space-y-1">
+<p class="font-medium text-gold-soft font-meta text-meta">Certificat de clôture émis n° BF-OUAGA-2024-8841</p>
+<p class="text-ink-on-indigo opacity-90 leading-relaxed">
+              Vos deux profils sont désormais sanctuarisés et retirés définitivement du vivier des célibataires en quête d'alliance. Les échanges du salon sont archivés de façon indélébile et chiffrée.
+            </p>
+</div>
+</div>
+<div class="flex justify-center">
+<button class="h-11 px-6 rounded-full bg-indigo hover:bg-primary text-ink-on-indigo font-body text-body transition-colors" onclick="setAuditState('init')" type="button">
+            Revenir à l'accueil du couple
+          </button>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- ÉTAT 5 : CADUCITÉ 30 JOURS SANS CONFIRMATION -->
+<!-- ======================================================== -->
+<div class="hidden space-y-6" id="view-expired">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8">
+<div class="flex items-center gap-3 mb-4 pb-4 border-b border-border-hairline text-danger">
+<span class="material-symbols-outlined" data-icon="event_busy" style="font-size: 28px;">event_busy</span>
+<div>
+<h2 class="font-heading text-heading text-primary">Déclaration expirée sans confirmation conjointe</h2>
+<p class="font-meta text-meta text-ink-secondary">Caducité légale après délai de 30 jours (FR-096 / AD-25)</p>
+</div>
+</div>
+<div class="bg-danger-soft border border-border-hairline rounded-xl p-4 mb-6 text-xs text-ink-primary space-y-2">
+<p>
+            La déclaration initiée le 24 Septembre 2024 par Tahir_Ouaga n'a pas reçu le second assentiment d'Aminata_O dans l'intervalle strict des 30 jours calendaires.
+          </p>
+<ul class="list-disc pl-4 space-y-1 text-ink-secondary">
+<li><strong class="text-ink-primary">Le compteur public n'a pas été incrémenté (resté à 0).</strong></li>
+<li>Aucun statut de mariage n'a été appliqué aux profils.</li>
+<li>Le salon de discussion demeure sous la supervision bienveillante du Wali.</li>
+</ul>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-3">
+<button class="w-full sm:w-auto h-11 px-6 rounded-full bg-indigo text-ink-on-indigo font-body text-body flex items-center justify-center gap-2" onclick="setAuditState('init')" type="button">
+<span class="material-symbols-outlined" data-icon="refresh" style="font-size: 18px;">refresh</span>
+<span>Réintroduire une nouvelle déclaration conjointe</span>
+</button>
+<a class="w-full sm:w-auto h-11 px-5 rounded-full border border-border-strong text-ink-primary font-body text-body flex items-center justify-center" href="#">
+            Consulter le tuteur (Wali)
+          </a>
+</div>
+</div>
+</div>
+<!-- Mentions de Réassurance Théologique & Légale -->
+<div class="mt-8 text-center text-xs text-ink-secondary space-y-1">
+<p class="flex items-center justify-center gap-1.5 font-meta text-meta">
+<span class="material-symbols-outlined text-gold" data-icon="shield_lock" style="font-size: 16px;">shield_lock</span>
+<span>Procédure conforme à l'éthique islamique sunnite et au droit burkinabè des personnes et de la famille.</span>
+</p>
+<p>Aucun artifice, aucun automatisme gamifié. La noblesse du mariage exige la sincérité réciproque.</p>
+</div>
+</main>
+<!-- Footer (Shared Component from JSON) -->
+<footer class="border-t border-border-hairline dark:border-border-hairline bg-surface-sand dark:bg-surface-sand mt-auto">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand & Sovereign Legal Notice -->
+<div class="space-y-2 text-center md:text-left max-w-2xl">
+<div class="flex items-center justify-center md:justify-start gap-2">
+<span class="font-title text-title text-primary dark:text-primary font-bold">AnKanu</span>
+<span class="text-xs bg-surface-raised px-2 py-0.5 rounded border border-border-hairline text-ink-secondary">Burkina Faso</span>
+</div>
+<p class="text-ink-secondary dark:text-ink-secondary font-meta text-meta leading-relaxed">
+          © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+</div>
+<!-- Footer Policy Links -->
+<nav aria-label="Liens Légaux" class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 font-meta text-meta">
+<a class="text-ink-secondary dark:text-ink-secondary hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#">Confidentialité &amp; Données</a>
+<a class="text-ink-secondary dark:text-ink-secondary hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#">Tuteurs Légaux (Wali)</a>
+<a class="text-ink-secondary dark:text-ink-secondary hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#">Éthique &amp; Respect</a>
+</nav>
+</div>
+</footer>
+<!-- Script de Contrôle de la Simulation d'Audit -->
+<script>
+    function setAuditState(state) {
+      const views = ['init', 'waiting', 'received', 'success', 'expired'];
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) el.classList.add('hidden');
+        
+        const btn = document.getElementById('btn-state-' + v);
+        if (btn) {
+          btn.className = "px-2.5 py-1 rounded bg-indigo-deep text-ink-on-indigo border border-border-strong hover:bg-mihrab transition-colors duration-150";
+        }
+      });
+
+      const activeView = document.getElementById('view-' + state);
+      if (activeView) activeView.classList.remove('hidden');
+
+      const activeBtn = document.getElementById('btn-state-' + state);
+      if (activeBtn) {
+        activeBtn.className = "px-2.5 py-1 rounded bg-gold text-indigo-deep font-semibold transition-colors duration-150";
+      }
+    }
+  </script>
+</body></html>

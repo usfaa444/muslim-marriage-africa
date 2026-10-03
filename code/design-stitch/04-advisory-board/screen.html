@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comité Consultatif Éthique &amp; Indépendant | AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary": "#ffffff",
+            "tertiary-container": "#582e20",
+            "on-error-container": "#93000a",
+            "surface-variant": "#e9e2d5",
+            "primary": "#032448",
+            "on-tertiary-fixed": "#341106",
+            "on-primary": "#ffffff",
+            "background": "#fff9ee",
+            "on-primary-fixed": "#001c3b",
+            "outline-variant": "#c4c6cf",
+            "on-background": "#1e1b14",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#e0d9cd",
+            "surface": "#fff9ee",
+            "tertiary": "#3e190c",
+            "surface-container-highest": "#e9e2d5",
+            "surface-tint": "#465f86",
+            "secondary-fixed": "#ffdf9c",
+            "primary-container": "#1f3a5f",
+            "secondary-container": "#fdd88a",
+            "surface-container-low": "#faf3e6",
+            "surface-container-high": "#eee7db",
+            "on-tertiary-container": "#d29582",
+            "inverse-surface": "#333028",
+            "error": "#ba1a1a",
+            "tertiary-fixed-dim": "#f9b7a3",
+            "primary-fixed-dim": "#aec8f4",
+            "on-secondary-fixed": "#251a00",
+            "surface-container": "#f4ede0",
+            "inverse-on-surface": "#f7f0e3",
+            "on-primary-fixed-variant": "#2d476d",
+            "tertiary-fixed": "#ffdbd0",
+            "on-secondary-fixed-variant": "#5b4300",
+            "secondary": "#755b18",
+            "outline": "#74777f",
+            "on-surface-variant": "#43474e",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#8ba4cf",
+            "on-error": "#ffffff",
+            "on-secondary-container": "#785d1b",
+            "on-surface": "#1e1b14",
+            "on-tertiary-fixed-variant": "#683b2c",
+            "inverse-primary": "#aec8f4",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#e5c276",
+            "primary-fixed": "#d5e3ff",
+            "surface-bright": "#fff9ee"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin-mobile": "1.25rem",
+            "gutter-mobile": "1rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "gutter": "1.5rem",
+            "margin": "2.5rem"
+          },
+          "fontFamily": {
+            "title-md": ["\"Source Sans 3\""],
+            "headline-lg": ["\"Source Serif 4\""],
+            "body-lg": ["\"Source Sans 3\""],
+            "body-md": ["\"Source Sans 3\""],
+            "label-md": ["\"Source Sans 3\""],
+            "headline-sm": ["\"Source Serif 4\""],
+            "display-lg-mobile": ["\"Source Serif 4\""],
+            "headline-md": ["\"Source Serif 4\""],
+            "label-sm": ["\"Source Sans 3\""],
+            "display-lg": ["\"Source Serif 4\""],
+            "label-lg": ["\"Source Sans 3\""],
+            "title-lg": ["\"Source Serif 4\""],
+            "body-sm": ["\"Source Sans 3\""]
+          },
+          "fontSize": {
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["17px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .mihrab-arch {
+      border-top-left-radius: 48px;
+      border-top-right-radius: 48px;
+    }
+  </style>
+</head>
+<body class="bg-surface-container text-on-surface antialiased selection:bg-secondary-fixed selection:text-on-secondary-fixed min-h-screen flex flex-col font-body-md text-body-md">
+<!-- ========================================== -->
+<!-- SHARED COMPONENT: TopNavBar                -->
+<!-- ========================================== -->
+<header class="bg-surface/90 dark:bg-inverse-surface/90 backdrop-blur-md text-primary dark:text-inverse-primary docked full-width top-0 sticky z-50 shadow-sm border-b border-secondary/15 dark:border-outline-variant/15">
+<div class="max-w-[1160px] mx-auto flex items-center justify-between px-6 py-4 w-full">
+<!-- Brand & Seal -->
+<a class="flex items-center gap-3 group focus:outline-none" href="#">
+<div class="w-10 h-10 rounded-lg bg-primary-container border border-secondary/30 flex items-center justify-center text-secondary-fixed">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md tracking-tight text-primary dark:text-primary-fixed leading-none">AnKanu</span>
+<span class="font-label-sm text-label-sm text-secondary tracking-widest mt-1">TA'ARUF HONORABLE &amp; NOBLE ALLIANCE</span>
+</div>
+</a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-label-md transition-colors duration-200" href="#">La Vision</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-label-md transition-colors duration-200" href="#">L'Académie</a>
+<!-- Active Nav: Comité Consultatif mapped exactly -->
+<a class="text-primary dark:text-primary-fixed border-b-2 border-secondary font-label-md pb-1" href="#">Comité Consultatif</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-label-md transition-colors duration-200" href="#">Tarifs</a>
+</nav>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-3">
+<a class="hidden sm:inline-flex items-center justify-center h-[44px] px-4 font-label-md text-label-md text-on-surface-variant border border-outline-variant/60 rounded-xl hover:bg-surface-variant/40 transition-colors duration-200" href="#">
+          Se Connecter
+        </a>
+<a class="inline-flex items-center justify-center h-[48px] px-6 bg-primary-container text-surface-container font-label-md text-label-md rounded-xl hover:bg-primary transition-all duration-200 shadow-sm" href="#">
+          Commencer l'Engagement
+        </a>
+</div>
+</div>
+</header>
+<main class="flex-grow">
+<!-- ========================================== -->
+<!-- HERO SECTION: Mihrab Sovereign Sanctuary  -->
+<!-- ========================================== -->
+<section class="max-w-[1140px] mx-auto px-6 pt-10 pb-8">
+<div class="bg-primary text-surface mihrab-arch rounded-b-xl border border-secondary/40 p-8 sm:p-14 relative overflow-hidden">
+<!-- Subtle sacred geometric aura -->
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_top,#1f3a5f_0%,transparent_70%)] opacity-60 pointer-events-none"></div>
+<div class="absolute -top-16 -right-16 w-64 h-64 border border-secondary/20 rounded-full pointer-events-none"></div>
+<div class="absolute -top-8 -right-8 w-48 h-48 border border-secondary/30 rounded-full pointer-events-none"></div>
+<div class="relative z-10 max-w-3xl">
+<!-- Eyebrow Tag -->
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-secondary/20 border border-secondary/40 text-secondary-fixed mb-6 font-label-md text-label-md tracking-wider">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span>Gouvernance Morale &amp; Cadre Canonique — Burkina Faso &amp; Afrique de l'Ouest</span>
+</div>
+<h1 class="font-display-lg text-display-lg sm:text-display-lg text-surface-bright mb-6">
+            Le Comité Consultatif Éthique &amp; Indépendant
+          </h1>
+<p class="font-body-lg text-body-lg text-surface-variant leading-relaxed mb-8">
+            Une autorité morale humaine veillant au strict alignement prophétique, au respect scrupuleux de la pudeur et à la protection légale des foyers. Conformément à nos principes inaltérables, le fiqh est porté par des savants humains assermentés, sans aucun automate ni arbitrage algorithmique.
+          </p>
+<!-- Verification Seals Strip -->
+<div class="flex flex-wrap items-center gap-3 pt-4 border-t border-secondary/30">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-surface/10 border border-secondary/30 text-surface-bright font-label-sm text-label-sm tracking-wide">
+<span class="material-symbols-outlined text-secondary-fixed text-[14px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+              Gouvernance Humaine Certifiée (AD-22)
+            </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-surface/10 border border-secondary/30 text-surface-bright font-label-sm text-label-sm tracking-wide">
+<span class="material-symbols-outlined text-secondary-fixed text-[14px]">smart_toy</span>
+              Zéro Fatwa-Bot
+            </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-surface/10 border border-secondary/30 text-surface-bright font-label-sm text-label-sm tracking-wide">
+<span class="material-symbols-outlined text-secondary-fixed text-[14px]">groups_3</span>
+              Délibération Collégiale
+            </span>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- ADVISORY BOARD MEMBERS (3 Dignified Cards)  -->
+<!-- ========================================== -->
+<section class="max-w-[1140px] mx-auto px-6 py-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-outline-variant/30">
+<div>
+<span class="font-label-sm text-label-sm text-secondary tracking-widest block mb-1">DIGNITAIRES &amp; GARANTS</span>
+<h2 class="font-headline-lg text-headline-lg text-primary">Savants &amp; Médiateurs Référents</h2>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mt-2 md:mt-0">
+          Chaque protocole d'agrément et d'alliance est supervisé par des autorités reconnues du Sahel et de la sous-région ouest-africaine.
+        </p>
+</div>
+<!-- Bento-style Card Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Member 1: Cheikh Dr. Oumarou Zoundi -->
+<article class="bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] p-6 flex flex-col justify-between shadow-[0_1px_2px_rgba(27,36,51,0.05)] transition-all hover:border-primary-container">
+<div>
+<!-- Top Card Monogram & Badges -->
+<div class="flex items-start justify-between mb-6 pb-4 border-b border-[#D9CDB8]">
+<div class="relative">
+<div class="w-16 h-16 rounded-xl bg-primary text-secondary-fixed flex items-center justify-center font-headline-md text-headline-md border-2 border-secondary/40">
+                  OZ
+                </div>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-secondary text-surface flex items-center justify-center text-[12px] border border-surface">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">gavel</span>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-block px-2.5 py-1 rounded bg-[#E8D5A3] text-primary border border-[#C4A35A] font-label-sm text-label-sm font-semibold tracking-wider">
+                  SUPERVISION FIQH
+                </span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Ouagadougou / Médine</p>
+</div>
+</div>
+<!-- Profile Info -->
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">Cheikh Dr. Oumarou Zoundi</h3>
+<p class="font-label-md text-label-md text-secondary mb-4">
+              Docteur en Droit Musulman &amp; Jurisprudence Comparée (Fiqh al-Mu'amalat &amp; Usul al-Fiqh)
+            </p>
+<!-- Mandate -->
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/30 mb-6">
+<span class="font-label-sm text-label-sm text-primary block mb-1">MANDAT INSTITUTIONNEL :</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Supervision de la conformité canonique des protocoles de ta'aruf, validation des mandats des tuteurs (Wali) et délimitation stricte du sanctuaire de pudeur.
+              </p>
+</div>
+</div>
+<!-- Citation Quote -->
+<blockquote class="italic font-title-lg text-title-lg text-primary/90 border-l-2 border-secondary pl-3 pt-1">
+            « Le mariage noble s'enracine dans la clairvoyance des intentions et la bénédiction filiale, loin des illusions du tumulte profane. »
+          </blockquote>
+</article>
+<!-- Member 2: Pr. Aminata Ouedraogo Traoré -->
+<article class="bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] p-6 flex flex-col justify-between shadow-[0_1px_2px_rgba(27,36,51,0.05)] transition-all hover:border-primary-container">
+<div>
+<!-- Top Card Monogram & Badges -->
+<div class="flex items-start justify-between mb-6 pb-4 border-b border-[#D9CDB8]">
+<div class="relative">
+<div class="w-16 h-16 rounded-xl bg-tertiary-container text-surface flex items-center justify-center font-headline-md text-headline-md border-2 border-secondary/40">
+                  AT
+                </div>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-secondary text-surface flex items-center justify-center text-[12px] border border-surface">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">balance</span>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-block px-2.5 py-1 rounded bg-[#E8D5A3] text-primary border border-[#C4A35A] font-label-sm text-label-sm font-semibold tracking-wider">
+                  MÉDIATION SOCIALE
+                </span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Université Ki-Zerbo</p>
+</div>
+</div>
+<!-- Profile Info -->
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">Pr. Aminata Ouedraogo Traoré</h3>
+<p class="font-label-md text-label-md text-secondary mb-4">
+              Enseignante-chercheuse en Sciences Sociales &amp; Médiatrice Familiale agréée
+            </p>
+<!-- Mandate -->
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/30 mb-6">
+<span class="font-label-sm text-label-sm text-primary block mb-1">MANDAT INSTITUTIONNEL :</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Évaluation éthique de l'Académie Pré-Maritale, préservation des équilibres familiaux ouest-africains et transmission intergénérationnelle bienveillante.
+              </p>
+</div>
+</div>
+<!-- Citation Quote -->
+<blockquote class="italic font-title-lg text-title-lg text-primary/90 border-l-2 border-secondary pl-3 pt-1">
+            « Préserver l'honneur de la femme et l'intégrité de la famille mandingue et mossi selon l'éthique de la sacralité conjugale. »
+          </blockquote>
+</article>
+<!-- Member 3: M. Karim El-Idrissi -->
+<article class="bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] p-6 flex flex-col justify-between shadow-[0_1px_2px_rgba(27,36,51,0.05)] transition-all hover:border-primary-container">
+<div>
+<!-- Top Card Monogram & Badges -->
+<div class="flex items-start justify-between mb-6 pb-4 border-b border-[#D9CDB8]">
+<div class="relative">
+<div class="w-16 h-16 rounded-xl bg-primary-container text-secondary-fixed flex items-center justify-center font-headline-md text-headline-md border-2 border-secondary/40">
+                  KI
+                </div>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-secondary text-surface flex items-center justify-center text-[12px] border border-surface">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">diversity_3</span>
+</div>
+</div>
+<div class="text-right">
+<span class="inline-block px-2.5 py-1 rounded bg-[#E8D5A3] text-primary border border-[#C4A35A] font-label-sm text-label-sm font-semibold tracking-wider">
+                  DÉONTOLOGIE ALLIANCE
+                </span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Bobo-Dioulasso / Dakar</p>
+</div>
+</div>
+<!-- Profile Info -->
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">M. Karim El-Idrissi</h3>
+<p class="font-label-md text-label-md text-secondary mb-4">
+              Médiateur Certifié &amp; Conseiller d'Alliance Matrimoniale
+            </p>
+<!-- Mandate -->
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/30 mb-6">
+<span class="font-label-sm text-label-sm text-primary block mb-1">MANDAT INSTITUTIONNEL :</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Conciliation déontologique, assistance aux tuteurs légaux dans l'examen bienveillant des biographies et prévention de l'isolement illicite (khalwa).
+              </p>
+</div>
+</div>
+<!-- Citation Quote -->
+<blockquote class="italic font-title-lg text-title-lg text-primary/90 border-l-2 border-secondary pl-3 pt-1">
+            « Aucun foyer durable ne se fonde dans la dissimulation ; la clarté devant Dieu et les témoins en est le premier ciment. »
+          </blockquote>
+</article>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- MANDAT & PRINCIPES D'ARBITRAGE (FR-116/AD-22) -->
+<!-- ========================================== -->
+<section class="max-w-[1140px] mx-auto px-6 py-8">
+<div class="bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] p-8 md:p-12 shadow-[0_1px_2px_rgba(27,36,51,0.05)]">
+<div class="max-w-2xl mb-10">
+<span class="font-label-sm text-label-sm text-secondary tracking-widest block mb-2">CHARTE DÉONTOLOGIQUE STRICTE</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-3">Piliers Fondateurs de la Délibération Humaine</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Les règles régissant le protocole AnKanu ne sont assujetties à aucune logique de rentabilité publicitaire ni d'engagement artificiel.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Pillar 1 -->
+<div class="flex flex-col">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-4 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-[24px]">front_hand</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Arbitrage strictement humain</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Aucun algorithme ni bot d'intelligence artificielle ne tranche sur le statut canonique ou la validité d'une démarche. Le fiqh demeure une délibération d'hommes et de femmes de science et de piété.
+            </p>
+</div>
+<!-- Pillar 2 -->
+<div class="flex flex-col">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-4 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">family_restroom</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Sanctuaire du Tuteur (Wali)</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Garantie de l'intégration du wali dès l'origine du protocole, sans contournement possible. Sa validation explicite et continue protège la sérénité des postulantes et l'honneur des lignées.
+            </p>
+</div>
+<!-- Pillar 3 -->
+<div class="flex flex-col">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-4 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-[24px]">mail_lock</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-2">Saisine Déontologique Directe</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              Procédure ouverte permettant aux postulantes, postulants et tuteurs de saisir le secrétariat du Comité en cas de manquement éthique, de comportement inconvenant ou de doute jurisprudentiel.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- SAISINE & CONTACT DU SECRÉTARIAT          -->
+<!-- ========================================== -->
+<section class="max-w-[1140px] mx-auto px-6 py-8">
+<div class="bg-[#15283F] rounded-xl border border-secondary/40 p-8 md:p-12 text-[#F4EDE0] relative overflow-hidden">
+<div class="max-w-2xl relative z-10">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-secondary/20 text-secondary-fixed border border-secondary/40 font-label-sm text-label-sm mb-4">
+<span class="material-symbols-outlined text-[14px]">policy</span>
+<span>Procédure Officielle de Recours Éthique</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-surface-bright mb-4">
+            Adresser une question jurisprudentielle ou déontologique au Secrétariat du Comité
+          </h2>
+<p class="font-body-md text-body-md text-surface-variant mb-8 leading-relaxed">
+            Toute postulante, postulant ou tuteur légal (Wali) peut solliciter l'avis formel du conseil pour éclaircir une situation maritale, soumettre un cas de force majeure ou dénoncer une entorse à la bienséance islamique.
+          </p>
+<!-- Response SLA Badge -->
+<div class="flex items-center gap-3 p-4 rounded-lg bg-primary border border-secondary/30 mb-8 max-w-xl">
+<span class="material-symbols-outlined text-secondary-fixed text-[24px]">schedule</span>
+<div>
+<p class="font-label-md text-label-md text-surface-bright">Engagement de Réponse Institutionnelle (SLA)</p>
+<p class="font-body-sm text-body-sm text-surface-variant">Délai moyen d'instruction : 72 heures ouvrées par un référent assermenté. Aucun traitement automatisé.</p>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="inline-flex items-center justify-center h-[48px] px-6 bg-secondary-fixed text-on-secondary-fixed font-label-md text-label-md rounded-xl hover:bg-secondary-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined mr-2 text-[18px]">outgoing_mail</span>
+              Rédiger une saisine au Secrétariat
+            </button>
+<button class="inline-flex items-center justify-center h-[48px] px-6 bg-transparent border border-[#D9CDB8] text-[#F4EDE0] font-label-md text-label-md rounded-xl hover:bg-primary transition-colors" type="button">
+<span class="material-symbols-outlined mr-2 text-[18px]">download</span>
+              Télécharger le protocole de saisine (PDF)
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- INTEGRITY COUNTER & CIVIC PROOF           -->
+<!-- ========================================== -->
+<section class="max-w-[1140px] mx-auto px-6 py-6">
+<div class="bg-[#FFFBF4] rounded-xl border border-[#D9CDB8] px-6 py-5 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-secondary border border-secondary/30">
+<span class="material-symbols-outlined">counter_0</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary tracking-wide">COMPTEUR D'INTÉGRITÉ MATRIMONIALE</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Mariages confirmés : <span class="font-semibold text-primary">0</span> (Plateforme scellée, aucun faux chiffre ni incitation mercantile)</p>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">cloud_done</span>
+<span>Hébergement Souverain en France (Scaleway) &amp; Séquestre Chiffré</span>
+</div>
+</div>
+</section>
+</main>
+<!-- ========================================== -->
+<!-- SHARED COMPONENT: Footer                   -->
+<!-- ========================================== -->
+<footer class="bg-surface-container dark:bg-inverse-surface border-t border-secondary/20 dark:border-outline-variant/20 w-full mt-12">
+<div class="max-w-[1160px] mx-auto px-6 py-12 w-full flex flex-col gap-8">
+<!-- Top Tier: Brand, Manifesto & Links -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<div class="md:col-span-5 flex flex-col gap-3">
+<a class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight" href="#">AnKanu</a>
+<p class="text-on-surface-variant dark:text-outline-variant font-body-sm text-body-sm max-w-sm leading-relaxed">
+            © 2025 AnKanu. Tous droits réservés. L'alliance noble et sincère, sous le regard des tuteurs et dans le respect des valeurs de foi.
+          </p>
+<div class="flex items-center gap-2 mt-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Conformité canonique certifiée par le Fiqh Council Burkinabè</span>
+</div>
+</div>
+<div class="md:col-span-7">
+<span class="font-label-sm text-label-sm text-secondary tracking-widest block mb-4">CADRE INSTITUTIONNEL &amp; ÉTHIQUE</span>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-body-sm text-body-sm transition-colors duration-200" href="#">
+              Charte Éthique &amp; Wali
+            </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-body-sm text-body-sm transition-colors duration-200" href="#">
+              L'Académie Pré-Maritale
+            </a>
+<a class="text-primary dark:text-primary-fixed font-medium font-body-sm text-body-sm" href="#">
+              Conseil Consultatif
+            </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-body-sm text-body-sm transition-colors duration-200" href="#">
+              Politique de Pudeur &amp; Confidentialité
+            </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-body-sm text-body-sm transition-colors duration-200" href="#">
+              Conditions Générales
+            </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed font-body-sm text-body-sm transition-colors duration-200" href="#">
+              Foire Aux Questions
+            </a>
+</div>
+</div>
+</div>
+<!-- Bottom Tier: Institutional legal note -->
+<div class="pt-6 border-t border-[#D9CDB8]/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<p>Plateforme dédiée au mariage honorable et légal. Strictement non affiliée aux services de rencontre récréative.</p>
+<p class="text-secondary font-semibold">Ouagadougou · Bobo-Dioulasso · Abidjan · Dakar · Paris</p>
+</div>
+</div>
+</footer>
+</body></html>

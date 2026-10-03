@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu Administration — Operator CIL / deletion tickets</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#abc9f3",
+            "background": "#fff9ee",
+            "surface-container-high": "#eee7db",
+            "success-soft": "#DCE6DE",
+            "surface-sand": "#F4EDE0",
+            "surface-tint": "#465f86",
+            "disabled": "#B5A894",
+            "ink-primary": "#1B2433",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#001c38",
+            "outline-variant": "#c4c6cf",
+            "on-surface": "#1e1b14",
+            "danger-soft": "#F3E0DC",
+            "surface-raised": "#FFFBF4",
+            "primary-fixed-dim": "#aec8f4",
+            "staff-soft": "#EFE4DC",
+            "surface-indigo": "#15283F",
+            "surface": "#fff9ee",
+            "surface-bright": "#fff9ee",
+            "on-surface-variant": "#43474e",
+            "on-secondary-fixed": "#251a00",
+            "border-hairline": "#D9CDB8",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-variant": "#e9e2d5",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "indigo": "#1F3A5F",
+            "surface-container-highest": "#e9e2d5",
+            "secondary-fixed-dim": "#e5c276",
+            "on-secondary": "#ffffff",
+            "danger": "#8B3A3A",
+            "tertiary": "#002546",
+            "staff": "#6B3D2E",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-primary-fixed": "#001c3b",
+            "primary-container": "#1f3a5f",
+            "tertiary-fixed": "#d3e4ff",
+            "primary": "#032448",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-secondary-fixed-variant": "#5b4300",
+            "focus-ring": "#1F3A5F",
+            "tertiary-container": "#1b3b5e",
+            "inverse-on-surface": "#f7f0e3",
+            "outline": "#74777f",
+            "blur-wash": "#C8BBA6",
+            "on-primary-container": "#8ba4cf",
+            "primary-fixed": "#d5e3ff",
+            "inverse-primary": "#aec8f4",
+            "surface-container": "#f4ede0",
+            "mihrab": "#2C4A6E",
+            "indigo-deep": "#15283F",
+            "inverse-surface": "#333028",
+            "on-tertiary-container": "#88a5ce",
+            "gold": "#C4A35A",
+            "secondary": "#755b18",
+            "gold-soft": "#E8D5A3",
+            "surface-dim": "#e0d9cd",
+            "secondary-container": "#fdd88a",
+            "surface-container-lowest": "#ffffff",
+            "border-strong": "#6F624C",
+            "secondary-fixed": "#ffdf9c",
+            "error": "#ba1a1a",
+            "success": "#3D5C45",
+            "ink-secondary": "#5C5346",
+            "on-secondary-container": "#785d1b",
+            "on-background": "#1e1b14",
+            "surface-container-low": "#faf3e6",
+            "on-tertiary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "screen-pad": "16px",
+            "2": "8px",
+            "gutter": "16px",
+            "space-sm": "0.5rem",
+            "7": "48px",
+            "4": "16px",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "5": "24px",
+            "space-xl": "2rem",
+            "6": "32px",
+            "1": "4px",
+            "space-lg": "1.5rem",
+            "3": "12px",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #F4EDE0;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #D9CDB8;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-body text-ink-primary bg-surface-sand antialiased selection:bg-gold-soft selection:text-indigo-deep">
+<!-- Interactive Test Bench / Canonical Simulator Bar -->
+<aside aria-label="Banc d'audit et simulation" class="bg-surface-indigo text-ink-on-indigo text-meta font-meta px-4 py-2 border-b border-border-strong flex flex-wrap items-center justify-between gap-3 shrink-0">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-staff text-ink-on-indigo text-caption font-meta font-semibold">
+<span class="material-symbols-outlined text-[14px]">science</span>
+        BANC D'AUDIT FR-143 / AD-19
+      </span>
+<span class="text-caption text-surface-sand opacity-80 hidden lg:inline">Simulateur d'états d'effacement CIL Burkina Faso</span>
+</div>
+<!-- State Switcher Controls -->
+<div class="flex items-center gap-1.5 bg-[#0e1d2f] p-1 rounded-lg border border-mihrab/40 text-caption">
+<span class="text-surface-sand/70 px-2 py-1 font-meta text-[11px] uppercase tracking-wider hidden sm:inline">État machine :</span>
+<button class="sim-btn px-2.5 py-1 rounded bg-indigo text-ink-on-indigo font-body-strong transition-all flex items-center gap-1" id="sim-btn-nominal" onclick="setSimState('nominal')">
+<span class="w-2 h-2 rounded-full bg-success"></span> 1. File nominale
+      </button>
+<button class="sim-btn px-2.5 py-1 rounded text-surface-sand/80 hover:text-ink-on-indigo transition-all flex items-center gap-1" id="sim-btn-loading" onclick="setSimState('loading')">
+<span class="w-2 h-2 rounded-full bg-gold"></span> 2. Chargement (Fetch)
+      </button>
+<button class="sim-btn px-2.5 py-1 rounded text-surface-sand/80 hover:text-ink-on-indigo transition-all flex items-center gap-1" id="sim-btn-breach" onclick="setSimState('breach')">
+<span class="w-2 h-2 rounded-full bg-danger"></span> 3. Alerte délai CIL (Breach)
+      </button>
+<button class="sim-btn px-2.5 py-1 rounded text-surface-sand/80 hover:text-ink-on-indigo transition-all flex items-center gap-1" id="sim-btn-empty" onclick="setSimState('empty')">
+<span class="w-2 h-2 rounded-full bg-disabled"></span> 4. File vide
+      </button>
+<button class="sim-btn px-2.5 py-1 rounded text-surface-sand/80 hover:text-ink-on-indigo transition-all flex items-center gap-1" id="sim-btn-completed" onclick="setSimState('completed')">
+<span class="w-2 h-2 rounded-full bg-gold"></span> 5. Scellé finalisé (Succès)
+      </button>
+</div>
+<div class="flex items-center gap-3 text-caption text-surface-sand/80">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-gold">verified</span>
+        CIL BF n° 2021-001/AN
+      </span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-surface-sand">dns</span>
+        Scaleway Paris/Ouaga
+      </span>
+</div>
+</aside>
+<!-- Canonical TopNavBar (from Shared Components JSON) -->
+<header class="bg-surface-raised border-b border-border-hairline shrink-0">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-7xl mx-auto">
+<!-- Brand & Status Identity -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded bg-surface-indigo flex items-center justify-center text-gold border border-border-strong/30 shadow-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">gavel</span>
+</div>
+<div>
+<span class="text-heading font-heading text-primary tracking-tight block">AnKanu Administration</span>
+<span class="text-caption font-caption text-ink-secondary">Plateforme de Ta'aruf &amp; Déontologie Matrimoniale</span>
+</div>
+</div>
+<!-- Mandatory Staff Only Badge -->
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-staff-soft text-staff border border-staff/30 font-meta text-caption font-semibold">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+<span>Équipe seulement</span>
+</div>
+</div>
+<!-- Navigation Links (Active mapping: Conformité CIL BF) -->
+<nav aria-label="Navigation principale administrateur" class="hidden md:flex items-center space-x-6 text-body font-body">
+<a class="text-ink-secondary hover:text-primary font-body transition-colors" href="#dossiers">Dossiers de Ta'aruf</a>
+<a class="text-ink-secondary hover:text-primary font-body transition-colors" href="#mediations">Médiations &amp; Wali</a>
+<a class="text-primary border-b-2 border-primary font-body-strong pb-1 flex items-center gap-1.5" href="#cil">
+<span>Conformité CIL BF</span>
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+</a>
+<a class="text-ink-secondary hover:text-primary font-body transition-colors" href="#audit">Registres d'Audit</a>
+</nav>
+<!-- Trailing Action & Security Profile Context -->
+<div class="flex items-center gap-3">
+<div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded bg-surface-sand border border-border-hairline text-caption font-meta text-ink-primary">
+<span class="material-symbols-outlined text-[16px] text-success">verified_user</span>
+<span>Session Inspecteur CIL : <strong class="font-body-strong">OP-BF-449</strong></span>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded text-ink-secondary hover:bg-surface-sand transition-colors duration-150" title="Notifications réglementaires">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="p-2 rounded text-ink-secondary hover:bg-surface-sand transition-colors duration-150" title="Registre des décrets">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+</button>
+</div>
+<!-- Admin Avatar & Role -->
+<div class="flex items-center gap-2 pl-2 border-l border-border-hairline">
+<div class="w-8 h-8 rounded-full bg-indigo flex items-center justify-center text-ink-on-indigo font-heading text-caption font-bold" title="Portrait de l'administrateur de garde AnKanu">
+            MK
+          </div>
+<div class="hidden xl:block text-left">
+<p class="text-caption font-body-strong leading-none text-ink-primary">M. Kaboré</p>
+<p class="text-[11px] font-meta text-ink-secondary leading-tight">Délégué CIL Ouagadougou</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Page Title Banner with Canonical Breadcrumb -->
+<div class="bg-surface-sand border-b border-border-hairline px-6 py-4">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+<div>
+<div class="flex items-center gap-2 text-caption font-caption text-ink-secondary mb-1">
+<span>Console Opérateur</span>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+<span>Conformité CIL &amp; Données</span>
+<span class="material-symbols-outlined text-[13px]">chevron_right</span>
+<span class="text-ink-primary font-body-strong">Droit à l'effacement définitif (FR-143 / AD-19)</span>
+</div>
+<h1 class="text-title font-title text-indigo-deep flex items-center gap-3">
+<span>Operator CIL / deletion tickets</span>
+<span class="inline-flex items-center gap-1 text-caption font-meta px-2.5 py-0.5 rounded-full bg-staff-soft text-staff border border-staff/30">
+<span class="material-symbols-outlined text-[13px]">shield</span> Équipe seulement
+          </span>
+</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-caption font-meta text-ink-secondary">Cadre légal appliqué :</p>
+<p class="text-caption font-body-strong text-indigo-deep">Loi n° 001-2021/AN • Protection des Données BF</p>
+</div>
+<button class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-border-strong bg-surface-raised hover:bg-surface-sand text-ink-primary text-caption font-body-strong transition-colors">
+<span class="material-symbols-outlined text-[16px] text-staff">history_edu</span>
+<span>Journal d'audit immuable</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Content Stage: Split 2-Pane Layout -->
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 min-h-0 overflow-hidden">
+<!-- LEFT PANE: Queue of deletion & CIL data export tickets (md:col-span-5) -->
+<section aria-labelledby="queue-heading" class="md:col-span-5 flex flex-col bg-surface-raised rounded-xl border border-border-hairline overflow-hidden shadow-none">
+<!-- Queue Header with Staff Only badge -->
+<div class="p-4 border-b border-border-hairline bg-surface-raised/90 shrink-0">
+<div class="flex items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<h2 class="text-heading font-heading text-indigo-deep" id="queue-heading">Tickets CIL &amp; Effacement définitif</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary text-caption font-body-strong border border-border-hairline" id="queue-counter">
+              3 actifs
+            </span>
+</div>
+<!-- Staff Only Badge Component -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+<span class="material-symbols-outlined text-[12px]">security</span>
+<span>Équipe seulement</span>
+</span>
+</div>
+<!-- Filter bar / search within queue -->
+<div class="flex items-center gap-2 mt-3 text-caption font-meta">
+<button class="px-2.5 py-1 rounded bg-indigo text-ink-on-indigo font-body-strong">Tous (3)</button>
+<button class="px-2.5 py-1 rounded bg-surface-sand text-ink-secondary hover:text-ink-primary border border-border-hairline">Paliers 1 &amp; 2 (2)</button>
+<button class="px-2.5 py-1 rounded bg-surface-sand text-ink-secondary hover:text-ink-primary border border-border-hairline flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-danger"></span> Délais critiques (1)
+          </button>
+</div>
+</div>
+<!-- Queue List Container (Supports Dynamic Simulation States) -->
+<div class="flex-1 overflow-y-auto custom-scroll p-3 space-y-2.5" id="queue-container">
+<!-- ROW 1: Active Focus Ticket (CIL-BF-2025-0894) -->
+<article class="ticket-item p-3.5 rounded-lg border-2 border-indigo bg-surface-sand/70 transition-all cursor-pointer relative" id="ticket-card-894" onclick="selectTicket('894')">
+<div class="flex items-start justify-between gap-2 mb-1.5">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+                Équipe seulement
+              </span>
+<span class="text-caption font-mono font-body-strong text-indigo-deep">CIL-BF-2025-0894</span>
+</div>
+<!-- SLA Pill -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger-soft text-danger text-caption font-meta font-semibold" id="ticket-894-sla">
+<span class="material-symbols-outlined text-[13px]">timer</span>
+<span id="ticket-894-time">04h 12m</span>
+</span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-strong text-ink-primary text-body leading-tight">Adama T. (Pseudonyme vérifié)</p>
+<p class="text-caption font-meta text-ink-secondary">Ta'aruf ID: BF-OUA-4892 • Initié par l'usager</p>
+</div>
+<div class="text-right">
+<span class="inline-block px-2 py-0.5 rounded bg-surface-raised border border-border-hairline text-caption font-meta text-ink-secondary">
+                Palier 1 : Clichés
+              </span>
+</div>
+</div>
+<div class="mt-2.5 pt-2 border-t border-border-hairline/70 flex items-center justify-between text-caption font-meta text-ink-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-mihrab">verified</span>
+              Wali notifié (Cheick Ouedraogo)
+            </span>
+<span class="text-indigo font-body-strong">Dossier sélectionné →</span>
+</div>
+</article>
+<!-- ROW 2: Ticket CIL-BF-2025-0891 -->
+<article class="ticket-item p-3.5 rounded-lg border border-border-hairline bg-surface-raised hover:bg-surface-sand transition-all cursor-pointer" id="ticket-card-891" onclick="selectTicket('891')">
+<div class="flex items-start justify-between gap-2 mb-1.5">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+                Équipe seulement
+              </span>
+<span class="text-caption font-mono font-body-strong text-ink-primary">CIL-BF-2025-0891</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary text-caption font-meta">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+<span>18h 40m</span>
+</span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-strong text-ink-primary text-body leading-tight">Mariam S. (Mandat Wali)</p>
+<p class="text-caption font-meta text-ink-secondary">Ta'aruf ID: BF-BOB-9104 • Révocation mutuelle</p>
+</div>
+<div class="text-right">
+<span class="inline-block px-2 py-0.5 rounded bg-surface-sand border border-border-hairline text-caption font-meta text-ink-secondary">
+                Palier 2 : Données
+              </span>
+</div>
+</div>
+<div class="mt-2.5 pt-2 border-t border-border-hairline/70 flex items-center justify-between text-caption font-meta text-ink-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-success">lock_reset</span>
+              Archives chiffrées en attente
+            </span>
+<span class="text-ink-secondary font-meta text-caption">Inspecter</span>
+</div>
+</article>
+<!-- ROW 3: Ticket CIL-BF-2025-0886 -->
+<article class="ticket-item p-3.5 rounded-lg border border-border-hairline bg-surface-raised hover:bg-surface-sand transition-all cursor-pointer" id="ticket-card-886" onclick="selectTicket('886')">
+<div class="flex items-start justify-between gap-2 mb-1.5">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+                Équipe seulement
+              </span>
+<span class="text-caption font-mono font-body-strong text-ink-primary">CIL-BF-2025-0886</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success-soft text-success text-caption font-meta font-semibold">
+<span class="material-symbols-outlined text-[13px]">done</span>
+<span>Scellage 28j</span>
+</span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-body-strong text-ink-primary text-body leading-tight">Koudbi I. (Compte inactif 18m)</p>
+<p class="text-caption font-meta text-ink-secondary">Purge canonique légale automatique</p>
+</div>
+<div class="text-right">
+<span class="inline-block px-2 py-0.5 rounded bg-surface-sand border border-border-hairline text-caption font-meta text-ink-secondary">
+                Palier 4 : Scellé
+              </span>
+</div>
+</div>
+<div class="mt-2.5 pt-2 border-t border-border-hairline/70 flex items-center justify-between text-caption font-meta text-ink-secondary">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gold">verified</span>
+              Certificat CIL émis
+            </span>
+<span class="text-ink-secondary font-meta text-caption">Inspecter</span>
+</div>
+</article>
+</div>
+<!-- Queue Footer / Compliance status footer -->
+<div class="p-3 border-t border-border-hairline bg-surface-sand text-caption font-meta text-ink-secondary flex items-center justify-between shrink-0">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+<span>Délai légal de grâce : 72h max</span>
+</div>
+<span class="text-[11px] font-mono">Serveur réplication: sec-gw.ankanu.bf</span>
+</div>
+</section>
+<!-- RIGHT PANE: Active Case Inspection & Purge Execution (md:col-span-7) -->
+<section aria-labelledby="details-heading" class="md:col-span-7 flex flex-col bg-surface-raised rounded-xl border border-border-hairline overflow-hidden shadow-none">
+<!-- Right Pane Header with Staff Badge and Public Correlation URL -->
+<div class="p-5 border-b border-border-hairline bg-surface-raised shrink-0">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+<span class="material-symbols-outlined text-[12px]">security</span>
+<span>Équipe seulement</span>
+</span>
+<span class="text-caption font-meta text-ink-secondary">Réquisition CIL n° <strong>CIL-BF-2025-0894</strong></span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-caption font-meta text-ink-secondary">Scellage :</span>
+<span class="px-2 py-0.5 rounded bg-gold-soft/50 text-indigo-deep border border-gold font-mono text-caption font-semibold">
+              HASH-SHA256: 9b2d...f4e1
+            </span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+<h2 class="text-title font-title text-indigo-deep" id="details-heading">Détail de la réquisition d'effacement</h2>
+<span class="text-caption font-meta text-ink-secondary">Usager requérant : <strong class="text-ink-primary font-body-strong">Adama T.</strong></span>
+</div>
+<!-- Correlation Link to Member View -->
+<div class="mt-3 p-2.5 rounded bg-surface-sand border border-border-hairline flex items-center justify-between gap-2">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[18px] text-mihrab shrink-0">visibility</span>
+<div class="truncate">
+<span class="text-caption font-meta text-ink-secondary block">Tickets Member can see on status page :</span>
+<a class="text-caption font-mono text-indigo hover:underline truncate inline-block" href="https://ankanu.com/privacy/status/req-894-bf" target="_blank">
+                https://ankanu.com/privacy/status/req-894-bf
+              </a>
+</div>
+</div>
+<a class="px-2.5 py-1 rounded bg-surface-raised border border-border-hairline text-ink-primary text-caption font-body-strong hover:bg-surface-sand shrink-0 inline-flex items-center gap-1" href="https://ankanu.com/privacy/status/req-894-bf" target="_blank">
+<span>Ouvrir aperçu miroir</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Right Pane Dynamic Body Container -->
+<div class="flex-1 overflow-y-auto custom-scroll p-5 space-y-6" id="right-pane-body">
+<!-- DYNAMIC CONTAINER 1: ERROR / ALERT STATE (Clock breach flagged) -->
+<div class="hidden rounded-lg bg-danger-soft border border-danger/40 p-4 text-ink-primary" id="alert-banner">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-[24px] shrink-0 mt-0.5">warning</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-heading font-heading text-danger">Alerte Horloge : Dépassement de Délai Légal CIL Détecté</h3>
+<span class="px-2 py-0.5 rounded bg-danger text-on-error text-caption font-meta font-semibold">Flag FR-143 Actif</span>
+</div>
+<p class="text-body font-body text-ink-primary mt-1">
+                Le délai de grâce légal de 48 heures prescrit par la délibération CIL BF n° 2021-001 est échu de <strong>+02h 14m</strong>. Tout retard supplémentaire expose la plateforme AnKanu à une injonction de classe 2.
+              </p>
+<div class="mt-3 flex flex-wrap items-center gap-3">
+<span class="text-caption font-meta text-ink-secondary">Motif du blocage : <strong class="text-ink-primary">Désynchronisation réplica Scaleway FR-PAR-2</strong></span>
+<button class="px-3 py-1 rounded bg-danger text-on-error text-caption font-body-strong hover:bg-danger/90 transition-colors inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">escalator_warning</span>
+                  Escalader au Réviseur Assermenté CIL
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- DYNAMIC CONTAINER 2: SUCCESS STATE (Member status page shows completed) -->
+<div class="hidden rounded-lg bg-success-soft border border-success/40 p-4 text-ink-primary" id="success-banner">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-success text-[26px] shrink-0 mt-0.5">verified</span>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h3 class="text-heading font-heading text-success">Purge Intégrale Scellée et Homologuée CIL</h3>
+<span class="px-2 py-0.5 rounded bg-success text-on-error text-caption font-meta font-semibold">Statut Membre : TERMINÉ</span>
+</div>
+<p class="text-body font-body text-ink-primary mt-1">
+                L'ensemble des attributs d'Adama T. a été expurgé des bases transactionnelles. Le certificat de scellement cryptographique a été mis à disposition sur sa page publique miroir.
+              </p>
+<div class="mt-3 p-3 rounded bg-surface-raised border border-border-hairline text-caption font-mono text-ink-secondary flex items-center justify-between">
+<span>Récépissé : CIL-RECIPISSE-PURGE-2025-0894-OUAGA</span>
+<span class="text-success font-body-strong flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">done_all</span> Horodaté UTC+0
+                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Guardian & Chaperone Banner (Staff / Mediateur presence requirement) -->
+<div class="bg-surface-indigo text-ink-on-indigo p-4 rounded-xl border border-mihrab flex items-start gap-3.5">
+<span class="material-symbols-outlined text-gold text-[24px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">family_restroom</span>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<h4 class="text-heading font-heading text-gold">Garantie Déontologique Wali &amp; Chaperon</h4>
+<span class="px-2 py-0.2 rounded-full bg-[#0c1827] text-surface-sand text-[11px] font-meta border border-border-strong/40">FR-143 / Chaperonnage Intègre</span>
+</div>
+<p class="text-meta font-meta text-surface-sand/90">
+              L'usager avait désigné <strong>Cheick Moussa Ouedraogo</strong> (Wali certifié). L'attestation de clôture de chaperonnage a été validée le 14/05/2025 à 09:12 GMT sans litige en suspens. L'effacement n'impacte aucun droit de tiers.
+            </p>
+</div>
+</div>
+<!-- Canonical Milestones / Deletion Tiers Pipeline -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="text-heading font-heading text-indigo-deep">Progression des 4 Paliers de Destruction CIL</h3>
+<span class="text-caption font-meta text-ink-secondary">Cycle légal régit par l'AD-19</span>
+</div>
+<div class="space-y-3">
+<!-- Milestone 1 -->
+<div class="p-3.5 rounded-lg border border-border-hairline bg-surface-raised flex items-start gap-3 transition-colors" id="step-1-card">
+<div class="w-7 h-7 rounded-full bg-success text-on-error flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="text-body-strong font-body-strong text-ink-primary">1. Purge clichés &amp; sceau d'identité (SLA 48h)</h4>
+<span class="px-2 py-0.5 rounded bg-success-soft text-success text-caption font-meta font-semibold">Exécuté</span>
+</div>
+<p class="text-caption font-meta text-ink-secondary mt-0.5">
+                  Déréférencement des photographies de courtoisie et destruction des clés d'accès chiffrées S3.
+                </p>
+<div class="text-[11px] font-mono text-ink-secondary mt-1 text-opacity-80">
+                  SHA: 341a9...c4e — Exécuté le 15/05/2025 08:30 GMT
+                </div>
+</div>
+</div>
+<!-- Milestone 2 -->
+<div class="p-3.5 rounded-lg border-2 border-indigo bg-surface-sand/60 flex items-start gap-3 transition-colors" id="step-2-card">
+<div class="w-7 h-7 rounded-full bg-indigo text-ink-on-indigo flex items-center justify-center shrink-0 mt-0.5 font-body-strong text-caption">
+                2
+              </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="text-body-strong font-body-strong text-indigo-deep">2. Rétention archive chiffrée (7 jours)</h4>
+<span class="px-2 py-0.5 rounded bg-gold-soft text-ink-primary text-caption font-meta font-semibold" id="step-2-status">En cours de purge</span>
+</div>
+<p class="text-caption font-meta text-ink-secondary mt-0.5">
+                  Délai de grâce légal anti-usurpation d'identité permettant au Wali de signaler une fraude.
+                </p>
+<div class="mt-2 flex items-center justify-between text-caption font-meta">
+<span class="text-ink-secondary">Horloge de rétention restante :</span>
+<strong class="font-mono text-danger font-body-strong" id="step-2-timer">04h 12m 18s</strong>
+</div>
+</div>
+</div>
+<!-- Milestone 3 -->
+<div class="p-3.5 rounded-lg border border-border-hairline bg-surface-raised opacity-75 flex items-start gap-3 transition-colors" id="step-3-card">
+<div class="w-7 h-7 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline flex items-center justify-center shrink-0 mt-0.5 font-body-strong text-caption">
+                3
+              </div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="text-body-strong font-body-strong text-ink-primary">3. Logs serveurs Scaleway (30 jours)</h4>
+<span class="px-2 py-0.5 rounded bg-surface-sand text-ink-secondary text-caption font-meta">En attente J+7</span>
+</div>
+<p class="text-caption font-meta text-ink-secondary mt-0.5">
+                  Effacement des adresses IP et traces d'accès sur l'infrastructure cluster Scaleway Paris/Ouaga.
+                </p>
+</div>
+</div>
+<!-- Milestone 4 -->
+<div class="p-3.5 rounded-lg border border-border-hairline bg-surface-raised opacity-75 flex items-start gap-3 transition-colors" id="step-4-card">
+<div class="w-7 h-7 rounded-full bg-surface-sand text-gold border border-gold flex items-center justify-center shrink-0 mt-0.5 font-body-strong text-caption">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<h4 class="text-body-strong font-body-strong text-ink-primary">4. Scellé final CIL &amp; certificat d'irréversibilité</h4>
+<span class="px-2 py-0.5 rounded bg-surface-sand text-ink-secondary text-caption font-meta">Étape finale</span>
+</div>
+<p class="text-caption font-meta text-ink-secondary mt-0.5">
+                  Génération du jeton cryptographique transmis à la Commission de l'Informatique et des Libertés du Burkina Faso.
+                </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Technical Registry & Cryptographic Hash Details -->
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline text-caption font-meta space-y-2">
+<div class="flex items-center justify-between border-b border-border-hairline pb-2">
+<span class="text-ink-secondary">Identifiant base PostgreSQL sécurisée :</span>
+<span class="font-mono font-body-strong text-ink-primary">usr_sec_994a0224bf</span>
+</div>
+<div class="flex items-center justify-between border-b border-border-hairline pb-2">
+<span class="text-ink-secondary">Noeud d'hébergement primaire :</span>
+<span class="font-mono text-ink-primary">scw-fr-par2-node-08 (Chiffrement AES-256 GCM)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-ink-secondary">Agent de contrôle habilité :</span>
+<span class="font-body-strong text-primary">M. Kaboré (Assermenté CIL BF - Clé matérielle FIDO2 active)</span>
+</div>
+</div>
+</div>
+<!-- Execution Sticky Action Bar (Indigo min 48px button requirement) -->
+<div class="p-4 border-t border-border-hairline bg-surface-raised flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-staff text-[20px]">policy</span>
+<span class="text-caption font-meta text-ink-secondary">
+            Action irréversible sous supervision régalienne CIL.
+          </span>
+</div>
+<div class="flex items-center gap-2 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-4 py-3 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand text-body font-body-strong transition-colors min-h-[48px] flex items-center justify-center gap-1.5" onclick="rejectPurge()">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+<span>Suspendre pour audit</span>
+</button>
+<!-- Canonical Primary Action Button (Indigo min 48px) -->
+<button class="flex-1 sm:flex-none px-6 py-3 rounded-full bg-indigo text-ink-on-indigo hover:bg-indigo-deep text-body font-body-strong transition-all min-h-[48px] shadow-sm flex items-center justify-center gap-2 focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" id="primary-action-btn" onclick="executePurge()">
+<span class="material-symbols-outlined text-[20px] text-gold">delete_forever</span>
+<span id="primary-action-text">Forcer &amp; sceller la purge immédiate (AD-19)</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Interactive State Engine Vanilla Script -->
+<script>
+    let currentState = 'nominal';
+
+    function setSimState(state) {
+      currentState = state;
+
+      // Update button styling
+      document.querySelectorAll('.sim-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo', 'text-ink-on-indigo', 'font-body-strong');
+        btn.classList.add('text-surface-sand/80');
+      });
+      const activeBtn = document.getElementById(`sim-btn-${state}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-indigo', 'text-ink-on-indigo', 'font-body-strong');
+        activeBtn.classList.remove('text-surface-sand/80');
+      }
+
+      // Containers
+      const queueContainer = document.getElementById('queue-container');
+      const queueCounter = document.getElementById('queue-counter');
+      const alertBanner = document.getElementById('alert-banner');
+      const successBanner = document.getElementById('success-banner');
+      const actionBtn = document.getElementById('primary-action-btn');
+      const actionText = document.getElementById('primary-action-text');
+      const rightBody = document.getElementById('right-pane-body');
+
+      // Reset banners
+      alertBanner.classList.add('hidden');
+      successBanner.classList.add('hidden');
+
+      if (state === 'nominal') {
+        queueCounter.innerText = '3 actifs';
+        restoreNominalQueue();
+        resetMilestonesToNominal();
+        actionBtn.disabled = false;
+        actionBtn.className = "flex-1 sm:flex-none px-6 py-3 rounded-full bg-indigo text-ink-on-indigo hover:bg-indigo-deep text-body font-body-strong transition-all min-h-[48px] shadow-sm flex items-center justify-center gap-2";
+        actionText.innerText = "Forcer & sceller la purge immédiate (AD-19)";
+      } 
+      else if (state === 'loading') {
+        queueCounter.innerText = 'Synchronisation...';
+        queueContainer.innerHTML = `
+          <div class="space-y-3 p-2 animate-pulse">
+            <div class="p-4 rounded-lg bg-surface-sand border border-border-hairline h-24"></div>
+            <div class="p-4 rounded-lg bg-surface-sand border border-border-hairline h-24"></div>
+            <div class="p-4 rounded-lg bg-surface-sand border border-border-hairline h-24"></div>
+            <div class="text-center py-4 text-caption font-meta text-ink-secondary">
+              Interrogation des registres CIL Scaleway en cours...
+            </div>
+          </div>
+        `;
+        actionBtn.disabled = true;
+        actionBtn.className = "flex-1 sm:flex-none px-6 py-3 rounded-full bg-disabled text-ink-secondary text-body font-body-strong min-h-[48px] flex items-center justify-center gap-2 cursor-not-allowed";
+        actionText.innerText = "Synchronisation des certificats...";
+      } 
+      else if (state === 'breach') {
+        queueCounter.innerText = '1 anomalie SLA critique';
+        restoreNominalQueue();
+        alertBanner.classList.remove('hidden');
+        
+        // Highlight first ticket with critical breach style
+        const t894 = document.getElementById('ticket-card-894');
+        if (t894) {
+          t894.classList.remove('border-indigo');
+          t894.classList.add('border-danger', 'bg-danger-soft/40');
+        }
+        const slaPill = document.getElementById('ticket-894-sla');
+        if (slaPill) {
+          slaPill.className = "inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger text-on-error text-caption font-meta font-bold";
+          slaPill.innerHTML = `<span class="material-symbols-outlined text-[13px]">alarm_on</span> DÉPASSEMENT +2h14m`;
+        }
+        actionBtn.disabled = false;
+        actionBtn.className = "flex-1 sm:flex-none px-6 py-3 rounded-full bg-danger text-on-error hover:bg-danger/90 text-body font-body-strong transition-all min-h-[48px] shadow-sm flex items-center justify-center gap-2";
+        actionText.innerText = "Exécution forcée d'urgence (Injonction CIL)";
+      } 
+      else if (state === 'empty') {
+        queueCounter.innerText = '0 en attente';
+        queueContainer.innerHTML = `
+          <div class="p-8 text-center flex flex-col items-center justify-center h-full my-auto space-y-3">
+            <div class="w-12 h-12 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-ink-secondary">
+              <span class="material-symbols-outlined text-[24px]">task_alt</span>
+            </div>
+            <h3 class="text-heading font-heading text-indigo-deep">File d'effacement CIL apurée</h3>
+            <p class="text-caption font-meta text-ink-secondary max-w-xs">
+              Aucun ticket d'effacement de données n'est en instance de traitement. Tous les délais de grâce sont sous contrôle.
+            </p>
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-success-soft text-success text-caption font-meta font-semibold">
+              <span class="material-symbols-outlined text-[14px]">shield_check</span>
+              Conforme CIL BF à 100%
+            </span>
+          </div>
+        `;
+        actionBtn.disabled = true;
+        actionBtn.className = "flex-1 sm:flex-none px-6 py-3 rounded-full bg-disabled text-ink-secondary text-body font-body-strong min-h-[48px] flex items-center justify-center gap-2 cursor-not-allowed";
+        actionText.innerText = "Aucun dossier à sceller";
+      } 
+      else if (state === 'completed') {
+        queueCounter.innerText = 'Scellé délivré';
+        restoreNominalQueue();
+        successBanner.classList.remove('hidden');
+
+        // Apply completed status to all milestones
+        setAllMilestonesCompleted();
+        actionBtn.disabled = false;
+        actionBtn.className = "flex-1 sm:flex-none px-6 py-3 rounded-full bg-gold text-indigo-deep hover:bg-gold-soft text-body font-body-strong transition-all min-h-[48px] shadow-sm flex items-center justify-center gap-2";
+        actionText.innerText = "Télécharger le certificat scellé CIL (.PDF certifié)";
+      }
+    }
+
+    function resetMilestonesToNominal() {
+      const step2Card = document.getElementById('step-2-card');
+      const step2Status = document.getElementById('step-2-status');
+      const step2Timer = document.getElementById('step-2-timer');
+      if (step2Card) {
+        step2Card.className = "p-3.5 rounded-lg border-2 border-indigo bg-surface-sand/60 flex items-start gap-3 transition-colors";
+        step2Status.className = "px-2 py-0.5 rounded bg-gold-soft text-ink-primary text-caption font-meta font-semibold";
+        step2Status.innerText = "En cours de purge";
+        step2Timer.innerText = "04h 12m 18s";
+      }
+      const step3Card = document.getElementById('step-3-card');
+      if (step3Card) step3Card.classList.add('opacity-75');
+      const step4Card = document.getElementById('step-4-card');
+      if (step4Card) step4Card.classList.add('opacity-75');
+    }
+
+    function setAllMilestonesCompleted() {
+      const step2Card = document.getElementById('step-2-card');
+      const step2Status = document.getElementById('step-2-status');
+      const step2Timer = document.getElementById('step-2-timer');
+      if (step2Card) {
+        step2Card.className = "p-3.5 rounded-lg border border-border-hairline bg-surface-raised flex items-start gap-3 transition-colors";
+        step2Status.className = "px-2 py-0.5 rounded bg-success-soft text-success text-caption font-meta font-semibold";
+        step2Status.innerText = "Purge confirmée";
+        step2Timer.innerText = "Terminé (Rétention levée)";
+      }
+
+      const step3Card = document.getElementById('step-3-card');
+      if (step3Card) {
+        step3Card.classList.remove('opacity-75');
+        step3Card.classList.add('border-success/40');
+      }
+
+      const step4Card = document.getElementById('step-4-card');
+      if (step4Card) {
+        step4Card.classList.remove('opacity-75');
+        step4Card.classList.add('border-gold', 'bg-gold-soft/20');
+      }
+    }
+
+    function restoreNominalQueue() {
+      const queueContainer = document.getElementById('queue-container');
+      queueContainer.innerHTML = `
+        <!-- ROW 1: Active Focus Ticket -->
+        <article onclick="selectTicket('894')" id="ticket-card-894" class="ticket-item p-3.5 rounded-lg border-2 border-indigo bg-surface-sand/70 transition-all cursor-pointer relative">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+                Équipe seulement
+              </span>
+              <span class="text-caption font-mono font-body-strong text-indigo-deep">CIL-BF-2025-0894</span>
+            </div>
+            <span id="ticket-894-sla" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-danger-soft text-danger text-caption font-meta font-semibold">
+              <span class="material-symbols-outlined text-[13px]">timer</span>
+              <span id="ticket-894-time">04h 12m</span>
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-body-strong text-ink-primary text-body leading-tight">Adama T. (Pseudonyme vérifié)</p>
+              <p class="text-caption font-meta text-ink-secondary">Ta'aruf ID: BF-OUA-4892 • Initié par l'usager</p>
+            </div>
+            <div class="text-right">
+              <span class="inline-block px-2 py-0.5 rounded bg-surface-raised border border-border-hairline text-caption font-meta text-ink-secondary">
+                Palier 1 : Clichés
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-2.5 pt-2 border-t border-border-hairline/70 flex items-center justify-between text-caption font-meta text-ink-secondary">
+            <span class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px] text-mihrab">verified</span>
+              Wali notifié (Cheick Ouedraogo)
+            </span>
+            <span class="text-indigo font-body-strong">Dossier sélectionné &rarr;</span>
+          </div>
+        </article>
+
+        <!-- ROW 2: Ticket CIL-BF-2025-0891 -->
+        <article onclick="selectTicket('891')" id="ticket-card-891" class="ticket-item p-3.5 rounded-lg border border-border-hairline bg-surface-raised hover:bg-surface-sand transition-all cursor-pointer">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+                Équipe seulement
+              </span>
+              <span class="text-caption font-mono font-body-strong text-ink-primary">CIL-BF-2025-0891</span>
+            </div>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary text-caption font-meta">
+              <span class="material-symbols-outlined text-[13px]">schedule</span>
+              <span>18h 40m</span>
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-body-strong text-ink-primary text-body leading-tight">Mariam S. (Mandat Wali)</p>
+              <p class="text-caption font-meta text-ink-secondary">Ta'aruf ID: BF-BOB-9104 • Révocation mutuelle</p>
+            </div>
+            <div class="text-right">
+              <span class="inline-block px-2 py-0.5 rounded bg-surface-sand border border-border-hairline text-caption font-meta text-ink-secondary">
+                Palier 2 : Données
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-2.5 pt-2 border-t border-border-hairline/70 flex items-center justify-between text-caption font-meta text-ink-secondary">
+            <span class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px] text-success">lock_reset</span>
+              Archives chiffrées en attente
+            </span>
+            <span class="text-ink-secondary font-meta text-caption">Inspecter</span>
+          </div>
+        </article>
+
+        <!-- ROW 3: Ticket CIL-BF-2025-0886 -->
+        <article onclick="selectTicket('886')" id="ticket-card-886" class="ticket-item p-3.5 rounded-lg border border-border-hairline bg-surface-raised hover:bg-surface-sand transition-all cursor-pointer">
+          <div class="flex items-start justify-between gap-2 mb-1.5">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-staff-soft text-staff text-caption font-meta font-semibold border border-staff/30">
+                Équipe seulement
+              </span>
+              <span class="text-caption font-mono font-body-strong text-ink-primary">CIL-BF-2025-0886</span>
+            </div>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success-soft text-success text-caption font-meta font-semibold">
+              <span class="material-symbols-outlined text-[13px]">done</span>
+              <span>Scellage 28j</span>
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="font-body-strong text-ink-primary text-body leading-tight">Koudbi I. (Compte inactif 18m)</p>
+              <p class="text-caption font-meta text-ink-secondary">Purge canonique légale automatique</p>
+            </div>
+            <div class="text-right">
+              <span class="inline-block px-2 py-0.5 rounded bg-surface-sand border border-border-hairline text-caption font-meta text-ink-secondary">
+                Palier 4 : Scellé
+              </span>
+            </div>
+          </div>
+
+          <div class="mt-2.5 pt-2 border-t border-border-hairline/70 flex items-center justify-between text-caption font-meta text-ink-secondary">
+            <span class="flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px] text-gold">verified</span>
+              Certificat CIL émis
+            </span>
+            <span class="text-ink-secondary font-meta text-caption">Inspecter</span>
+          </div>
+        </article>
+      `;
+    }
+
+    function selectTicket(id) {
+      document.querySelectorAll('.ticket-item').forEach(el => {
+        el.classList.remove('border-2', 'border-indigo', 'bg-surface-sand/70');
+        el.classList.add('border-border-hairline', 'bg-surface-raised');
+      });
+      const selected = document.getElementById(`ticket-card-${id}`);
+      if (selected) {
+        selected.classList.remove('border-border-hairline', 'bg-surface-raised');
+        selected.classList.add('border-2', 'border-indigo', 'bg-surface-sand/70');
+      }
+    }
+
+    function executePurge() {
+      if (currentState === 'completed') {
+        alert("Génération et téléchargement du certificat officiel CIL (Burkina Faso - Délibération 2021-001/AN)...");
+        return;
+      }
+      if (confirm("Confirmation de l'officier assermenté CIL : Confirmez-vous l'ordre irréversible d'effacement canonique pour le ticket CIL-BF-2025-0894 ?")) {
+        setSimState('completed');
+      }
+    }
+
+    function rejectPurge() {
+      const reason = prompt("Saisir le motif officiel de suspension déontologique ou légale pour le registre CIL :", "Enquête Wali en cours sur le consentement");
+      if (reason) {
+        alert("Procédure suspendue. Notification envoyée au Réviseur de garde et horodatée dans le grand livre immuable.");
+      }
+    }
+  </script>
+</body></html>

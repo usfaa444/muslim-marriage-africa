@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Témoignage d'Alliance &amp; Consentement Réciproque | AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration verbatim from instructions -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-highest": "#e9e2d5",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#1b3b5e",
+            "surface-container": "#f4ede0",
+            "on-primary-fixed": "#001c3b",
+            "inverse-on-surface": "#f7f0e3",
+            "primary-fixed": "#d5e3ff",
+            "on-tertiary-container": "#88a5ce",
+            "mihrab": "#2C4A6E",
+            "background": "#fff9ee",
+            "inverse-surface": "#333028",
+            "secondary-fixed-dim": "#e5c276",
+            "ink-primary": "#1B2433",
+            "indigo": "#1F3A5F",
+            "disabled": "#B5A894",
+            "outline-variant": "#c4c6cf",
+            "focus-ring": "#1F3A5F",
+            "staff": "#6B3D2E",
+            "success": "#3D5C45",
+            "on-error": "#ffffff",
+            "primary-fixed-dim": "#aec8f4",
+            "surface-container-lowest": "#ffffff",
+            "indigo-deep": "#15283F",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-primary": "#ffffff",
+            "border-hairline": "#D9CDB8",
+            "on-secondary": "#ffffff",
+            "ink-on-indigo": "#F4EDE0",
+            "on-tertiary": "#ffffff",
+            "secondary-container": "#fdd88a",
+            "error-container": "#ffdad6",
+            "surface-dim": "#e0d9cd",
+            "secondary": "#755b18",
+            "gold-soft": "#E8D5A3",
+            "primary-container": "#1f3a5f",
+            "on-primary-container": "#8ba4cf",
+            "on-secondary-container": "#785d1b",
+            "on-surface": "#1e1b14",
+            "success-soft": "#DCE6DE",
+            "surface-variant": "#e9e2d5",
+            "primary": "#032448",
+            "on-secondary-fixed": "#251a00",
+            "inverse-primary": "#aec8f4",
+            "surface-container-low": "#faf3e6",
+            "surface-tint": "#465f86",
+            "border-strong": "#6F624C",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-raised": "#FFFBF4",
+            "surface-sand": "#F4EDE0",
+            "surface": "#fff9ee",
+            "ink-secondary": "#5C5346",
+            "tertiary": "#002546",
+            "outline": "#74777f",
+            "on-tertiary-fixed": "#001c38",
+            "gold": "#C4A35A",
+            "surface-container-high": "#eee7db",
+            "secondary-fixed": "#ffdf9c",
+            "on-secondary-fixed-variant": "#5b4300",
+            "blur-wash": "#C8BBA6",
+            "error": "#ba1a1a",
+            "surface-bright": "#fff9ee",
+            "staff-soft": "#EFE4DC",
+            "danger": "#8B3A3A",
+            "on-background": "#1e1b14",
+            "danger-soft": "#F3E0DC",
+            "surface-indigo": "#15283F",
+            "tertiary-fixed": "#d3e4ff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "3": "12px",
+            "space-xl": "2rem",
+            "6": "32px",
+            "1": "4px",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "screen-pad": "16px",
+            "gutter": "16px",
+            "7": "48px",
+            "margin": "1rem",
+            "5": "24px",
+            "2": "8px",
+            "4": "16px"
+          },
+          "fontFamily": {
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"]
+          },
+          "fontSize": {
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Subtle custom pattern reminiscent of Sahelian handloom / Faso Dan Fani grain */
+    .bg-sahel-subtle {
+      background-color: #F4EDE0;
+      background-image: radial-gradient(#D9CDB8 0.75px, transparent 0.75px);
+      background-size: 16px 16px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-surface-sand text-ink-primary font-body flex flex-col antialiased selection:bg-gold-soft selection:text-ink-primary">
+<!-- 1. CANONICAL AUDIT SIMULATOR BAR (FR-099 / FR-100 / AD-25) -->
+<aside aria-label="Simulateur canonique d'audit" class="bg-indigo-deep text-ink-on-indigo text-caption py-2 px-screen-pad border-b border-mihrab">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" style="font-size: 16px;">verified_user</span>
+<span class="font-meta text-meta text-gold font-semibold uppercase tracking-wider">Simulateur canonique (FR-099 / FR-100 / AD-25)</span>
+</div>
+<div class="flex items-center gap-1 overflow-x-auto text-caption py-1">
+<button class="px-2 py-1 rounded bg-gold text-indigo-deep font-semibold whitespace-nowrap transition-colors" id="sim-state-1" onclick="setAuditState(1)">1. Formulaire initial (Défaut)</button>
+<span class="text-mihrab">/</span>
+<button class="px-2 py-1 rounded text-ink-on-indigo hover:text-gold whitespace-nowrap transition-colors" id="sim-state-2" onclick="setAuditState(2)">2. Refus de publication</button>
+<span class="text-mihrab">/</span>
+<button class="px-2 py-1 rounded text-ink-on-indigo hover:text-gold whitespace-nowrap transition-colors" id="sim-state-3" onclick="setAuditState(3)">3. Attente Wali &amp; Famille</button>
+<span class="text-mihrab">/</span>
+<button class="px-2 py-1 rounded text-ink-on-indigo hover:text-gold whitespace-nowrap transition-colors" id="sim-state-4" onclick="setAuditState(4)">4. Homologation FR-141</button>
+<span class="text-mihrab">/</span>
+<button class="px-2 py-1 rounded text-ink-on-indigo hover:text-gold whitespace-nowrap transition-colors" id="sim-state-5" onclick="setAuditState(5)">5. Succès Homologué</button>
+</div>
+</div>
+</aside>
+<!-- TOP NAV BAR (Derived from Shared Component TopNavBar) -->
+<header class="bg-surface border-b border-border-hairline sticky top-0 z-30">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<!-- Brand anchor -->
+<div class="flex items-center gap-3">
+<a class="font-title text-title text-primary tracking-tight font-semibold flex items-center gap-2" href="#">
+<span>AnKanu</span>
+<span class="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-gold"></span>
+<span class="hidden sm:inline-block font-meta text-meta text-ink-secondary font-normal">Ta'aruf Honorable &amp; Mariage Noble</span>
+</a>
+</div>
+<!-- Navigation links (Member Context) -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors duration-150" href="#">Invitations</a>
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors duration-150" href="#">Discussions</a>
+<span class="text-primary font-body-strong border-b-2 border-primary pb-1">Alliance</span>
+</nav>
+<!-- Wali indicator & Assistance action -->
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-1.5 px-3 py-1 bg-staff-soft rounded-full border border-border-hairline">
+<span class="material-symbols-outlined text-staff" style="font-size: 15px;">shield_person</span>
+<span class="font-meta text-meta text-staff">Wali notifié : Oumar O.</span>
+</div>
+<a class="font-meta text-meta text-ink-secondary hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined" style="font-size: 18px;">help_center</span>
+<span>Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- MAIN EDITORIAL CANVAS -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-screen-pad py-6 md:py-8 space-y-6">
+<!-- 2. HEADER & BANNER OF DIGNITY -->
+<section class="space-y-4">
+<!-- Breadcrumb and Nikah Seal -->
+<div class="flex items-center gap-2 text-ink-secondary font-meta text-meta">
+<span>Registre des Alliances (Nikah)</span>
+<span class="material-symbols-outlined" style="font-size: 14px;">chevron_right</span>
+<span class="text-ink-primary font-semibold">Témoignage d'édification mutuelle</span>
+</div>
+<!-- Dignified Header Block -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-6 md:p-8 space-y-4">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-2">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-gold-soft/50 border border-gold text-indigo font-meta text-meta">
+<span class="material-symbols-outlined" style="font-size: 16px;">verified</span>
+<span>Union sanctifiée &amp; officialisée</span>
+</div>
+<h1 class="font-display text-display text-primary">Témoignage d'Alliance &amp; Consentement Réciproque</h1>
+<p class="font-body text-body text-ink-secondary max-w-2xl leading-relaxed">
+              Partage facultatif et pudique de votre cheminement honorable. Votre union est déjà scellée et bénie ; ce récit n'est rendu public que sous réserve de votre double accord formel, de l'accord familial et de l'homologation du Conseil (FR-099 / FR-100).
+            </p>
+</div>
+<!-- Traditional Burkinabè motif stamp -->
+<div class="hidden sm:flex flex-col items-center justify-center p-3 rounded-lg border border-border-hairline bg-surface-sand text-center min-w-[110px]">
+<span class="material-symbols-outlined text-gold" style="font-size: 28px;">military_tech</span>
+<span class="font-meta text-caption text-ink-secondary mt-1">Sceau AnKanu</span>
+<span class="font-meta text-caption text-ink-primary font-bold">Alliance #2412</span>
+</div>
+</div>
+<!-- Trust badge and principles -->
+<div class="pt-4 border-t border-border-hairline flex flex-wrap items-center gap-y-2 gap-x-4 font-meta text-meta text-ink-secondary">
+<span class="inline-flex items-center gap-1.5 text-success">
+<span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+<span>Caractère strictement facultatif</span>
+</span>
+<span class="text-border-hairline hidden md:inline">·</span>
+<span class="inline-flex items-center gap-1.5 text-ink-secondary">
+<span class="material-symbols-outlined" style="font-size: 16px;">volunteer_activism</span>
+<span>Zéro pression marchande</span>
+</span>
+<span class="text-border-hairline hidden md:inline">·</span>
+<span class="inline-flex items-center gap-1.5 text-indigo">
+<span class="material-symbols-outlined" style="font-size: 16px;">balance</span>
+<span>Droit de veto inaliénable de chacun des époux</span>
+</span>
+</div>
+</div>
+</section>
+<!-- 3. DOUBLE-CONSENT STATUS INDICATOR (Les Deux Époux) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="font-heading text-heading text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" style="font-size: 20px;">handshake</span>
+<span>Accord Bilatéral des Conjoints (Double Clé de Souveraineté)</span>
+</h2>
+<span class="font-meta text-caption text-ink-secondary">Procédure AD-25</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Epoux (Vous) -->
+<div class="p-4 rounded-lg border border-border-hairline bg-surface-sand flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-indigo flex items-center justify-center text-ink-on-indigo shrink-0">
+<span class="material-symbols-outlined" style="font-size: 20px;">person</span>
+</div>
+<div class="flex-1 space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body-strong text-ink-primary">Tahir O. (Vous)</span>
+<span class="px-2 py-0.5 rounded-full text-caption bg-success-soft text-success font-semibold inline-flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 12px;">check</span> En cours
+              </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">Époux demandeur · Auteur du projet de transmission</p>
+</div>
+</div>
+<!-- Epouse (Conjointe) -->
+<div class="p-4 rounded-lg border border-border-hairline bg-surface-sand flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-indigo flex items-center justify-center text-gold shrink-0">
+<span class="material-symbols-outlined" style="font-size: 20px;">account_circle</span>
+</div>
+<div class="flex-1 space-y-1">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body-strong text-ink-primary">Aminata O.</span>
+<span class="px-2 py-0.5 rounded-full text-caption bg-gold-soft text-indigo font-semibold inline-flex items-center gap-1" id="aminata-status-badge">
+<span class="material-symbols-outlined" style="font-size: 12px;">hourglass_top</span> En attente
+              </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">Épouse · Notification transmise sous chaperonnage</p>
+</div>
+</div>
+</div>
+<!-- Veto Rule Callout -->
+<div class="p-3.5 rounded-lg bg-surface-sand border border-border-hairline flex items-start gap-3 text-meta text-ink-secondary" id="veto-banner">
+<span class="material-symbols-outlined text-indigo shrink-0 mt-0.5" style="font-size: 18px;">gavel</span>
+<p class="leading-relaxed">
+<strong class="text-ink-primary">Règle de protection absolue :</strong> Si l'un des deux époux refuse, ou retire son accord à tout instant, la publication dans le Showcase public est instantanément et définitivement bloquée. Aucun nom ni portrait ne sera dévoilé.
+        </p>
+</div>
+</section>
+<!-- 4. CORE STORY CONTROLS & EDITORIAL FORM -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 md:p-8 space-y-6">
+<!-- Card preamble quote -->
+<div class="border-l-2 border-gold pl-4 py-1 italic font-title text-title text-indigo">
+        « Ce témoignage est un don d'édification fraternelle, jamais une obligation. »
+      </div>
+<form class="space-y-6" id="consent-story-form" onsubmit="event.preventDefault(); submitForAudit();">
+<!-- Control 1 & 2: Ville & Date (Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Control 1: Ville de l'alliance -->
+<div class="space-y-2">
+<label class="block font-meta text-meta text-ink-secondary font-semibold" for="alliance-city">
+              1. Ville de célébration de l'alliance
+            </label>
+<div class="relative">
+<select class="w-full bg-surface-sand border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring rounded-lg px-3.5 py-2.5 font-body text-body text-ink-primary appearance-none pr-10" id="alliance-city">
+<option selected="" value="ouaga">Ouagadougou (Kadiogo)</option>
+<option value="bobo">Bobo-Dioulasso (Houet)</option>
+<option value="koudougou">Koudougou (Boulkiemdé)</option>
+<option value="fada">Fada N'Gourma (Gourma)</option>
+<option value="ouahigouya">Ouahigouya (Yatenga)</option>
+<option value="diaspora">Diaspora Burkinabè (Préciser)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-3 text-ink-secondary pointer-events-none" style="font-size: 20px;">expand_more</span>
+</div>
+<p class="font-meta text-caption text-ink-secondary">Seul le gouvernorat ou la cité sera mentionné publiquement.</p>
+</div>
+<!-- Control 2: Date de célébration -->
+<div class="space-y-2">
+<label class="block font-meta text-meta text-ink-secondary font-semibold" for="alliance-date">
+              2. Date de célébration du Nikah
+            </label>
+<div class="grid grid-cols-2 gap-2">
+<select class="w-full bg-surface-sand border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring rounded-lg px-3 py-2.5 font-body text-body text-ink-primary appearance-none" id="alliance-month">
+<option value="shawwal">Chawwal 1446</option>
+<option value="ramadan">Ramadan 1446</option>
+<option value="shaban">Cha'ban 1446</option>
+<option selected="" value="fevrier">Février 2025</option>
+<option value="janvier">Janvier 2025</option>
+</select>
+<input class="w-full bg-surface-sand border border-border-hairline rounded-lg px-3 py-2.5 font-body text-body text-ink-primary text-center" id="alliance-year" readonly="" type="text" value="2025"/>
+</div>
+<p class="font-meta text-caption text-ink-secondary">Permet l'inscription chronologique dans les annales.</p>
+</div>
+</div>
+<!-- Control 3: Pudeur des visages (Visual Modesty Selector) -->
+<div class="space-y-3 pt-2">
+<label class="block font-meta text-meta text-ink-secondary font-semibold">
+            3. Pudeur des visages &amp; Préservation de l'anonymat
+          </label>
+<div class="p-3 bg-staff-soft/60 rounded-lg border border-border-hairline flex items-center gap-2 text-meta text-staff mb-3">
+<span class="material-symbols-outlined" style="font-size: 18px;">shield</span>
+<span>Règle d'or : Aucun visage en clair n'est diffusé sans consentement explicite et double validation.</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Option A (Recommended) -->
+<label class="relative flex flex-col p-4 rounded-xl border-2 border-indigo bg-surface-sand/50 cursor-pointer hover:bg-surface-sand transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<input checked="" class="text-indigo focus:ring-indigo h-4 w-4" name="face_modesty" type="radio" value="blur_canonical"/>
+<span class="font-body-strong text-body-strong text-ink-primary">Option A (Recommandée)</span>
+</div>
+<span class="px-2 py-0.5 text-caption bg-gold text-indigo-deep font-semibold rounded">Honorifique</span>
+</div>
+<p class="mt-2 font-meta text-meta text-ink-secondary">
+                Portraits sous le <strong>Sceau de Pudeur</strong> : silhouette stylisée en tissu traditionnel (Faso Dan Fani) ou floutage canonique respectueux.
+              </p>
+<div class="mt-3 flex items-center gap-2 text-caption text-indigo font-semibold">
+<span class="material-symbols-outlined" style="font-size: 16px;">visibility_off</span>
+<span>Anonymat et barrière spirituelle préservés</span>
+</div>
+</label>
+<!-- Option B -->
+<label class="relative flex flex-col p-4 rounded-xl border border-border-hairline bg-surface-raised cursor-pointer hover:bg-surface-sand transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-2">
+<input class="text-indigo focus:ring-indigo h-4 w-4" name="face_modesty" type="radio" value="veiled_archive"/>
+<span class="font-body-strong text-body-strong text-ink-primary">Option B : Sobriété d'archives</span>
+</div>
+</div>
+<p class="mt-2 font-meta text-meta text-ink-secondary">
+                Photographies voilées d'archives (plans larges de la cérémonie familiale sans gros plan sur les traits ni indices d'intimité).
+              </p>
+<div class="mt-3 flex items-center gap-2 text-caption text-ink-secondary">
+<span class="material-symbols-outlined" style="font-size: 16px;">crop_original</span>
+<span>Sujet à examen préalable par le Conseil</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Control 4: Récit d'édification (Témoignage moral des époux) -->
+<div class="space-y-3 pt-2">
+<div class="flex items-center justify-between">
+<label class="block font-meta text-meta text-ink-secondary font-semibold" for="edification-story">
+              4. Récit d'édification (Témoignage fraternel sur la démarche)
+            </label>
+<span class="font-meta text-caption text-ink-secondary">Maximum 600 caractères</span>
+</div>
+<!-- Strict Rule Banner FR-100 -->
+<div class="p-3 bg-danger-soft/60 border border-danger/30 rounded-lg flex items-start gap-2.5 text-meta text-danger">
+<span class="material-symbols-outlined shrink-0 mt-0.5" style="font-size: 18px;">block</span>
+<p>
+<strong>Règle FR-100 :</strong> Interdiction formelle de publier des extraits de messagerie privée (No Chat excerpts), transcriptions directes ou confidences intimes de la khitba. Partagez uniquement les enseignements sur la patience, l'implication des tuteurs et l'esprit de concertation.
+            </p>
+</div>
+<textarea class="w-full bg-surface-sand border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring rounded-lg p-3.5 font-body text-body text-ink-primary placeholder:text-disabled leading-relaxed" id="edification-story" placeholder="« Par la grâce d'Allah et le soutien diligent de nos tuteurs respectifs, notre démarche au sein d'AnKanu a toujours été guidée par la clarté d'intention. Nous remercions particulièrement notre Wali pour ses conseils judicieux... »" rows="4"></textarea>
+<p class="font-meta text-caption text-ink-secondary flex items-center justify-between">
+<span>Ce texte fera l'objet d'une relecture conjointe avant soumission.</span>
+<span id="char-count">0 / 600</span>
+</p>
+</div>
+<!-- Control 5: Accord de la famille & des tuteurs (Wali) -->
+<div class="p-4 bg-surface-sand rounded-xl border border-border-hairline space-y-3">
+<label class="flex items-start gap-3 cursor-pointer">
+<input checked="" class="mt-1 h-4 w-4 rounded border-border-strong text-indigo focus:ring-indigo" id="wali-family-consent" required="" type="checkbox"/>
+<div class="space-y-1">
+<span class="font-body-strong text-body-strong text-ink-primary">
+                Accord préalable formel des tuteurs légaux (Wali) et des deux familles
+              </span>
+<p class="font-meta text-meta text-ink-secondary leading-relaxed">
+                Je confirme sous serment d'honneur avoir consulté le Wali (Oumar O.) et les anciens des deux familles. Ils ont expressément approuvé le principe de ce témoignage d'édification morale dans le Registre public AnKanu.
+              </p>
+</div>
+</label>
+</div>
+<!-- Control 6: Droit de refus souverain (Bouton silencieux / Veto unilateral) -->
+<div class="p-4 bg-surface rounded-xl border border-dashed border-border-strong/40 space-y-3">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-1">
+<h3 class="font-heading text-heading text-ink-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-ink-secondary" style="font-size: 18px;">visibility_off</span>
+<span>Droit de retrait &amp; Secret absolu des familles</span>
+</h3>
+<p class="font-meta text-meta text-ink-secondary max-w-xl">
+                À tout moment, vous pouvez refuser toute apparition dans le Showcase. L'union demeure bénie et valide dans la vie civile et religieuse ; le profil est immédiatement scellé en mode discret sans impact.
+              </p>
+</div>
+<button class="px-4 py-2 rounded-lg border border-danger text-danger hover:bg-danger-soft font-meta text-meta font-semibold transition-colors duration-150 shrink-0 flex items-center gap-1.5" onclick="triggerQuietRefusal()" type="button">
+<span class="material-symbols-outlined" style="font-size: 16px;">do_not_disturb_on</span>
+<span>Refuser toute publication</span>
+</button>
+</div>
+</div>
+<!-- 5. HOMOLOGATION & PUBLISHING PIPELINE (FR-141) -->
+<div class="pt-4 border-t border-border-hairline space-y-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="font-heading text-heading text-primary">Processus d'homologation préalable (FR-141)</span>
+<span class="px-2 py-0.5 rounded text-caption bg-staff-soft text-staff font-semibold">Comité Éthique</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+              Toute fiche validée bilatéralement est examinée manuellement par l'Opérateur assermenté afin de vérifier la stricte réserve spirituelle et l'absence de divulgation intime.
+            </p>
+</div>
+<!-- Step Progress Ribbon -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2">
+<div class="p-2.5 rounded-lg bg-surface-sand border border-gold text-center">
+<span class="font-meta text-caption text-indigo font-bold block">Étape 1</span>
+<span class="font-meta text-meta text-ink-primary font-semibold flex items-center justify-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-success" style="font-size: 14px;">check_circle</span> Double accord
+              </span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-sand border border-border-hairline text-center">
+<span class="font-meta text-caption text-ink-secondary block">Étape 2</span>
+<span class="font-meta text-meta text-ink-primary font-semibold flex items-center justify-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-gold" style="font-size: 14px;">family_restroom</span> Accord familial
+              </span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-sand border border-border-hairline text-center">
+<span class="font-meta text-caption text-ink-secondary block">Étape 3</span>
+<span class="font-meta text-meta text-ink-secondary flex items-center justify-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-ink-secondary" style="font-size: 14px;">rate_review</span> Revue Conseil
+              </span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-sand border border-border-hairline text-center opacity-70">
+<span class="font-meta text-caption text-ink-secondary block">Étape 4</span>
+<span class="font-meta text-meta text-ink-secondary flex items-center justify-center gap-1 mt-0.5">
+<span class="material-symbols-outlined" style="font-size: 14px;">menu_book</span> Sceau public
+              </span>
+</div>
+</div>
+</div>
+<!-- 6. ACTION BUTTONS -->
+<div class="pt-6 border-t border-border-hairline flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto px-5 py-3 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-body text-body font-semibold transition-colors duration-150 flex items-center justify-center gap-2" onclick="saveDraft()" type="button">
+<span class="material-symbols-outlined" style="font-size: 18px;">save</span>
+<span>Enregistrer en brouillon privé</span>
+</button>
+<div class="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-3">
+<button class="w-full sm:w-auto min-h-[48px] px-8 py-3 rounded-full bg-indigo text-ink-on-indigo hover:bg-indigo-deep font-body-strong text-body-strong font-semibold shadow-none transition-colors duration-150 flex items-center justify-center gap-2" id="submit-btn" type="submit">
+<span class="material-symbols-outlined text-gold" style="font-size: 20px;">gavel</span>
+<span>Soumettre pour homologation déontologique</span>
+</button>
+</div>
+</div>
+</form>
+</section>
+<!-- LIVE STATUS MODAL / BANNER SIMULATED CONTAINER (Interactive feedback) -->
+<div class="hidden p-4 rounded-xl border border-border-hairline bg-surface-raised space-y-2" id="status-feedback">
+<!-- Dynamic notification injected by simulator -->
+</div>
+</main>
+<!-- 7. FOOTER (Shared Component Footer) -->
+<footer class="bg-surface-sand border-t border-border-hairline mt-12">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="space-y-1 text-center md:text-left">
+<p class="font-meta text-meta text-primary font-semibold">AnKanu · Plateforme d'engagement matrimonial noble</p>
+<p class="font-meta text-caption text-ink-secondary">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè. Déclaration CIL Burkina Faso n°2024-912 · Hébergement souverain Scaleway.
+        </p>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-4 text-ink-secondary font-meta text-meta">
+<a class="hover:text-primary transition-colors" href="#">Confidentialité &amp; Données</a>
+<span class="text-border-hairline">·</span>
+<a class="hover:text-primary transition-colors" href="#">Tuteurs Légaux (Wali)</a>
+<span class="text-border-hairline">·</span>
+<a class="hover:text-primary transition-colors" href="#">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- SCRIPT FOR STATE SIMULATOR & INTERACTION (Vanilla JS) -->
+<script>
+    const storyInput = document.getElementById('edification-story');
+    const charCounter = document.getElementById('char-count');
+    const feedbackBox = document.getElementById('status-feedback');
+    const aminataBadge = document.getElementById('aminata-status-badge');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // Live character count
+    if (storyInput) {
+      storyInput.addEventListener('input', function() {
+        const len = this.value.length;
+        charCounter.textContent = `${len} / 600`;
+        if (len > 600) {
+          charCounter.classList.add('text-danger');
+        } else {
+          charCounter.classList.remove('text-danger');
+        }
+      });
+    }
+
+    // Canonical State Simulator switching logic
+    function setAuditState(state) {
+      // Reset button styles
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`sim-state-${i}`);
+        if (btn) {
+          btn.className = "px-2 py-1 rounded text-ink-on-indigo hover:text-gold whitespace-nowrap transition-colors";
+        }
+      }
+      const activeBtn = document.getElementById(`sim-state-${state}`);
+      if (activeBtn) {
+        activeBtn.className = "px-2 py-1 rounded bg-gold text-indigo-deep font-semibold whitespace-nowrap transition-colors";
+      }
+
+      feedbackBox.classList.remove('hidden');
+
+      if (state === 1) {
+        // Défaut
+        feedbackBox.innerHTML = `
+          <div class="flex items-center gap-2 text-indigo">
+            <span class="material-symbols-outlined">edit_note</span>
+            <strong class="font-heading text-heading">État 1 : Formulaire initial (Défaut)</strong>
+          </div>
+          <p class="font-meta text-meta text-ink-secondary">Le formulaire est ouvert à l'édition bilatérale. Aucune notification définitive n'a été transmise au registre.</p>
+        `;
+        aminataBadge.innerHTML = `<span class="material-symbols-outlined" style="font-size: 12px;">hourglass_top</span> En attente`;
+        aminataBadge.className = "px-2 py-0.5 rounded-full text-caption bg-gold-soft text-indigo font-semibold inline-flex items-center gap-1";
+      } else if (state === 2) {
+        // Refus unilatéral
+        feedbackBox.innerHTML = `
+          <div class="flex items-center gap-2 text-danger">
+            <span class="material-symbols-outlined">gavel</span>
+            <strong class="font-heading text-heading">État 2 : Droit de retrait unilatéral activé</strong>
+          </div>
+          <p class="font-meta text-meta text-danger">L'un des époux a exercé son droit de refus. Le Showcase public est verrouillé et inaccessible. Aucune donnée d'état civil ne peut être publiée.</p>
+        `;
+        aminataBadge.innerHTML = `<span class="material-symbols-outlined" style="font-size: 12px;">cancel</span> Veto exprimé`;
+        aminataBadge.className = "px-2 py-0.5 rounded-full text-caption bg-danger-soft text-danger font-semibold inline-flex items-center gap-1";
+      } else if (state === 3) {
+        // En attente Wali
+        feedbackBox.innerHTML = `
+          <div class="flex items-center gap-2 text-primary">
+            <span class="material-symbols-outlined">supervisor_account</span>
+            <strong class="font-heading text-heading">État 3 : En attente d'attestation Wali & Familles</strong>
+          </div>
+          <p class="font-meta text-meta text-ink-secondary">Les deux époux ont contresigné. Le dossier est en attente du quitus numérique d'Oumar O. (Wali principal).</p>
+        `;
+        aminataBadge.innerHTML = `<span class="material-symbols-outlined" style="font-size: 12px;">check</span> Signé`;
+        aminataBadge.className = "px-2 py-0.5 rounded-full text-caption bg-success-soft text-success font-semibold inline-flex items-center gap-1";
+      } else if (state === 4) {
+        // En cours d'homologation FR-141
+        feedbackBox.innerHTML = `
+          <div class="flex items-center gap-2 text-primary">
+            <span class="material-symbols-outlined">fact_check</span>
+            <strong class="font-heading text-heading">État 4 : Soumis & En cours d'homologation déontologique (FR-141)</strong>
+          </div>
+          <p class="font-meta text-meta text-ink-secondary">Le récit est entre les mains du Comité Consultatif Éthique pour examen de pudeur et de sincérité.</p>
+        `;
+      } else if (state === 5) {
+        // Succès homologué
+        feedbackBox.innerHTML = `
+          <div class="flex items-center gap-2 text-success">
+            <span class="material-symbols-outlined">military_tech</span>
+            <strong class="font-heading text-heading">État 5 : Succès Homologué (Inscrit au Registre Public)</strong>
+          </div>
+          <p class="font-meta text-meta text-ink-secondary">Le témoignage est publié sous le Sceau de Pudeur dans le Showcase officiel d'AnKanu. Baraka Allahu Lakuma.</p>
+        `;
+      }
+    }
+
+    function triggerQuietRefusal() {
+      if (confirm("Confirmez-vous le retrait total de publication ? Cette action garantit le secret absolu de votre alliance dans le Showcase.")) {
+        setAuditState(2);
+      }
+    }
+
+    function saveDraft() {
+      alert("Votre brouillon de témoignage a été sauvegardé dans votre espace conjugal sécurisé.");
+    }
+
+    function submitForAudit() {
+      setAuditState(4);
+      feedbackBox.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body></html>

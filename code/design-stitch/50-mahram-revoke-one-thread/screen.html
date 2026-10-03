@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-container" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Révocation sélective d'octroi de tutelle (FR-074)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 exclusively -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#3e190c",
+            "primary-container": "#1f3a5f",
+            "tertiary-container": "#582e20",
+            "on-background": "#1e1b14",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#8ba4cf",
+            "inverse-primary": "#aec8f4",
+            "on-secondary-container": "#785d1b",
+            "inverse-surface": "#333028",
+            "secondary-container": "#fdd88a",
+            "on-tertiary-fixed": "#341106",
+            "secondary-fixed": "#ffdf9c",
+            "secondary-fixed-dim": "#e5c276",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c4c6cf",
+            "surface-container-high": "#eee7db",
+            "on-primary-fixed-variant": "#2d476d",
+            "surface-container-low": "#faf3e6",
+            "surface-container-highest": "#e9e2d5",
+            "inverse-on-surface": "#f7f0e3",
+            "on-surface": "#1e1b14",
+            "primary": "#032448",
+            "tertiary-fixed": "#ffdbd0",
+            "on-secondary-fixed-variant": "#5b4300",
+            "secondary": "#755b18",
+            "on-tertiary-container": "#d29582",
+            "surface": "#fff9ee",
+            "primary-fixed": "#d5e3ff",
+            "primary-fixed-dim": "#aec8f4",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed-variant": "#683b2c",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#001c3b",
+            "on-primary": "#ffffff",
+            "surface-tint": "#465f86",
+            "background": "#fff9ee",
+            "on-secondary-fixed": "#251a00",
+            "outline": "#74777f",
+            "error-container": "#ffdad6",
+            "surface-variant": "#e9e2d5",
+            "surface-dim": "#e0d9cd",
+            "on-surface-variant": "#43474e",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "surface-container": "#f4ede0",
+            "tertiary-fixed-dim": "#f9b7a3",
+            "surface-bright": "#fff9ee"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin-desktop": "3rem",
+            "gutter": "1.25rem",
+            "gutter-desktop": "2rem",
+            "space-xl": "2.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["\"Source Serif 4\""],
+            "label-md": ["\"Source Sans 3\""],
+            "label-sm": ["\"Source Sans 3\""],
+            "display-lg": ["\"Source Serif 4\""],
+            "headline-sm": ["\"Source Serif 4\""],
+            "body-md": ["\"Source Sans 3\""],
+            "body-sm": ["\"Source Sans 3\""],
+            "headline-md": ["\"Source Serif 4\""],
+            "body-lg": ["\"Source Sans 3\""],
+            "display-lg-mobile": ["\"Source Serif 4\""]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+            "label-md": ["13px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }],
+            "body-lg": ["17px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-full flex flex-col font-body-md text-body-md text-on-surface bg-surface-container antialiased selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- Interactive States Simulator Bar (Canonical Evaluation Matrix) -->
+<aside aria-label="Simulateur d'états d'évaluation FR-074" class="w-full bg-inverse-surface text-inverse-on-surface px-margin md:px-margin-desktop py-space-xs text-label-sm font-label-sm flex flex-wrap items-center justify-between border-b border-surface-variant/30">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary-fixed text-[16px]">tune</span>
+<span class="font-semibold text-secondary-fixed">Simulateur canonique FR-074 :</span>
+<span class="opacity-80">Testez la réaction du pupitre selon les transitions d'état</span>
+</div>
+<div aria-label="États du système" class="flex items-center gap-1.5 overflow-x-auto py-1" role="tablist">
+<button class="px-2.5 py-1 rounded bg-secondary-fixed text-on-secondary-fixed font-semibold transition-all" id="tab-active" onclick="setSystemState('active')">
+        1. État Actif (Sélectif)
+      </button>
+<button class="px-2.5 py-1 rounded bg-inverse-surface hover:bg-surface-variant/20 text-inverse-on-surface transition-all" id="tab-loading" onclick="setSystemState('loading')">
+        2. Révocation en cours
+      </button>
+<button class="px-2.5 py-1 rounded bg-inverse-surface hover:bg-surface-variant/20 text-inverse-on-surface transition-all" id="tab-error" onclick="setSystemState('error')">
+        3. Erreur passerelle
+      </button>
+<button class="px-2.5 py-1 rounded bg-inverse-surface hover:bg-surface-variant/20 text-inverse-on-surface transition-all" id="tab-success" onclick="setSystemState('success')">
+        4. Succès canonique
+      </button>
+</div>
+</aside>
+<!-- TOP APP BAR (Shared Components: TopNavBar) -->
+<header class="w-full bg-surface shadow-sm sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-margin md:px-margin-desktop h-16 flex items-center justify-between">
+<!-- Brand & Mahram Space Anchor -->
+<div class="flex items-center gap-space-md">
+<a class="font-headline-md text-headline-md font-semibold text-primary tracking-normal flex items-center gap-2" href="#salons">
+<span>AnKanu</span>
+<span class="text-label-sm font-label-sm uppercase tracking-wider px-2 py-0.5 rounded bg-surface-container-high text-secondary border border-secondary/20">
+            Espace Tuteur Légal
+          </span>
+</a>
+</div>
+<!-- Mahram Nav Items (Prohibition of 'Découvrir' and 'Invitations') -->
+<nav aria-label="Navigation Tuteur Légal" class="hidden md:flex items-center gap-space-lg text-label-md font-label-md">
+<!-- Exact label match: 'Salons sous tutelle' active -->
+<a aria-current="page" class="text-primary border-b-2 border-primary pb-1 font-semibold flex items-center gap-1.5" href="#salons">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+          Salons sous tutelle
+        </a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150 flex items-center gap-1.5" href="#attestations">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+          Attestations d'honneur
+        </a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors duration-150 flex items-center gap-1.5" href="#assistance">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+          Assistance déontologique
+        </a>
+</nav>
+<!-- Trailing Identity & Actions -->
+<div class="flex items-center gap-space-md">
+<div class="hidden lg:flex items-center gap-2 pl-space-md border-l border-surface-variant">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<div class="flex flex-col text-left">
+<span class="font-label-md text-label-md text-primary leading-tight font-semibold">El Hadj Ousmane Sawadogo</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Tuteur légal déclaré · Wali</span>
+</div>
+</div>
+<button aria-label="Protocole Wali" class="p-2 rounded hover:bg-surface-container text-primary transition-all duration-200" type="button">
+<span class="material-symbols-outlined text-[20px]">policy</span>
+</button>
+<button aria-label="Notifications" class="p-2 rounded hover:bg-surface-container text-primary relative transition-all duration-200" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary"></span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN VIEWPORT (Fixed-center column, max-width 768px as mandated by DESIGN.md) -->
+<main class="flex-grow w-full max-w-[768px] mx-auto px-margin md:px-margin-desktop py-space-xl">
+<!-- Solemn Legal Breadcrumb -->
+<nav aria-label="Fil d'Ariane solennel" class="mb-space-md flex flex-wrap items-center gap-1.5 text-label-sm font-label-sm text-on-surface-variant">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#salons">
+<span class="material-symbols-outlined text-[14px]">arrow_back</span>
+        Salons sous tutelle
+      </a>
+<span class="text-outline-variant">/</span>
+<span>Gestion des octrois canoniques</span>
+<span class="text-outline-variant">/</span>
+<span class="text-primary font-semibold">Retrait d'octroi de présence</span>
+<span class="ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-high text-secondary border border-secondary/20">
+<span class="material-symbols-outlined text-[12px]">security</span>
+        Protocole FR-074 · Souveraineté de la tutelle
+      </span>
+</nav>
+<!-- Header Section -->
+<header class="mb-space-xl border-b border-surface-variant/80 pb-space-lg">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 mb-space-sm rounded bg-surface border border-secondary/40 text-on-surface text-label-sm font-label-sm">
+<span class="material-symbols-outlined text-secondary text-[16px]" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<span>Procédure de désengagement sélectif</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight mb-space-xs">
+        Révocation ciblée de la présence tutélaire
+      </h1>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        En votre qualité de tuteur légal (Mahram), vous exercez votre libre appréciation canonique pour vous retirer de cet échange sans interrompre les autres correspondances autorisées de votre pupille.
+      </p>
+</header>
+<!-- CARD: Discussion Concernée (Raised Surface #FFFBF4, Hairline #D9CDB8) -->
+<section aria-labelledby="target-thread-title" class="bg-surface-container-lowest border border-surface-variant/90 rounded-lg p-space-lg shadow-sm mb-space-lg">
+<div class="flex items-start justify-between gap-space-md mb-space-md pb-space-sm border-b border-surface-variant/50">
+<div>
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-secondary font-semibold">Salon de pourparlers ciblé</span>
+<h2 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2 mt-0.5" id="target-thread-title">
+<span>Tahir_Ouaga</span>
+<span class="text-on-surface-variant font-body-md font-normal text-body-sm">(29 ans · Ingénieur hydraulique · Ouagadougou)</span>
+</h2>
+</div>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-on-surface-variant block">Pupille sous tutelle</span>
+<span class="font-label-md text-label-md font-semibold text-primary">Aminata_O (Sœur)</span>
+</div>
+</div>
+<!-- Current Tutelage State Display -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md text-body-sm font-body-sm">
+<div class="p-space-md rounded bg-surface-container-low border border-surface-variant/60">
+<div class="flex items-center gap-2 text-primary font-semibold mb-1">
+<span class="material-symbols-outlined text-[18px] text-secondary">visibility</span>
+<span>Statut de présence actuel</span>
+</div>
+<p class="text-on-surface-variant mb-2">
+            La bannière canonique suivante est actuellement affichée aux correspondants :
+          </p>
+<div class="p-2.5 rounded bg-surface-container border border-secondary/30 flex items-center gap-2 text-label-md font-label-md text-primary">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified_user</span>
+<span>« Un wali lit cette discussion »</span>
+</div>
+</div>
+<div class="p-space-md rounded bg-surface-container-low border border-surface-variant/60">
+<div class="flex items-center gap-2 text-primary font-semibold mb-1">
+<span class="material-symbols-outlined text-[18px] text-secondary">lock_reset</span>
+<span>Périmètre de la révocation</span>
+</div>
+<p class="text-on-surface-variant">
+            Ce désengagement s'applique <strong class="text-primary font-semibold">exclusivement</strong> à ce fil.
+          </p>
+<p class="text-on-surface-variant mt-1 text-label-sm font-label-sm">
+            Vos autres supervisions (notamment le salon actif avec <span class="font-semibold text-primary">Ibrahim_Kdg</span>) demeurent sous votre autorité intacte.
+          </p>
+</div>
+</div>
+</section>
+<!-- EXPLANATORY & INTEGRITY BOX (FR-074 Specifications) -->
+<section aria-labelledby="rules-and-guarantees" class="mb-space-xl space-y-space-md">
+<h3 class="sr-only" id="rules-and-guarantees">Règles canoniques et garanties d'indépendance</h3>
+<!-- Guarantee 1: Strict Independence of Grants -->
+<div class="flex gap-space-md p-space-md bg-surface-container-low border border-surface-variant/70 rounded">
+<div class="flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-secondary text-[24px]">balance</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary font-semibold mb-0.5">
+            Garantie d'indépendance des octrois (Norme FR-074)
+          </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Le retrait de votre présence de ce salon spécifique n'affecte en aucun cas la validité du dossier matrimonial d'Aminata_O, ni sa réputation familiale. Aucune mention punitive ni mention de blâme n'est attachée au compte du prétendant ni à celui de la postulante.
+          </p>
+</div>
+</div>
+<!-- Guarantee 2: Denylist Infrastructure & Immediate Effect -->
+<div class="flex gap-space-md p-space-md bg-surface-container-low border border-surface-variant/70 rounded">
+<div class="flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-secondary text-[24px]">enhanced_encryption</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-primary font-semibold mb-0.5">
+            Source de vérité et déconnexion immédiate (≤ 60s)
+          </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Votre décision entraîne l'inscription de l'identifiant du salon dans la <em>denylist</em> d'infrastructure matrimoniale. Le flux chiffré de lecture sera révoqué instantanément et la bannière tutélaire disparaîtra immédiatement de la vue du frère Tahir_Ouaga.
+          </p>
+</div>
+</div>
+</section>
+<!-- STATE RENDERING CONTAINERS (Controlled by Simulator) -->
+<!-- 1. ACTIVE FORM STATE (Default) -->
+<div class="space-y-space-lg" id="view-active">
+<div class="bg-surface-container-lowest border border-surface-variant/90 rounded-lg p-space-lg shadow-sm">
+<div class="flex items-center gap-space-sm text-tertiary-container mb-space-sm font-label-md font-semibold">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+<span>Confirmation de cessation de vigilance</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-lg">
+          Veuillez confirmer que vous ne désirez plus exercer de regard d'honneur sur cette entrevue spécifique. Cette action retirera définitivement ce salon de votre pupitre de contrôle.
+        </p>
+<!-- Action cluster: Strict compliance with quiet decline pattern & 48px height -->
+<div class="flex flex-col sm:flex-row-reverse items-center justify-between gap-space-md pt-space-sm border-t border-surface-variant/60">
+<!-- Button quiet pattern: Respectful revocation without shaming -->
+<button class="w-full sm:w-auto h-12 px-space-lg rounded bg-tertiary-container hover:bg-tertiary text-on-tertiary font-label-md text-label-md transition-all duration-150 flex items-center justify-center gap-2 active:scale-[0.99] shadow-sm" onclick="triggerRevocation()" type="button">
+<span class="material-symbols-outlined text-[18px]">person_remove</span>
+<span>Retirer mon octroi pour ce salon uniquement</span>
+</button>
+<!-- Safe return action (44px/48px height) -->
+<a class="w-full sm:w-auto h-12 px-space-lg rounded border border-surface-variant hover:border-outline text-primary font-label-md text-label-md transition-all duration-150 flex items-center justify-center gap-2 bg-transparent" href="#salons">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Maintenir la supervision active</span>
+</a>
+</div>
+</div>
+<!-- Dignity & Ethics Micro-copy -->
+<div class="text-center font-body-sm text-body-sm text-on-surface-variant flex items-center justify-center gap-1.5 opacity-90">
+<span class="material-symbols-outlined text-[16px] text-secondary">handshake</span>
+<span>Procédure conforme au rite de réserve et à la souveraineté du tuteur légal.</span>
+</div>
+</div>
+<!-- 2. LOADING STATE (In-Flight Transaction) -->
+<div class="hidden" id="view-loading">
+<div class="bg-surface-container-lowest border border-surface-variant/90 rounded-lg p-space-xl text-center shadow-sm">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-container-high text-primary mb-space-md animate-pulse">
+<span class="material-symbols-outlined text-[28px] animate-spin">sync</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-space-xs">
+          Révocation canonique en cours d'enregistrement...
+        </h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-md mx-auto mb-space-md">
+          Mise à jour de la table d'octroi et retrait de la clé de déchiffrement tutélaire sur le salon de pourparlers Tahir_Ouaga.
+        </p>
+<div class="w-48 h-1.5 bg-surface-container mx-auto rounded-full overflow-hidden">
+<div class="w-2/3 h-full bg-primary rounded-full animate-indeterminate"></div>
+</div>
+<span class="block mt-space-md text-label-sm font-label-sm text-outline">
+          Révocation atomique FR-074 en cours de propagation (≤ 60s)
+        </span>
+</div>
+</div>
+<!-- 3. ERROR STATE (Gateway Failure with idempotent retry) -->
+<div class="hidden" id="view-error">
+<div class="bg-surface-container-lowest border border-error/50 rounded-lg p-space-lg shadow-sm">
+<div class="flex items-start gap-space-md mb-space-md">
+<div class="p-2 rounded bg-error-container text-on-error-container mt-0.5">
+<span class="material-symbols-outlined text-[24px]">cloud_off</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-1">
+              Erreur de liaison avec la passerelle souveraine
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              La passerelle chiffrée n'a pas pu valider immédiatement l'inscription du fil dans la denylist d'infrastructure. Par précaution stricte, le salon demeure actuellement sous votre supervision nominale.
+            </p>
+</div>
+</div>
+<div class="p-space-md rounded bg-surface-container border border-surface-variant/60 mb-space-lg text-body-sm font-body-sm">
+<span class="font-semibold text-primary block mb-0.5">Intégrité de la denylist :</span>
+          L'état local n'a pas été altéré. Vous pouvez relancer la révocation sans risque de collision ou revenir ultérieurement.
+        </div>
+<div class="flex flex-col sm:flex-row-reverse items-center justify-between gap-space-md">
+<button class="w-full sm:w-auto h-12 px-space-lg rounded bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md transition-all flex items-center justify-center gap-2" onclick="triggerRevocation()" type="button">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+<span>Réessayer la transmission au registre</span>
+</button>
+<a class="w-full sm:w-auto h-12 px-space-lg rounded border border-surface-variant text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center justify-center" href="#salons">
+            Différer et revenir aux salons
+          </a>
+</div>
+</div>
+</div>
+<!-- 4. SUCCESS STATE (Canonical Outcome) -->
+<div class="hidden" id="view-success">
+<div class="bg-surface-container-lowest border border-secondary/40 rounded-lg p-space-xl shadow-sm text-center">
+<div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-surface-container text-secondary mb-space-md">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-space-xs">
+          Révocation de présence actée avec dignité
+        </h3>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-lg mx-auto mb-space-lg">
+          Votre octroi de présence sur le salon avec <strong class="text-primary">Tahir_Ouaga</strong> est désormais clos. La bannière tutélaire a été retirée du fil de discussion.
+        </p>
+<!-- Status Summary Confirmation -->
+<div class="max-w-md mx-auto text-left p-space-md rounded bg-surface-container-low border border-surface-variant/70 mb-space-xl space-y-2 text-body-sm font-body-sm">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>
+<span>Salon retiré de votre espace de vigilance</span>
+</div>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>
+<span>Bannière « Un wali lit cette discussion » révoquée côté prétendant</span>
+</div>
+<div class="flex items-center gap-2 text-primary font-semibold">
+<span class="material-symbols-outlined text-[18px] text-secondary">shield</span>
+<span>Vos autres mandats (ex: Ibrahim_Kdg) demeurent protégés</span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row justify-center gap-space-md">
+<a class="h-12 px-space-xl rounded bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md transition-all flex items-center justify-center gap-2 shadow-sm" href="#salons">
+<span class="material-symbols-outlined text-[18px]">forum</span>
+<span>Retourner aux salons sous tutelle</span>
+</a>
+</div>
+</div>
+</div>
+</main>
+<!-- FOOTER (Shared Components: Footer) -->
+<footer class="mt-auto bg-surface-container-low border-t border-outline-variant">
+<div class="w-full max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-xl flex flex-col md:flex-row justify-between items-center gap-space-lg text-body-sm font-body-sm text-on-surface-variant">
+<!-- Brand & Jurisdictional Anchor -->
+<div class="flex flex-col max-w-xl text-center md:text-left">
+<div class="font-headline-sm text-headline-sm font-semibold text-primary mb-1">
+          AnKanu Matrimonial
+        </div>
+<p class="text-label-sm font-label-sm leading-relaxed">
+          © 2025 AnKanu Matrimonial. Tous droits réservés. Plateforme de ta'aruf noble et gouvernance matrimoniale selon les rites authentiques et le droit burkinabè.
+        </p>
+</div>
+<!-- Legal and Compliance Links -->
+<nav aria-label="Liens réglementaires" class="flex flex-wrap justify-center md:justify-end gap-x-space-md gap-y-2 text-label-sm font-label-sm">
+<a class="hover:text-primary underline underline-offset-4 transition-colors duration-150" href="#charte">
+          Charte des Tuteurs (Wali)
+        </a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors duration-150" href="#pudeur">
+          Pudeur &amp; Chaperonnage
+        </a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors duration-150" href="#mentions">
+          Mentions Légales
+        </a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors duration-150" href="#cil">
+          Conformité CIL Burkina Faso
+        </a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors duration-150" href="#scaleway">
+          Hébergement Souverain Scaleway (Paris / Ouagadougou)
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Light Vanilla JavaScript for Interactive State Evaluation -->
+<script>
+    function setSystemState(state) {
+      // Toggle views
+      const views = ['active', 'loading', 'error', 'success'];
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        const tab = document.getElementById('tab-' + v);
+        if (v === state) {
+          el.classList.remove('hidden');
+          tab.classList.remove('bg-inverse-surface', 'text-inverse-on-surface');
+          tab.classList.add('bg-secondary-fixed', 'text-on-secondary-fixed', 'font-semibold');
+        } else {
+          el.classList.add('hidden');
+          tab.classList.remove('bg-secondary-fixed', 'text-on-secondary-fixed', 'font-semibold');
+          tab.classList.add('bg-inverse-surface', 'text-inverse-on-surface');
+        }
+      });
+    }
+
+    function triggerRevocation() {
+      setSystemState('loading');
+      // Simulate canonical atomic revocation in-flight
+      setTimeout(() => {
+        setSystemState('success');
+      }, 1400);
+    }
+  </script>
+</body></html>

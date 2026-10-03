@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Contact-share interstitial (FR-068 / AD-17)</title>
+<!-- Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "secondary-fixed-dim": "#e5c276",
+            "surface-tint": "#465f86",
+            "blur-wash": "#C8BBA6",
+            "tertiary-fixed-dim": "#abc9f3",
+            "error": "#ba1a1a",
+            "surface-container": "#f4ede0",
+            "surface-variant": "#e9e2d5",
+            "primary-fixed": "#d5e3ff",
+            "ink-on-indigo": "#F4EDE0",
+            "staff-soft": "#EFE4DC",
+            "primary": "#032448",
+            "danger": "#8B3A3A",
+            "border-strong": "#6F624C",
+            "secondary": "#755b18",
+            "focus-ring": "#1F3A5F",
+            "tertiary-fixed": "#d3e4ff",
+            "on-surface": "#1e1b14",
+            "secondary-container": "#fdd88a",
+            "primary-fixed-dim": "#aec8f4",
+            "on-tertiary": "#ffffff",
+            "mihrab": "#2C4A6E",
+            "on-secondary-container": "#785d1b",
+            "surface-container-highest": "#e9e2d5",
+            "error-container": "#ffdad6",
+            "indigo-deep": "#15283F",
+            "surface": "#fff9ee",
+            "gold": "#C4A35A",
+            "secondary-fixed": "#ffdf9c",
+            "inverse-on-surface": "#f7f0e3",
+            "gold-soft": "#E8D5A3",
+            "surface-dim": "#e0d9cd",
+            "surface-indigo": "#15283F",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-secondary-fixed": "#251a00",
+            "on-error-container": "#93000a",
+            "surface-container-lowest": "#ffffff",
+            "surface-bright": "#fff9ee",
+            "ink-primary": "#1B2433",
+            "border-hairline": "#D9CDB8",
+            "outline": "#74777f",
+            "surface-sand": "#F4EDE0",
+            "ink-secondary": "#5C5346",
+            "indigo": "#1F3A5F",
+            "on-background": "#1e1b14",
+            "success-soft": "#DCE6DE",
+            "tertiary-container": "#1b3b5e",
+            "on-surface-variant": "#43474e",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed": "#001c38",
+            "surface-raised": "#FFFBF4",
+            "success": "#3D5C45",
+            "outline-variant": "#c4c6cf",
+            "inverse-primary": "#aec8f4",
+            "background": "#fff9ee",
+            "disabled": "#B5A894",
+            "surface-container-low": "#faf3e6",
+            "on-tertiary-container": "#88a5ce",
+            "staff": "#6B3D2E",
+            "on-primary-fixed-variant": "#2d476d",
+            "tertiary": "#002546",
+            "primary-container": "#1f3a5f",
+            "on-primary-fixed": "#001c3b",
+            "inverse-surface": "#333028",
+            "on-primary-container": "#8ba4cf",
+            "surface-container-high": "#eee7db",
+            "on-secondary": "#ffffff",
+            "danger-soft": "#F3E0DC"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "5": "24px",
+            "7": "48px",
+            "6": "32px",
+            "2": "8px",
+            "space-sm": "0.5rem",
+            "4": "16px",
+            "margin": "1rem",
+            "space-md": "1rem",
+            "screen-pad": "16px",
+            "1": "4px",
+            "gutter": "16px",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "3": "12px"
+          },
+          fontFamily: {
+            title: ['"Source Serif 4", Georgia, serif'],
+            body: ['"Source Sans 3", system-ui, sans-serif'],
+            "body-strong": ['"Source Sans 3", system-ui, sans-serif'],
+            meta: ['"Source Sans 3", system-ui, sans-serif'],
+            heading: ['"Source Serif 4", Georgia, serif'],
+            display: ['"Source Serif 4", Georgia, serif'],
+            caption: ['"Source Sans 3", system-ui, sans-serif']
+          },
+          fontSize: {
+            title: ['22px', { lineHeight: '1.25', fontWeight: '600' }],
+            body: ['16px', { lineHeight: '1.5', fontWeight: '400' }],
+            "body-strong": ['16px', { lineHeight: '1.5', fontWeight: '600' }],
+            meta: ['13px', { lineHeight: '1.4', letterSpacing: '0.01em', fontWeight: '500' }],
+            heading: ['18px', { lineHeight: '1.3', fontWeight: '600' }],
+            display: ['28px', { lineHeight: '1.2', letterSpacing: '-0.01em', fontWeight: '600' }],
+            caption: ['12px', { lineHeight: '1.4', fontWeight: '400' }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-surface-sand text-ink-primary font-body flex flex-col justify-between antialiased selection:bg-gold-soft selection:text-ink-primary">
+<!-- ================= TOP APP BAR (Shared Component Anchor) ================= -->
+<header class="w-full bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab sticky top-0 z-40">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center space-x-6">
+<a class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-gold" style="font-variation-settings: 'FILL' 1;">shield</span>
+          AnKanu
+        </a>
+<nav class="hidden md:flex items-center space-x-5 text-meta">
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Découvrir</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Invitations</a>
+<a class="text-primary dark:text-gold font-body-strong border-b-2 border-primary dark:border-gold pb-1 flex items-center gap-1.5" href="#">
+<span>Discussions</span>
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Profil</a>
+</nav>
+</div>
+<!-- Mahram / Wali Chaperone Presence Anchor -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 bg-surface-sand px-3 py-1.5 rounded-full border border-border-hairline text-meta text-ink-secondary">
+<span class="material-symbols-outlined text-indigo text-sm" style="font-variation-settings: 'FILL' 1;">supervised_user_circle</span>
+<span class="font-meta font-medium">Wali notifié : <strong class="text-ink-primary font-semibold">Oumar O.</strong></span>
+</div>
+<a class="hidden sm:inline-flex text-meta text-ink-secondary hover:text-ink-primary transition-colors" href="#">
+          Charte d'Honneur
+        </a>
+</div>
+</div>
+</header>
+<!-- ================= MAIN CANVAS WITH CONTEXTUAL INTERSTITIAL ================= -->
+<main class="flex-grow w-full max-w-4xl mx-auto px-screen-pad py-6 relative">
+<!-- UX Audit State Simulator Bar (FR-068 / AD-17 State Verification) -->
+<div class="mb-5 bg-surface-raised border border-border-hairline rounded-xl p-3 flex flex-wrap items-center justify-between gap-2 shadow-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-base">rule</span>
+<span class="font-meta text-meta text-ink-secondary">Simulateur d'états d'agrément (Audit UX) :</span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5">
+<button class="px-2.5 py-1 rounded text-caption font-meta font-medium bg-indigo text-ink-on-indigo transition-colors" id="btn-state-1" onclick="setAuditState(1)">
+          1. Aucun accord
+        </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta font-medium bg-surface-sand text-ink-secondary border border-border-hairline hover:bg-surface-raised transition-colors" id="btn-state-2" onclick="setAuditState(2)">
+          2. En cours (Opt-in)
+        </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta font-medium bg-surface-sand text-ink-secondary border border-border-hairline hover:bg-surface-raised transition-colors" id="btn-state-3" onclick="setAuditState(3)">
+          3. Accord unilatéral
+        </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta font-medium bg-surface-sand text-ink-secondary border border-border-hairline hover:bg-surface-raised transition-colors" id="btn-state-4" onclick="setAuditState(4)">
+          4. Accord bilatéral
+        </button>
+</div>
+</div>
+<!-- Background Chat Context (Delineated, soft-blurred under the interstitial folio) -->
+<div class="relative rounded-xl border border-border-hairline bg-surface-raised/60 p-5 mb-4 overflow-hidden select-none opacity-40 blur-[0.8px] pointer-events-none">
+<div class="flex items-center justify-between pb-3 border-b border-border-hairline mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-indigo text-gold flex items-center justify-center font-heading text-heading">
+            A
+          </div>
+<div>
+<div class="font-heading text-heading text-ink-primary">Aminata S.</div>
+<div class="font-caption text-caption text-ink-secondary">Ta'aruf actif • Suivi par Wali : Boureima S.</div>
+</div>
+</div>
+<div class="text-caption font-meta text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">verified</span> Protocole certifié
+        </div>
+</div>
+<div class="space-y-3 font-body text-body text-ink-secondary">
+<div class="max-w-[70%] bg-surface-sand p-3.5 rounded-[20px] rounded-tl-sm border border-border-hairline text-ink-primary">
+          As-salamu alaykum mon frère. Mon tuteur et moi-même avons bien pris connaissance de vos aspirations familiales.
+        </div>
+<div class="max-w-[70%] ml-auto bg-surface-indigo text-ink-on-indigo p-3.5 rounded-[20px] rounded-tr-sm">
+          Wa alaykum as-salam wa rahmatullah ma sœur. C'est un réel honneur. Nos intentions sont claires devant nos aînés.
+        </div>
+<div class="max-w-[75%] ml-auto bg-danger-soft text-danger p-3.5 rounded-[20px] border border-danger/20 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">block</span>
+<span>Message retenu : <em>« Si possible, contactez-moi au +226 70 24 •• 84 ou wa.me/226... »</em></span>
+</div>
+</div>
+</div>
+<!-- ================= THE CORE INTERSTITIAL MODAL / RAISED SHEET ================= -->
+<!-- Trigger: CONTACT_SHARE_REQUIRED (FR-068 / AD-17) -->
+<div class="relative bg-surface-raised border border-border-hairline rounded-xl shadow-sm overflow-hidden z-20 transition-all duration-300">
+<!-- Canonical Frame Header (Indigo & Gold Trim) -->
+<div class="bg-surface-indigo text-ink-on-indigo px-5 py-4 border-b border-mihrab flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-mihrab flex items-center justify-center text-gold">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<div>
+<div class="font-meta text-meta tracking-wider text-gold-soft uppercase">Protocole de Partage des Coordonnées</div>
+<div class="font-caption text-caption text-surface-tint">Réf : FR-068 / AD-17 • Procédure de convenance maritale</div>
+</div>
+</div>
+<div class="hidden sm:flex items-center gap-1.5 bg-indigo px-2.5 py-1 rounded-full border border-mihrab text-caption font-meta text-gold-soft">
+<span class="material-symbols-outlined text-xs">verified_user</span>
+<span>Cadre Wali Supervisé</span>
+</div>
+</div>
+<!-- Inner Sheet Body -->
+<div class="p-6 md:p-8 space-y-6">
+<!-- Exact Mandated Label as Lead Headline -->
+<div class="space-y-2 text-center max-w-xl mx-auto">
+<div class="inline-flex items-center justify-center p-2 rounded-full bg-gold-soft/30 text-secondary mb-1">
+<span class="material-symbols-outlined text-2xl">handshake</span>
+</div>
+<h1 class="font-title text-title md:text-display text-ink-primary font-semibold tracking-tight">
+            « Les numéros et WhatsApp attendent l’accord des deux. »
+          </h1>
+<p class="font-body text-body text-ink-secondary">
+            Sur AnKanu, la préservation de la pudeur et l'implication sereine des tuteurs légaux (<em class="italic">Wali</em>) interdisent l'échange unilatéral ou précipité de coordonnées directes.
+          </p>
+</div>
+<!-- Intercepted Excerpt Banner (Direct Contact Attempt) -->
+<div class="bg-surface-sand rounded-lg border border-border-hairline p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger mt-0.5" style="font-variation-settings: 'FILL' 1;">pause_circle</span>
+<div>
+<div class="font-meta text-meta text-ink-primary font-semibold">Élément intercepté par le protocole</div>
+<div class="font-body text-body text-ink-secondary font-mono text-sm tracking-wide mt-0.5">
+                « +226 70 •• •• 84 » <span class="text-caption font-sans text-ink-secondary/70">(ou lien WhatsApp externe)</span>
+</div>
+</div>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-danger-soft text-danger text-caption font-meta self-start sm:self-center">
+<span class="w-1.5 h-1.5 rounded-full bg-danger animate-pulse"></span>
+<span>Émission suspendue — Consentement requis</span>
+</div>
+</div>
+<!-- Dynamic Mutual Consent Status Matrix -->
+<div class="bg-surface border border-border-hairline rounded-xl p-5 space-y-4">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<span class="font-heading text-heading text-ink-primary">Registre de double assentiment</span>
+<span class="font-caption text-caption text-ink-secondary">Règle de symétrie obligatoire</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Party A: Current Member (You) -->
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-4 transition-all" id="card-party-a">
+<div class="flex items-center justify-between mb-2">
+<span class="font-meta text-meta text-ink-secondary">Votre position (Demandeur)</span>
+<span class="inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline" id="badge-party-a">
+<span class="material-symbols-outlined text-xs">hourglass_empty</span>
+                  En attente
+                </span>
+</div>
+<div class="font-body-strong text-ink-primary flex items-center gap-2">
+<span>Vous (Ibrahim D.)</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-1" id="desc-party-a">
+                Vous n'avez pas encore officialisé votre souhait d'échanger vos coordonnées privées.
+              </p>
+</div>
+<!-- Party B: Other Member -->
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-4 transition-all" id="card-party-b">
+<div class="flex items-center justify-between mb-2">
+<span class="font-meta text-meta text-ink-secondary">Partie correspondante</span>
+<span class="inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline" id="badge-party-b">
+<span class="material-symbols-outlined text-xs">lock</span>
+                  Non consultée
+                </span>
+</div>
+<div class="font-body-strong text-ink-primary flex items-center gap-2">
+<span>Aminata S.</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-1" id="desc-party-b">
+                L'invitation ne lui sera adressée qu'une fois votre démarche confirmée.
+              </p>
+</div>
+</div>
+<!-- Guardian Supervision Line -->
+<div class="bg-staff-soft/60 border border-border-hairline rounded-lg px-4 py-3 flex items-center justify-between text-meta">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-staff" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<span class="text-ink-primary font-medium">Contrôle de convenance tutélaire :</span>
+<span class="text-ink-secondary">Le tuteur légal (Wali Oumar) reçoit une copie horodatée de tout accord.</span>
+</div>
+<span class="material-symbols-outlined text-success text-base" title="Canal conforme">check_circle</span>
+</div>
+</div>
+<!-- Strict Canonical & Integrity Guidance Note -->
+<div class="space-y-2">
+<div class="bg-surface-sand border-l-2 border-border-strong px-4 py-3 text-caption font-body text-ink-secondary rounded-r">
+<strong class="font-body-strong text-ink-primary block mb-0.5">Pourquoi cette règle canonique ?</strong>
+            Ce protocole prévient toute pression unilatérale et garantit que les deux familles cheminent au même rythme dans la clarté. Tout message incitant à des transactions financières ou des demandes d'argent fait l'objet d'un signalement immédiat aux modérateurs et aux tuteurs légaux.
+          </div>
+<div class="text-[11px] text-ink-secondary/70 italic px-1">
+            Note d'intégrité : Le filtrage des contacts s'applique sans délai. La détection automatisée reste active post-délivrance conformément aux règles CIL du Burkina Faso.
+          </div>
+</div>
+<!-- Call to Actions -->
+<div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+<button class="w-full sm:flex-1 h-12 px-6 rounded-full bg-indigo hover:bg-indigo-deep text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-colors focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" id="primary-cta-btn" onclick="triggerOptInAction()">
+<span class="material-symbols-outlined text-gold text-lg" id="primary-btn-icon">how_to_reg</span>
+<span id="primary-btn-text">Formuler mon consentement d'échange</span>
+</button>
+<button class="w-full sm:w-auto h-12 px-6 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-body text-body transition-colors" onclick="dismissModalQuietly()">
+            Poursuivre sur AnKanu sans partager
+          </button>
+</div>
+</div>
+<!-- Footnote of modal -->
+<div class="bg-surface-sand/80 px-6 py-3 border-t border-border-hairline text-center text-caption font-meta text-ink-secondary flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xs">balance</span>
+<span>Conforme aux recommandations de l'éthique matrimoniale Burkinabè • AnKanu Ta'aruf</span>
+</div>
+</div>
+</main>
+<!-- ================= MINIMAL EDITORIAL FOOTER (Shared Component Anchor) ================= -->
+<footer class="w-full bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-10">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="text-caption font-body text-ink-secondary text-center md:text-left">
+        © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+      </div>
+<div class="flex items-center space-x-5 text-meta">
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">Confidentialité &amp; Données</a>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">Tuteurs Légaux (Wali)</a>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- ================= JAVASCRIPT STATE SIMULATOR (Audit Verification) ================= -->
+<script>
+    let currentState = 1;
+
+    function setAuditState(state) {
+      currentState = state;
+      
+      // Update simulator buttons style
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById(`btn-state-${i}`);
+        if (i === state) {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta font-medium bg-indigo text-ink-on-indigo transition-colors";
+        } else {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta font-medium bg-surface-sand text-ink-secondary border border-border-hairline hover:bg-surface-raised transition-colors";
+        }
+      }
+
+      const cardA = document.getElementById('card-party-a');
+      const badgeA = document.getElementById('badge-party-a');
+      const descA = document.getElementById('desc-party-a');
+
+      const cardB = document.getElementById('card-party-b');
+      const badgeB = document.getElementById('badge-party-b');
+      const descB = document.getElementById('desc-party-b');
+
+      const primaryBtn = document.getElementById('primary-cta-btn');
+      const btnIcon = document.getElementById('primary-btn-icon');
+      const btnText = document.getElementById('primary-btn-text');
+
+      if (state === 1) {
+        // État 1 : Vide / Initial (Aucun accord)
+        cardA.className = "bg-surface-raised border border-border-hairline rounded-lg p-4 transition-all";
+        badgeA.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline";
+        badgeA.innerHTML = '<span class="material-symbols-outlined text-xs">hourglass_empty</span> En attente';
+        descA.textContent = "Vous n'avez pas encore officialisé votre souhait d'échanger vos coordonnées privées.";
+
+        cardB.className = "bg-surface-raised border border-border-hairline rounded-lg p-4 transition-all";
+        badgeB.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline";
+        badgeB.innerHTML = '<span class="material-symbols-outlined text-xs">lock</span> Non consultée';
+        descB.textContent = "L'invitation ne lui sera adressée qu'une fois votre démarche confirmée.";
+
+        primaryBtn.disabled = false;
+        primaryBtn.className = "w-full sm:flex-1 h-12 px-6 rounded-full bg-indigo hover:bg-indigo-deep text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-colors";
+        btnIcon.textContent = "how_to_reg";
+        btnText.textContent = "Formuler mon consentement d'échange";
+      } 
+      else if (state === 2) {
+        // État 2 : En cours / Chargement (Transmission de l'opt-in)
+        cardA.className = "bg-surface-sand border border-border-strong rounded-lg p-4 transition-all";
+        badgeA.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container";
+        badgeA.innerHTML = '<span class="material-symbols-outlined text-xs animate-spin">sync</span> Envoi en cours...';
+        descA.textContent = "Transmission de votre volonté au greffe du salon surveillé...";
+
+        cardB.className = "bg-surface-raised border border-border-hairline rounded-lg p-4 opacity-75 transition-all";
+        badgeB.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-surface-sand text-ink-secondary";
+        badgeB.innerHTML = '<span class="material-symbols-outlined text-xs">hourglass_top</span> Préparation';
+        descB.textContent = "La notification sera transmise au Wali d'Aminata S.";
+
+        primaryBtn.disabled = true;
+        primaryBtn.className = "w-full sm:flex-1 h-12 px-6 rounded-full bg-disabled text-ink-secondary font-body-strong text-body flex items-center justify-center gap-2 cursor-wait";
+        btnIcon.textContent = "sync";
+        btnText.textContent = "Enregistrement du consentement...";
+      }
+      else if (state === 3) {
+        // État 3 : Accord unilatéral (You approved, awaiting other party)
+        cardA.className = "bg-success-soft/30 border border-success/40 rounded-lg p-4 transition-all";
+        badgeA.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-success-soft text-success font-semibold";
+        badgeA.innerHTML = '<span class="material-symbols-outlined text-xs">check_circle</span> Consentement signé';
+        descA.textContent = "Votre accord formel est archivé. Le Wali Oumar a été notifié de votre démarche.";
+
+        cardB.className = "bg-surface-raised border border-border-strong rounded-lg p-4 transition-all";
+        badgeB.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-container";
+        badgeB.innerHTML = '<span class="material-symbols-outlined text-xs">pending</span> En attente du second accord';
+        descB.textContent = "Aminata S. et son Wali ont reçu la demande. Le salon reste actif ici sans blocage.";
+
+        primaryBtn.disabled = true;
+        primaryBtn.className = "w-full sm:flex-1 h-12 px-6 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline font-body-strong text-body flex items-center justify-center gap-2 cursor-not-allowed";
+        btnIcon.textContent = "mark_email_read";
+        btnText.textContent = "Consentement formulé • En attente d'Aminata";
+      }
+      else if (state === 4) {
+        // État 4 : Succès / Accord bilatéral validé (Unlocked)
+        cardA.className = "bg-success-soft/40 border border-success rounded-lg p-4 transition-all";
+        badgeA.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-success text-on-primary font-semibold";
+        badgeA.innerHTML = '<span class="material-symbols-outlined text-xs">verified</span> Accord confirmé';
+        descA.textContent = "Coordonnées directes validées. Accord de transmission effectif.";
+
+        cardB.className = "bg-success-soft/40 border border-success rounded-lg p-4 transition-all";
+        badgeB.className = "inline-flex items-center gap-1 text-caption font-meta px-2 py-0.5 rounded-full bg-success text-on-primary font-semibold";
+        badgeB.innerHTML = '<span class="material-symbols-outlined text-xs">verified</span> Accord confirmé';
+        descB.textContent = "Aminata S. et son tuteur légal ont validé l'échange avec bienveillance.";
+
+        primaryBtn.disabled = false;
+        primaryBtn.className = "w-full sm:flex-1 h-12 px-6 rounded-full bg-gold hover:bg-gold-soft text-ink-primary font-body-strong text-body flex items-center justify-center gap-2 transition-colors";
+        btnIcon.textContent = "lock_open_right";
+        btnText.textContent = "Afficher les coordonnées débloquées";
+      }
+    }
+
+    function triggerOptInAction() {
+      if (currentState === 1) {
+        setAuditState(2);
+        setTimeout(() => {
+          setAuditState(3);
+        }, 1200);
+      } else if (currentState === 4) {
+        alert("Accord bilatéral validé : Les coordonnées sont désormais visibles dans le volet officiel du profil chaperonné.");
+      }
+    }
+
+    function dismissModalQuietly() {
+      alert("Retour à la discussion : Vos échanges se poursuivent dans le cadre sécurisé d'AnKanu sans partage externe.");
+    }
+  </script>
+</body></html>

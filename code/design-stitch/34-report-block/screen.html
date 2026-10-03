@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu - Signalement &amp; Protection Déontologique</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#aec8f4",
+            "focus-ring": "#1F3A5F",
+            "on-secondary-fixed": "#251a00",
+            "inverse-on-surface": "#f7f0e3",
+            "primary-container": "#1f3a5f",
+            "staff-soft": "#EFE4DC",
+            "on-surface-variant": "#43474e",
+            "error-container": "#ffdad6",
+            "surface-dim": "#e0d9cd",
+            "surface-container-highest": "#e9e2d5",
+            "tertiary-container": "#1b3b5e",
+            "disabled": "#B5A894",
+            "surface-container-low": "#faf3e6",
+            "gold-soft": "#E8D5A3",
+            "danger": "#8B3A3A",
+            "background": "#fff9ee",
+            "on-primary": "#ffffff",
+            "border-strong": "#6F624C",
+            "surface": "#fff9ee",
+            "secondary-fixed": "#ffdf9c",
+            "on-primary-container": "#8ba4cf",
+            "indigo-deep": "#15283F",
+            "secondary-fixed-dim": "#e5c276",
+            "on-primary-fixed": "#001c3b",
+            "surface-tint": "#465f86",
+            "ink-on-indigo": "#F4EDE0",
+            "tertiary-fixed-dim": "#abc9f3",
+            "indigo": "#1F3A5F",
+            "surface-bright": "#fff9ee",
+            "surface-raised": "#FFFBF4",
+            "success": "#3D5C45",
+            "on-tertiary": "#ffffff",
+            "on-background": "#1e1b14",
+            "inverse-primary": "#aec8f4",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-error": "#ffffff",
+            "secondary-container": "#fdd88a",
+            "success-soft": "#DCE6DE",
+            "outline": "#74777f",
+            "on-secondary-container": "#785d1b",
+            "on-tertiary-fixed": "#001c38",
+            "on-surface": "#1e1b14",
+            "danger-soft": "#F3E0DC",
+            "border-hairline": "#D9CDB8",
+            "staff": "#6B3D2E",
+            "on-error-container": "#93000a",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-tertiary-container": "#88a5ce",
+            "ink-primary": "#1B2433",
+            "tertiary-fixed": "#d3e4ff",
+            "surface-indigo": "#15283F",
+            "inverse-surface": "#333028",
+            "on-secondary-fixed-variant": "#5b4300",
+            "error": "#ba1a1a",
+            "blur-wash": "#C8BBA6",
+            "tertiary": "#002546",
+            "mihrab": "#2C4A6E",
+            "surface-variant": "#e9e2d5",
+            "secondary": "#755b18",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "outline-variant": "#c4c6cf",
+            "surface-container-high": "#eee7db",
+            "primary-fixed": "#d5e3ff",
+            "primary": "#032448",
+            "surface-sand": "#F4EDE0",
+            "ink-secondary": "#5C5346",
+            "surface-container": "#f4ede0",
+            "gold": "#C4A35A"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "1": "4px",
+            "2": "8px",
+            "3": "12px",
+            "4": "16px",
+            "5": "24px",
+            "6": "32px",
+            "7": "48px",
+            "screen-pad": "16px",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-surface-sand text-ink-primary font-body text-body flex flex-col antialiased selection:bg-gold-soft selection:text-indigo-deep">
+<!-- TopNavBar docked full-width -->
+<header class="w-full bg-surface border-b border-border-hairline sticky top-0 z-30">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<a class="font-title text-title text-primary tracking-tight font-semibold flex items-center gap-2" href="#">
+<span class="w-2.5 h-2.5 rounded-full bg-gold inline-block"></span>
+          AnKanu
+        </a>
+<nav class="hidden md:flex items-center space-x-6">
+<a class="text-ink-secondary font-meta hover:text-ink-primary transition-colors" href="#">Charte d'Honneur</a>
+<a class="text-ink-secondary font-meta hover:text-ink-primary transition-colors" href="#">Assistance</a>
+</nav>
+</div>
+<div class="flex items-center gap-3">
+<!-- Chaperone Wali badge -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-staff-soft border border-border-hairline text-staff font-meta text-meta">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified_user">verified_user</span>
+<span>Tuteur (Wali) notifié</span>
+</div>
+<a class="text-ink-secondary hover:text-primary font-meta text-meta transition-colors duration-150 ease-in-out hidden sm:inline" href="#">
+          Retour à la Connexion
+        </a>
+</div>
+</div>
+</header>
+<!-- Interactive UX State Controller Bar (For Audit & Verification) -->
+<div class="bg-surface-raised border-b border-border-hairline py-2 px-screen-pad">
+<div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2 text-ink-secondary font-meta text-meta">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-gold" data-icon="tune">tune</span>
+<span class="font-body-strong text-ink-primary">Simulateur d'états d'audit :</span>
+</div>
+<div class="flex flex-wrap gap-1.5" id="state-buttons">
+<button class="px-2.5 py-1 rounded border text-caption transition-colors bg-indigo text-ink-on-indigo border-indigo state-btn" data-state="state-empty" onclick="setAuditState('state-empty')">1. Formulaire Vierge</button>
+<button class="px-2.5 py-1 rounded border text-caption transition-colors bg-surface-sand text-ink-primary border-border-hairline hover:border-border-strong state-btn" data-state="state-ready" onclick="setAuditState('state-ready')">2. Motif Prêt</button>
+<button class="px-2.5 py-1 rounded border text-caption transition-colors bg-surface-sand text-ink-primary border-border-hairline hover:border-border-strong state-btn" data-state="state-loading" onclick="setAuditState('state-loading')">3. Envoi en cours</button>
+<button class="px-2.5 py-1 rounded border text-caption transition-colors bg-surface-sand text-ink-primary border-border-hairline hover:border-border-strong state-btn" data-state="state-success" onclick="setAuditState('state-success')">4. Succès (SLA 24h)</button>
+<button class="px-2.5 py-1 rounded border text-caption transition-colors bg-surface-sand text-ink-primary border-border-hairline hover:border-border-strong state-btn" data-state="state-rate-limit" onclick="setAuditState('state-rate-limit')">5. Erreur Rate-Limit</button>
+</div>
+</div>
+</div>
+<!-- Main Content Canvas (Narrow Folio Layout max-w-2xl / 680px) -->
+<main class="flex-grow w-full max-w-2xl mx-auto px-screen-pad py-6 md:py-8 space-y-6">
+<!-- Discrete Back Link -->
+<div class="flex items-center justify-between">
+<a class="inline-flex items-center gap-2 text-ink-secondary hover:text-primary font-meta text-meta transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-[18px] group-hover:-translate-x-0.5 transition-transform" data-icon="arrow_back">arrow_back</span>
+<span>Retour à l'échange / au profil</span>
+</a>
+<span class="inline-flex items-center gap-1 font-caption text-caption text-ink-secondary bg-surface-sand px-2.5 py-0.5 rounded-full border border-border-hairline">
+<span class="material-symbols-outlined text-[14px] text-gold" data-icon="lock">lock</span>
+        Canal confidentiel CIL-BF
+      </span>
+</div>
+<!-- 1. Bandeau contextuel d'inviolabilité déontologique -->
+<section class="bg-surface-indigo text-ink-on-indigo rounded-xl p-5 md:p-6 border border-mihrab relative overflow-hidden">
+<div class="absolute -right-6 -bottom-6 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[160px]" data-icon="verified">verified</span>
+</div>
+<div class="relative z-10 flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-mihrab/50 border border-gold/40 flex items-center justify-center shrink-0 text-gold">
+<span class="material-symbols-outlined text-[22px]" data-icon="shield">shield</span>
+</div>
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<h1 class="font-title text-title text-gold font-semibold tracking-tight">Garantie d'Inviolabilité &amp; Pudeur</h1>
+<span class="px-2 py-0.5 rounded text-caption bg-gold/20 text-gold-soft border border-gold/30">Amanah</span>
+</div>
+<p class="font-body text-body text-ink-on-indigo/90">
+            Dans la noble tradition burkinabè du <em>ta'aruf</em>, la dignité de chacun est sacrée. Tout signalement est examiné avec impartialité, à l'abri de toute représaille.
+          </p>
+<div class="pt-2 flex flex-wrap items-center gap-y-1 gap-x-4 font-meta text-meta text-gold-soft/90">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="check_circle">check_circle</span>
+              Aucune contre-notification à la partie visée
+            </span>
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="family_restroom">family_restroom</span>
+              Protection coordonnée avec les tuteurs
+            </span>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Fiche résumé de convenance du profil concerné -->
+<section class="bg-surface-raised rounded-xl p-4 md:p-5 border border-border-hairline flex items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<!-- Avatar avec flou souverain et pictogramme de pudeur -->
+<div class="relative w-14 h-14 rounded-full bg-surface-dim border border-border-hairline overflow-hidden flex items-center justify-center shrink-0">
+<div class="absolute inset-0 bg-gradient-to-tr from-indigo-deep/20 to-gold/20 backdrop-blur-sm"></div>
+<span class="material-symbols-outlined text-[28px] text-ink-secondary/70 relative z-10" data-icon="person">person</span>
+<div class="absolute bottom-0 inset-x-0 h-4 bg-indigo-deep/40 flex items-center justify-center">
+<span class="material-symbols-outlined text-[11px] text-ink-on-indigo" data-icon="visibility_off">visibility_off</span>
+</div>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary font-semibold">Tahir_Ouaga</h2>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-sand border border-border-hairline text-ink-secondary text-caption font-meta">
+<span class="material-symbols-outlined text-[12px] text-secondary" data-icon="location_on">location_on</span>
+              Ouagadougou (Kadiogo)
+            </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+            Dossier matrimonial : Célibataire • Démarche supervisée par wali paternel
+          </p>
+<div class="mt-1 flex items-center gap-2 text-caption text-ink-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+<span>Échange suspendu dans l'attente du règlement déontologique</span>
+</div>
+</div>
+</div>
+<div class="text-right hidden sm:block shrink-0">
+<span class="text-caption font-meta text-ink-secondary block">Référence dossier</span>
+<span class="font-mono text-meta text-ink-primary font-semibold">BF-OUA-2025-884</span>
+</div>
+</section>
+<!-- BANNIÈRE D'ÉTAT DYNAMIQUE (Erreur Rate Limit / Alerte) -->
+<div class="hidden bg-danger-soft border border-danger/30 rounded-xl p-4 text-danger flex items-start gap-3" id="alert-rate-limit">
+<span class="material-symbols-outlined text-[22px] shrink-0 text-danger mt-0.5" data-icon="error_outline">error_outline</span>
+<div class="space-y-1">
+<h4 class="font-body-strong text-body-strong font-semibold text-danger">Modération préventive de sécurité (FR-084-SEC)</h4>
+<p class="font-meta text-meta text-danger/90">
+          Un nombre inhabituel de requêtes a été enregistré depuis ce terminal. Par mesure de sauvegarde et pour préserver la quiétude des familles, veuillez patienter quelques minutes ou solliciter l'assistance officielle.
+        </p>
+</div>
+</div>
+<!-- BANNIÈRE D'ÉTAT DYNAMIQUE (Confirmation Succès SLA) -->
+<div class="hidden bg-success-soft border border-success/40 rounded-xl p-5 text-success space-y-4" id="alert-success">
+<div class="flex items-start gap-3.5">
+<span class="material-symbols-outlined text-[26px] shrink-0 text-success" data-icon="check_circle">check_circle</span>
+<div class="space-y-1">
+<h3 class="font-title text-heading text-success font-semibold">Signalement enregistré &amp; Mesure d'invisibilité scellée</h3>
+<p class="font-body text-body text-ink-primary">
+            L'engagement d'intégrité a été acté sous le registre d'audit numéro <span class="font-mono font-semibold text-success">BF-REC-2025-9104</span>.
+          </p>
+</div>
+</div>
+<div class="bg-surface-raised rounded-lg p-3.5 border border-border-hairline space-y-2 text-meta font-meta text-ink-primary">
+<div class="flex justify-between border-b border-border-hairline pb-1.5">
+<span class="text-ink-secondary">Statut de la démarche :</span>
+<span class="font-semibold text-indigo">Prise en charge officielle sous 24h</span>
+</div>
+<div class="flex justify-between border-b border-border-hairline pb-1.5">
+<span class="text-ink-secondary">Invisibilité réciproque :</span>
+<span class="text-success font-semibold">Active &amp; Immédiate (FR-084)</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-secondary">Officier de convenance assermenté :</span>
+<span class="text-ink-primary">Commission Matrimoniale Ouagadougou</span>
+</div>
+</div>
+<p class="text-caption font-meta text-ink-secondary italic">
+        Le profil Tahir_Ouaga a totalement disparu de votre environnement et ne pourra plus initier de sollicitation matrimoniale vers votre cercle familial.
+      </p>
+</div>
+<!-- FORMULAIRE PRINCIPAL (Volet A & Volet B) -->
+<form class="space-y-6" id="report-block-form" onsubmit="event.preventDefault(); handleSubmit();">
+<!-- VOLET A : SIGNALEMENT DÉONTOLOGIQUE (FR-083) -->
+<section class="bg-surface-raised rounded-xl p-5 md:p-6 border border-border-hairline space-y-5">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-indigo-deep text-ink-on-indigo text-caption font-bold flex items-center justify-center">A</span>
+<h2 class="font-heading text-heading text-ink-primary font-semibold">Signalement Déontologique (FR-083)</h2>
+</div>
+<span class="font-caption text-caption text-danger flex items-center gap-1 font-meta">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+            Motif obligatoire
+          </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+          Sélectionnez avec probité la circonstance exacte qui contrevient à l'éthique de rencontre honorable et aux préceptes de convenance :
+        </p>
+<!-- Liste canonique des 9 motifs -->
+<fieldset class="space-y-2">
+<legend class="sr-only">Motif canonique du signalement</legend>
+<!-- 1. Fausses déclarations -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="marital_misrepresentation"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Fausses déclarations matrimoniales ou dissimulation de statut</span>
+<span class="font-caption text-caption text-ink-secondary block">Statut marital dissimulé, fausse situation de famille, polygamie non déclarée.</span>
+</div>
+</label>
+<!-- 2. Propos indécents -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="indecent_language"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Propos indécents ou inconvenants</span>
+<span class="font-caption text-caption text-ink-secondary block">Manque de retenue verbale, vulgarité ou vocabulaire contraire à la pudeur (*haya*).</span>
+</div>
+</label>
+<!-- 3. Allusions sexuelles -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="sexual_solicitation"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Allusions ou sollicitations à caractère sexuel</span>
+<span class="font-caption text-caption text-ink-secondary block">Toute proposition déviant du cadre matrimonial formel et de la bienséance.</span>
+</div>
+</label>
+<!-- 4. Usurpation -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="identity_theft"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Usurpation d'identité ou faux profil</span>
+<span class="font-caption text-caption text-ink-secondary block">Utilisation de la photographie ou du patronyme d'un tiers sans son accord.</span>
+</div>
+</label>
+<!-- 5. Comptes multiples -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="multiple_accounts"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Comptes multiples ou dissimulation délibérée</span>
+<span class="font-caption text-caption text-ink-secondary block">Contournement des règles de surveillance tutélaire par création de profils doublons.</span>
+</div>
+</label>
+<!-- 6. Harcèlement -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="harassment"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Harcèlement ou insistance déplacée</span>
+<span class="font-caption text-caption text-ink-secondary block">Refus du refus, pressions réitérées malgré un désengagement explicite.</span>
+</div>
+</label>
+<!-- 7. Demande d'argent / Escroquerie -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="financial_solicitation"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Demande d'argent, prêt ou tentative d'escroquerie</span>
+<span class="font-caption text-caption text-ink-secondary block">Toute sollicitation financière, dotal anticipé direct ou prétexte d'urgence médicale.</span>
+</div>
+</label>
+<!-- 8. Propos haineux -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="hate_speech"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Propos haineux ou outrageants</span>
+<span class="font-caption text-caption text-ink-secondary block">Invectives tribales, discriminations familiales ou outrages aux valeurs d'AnKanu.</span>
+</div>
+</label>
+<!-- 9. Détournement hors mariage -->
+<label class="reason-card flex items-start gap-3 p-3 rounded-lg border border-border-hairline hover:bg-surface-sand/60 transition-all cursor-pointer">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="report_reason" onchange="handleReasonChange(this)" type="radio" value="non_marriage_use"/>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body text-ink-primary block">Utilisation détournée hors finalité de mariage</span>
+<span class="font-caption text-caption text-ink-secondary block">Flirt futile, simple divertissement récréatif sans intention matrimoniale sincère.</span>
+</div>
+</label>
+</fieldset>
+<!-- Champ d'exposition circonstanciée -->
+<div class="space-y-1.5 pt-2">
+<label class="block font-meta text-meta text-ink-secondary" for="report-details">
+            Exposition circonstanciée des faits (destinée à la commission déontologique) :
+          </label>
+<textarea class="w-full bg-surface-raised border border-border-hairline rounded-xl p-3 text-body font-body text-ink-primary placeholder:text-disabled focus:border-border-strong focus:ring-2 focus:ring-focus-ring outline-none transition-all" id="report-details" placeholder="Précisez sobrement les faits observés, les dates approximatives ou le contexte des échanges..." rows="3"></textarea>
+<p class="font-caption text-caption text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-gold" data-icon="info">info</span>
+            Ce procès-verbal est conservé sous scellé cryptographique conforme à la loi CIL du Burkina Faso.
+          </p>
+</div>
+<!-- Option transmission salon surveillé + tuteur -->
+<div class="pt-2">
+<label class="flex items-start gap-3 p-3 rounded-lg bg-surface-sand/40 border border-border-hairline cursor-pointer hover:bg-surface-sand/80 transition-colors">
+<input checked="" class="mt-1 rounded text-indigo focus:ring-focus-ring border-border-strong" id="share-transcripts" type="checkbox"/>
+<div class="space-y-0.5 text-meta">
+<span class="font-body-strong text-ink-primary block">Transmettre les extraits horodatés du salon supervisé</span>
+<span class="font-caption text-caption text-ink-secondary block">
+                Joint automatiquement les échanges récents supervisés par votre tuteur légal (Wali) pour validation par l'officier de convenance.
+              </span>
+</div>
+</label>
+</div>
+<!-- SLA officiel 24h -->
+<div class="p-3 rounded-lg bg-surface-container-high/60 border border-border-hairline flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-primary" data-icon="schedule">schedule</span>
+<div class="text-meta font-meta text-ink-primary">
+<span class="font-semibold">Engagement officiel SLA :</span> Traitement et arbitrage diligent sous <strong>24 heures ouvrées</strong> par un officier de convenance assermenté.
+          </div>
+</div>
+</section>
+<!-- VOLET B : BLOCAGE D'INVISIBILITÉ BILATÉRALE (FR-084, FR-037) -->
+<section class="bg-surface-raised rounded-xl p-5 md:p-6 border border-border-hairline space-y-4">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-danger text-ink-on-indigo text-caption font-bold flex items-center justify-center">B</span>
+<h2 class="font-heading text-heading text-ink-primary font-semibold">Blocage d'Invisibilité Bilatérale (FR-084, FR-037)</h2>
+</div>
+<span class="inline-flex items-center gap-1 font-caption text-caption px-2 py-0.5 rounded bg-danger-soft text-danger font-semibold">
+            Mesure Irréversible
+          </span>
+</div>
+<!-- Bascule / Toggle de blocage immédiat -->
+<label class="flex items-start justify-between gap-4 p-3.5 rounded-xl border border-border-hairline bg-surface-sand/30 hover:bg-surface-sand/70 transition-all cursor-pointer">
+<div class="space-y-1">
+<span class="font-body-strong text-body text-ink-primary block flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-danger" data-icon="block">block</span>
+              Sceller l'invisibilité immédiate de ce membre
+            </span>
+<span class="font-caption text-caption text-ink-secondary block">
+              Recommandé pour clore définitivement toute relation sans ambiguïté ni persistance.
+            </span>
+</div>
+<input checked="" class="mt-1.5 w-5 h-5 rounded text-danger focus:ring-danger border-border-strong" id="block-member" type="checkbox"/>
+</label>
+<!-- Conséquences strictes clairement explicitées -->
+<div class="rounded-lg bg-surface-sand p-4 border border-border-hairline space-y-2">
+<h4 class="font-meta text-meta font-semibold text-ink-primary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-danger" data-icon="warning">warning</span>
+            Conséquences canoniques immédiates :
+          </h4>
+<ul class="space-y-1.5 font-meta text-meta text-ink-secondary">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary shrink-0 mt-0.5" data-icon="visibility_off">visibility_off</span>
+<span><strong>Disparition mutuelle instantanée :</strong> Vous disparaîtrez de ses résultats de recherche (*Découvrir*) et son profil disparaîtra du vôtre.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary shrink-0 mt-0.5" data-icon="cancel">cancel</span>
+<span><strong>Interruption irréversible :</strong> Annulation définitive des invitations en attente et fermeture permanente du salon de discussion.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[16px] text-secondary shrink-0 mt-0.5" data-icon="shield">shield</span>
+<span><strong>Rejet systématique pérenne :</strong> Toute tentative ultérieure de réouverture de démarche par ce profil sera automatiquement bloquée à la source.</span>
+</li>
+</ul>
+</div>
+</section>
+<!-- ATTESTATION D'HONNEUR & BONNE FOI -->
+<section class="p-4 rounded-xl border border-border-hairline bg-surface-sand/40">
+<label class="flex items-start gap-3 cursor-pointer">
+<input class="mt-1 rounded text-indigo focus:ring-focus-ring border-border-strong" id="honor-attestation" required="" type="checkbox"/>
+<div class="text-meta font-meta text-ink-primary">
+<span>J'atteste sur l'honneur devant Dieu et les miens de l'exactitude de ces déclarations. Je confirme que cette démarche est engagée avec sérieux, sans animosité injustifiée ni médisance frivole.</span>
+</div>
+</label>
+</section>
+<!-- ACTIONS PRINCIPALES -->
+<div class="pt-2 space-y-3">
+<!-- Bouton primaire 48px -->
+<button class="w-full h-12 rounded-full bg-disabled text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-all duration-200 cursor-not-allowed" disabled="" id="submit-btn" type="submit">
+<span class="material-symbols-outlined text-[20px]" data-icon="gavel">gavel</span>
+<span id="btn-text">Motif requis pour transmettre</span>
+<span class="hidden animate-spin material-symbols-outlined text-[20px]" data-icon="progress_activity" id="btn-spinner">progress_activity</span>
+</button>
+<!-- Bouton secondaire / ghost discret -->
+<div class="text-center">
+<a class="inline-block py-2 px-6 rounded-full text-ink-secondary hover:text-ink-primary font-meta text-meta transition-colors" href="#">
+            Annuler et revenir sans action
+          </a>
+</div>
+</div>
+</form>
+</main>
+<!-- Minimal Editorial Footer (Anchored from Shared Components JSON) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline mt-auto">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="space-y-1 text-center md:text-left">
+<span class="font-heading text-heading text-primary">AnKanu</span>
+<p class="font-caption text-caption text-ink-secondary">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+<div class="flex items-center justify-center md:justify-start gap-3 text-caption text-ink-secondary pt-0.5">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-success" data-icon="lock">lock</span>
+            CIL Burkina Faso N°2024-089
+          </span>
+<span>•</span>
+<span>Chiffrement souverain certifié Scaleway</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-4 text-meta font-meta">
+<a class="text-ink-secondary hover:text-primary transition-colors" href="#">Confidentialité &amp; Données</a>
+<a class="text-ink-secondary hover:text-primary transition-colors" href="#">Tuteurs Légaux (Wali)</a>
+<a class="text-ink-secondary hover:text-primary transition-colors" href="#">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- Script de logique interactive pour démonstration fidèle du cycle d'audit UX -->
+<script>
+    let selectedReason = null;
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnSpinner = document.getElementById('btn-spinner');
+    const formElement = document.getElementById('report-block-form');
+    const alertSuccess = document.getElementById('alert-success');
+    const alertRateLimit = document.getElementById('alert-rate-limit');
+    const honorCheckbox = document.getElementById('honor-attestation');
+
+    function updateButtonState() {
+      if (selectedReason && honorCheckbox.checked) {
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full h-12 rounded-full bg-indigo hover:bg-indigo-deep text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 shadow-sm transition-all duration-200 cursor-pointer";
+        btnText.textContent = "Transmettre le signalement et sceller la protection";
+      } else if (!selectedReason) {
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full h-12 rounded-full bg-disabled text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-all duration-200 cursor-not-allowed";
+        btnText.textContent = "Sélectionnez un motif obligatoire";
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full h-12 rounded-full bg-disabled text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-all duration-200 cursor-not-allowed";
+        btnText.textContent = "Attestation sur l'honneur requise";
+      }
+    }
+
+    function handleReasonChange(radio) {
+      selectedReason = radio.value;
+      // Highlighting card
+      document.querySelectorAll('.reason-card').forEach(card => {
+        card.classList.remove('bg-surface-sand', 'border-border-strong');
+        card.classList.add('border-border-hairline');
+      });
+      radio.closest('.reason-card').classList.add('bg-surface-sand', 'border-border-strong');
+      updateButtonState();
+    }
+
+    honorCheckbox.addEventListener('change', updateButtonState);
+
+    function handleSubmit() {
+      // Transition to Loading
+      setAuditState('state-loading');
+      setTimeout(() => {
+        setAuditState('state-success');
+      }, 1600);
+    }
+
+    function setAuditState(stateName) {
+      // Mise à jour de la surbrillance des boutons d'état
+      document.querySelectorAll('.state-btn').forEach(btn => {
+        if (btn.getAttribute('data-state') === stateName) {
+          btn.className = "px-2.5 py-1 rounded border text-caption transition-colors bg-indigo text-ink-on-indigo border-indigo state-btn font-semibold";
+        } else {
+          btn.className = "px-2.5 py-1 rounded border text-caption transition-colors bg-surface-sand text-ink-primary border-border-hairline hover:border-border-strong state-btn";
+        }
+      });
+
+      // Reset panels
+      alertSuccess.classList.add('hidden');
+      alertRateLimit.classList.add('hidden');
+      formElement.classList.remove('opacity-50', 'pointer-events-none');
+      btnSpinner.classList.add('hidden');
+
+      if (stateName === 'state-empty') {
+        // État 1: Vierge
+        document.querySelectorAll('input[name="report_reason"]').forEach(r => r.checked = false);
+        document.querySelectorAll('.reason-card').forEach(c => c.classList.remove('bg-surface-sand', 'border-border-strong'));
+        honorCheckbox.checked = false;
+        selectedReason = null;
+        updateButtonState();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } 
+      else if (stateName === 'state-ready') {
+        // État 2: Motif sélectionné
+        const firstRadio = document.querySelector('input[name="report_reason"]');
+        firstRadio.checked = true;
+        handleReasonChange(firstRadio);
+        honorCheckbox.checked = true;
+        updateButtonState();
+      }
+      else if (stateName === 'state-loading') {
+        // État 3: Envoi en cours
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full h-12 rounded-full bg-indigo-deep/80 text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 cursor-wait";
+        btnText.textContent = "Vérification cryptographique et transmission...";
+        btnSpinner.classList.remove('hidden');
+        formElement.classList.add('opacity-70', 'pointer-events-none');
+      }
+      else if (stateName === 'state-success') {
+        // État 4: Succès
+        alertSuccess.classList.remove('hidden');
+        formElement.classList.add('opacity-40', 'pointer-events-none');
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full h-12 rounded-full bg-success text-on-primary font-body-strong text-body flex items-center justify-center gap-2 cursor-default";
+        btnText.textContent = "Signalement scellé avec succès";
+        alertSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      else if (stateName === 'state-rate-limit') {
+        // État 5: Rate limit
+        alertRateLimit.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full h-12 rounded-full bg-disabled text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 cursor-not-allowed";
+        btnText.textContent = "Délai de sécurité en vigueur";
+        alertRateLimit.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+  </script>
+</body></html>

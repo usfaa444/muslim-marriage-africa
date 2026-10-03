@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-container" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Authentification d'Identité &amp; Vivacité Faciale</title>
+<!-- Material Symbols & Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Official Configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary": "#3e190c",
+            "surface-container-lowest": "#ffffff",
+            "on-primary-fixed": "#001c3b",
+            "on-error-container": "#93000a",
+            "on-secondary-fixed": "#251a00",
+            "secondary": "#755b18",
+            "surface": "#fff9ee",
+            "tertiary-fixed-dim": "#f9b7a3",
+            "error": "#ba1a1a",
+            "primary-fixed": "#d5e3ff",
+            "on-surface": "#1e1b14",
+            "on-primary-fixed-variant": "#2d476d",
+            "surface-bright": "#fff9ee",
+            "on-primary": "#ffffff",
+            "surface-container-highest": "#e9e2d5",
+            "outline": "#74777f",
+            "inverse-on-surface": "#f7f0e3",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-primary-container": "#8ba4cf",
+            "surface-variant": "#e9e2d5",
+            "on-secondary": "#ffffff",
+            "inverse-primary": "#aec8f4",
+            "secondary-container": "#fdd88a",
+            "tertiary-fixed": "#ffdbd0",
+            "on-tertiary-container": "#d29582",
+            "on-surface-variant": "#43474e",
+            "on-tertiary-fixed-variant": "#683b2c",
+            "on-background": "#1e1b14",
+            "tertiary-container": "#582e20",
+            "error-container": "#ffdad6",
+            "on-secondary-container": "#785d1b",
+            "surface-container-low": "#faf3e6",
+            "on-tertiary-fixed": "#341106",
+            "primary": "#032448",
+            "surface-container": "#f4ede0",
+            "secondary-fixed": "#ffdf9c",
+            "surface-dim": "#e0d9cd",
+            "on-error": "#ffffff",
+            "primary-container": "#1f3a5f",
+            "primary-fixed-dim": "#aec8f4",
+            "inverse-surface": "#333028",
+            "outline-variant": "#c4c6cf",
+            "on-tertiary": "#ffffff",
+            "background": "#fff9ee",
+            "surface-tint": "#465f86",
+            "surface-container-high": "#eee7db",
+            "secondary-fixed-dim": "#e5c276"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "gutter-mobile": "1rem",
+            "space-xl": "2.5rem",
+            "space-md": "1rem",
+            "margin-mobile": "1.25rem",
+            "space-lg": "1.5rem",
+            "gutter": "1.25rem"
+          },
+          "fontFamily": {
+            "body-lg": ["\"Source Sans 3\""],
+            "headline-lg": ["\"Source Serif 4\""],
+            "display-lg": ["\"Source Serif 4\""],
+            "label-lg": ["\"Source Sans 3\""],
+            "body-md": ["\"Source Sans 3\""],
+            "headline-sm": ["\"Source Serif 4\""],
+            "headline-lg-mobile": ["\"Source Serif 4\""],
+            "headline-md": ["\"Source Serif 4\""],
+            "label-md": ["\"Source Sans 3\""],
+            "body-sm": ["\"Source Sans 3\""],
+            "label-sm": ["\"Source Sans 3\""],
+            "title-lg": ["\"Source Serif 4\""]
+          },
+          "fontSize": {
+            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "700" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="min-h-full flex flex-col font-body-md text-on-surface bg-surface-container antialiased selection:bg-secondary-fixed-dim selection:text-on-secondary-fixed">
+<!-- TOP APP BAR (Shared Components Tokenized Implementation) -->
+<header class="w-full bg-surface-container-low border-b border-outline-variant z-30">
+<div class="w-full max-w-[1140px] mx-auto px-margin-mobile md:px-margin flex justify-between items-center py-space-md">
+<!-- Brand & Canonical Title -->
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-surface border border-secondary shadow-sm">
+<span class="material-symbols-outlined text-secondary-fixed" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<span class="font-headline-md text-headline-md tracking-tight text-primary block leading-none">AnKanu</span>
+<span class="font-label-sm text-label-sm text-secondary tracking-widest uppercase block mt-1">Ta'aruf Honorable &amp; Mariage Noble</span>
+</div>
+</div>
+<!-- Linear Stepper Navigation Ledger -->
+<nav class="hidden md:flex items-center gap-space-lg">
+<span class="text-on-surface-variant font-label-lg text-label-lg flex items-center gap-1.5 opacity-60">
+<span class="material-symbols-outlined text-[16px]" data-icon="task_alt">task_alt</span>
+          1. Dossier Civil
+        </span>
+<span class="text-on-surface-variant font-label-lg text-label-lg flex items-center gap-1.5 opacity-60">
+<span class="material-symbols-outlined text-[16px]" data-icon="task_alt">task_alt</span>
+          2. Wali &amp; Garants
+        </span>
+<span class="border-b-2 border-secondary text-primary font-title-lg text-title-lg pb-1 flex items-center gap-1.5 font-semibold">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="shield">shield</span>
+          3. Identité &amp; Vivacité
+        </span>
+<span class="text-on-surface-variant font-label-lg text-label-lg flex items-center gap-1.5 opacity-40">
+          4. Serment Solennel
+        </span>
+</nav>
+<!-- Trailing Action -->
+<div class="flex items-center gap-space-sm">
+<a class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-outline-variant bg-surface text-primary hover:bg-surface-container font-label-md text-label-md transition-colors duration-150" href="#assistance">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="help_outline">help_outline</span>
+          Assistance Déontologique
+        </a>
+</div>
+</div>
+</header>
+<!-- SUB-HEADER ANNOUNCEMENT BANNER -->
+<section class="w-full bg-surface-container-high border-b border-outline-variant/60 py-2.5">
+<div class="w-full max-w-[1140px] mx-auto px-margin-mobile md:px-margin flex flex-wrap items-center justify-between gap-2 text-on-surface-variant font-label-md text-label-md">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-secondary text-surface text-xs font-bold font-body-sm">§</span>
+<span class="text-on-surface font-medium">Protocole de Confiance &amp; Vérification Souveraine (FR-014, FR-015, AD-13)</span>
+<span class="hidden lg:inline text-outline">— Démarche 100% gratuite, sans frais ni abonnement requis</span>
+</div>
+<div class="flex items-center gap-2 text-secondary font-semibold">
+<span class="material-symbols-outlined text-[16px]" data-icon="gavel">gavel</span>
+<span>Conformité Stricte CIL &amp; Pudeur Islamique</span>
+</div>
+</div>
+</section>
+<!-- MAIN CANVAS -->
+<main class="flex-grow w-full max-w-[1140px] mx-auto px-margin-mobile md:px-margin py-space-xl">
+<!-- State Simulation Control Ledger (Affordance to observe edge-states: loading, discordance, minorhold, success) -->
+<div class="mb-space-lg bg-surface border border-outline-variant rounded-xl p-3 md:p-4 shadow-sm">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-2.5 pb-2.5 border-b border-outline-variant/40">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="tune">tune</span>
+<span class="font-label-lg text-label-lg text-primary">Simulateur d'Audit Déontologique (Vérification en Direct) :</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Norme FR-014 / FR-015 / FR-091</span>
+</div>
+<div class="flex flex-wrap gap-2 text-xs">
+<button class="px-3 py-1.5 rounded-lg border border-primary bg-primary text-surface font-label-sm transition-colors" id="btn-state-ready" onclick="setScreenState('ready')" type="button">
+          1. Capture Prête
+        </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface font-label-sm hover:bg-surface-container transition-colors" id="btn-state-loading" onclick="setScreenState('loading')" type="button">
+          2. Téléversement en cours (Scaleway Paris DC)
+        </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface font-label-sm hover:bg-surface-container transition-colors" id="btn-state-mismatch" onclick="setScreenState('mismatch')" type="button">
+          3. Échec / Discordance (Sans Pénalité)
+        </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface font-label-sm hover:bg-surface-container transition-colors" id="btn-state-minorhold" onclick="setScreenState('minorhold')" type="button">
+          4. Suspicion de Minorité (FR-091 - Profil Retenu)
+        </button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface font-label-sm hover:bg-surface-container transition-colors" id="btn-state-success" onclick="setScreenState('success')" type="button">
+          5. Scellé &amp; Soumis (Homologation Humaine)
+        </button>
+</div>
+</div>
+<!-- Solemn Ledger Card (Raised Deckle Parchment Container) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-6 sm:p-8 md:p-10 shadow-sm relative overflow-hidden">
+<!-- Archival Seal Top Trim -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-secondary via-secondary-container to-secondary"></div>
+<!-- Dossier Title Block -->
+<div class="max-w-3xl mb-space-xl">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-surface-container text-primary font-label-sm text-label-sm border border-outline-variant/60 mb-3">
+<span class="material-symbols-outlined text-[16px] text-secondary" data-icon="lock">lock</span>
+          Étape 3 sur 4 : Authentification de la personne physique — Requis après OTP
+        </div>
+<h1 class="font-headline-lg text-headline-lg text-primary mb-3">
+          Vérification d'Identité Officielle &amp; Test de Vivacité
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+          Afin de protéger la pureté du sanctuaire, d'éradiquer les faux profils et d'assurer aux tuteurs (<span class="italic text-primary font-serif">wali</span>) une entière sincérité, la pièce d'identité et la vivacité faciale sont rigoureusement confrontées aux photographies du profil. Ce processus est strictement gratuit et n'est soumis à aucun forfait payant.
+        </p>
+</div>
+<!-- Two-Column Asymmetric Ledger Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-xl items-start">
+<!-- LEFT COLUMN: Identity Document (FR-014) -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/60">
+<h2 class="font-title-lg text-title-lg text-primary flex items-center gap-2">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-surface text-xs font-serif font-bold">1</span>
+              Pièce d'Identité Officielle (FR-014)
+            </h2>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold">Burkina Faso &amp; Sahel</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Pièces admises : <strong class="text-on-surface font-semibold">CNIB</strong> (Carte Nationale d'Identité Burkinabè), Passeport biométrique, ou Titre de séjour / Carte consulaire en cours de validité.
+          </p>
+<!-- Dropzone Document Container -->
+<div class="border-2 border-dashed border-outline rounded-xl p-6 bg-surface-container flex flex-col items-center justify-center text-center relative group transition-colors hover:border-primary">
+<div class="w-14 h-14 rounded-full bg-surface flex items-center justify-center mb-3 text-secondary border border-outline-variant">
+<span class="material-symbols-outlined text-[30px]" data-icon="badge">badge</span>
+</div>
+<p class="font-title-lg text-title-lg text-primary mb-1">Téléversez ou numérisez votre document</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-4 max-w-xs">
+              Document lisible, bords visibles, sans reflet ni ombrage occultant.
+            </p>
+<label class="cursor-pointer inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface border border-secondary text-primary font-label-lg hover:bg-surface-container-low transition-colors duration-150">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="file_upload">file_upload</span>
+              Parcourir le dossier local
+              <input accept="image/*,.pdf" class="hidden" type="file"/>
+</label>
+</div>
+<!-- Document Attached Ledger Notification -->
+<div class="bg-surface border border-outline-variant rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]" data-icon="description">description</span>
+</div>
+<div>
+<p class="font-label-lg text-label-lg text-primary font-semibold">CNIB_Sawadogo_Recto.jpg</p>
+<p class="font-label-sm text-label-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span>
+                  Vérifié en local &amp; conforme au gabarit
+                </p>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1 rounded transition-colors" title="Remplacer le fichier" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="change_circle">change_circle</span>
+</button>
+</div>
+<!-- Age & Integrity Legal Reminder -->
+<div class="bg-surface-container-low border-l-4 border-secondary p-3.5 rounded-r-xl text-on-surface-variant font-body-sm text-body-sm">
+<strong class="text-primary font-semibold block mb-0.5">Règle Canonique de Majorité :</strong>
+            La concordance d'âge avec l'étape précédente (19 ans et plus révolus) sera auditée formellement. Tout profil ne satisfaisant pas cette exigence légale est suspendu d'office.
+          </div>
+</div>
+<!-- RIGHT COLUMN: Facial Liveness Test (FR-015, FR-105) -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/60">
+<h2 class="font-title-lg text-title-lg text-primary flex items-center gap-2">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-surface text-xs font-serif font-bold">2</span>
+              Test de Vivacité Faciale (FR-015, FR-105)
+            </h2>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-semibold">Sceau de Pudeur</span>
+</div>
+<!-- Audio Accessibility Guidance (Mooré & Dioula - Min 44px hit-target) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+<button class="min-h-[44px] px-3.5 py-2.5 rounded-xl border border-secondary text-primary bg-surface hover:bg-surface-container flex items-center justify-center gap-2 font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="volume_up">volume_up</span>
+<span>Instruction vocale en <strong class="font-semibold">Mooré (mos)</strong></span>
+</button>
+<button class="min-h-[44px] px-3.5 py-2.5 rounded-xl border border-secondary text-primary bg-surface hover:bg-surface-container flex items-center justify-center gap-2 font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="volume_up">volume_up</span>
+<span>Instruction vocale en <strong class="font-semibold">Dioula (dyu)</strong></span>
+</button>
+</div>
+<!-- Live Camera Viewport with Facial Guide -->
+<div class="relative bg-primary rounded-xl overflow-hidden aspect-[4/3] flex flex-col items-center justify-center text-surface p-4 border border-outline-variant shadow-inner">
+<!-- Solemn Oval Guideline Overlay -->
+<div class="w-48 h-64 border-2 border-secondary-fixed/80 border-dashed rounded-[50%] flex flex-col items-center justify-center relative">
+<div class="w-full h-full rounded-[50%] bg-surface/5 backdrop-blur-[0.5px] flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary-fixed/50 text-[48px]" data-icon="face">face</span>
+</div>
+<!-- Real-time corner markers -->
+<div class="absolute top-0 w-4 h-4 border-t-2 border-l-2 border-secondary-fixed"></div>
+<div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-secondary-fixed"></div>
+<div class="absolute bottom-0 w-4 h-4 border-b-2 border-l-2 border-secondary-fixed"></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-secondary-fixed"></div>
+</div>
+<!-- Visual Prompt Bar -->
+<div class="absolute bottom-3 left-3 right-3 bg-surface/95 text-primary py-2 px-3 rounded-lg text-center font-label-md text-label-md border border-outline-variant shadow-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="visibility">visibility</span>
+<span>Regardez l'objectif, hochez lentement la tête sous un éclairage décent.</span>
+</div>
+</div>
+<!-- Non-Color WCAG Compliant Indicators & Retake Affordance -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-2.5">
+<!-- Dual-symbol verification (Icon + Affirmative Label, not color alone) -->
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-primary text-surface font-bold text-xs">✓</span>
+<div>
+<p class="font-label-lg text-label-lg text-primary font-semibold">[VALIDÉ] Repères biométriques nets</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Conforme aux critères de l'AD-13</p>
+</div>
+</div>
+<!-- Retake Button (Always free, accessible, not a paywall) -->
+<button class="min-h-[44px] px-4 py-2 rounded-xl border border-outline text-on-surface bg-surface hover:bg-surface-container font-label-md text-label-md flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+              Reprendre la capture
+            </button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+            * Note déontologique : La vérification biométrique compare la vivacité avec vos photographies de profil soumises sous le sceau de pudeur.
+          </p>
+</div>
+</div>
+<!-- DYNAMIC STATUS PANELS (Managed by Simulator Logic) -->
+<div class="mt-space-xl pt-space-lg border-t border-outline-variant">
+<!-- STATE 1: Default Ready Indicator -->
+<div class="p-4 rounded-xl bg-surface border border-secondary text-primary flex items-start gap-3" id="status-ready">
+<span class="material-symbols-outlined text-secondary text-[24px] mt-0.5" data-icon="verified">verified</span>
+<div>
+<h3 class="font-title-lg text-title-lg font-semibold text-primary">Les éléments d'identité sont prêts pour transmission</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              Le document officiel et le test de vivacité sont synchronisés en mémoire locale. Vous pouvez soumettre votre dossier pour examen par notre conseil de vérification.
+            </p>
+</div>
+</div>
+<!-- STATE 2: Loading / Encrypting Scaleway Transfer -->
+<div class="hidden p-5 rounded-xl bg-surface-container border border-primary text-primary" id="status-loading">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined animate-spin text-secondary text-[26px]" data-icon="progress_activity">progress_activity</span>
+<div>
+<h3 class="font-title-lg text-title-lg font-semibold text-primary">Chiffrement &amp; transmission sécurisée vers l'infrastructure souveraine en cours...</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Serveur certifié Scaleway Paris DC / Ouagadougou CIL — Chiffrement asymétrique AES-256 GCM.</p>
+</div>
+</div>
+<!-- Calibrated Progress Bar -->
+<div class="w-full bg-surface-container-highest rounded-full h-2.5 overflow-hidden">
+<div class="bg-primary h-2.5 rounded-full w-2/3 transition-all duration-500"></div>
+</div>
+</div>
+<!-- STATE 3: Mismatch / Non-color WCAG Compliant Error & Free Retake -->
+<div class="hidden p-5 rounded-xl bg-surface-container-low border-2 border-outline-variant text-on-surface" id="status-mismatch">
+<div class="flex items-start gap-3.5">
+<span class="inline-flex items-center justify-center w-7 h-7 rounded-md bg-error text-surface font-bold text-sm shrink-0">!</span>
+<div class="space-y-2">
+<h3 class="font-title-lg text-title-lg text-primary font-bold">
+                [ALERTE DISCORDANCE DÉTECTÉE] Vérification Non Concluante
+              </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                La photographie d'identité ne correspond pas à la vivacité faciale ou le document fourni présente des reflets illisibles.
+              </p>
+<div class="p-3 bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm text-on-surface">
+<strong>Procédure équitable :</strong> Veuillez reprendre la prise de vue gratuitement sans aucune pénalité ni surcoût commercial. Chez AnKanu, la sincérité ne fait l'objet d'aucun péage.
+              </div>
+<div class="pt-2">
+<button class="min-h-[44px] px-5 py-2 rounded-xl bg-primary text-surface font-label-md text-label-md inline-flex items-center gap-2 hover:bg-primary-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="replay">replay</span>
+                  Reprendre la capture sans frais
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- STATE 4: Suspected Minor Hold (FR-091 & Gap G8) -->
+<div class="hidden p-5 rounded-xl bg-tertiary-container/10 border-2 border-tertiary text-on-surface" id="status-minorhold">
+<div class="flex items-start gap-3.5">
+<span class="material-symbols-outlined text-tertiary text-[28px] shrink-0" data-icon="policy">policy</span>
+<div class="space-y-1.5">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded text-xs font-bold uppercase bg-tertiary text-surface">FR-091</span>
+<h3 class="font-title-lg text-title-lg text-tertiary font-bold">Dossier Suspendu en Rétention d'Intégrité</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface">
+<strong>Suspicion d'âge inférieur au seuil canonique de 19 ans.</strong> Le profil est consigné, jamais mis en visibilité publique, et transmis au comité des juristes pour vérification légale.
+              </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Cette mesure protège les familles et respecte les obligations de la juridiction sahélienne. Aucune donnée n'est indexée publiquement.
+              </p>
+</div>
+</div>
+</div>
+<!-- STATE 5: Success Banner (Sanctuary Precedes Payment) -->
+<div class="hidden p-5 rounded-xl bg-surface border border-secondary text-primary" id="status-success">
+<div class="flex items-start gap-3.5">
+<span class="material-symbols-outlined text-secondary text-[30px] shrink-0" data-icon="task_alt">task_alt</span>
+<div class="space-y-1">
+<h3 class="font-title-lg text-title-lg font-bold text-primary">Dossier d'Identité Scellé avec Succès</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+<strong>Statut : En attente d'homologation humaine par l'officier de conformité.</strong>
+</p>
+<div class="mt-2 p-3 bg-surface-container rounded-lg font-body-sm text-body-sm text-on-surface border border-outline-variant/60">
+<span class="font-semibold text-primary">Rappel Déontologique Fondateur :</span>
+                Tout forfait souscrit sans validation préalable ID + liveness ne confère aucune visibilité publique. <strong class="text-secondary">Le sanctuaire prime impérativement sur le paiement.</strong>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons Footer Inside Ledger Card -->
+<div class="mt-space-xl pt-space-lg border-t border-outline-variant/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto min-h-[44px] px-4 py-2 rounded-xl text-on-surface-variant hover:text-primary font-label-lg flex items-center justify-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="pause_circle">pause_circle</span>
+          Interrompre et reprendre plus tard
+        </button>
+<div class="w-full sm:w-auto flex items-center gap-3">
+<button class="w-full sm:w-auto min-h-[48px] px-7 py-3 rounded-xl bg-primary text-surface hover:bg-primary-container font-label-lg flex items-center justify-center gap-2 shadow-sm transition-all duration-150" id="submit-btn" type="button">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]" data-icon="verified_user">verified_user</span>
+            Transmettre pour homologation déontologique
+          </button>
+</div>
+</div>
+</div>
+<!-- Solemn Privacy & Compliance Guarantee Card -->
+<div class="mt-space-lg bg-surface border border-outline-variant rounded-xl p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-[26px] mt-0.5" data-icon="enhanced_encryption">enhanced_encryption</span>
+<div>
+<h4 class="font-title-lg text-title-lg text-primary font-semibold">Engagement de Pudeur &amp; Non-Diffusion</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-3xl">
+            Vos pièces d'identité et captures biométriques sont chiffrées de bout en bout (AES-256), stockées sur infrastructure souveraine conforme CIL Burkina Faso et RGPD. Elles ne sont jamais rendues publiques, ni indexées sur les moteurs de recherche, ni cédées à des tiers.
+          </p>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-2 text-on-surface-variant font-label-sm">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
+        Hébergement Scaleway CIL Certifié
+      </div>
+</div>
+</main>
+<!-- FOOTER (Shared Components Tokenized Implementation) -->
+<footer class="w-full bg-primary text-surface-container-lowest mt-space-xl border-t border-secondary">
+<div class="w-full max-w-[1140px] mx-auto px-margin-mobile md:px-margin py-space-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-space-lg">
+<!-- Institutional Legal Attribution -->
+<div class="max-w-2xl">
+<span class="font-headline-sm text-headline-sm text-surface-container-lowest block mb-2">AnKanu Matrimonial Ta'aruf</span>
+<p class="font-body-sm text-body-sm text-surface-container-highest leading-relaxed">
+          © 2025 AnKanu Matrimonial Ta'aruf. Hébergement souverain certifié chiffré Scaleway Paris/Ouagadougou. Conformité stricte aux lois burkinabè sur la protection des données personnelles (CIL) et à l'éthique islamique sahélienne. Zéro exploitation commerciale ni diffusion publique des dossiers.
+        </p>
+</div>
+<!-- Institutional Links Hierarchy -->
+<div class="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-4 font-label-md text-label-md text-secondary-fixed">
+<a class="hover:text-secondary-fixed-dim transition-colors duration-150 underline-offset-4 hover:underline" href="#ethique">Cadre Éthique &amp; Charia</a>
+<a class="hover:text-secondary-fixed-dim transition-colors duration-150 underline-offset-4 hover:underline" href="#cil">Conformité Réglementaire CIL</a>
+<a class="hover:text-secondary-fixed-dim transition-colors duration-150 underline-offset-4 hover:underline" href="#chiffrement">Protocole de Chiffrement</a>
+<a class="hover:text-secondary-fixed-dim transition-colors duration-150 underline-offset-4 hover:underline" href="#recours">Tribunal &amp; Recours Wali</a>
+</div>
+</div>
+</footer>
+<!-- Simulation Control Micro-Interactions Script -->
+<script>
+    function setScreenState(state) {
+      const states = ['ready', 'loading', 'mismatch', 'minorhold', 'success'];
+      
+      // Update status visibility
+      states.forEach(s => {
+        const el = document.getElementById('status-' + s);
+        if (el) {
+          if (s === state) {
+            el.classList.remove('hidden');
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+      });
+
+      // Update simulation toggle buttons style
+      states.forEach(s => {
+        const btn = document.getElementById('btn-state-' + s);
+        if (btn) {
+          if (s === state) {
+            btn.className = "px-3 py-1.5 rounded-lg border border-primary bg-primary text-surface font-label-sm transition-colors";
+          } else {
+            btn.className = "px-3 py-1.5 rounded-lg border border-outline-variant bg-surface text-on-surface font-label-sm hover:bg-surface-container transition-colors";
+          }
+        }
+      });
+
+      // Disable submit button during minor hold or loading
+      const submitBtn = document.getElementById('submit-btn');
+      if (submitBtn) {
+        if (state === 'minorhold' || state === 'loading') {
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      }
+    }
+  </script>
+</body></html>

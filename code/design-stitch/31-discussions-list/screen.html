@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Discussions &amp; Salons d'Alliance</title>
+<!-- Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed": "#001c38",
+            "on-primary-fixed-variant": "#2d476d",
+            "mihrab": "#2C4A6E",
+            "blur-wash": "#C8BBA6",
+            "on-secondary-fixed": "#251a00",
+            "ink-on-indigo": "#F4EDE0",
+            "indigo": "#1F3A5F",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#fdd88a",
+            "error": "#ba1a1a",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-container-low": "#faf3e6",
+            "on-secondary-fixed-variant": "#5b4300",
+            "surface-raised": "#FFFBF4",
+            "surface-variant": "#e9e2d5",
+            "secondary-fixed-dim": "#e5c276",
+            "background": "#fff9ee",
+            "tertiary-fixed": "#d3e4ff",
+            "success": "#3D5C45",
+            "primary-fixed": "#d5e3ff",
+            "inverse-primary": "#aec8f4",
+            "disabled": "#B5A894",
+            "on-primary-fixed": "#001c3b",
+            "surface-bright": "#fff9ee",
+            "danger-soft": "#F3E0DC",
+            "on-error": "#ffffff",
+            "secondary-fixed": "#ffdf9c",
+            "focus-ring": "#1F3A5F",
+            "surface-indigo": "#15283F",
+            "on-secondary-container": "#785d1b",
+            "border-hairline": "#D9CDB8",
+            "gold": "#C4A35A",
+            "on-background": "#1e1b14",
+            "staff-soft": "#EFE4DC",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#1b3b5e",
+            "on-tertiary-container": "#88a5ce",
+            "surface-container": "#f4ede0",
+            "ink-primary": "#1B2433",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#eee7db",
+            "inverse-on-surface": "#f7f0e3",
+            "success-soft": "#DCE6DE",
+            "danger": "#8B3A3A",
+            "primary-container": "#1f3a5f",
+            "surface-dim": "#e0d9cd",
+            "outline": "#74777f",
+            "on-surface": "#1e1b14",
+            "surface-sand": "#F4EDE0",
+            "surface-tint": "#465f86",
+            "border-strong": "#6F624C",
+            "secondary": "#755b18",
+            "gold-soft": "#E8D5A3",
+            "staff": "#6B3D2E",
+            "on-tertiary": "#ffffff",
+            "inverse-surface": "#333028",
+            "primary": "#032448",
+            "outline-variant": "#c4c6cf",
+            "on-primary-container": "#8ba4cf",
+            "on-error-container": "#93000a",
+            "tertiary": "#002546",
+            "surface": "#fff9ee",
+            "ink-secondary": "#5C5346",
+            "primary-fixed-dim": "#aec8f4",
+            "surface-container-highest": "#e9e2d5",
+            "indigo-deep": "#15283F"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "2": "8px",
+            "space-sm": "0.5rem",
+            "5": "24px",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "4": "16px",
+            "gutter": "16px",
+            "1": "4px",
+            "3": "12px",
+            "margin": "1rem",
+            "6": "32px",
+            "7": "48px",
+            "screen-pad": "16px"
+          },
+          "fontFamily": {
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-ink-primary font-body antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-indigo-deep">
+<!-- TOP APP BAR -->
+<header class="w-full bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab sticky top-0 z-40">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<!-- Wordmark & Subtitle Anchor -->
+<div class="flex items-baseline gap-3">
+<span class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold">AnKanu</span>
+<span class="hidden md:inline font-meta text-meta text-ink-secondary border-l border-border-hairline pl-3">Ta'aruf Honorable &amp; Mariage Noble</span>
+</div>
+<!-- Nav Cluster & Secondary Action -->
+<div class="flex items-center gap-6">
+<nav class="hidden md:flex items-center gap-5">
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Découvrir</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors flex items-center gap-1.5" href="#">
+            Invitations
+          </a>
+<a class="text-primary dark:text-gold font-body-strong border-b-2 border-primary dark:border-gold pb-1 flex items-center gap-1.5" href="#">
+            Discussions
+            <span class="inline-flex items-center justify-center px-1.5 py-0.2 bg-indigo text-ink-on-indigo font-caption text-caption rounded-full">3</span>
+</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Profil</a>
+</nav>
+<!-- Guardian presence chip & Secondary Links -->
+<div class="flex items-center gap-3">
+<div class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 bg-surface-sand border border-border-hairline rounded-full font-meta text-meta text-ink-secondary" title="Supervision active du Wali">
+<span class="material-symbols-outlined text-gold fill-icon" style="font-size: 16px;">verified_user</span>
+<span>Wali notifié : <strong class="text-ink-primary font-body-strong">Oumar O.</strong></span>
+</div>
+<a class="font-meta text-meta text-ink-secondary hover:text-primary dark:hover:text-gold transition-colors duration-200" href="#">Assistance</a>
+</div>
+</div>
+</div>
+<!-- SUB-BAR / BREADCRUMB & NORMATIVE ANCHOR -->
+<div class="bg-surface-sand border-t border-border-hairline/60">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-meta text-meta text-ink-secondary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" style="font-size: 16px;">temple_buddhist</span>
+<span class="tracking-wide">Sanctuaire de convenance · Salons d'échanges chaperonnés</span>
+</div>
+<div class="inline-flex items-center gap-2 self-start sm:self-auto font-caption text-caption text-ink-secondary bg-surface-raised px-2.5 py-0.5 rounded border border-border-hairline">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+<span>Normes FR-041 · FR-050 · AD-15</span>
+</div>
+</div>
+</div>
+</header>
+<!-- CANONICAL TEST BENCH / STATE SIMULATOR BAR -->
+<section class="bg-surface-raised border-b border-border-hairline">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-2.5">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2 text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-primary" style="font-size: 18px;">tune</span>
+<span class="font-body-strong text-ink-primary">Simulateur d'états canoniques :</span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5" id="stateButtons">
+<button class="px-2.5 py-1 text-meta rounded font-body-strong transition-colors bg-indigo text-ink-on-indigo" id="btn-active" onclick="switchState('active')">1. Liste active</button>
+<button class="px-2.5 py-1 text-meta rounded font-meta text-ink-secondary bg-surface-sand hover:text-ink-primary border border-border-hairline transition-colors" id="btn-empty" onclick="switchState('empty')">2. État vide</button>
+<button class="px-2.5 py-1 text-meta rounded font-meta text-ink-secondary bg-surface-sand hover:text-ink-primary border border-border-hairline transition-colors" id="btn-loading" onclick="switchState('loading')">3. Chargement</button>
+<button class="px-2.5 py-1 text-meta rounded font-meta text-ink-secondary bg-surface-sand hover:text-ink-primary border border-border-hairline transition-colors" id="btn-error" onclick="switchState('error')">4. Erreur synchro</button>
+<button class="px-2.5 py-1 text-meta rounded font-meta text-ink-secondary bg-surface-sand hover:text-ink-primary border border-border-hairline transition-colors" id="btn-rule" onclick="switchState('rule-ad15')">5. Règle Frère (AD-15)</button>
+</div>
+</div>
+</div>
+</section>
+<!-- MAIN EDITORIAL CANVAS -->
+<main class="flex-grow w-full max-w-4xl mx-auto px-screen-pad py-8 space-y-6">
+<!-- EDITORIAL INTRO BLOCK -->
+<section class="space-y-3">
+<div class="flex flex-col md:flex-row md:items-baseline justify-between gap-2">
+<h1 class="font-display text-display text-primary tracking-tight">Discussions &amp; Salons d'Alliance</h1>
+<div class="inline-flex items-center gap-1.5 text-success font-meta text-meta">
+<span class="material-symbols-outlined fill-icon" style="font-size: 16px;">shield</span>
+<span>Délivrance directe (FR-050 sans différé)</span>
+</div>
+</div>
+<p class="font-body text-body text-ink-secondary max-w-3xl leading-relaxed">
+        Les échanges directs sont débloqués exclusivement après consentement mutuel (acceptation par la sœur et information du tuteur légal). Tout échange se déroule sous la supervision bienveillante du Wali (AD-15).
+      </p>
+<!-- Guardian & Chaperone Banner -->
+<div class="bg-surface-indigo text-ink-on-indigo p-4 rounded-xl border border-mihrab flex items-start gap-3.5">
+<span class="material-symbols-outlined text-gold mt-0.5" style="font-size: 22px;">family_restroom</span>
+<div class="space-y-1">
+<h2 class="font-heading text-heading text-gold leading-none">Présence continue du tuteur légal (Wali)</h2>
+<p class="font-meta text-meta text-ink-on-indigo/90">
+            Zéro isolement illicite (khalwa) · Les échanges sont consultables par le tuteur de la promise. Aucun badge de mise en attente arbitraire : les correspondances agréées s'ouvrent immédiatement.
+          </p>
+</div>
+</div>
+</section>
+<!-- CANONICAL STATE CONTAINER -->
+<div class="space-y-4" id="state-canvas">
+<!-- 1. ACTIVE STATE (Default) -->
+<div class="space-y-4" id="view-active">
+<!-- Discreet notice regarding brother's pending requests (Rule AD-15) -->
+<div class="bg-surface-sand/70 border border-border-hairline rounded-lg px-3.5 py-2.5 flex items-center justify-between text-ink-secondary font-meta text-meta">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" style="font-size: 18px;">info</span>
+<span><strong>Règle de bienséance (AD-15) :</strong> Les demandes formulées et en attente d'accord de la sœur restent au registre des invitations et ne créent aucun fil prématuré.</span>
+</div>
+<a class="underline text-indigo font-body-strong whitespace-nowrap ml-2" href="#">Voir mes démarches</a>
+</div>
+<!-- Chat Rows List -->
+<div class="space-y-3">
+<!-- ROW 1: Aminata_O (Unread message) -->
+<article class="group bg-surface-raised border border-border-hairline hover:border-border-strong rounded-xl p-4 transition-all duration-150 cursor-pointer shadow-none" onclick="openThread('Aminata_O')">
+<div class="flex items-start gap-4">
+<!-- Sceau de Pudeur Avatar: Wash tactique, no peek-blur, strictly modest -->
+<div class="relative flex-shrink-0 w-14 h-14 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-ink-secondary text-2xl">person_outline</span>
+<div class="absolute bottom-0 w-full bg-surface-indigo/90 text-gold text-[9px] text-center py-0.5 tracking-wider font-meta">PUDEUR</div>
+</div>
+<!-- Content Area -->
+<div class="flex-grow min-w-0 space-y-1">
+<div class="flex items-baseline justify-between gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<h3 class="font-heading text-heading text-primary font-semibold group-hover:text-indigo transition-colors">Aminata_O</h3>
+<span class="font-meta text-meta text-ink-secondary">27 ans · Ouagadougou</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-success-soft text-success text-caption font-meta rounded-full">
+<span class="material-symbols-outlined fill-icon" style="font-size: 13px;">verified</span>
+                      Wali actif &amp; notifié
+                    </span>
+</div>
+<span class="font-meta text-meta text-indigo font-semibold whitespace-nowrap">Aujourd'hui 14:28</span>
+</div>
+<!-- Last Message Excerpt -->
+<p class="font-body text-body text-ink-primary font-medium line-clamp-1">
+                  « Salam aleykoum. Mon père a pris connaissance de votre démarche et souhaite convenir de l'entretien... »
+                </p>
+<!-- Footer details of the row -->
+<div class="pt-1 flex items-center justify-between font-meta text-meta">
+<div class="flex items-center gap-2 text-ink-secondary">
+<span class="inline-flex items-center gap-1 text-staff font-meta">
+<span class="material-symbols-outlined" style="font-size: 15px;">gavel</span>
+                      Salon chaperonné · Présence tuteur confirmée
+                    </span>
+</div>
+<!-- Noble unread pill -->
+<div class="inline-flex items-center gap-1 bg-indigo text-ink-on-indigo font-caption px-2 py-0.5 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+<span>1 non lu</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- ROW 2: Fatoumata_S (2 unread messages) -->
+<article class="group bg-surface-raised border border-border-hairline hover:border-border-strong rounded-xl p-4 transition-all duration-150 cursor-pointer shadow-none" onclick="openThread('Fatoumata_S')">
+<div class="flex items-start gap-4">
+<!-- Sceau de Pudeur Avatar -->
+<div class="relative flex-shrink-0 w-14 h-14 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-ink-secondary text-2xl">person_outline</span>
+<div class="absolute bottom-0 w-full bg-surface-indigo/90 text-gold text-[9px] text-center py-0.5 tracking-wider font-meta">PUDEUR</div>
+</div>
+<!-- Content Area -->
+<div class="flex-grow min-w-0 space-y-1">
+<div class="flex items-baseline justify-between gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<h3 class="font-heading text-heading text-primary font-semibold group-hover:text-indigo transition-colors">Fatoumata_S</h3>
+<span class="font-meta text-meta text-ink-secondary">25 ans · Bobo-Dioulasso</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-success-soft text-success text-caption font-meta rounded-full">
+<span class="material-symbols-outlined fill-icon" style="font-size: 13px;">verified</span>
+                      Wali actif &amp; notifié
+                    </span>
+</div>
+<span class="font-meta text-meta text-indigo font-semibold whitespace-nowrap">Hier 18:45</span>
+</div>
+<p class="font-body text-body text-ink-primary font-medium line-clamp-1">
+                  « Wa aleykoum salam wa rahmatullah. Nous avons bien reçu le complément de folio d'alliance... »
+                </p>
+<div class="pt-1 flex items-center justify-between font-meta text-meta">
+<div class="flex items-center gap-2 text-ink-secondary">
+<span class="inline-flex items-center gap-1 text-staff font-meta">
+<span class="material-symbols-outlined" style="font-size: 15px;">gavel</span>
+                      Salon chaperonné · Wali actif
+                    </span>
+</div>
+<!-- Noble unread pill -->
+<div class="inline-flex items-center gap-1 bg-indigo text-ink-on-indigo font-caption px-2 py-0.5 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+<span>2 non lus</span>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- ROW 3: Nafissatou_D (Read thread) -->
+<article class="group bg-surface-raised/70 border border-border-hairline hover:border-border-strong rounded-xl p-4 transition-all duration-150 cursor-pointer shadow-none" onclick="openThread('Nafissatou_D')">
+<div class="flex items-start gap-4">
+<!-- Sceau de Pudeur Avatar -->
+<div class="relative flex-shrink-0 w-14 h-14 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center overflow-hidden opacity-90">
+<span class="material-symbols-outlined text-ink-secondary text-2xl">person_outline</span>
+<div class="absolute bottom-0 w-full bg-surface-indigo/90 text-gold text-[9px] text-center py-0.5 tracking-wider font-meta">PUDEUR</div>
+</div>
+<!-- Content Area -->
+<div class="flex-grow min-w-0 space-y-1">
+<div class="flex items-baseline justify-between gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<h3 class="font-heading text-heading text-primary font-semibold group-hover:text-indigo transition-colors">Nafissatou_D</h3>
+<span class="font-meta text-meta text-ink-secondary">29 ans · Ouagadougou</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 bg-surface-sand text-ink-secondary text-caption font-meta rounded-full border border-border-hairline">
+<span class="material-symbols-outlined" style="font-size: 13px;">verified</span>
+                      Tuteur accrédité
+                    </span>
+</div>
+<span class="font-meta text-meta text-ink-secondary whitespace-nowrap">24 oct</span>
+</div>
+<p class="font-body text-body text-ink-secondary line-clamp-1">
+                  « Qu'Allah bénisse cette démarche d'alliance sincère. Mon tuteur prendra contact après la prière du Jumu'a. »
+                </p>
+<div class="pt-1 flex items-center justify-between font-meta text-meta">
+<span class="inline-flex items-center gap-1 text-ink-secondary">
+<span class="material-symbols-outlined text-success" style="font-size: 16px;">done_all</span>
+                    Lu et transmis au Wali
+                  </span>
+<span class="font-caption text-caption text-ink-secondary">Entretien familial convenu</span>
+</div>
+</div>
+</div>
+</article>
+</div>
+</div>
+<!-- 2. EMPTY STATE -->
+<div class="hidden bg-surface-raised border border-border-hairline rounded-xl p-8 md:p-12 text-center space-y-5" id="view-empty">
+<div class="w-16 h-16 mx-auto rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">chat_bubble_outline</span>
+</div>
+<div class="max-w-md mx-auto space-y-2">
+<!-- Exact Required Label -->
+<h2 class="font-heading text-title text-primary">« Aucune discussion. »</h2>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+            Conformément à l'éthique de pudeur et d'alliance noble, les salons de pourparlers ne s'ouvrent qu'après agrément bilatéral (acceptation explicite par la sœur et notification de son Wali).
+          </p>
+</div>
+<div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+<a class="px-5 py-2.5 bg-indigo text-ink-on-indigo font-body-strong rounded-full hover:bg-surface-indigo transition-colors duration-200" href="#">
+            Explorer les folios d'alliance
+          </a>
+<a class="px-5 py-2.5 border border-border-strong text-ink-primary font-body rounded-full hover:bg-surface-sand transition-colors duration-200" href="#">
+            Consulter mes démarches transmises
+          </a>
+</div>
+<p class="font-caption text-caption text-ink-secondary">
+          Protocole de sérénité AnKanu · Réf. Ta'aruf burkinabè FR-041
+        </p>
+</div>
+<!-- 3. LOADING / SKELETON STATE -->
+<div class="hidden space-y-3" id="view-loading">
+<div class="p-3 bg-surface-sand/50 rounded-lg text-center font-meta text-meta text-ink-secondary">
+          Chargement sécurisé des pourparlers chaperonnés...
+        </div>
+<!-- Skeleton Card 1 -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 animate-pulse">
+<div class="flex items-start gap-4">
+<div class="w-14 h-14 rounded-full bg-border-hairline/60 flex-shrink-0"></div>
+<div class="flex-grow space-y-2.5">
+<div class="flex justify-between items-center">
+<div class="h-4 bg-border-hairline/70 rounded w-1/3"></div>
+<div class="h-3 bg-border-hairline/50 rounded w-16"></div>
+</div>
+<div class="h-4 bg-border-hairline/40 rounded w-3/4"></div>
+<div class="flex justify-between items-center pt-1">
+<div class="h-3 bg-border-hairline/40 rounded w-1/4"></div>
+<div class="h-4 bg-border-hairline/60 rounded-full w-14"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Skeleton Card 2 -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 animate-pulse">
+<div class="flex items-start gap-4">
+<div class="w-14 h-14 rounded-full bg-border-hairline/60 flex-shrink-0"></div>
+<div class="flex-grow space-y-2.5">
+<div class="flex justify-between items-center">
+<div class="h-4 bg-border-hairline/70 rounded w-1/4"></div>
+<div class="h-3 bg-border-hairline/50 rounded w-12"></div>
+</div>
+<div class="h-4 bg-border-hairline/40 rounded w-2/3"></div>
+<div class="flex justify-between items-center pt-1">
+<div class="h-3 bg-border-hairline/40 rounded w-1/3"></div>
+<div class="h-4 bg-border-hairline/60 rounded-full w-14"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. ERROR STATE -->
+<div class="hidden bg-surface-raised border border-danger/30 rounded-xl p-8 text-center space-y-4" id="view-error">
+<div class="w-14 h-14 mx-auto rounded-full bg-danger-soft text-danger flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">sync_problem</span>
+</div>
+<div class="space-y-1 max-w-md mx-auto">
+<h2 class="font-heading text-title text-danger">Échec de synchronisation des correspondances</h2>
+<p class="font-body text-body text-ink-secondary">
+            La liaison sécurisée avec le registre matrimonial n'a pu aboutir. Vos correspondances et approbations de tuteur restent intégralement préservées et chiffrées.
+          </p>
+</div>
+<div class="pt-2">
+<button class="px-6 py-2.5 bg-indigo text-ink-on-indigo font-body-strong rounded-full hover:bg-surface-indigo transition-colors duration-200 inline-flex items-center gap-2" onclick="switchState('active')">
+<span class="material-symbols-outlined" style="font-size: 18px;">refresh</span>
+            Réessayer
+          </button>
+</div>
+</div>
+<!-- 5. RULE AD-15 EXPLANATION VIEW -->
+<div class="hidden bg-surface-raised border border-gold rounded-xl p-6 md:p-8 space-y-4" id="view-rule-ad15">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-gold-soft/40 border border-gold flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-2xl">balance</span>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="font-caption text-caption uppercase tracking-wider text-staff font-bold">Règle Canonique AD-15</span>
+<span class="px-2 py-0.5 bg-surface-sand text-ink-secondary text-caption rounded border border-border-hairline">Ta'aruf Respectueux</span>
+</div>
+<h2 class="font-heading text-title text-primary">Démarches Frère en cours &amp; Protection de la Pudeur</h2>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+              Sur AnKanu, l'envoi d'une démarche d'alliance par un frère <strong>ne génère aucun fil de discussion direct</strong> tant que la sœur n'a pas formellement accepté la présentation et que son tuteur légal (Wali) n'en est pas informé.
+            </p>
+<div class="p-3 bg-surface-sand rounded-lg border border-border-hairline text-ink-primary font-meta text-meta space-y-1">
+<div class="flex items-center gap-2 font-body-strong text-indigo">
+<span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+                Principe de non-intrusion et délivrance directe (FR-050)
+              </div>
+<p>
+                Aucune messagerie informelle unilatérale n'est tolérée. Lorsque le consentement mutuel est scellé, le salon s'ouvre instantanément sans aucun badge d'attente artificielle ni modération différée.
+              </p>
+</div>
+<div class="pt-2">
+<button class="px-5 py-2 bg-indigo text-ink-on-indigo font-body-strong rounded-full text-meta" onclick="switchState('active')">
+                Retour à mes salons confirmés
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- DIALOG SIMULATION OVERLAY (CLICKABLE THREAD INSPECTION) -->
+<div class="hidden fixed inset-0 bg-indigo-deep/40 backdrop-blur-[2px] z-50 flex items-center justify-center p-4" id="threadModal">
+<div class="bg-surface-raised border border-border-hairline rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-none">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<h3 class="font-heading text-title text-primary font-semibold" id="modalTitle">Salon Chaperonné</h3>
+<p class="font-meta text-meta text-success flex items-center gap-1">
+<span class="material-symbols-outlined fill-icon" style="font-size: 14px;">verified</span>
+                Wali en copie conforme · Entretien supervisé
+              </p>
+</div>
+</div>
+<button class="text-ink-secondary hover:text-ink-primary" onclick="closeThreadModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-4 bg-surface-sand rounded-xl border border-border-hairline text-body text-ink-secondary space-y-2">
+<p class="italic text-ink-primary" id="modalQuote">« ... »</p>
+<div class="text-caption text-ink-secondary pt-2 border-t border-border-hairline/80 flex items-center justify-between">
+<span>Canal chiffré de bout en bout</span>
+<span class="text-gold font-body-strong">Protocole FR-050</span>
+</div>
+</div>
+<div class="flex justify-end gap-2 pt-2">
+<button class="px-4 py-2 border border-border-strong text-ink-primary rounded-full font-meta" onclick="closeThreadModal()">Fermer l'aperçu</button>
+<a class="px-5 py-2 bg-indigo text-ink-on-indigo font-body-strong rounded-full font-meta hover:bg-surface-indigo transition-colors" href="#">Entrer dans le salon</a>
+</div>
+</div>
+</div>
+</main>
+<!-- SHARED FOOTER -->
+<footer class="w-full bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-auto">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<!-- Copyright text from JSON -->
+<p class="font-meta text-meta text-ink-secondary dark:text-outline-variant text-center md:text-left">
+        © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+      </p>
+<!-- Footer navigation links from JSON -->
+<div class="flex flex-wrap items-center justify-center gap-4">
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">Confidentialité &amp; Données</a>
+<span class="text-border-hairline">·</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">Tuteurs Légaux (Wali)</a>
+<span class="text-border-hairline">·</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- SCRIPT FOR STATE TOGGLING & MODAL INTERACTION -->
+<script>
+    function switchState(stateName) {
+      const views = ['active', 'empty', 'loading', 'error', 'rule-ad15'];
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) el.classList.add('hidden');
+      });
+
+      // Show chosen state
+      const target = document.getElementById('view-' + stateName);
+      if (target) target.classList.remove('hidden');
+
+      // Update button styling
+      const buttons = [
+        { id: 'btn-active', key: 'active' },
+        { id: 'btn-empty', key: 'empty' },
+        { id: 'btn-loading', key: 'loading' },
+        { id: 'btn-error', key: 'error' },
+        { id: 'btn-rule', key: 'rule-ad15' }
+      ];
+
+      buttons.forEach(b => {
+        const btnEl = document.getElementById(b.id);
+        if (!btnEl) return;
+        if (b.key === stateName) {
+          btnEl.className = 'px-2.5 py-1 text-meta rounded font-body-strong transition-colors bg-indigo text-ink-on-indigo';
+        } else {
+          btnEl.className = 'px-2.5 py-1 text-meta rounded font-meta text-ink-secondary bg-surface-sand hover:text-ink-primary border border-border-hairline transition-colors';
+        }
+      });
+    }
+
+    function openThread(sender) {
+      const modal = document.getElementById('threadModal');
+      const title = document.getElementById('modalTitle');
+      const quote = document.getElementById('modalQuote');
+
+      if (sender === 'Aminata_O') {
+        title.innerText = 'Salon : Aminata_O (27 ans, Ouaga)';
+        quote.innerText = '« Salam aleykoum. Mon père a pris connaissance de votre démarche et souhaite convenir de l\'entretien en présence de son représentant... »';
+      } else if (sender === 'Fatoumata_S') {
+        title.innerText = 'Salon : Fatoumata_S (25 ans, Bobo)';
+        quote.innerText = '« Wa aleykoum salam wa rahmatullah. Nous avons bien reçu le complément de folio d\'alliance et prions pour que cette démarche soit agréée. »';
+      } else {
+        title.innerText = 'Salon : Nafissatou_D (29 ans, Ouaga)';
+        quote.innerText = '« Qu\'Allah bénisse cette démarche d\'alliance sincère. Mon tuteur prendra contact après la prière du Jumu\'a. »';
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeThreadModal() {
+      document.getElementById('threadModal').classList.add('hidden');
+    }
+  </script>
+</body></html>

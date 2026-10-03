@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Public pricing — AnKanu | Ta'aruf Honorable</title>
+
+  <!-- Canonical Fonts: Source Serif 4 & Source Sans 3 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,600&display=swap" rel="stylesheet"/>
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-sand": "#F4EDE0",
+            "surface-raised": "#FFFBF4",
+            "surface-indigo": "#15283F",
+            "ink-primary": "#1B2433",
+            "ink-secondary": "#5C5346",
+            "ink-on-indigo": "#F4EDE0",
+            "indigo": "#1F3A5F",
+            "indigo-deep": "#15283F",
+            "gold": "#C4A35A",
+            "gold-soft": "#E8D5A3",
+            "mihrab": "#2C4A6E",
+            "border-hairline": "#D9CDB8",
+            "border-strong": "#6F624C",
+            "focus-ring": "#1F3A5F",
+            "blur-wash": "#C8BBA6",
+            "danger": "#8B3A3A",
+            "danger-soft": "#F3E0DC",
+            "success": "#3D5C45",
+            "success-soft": "#DCE6DE",
+            "staff": "#6B3D2E",
+            "staff-soft": "#EFE4DC",
+            "disabled": "#B5A894"
+          },
+          borderRadius: {
+            "sm": "6px",
+            "md": "12px",
+            "lg": "20px",
+            "full": "9999px"
+          },
+          fontFamily: {
+            display: ['"Source Serif 4"', 'Georgia', 'serif'],
+            title: ['"Source Serif 4"', 'Georgia', 'serif'],
+            heading: ['"Source Serif 4"', 'Georgia', 'serif'],
+            body: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+            meta: ['"Source Sans 3"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .mihrab-arch {
+      border-radius: 40px 40px 0 0;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-indigo-deep">
+
+  <!-- Top Navigation (Identical chrome family) -->
+  <header class="sticky top-0 z-50 bg-surface-raised/95 backdrop-blur-sm border-b border-border-hairline shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between py-3">
+      <!-- Brand Logo / Wordmark -->
+      <a href="/" class="flex items-center gap-3 group focus:outline-none">
+        <div class="w-10 h-10 rounded-sm bg-indigo flex items-center justify-center text-gold-soft shadow-inner">
+          <span class="material-symbols-outlined text-gold-soft text-2xl" data-icon="shield">shield</span>
+        </div>
+        <div class="flex flex-col">
+          <div class="flex items-baseline gap-1.5">
+            <span class="font-heading text-2xl font-bold tracking-tight text-indigo">AnKanu</span>
+            <span class="text-[10px] tracking-widest uppercase font-semibold text-gold">Burkina Faso</span>
+          </div>
+          <span class="text-xs text-ink-secondary -mt-1 hidden sm:inline">Ta'aruf honorable &amp; noble alliance</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav links -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <a href="/" class="text-ink-secondary hover:text-indigo transition-colors">La Vision</a>
+        <a href="/academie" class="text-ink-secondary hover:text-indigo transition-colors">L'Académie</a>
+        <a href="/comite" class="text-ink-secondary hover:text-indigo transition-colors">Comité Consultatif</a>
+        <a href="/tarifs" class="text-indigo font-semibold border-b-2 border-indigo pb-0.5">Tarifs clairs</a>
+        <a href="/faq" class="text-ink-secondary hover:text-indigo transition-colors">Foire aux Questions</a>
+      </nav>
+
+      <!-- Trailing Action -->
+      <div class="flex items-center gap-3">
+        <a href="/login" class="text-sm font-medium text-ink-secondary hover:text-indigo hidden sm:inline-block px-3 py-2">
+          Se connecter
+        </a>
+        <a href="/demarche" class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-md bg-indigo text-ink-on-indigo font-semibold text-sm hover:bg-indigo-deep transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-gold-soft">
+          Commencer l'inscription
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Welcoming Mihrab Header Wash -->
+  <section class="bg-gradient-to-b from-mihrab/15 via-surface-sand to-surface-sand pt-10 pb-8 px-4 sm:px-6 lg:px-8 border-b border-border-hairline">
+    <div class="max-w-5xl mx-auto text-center">
+      <!-- Solemn Tag -->
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-raised border border-border-hairline text-ink-secondary text-xs font-medium mb-4 shadow-2xs">
+        <span class="material-symbols-outlined text-gold text-base" data-icon="verified_user">verified_user</span>
+        <span>Médiation noble pour le mariage — Burkina Faso &amp; Afrique de l'Ouest</span>
+      </div>
+
+      <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-indigo-deep tracking-tight mb-4">
+        Transparence économique &amp; honorabilité
+      </h1>
+      <p class="font-body text-base sm:text-lg text-ink-secondary max-w-2xl mx-auto leading-relaxed">
+        Une tarification sincère dédiée à la rémunération de la vérification humaine, au respect de la pudeur et à la médiation des tuteurs (Wali). Aucun abonnement caché, aucun prélèvement abusif.
+      </p>
+
+      <!-- Verified Marriages Counter Widget (Official Zero Artifice) -->
+      <div class="mt-7 inline-flex items-center justify-center gap-3 px-6 py-2.5 rounded-lg bg-surface-raised border border-border-hairline shadow-sm">
+        <div class="w-8 h-8 rounded-full bg-surface-sand flex items-center justify-center text-indigo">
+          <span class="material-symbols-outlined text-gold text-xl" data-icon="favorite">favorite</span>
+        </div>
+        <div class="text-left">
+          <div class="text-xs uppercase tracking-wider text-ink-secondary font-semibold">Transparence intégrale</div>
+          <div class="font-display text-lg font-bold text-indigo leading-tight">Mariages confirmés : 0</div>
+        </div>
+        <span class="ml-2 text-xs text-ink-secondary hidden sm:inline border-l border-border-hairline pl-3">
+          Compteur officiel certifié au premier scellé
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Persona / Mode Switcher -->
+  <main class="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+
+    <!-- Mode Selector Tabs: Brother / Sister same_quota vs Sister free_unlimited -->
+    <div class="bg-surface-raised rounded-md border border-border-strong p-4 sm:p-5">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-gold">Configuration d'accès &amp; Statut</span>
+          <h2 class="font-heading text-lg font-bold text-indigo">Aperçu selon votre profil de convenance</h2>
+          <p class="text-xs text-ink-secondary mt-0.5">La dignité et les règles de contact sont adaptées selon le mode d'admission prescrit.</p>
+        </div>
+
+        <!-- Mode Toggle Segment -->
+        <div class="inline-flex rounded-md p-1 bg-surface-sand border border-border-hairline w-full sm:w-auto" role="tablist">
+          <button id="tab-brother" onclick="switchMode('brother')" class="flex-1 sm:flex-initial px-4 py-2 rounded-sm text-xs font-semibold transition-all bg-indigo text-ink-on-indigo shadow-sm" role="tab" aria-selected="true">
+            Frères &amp; Sœurs (Quotas unifiés)
+          </button>
+          <button id="tab-sister-unlimited" onclick="switchMode('sister-unlimited')" class="flex-1 sm:flex-initial px-4 py-2 rounded-sm text-xs font-medium text-ink-secondary hover:text-indigo transition-all" role="tab" aria-selected="false">
+            Sœurs (Invitations illimitées)
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Dynamic Banner based on active mode -->
+      <div id="mode-summary-banner" class="mt-4 pt-3 border-t border-border-hairline flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-indigo text-base" data-icon="policy">policy</span>
+          <span id="mode-text-lead" class="font-semibold text-ink-primary">Règle appliquée : Frères et Sœurs avec quota unifié d'invitations</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="bg-surface-sand px-2.5 py-1 rounded text-ink-secondary border border-border-hairline">
+            Quota Free d'invitations : <strong id="free-invite-badge" class="text-indigo">Limité (Pack Requis pour l'illimité)</strong>
+          </span>
+          <span class="bg-surface-sand px-2.5 py-1 rounded text-ink-secondary border border-border-hairline">
+            Plafond messages journalier : <strong class="text-indigo" id="daily-cap-badge">daily_message_cap (Actif)</strong>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Free Tier Description Card (FR-044, FR-045, FR-145) -->
+    <section class="bg-surface-raised rounded-md border border-border-strong p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border-hairline">
+        <div class="space-y-1">
+          <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-surface-sand border border-border-hairline text-ink-secondary text-xs font-semibold">
+            <span>PALLIER D'ACCUEIL UNIVERSEL</span>
+          </div>
+          <h2 class="font-title text-2xl font-bold text-indigo">L'Entrée au Sanctuaire (Gratuit &amp; Sécurisé)</h2>
+          <p class="text-sm text-ink-secondary max-w-2xl leading-relaxed">
+            Accessible à tous après étude de la demande. La pudeur, la sécurité des correspondances et l'encadrement par le tuteur légal (Wali) ne sont jamais monétisés.
+          </p>
+        </div>
+
+        <div class="text-left md:text-right flex-shrink-0">
+          <div class="font-display text-3xl font-bold text-indigo">0 FCFA</div>
+          <div class="text-xs text-ink-secondary">Aucun frais d'inscription initial</div>
+        </div>
+      </div>
+
+      <!-- Free Tier Core Inclusions -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        <div class="p-4 rounded-md bg-surface-sand/70 border border-border-hairline">
+          <div class="flex items-center gap-2 text-indigo font-semibold text-sm mb-1.5">
+            <span class="material-symbols-outlined text-base" data-icon="lock">lock</span>
+            <span>Sanctuaire de pudeur</span>
+          </div>
+          <p class="text-xs text-ink-secondary leading-relaxed">
+            Floutage protecteur algorithmique de vos clichés (AES-256). Dévoilement bilatéral sous accord strict.
+          </p>
+        </div>
+
+        <div class="p-4 rounded-md bg-surface-sand/70 border border-border-hairline">
+          <div class="flex items-center gap-2 text-indigo font-semibold text-sm mb-1.5">
+            <span class="material-symbols-outlined text-base" data-icon="family_restroom">family_restroom</span>
+            <span>Présence du tuteur</span>
+          </div>
+          <p class="text-xs text-ink-secondary leading-relaxed">
+            Intégration du Wali dès l'acceptation de l'échange. Protection contre l'isolement illicite (khalwa).
+          </p>
+        </div>
+
+        <div class="p-4 rounded-md bg-surface-sand/70 border border-border-hairline">
+          <div class="flex items-center gap-2 text-indigo font-semibold text-sm mb-1.5">
+            <span class="material-symbols-outlined text-base" data-icon="verified">verified</span>
+            <span>SLA d'Examen Gratuit</span>
+          </div>
+          <p class="text-xs text-ink-secondary leading-relaxed">
+            Validation sous notre délai institutionnel unique de révision des pièces (FR-013).
+          </p>
+        </div>
+
+        <div class="p-4 rounded-md bg-surface-sand/70 border border-border-hairline">
+          <div class="flex items-center gap-2 text-indigo font-semibold text-sm mb-1.5">
+            <span class="material-symbols-outlined text-base" data-icon="chat">chat</span>
+            <span>Messagerie encadrée</span>
+          </div>
+          <p class="text-xs text-ink-secondary leading-relaxed" id="free-message-cap-text">
+            Messages journaliers limités au quota administratif (<code class="text-indigo font-medium">daily_message_cap</code>) pour préserver la mesure.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION: Piles des Packs d'Engagement (1, 3, 6 mois en FCFA XOF) -->
+    <section class="space-y-6">
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-xs font-semibold uppercase tracking-wider text-gold">Forfaits d'Homologation &amp; Médiation</span>
+        <h2 class="font-display text-3xl font-bold text-indigo-deep">Forfaits d'Engagement Ta'aruf</h2>
+        <p class="text-sm text-ink-secondary leading-relaxed" id="packs-subheading">
+          Les forfaits rétribuent la vérification physique des profils, le service d'officier de conformité et l'accompagnement par les médiateurs agréés.
+        </p>
+      </div>
+
+      <!-- Mandatory "Pas de renouvellement automatique" Banner with AUDIO PROMPT (component) -->
+      <div class="bg-surface-raised rounded-md border-2 border-border-strong p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-sm bg-indigo text-gold-soft flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-2xl" data-icon="cancel">cancel</span>
+          </div>
+          <div>
+            <div class="font-title text-base sm:text-lg font-bold text-indigo">
+              Pas de renouvellement automatique.
+            </div>
+            <p class="text-xs text-ink-secondary">
+              Paiement unique pour le cycle souscrit. Aucun prélèvement bancaire silencieux ni reconduction tacite.
+            </p>
+          </div>
+        </div>
+
+        <!-- Component: Audio Prompt with Mooré (mos) and Dioula (dyu) toggles (min-height 44px) -->
+        <div class="flex items-center gap-2 bg-surface-sand p-1.5 rounded-md border border-border-hairline flex-shrink-0">
+          <div class="flex items-center gap-1.5 px-2 text-ink-secondary">
+            <span class="material-symbols-outlined text-indigo text-xl" data-icon="volume_up">volume_up</span>
+            <span class="text-xs font-semibold hidden sm:inline">Explication vocale :</span>
+          </div>
+          <button type="button" onclick="playAudioNotice('mos')" class="min-h-[44px] px-3 py-2 rounded-sm bg-surface-raised text-indigo border border-border-hairline text-xs font-semibold hover:border-border-strong hover:bg-gold-soft/30 transition-all focus:ring-2 focus:ring-focus-ring">
+            Mooré (mos)
+          </button>
+          <button type="button" onclick="playAudioNotice('dyu')" class="min-h-[44px] px-3 py-2 rounded-sm bg-surface-raised text-indigo border border-border-hairline text-xs font-semibold hover:border-border-strong hover:bg-gold-soft/30 transition-all focus:ring-2 focus:ring-focus-ring">
+            Dioula (dyu)
+          </button>
+        </div>
+      </div>
+
+      <!-- 3 Pack Cards: 1 mois, 3 mois, 6 mois in XOF with launch price & normal price (FR-108) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+
+        <!-- Pack 1 : 1 Mois -->
+        <div class="pack-card bg-surface-raised rounded-md border border-border-strong p-6 flex flex-col justify-between shadow-sm relative transition-all hover:border-indigo">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-semibold tracking-wider uppercase text-gold">Démarche Initiale</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-surface-sand border border-border-hairline text-ink-secondary font-medium">1 Mois</span>
+            </div>
+            
+            <h3 class="font-title text-xl font-bold text-indigo">Pack Découverte Ta'aruf</h3>
+            <p class="text-xs text-ink-secondary mt-1 min-h-[32px]" id="pack-1-desc">
+              Pour initier les premiers échanges accompagnés en pleine convenance.
+            </p>
+
+            <!-- Pricing: Launch Price AND Normal Price (FR-108) -->
+            <div class="mt-4 pt-4 border-t border-border-hairline">
+              <div class="flex items-baseline gap-2">
+                <span class="font-display text-3xl font-bold text-indigo">25 000 FCFA</span>
+                <span class="text-xs text-ink-secondary">XOF</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1 text-xs">
+                <span class="text-ink-secondary line-through">Prix normal : 35 000 FCFA</span>
+                <span class="px-1.5 py-0.2 rounded bg-gold-soft/40 text-indigo font-semibold text-[11px]">Tarif Lancement</span>
+              </div>
+            </div>
+
+            <!-- Inclusions list -->
+            <ul class="space-y-2.5 text-xs text-ink-secondary mt-6">
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span id="pack-1-feature-invites">Invitations : Illimitées pendant 30 jours</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Messagerie : Messages illimités (levée du plafond FR-146)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Priorité d'instruction dossier (FR-012)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Pas de reconduction tacite</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-border-hairline">
+            <a href="/checkout/1-mois" class="w-full min-h-[48px] inline-flex items-center justify-center px-4 rounded-md bg-surface-raised border border-border-strong text-indigo font-semibold text-sm hover:bg-surface-sand transition-all focus:outline-none focus:ring-2 focus:ring-focus-ring">
+              Choisir 1 mois
+            </a>
+            <p class="text-[11px] text-center text-ink-secondary mt-2">Paiement unique 25 000 FCFA</p>
+          </div>
+        </div>
+
+        <!-- Pack 2 : 3 Mois (Recommandé / Featured) -->
+        <div class="pack-card bg-surface-raised rounded-md border-2 border-indigo p-6 flex flex-col justify-between shadow-md relative">
+          <!-- Featured badge -->
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo text-ink-on-indigo text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+            Conseillé pour l'aboutissement
+          </div>
+
+          <div>
+            <div class="flex justify-between items-start mb-2 mt-1">
+              <span class="text-xs font-semibold tracking-wider uppercase text-gold">Cycle Médian</span>
+              <span class="text-xs px-2.5 py-0.5 rounded bg-gold-soft/50 border border-gold/40 text-indigo font-bold">3 Mois</span>
+            </div>
+            
+            <h3 class="font-title text-xl font-bold text-indigo">Pack Alliance &amp; Familles</h3>
+            <p class="text-xs text-ink-secondary mt-1 min-h-[32px]" id="pack-3-desc">
+              Le rythme propice à l'alignement des valeurs, à la médiation et à l'accord du tuteur.
+            </p>
+
+            <!-- Pricing: Launch Price AND Normal Price (FR-108) -->
+            <div class="mt-4 pt-4 border-t border-border-hairline">
+              <div class="flex items-baseline gap-2">
+                <span class="font-display text-3xl font-bold text-indigo">60 000 FCFA</span>
+                <span class="text-xs text-ink-secondary">XOF</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1 text-xs">
+                <span class="text-ink-secondary line-through">Prix normal : 85 000 FCFA</span>
+                <span class="px-1.5 py-0.2 rounded bg-gold-soft/40 text-indigo font-semibold text-[11px]">Tarif Lancement (-29%)</span>
+              </div>
+            </div>
+
+            <!-- Inclusions list -->
+            <ul class="space-y-2.5 text-xs text-ink-secondary mt-6">
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span id="pack-3-feature-invites" class="font-semibold text-ink-primary">Invitations illimitées (aucun plafond de 15)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span class="font-semibold text-ink-primary">Messagerie : Messages illimités (franchit FR-146)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Priorité file de révision humaine (FR-012)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Facilitation directe de la mise en relation avec le Wali</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Pas de renouvellement automatique</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-border-hairline">
+            <!-- Single Primary Button on the screen (FR brand rule) -->
+            <a href="/checkout/3-mois" class="w-full min-h-[48px] inline-flex items-center justify-center px-4 rounded-md bg-indigo text-ink-on-indigo font-bold text-sm hover:bg-indigo-deep transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-gold-soft">
+              Sélectionner 3 mois
+            </a>
+            <p class="text-[11px] text-center text-ink-secondary mt-2">Paiement unique 60 000 FCFA</p>
+          </div>
+        </div>
+
+        <!-- Pack 3 : 6 Mois -->
+        <div class="pack-card bg-surface-raised rounded-md border border-border-strong p-6 flex flex-col justify-between shadow-sm relative transition-all hover:border-indigo">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-semibold tracking-wider uppercase text-gold">Pleine Sérénité</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-surface-sand border border-border-hairline text-ink-secondary font-medium">6 Mois</span>
+            </div>
+            
+            <h3 class="font-title text-xl font-bold text-indigo">Pack Khitba &amp; Nikah</h3>
+            <p class="text-xs text-ink-secondary mt-1 min-h-[32px]" id="pack-6-desc">
+              Accompagnement durable jusqu'à la célébration solennelle du mariage.
+            </p>
+
+            <!-- Pricing: Launch Price AND Normal Price (FR-108) -->
+            <div class="mt-4 pt-4 border-t border-border-hairline">
+              <div class="flex items-baseline gap-2">
+                <span class="font-display text-3xl font-bold text-indigo">110 000 FCFA</span>
+                <span class="text-xs text-ink-secondary">XOF</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1 text-xs">
+                <span class="text-ink-secondary line-through">Prix normal : 150 000 FCFA</span>
+                <span class="px-1.5 py-0.2 rounded bg-gold-soft/40 text-indigo font-semibold text-[11px]">Tarif Lancement (-27%)</span>
+              </div>
+            </div>
+
+            <!-- Inclusions list -->
+            <ul class="space-y-2.5 text-xs text-ink-secondary mt-6">
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span id="pack-6-feature-invites">Invitations illimitées sans aucune restriction</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Messages illimités pendant 180 jours entiers</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Priorité absolue en file de modération (FR-012)</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Accompagnement consultatif aux modules de l'Académie</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="material-symbols-outlined text-success text-base flex-shrink-0" data-icon="check_circle">check_circle</span>
+                <span>Clôture d'office dès célébration du mariage</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-border-hairline">
+            <a href="/checkout/6-mois" class="w-full min-h-[48px] inline-flex items-center justify-center px-4 rounded-md bg-surface-raised border border-border-strong text-indigo font-semibold text-sm hover:bg-surface-sand transition-all focus:outline-none focus:ring-2 focus:ring-focus-ring">
+              Choisir 6 mois
+            </a>
+            <p class="text-[11px] text-center text-ink-secondary mt-2">Paiement unique 110 000 FCFA</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Clear Comparison: Premium vs Free Differences (FR-044, FR-045, FR-146) -->
+    <section class="bg-surface-raised rounded-md border border-border-hairline p-6 sm:p-8">
+      <div class="mb-6">
+        <span class="text-xs font-semibold uppercase tracking-wider text-gold">Différenciation Objective</span>
+        <h3 class="font-title text-2xl font-bold text-indigo">Comparatif des Prérogatives : Gratuit vs Premium</h3>
+        <p class="text-xs text-ink-secondary mt-1">Conformément à nos engagements, la sécurité et la pudeur ne sont soumises à aucun péage.</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm border-collapse">
+          <thead>
+            <tr class="border-b border-border-hairline text-ink-secondary">
+              <th class="py-3 px-4 font-semibold">Fonctionnalités &amp; Garanties</th>
+              <th class="py-3 px-4 font-semibold text-indigo">Accès Sanctuaire (Gratuit)</th>
+              <th class="py-3 px-4 font-semibold text-indigo">Forfaits d'Engagement (Premium)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border-hairline text-ink-secondary">
+            <tr>
+              <td class="py-3 px-4 font-medium text-ink-primary">Envoi d'invitations (Ta'aruf)</td>
+              <td class="py-3 px-4" id="table-col-free-invites">Plafonné au quota Free (défini par l'administration)</td>
+              <td class="py-3 px-4 font-semibold text-indigo">Illimitées (Aucun plafond artificiel de 15)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-ink-primary">Échanges de messages</td>
+              <td class="py-3 px-4">Plafonné au quota quotidien actif (<code class="text-indigo font-medium">daily_message_cap</code>)</td>
+              <td class="py-3 px-4 font-semibold text-indigo">Illimités sans interruption (Levée FR-146)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-ink-primary">File de validation des profils</td>
+              <td class="py-3 px-4">Délai standard garanti selon le SLA public d'examen (FR-013)</td>
+              <td class="py-3 px-4 font-semibold text-indigo">Priorité de traitement en file de revue (FR-012)</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-ink-primary">Protection des photos &amp; Floutage (Blur)</td>
+              <td class="py-3 px-4 text-success font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base" data-icon="check_circle">check_circle</span> Inclus (Sans distinction)
+              </td>
+              <td class="py-3 px-4 text-success font-semibold">Inclus intégralement</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-ink-primary">Implication obligatoire du tuteur (Wali)</td>
+              <td class="py-3 px-4 text-success font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base" data-icon="check_circle">check_circle</span> Inclus (Sans distinction)
+              </td>
+              <td class="py-3 px-4 text-success font-semibold">Inclus intégralement</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-ink-primary">Signalement, Blocage &amp; Droits CIL/RGPD</td>
+              <td class="py-3 px-4 text-success font-semibold flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base" data-icon="check_circle">check_circle</span> Inclus (Sans distinction)
+              </td>
+              <td class="py-3 px-4 text-success font-semibold">Inclus intégralement</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-ink-primary">Renouvellement automatique</td>
+              <td class="py-3 px-4 text-ink-secondary">Néant</td>
+              <td class="py-3 px-4 text-danger font-semibold">Strictement AUCUN (Zéro reconduction)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Authorized Payment Rails (Burkina Faso focus: Orange Money BF, Moov Africa BF, Wave/Coris; Cards secondary) -->
+    <!-- Explicitly absent: Free Money / MTN MoMo -->
+    <section class="bg-surface-raised rounded-md border border-border-hairline p-6 sm:p-8">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-border-hairline">
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-gold">Modes de Règlement Burkinabé</span>
+          <h3 class="font-title text-xl font-bold text-indigo">Moyens de Paiement Agréés au Faso</h3>
+          <p class="text-xs text-ink-secondary mt-1">Transactions directes par monnaie électronique locale ou carte bancaire.</p>
+        </div>
+        <div class="text-xs text-ink-secondary bg-surface-sand px-3 py-1.5 rounded border border-border-hairline">
+          Devise : <strong class="text-indigo">Franc CFA (XOF)</strong>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+        <!-- Orange Money BF -->
+        <div class="p-4 rounded-md bg-surface-sand border border-border-hairline flex items-center gap-3">
+          <div class="w-10 h-10 rounded-sm bg-[#FF7900] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-2xs">
+            OM
+          </div>
+          <div>
+            <div class="font-semibold text-sm text-ink-primary">Orange Money BF</div>
+            <div class="text-xs text-ink-secondary">Paiement instantané mobile</div>
+          </div>
+        </div>
+
+        <!-- Moov Africa BF -->
+        <div class="p-4 rounded-md bg-surface-sand border border-border-hairline flex items-center gap-3">
+          <div class="w-10 h-10 rounded-sm bg-[#005CA9] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-2xs">
+            MOOV
+          </div>
+          <div>
+            <div class="font-semibold text-sm text-ink-primary">Moov Africa BF</div>
+            <div class="text-xs text-ink-secondary">Moov Money Burkina</div>
+          </div>
+        </div>
+
+        <!-- Wave / Coris -->
+        <div class="p-4 rounded-md bg-surface-sand border border-border-hairline flex items-center gap-3">
+          <div class="w-10 h-10 rounded-sm bg-[#1DC3F4] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-2xs">
+            WAVE
+          </div>
+          <div>
+            <div class="font-semibold text-sm text-ink-primary">Wave / Coris Bank</div>
+            <div class="text-xs text-ink-secondary">Réseau partenaire &amp; Coris</div>
+          </div>
+        </div>
+
+        <!-- Cartes bancaires (Secondary) -->
+        <div class="p-4 rounded-md bg-surface-sand border border-border-hairline flex items-center gap-3">
+          <div class="w-10 h-10 rounded-sm bg-indigo text-gold-soft flex items-center justify-center font-bold text-xs flex-shrink-0 shadow-2xs">
+            <span class="material-symbols-outlined text-xl" data-icon="credit_card">credit_card</span>
+          </div>
+          <div>
+            <div class="font-semibold text-sm text-ink-primary">Cartes Bancaires</div>
+            <div class="text-xs text-ink-secondary">Visa, Mastercard (Secondaire)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resilient Safety Guarantee: Payment rail error never hides safety -->
+      <div class="mt-6 pt-4 border-t border-border-hairline flex items-start gap-2 text-xs text-ink-secondary">
+        <span class="material-symbols-outlined text-indigo text-base mt-0.5" data-icon="security">security</span>
+        <span>
+          <strong>Garantie de continuité inviolable :</strong> Même en cas d'indisponibilité momentanée des canaux de règlement (<code class="text-indigo">PAY_UNAVAILABLE</code>), les prérogatives fondamentales de sécurité (Vérification, Messagerie en cours, Floutage, Tuteur Wali, Blocage et Signalement déontologique) restent pleinement opérationnelles sans interruption.
+        </span>
+      </div>
+    </section>
+
+    <!-- Institutional Reassurance Banner -->
+    <section class="bg-surface-indigo text-ink-on-indigo rounded-md p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="space-y-1.5 text-center md:text-left">
+        <div class="inline-flex items-center gap-2 text-gold-soft text-xs uppercase font-semibold">
+          <span class="material-symbols-outlined text-base" data-icon="gavel">gavel</span>
+          <span>Droit à la rétractation &amp; Assistance</span>
+        </div>
+        <h3 class="font-title text-xl font-bold text-surface-sand">Une interrogation avant de franchir le pas ?</h3>
+        <p class="text-xs text-ink-on-indigo/80 max-w-xl">
+          Droit légal de rétractation de 14 jours francs. Remboursement immédiat sans justification préalable en cas de non-utilisation des services de mise en relation.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="/faq" class="min-h-[44px] px-5 py-2.5 rounded-md bg-surface-raised text-indigo font-semibold text-xs hover:bg-gold-soft transition-all">
+          Consulter la FAQ Tarifs
+        </a>
+        <a href="/contact-secretariat" class="min-h-[44px] px-5 py-2.5 rounded-md border border-border-hairline text-ink-on-indigo text-xs font-semibold hover:bg-surface-sand/10 transition-all">
+          Écrire au Secrétariat
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Public Shared Solemn Footer (Consistent with Legal Hub and Landing) -->
+  <footer class="bg-surface-raised border-t border-border-hairline mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      
+      <!-- Top Row: Integrity Marriage Counter & Protocol Note -->
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-border-hairline">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-surface-sand border border-gold flex items-center justify-center text-indigo">
+            <span class="material-symbols-outlined text-gold text-xl" data-icon="favorite">favorite</span>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-ink-secondary uppercase tracking-wider">Compteur d'Intégrité Matrimoniale</div>
+            <div class="font-display text-lg font-bold text-indigo">Mariages confirmés : 0</div>
+          </div>
+        </div>
+
+        <p class="text-xs text-ink-secondary max-w-md text-center md:text-right leading-relaxed">
+          <strong>Engagement Zéro Artifice :</strong> Aucune statistique fictive, aucun faux compteur de présence. Chaque union est validée solennellement devant Dieu et les familles.
+        </p>
+      </div>
+
+      <!-- Links Row -->
+      <div class="flex flex-wrap items-center justify-center md:justify-start gap-x-6 gap-y-2 text-xs font-medium text-ink-secondary">
+        <a href="/mentions-legales" class="hover:text-indigo transition-colors">Mentions Légales</a>
+        <a href="/cgu-cgv" class="hover:text-indigo transition-colors">CGU &amp; CGV</a>
+        <a href="/confidentialite" class="hover:text-indigo transition-colors">Politique de Pudeur &amp; RGPD</a>
+        <a href="/traceurs" class="hover:text-indigo transition-colors">Gestion des Témoins (Zéro Pixel Tiers)</a>
+        <a href="/dpo" class="hover:text-indigo transition-colors">Délégué aux Données (DPO)</a>
+        <a href="/souverainete" class="hover:text-indigo transition-colors">Hébergement Souverain (Scaleway Paris)</a>
+        <a href="/faq" class="hover:text-indigo transition-colors">Foire Aux Questions</a>
+      </div>
+
+      <!-- Mandatory Copyright & Sovereignty Notice -->
+      <div class="pt-2 text-center md:text-left text-[11px] text-ink-secondary/80 leading-relaxed space-y-1">
+        <p>© 2026 AnKanu (ankanu.com). Tous droits réservés. Plateforme d'alliance et de médiation familiale honorable (Burkina Faso / Afrique de l'Ouest).</p>
+        <p>Hébergé sur infrastructure souveraine française (Scaleway Île-de-France). Conforme aux normes déontologiques et aux préceptes du droit musulman de la famille.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Vanilla Interaction Script for Mode Switching & Audio Playback -->
+  <script>
+    function switchMode(mode) {
+      const tabBrother = document.getElementById('tab-brother');
+      const tabSister = document.getElementById('tab-sister-unlimited');
+      const modeTextLead = document.getElementById('mode-text-lead');
+      const freeInviteBadge = document.getElementById('free-invite-badge');
+      const packsSubheading = document.getElementById('packs-subheading');
+      const tableColFreeInvites = document.getElementById('table-col-free-invites');
+
+      const pack1Desc = document.getElementById('pack-1-desc');
+      const pack3Desc = document.getElementById('pack-3-desc');
+      const pack6Desc = document.getElementById('pack-6-desc');
+
+      const pack1Feature = document.getElementById('pack-1-feature-invites');
+      const pack3Feature = document.getElementById('pack-3-feature-invites');
+      const pack6Feature = document.getElementById('pack-6-feature-invites');
+
+      if (mode === 'sister-unlimited') {
+        // Tab styling
+        tabSister.className = "flex-1 sm:flex-initial px-4 py-2 rounded-sm text-xs font-semibold transition-all bg-indigo text-ink-on-indigo shadow-sm";
+        tabSister.setAttribute('aria-selected', 'true');
+        tabBrother.className = "flex-1 sm:flex-initial px-4 py-2 rounded-sm text-xs font-medium text-ink-secondary hover:text-indigo transition-all";
+        tabBrother.setAttribute('aria-selected', 'false');
+
+        // Text changes according to PRD / FR specifications
+        modeTextLead.textContent = "Règle appliquée : Mode Sœurs — Invitations illimitées sans souscription requise";
+        freeInviteBadge.textContent = "Invitations illimitées.";
+        packsSubheading.textContent = "En mode Sœur avec invitations illimitées, ces forfaits lèvent le plafond journalier de messages et vous offrent la priorité en file de révision (non requis pour la portée d'invitation).";
+        tableColFreeInvites.innerHTML = "<strong class='text-indigo'>Invitations illimitées.</strong> (Aucune exigence de pack pour inviter)";
+
+        pack1Desc.textContent = "Messages illimités pendant 30 jours et examen accéléré (invitations déjà illimitées).";
+        pack3Desc.textContent = "Messagerie continue sans plafond journalier et accompagnement avec le tuteur.";
+        pack6Desc.textContent = "Sérénité d'échanges prolongés jusqu'à la conclusion de l'alliance bénie.";
+
+        pack1Feature.textContent = "Messages : Illimités sans blocage (FR-146 levé)";
+        pack3Feature.textContent = "Messages illimités en continu (Invitations déjà libres)";
+        pack6Feature.textContent = "Messages illimités + priorité totale de médiation";
+      } else {
+        // Default Brother / Sister same_quota_as_brothers
+        tabBrother.className = "flex-1 sm:flex-initial px-4 py-2 rounded-sm text-xs font-semibold transition-all bg-indigo text-ink-on-indigo shadow-sm";
+        tabBrother.setAttribute('aria-selected', 'true');
+        tabSister.className = "flex-1 sm:flex-initial px-4 py-2 rounded-sm text-xs font-medium text-ink-secondary hover:text-indigo transition-all";
+        tabSister.setAttribute('aria-selected', 'false');
+
+        modeTextLead.textContent = "Règle appliquée : Frères et Sœurs avec quota unifié d'invitations";
+        freeInviteBadge.textContent = "Limité (Pack Requis pour l'illimité)";
+        packsSubheading.textContent = "Les forfaits rétribuent la vérification physique des profils, le service d'officier de conformité et l'accompagnement par les médiateurs agréés.";
+        tableColFreeInvites.textContent = "Plafonné au quota Free (défini par l'administration)";
+
+        pack1Desc.textContent = "Pour initier les premiers échanges accompagnés en pleine convenance.";
+        pack3Desc.textContent = "Le rythme propice à l'alignement des valeurs, à la médiation et à l'accord du tuteur.";
+        pack6Desc.textContent = "Accompagnement durable jusqu'à la célébration solennelle du mariage.";
+
+        pack1Feature.textContent = "Invitations : Illimitées pendant 30 jours";
+        pack3Feature.textContent = "Invitations illimitées (aucun plafond de 15)";
+        pack6Feature.textContent = "Invitations illimitées sans aucune restriction";
+      }
+    }
+
+    function playAudioNotice(lang) {
+      const message = lang === 'mos' 
+        ? "Explication vocale en Mooré (audio-prompt) : Pas de renouvellement automatique. Vous payez une seule fois par Orange Money BF, Moov Africa BF ou Wave."
+        : "Explication vocale en Dioula (audio-prompt) : Pas de prélèvement tacite. Paiement unique sans engagement reconduit.";
+      alert(message);
+    }
+  </script>
+</body>
+</html>

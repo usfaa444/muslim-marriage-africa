@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-[#F4EDE0]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAQ + contact — AnKanu</title>
+  <!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: '#F4EDE0',
+            raised: '#FFFBF4',
+            'indigo-base': '#1F3A5F',
+            'indigo-deep': '#15283F',
+            gold: '#C4A35A',
+            'gold-soft': '#E8D5A3',
+            'ink-primary': '#1B2433',
+            'ink-secondary': '#5C5346',
+            'ink-on-indigo': '#F4EDE0',
+            danger: '#8B3A3A',
+            'danger-soft': '#F3E0DC',
+            success: '#3D5C45',
+            'success-soft': '#DCE6DE',
+            staff: '#6B3D2E',
+            'staff-soft': '#EFE4DC',
+            'border-hairline': '#D9CDB8',
+            'border-strong': '#6F624C',
+            'blur-wash': '#C8BBA6'
+          },
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif']
+          },
+          borderRadius: {
+            sm: '6px',
+            md: '12px',
+            lg: '20px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Details / Summary styling */
+    details > summary {
+      list-style: none;
+    }
+    details > summary::-webkit-details-marker {
+      display: none;
+    }
+    details[open] .faq-icon {
+      transform: rotate(180deg);
+    }
+    .focus-ring:focus {
+      outline: 2px solid #1F3A5F;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-sans text-ink-primary bg-sand antialiased selection:bg-gold-soft selection:text-indigo-deep">
+
+  <!-- Top Navigation Bar (Editorial AnKanu Header) -->
+  <header class="w-full bg-sand/90 backdrop-blur border-b border-border-hairline sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <a href="#accueil" class="flex items-center gap-3 group focus:outline-none">
+          <!-- Monogram / Seal -->
+          <div class="w-10 h-10 rounded-full border border-indigo-base flex items-center justify-center bg-raised text-indigo-base transition group-hover:border-gold">
+            <span class="font-serif font-bold text-lg leading-none">A</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="font-serif font-bold text-xl text-indigo-base tracking-tight leading-tight">AnKanu</span>
+            <span class="text-[10px] font-semibold tracking-widest uppercase text-ink-secondary">Ta'aruf Honorable</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Links -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#vision" class="text-sm font-medium text-ink-secondary hover:text-indigo-base transition-colors">La Vision</a>
+        <a href="#academie" class="text-sm font-medium text-ink-secondary hover:text-indigo-base transition-colors">L'Académie</a>
+        <a href="#comite" class="text-sm font-medium text-ink-secondary hover:text-indigo-base transition-colors">Comité Consultatif</a>
+        <a href="#tarifs" class="text-sm font-medium text-ink-secondary hover:text-indigo-base transition-colors">Tarifs clairs</a>
+        <a href="#faq" class="text-sm font-semibold text-indigo-base border-b-2 border-indigo-base pb-1">Foire Aux Questions</a>
+      </nav>
+
+      <!-- Access -->
+      <div class="flex items-center gap-3">
+        <a href="#connexion" class="text-sm font-medium text-ink-secondary hover:text-indigo-base px-3 py-2 transition-colors">Se connecter</a>
+        <a href="#demarche" class="bg-indigo-base hover:bg-indigo-deep text-ink-on-indigo text-sm font-semibold px-4 py-2.5 rounded-md transition-colors shadow-sm">Commencer l'Engagement</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <!-- Header Section with soft mihrab backdrop -->
+    <section class="relative bg-sand pt-12 pb-16 border-b border-border-hairline overflow-hidden">
+      <!-- Soft Mihrab decorative curve behind title -->
+      <div class="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#EBE2D2] to-transparent pointer-events-none opacity-60"></div>
+      <div class="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
+        <!-- Integrity badge -->
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-raised border border-border-hairline text-ink-secondary text-xs font-medium mb-6">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+          <span>Cadre Institutionnel FR-118 · Burkina Faso &amp; Sous-région</span>
+        </div>
+
+        <h1 class="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-indigo-base tracking-tight mb-4">
+          Foire Aux Questions &amp; Secrétariat Déontologique
+        </h1>
+        <p class="text-base sm:text-lg text-ink-secondary max-w-2xl mx-auto leading-relaxed">
+          Retrouvez les réponses fondamentales sur les protocoles de convenance, la présence du tuteur légal (Wali), et adressez toute demande ou signalement au Secrétariat d'assistance.
+        </p>
+
+        <!-- Official Registry Counter Notice -->
+        <div class="mt-8 inline-flex items-center gap-4 bg-raised px-5 py-2.5 rounded-md border border-border-hairline shadow-sm text-xs sm:text-sm text-ink-secondary">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            <span class="font-semibold text-ink-primary">Registre officiel scellé :</span>
+            <span>Mariages confirmés : 0</span>
+          </div>
+          <span class="text-border-strong hidden sm:inline">|</span>
+          <span class="hidden sm:inline italic">Plateforme inaugurale sans chiffres de complaisance</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content: FAQ (Left/Center) + Ticketed Form (Right/Side) in responsive layout -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        
+        <!-- Left: FAQ Section (FR-118 Core) -->
+        <div class="lg:col-span-7 space-y-8">
+          <div>
+            <div class="flex items-center justify-between pb-4 border-b border-border-hairline">
+              <div>
+                <h2 class="font-serif text-2xl font-bold text-indigo-base">Foire Aux Questions</h2>
+                <p class="text-sm text-ink-secondary mt-1">Éclaircissements doctrinaux, sécurité de la pudeur et fonctionnement technique.</p>
+              </div>
+              <span class="text-xs font-semibold px-2.5 py-1 rounded bg-raised border border-border-hairline text-ink-secondary">7 articles</span>
+            </div>
+
+            <!-- FAQ Accordion List -->
+            <div class="mt-6 space-y-4">
+              <!-- Item 1 -->
+              <details class="group bg-raised rounded-md border border-border-hairline transition-all duration-200 open:border-border-strong open:shadow-sm" open>
+                <summary class="flex items-center justify-between p-5 cursor-pointer select-none">
+                  <span class="font-serif font-semibold text-base sm:text-lg text-indigo-base pr-4">
+                    Comment le tuteur légal (Wali) est-il intégré au cheminement ?
+                  </span>
+                  <div class="faq-icon flex-shrink-0 w-7 h-7 rounded-full border border-border-hairline bg-sand flex items-center justify-center text-indigo-base transition-transform duration-200">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </summary>
+                <div class="px-5 pb-5 text-sm sm:text-base text-ink-secondary leading-relaxed border-t border-border-hairline/60 pt-4">
+                  Dès l'acceptation formelle d'une invitation au ta'aruf, les coordonnées du tuteur légal sont scellées et associées au dossier. Le Wali dispose d'un accès dédié lui permettant de lire les correspondances, de valider chaque palier et de convenir des entretiens de famille. Aucun isolement illicite (<em>khalwa numérique</em>) n'est techniquement possible au sein d'AnKanu.
+                </div>
+              </details>
+
+              <!-- Item 2 -->
+              <details class="group bg-raised rounded-md border border-border-hairline transition-all duration-200 open:border-border-strong open:shadow-sm">
+                <summary class="flex items-center justify-between p-5 cursor-pointer select-none">
+                  <span class="font-serif font-semibold text-base sm:text-lg text-indigo-base pr-4">
+                    En quoi consiste le protocole de floutage et le Sceau de Pudeur ?
+                  </span>
+                  <div class="faq-icon flex-shrink-0 w-7 h-7 rounded-full border border-border-hairline bg-sand flex items-center justify-center text-indigo-base transition-transform duration-200">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </summary>
+                <div class="px-5 pb-5 text-sm sm:text-base text-ink-secondary leading-relaxed border-t border-border-hairline/60 pt-4">
+                  Les portraits photographiques ne sont jamais exposés publiquement ni étalés en grille marchande. Ils bénéficient d'un dérivé de floutage généré côté serveur. Le dévoilement partiel ou complet exige un consentement mutuel préalable (Sceau de Dévoilement bilatéral) et la notification explicite du tuteur légal.
+                </div>
+              </details>
+
+              <!-- Item 3 -->
+              <details class="group bg-raised rounded-md border border-border-hairline transition-all duration-200 open:border-border-strong open:shadow-sm">
+                <summary class="flex items-center justify-between p-5 cursor-pointer select-none">
+                  <span class="font-serif font-semibold text-base sm:text-lg text-indigo-base pr-4">
+                    Pourquoi n'y a-t-il aucun prélèvement automatique ou abonnement tacite ?
+                  </span>
+                  <div class="faq-icon flex-shrink-0 w-7 h-7 rounded-full border border-border-hairline bg-sand flex items-center justify-center text-indigo-base transition-transform duration-200">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </summary>
+                <div class="px-5 pb-5 text-sm sm:text-base text-ink-secondary leading-relaxed border-t border-border-hairline/60 pt-4">
+                  Le mariage étant un engagement sacré, notre modèle économique repose uniquement sur des forfaits forfaitaires à paiement unique (1, 3 ou 6 mois) réglables via Orange Money, Moov Africa, Wave ou carte bancaire. Aucun compte n'est prélevé à son insu, conformément à l'exigence canonique de clarté contractuelle.
+                </div>
+              </details>
+
+              <!-- Item 4 -->
+              <details class="group bg-raised rounded-md border border-border-hairline transition-all duration-200 open:border-border-strong open:shadow-sm">
+                <summary class="flex items-center justify-between p-5 cursor-pointer select-none">
+                  <span class="font-serif font-semibold text-base sm:text-lg text-indigo-base pr-4">
+                    Comment sont traités les signalements pour manquement à la bienséance (misuse) ?
+                  </span>
+                  <div class="faq-icon flex-shrink-0 w-7 h-7 rounded-full border border-border-hairline bg-sand flex items-center justify-center text-indigo-base transition-transform duration-200">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </summary>
+                <div class="px-5 pb-5 text-sm sm:text-base text-ink-secondary leading-relaxed border-t border-border-hairline/60 pt-4">
+                  Tout propos inconvenant, contournement de tuteur ou tentative de transaction directe déclenche une alerte prioritaire routée immédiatement vers l'équipe des modérateurs assermentés. La file disciplinaire interne examine le contexte sous badge « Équipe seulement » et applique des sanctions allant du rappel à l'ordre à la radiation définitive avec clôture de dossier.
+                </div>
+              </details>
+
+              <!-- Item 5 -->
+              <details class="group bg-raised rounded-md border border-border-hairline transition-all duration-200 open:border-border-strong open:shadow-sm">
+                <summary class="flex items-center justify-between p-5 cursor-pointer select-none">
+                  <span class="font-serif font-semibold text-base sm:text-lg text-indigo-base pr-4">
+                    Quelles garanties de souveraineté pour les pièces d'identité et dossiers ?
+                  </span>
+                  <div class="faq-icon flex-shrink-0 w-7 h-7 rounded-full border border-border-hairline bg-sand flex items-center justify-center text-indigo-base transition-transform duration-200">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </summary>
+                <div class="px-5 pb-5 text-sm sm:text-base text-ink-secondary leading-relaxed border-t border-border-hairline/60 pt-4">
+                  Les pièces d'homologation sont hébergées sur des serveurs souverains sécurisés conformes aux normes européennes RGPD et aux exigences strictes de protection de la vie privée. Aucune donnée personnelle n'est commercialisée, ni exploitée à des fins publicitaires comportementales.
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <!-- Empty State pattern component as per design system requirements -->
+          <div class="p-6 rounded-md bg-raised border border-border-hairline flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="font-serif font-semibold text-indigo-base">Votre interrogation demeure sans réponse ?</h3>
+              <p class="text-sm text-ink-secondary mt-0.5">Le secrétariat d'admission et d'éthique traite chaque requête humaine individuellement.</p>
+            </div>
+            <a href="#ticket-form" class="inline-flex items-center justify-center px-4 py-2 text-xs font-semibold uppercase tracking-wider text-indigo-base bg-sand hover:bg-gold-soft border border-border-strong rounded-md transition-colors whitespace-nowrap">
+              Ouvrir un ticket
+            </a>
+          </div>
+        </div>
+
+        <!-- Right: Ticketed Contact Form (FR-118 Core) -->
+        <div id="ticket-form" class="lg:col-span-5">
+          <div class="bg-raised rounded-md border border-border-strong p-6 sm:p-8 shadow-sm">
+            <div class="border-b border-border-hairline pb-4 mb-6">
+              <div class="flex items-center justify-between">
+                <h2 class="font-serif text-2xl font-bold text-indigo-base">Formulaire de Contact</h2>
+                <span class="text-xs font-mono px-2 py-0.5 rounded bg-sand border border-border-hairline text-ink-secondary">Ticket certifié</span>
+              </div>
+              <p class="text-xs sm:text-sm text-ink-secondary mt-1">
+                Ouverture d'un ticket numéroté auprès du Secrétariat ou du Pôle de Modération.
+              </p>
+            </div>
+
+            <!-- Error Banner (Design system inheritance: danger-soft, retry verb) -->
+            <div id="form-error-banner" class="hidden mb-6 p-4 rounded-md bg-danger-soft border border-danger text-xs text-danger flex items-start justify-between gap-3">
+              <div class="flex items-start gap-2">
+                <svg class="w-4 h-4 flex-shrink-0 mt-0.5 text-danger" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <span>Veuillez renseigner tous les champs obligatoires et choisir un motif valide.</span>
+              </div>
+              <button type="button" onclick="document.getElementById('form-error-banner').classList.add('hidden')" class="font-bold underline uppercase tracking-wider text-[11px] text-danger hover:text-ink-primary">
+                Réessayer
+              </button>
+            </div>
+
+            <!-- Form Container -->
+            <form id="contactForm" onsubmit="handleTicketSubmit(event)" class="space-y-5">
+              
+              <!-- Identity Fields -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="contact_nom" class="block text-xs font-semibold text-ink-primary mb-1.5">
+                    Nom &amp; Prénom <span class="text-danger">*</span>
+                  </label>
+                  <input type="text" id="contact_nom" required placeholder="Ex. Ousmane Sawadogo" class="w-full px-3.5 py-2.5 rounded-md bg-sand border border-border-strong text-ink-primary text-sm focus-ring placeholder-ink-secondary/50">
+                </div>
+                <div>
+                  <label for="contact_statut" class="block text-xs font-semibold text-ink-primary mb-1.5">
+                    Qualité <span class="text-danger">*</span>
+                  </label>
+                  <select id="contact_statut" required class="w-full px-3.5 py-2.5 rounded-md bg-sand border border-border-strong text-ink-primary text-sm focus-ring">
+                    <option value="" disabled selected>Sélectionner votre statut</option>
+                    <option value="postulant">Postulant / Postulante</option>
+                    <option value="wali">Tuteur légal (Wali)</option>
+                    <option value="famille">Membre de la famille</option>
+                    <option value="visiteur">Visiteur externe</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Contact Field -->
+              <div>
+                <label for="contact_email" class="block text-xs font-semibold text-ink-primary mb-1.5">
+                  Adresse électronique de notification <span class="text-danger">*</span>
+                </label>
+                <input type="email" id="contact_email" required placeholder="adresse@domaine.com" class="w-full px-3.5 py-2.5 rounded-md bg-sand border border-border-strong text-ink-primary text-sm focus-ring placeholder-ink-secondary/50">
+                <span class="text-[11px] text-ink-secondary mt-1 block">Votre récépissé officiel de ticket y sera délivré instantanément.</span>
+              </div>
+
+              <!-- Subject Triage Including Misuse (Critical FR-118 Requirement) -->
+              <div>
+                <label for="contact_triage" class="block text-xs font-semibold text-ink-primary mb-1.5 flex items-center justify-between">
+                  <span>Motif de la saisine (Triage) <span class="text-danger">*</span></span>
+                </label>
+                <select id="contact_triage" required onchange="handleTriageChange(this.value)" class="w-full px-3.5 py-2.5 rounded-md bg-sand border border-border-strong text-ink-primary text-sm focus-ring font-medium">
+                  <option value="" disabled selected>Choisir la nature de la requête...</option>
+                  <optgroup label="Assistance courante">
+                    <option value="admission">Procédure d'admission &amp; vérification de profil</option>
+                    <option value="wali_validation">Assistance tuteur légal (Wali)</option>
+                    <option value="tarifs">Règlement des forfaits (Mobile Money / Carte)</option>
+                    <option value="technique">Support technique ou compte</option>
+                  </optgroup>
+                  <optgroup label="Déontologie &amp; Sécurité (Routage Modération)">
+                    <option value="misuse_behavior">Signalement de manquement à la bienséance (Misuse)</option>
+                    <option value="misuse_khalwa">Tentative de contournement du tuteur ou d'isolement</option>
+                    <option value="misuse_photo">Usurpation d'identité ou infraction au Sceau de Pudeur</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <!-- Dynamic Misuse Notification Banner -->
+              <div id="misuseNotice" class="hidden p-3 rounded-md bg-staff-soft border border-staff text-xs text-staff space-y-1">
+                <div class="flex items-center gap-2 font-semibold">
+                  <span class="inline-block px-1.5 py-0.5 rounded bg-staff text-raised text-[10px] tracking-wider uppercase font-sans">Équipe seulement</span>
+                  <span>Routage prioritaire vers le collège des modérateurs</span>
+                </div>
+                <p class="text-ink-secondary text-[11px] leading-snug">
+                  Ce motif est immédiatement transmis aux modérateurs assermentés. Une instruction humaine conservatoire est engagée sous un délai contractuel moyen de 24h ouvrées.
+                </p>
+              </div>
+
+              <!-- Message / Description -->
+              <div>
+                <label for="contact_message" class="block text-xs font-semibold text-ink-primary mb-1.5">
+                  Exposé circonstancié de la demande <span class="text-danger">*</span>
+                </label>
+                <textarea id="contact_message" required rows="4" placeholder="Précisez votre situation, les références de dossier éventuelles ou la description du manquement constaté..." class="w-full px-3.5 py-2.5 rounded-md bg-sand border border-border-strong text-ink-primary text-sm focus-ring placeholder-ink-secondary/50"></textarea>
+              </div>
+
+              <!-- Reference Optional Field -->
+              <div>
+                <label for="contact_ref" class="block text-xs font-semibold text-ink-secondary mb-1">
+                  Référence de profil ou d'adhérent (facultatif)
+                </label>
+                <input type="text" id="contact_ref" placeholder="Ex. ANK-2026-XXXX" class="w-full px-3.5 py-2 rounded-md bg-sand border border-border-hairline text-ink-primary text-xs focus-ring placeholder-ink-secondary/50">
+              </div>
+
+              <!-- Submit Button (Primary Indigo 48px - EXACTLY ONE per screen) -->
+              <div class="pt-2">
+                <button type="submit" id="submitBtn" class="w-full h-12 bg-indigo-base hover:bg-indigo-deep active:bg-indigo-deep text-ink-on-indigo font-semibold text-base rounded-md transition-colors shadow-sm flex items-center justify-center gap-2 focus-ring">
+                  <span>Enregistrer le ticket au Secrétariat</span>
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </button>
+              </div>
+
+              <p class="text-[11px] text-center text-ink-secondary">
+                Aucun traitement par automate prédictif. Instruction sous serment d'intégrité déontologique.
+              </p>
+            </form>
+
+            <!-- Success State: Ticket ID shown to the visitor (FR-118 Requirement) -->
+            <div id="ticketSuccessState" class="hidden space-y-6">
+              <div class="p-5 rounded-md bg-success-soft border border-success text-center">
+                <div class="w-12 h-12 rounded-full bg-success/20 text-success mx-auto flex items-center justify-center mb-3">
+                  <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h3 class="font-serif font-bold text-xl text-indigo-base">Ticket Déposé avec Succès</h3>
+                <p class="text-xs text-ink-secondary mt-1">
+                  Votre demande a été scellée et enregistrée au registre des requêtes de la plateforme AnKanu.
+                </p>
+
+                <!-- Ticket ID Card -->
+                <div class="mt-4 p-4 rounded-md bg-raised border border-border-strong text-center">
+                  <span class="text-[11px] uppercase tracking-wider font-semibold text-ink-secondary block mb-1">Identifiant Unique de Ticket</span>
+                  <div id="displayTicketId" class="font-mono text-2xl font-bold tracking-wider text-indigo-base select-all">
+                    ANK-TKT-2026-8942
+                  </div>
+                  <div class="mt-2 inline-flex items-center gap-1.5 text-xs text-ink-secondary">
+                    <span class="w-2 h-2 rounded-full bg-success"></span>
+                    <span id="displayRouteType">Routage standard : Secrétariat Général</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Ticket details recap -->
+              <div class="space-y-3 text-xs text-ink-secondary border-t border-border-hairline pt-4">
+                <div class="flex justify-between py-1">
+                  <span>Horodatage officiel :</span>
+                  <span class="font-medium text-ink-primary" id="ticketTimestamp">À l'instant</span>
+                </div>
+                <div class="flex justify-between py-1">
+                  <span>Délai moyen d'instruction :</span>
+                  <span class="font-medium text-ink-primary">24h à 48h ouvrées</span>
+                </div>
+                <div class="flex justify-between py-1">
+                  <span>Notification :</span>
+                  <span class="font-medium text-ink-primary" id="notifEmail">adresse transmise</span>
+                </div>
+              </div>
+
+              <div class="pt-2 flex flex-col gap-2">
+                <button type="button" onclick="resetTicketForm()" class="w-full h-11 bg-sand hover:bg-raised text-indigo-base border border-border-strong rounded-md text-xs font-semibold transition-colors focus-ring">
+                  Déposer une autre demande
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Administrative Contact Channels & Hours -->
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 pb-16">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-6 rounded-md bg-raised border border-border-hairline">
+          <div class="w-8 h-8 rounded border border-border-hairline bg-sand flex items-center justify-center text-indigo-base mb-3">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <h3 class="font-serif font-semibold text-base text-indigo-base">Siège &amp; Correspondance</h3>
+          <p class="text-xs text-ink-secondary mt-1 leading-relaxed">
+            AnKanu S.A.S. — Ouagadougou &amp; Représentation Europe.<br>
+            Hébergement certifié souverain en France (Scaleway).
+          </p>
+        </div>
+
+        <div class="p-6 rounded-md bg-raised border border-border-hairline">
+          <div class="w-8 h-8 rounded border border-border-hairline bg-sand flex items-center justify-center text-indigo-base mb-3">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="font-serif font-semibold text-base text-indigo-base">Délai d'Instruction Canonique</h3>
+          <p class="text-xs text-ink-secondary mt-1 leading-relaxed">
+            Instruction sous 24h à 72h ouvrées selon la gravité des signalements déontologiques et la consultation du Conseil.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-md bg-raised border border-border-hairline">
+          <div class="w-8 h-8 rounded border border-border-hairline bg-sand flex items-center justify-center text-indigo-base mb-3">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 class="font-serif font-semibold text-base text-indigo-base">Indépendance &amp; Fiqh</h3>
+          <p class="text-xs text-ink-secondary mt-1 leading-relaxed">
+            Conforme aux avis du Conseil Consultatif Éthique. Zéro Fatwa-Bot, délibération collégiale stricte.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Canonical AnKanu Institutional Footer -->
+  <footer class="w-full bg-[#EFE7D8] border-t border-border-hairline py-12 text-ink-secondary">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        
+        <!-- Brand Summary -->
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-full border border-indigo-base flex items-center justify-center bg-raised text-indigo-base">
+              <span class="font-serif font-bold text-sm">A</span>
+            </div>
+            <span class="font-serif font-bold text-lg text-indigo-base">AnKanu</span>
+          </div>
+          <p class="text-xs leading-relaxed text-ink-secondary max-w-md">
+            Plateforme dédiée à l'alliance honorable (ta'aruf) et au mariage noble au Burkina Faso et en Afrique de l'Ouest. Strictement non affiliée aux services de rencontre récréative ou de libertinage.
+          </p>
+          <div class="text-[11px] text-ink-secondary pt-1">
+            Ouagadougou · Bobo-Dioulasso · Abidjan · Dakar · Paris
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="space-y-2">
+          <h4 class="font-serif font-semibold text-xs uppercase tracking-wider text-indigo-base">Orientation</h4>
+          <ul class="space-y-1.5 text-xs">
+            <li><a href="#vision" class="hover:text-indigo-base transition-colors">La Vision &amp; la Sira</a></li>
+            <li><a href="#academie" class="hover:text-indigo-base transition-colors">L'Académie Pré-Maritale</a></li>
+            <li><a href="#comite" class="hover:text-indigo-base transition-colors">Comité Consultatif Éthique</a></li>
+            <li><a href="#tarifs" class="hover:text-indigo-base transition-colors">Tarifs Forfaitaires &amp; Moyens</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal Links (Reached from footer) -->
+        <div class="space-y-2">
+          <h4 class="font-serif font-semibold text-xs uppercase tracking-wider text-indigo-base">Cadre Juridique</h4>
+          <ul class="space-y-1.5 text-xs">
+            <li><a href="#faq" class="text-indigo-base font-medium underline">Foire Aux Questions &amp; Support</a></li>
+            <li><a href="#charte" class="hover:text-indigo-base transition-colors">Charte Éthique &amp; Rôle du Wali</a></li>
+            <li><a href="#cgu" class="hover:text-indigo-base transition-colors">Mentions Légales &amp; CGU</a></li>
+            <li><a href="#rgpd" class="hover:text-indigo-base transition-colors">Politique de Pudeur &amp; RGPD</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom Bar with Marriage counter & Sovereign host -->
+      <div class="pt-6 border-t border-border-hairline/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+        <div>
+          © 2026 AnKanu. Tous droits réservés. L'alliance noble et sincère sous le regard des tuteurs.
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="inline-flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+            <span>Mariages confirmés : 0</span>
+          </span>
+          <span>·</span>
+          <span>Hébergement souverain Scaleway France (SecNumCloud)</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for ticket handling, misuse triage routing, and state display -->
+  <script>
+    function handleTriageChange(val) {
+      const notice = document.getElementById('misuseNotice');
+      if (val && val.startsWith('misuse_')) {
+        notice.classList.remove('hidden');
+      } else {
+        notice.classList.add('hidden');
+      }
+    }
+
+    function handleTicketSubmit(event) {
+      event.preventDefault();
+      
+      const form = document.getElementById('contactForm');
+      const nom = document.getElementById('contact_nom').value.trim();
+      const email = document.getElementById('contact_email').value.trim();
+      const triage = document.getElementById('contact_triage').value;
+      const message = document.getElementById('contact_message').value.trim();
+      const errorBanner = document.getElementById('form-error-banner');
+
+      if (!nom || !email || !triage || !message) {
+        errorBanner.classList.remove('hidden');
+        return;
+      }
+      errorBanner.classList.add('hidden');
+
+      // Generate realistic deterministic/random ticket id
+      const randomDigits = Math.floor(1000 + Math.random() * 9000);
+      const isMisuse = triage.startsWith('misuse_');
+      const prefix = isMisuse ? 'MOD' : 'TKT';
+      const generatedId = `ANK-${prefix}-2026-${randomDigits}`;
+
+      // Update success view
+      document.getElementById('displayTicketId').innerText = generatedId;
+      document.getElementById('notifEmail').innerText = email;
+      
+      const routeTypeEl = document.getElementById('displayRouteType');
+      if (isMisuse) {
+        routeTypeEl.innerHTML = '<strong class="text-staff">Routage prioritaire : Modérateurs assermentés (Misuse)</strong>';
+      } else {
+        routeTypeEl.innerText = 'Routage standard : Secrétariat Général';
+      }
+
+      const now = new Date();
+      document.getElementById('ticketTimestamp').innerText = now.toLocaleDateString('fr-FR') + ' à ' + now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+
+      // Switch views
+      form.classList.add('hidden');
+      document.getElementById('ticketSuccessState').classList.remove('hidden');
+    }
+
+    function resetTicketForm() {
+      document.getElementById('contactForm').reset();
+      document.getElementById('misuseNotice').classList.add('hidden');
+      document.getElementById('ticketSuccessState').classList.add('hidden');
+      document.getElementById('contactForm').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

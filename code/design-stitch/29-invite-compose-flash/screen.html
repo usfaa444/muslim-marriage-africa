@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-[#F4EDE0]">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Invite compose + Message Flash | AnKanu - Ta'aruf Honorable</title>
+  
+  <!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&display=swap" rel="stylesheet"/>
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: '#F4EDE0',
+            raised: '#FFFBF4',
+            indigo: {
+              DEFAULT: '#1F3A5F',
+              deep: '#15283F',
+            },
+            gold: {
+              DEFAULT: '#C4A35A',
+              soft: '#E8D5A3',
+            },
+            ink: {
+              primary: '#1B2433',
+              secondary: '#5C5346',
+              'on-indigo': '#F4EDE0',
+            },
+            border: {
+              hairline: '#D9CDB8',
+              strong: '#6F624C',
+            },
+            danger: {
+              DEFAULT: '#8B3A3A',
+              soft: '#F3E0DC',
+            },
+            staff: {
+              DEFAULT: '#6B3D2E',
+              soft: '#EFE4DC',
+            },
+            blur: {
+              wash: '#C8BBA6',
+            },
+            success: {
+              DEFAULT: '#3D5C45',
+              soft: '#DCE6DE',
+            }
+          },
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            card: '12px',
+            bubble: '20px',
+            staff: '6px',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-1 {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-[#F4EDE0] text-[#1B2433] font-sans antialiased selection:bg-[#E8D5A3] selection:text-[#15283F]">
+
+  <!-- Top Global Header (AnKanu Canonical Header) -->
+  <header class="w-full bg-[#FFFBF4] border-b border-[#D9CDB8] sticky top-0 z-40">
+    <div class="w-full max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <!-- Brand & Honorific Subtitle -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="flex flex-col">
+          <span class="font-serif text-2xl text-[#1F3A5F] tracking-tight font-semibold">AnKanu</span>
+          <span class="font-sans text-xs text-[#5C5346] tracking-wide">Ta'aruf Honorable &amp; Mariage Noble</span>
+        </a>
+      </div>
+      <!-- Member Desktop Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="#" class="text-[#5C5346] font-sans hover:text-[#1B2433] transition-colors">Découvrir</a>
+        <a href="#" class="text-[#1F3A5F] font-semibold border-b-2 border-[#1F3A5F] pb-1 flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-base fill-1">send</span>
+          <span>Invitations</span>
+        </a>
+        <a href="#" class="text-[#5C5346] font-sans hover:text-[#1B2433] transition-colors">Discussions</a>
+        <a href="#" class="text-[#5C5346] font-sans hover:text-[#1B2433] transition-colors">Profil</a>
+      </nav>
+      <!-- Trailing Status & Action -->
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#F4EDE0] border border-[#D9CDB8] text-xs font-medium text-[#5C5346]">
+          <span class="material-symbols-outlined text-xs text-[#3D5C45]">shield</span>
+          <span>Protocole FR-038 scellé</span>
+        </div>
+        <a href="#" class="text-xs font-medium text-[#5C5346] hover:text-[#1F3A5F] transition-colors">Retour au profil</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Interactive Persona / Role & UX State Simulator (For Verification & Auditing) -->
+  <aside class="w-full bg-[#FFFBF4] border-b border-[#D9CDB8] py-2 px-4 sticky top-[57px] z-30 shadow-xs">
+    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[#6F624C] text-sm">tune</span>
+        <span class="font-medium text-[#5C5346]">Simulation Déontologique :</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <!-- Persona Mode Selector -->
+        <div class="inline-flex rounded-full p-0.5 bg-[#F4EDE0] border border-[#D9CDB8]">
+          <button id="btn-role-brother" onclick="switchPersona('brother')" class="px-2.5 py-0.5 rounded-full bg-[#1F3A5F] text-[#F4EDE0] font-medium transition-all">
+            Frère (3 libres)
+          </button>
+          <button id="btn-role-sister-unlimited" onclick="switchPersona('sister-unlimited')" class="px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all">
+            Sœur (Illimitée)
+          </button>
+          <button id="btn-role-sister-quota" onclick="switchPersona('sister-quota')" class="px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all">
+            Sœur (Même quota: 3)
+          </button>
+        </div>
+
+        <!-- System State Switcher -->
+        <div class="inline-flex rounded-full p-0.5 bg-[#F4EDE0] border border-[#D9CDB8]">
+          <button id="btn-state-normal" onclick="switchState('normal')" class="px-2.5 py-0.5 rounded-full bg-[#1F3A5F] text-[#F4EDE0] font-medium transition-all">
+            Saisie
+          </button>
+          <button id="btn-state-nophoto" onclick="switchState('nophoto')" class="px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all">
+            Sans Photo (FR-016)
+          </button>
+          <button id="btn-state-contacterror" onclick="switchState('contacterror')" class="px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all">
+            Contact refusé
+          </button>
+          <button id="btn-state-quotaerror" onclick="switchState('quotaerror')" class="px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all">
+            Quota dépassé
+          </button>
+          <button id="btn-state-loading" onclick="switchState('loading')" class="px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all">
+            Envoi en cours
+          </button>
+          <button id="btn-state-success" onclick="switchState('success')" class="px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all">
+            Transmis
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Canvas Container -->
+  <main class="flex-1 w-full max-w-4xl mx-auto px-4 py-6 md:py-8 flex flex-col gap-6">
+
+    <!-- Breadcrumb & Canonical Reference -->
+    <nav aria-label="Fil d'Ariane" class="flex items-center justify-between text-xs text-[#5C5346]">
+      <a href="#" class="inline-flex items-center gap-1.5 text-[#1F3A5F] hover:underline font-semibold transition-colors">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        <span>Retour à la fiche de convenance</span>
+      </a>
+      <span class="tracking-wide bg-[#FFFBF4] px-2.5 py-1 rounded border border-[#D9CDB8]">
+        FR-038 · FR-044 · FR-146 (Message Flash)
+      </span>
+    </nav>
+
+    <!-- SECTION 1: Recipient Brief Context Card (One Focused Card Recipient Context) -->
+    <section class="bg-[#FFFBF4] border border-[#D9CDB8] rounded-card p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <!-- Canonical Sceau de Pudeur Portrait Token (Flat wash + covered face pictogram, never a tease) -->
+        <div class="w-14 h-14 md:w-16 md:h-16 rounded-card bg-[#C8BBA6] border border-[#D9CDB8] relative flex items-center justify-center flex-shrink-0 shadow-inner" title="Portrait sous Sceau de Pudeur canonique">
+          <div class="flex flex-col items-center justify-center text-[#6F624C]">
+            <span class="material-symbols-outlined text-2xl">person_off</span>
+            <span class="text-[9px] uppercase tracking-wider font-semibold mt-0.5">Sceau</span>
+          </div>
+        </div>
+        
+        <!-- Recipient Overview -->
+        <div class="space-y-1">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs uppercase tracking-wider text-[#5C5346] font-medium">Destinataire :</span>
+            <h2 class="font-serif text-lg font-semibold text-[#1B2433]">Aminata_O</h2>
+            <span class="text-xs text-[#5C5346]">· 27 ans · Ouagadougou (Baskuy)</span>
+          </div>
+          <p class="text-xs text-[#5C5346]">
+            Statut : Célibataire (Jamais mariée) · Madhab Malékite · Projet monogame exclusif
+          </p>
+          <div class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] bg-[#DCE6DE] text-[#3D5C45] border border-[#D9CDB8]">
+            <span class="material-symbols-outlined text-xs fill-1">verified_user</span>
+            <span>Wali vérifié (Mahram)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recipient Quota / Visibility Info -->
+      <div class="self-stretch sm:self-auto flex sm:flex-col items-center sm:items-end justify-between sm:justify-center border-t sm:border-t-0 pt-2 sm:pt-0 border-[#D9CDB8] text-xs">
+        <span class="text-[#5C5346]">Statut du profil :</span>
+        <span class="inline-flex items-center gap-1 text-[#3D5C45] font-medium">
+          <span class="w-2 h-2 rounded-full bg-[#3D5C45]"></span>
+          <span>Disponible pour Ta'aruf</span>
+        </span>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Mahram Banner (Persistent indigo-deep bar, shown to Brother from first Flash ONLY if thread is granted) -->
+    <div id="mahram-banner" class="w-full bg-[#15283F] text-[#F4EDE0] rounded-card p-3.5 px-4 flex items-center justify-between border border-[#1F3A5F] shadow-xs">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[#E8D5A3] text-xl flex-shrink-0">family_restroom</span>
+        <div>
+          <p class="text-xs md:text-sm font-semibold tracking-wide">
+            Un wali lit cette discussion
+          </p>
+          <p class="text-[11px] text-[#D9CDB8] mt-0.5">
+            Ce fil bénéficie de la présence tutélaire du Wali assermenté. Tout échange s'opère en clarté pour l'honneur des familles.
+          </p>
+        </div>
+      </div>
+      <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase font-semibold bg-[#2C4A6E] text-[#E8D5A3] border border-[#6F624C]/40">
+        Présence Mahram active
+      </span>
+    </div>
+
+    <!-- ERROR & NOTIFICATION BANNERS AREA -->
+    
+    <!-- 1. Photo Required Prompt (FR-016 Blocking Dialogue) -->
+    <div id="alert-photo-required" class="hidden bg-[#FFFBF4] border-2 border-[#8B3A3A] rounded-card p-5 shadow-xs">
+      <div class="flex items-start gap-3.5">
+        <div class="w-10 h-10 rounded-full bg-[#F3E0DC] flex items-center justify-center flex-shrink-0 text-[#8B3A3A]">
+          <span class="material-symbols-outlined text-xl">add_a_photo</span>
+        </div>
+        <div class="space-y-2 flex-1">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif text-base font-semibold text-[#8B3A3A]">
+              Photographie matrimoniale requise (FR-016)
+            </h3>
+            <span class="text-xs px-2 py-0.5 rounded bg-[#F3E0DC] text-[#8B3A3A] font-medium">Blocage d'intégrité</span>
+          </div>
+          <p class="text-sm text-[#1B2433]">
+            Pour pouvoir transmettre une invitation solennelle et rédiger un Message Flash, la charte déontologique exige le dépôt préalable d'un portrait conforme aux règles de pudeur.
+          </p>
+          <div class="pt-2 flex flex-wrap items-center gap-3">
+            <a href="#" class="inline-flex items-center gap-1.5 h-10 px-4 rounded-card bg-[#1F3A5F] text-[#F4EDE0] text-xs font-semibold hover:bg-[#15283F] transition-colors">
+              <span class="material-symbols-outlined text-sm">upload</span>
+              <span>Déposer un portrait digne</span>
+            </a>
+            <button onclick="switchState('normal')" type="button" class="text-xs text-[#5C5346] hover:text-[#1B2433] underline">
+              Fermer cet avertissement
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Contact Share Refusal Alert (CONTACT_SHARE_REQUIRED) -->
+    <div id="alert-contact-refusal" class="hidden bg-[#F3E0DC] border border-[#8B3A3A] rounded-card p-4">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-[#8B3A3A] text-xl flex-shrink-0 mt-0.5">block</span>
+        <div class="space-y-1 flex-1">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-[#8B3A3A]">
+            Tentative de transmission de coordonnées interceptée
+          </h4>
+          <p class="text-xs text-[#1B2433]">
+            Numéro de téléphone, lien externe, identifiant WhatsApp ou réseaux sociaux strictement prohibés dans le Message Flash (Règle Contact-Share). Tout contact direct requiert l'agrément bilatéral préalable des deux partis et du Wali.
+          </p>
+        </div>
+        <button onclick="switchState('normal')" class="text-xs text-[#8B3A3A] hover:underline font-medium">Masquer</button>
+      </div>
+    </div>
+
+    <!-- 3. Quota Exceeded Alert (QUOTA_EXCEEDED with Ouaga-day reset) -->
+    <div id="alert-quota-exceeded" class="hidden bg-[#FFFBF4] border border-[#8B3A3A] rounded-card p-5">
+      <div class="flex items-start gap-3.5">
+        <span class="material-symbols-outlined text-[#8B3A3A] text-2xl flex-shrink-0 mt-0.5">event_busy</span>
+        <div class="space-y-2 flex-1">
+          <h3 class="font-serif text-base font-semibold text-[#8B3A3A]">
+            Plafond quotidien d'invitations atteint (QUOTA_EXCEEDED)
+          </h3>
+          <p class="text-xs text-[#5C5346]">
+            Votre contingent d'invitations gratuites pour cette journée est épuisé. Afin de préserver la solennité de la démarche et prévenir le consumérisme matrimonial, le compteur se réinitialisera à l'aube (fuseau horaire de Ouagadougou).
+          </p>
+          <div class="inline-flex items-center gap-2 p-2 rounded bg-[#F4EDE0] border border-[#D9CDB8] text-xs text-[#5C5346]">
+            <span class="material-symbols-outlined text-xs text-[#C4A35A]">schedule</span>
+            <span>Prochaine réinitialisation : <strong>Minuit (Heure de Ouagadougou / GMT)</strong></span>
+          </div>
+          <div id="quota-upgrade-option" class="pt-1">
+            <!-- Rendered only if user is brother or sister in same_quota_as_brothers -->
+            <p class="text-xs text-[#1B2433] font-medium">
+              Les prétendants engagés dans une recherche active peuvent souscrire un Forfait d'Engagement Ta'aruf pour des invitations sans plafond journalier.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Loading In-Flight Banner -->
+    <div id="alert-loading" class="hidden bg-[#FFFBF4] border border-[#1F3A5F] rounded-card p-4">
+      <div class="flex items-center gap-3">
+        <svg class="animate-spin h-5 w-5 text-[#1F3A5F]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="text-xs font-semibold text-[#1F3A5F]">Transmission canonique de l'invitation en cours d'enregistrement...</span>
+      </div>
+    </div>
+
+    <!-- 5. Success State Card -->
+    <div id="alert-success" class="hidden bg-[#FFFBF4] border border-[#3D5C45] rounded-card p-6 text-center space-y-3">
+      <div class="w-12 h-12 rounded-full bg-[#DCE6DE] text-[#3D5C45] mx-auto flex items-center justify-center">
+        <span class="material-symbols-outlined text-2xl">check_circle</span>
+      </div>
+      <h3 class="font-serif text-lg font-semibold text-[#1B2433]">Invitation et Message Flash transmis avec succès</h3>
+      <p class="text-xs text-[#5C5346] max-w-md mx-auto">
+        Votre démarche a été inscrite sur le registre confidentiel d'Aminata_O. Le message Flash d'introduction lui est désormais visible avant acceptation formelle (FR-146).
+      </p>
+      <div class="pt-2 flex justify-center gap-3">
+        <a href="#" class="h-10 px-5 rounded-card bg-[#1F3A5F] text-[#F4EDE0] text-xs font-semibold inline-flex items-center gap-1.5 hover:bg-[#15283F] transition-colors">
+          <span>Consulter mes invitations en attente</span>
+          <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- SECTION 3: Main Composition Card (Flash Composer & Quota Controls) -->
+    <div id="composition-section" class="bg-[#FFFBF4] border border-[#6F624C] rounded-card p-5 md:p-7 space-y-6">
+
+      <!-- Header & Quota Metric -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9CDB8] pb-4">
+        <div>
+          <h1 class="font-serif text-2xl font-semibold text-[#1F3A5F] tracking-tight">
+            Transmettre une Invitation &amp; Message Flash
+          </h1>
+          <p class="text-xs text-[#5C5346] mt-1">
+            Démarche solennelle transmise sous le regard du tuteur légal. Le Message Flash d'introduction est visible dès réception.
+          </p>
+        </div>
+
+        <!-- Dynamic Quota Badge Based on Active Persona / Admin message cap -->
+        <div class="self-start sm:self-auto flex items-center gap-2">
+          <!-- Remaining Free Invites Pill -->
+          <div id="quota-invites-pill" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4EDE0] border border-[#D9CDB8] text-xs">
+            <span class="material-symbols-outlined text-sm text-[#1F3A5F]">mark_email_unread</span>
+            <span id="quota-invites-text" class="text-[#1B2433]">Invitations gratuites restantes : <strong class="font-bold text-[#1F3A5F]">3</strong></span>
+          </div>
+
+          <!-- Free Message Cap Metric (Shows current admin daily_message_cap without locked numbers) -->
+          <div class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full bg-[#F4EDE0] border border-[#D9CDB8] text-xs text-[#5C5346]" title="Plafond quotidien administré">
+            <span class="material-symbols-outlined text-xs text-[#C4A35A]">hourglass_top</span>
+            <span id="daily-cap-text">Quota journalier de messages : <span class="font-medium text-[#1B2433]">Actif (daily_message_cap)</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ice Breaker Selection: Deen / Family Templates (Editable before send, NOT AI-personalized) -->
+      <div class="space-y-2.5">
+        <div class="flex items-center justify-between">
+          <label class="text-xs font-semibold uppercase tracking-wider text-[#1B2433] flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-[#C4A35A]">auto_stories</span>
+            <span>Amorces de dialogue respectueuses (Modèles Deen &amp; Famille)</span>
+          </label>
+          <span class="text-[11px] text-[#5C5346]">Facultatif · Non altéré par automate</span>
+        </div>
+
+        <!-- Ice Breaker Template Buttons (Canonical gaps respected: templates editable before send) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <!-- Template 1: Deen orientation -->
+          <button type="button" onclick="applyTemplate(1)" class="text-left p-3 rounded-card bg-[#F4EDE0] border border-[#D9CDB8] hover:border-[#6F624C] transition-all group flex flex-col justify-between">
+            <div class="flex items-center justify-between w-full mb-1">
+              <span class="text-[11px] font-semibold text-[#1F3A5F] uppercase tracking-wider flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">mosque</span>
+                <span>Modèle Deen &amp; Concordance</span>
+              </span>
+              <span class="material-symbols-outlined text-xs text-[#5C5346] group-hover:text-[#1F3A5F]">add</span>
+            </div>
+            <p class="text-xs text-[#5C5346] italic line-clamp-2">
+              « Salam aleykoum. J'ai examiné votre folio avec grand intérêt, particulièrement votre engagement dans la pratique et votre vision du foyer. »
+            </p>
+          </button>
+
+          <!-- Template 2: Family & Wali orientation -->
+          <button type="button" onclick="applyTemplate(2)" class="text-left p-3 rounded-card bg-[#F4EDE0] border border-[#D9CDB8] hover:border-[#6F624C] transition-all group flex flex-col justify-between">
+            <div class="flex items-center justify-between w-full mb-1">
+              <span class="text-[11px] font-semibold text-[#1F3A5F] uppercase tracking-wider flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">supervised_user_circle</span>
+                <span>Modèle Famille &amp; Tuteur</span>
+              </span>
+              <span class="material-symbols-outlined text-xs text-[#5C5346] group-hover:text-[#1F3A5F]">add</span>
+            </div>
+            <p class="text-xs text-[#5C5346] italic line-clamp-2">
+              « Salam aleykoum. Sensible à votre droiture et à la présence confirmée de votre tuteur, je formule cette invitation solennelle dans le respect des bienséances. »
+            </p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Flash Composer: Textarea with strict 280-char counter and Contact-share guard -->
+      <div class="space-y-2">
+        <div class="flex items-center justify-between">
+          <label for="flash-text" class="text-xs font-semibold uppercase tracking-wider text-[#1B2433] flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-sm text-[#1F3A5F]">edit_note</span>
+            <span>Message Flash d'introduction (Visible avant acceptation · FR-146)</span>
+          </label>
+          <span class="text-xs text-[#5C5346]">
+            <span id="char-count" class="font-bold text-[#1B2433]">0</span> / 280 caractères
+          </span>
+        </div>
+
+        <div class="relative">
+          <textarea id="flash-text" rows="4" maxlength="280" oninput="handleInput(this)" placeholder="Rédigez sobrement votre intention matrimoniale. Téléphone, WhatsApp et liens externes y sont strictement interdits par le protocole déontologique." class="w-full bg-[#FFFBF4] border-2 border-[#6F624C] rounded-card p-3.5 text-sm text-[#1B2433] placeholder-[#5C5346]/60 focus:outline-none focus:ring-2 focus:ring-[#1F3A5F] transition-all resize-none"></textarea>
+        </div>
+
+        <!-- Contact Share Guard Inline Warning -->
+        <div class="flex items-center justify-between text-[11px] text-[#5C5346] pt-1">
+          <span class="flex items-center gap-1">
+            <span class="material-symbols-outlined text-xs text-[#8B3A3A]">shield</span>
+            <span>Règle d'or : Téléphone / WhatsApp / Liens refusés avant consentement bilatéral du Wali.</span>
+          </span>
+          <span class="text-[10px] text-[#5C5346]/80 italic">Aucune validation par IA requise</span>
+        </div>
+      </div>
+
+      <!-- Action Footer: Quiet Decline / Cancel & Primary Button (Never waits on AI) -->
+      <div class="pt-3 border-t border-[#D9CDB8] flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Quiet Cancel / Decline Button (44px min-height, text-only, no confirm-shaming) -->
+        <a href="#" class="w-full sm:w-auto h-11 px-4 inline-flex items-center justify-center text-xs font-medium text-[#5C5346] hover:text-[#1B2433] transition-colors">
+          Annuler la démarche
+        </a>
+
+        <!-- Submission Row -->
+        <div class="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-3">
+          <button id="btn-submit" type="button" onclick="submitInvitation()" class="w-full sm:w-auto min-h-[48px] px-6 rounded-card bg-[#1F3A5F] text-[#F4EDE0] text-sm font-semibold hover:bg-[#15283F] focus:outline-none focus:ring-2 focus:ring-[#E8D5A3] transition-all inline-flex items-center justify-center gap-2 shadow-xs">
+            <span>Transmettre l'invitation solennelle</span>
+            <span class="material-symbols-outlined text-sm">send</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SECTION 4: Ethical & Jurisprudential Reassurance Card -->
+    <section class="bg-[#FFFBF4] border border-[#D9CDB8] rounded-card p-4 md:p-5 flex items-start gap-3.5">
+      <span class="material-symbols-outlined text-[#C4A35A] text-xl flex-shrink-0 mt-0.5">verified</span>
+      <div class="space-y-1 text-xs text-[#5C5346]">
+        <h4 class="font-semibold text-[#1B2433]">Protocole Canonique d'Invitation (FR-038 · FR-044 · FR-146)</h4>
+        <p>
+          L'envoi d'une invitation n'engage à aucune contrainte. La destinataire conserve la faculté d'examiner sereinement votre folio et de refuser discrètement. En cas de refus, aucun renouvellement immédiat d'invitation n'est possible (FR-043).
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Canonical Member Footer (Editorial Minimal) -->
+  <footer class="w-full bg-[#F4EDE0] border-t border-[#D9CDB8] mt-auto">
+    <div class="w-full max-w-4xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+      <div class="space-y-1 text-center md:text-left">
+        <div class="font-serif text-base text-[#1F3A5F] font-semibold">AnKanu</div>
+        <p class="text-[#5C5346]">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2">
+        <a href="#" class="text-[#5C5346] hover:text-[#1B2433] transition-colors">Confidentialité &amp; Données</a>
+        <a href="#" class="text-[#5C5346] hover:text-[#1B2433] transition-colors">Tuteurs Légaux (Wali)</a>
+        <a href="#" class="text-[#5C5346] hover:text-[#1B2433] transition-colors">Éthique &amp; Respect</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Embedded Client Logic for Simulator & Controls -->
+  <script>
+    let currentPersona = 'brother';
+    let currentState = 'normal';
+
+    const templates = {
+      1: "Salam aleykoum. J'ai examiné votre folio avec grand intérêt, particulièrement votre engagement dans la pratique et votre vision du foyer. Ce Message Flash formule mon intention sincère d'ouvrir le dialogue de convenance sous le regard bienveillant de votre tuteur légal.",
+      2: "Salam aleykoum. Sensible à la rectitude de votre démarche et à l'attestation de votre tuteur (Wali), je sollicite respectueusement la permission d'entamer une première étape de convenance honorable pour notre avenir."
+    };
+
+    function handleInput(textarea) {
+      const charCount = document.getElementById('char-count');
+      charCount.textContent = textarea.value.length;
+
+      // Contact-share check: detect phone numbers, urls, or emails
+      const forbiddenPatterns = [
+        /\b(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{2,4}[-.\s]?\d{2,4}\b/,
+        /(?:https?:\/\/|www\.)\S+/i,
+        /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/i,
+        /\b(?:whatsapp|telegram|insta|snap|fb|imo)\b/i
+      ];
+
+      const hasForbidden = forbiddenPatterns.some(pattern => pattern.test(textarea.value));
+      const alertContact = document.getElementById('alert-contact-refusal');
+
+      if (hasForbidden) {
+        alertContact.classList.remove('hidden');
+      } else {
+        if (currentState !== 'contacterror') {
+          alertContact.classList.add('hidden');
+        }
+      }
+    }
+
+    function applyTemplate(id) {
+      const textarea = document.getElementById('flash-text');
+      textarea.value = templates[id];
+      handleInput(textarea);
+      textarea.focus();
+    }
+
+    function switchPersona(persona) {
+      currentPersona = persona;
+      const btnBrother = document.getElementById('btn-role-brother');
+      const btnSisterUnlimited = document.getElementById('btn-role-sister-unlimited');
+      const btnSisterQuota = document.getElementById('btn-role-sister-quota');
+      const quotaPill = document.getElementById('quota-invites-pill');
+      const quotaText = document.getElementById('quota-invites-text');
+      const upgradeOption = document.getElementById('quota-upgrade-option');
+
+      // Reset button classes
+      [btnBrother, btnSisterUnlimited, btnSisterQuota].forEach(btn => {
+        btn.className = "px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all";
+      });
+
+      if (persona === 'brother') {
+        btnBrother.className = "px-2.5 py-0.5 rounded-full bg-[#1F3A5F] text-[#F4EDE0] font-medium transition-all";
+        quotaPill.classList.remove('hidden');
+        quotaText.innerHTML = `Invitations gratuites restantes : <strong class="font-bold text-[#1F3A5F]">3</strong>`;
+        if (upgradeOption) upgradeOption.classList.remove('hidden');
+      } else if (persona === 'sister-unlimited') {
+        btnSisterUnlimited.className = "px-2.5 py-0.5 rounded-full bg-[#1F3A5F] text-[#F4EDE0] font-medium transition-all";
+        quotaPill.classList.remove('hidden');
+        // Label strictly required: « Invitations illimitées. » (no count, no reach-pack CTA)
+        quotaText.innerHTML = `<strong class="font-bold text-[#3D5C45]">« Invitations illimitées. »</strong>`;
+        if (upgradeOption) upgradeOption.classList.add('hidden');
+      } else if (persona === 'sister-quota') {
+        btnSisterQuota.className = "px-2.5 py-0.5 rounded-full bg-[#1F3A5F] text-[#F4EDE0] font-medium transition-all";
+        quotaPill.classList.remove('hidden');
+        quotaText.innerHTML = `Invitations restantes : <strong class="font-bold text-[#1F3A5F]">3</strong>`;
+        if (upgradeOption) upgradeOption.classList.remove('hidden');
+      }
+    }
+
+    function switchState(state) {
+      currentState = state;
+      const states = ['normal', 'nophoto', 'contacterror', 'quotaerror', 'loading', 'success'];
+      const buttons = {
+        'normal': document.getElementById('btn-state-normal'),
+        'nophoto': document.getElementById('btn-state-nophoto'),
+        'contacterror': document.getElementById('btn-state-contacterror'),
+        'quotaerror': document.getElementById('btn-state-quotaerror'),
+        'loading': document.getElementById('btn-state-loading'),
+        'success': document.getElementById('btn-state-success')
+      };
+
+      Object.keys(buttons).forEach(k => {
+        if (k === state) {
+          buttons[k].className = "px-2.5 py-0.5 rounded-full bg-[#1F3A5F] text-[#F4EDE0] font-medium transition-all";
+        } else {
+          buttons[k].className = "px-2.5 py-0.5 rounded-full text-[#5C5346] hover:text-[#1B2433] transition-all";
+        }
+      });
+
+      // Manage alert visibility
+      document.getElementById('alert-photo-required').classList.toggle('hidden', state !== 'nophoto');
+      document.getElementById('alert-contact-refusal').classList.toggle('hidden', state !== 'contacterror');
+      document.getElementById('alert-quota-exceeded').classList.toggle('hidden', state !== 'quotaerror');
+      document.getElementById('alert-loading').classList.toggle('hidden', state !== 'loading');
+      document.getElementById('alert-success').classList.toggle('hidden', state !== 'success');
+      document.getElementById('composition-section').classList.toggle('opacity-50', state === 'loading');
+      
+      const submitBtn = document.getElementById('btn-submit');
+      if (state === 'quotaerror' || state === 'nophoto') {
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      } else {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    }
+
+    function submitInvitation() {
+      const textarea = document.getElementById('flash-text');
+      if (!textarea.value.trim()) {
+        textarea.focus();
+        textarea.classList.add('border-[#8B3A3A]');
+        setTimeout(() => textarea.classList.remove('border-[#8B3A3A]'), 1500);
+        return;
+      }
+      switchState('loading');
+      setTimeout(() => {
+        switchState('success');
+      }, 1200);
+    }
+  </script>
+</body>
+</html>

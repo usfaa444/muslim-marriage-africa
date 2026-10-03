@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OTP — Vérification Téléphonique | AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..800;1,300..800&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400..800;1,8..60,400..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed-dim": "#abc9f3",
+            "tertiary-container": "#1b3b5e",
+            "primary-container": "#1f3a5f",
+            "on-error-container": "#93000a",
+            "secondary-fixed": "#ffdf9c",
+            "primary": "#032448",
+            "on-primary": "#ffffff",
+            "surface-container": "#f4ede0",
+            "mihrab": "#2C4A6E",
+            "success": "#3D5C45",
+            "on-tertiary": "#ffffff",
+            "success-soft": "#DCE6DE",
+            "blur-wash": "#C8BBA6",
+            "surface-indigo": "#15283F",
+            "on-surface-variant": "#43474e",
+            "ink-primary": "#1B2433",
+            "error": "#ba1a1a",
+            "on-primary-fixed-variant": "#2d476d",
+            "primary-fixed-dim": "#aec8f4",
+            "secondary": "#755b18",
+            "inverse-surface": "#333028",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-background": "#1e1b14",
+            "on-primary-container": "#8ba4cf",
+            "on-tertiary-container": "#88a5ce",
+            "primary-fixed": "#d5e3ff",
+            "surface-tint": "#465f86",
+            "focus-ring": "#1F3A5F",
+            "surface": "#fff9ee",
+            "tertiary": "#002546",
+            "on-surface": "#1e1b14",
+            "on-secondary-fixed": "#251a00",
+            "surface-container-high": "#eee7db",
+            "inverse-on-surface": "#f7f0e3",
+            "border-strong": "#6F624C",
+            "surface-variant": "#e9e2d5",
+            "outline": "#74777f",
+            "secondary-fixed-dim": "#e5c276",
+            "on-tertiary-fixed": "#001c38",
+            "on-primary-fixed": "#001c3b",
+            "tertiary-fixed": "#d3e4ff",
+            "surface-container-highest": "#e9e2d5",
+            "danger-soft": "#F3E0DC",
+            "surface-sand": "#F4EDE0",
+            "on-secondary-container": "#785d1b",
+            "surface-container-lowest": "#ffffff",
+            "indigo-deep": "#15283F",
+            "surface-dim": "#e0d9cd",
+            "staff-soft": "#EFE4DC",
+            "ink-secondary": "#5C5346",
+            "surface-container-low": "#faf3e6",
+            "surface-raised": "#FFFBF4",
+            "gold-soft": "#E8D5A3",
+            "gold": "#C4A35A",
+            "outline-variant": "#c4c6cf",
+            "danger": "#8B3A3A",
+            "on-secondary": "#ffffff",
+            "background": "#fff9ee",
+            "surface-bright": "#fff9ee",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "indigo": "#1F3A5F",
+            "staff": "#6B3D2E",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "ink-on-indigo": "#F4EDE0",
+            "disabled": "#B5A894",
+            "inverse-primary": "#aec8f4",
+            "secondary-container": "#fdd88a",
+            "border-hairline": "#D9CDB8"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "space-xs": "0.25rem",
+            "5": "24px",
+            "1": "4px",
+            "gutter": "16px",
+            "6": "32px",
+            "7": "48px",
+            "screen-pad": "16px",
+            "2": "8px",
+            "space-md": "1rem",
+            "4": "16px",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "3": "12px"
+          },
+          "fontFamily": {
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-ink-primary">
+<!-- TOP APP BAR / HEADER (Preserving Shared Component Anchor) -->
+<header class="w-full bg-surface border-b border-border-hairline">
+<div class="w-full max-w-5xl mx-auto px-screen-pad py-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-title text-title text-primary tracking-tight font-bold">AnKanu</span>
+<span class="h-4 w-[1px] bg-border-hairline"></span>
+<span class="font-meta text-meta uppercase tracking-wider text-ink-secondary font-semibold">Ta'aruf Honorable</span>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-meta text-meta text-ink-secondary hover:text-ink-primary pb-1 transition-colors duration-200" href="#charte">Charte Éthique</a>
+<a class="font-meta text-meta text-ink-secondary hover:text-ink-primary pb-1 transition-colors duration-200" href="#processus">Le Processus Ta'aruf</a>
+</nav>
+<a class="inline-flex items-center gap-2 font-meta text-meta text-ink-secondary hover:text-primary transition-colors duration-200" href="#accueil">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Retour à l'accueil</span>
+</a>
+</div>
+</header>
+<!-- MAIN EDITORIAL ENVELOPE -->
+<main class="flex-grow flex flex-col items-center justify-center px-screen-pad py-8 md:py-12">
+<div class="w-full max-w-[720px] mx-auto space-y-6">
+<!-- INSTITUTIONAL BREADCRUMB / STEPS TRAIL -->
+<nav aria-label="Progression de l'enregistrement" class="w-full bg-surface-raised border border-border-hairline rounded-xl px-4 py-3">
+<ol class="flex flex-col sm:flex-row items-start sm:items-center justify-between text-meta font-meta gap-2 sm:gap-0">
+<li class="flex items-center gap-2 text-ink-secondary">
+<span class="w-5 h-5 rounded-full bg-surface-sand text-ink-secondary border border-border-hairline flex items-center justify-center text-[11px] font-semibold">1</span>
+<span class="line-through decoration-border-strong opacity-75">Inscription initiale</span>
+</li>
+<li class="hidden sm:block text-border-hairline font-light">/</li>
+<li class="flex items-center gap-2 text-primary font-body-strong">
+<span class="w-5 h-5 rounded-full bg-indigo text-ink-on-indigo flex items-center justify-center text-[11px] font-semibold">2</span>
+<span>Vérification téléphonique (OTP)</span>
+</li>
+<li class="hidden sm:block text-border-hairline font-light">/</li>
+<li class="flex items-center gap-2 text-disabled">
+<span class="w-5 h-5 rounded-full bg-surface-sand text-disabled border border-border-hairline flex items-center justify-center text-[11px]">3</span>
+<span>Validation de convenance / Wali</span>
+</li>
+</ol>
+</nav>
+<!-- AUDIT INTERACTIVE STATE DEMONSTRATOR BAR (Reviewer Tooling) -->
+<aside aria-label="Contrôleur d'états de conformité" class="bg-surface-sand border border-border-strong rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-meta font-meta">
+<div class="flex items-center gap-2 text-ink-secondary">
+<span class="material-symbols-outlined text-[18px] text-secondary">tune</span>
+<span class="font-body-strong text-ink-primary">Audit de conformité (FR-002 / AD-13) :</span>
+</div>
+<div class="inline-flex rounded-lg border border-border-hairline bg-surface-raised p-1 gap-1">
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-indigo text-ink-on-indigo transition-colors duration-150" id="btn-state-default" onclick="setScreenState('default')">
+            En attente
+          </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta text-ink-secondary hover:text-ink-primary transition-colors duration-150" id="btn-state-sent" onclick="setScreenState('sent')">
+            Code envoyé
+          </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta text-ink-secondary hover:text-ink-primary transition-colors duration-150" id="btn-state-error" onclick="setScreenState('error')">
+            Erreur / Expiré
+          </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta text-ink-secondary hover:text-ink-primary transition-colors duration-150" id="btn-state-success" onclick="setScreenState('success')">
+            Succès accordé
+          </button>
+</div>
+</aside>
+<!-- CENTRAL SOLEMN VERIFICATION CARD -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-10 shadow-none">
+<!-- CARD HEADER & REGAL INSIGNIA -->
+<div class="text-center space-y-4 max-w-xl mx-auto">
+<div class="mx-auto w-16 h-16 rounded-full bg-surface-indigo flex items-center justify-center border-2 border-gold/40 text-gold shadow-none">
+<span class="material-symbols-outlined text-[30px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div class="space-y-2">
+<span class="inline-block text-caption font-meta tracking-widest uppercase text-secondary font-semibold">Protocole de Sceau Numérique</span>
+<h1 class="font-display text-display text-primary tracking-tight">Vérification du Numéro de Téléphone</h1>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+              Un code à 6 chiffres a été scellé et transmis par SMS pour attester votre engagement et octroyer la validation téléphonique avant toute mise en visibilité canonique.
+            </p>
+</div>
+<!-- AUDIO PROMPT PILL AFFORDANCE (BURKINABÈ LINGUISTIC INCLUSION) -->
+<div class="pt-1 pb-2 flex flex-wrap items-center justify-center gap-2">
+<button class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border-hairline bg-surface-sand hover:bg-surface-variant text-ink-secondary text-caption font-meta transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">volume_up</span>
+<span>Explication vocale en <strong>Mooré (mos)</strong></span>
+</button>
+<button class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border-hairline bg-surface-sand hover:bg-surface-variant text-ink-secondary text-caption font-meta transition-colors duration-150" type="button">
+<span class="material-symbols-outlined text-[16px] text-primary">volume_up</span>
+<span>Explication vocale en <strong>Dioula (dyu)</strong></span>
+</button>
+</div>
+</div>
+<div class="mt-8 space-y-6">
+<!-- PHONE METADATA & TRANSMISSION BANNER -->
+<div class="rounded-lg p-3 border border-border-hairline bg-surface-sand transition-all duration-200" id="status-container">
+<div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-meta font-meta">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-success" id="status-icon">send</span>
+<span class="font-body-strong text-ink-primary" id="status-headline">Code expédié par passerelle sécurisée</span>
+</div>
+<div class="flex items-center gap-3 text-ink-secondary">
+<span class="font-mono text-ink-primary font-semibold text-[13px] bg-surface-raised px-2 py-0.5 rounded border border-border-hairline">+226 70 •• •• 84</span>
+<span class="text-caption text-ink-secondary">Faso / Ouagadougou</span>
+</div>
+</div>
+<!-- Contextual Banner Details -->
+<div class="mt-2 pt-2 border-t border-border-hairline text-caption font-caption text-ink-secondary flex items-center justify-between" id="status-detail">
+<span>Horodatage : <time id="dispatch-timestamp">Aujourd'hui, 14:32:08 UTC</time></span>
+<span class="text-success font-medium">Transmission SMS confirmée</span>
+</div>
+</div>
+<!-- DYNAMIC FEEDBACK NOTICES (Error / Success) -->
+<div class="hidden rounded-lg p-3 bg-danger-soft border border-danger/30 text-danger text-meta font-meta" id="error-banner">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[20px] text-danger mt-0.5">error_outline</span>
+<div>
+<p class="font-body-strong">Code invalide ou expiré</p>
+<p class="text-caption font-caption text-danger/90">Veuillez patienter avant un nouvel envoi. Par précaution déontologique, aucune inférence sur l'existence du compte n'est divulguée.</p>
+</div>
+</div>
+</div>
+<div class="hidden rounded-lg p-3 bg-success-soft border border-success/30 text-success text-meta font-meta" id="success-banner">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-[20px] text-success mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<p class="font-body-strong">Niveau téléphonique accordé (Phone level granted)</p>
+<p class="text-caption font-caption text-success/90">Vérification FR-002 scellée avec succès. Transmission vers l'étape de convenance parentale.</p>
+</div>
+</div>
+</div>
+<!-- OTP FORM INPUT CLUSTER -->
+<form class="space-y-6" id="otp-form" onsubmit="handleFormSubmit(event)">
+<div class="space-y-2">
+<label class="block text-center font-meta text-meta text-ink-secondary" for="otp-0">
+                Saisissez les six chiffres du sceau confidentiel
+              </label>
+<!-- 6 Discrete Input Boxes -->
+<div class="flex justify-center items-center gap-2 sm:gap-3" id="otp-inputs-wrapper">
+<input aria-label="Chiffre 1" autocomplete="one-time-code" autofocus="" class="w-12 h-14 sm:w-14 sm:h-16 text-center text-title font-title text-primary bg-surface-raised border border-border-strong rounded-lg focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all" data-index="0" id="otp-0" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text"/>
+<input aria-label="Chiffre 2" class="w-12 h-14 sm:w-14 sm:h-16 text-center text-title font-title text-primary bg-surface-raised border border-border-strong rounded-lg focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all" data-index="1" id="otp-1" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text"/>
+<input aria-label="Chiffre 3" class="w-12 h-14 sm:w-14 sm:h-16 text-center text-title font-title text-primary bg-surface-raised border border-border-strong rounded-lg focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all" data-index="2" id="otp-2" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text"/>
+<span class="text-border-strong text-lg font-light select-none">−</span>
+<input aria-label="Chiffre 4" class="w-12 h-14 sm:w-14 sm:h-16 text-center text-title font-title text-primary bg-surface-raised border border-border-strong rounded-lg focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all" data-index="3" id="otp-3" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text"/>
+<input aria-label="Chiffre 5" class="w-12 h-14 sm:w-14 sm:h-16 text-center text-title font-title text-primary bg-surface-raised border border-border-strong rounded-lg focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all" data-index="4" id="otp-4" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text"/>
+<input aria-label="Chiffre 6" class="w-12 h-14 sm:w-14 sm:h-16 text-center text-title font-title text-primary bg-surface-raised border border-border-strong rounded-lg focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-all" data-index="5" id="otp-5" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text"/>
+</div>
+</div>
+<!-- PRIMARY SUBMISSION BUTTON -->
+<button class="w-full h-12 rounded-full bg-disabled text-ink-primary/60 font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-not-allowed" disabled="" id="submit-btn" type="submit">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+<span id="submit-btn-text">Confirmer le code scellé</span>
+</button>
+</form>
+<!-- RESEND CONTROLS & COOLDOWN -->
+<div class="pt-2 flex flex-col sm:flex-row items-center justify-between text-meta font-meta gap-3 border-t border-border-hairline">
+<div class="flex items-center gap-2 text-ink-secondary">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+<span id="cooldown-label">Renvoyer le code par SMS (<span id="timer-counter">58</span>s)</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-disabled font-body-strong cursor-not-allowed transition-colors" disabled="" id="resend-action" onclick="triggerResend()" type="button">
+                Renvoyer maintenant
+              </button>
+<span class="text-border-hairline">|</span>
+<button class="text-ink-secondary hover:text-ink-primary font-body-strong transition-colors" onclick="openModifyNumberModal()" type="button">
+                Modifier le numéro
+              </button>
+</div>
+</div>
+<!-- CLARIFICATION NOTICE & ETHICAL COMPLIANCE (FR-002, AD-13) -->
+<aside class="rounded-lg bg-surface-sand/80 border border-border-hairline p-4 space-y-2">
+<div class="flex items-center gap-2 text-ink-primary font-body-strong text-meta font-meta">
+<span class="material-symbols-outlined text-secondary text-[18px]">gavel</span>
+<span>Exigence d'intégrité FR-002 &amp; AD-13</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary leading-relaxed">
+              La vérification téléphonique par SMS (OTP) est rigoureusement requise avant toute inscription sur les registres et avant toute visibilité publique dans le sanctuaire de convenance. Cette barrière protège les familles contre l'usurpation et garantit la dignité des échanges.
+            </p>
+</aside>
+<!-- SECRETARIAT ASSISTANCE -->
+<div class="text-center pt-2">
+<a class="inline-flex items-center gap-1.5 text-caption font-meta text-ink-secondary hover:text-primary transition-colors duration-150" href="mailto:secretariat@ankanu.com">
+<span class="material-symbols-outlined text-[16px]">support_agent</span>
+<span>Une difficulté de réception ? Contacter le secrétariat éthique</span>
+</a>
+</div>
+</div>
+</section>
+<!-- CHAPERONE & WALI PEACE OF MIND CALLOUT -->
+<div class="bg-surface-indigo text-ink-on-indigo rounded-xl p-4 flex items-center justify-between gap-4 border border-gold/30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gold text-[24px]">shield</span>
+<p class="text-caption font-caption leading-tight text-ink-on-indigo/90">
+<strong>Garantie du Sanctuaire :</strong> Aucun numéro personnel n'est exposé publiquement aux autres postulants sans le consentement explicite et formalisé du Wali.
+          </p>
+</div>
+<span class="text-caption font-meta text-gold whitespace-nowrap hidden md:inline-block">Charte souveraine</span>
+</div>
+</div>
+</main>
+<!-- FOOTER (Preserving Shared Component Anchor) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline">
+<div class="w-full max-w-5xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+<div class="space-y-1">
+<p class="font-heading text-heading text-primary font-bold">AnKanu</p>
+<p class="font-caption text-caption text-ink-secondary">
+          © AnKanu — Institution matrimoniale d'honneur et de ta'aruf. Hébergement souverain certifié Scaleway (Paris, France).
+        </p>
+</div>
+<nav class="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2 font-caption text-caption">
+<a class="text-ink-secondary hover:text-ink-primary transition-colors duration-200" href="#confidentialite">Charte de Confidentialité</a>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors duration-200" href="#wali">Conditions du Wali</a>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors duration-200" href="#mentions">Mentions Légales</a>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors duration-200" href="#deontologie">Sécurité &amp; Déontologie</a>
+</nav>
+</div>
+</footer>
+<!-- VANILLA INTERACTION JAVASCRIPT -->
+<script>
+    const otpInputs = Array.from(document.querySelectorAll('#otp-inputs-wrapper input'));
+    const submitBtn = document.getElementById('submit-btn');
+    const submitBtnText = document.getElementById('submit-btn-text');
+    const cooldownLabel = document.getElementById('cooldown-label');
+    const timerCounter = document.getElementById('timer-counter');
+    const resendAction = document.getElementById('resend-action');
+    const errorBanner = document.getElementById('error-banner');
+    const successBanner = document.getElementById('success-banner');
+    const statusHeadline = document.getElementById('status-headline');
+    const statusIcon = document.getElementById('status-icon');
+    const statusDetail = document.getElementById('status-detail');
+
+    let cooldownSeconds = 58;
+    let timerInterval = null;
+
+    // Start Cooldown Clock
+    function startCooldown(seconds) {
+      clearInterval(timerInterval);
+      cooldownSeconds = seconds;
+      resendAction.disabled = true;
+      resendAction.className = "text-disabled font-body-strong cursor-not-allowed transition-colors";
+      
+      timerInterval = setInterval(() => {
+        cooldownSeconds--;
+        if (cooldownSeconds > 0) {
+          timerCounter.textContent = cooldownSeconds;
+          cooldownLabel.innerHTML = `Renvoyer le code par SMS (<span id="timer-counter">${cooldownSeconds}</span>s)`;
+        } else {
+          clearInterval(timerInterval);
+          cooldownLabel.textContent = "Délai de réexpédition écoulé";
+          resendAction.disabled = false;
+          resendAction.className = "text-primary hover:text-secondary underline font-body-strong cursor-pointer transition-colors";
+        }
+      }, 1000);
+    }
+
+    startCooldown(58);
+
+    // Auto-advancing OTP Input behavior
+    otpInputs.forEach((input, idx) => {
+      input.addEventListener('input', (e) => {
+        const val = e.target.value.replace(/[^0-9]/g, '');
+        e.target.value = val;
+        
+        if (val && idx < otpInputs.length - 1) {
+          otpInputs[idx + 1].focus();
+        }
+        checkOtpCompletion();
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && idx > 0) {
+          otpInputs[idx - 1].focus();
+        }
+      });
+
+      input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+        const numbers = pasteData.replace(/[^0-9]/g, '').slice(0, 6);
+        numbers.split('').forEach((num, i) => {
+          if (otpInputs[i]) {
+            otpInputs[i].value = num;
+          }
+        });
+        if (numbers.length === 6) {
+          otpInputs[5].focus();
+        } else if (otpInputs[numbers.length]) {
+          otpInputs[numbers.length].focus();
+        }
+        checkOtpCompletion();
+      });
+    });
+
+    function checkOtpCompletion() {
+      const code = otpInputs.map(input => input.value).join('');
+      if (code.length === 6) {
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full h-12 rounded-full bg-indigo text-ink-on-indigo hover:bg-surface-indigo font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-none";
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full h-12 rounded-full bg-disabled text-ink-primary/60 font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-not-allowed";
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const code = otpInputs.map(input => input.value).join('');
+      if (code === '123456' || code === '840192') {
+        setScreenState('success');
+      } else {
+        setScreenState('error');
+      }
+    }
+
+    function triggerResend() {
+      startCooldown(60);
+      setScreenState('sent');
+    }
+
+    function openModifyNumberModal() {
+      const newNum = prompt("Entrez le numéro de téléphone rectifié pour le Burkina Faso ou l'international :", "+226 70 00 00 00");
+      if (newNum) {
+        alert("Numéro enregistré avec succès. Un nouveau code à 6 chiffres a été ordonnancé.");
+        setScreenState('sent');
+      }
+    }
+
+    // State demonstrator switcher
+    function setScreenState(state) {
+      // Reset tab button styles
+      ['default', 'sent', 'error', 'success'].forEach(s => {
+        const btn = document.getElementById(`btn-state-${s}`);
+        if (btn) {
+          if (s === state) {
+            btn.className = "px-2.5 py-1 rounded text-caption font-meta bg-indigo text-ink-on-indigo transition-colors duration-150";
+          } else {
+            btn.className = "px-2.5 py-1 rounded text-caption font-meta text-ink-secondary hover:text-ink-primary transition-colors duration-150";
+          }
+        }
+      });
+
+      errorBanner.classList.add('hidden');
+      successBanner.classList.add('hidden');
+      otpInputs.forEach(i => i.classList.remove('border-danger', 'border-success'));
+
+      if (state === 'default') {
+        otpInputs.forEach(i => { i.value = ''; });
+        checkOtpCompletion();
+        statusHeadline.textContent = "Code expédié par passerelle sécurisée";
+        statusIcon.textContent = "send";
+        statusIcon.className = "material-symbols-outlined text-[18px] text-success";
+        submitBtnText.textContent = "Confirmer le code scellé";
+      } else if (state === 'sent') {
+        statusHeadline.textContent = "Nouveau code transmis à l'instant";
+        statusIcon.textContent = "mark_email_read";
+        statusIcon.className = "material-symbols-outlined text-[18px] text-primary";
+        otpInputs[0].focus();
+        checkOtpCompletion();
+      } else if (state === 'error') {
+        errorBanner.classList.remove('hidden');
+        otpInputs.forEach(i => i.classList.add('border-danger'));
+        startCooldown(42);
+        submitBtn.disabled = true;
+        submitBtn.className = "w-full h-12 rounded-full bg-disabled text-ink-primary/60 font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-not-allowed";
+      } else if (state === 'success') {
+        ['8', '4', '0', '1', '9', '2'].forEach((n, idx) => {
+          if (otpInputs[idx]) otpInputs[idx].value = n;
+        });
+        checkOtpCompletion();
+        otpInputs.forEach(i => i.classList.add('border-success'));
+        successBanner.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.className = "w-full h-12 rounded-full bg-success text-on-primary font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-none";
+        submitBtnText.textContent = "Accéder à l'étape Wali";
+      }
+    }
+  </script>
+</body></html>
