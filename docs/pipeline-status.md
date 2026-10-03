@@ -12,7 +12,7 @@
 | 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
 | 6 Epics & stories (`_bmad-output/planning-artifacts/epics.md`) | done (12 epics, 98 stories; ready for development) | b67d789 |
 | 7 Sprint planning / implementation | **not started** (not started by the 2026-10-02 sister-reach amendment) | — |
-| Amendment 2026-10-02: sister reach mode (`sister_reach_mode`, FR-145, AD-27, story 4.7) | done | (this commit) |
+| Amendment 2026-10-02: sister reach mode (`sister_reach_mode`, FR-145, AD-27, story 4.7) | done | c9cfdde |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
