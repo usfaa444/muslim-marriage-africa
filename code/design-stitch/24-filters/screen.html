@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Critères de Convenance et d'Alliance</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#e9e2d5",
+            "surface-tint": "#465f86",
+            "on-primary-container": "#8ba4cf",
+            "blur-wash": "#C8BBA6",
+            "inverse-on-surface": "#f7f0e3",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "surface-raised": "#FFFBF4",
+            "gold": "#C4A35A",
+            "surface-indigo": "#15283F",
+            "border-hairline": "#D9CDB8",
+            "success-soft": "#DCE6DE",
+            "outline": "#74777f",
+            "ink-secondary": "#5C5346",
+            "staff": "#6B3D2E",
+            "on-secondary-container": "#785d1b",
+            "on-surface": "#1e1b14",
+            "tertiary-fixed": "#d3e4ff",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-background": "#1e1b14",
+            "surface-container-high": "#eee7db",
+            "on-secondary-fixed": "#251a00",
+            "surface-container": "#f4ede0",
+            "on-primary": "#ffffff",
+            "border-strong": "#6F624C",
+            "surface": "#fff9ee",
+            "background": "#fff9ee",
+            "on-tertiary": "#ffffff",
+            "primary-container": "#1f3a5f",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#e5c276",
+            "on-primary-fixed": "#001c3b",
+            "surface-sand": "#F4EDE0",
+            "ink-primary": "#1B2433",
+            "on-secondary": "#ffffff",
+            "indigo-deep": "#15283F",
+            "error": "#ba1a1a",
+            "focus-ring": "#1F3A5F",
+            "danger": "#8B3A3A",
+            "on-tertiary-fixed": "#001c38",
+            "mihrab": "#2C4A6E",
+            "tertiary-container": "#1b3b5e",
+            "on-error-container": "#93000a",
+            "disabled": "#B5A894",
+            "surface-container-low": "#faf3e6",
+            "tertiary": "#002546",
+            "success": "#3D5C45",
+            "primary-fixed": "#d5e3ff",
+            "on-primary-fixed-variant": "#2d476d",
+            "secondary-container": "#fdd88a",
+            "indigo": "#1F3A5F",
+            "secondary-fixed": "#ffdf9c",
+            "surface-dim": "#e0d9cd",
+            "gold-soft": "#E8D5A3",
+            "surface-container-highest": "#e9e2d5",
+            "outline-variant": "#c4c6cf",
+            "primary-fixed-dim": "#aec8f4",
+            "on-error": "#ffffff",
+            "danger-soft": "#F3E0DC",
+            "surface-bright": "#fff9ee",
+            "on-tertiary-container": "#88a5ce",
+            "tertiary-fixed-dim": "#abc9f3",
+            "secondary": "#755b18",
+            "primary": "#032448",
+            "inverse-primary": "#aec8f4",
+            "inverse-surface": "#333028",
+            "staff-soft": "#EFE4DC",
+            "on-surface-variant": "#43474e",
+            "ink-on-indigo": "#F4EDE0"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "6": "32px",
+            "gutter": "16px",
+            "4": "16px",
+            "space-xs": "0.25rem",
+            "3": "12px",
+            "1": "4px",
+            "screen-pad": "16px",
+            "space-xl": "2rem",
+            "space-md": "1rem",
+            "5": "24px",
+            "7": "48px",
+            "2": "8px",
+            "space-sm": "0.5rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""]
+          },
+          "fontSize": {
+            "meta": ["13px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+            "heading": ["18px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+            "title": ["22px", {"lineHeight": "1.25", "fontWeight": "600"}],
+            "body-strong": ["16px", {"lineHeight": "1.5", "fontWeight": "600"}],
+            "body": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "display": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body antialiased min-h-screen flex flex-col selection:bg-gold selection:text-surface-indigo">
+<!-- Top Navigation Anchor (Shared Component: TopNavBar) -->
+<header class="bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab sticky top-0 z-30 shadow-none">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<a class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold flex items-center gap-2" href="#">
+<span>AnKanu</span>
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-gold"></span>
+</a>
+<!-- Desktop Navigation Items -->
+<nav class="hidden md:flex items-center gap-5">
+<a class="text-primary dark:text-gold font-body-strong border-b-2 border-primary dark:border-gold pb-1 transition-colors duration-150" href="#">
+            Découvrir
+          </a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">
+            Charte d'Honneur
+          </a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">
+            Assistance
+          </a>
+</nav>
+</div>
+<!-- Chaperone Presence & Return Action -->
+<div class="flex items-center gap-3">
+<!-- Chaperone badge indicator -->
+<div class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-success-soft text-success text-meta font-meta">
+<span class="material-symbols-outlined text-[15px]" data-icon="verified_user">verified_user</span>
+<span>Wali Relié : Oumar T.</span>
+</div>
+<a class="inline-flex items-center gap-1 text-ink-secondary hover:text-primary transition-colors text-meta font-meta" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_back">arrow_back</span>
+<span>Retour à la Connexion</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Focused Canvas Sub-Header / Breadcrumb -->
+<div class="bg-surface-sand border-b border-border-hairline">
+<div class="max-w-3xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<a class="inline-flex items-center gap-1.5 text-primary hover:text-ink-primary text-body font-body font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="chevron_left">chevron_left</span>
+<span>Retour à la découverte</span>
+</a>
+<span class="text-caption font-caption text-ink-secondary px-2.5 py-0.5 rounded bg-surface-variant border border-border-hairline">
+        Réf. Déontologique FR-024
+      </span>
+</div>
+</div>
+<!-- Main Content Container -->
+<main class="flex-grow w-full max-w-3xl mx-auto px-screen-pad py-6 space-y-6">
+<!-- Solemn Introduction Banner -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 space-y-3">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-primary flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]" data-icon="balance">balance</span>
+</div>
+<div class="space-y-1">
+<h1 class="font-title text-title text-primary tracking-tight">
+            Critères de convenance et d'alliance
+          </h1>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+            Sur AnKanu, la recherche repose sur l'affinité spirituelle, la concordance éthique et la vision de foyer partagée (<em>Sidq</em>). Aucun filtre superficiel, notation d'apparence ni métrique marchande n'a cours en ce lieu de respect mutuel.
+          </p>
+</div>
+</div>
+<div class="pt-2 border-t border-border-hairline flex flex-wrap items-center gap-4 text-meta font-meta text-ink-secondary">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-gold text-[16px]" data-icon="shield">shield</span>
+          Modération par les tuteurs (Wali)
+        </span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-gold text-[16px]" data-icon="lock">lock</span>
+          Données strictement préservées
+        </span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-gold text-[16px]" data-icon="handshake">handshake</span>
+          Engagement solennel
+        </span>
+</div>
+</section>
+<form class="space-y-6" id="convenanceFiltersForm" onsubmit="event.preventDefault();">
+<!-- Section 1: Localisation & Proximité géographique -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 space-y-5">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="location_on">location_on</span>
+<h2 class="font-heading text-heading text-ink-primary">1. Localisation &amp; Proximité géographique</h2>
+</div>
+<span class="text-caption font-caption text-ink-secondary">Faso &amp; Environs</span>
+</div>
+<div class="space-y-4">
+<!-- Ville de résidence -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1.5" for="residence_city">
+              Ville de résidence principale
+            </label>
+<div class="relative">
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-4 py-2.5 font-body text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-colors" id="residence_city">
+<option selected="" value="ouaga">Ouagadougou (Centre)</option>
+<option value="bobo">Bobo-Dioulasso (Hauts-Bassins)</option>
+<option value="koudougou">Koudougou (Centre-Ouest)</option>
+<option value="ouahigouya">Ouahigouya (Nord)</option>
+<option value="diaspora">Diaspora sahélienne / Autre contrée</option>
+</select>
+</div>
+</div>
+<!-- Périmètre / Rayon de convenance -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1.5">
+              Rayon de convenance territoriale
+            </label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<label class="flex items-center justify-center p-2.5 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all text-center">
+<input checked="" class="sr-only" name="distance_radius" type="radio" value="strict"/>
+<span class="font-meta text-meta">Ville stricte</span>
+</label>
+<label class="flex items-center justify-center p-2.5 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all text-center">
+<input class="sr-only" name="distance_radius" type="radio" value="10km"/>
+<span class="font-meta text-meta">10 km</span>
+</label>
+<label class="flex items-center justify-center p-2.5 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all text-center">
+<input class="sr-only" name="distance_radius" type="radio" value="25km"/>
+<span class="font-meta text-meta">25 km</span>
+</label>
+<label class="flex items-center justify-center p-2.5 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all text-center">
+<input class="sr-only" name="distance_radius" type="radio" value="50km"/>
+<span class="font-meta text-meta">50 km</span>
+</label>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-1.5">
+              La restriction de distance garantit la faisabilité des échanges présentiels sous supervision familiale.
+            </p>
+</div>
+</div>
+</section>
+<!-- Section 2: Statut matrimonial & Projet familial -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 space-y-5">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="family_restroom">family_restroom</span>
+<h2 class="font-heading text-heading text-ink-primary">2. Statut matrimonial &amp; Projet familial</h2>
+</div>
+<span class="text-caption font-caption text-ink-secondary">Transparence loyale</span>
+</div>
+<div class="space-y-5">
+<!-- Statut civil actuel -->
+<div>
+<span class="block font-meta text-meta text-ink-secondary mb-2">
+              Statuts civils admissibles pour l'alliance
+            </span>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<label class="flex items-center gap-2 p-3 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all">
+<input checked="" class="rounded border-border-strong text-primary focus:ring-0" name="marital_status" type="checkbox" value="single"/>
+<span class="font-meta text-meta">Célibataire</span>
+</label>
+<label class="flex items-center gap-2 p-3 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all">
+<input checked="" class="rounded border-border-strong text-primary focus:ring-0" name="marital_status" type="checkbox" value="divorced"/>
+<span class="font-meta text-meta">Divorcé(e)</span>
+</label>
+<label class="flex items-center gap-2 p-3 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all">
+<input checked="" class="rounded border-border-strong text-primary focus:ring-0" name="marital_status" type="checkbox" value="widowed"/>
+<span class="font-meta text-meta">Veuf / Veuve</span>
+</label>
+<label class="flex items-center gap-2 p-3 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all">
+<input class="rounded border-border-strong text-primary focus:ring-0" name="marital_status" type="checkbox" value="married"/>
+<span class="font-meta text-meta">Marié(e)</span>
+</label>
+</div>
+</div>
+<!-- Sister filter: Intention polygamie (FR-022 / FR-024) -->
+<div class="p-4 rounded-xl bg-surface-sand border border-border-hairline space-y-3">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-[20px] flex-shrink-0 mt-0.5" data-icon="menu_book">menu_book</span>
+<div class="space-y-1">
+<span class="font-body-strong text-body-strong text-ink-primary block">
+                  Intention et engagement quant à la polygamie (Cadre FR-024)
+                </span>
+<p class="font-caption text-caption text-ink-secondary">
+                  Exigence déontologique stricte : conformité aux engagements contractuels préalables et aux volontés explicites des soeurs et de leurs tuteurs.
+                </p>
+</div>
+</div>
+<div class="space-y-2 pt-1">
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input checked="" class="mt-1 text-primary focus:ring-0 border-border-strong" name="polygyny_intention" type="radio" value="monogamy_only"/>
+<span class="font-body text-body text-ink-primary">
+<strong>Union strictement monogame :</strong> N'inclure que les profils s'engageant expressément sur un foyer à épouse unique.
+                </span>
+</label>
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input class="mt-1 text-primary focus:ring-0 border-border-strong" name="polygyny_intention" type="radio" value="open_plural"/>
+<span class="font-body text-body text-ink-primary">
+<strong>Ouvert(e) à une union plurielle loyale :</strong> Profils disposés à une alliance transparente dans le respect de l'équité canonique.
+                </span>
+</label>
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input class="mt-1 text-primary focus:ring-0 border-border-strong" name="polygyny_intention" type="radio" value="any_stated"/>
+<span class="font-body text-body text-ink-secondary">
+                  Indifférent (tout statut déclaré avec clarté)
+                </span>
+</label>
+</div>
+<div class="flex items-center gap-2 pt-2 border-t border-border-hairline">
+<input checked="" class="rounded border-border-strong text-primary focus:ring-0" id="exclude_unspecified" type="checkbox"/>
+<label class="font-meta text-meta text-ink-primary" for="exclude_unspecified">
+                Exclure impérativement les profils n'ayant pas renseigné de position formelle.
+              </label>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 3: Pratique religieuse & Concordance spirituelle -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 space-y-5">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="mosque">mosque</span>
+<h2 class="font-heading text-heading text-ink-primary">3. Pratique religieuse &amp; Concordance spirituelle</h2>
+</div>
+<span class="text-caption font-caption text-ink-secondary">Piliers &amp; Fiqh</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- École de jurisprudence -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1.5" for="madhhab_select">
+              École de jurisprudence (Madhhab)
+            </label>
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-4 py-2.5 font-body text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-colors" id="madhhab_select">
+<option selected="" value="maliki">Malékite (Tradition majoritaire Faso)</option>
+<option value="hanafi">Hanafite</option>
+<option value="shafii">Chafiite</option>
+<option value="hanbali">Hanbalite</option>
+<option value="any">Sans distinction stricte (Sunna)</option>
+</select>
+</div>
+<!-- Assiduité à la Salat -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1.5" for="salat_select">
+              Assiduité à la Salat quotidienne
+            </label>
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-4 py-2.5 font-body text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none transition-colors" id="salat_select">
+<option selected="" value="five_strict">5 prières quotidiennes assidues</option>
+<option value="mosque_ontime">À la mosquée / scrupuleusement à l'heure</option>
+<option value="sincere_path">En cheminement sincère et régulier</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Section 4: Horizon temporel & Disposition de vie -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 space-y-5">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="event_upcoming">event_upcoming</span>
+<h2 class="font-heading text-heading text-ink-primary">4. Horizon temporel &amp; Disposition de vie</h2>
+</div>
+<span class="text-caption font-caption text-ink-secondary">Intentions de nikah</span>
+</div>
+<div class="space-y-3">
+<span class="block font-meta text-meta text-ink-secondary">
+            Échéance envisagée pour la Khitba (demande) et le Nikah
+          </span>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<!-- ready_now -->
+<label class="relative p-4 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all block">
+<input checked="" class="sr-only" name="life_plan" type="radio" value="ready_now"/>
+<div class="space-y-1">
+<span class="material-symbols-outlined text-[20px] block" data-icon="done_all">done_all</span>
+<span class="font-body-strong text-body-strong block">Prêt immédiatement</span>
+<span class="font-caption text-caption opacity-90 block">Khitba &amp; Nikah dès convenance mutuelle et aval du tuteur</span>
+</div>
+</label>
+<!-- within_year -->
+<label class="relative p-4 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all block">
+<input class="sr-only" name="life_plan" type="radio" value="within_year"/>
+<div class="space-y-1">
+<span class="material-symbols-outlined text-[20px] block" data-icon="schedule">schedule</span>
+<span class="font-body-strong text-body-strong block">Dans l'année</span>
+<span class="font-caption text-caption opacity-90 block">Horizon sous 6 à 12 mois pour consolidation du foyer</span>
+</div>
+</label>
+<!-- exploring -->
+<label class="relative p-4 rounded-xl border border-border-hairline bg-surface-sand cursor-pointer hover:border-border-strong has-[:checked]:border-primary has-[:checked]:bg-primary-container has-[:checked]:text-ink-on-indigo transition-all block">
+<input class="sr-only" name="life_plan" type="radio" value="exploring"/>
+<div class="space-y-1">
+<span class="material-symbols-outlined text-[20px] block" data-icon="hourglass_top">hourglass_top</span>
+<span class="font-body-strong text-body-strong block">Consultation sereine</span>
+<span class="font-caption text-caption opacity-90 block">Phase préalable d'échange chaperonné et discernement</span>
+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- Section 5 & 6: Déontologie & Règle d'intégrité zéro donnée artificielle -->
+<section class="bg-surface-sand border border-border-hairline rounded-xl p-4 md:p-5 flex items-start gap-3.5">
+<span class="material-symbols-outlined text-border-strong text-[22px] flex-shrink-0 mt-0.5" data-icon="verified">verified</span>
+<div class="space-y-1 text-ink-secondary">
+<h3 class="font-body-strong text-body-strong text-ink-primary">
+            Charte d'authenticité et d'intégrité intégrale
+          </h3>
+<p class="font-caption text-caption leading-relaxed">
+            Si vos filtres ne retournent aucune correspondance dans votre périmètre, <strong>aucun profil factice ni robot ne sera jamais simulé</strong>. Le mariage est une responsabilité devant Dieu (<em>Amanah</em>) ; la patience et la véracité gouvernent chaque mise en relation.
+          </p>
+</div>
+</section>
+<!-- Section 7: Actions de soumission et réinitialisation -->
+<div class="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+<!-- Quiet decline / reset button (44px) -->
+<button class="w-full sm:w-auto h-[44px] px-6 rounded-full border border-border-strong text-ink-primary hover:bg-surface-variant font-body text-body font-medium transition-colors flex items-center justify-center gap-2" onclick="document.getElementById('convenanceFiltersForm').reset()" type="button">
+<span class="material-symbols-outlined text-[18px]" data-icon="restart_alt">restart_alt</span>
+<span>Réinitialiser les filtres</span>
+</button>
+<!-- Primary button (48px indigo) -->
+<button class="w-full sm:w-auto h-[48px] px-8 rounded-full bg-indigo hover:bg-primary-container text-ink-on-indigo font-body-strong text-body-strong flex items-center justify-center gap-2 transition-colors duration-200" type="submit">
+<span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+<span>Appliquer les critères de convenance</span>
+</button>
+</div>
+</form>
+</main>
+<!-- Footer Component (Shared Component: Footer) -->
+<footer class="bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-12">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<!-- Copyright text from JSON -->
+<div class="text-center md:text-left">
+<div class="font-heading text-heading text-primary dark:text-ink-on-indigo mb-1 flex items-center justify-center md:justify-start gap-1.5">
+<span>AnKanu</span>
+<span class="text-caption font-caption text-gold">Mariage Digne</span>
+</div>
+<p class="text-ink-secondary dark:text-outline-variant font-caption text-caption">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+</div>
+<!-- Links from JSON -->
+<div class="flex flex-wrap justify-center gap-4 text-center">
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">
+          Confidentialité &amp; Données
+        </a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">
+          Tuteurs Légaux (Wali)
+        </a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#">
+          Éthique &amp; Respect
+        </a>
+</div>
+</div>
+</footer>
+</body></html>

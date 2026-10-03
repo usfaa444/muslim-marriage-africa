@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Message quota wall</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed": "#d5e3ff",
+            "ink-secondary": "#5C5346",
+            "on-background": "#1e1b14",
+            "ink-primary": "#1B2433",
+            "success-soft": "#DCE6DE",
+            "surface-variant": "#e9e2d5",
+            "on-surface-variant": "#43474e",
+            "error": "#ba1a1a",
+            "surface-bright": "#fff9ee",
+            "danger-soft": "#F3E0DC",
+            "inverse-surface": "#333028",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-highest": "#e9e2d5",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-error": "#ffffff",
+            "on-secondary-fixed": "#251a00",
+            "surface-container-low": "#faf3e6",
+            "staff-soft": "#EFE4DC",
+            "surface": "#fff9ee",
+            "secondary": "#755b18",
+            "surface-container-high": "#eee7db",
+            "tertiary-fixed": "#d3e4ff",
+            "gold": "#C4A35A",
+            "on-tertiary-fixed": "#001c38",
+            "border-hairline": "#D9CDB8",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#e5c276",
+            "on-secondary-container": "#785d1b",
+            "on-primary-fixed-variant": "#2d476d",
+            "background": "#fff9ee",
+            "on-primary": "#ffffff",
+            "gold-soft": "#E8D5A3",
+            "primary-container": "#1f3a5f",
+            "on-tertiary": "#ffffff",
+            "success": "#3D5C45",
+            "tertiary": "#002546",
+            "indigo": "#1F3A5F",
+            "danger": "#8B3A3A",
+            "on-secondary-fixed-variant": "#5b4300",
+            "surface-sand": "#F4EDE0",
+            "primary": "#032448",
+            "surface-dim": "#e0d9cd",
+            "on-secondary": "#ffffff",
+            "secondary-container": "#fdd88a",
+            "mihrab": "#2C4A6E",
+            "on-surface": "#1e1b14",
+            "surface-container": "#f4ede0",
+            "on-primary-fixed": "#001c3b",
+            "surface-raised": "#FFFBF4",
+            "inverse-on-surface": "#f7f0e3",
+            "secondary-fixed": "#ffdf9c",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#aec8f4",
+            "on-primary-container": "#8ba4cf",
+            "staff": "#6B3D2E",
+            "on-tertiary-container": "#88a5ce",
+            "tertiary-container": "#1b3b5e",
+            "indigo-deep": "#15283F",
+            "outline": "#74777f",
+            "border-strong": "#6F624C",
+            "tertiary-fixed-dim": "#abc9f3",
+            "disabled": "#B5A894",
+            "inverse-primary": "#aec8f4",
+            "blur-wash": "#C8BBA6",
+            "outline-variant": "#c4c6cf",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-indigo": "#15283F",
+            "focus-ring": "#1F3A5F",
+            "surface-tint": "#465f86"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "4": "16px",
+            "6": "32px",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem",
+            "5": "24px",
+            "2": "8px",
+            "margin": "1rem",
+            "space-md": "1rem",
+            "space-xl": "2rem",
+            "7": "48px",
+            "screen-pad": "16px",
+            "3": "12px",
+            "space-sm": "0.5rem",
+            "1": "4px",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "caption": [
+              "\"Source Sans 3, system-ui, sans-serif\""
+            ],
+            "body-strong": [
+              "\"Source Sans 3, system-ui, sans-serif\""
+            ],
+            "body": [
+              "\"Source Sans 3, system-ui, sans-serif\""
+            ],
+            "display": [
+              "\"Source Serif 4, Georgia, serif\""
+            ],
+            "meta": [
+              "\"Source Sans 3, system-ui, sans-serif\""
+            ],
+            "title": [
+              "\"Source Serif 4, Georgia, serif\""
+            ],
+            "heading": [
+              "\"Source Serif 4, Georgia, serif\""
+            ]
+          },
+          "fontSize": {
+            "caption": [
+              "12px",
+              {
+                "lineHeight": "1.4",
+                "fontWeight": "400"
+              }
+            ],
+            "body-strong": [
+              "16px",
+              {
+                "lineHeight": "1.5",
+                "fontWeight": "600"
+              }
+            ],
+            "body": [
+              "16px",
+              {
+                "lineHeight": "1.5",
+                "fontWeight": "400"
+              }
+            ],
+            "display": [
+              "28px",
+              {
+                "lineHeight": "1.2",
+                "letterSpacing": "-0.01em",
+                "fontWeight": "600"
+              }
+            ],
+            "meta": [
+              "13px",
+              {
+                "lineHeight": "1.4",
+                "letterSpacing": "0.01em",
+                "fontWeight": "500"
+              }
+            ],
+            "title": [
+              "22px",
+              {
+                "lineHeight": "1.25",
+                "fontWeight": "600"
+              }
+            ],
+            "heading": [
+              "18px",
+              {
+                "lineHeight": "1.3",
+                "fontWeight": "600"
+              }
+            ]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-surface text-ink-primary font-body antialiased flex flex-col min-h-screen selection:bg-gold-soft selection:text-ink-primary">
+<!-- Interactive State Simulator Bar (Audit UX pour validation opérationnelle) -->
+<aside aria-label="Simulateur d'états UX" class="bg-surface-indigo text-ink-on-indigo text-caption px-screen-pad py-2 border-b border-mihrab/40">
+<div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+<span class="font-meta text-meta text-gold tracking-wide">SIMULATEUR D'ÉTATS ANKANU (Audit UX)</span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5" id="simulator-buttons">
+<button class="px-2.5 py-1 rounded-full text-caption bg-gold text-indigo font-body-strong transition-all" id="btn-state-quota" onclick="setScreenState('quota_reached')" type="button">
+          1. Quota Atteint (Défaut)
+        </button>
+<button class="px-2.5 py-1 rounded-full text-caption bg-indigo text-ink-on-indigo hover:bg-mihrab transition-all" id="btn-state-loading" onclick="setScreenState('loading')" type="button">
+          2. Chargement Entitlement
+        </button>
+<button class="px-2.5 py-1 rounded-full text-caption bg-indigo text-ink-on-indigo hover:bg-mihrab transition-all" id="btn-state-pay" onclick="setScreenState('pay_unavailable')" type="button">
+          3. Erreur PAY_UNAVAILABLE
+        </button>
+<button class="px-2.5 py-1 rounded-full text-caption bg-indigo text-ink-on-indigo hover:bg-mihrab transition-all" id="btn-state-reset" onclick="setScreenState('quota_reset')" type="button">
+          4. Quota Réinitialisé (Minuit)
+        </button>
+<button class="px-2.5 py-1 rounded-full text-caption bg-indigo text-ink-on-indigo hover:bg-mihrab transition-all" id="btn-state-purchased" onclick="setScreenState('purchased')" type="button">
+          5. Achat Validé / Membre Engagé
+        </button>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Bar (Shared Component Anchor) -->
+<header class="bg-surface border-b border-border-hairline sticky top-0 z-30">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-2" href="#accueil">
+<span class="material-symbols-outlined text-primary text-title" data-icon="temple_hindu">temple_hindu</span>
+<span class="font-title text-title text-primary tracking-tight font-semibold">AnKanu</span>
+</a>
+<!-- Web navigation links -->
+<nav class="hidden md:flex items-center gap-5">
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors" href="#decouvrir">Découvrir</a>
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors" href="#invitations">Invitations</a>
+<!-- Active intent: Discussions / Chat quota context -->
+<a class="text-primary font-body-strong border-b-2 border-primary pb-1 flex items-center gap-1" href="#discussions">
+<span>Discussions</span>
+<span class="w-1.5 h-1.5 rounded-full bg-gold inline-block"></span>
+</a>
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors" href="#profil">Profil</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<a class="hidden sm:inline-block font-meta text-meta text-ink-secondary hover:text-primary transition-colors" href="#charte">Charte d'Honneur</a>
+<a class="font-meta text-meta text-ink-secondary hover:text-primary flex items-center gap-1 transition-colors" href="#assistance">
+<span class="material-symbols-outlined text-heading" data-icon="support_agent">support_agent</span>
+<span>Assistance</span>
+</a>
+<div class="h-4 w-px bg-border-hairline hidden sm:block"></div>
+<a class="font-meta text-meta text-primary hover:text-gold transition-colors flex items-center gap-1" href="#retour-connexion">
+<span class="material-symbols-outlined text-heading" data-icon="arrow_back">arrow_back</span>
+<span class="hidden sm:inline">Retour à la Connexion</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Contextual Linear Norm Banner -->
+<section class="bg-surface-sand border-b border-border-hairline py-2">
+<div class="max-w-4xl mx-auto px-screen-pad flex flex-wrap items-center justify-between text-caption text-ink-secondary gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-body" data-icon="shield">shield</span>
+<span>Cadre éthique matrimonial · <strong>Normes FR-146 · FR-044 · FR-105</strong></span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1 text-ink-secondary">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+          Sanctuaire &amp; Confidentialité Garantis
+        </span>
+<span class="text-border-strong">·</span>
+<span>Ouagadougou (UTC+0)</span>
+</div>
+</div>
+</section>
+<!-- Main Canvas Container -->
+<main class="flex-grow max-w-4xl mx-auto w-full px-screen-pad py-7 space-y-6">
+<!-- ALERT BANNER: PAY_UNAVAILABLE (Hidden by default, triggered by simulator or server flag) -->
+<div class="hidden bg-staff-soft border border-staff/30 rounded-xl p-4 transition-all" id="banner-pay-unavailable">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-staff text-title shrink-0" data-icon="cloud_off">cloud_off</span>
+<div class="space-y-1">
+<h2 class="font-heading text-heading text-staff">Réseaux de paiement temporairement indisponibles (Alerte PAY_UNAVAILABLE)</h2>
+<p class="font-body text-body text-ink-secondary">
+            Les passerelles Mobile Money connaissent une latence passagère à Ouagadougou. Votre sanctuaire demeure intact : la réception des messages, la modération et la supervision par votre Wali continuent sans aucune interruption. Les forfaits seront de nouveau accessibles dès stabilisation du réseau.
+          </p>
+</div>
+</div>
+</div>
+<!-- ALERT BANNER: Quota Reset State (Minuit Ouaga) -->
+<div class="hidden bg-success-soft border border-success/30 rounded-xl p-4 transition-all" id="banner-quota-reset">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-success text-title shrink-0" data-icon="check_circle">check_circle</span>
+<div class="space-y-1">
+<h2 class="font-heading text-heading text-success">Plafond quotidien réinitialisé</h2>
+<p class="font-body text-body text-ink-secondary">
+            Le lever du jour à Ouagadougou a rétabli vos 3 messages d'initiation quotidiens sans aucun frais. Poursuivez vos démarches dans la sérénité et le respect des convenances.
+          </p>
+<div class="pt-2">
+<a class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-primary text-ink-on-indigo font-body-strong text-caption" href="#discussions">
+<span>Reprendre les échanges</span>
+<span class="material-symbols-outlined text-body" data-icon="chat">chat</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- ALERT BANNER: Purchased State (Membre Engagé Illimité) -->
+<div class="hidden bg-surface-indigo text-ink-on-indigo border border-gold/40 rounded-xl p-5 transition-all" id="banner-purchased">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-gold text-display shrink-0" data-icon="verified">verified</span>
+<div class="space-y-2">
+<div class="inline-block px-2.5 py-0.5 rounded-full bg-gold/20 text-gold font-meta text-caption">STATUT : ENGAGEMENT ILLIMITÉ ACTIF</div>
+<h2 class="font-heading text-heading text-ink-on-indigo">Souscription confirmée avec honneur</h2>
+<p class="font-body text-body text-ink-on-indigo/90">
+            Toutes les limites de messages sont levées. Vous bénéficiez désormais de pourparlers continus et d'une priorité de revue humaine par les médiateurs assermentés AnKanu pour votre démarche matrimoniale.
+          </p>
+</div>
+</div>
+</div>
+<!-- LOADING STATE PLACEHOLDER (Hidden by default) -->
+<div class="hidden bg-surface-raised border border-border-hairline rounded-xl p-12 text-center space-y-4" id="state-loading-spinner">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-surface-sand text-primary animate-spin">
+<span class="material-symbols-outlined text-title" data-icon="progress_activity">progress_activity</span>
+</div>
+<div class="space-y-1">
+<p class="font-heading text-heading text-primary">Vérification de vos privilèges d'engagement...</p>
+<p class="font-meta text-meta text-ink-secondary">Synchronisation sécurisée avec le registre matrimonial de Ouagadougou.</p>
+</div>
+</div>
+<!-- DEFAULT STATE: Quota Atteint (Message Quota Wall Core) -->
+<div class="space-y-6" id="main-quota-content">
+<!-- Primary Status Card: Quota Exhausted & Countdown -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 transition-all">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-5 pb-5 border-b border-border-hairline">
+<div class="space-y-2 max-w-xl">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-danger-soft text-danger font-meta text-caption">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+<span>Plafond journalier de bienséance atteint</span>
+</div>
+<h1 class="font-display text-display text-ink-primary tracking-tight">
+              Envoi refusé. Quota du jour atteint.
+            </h1>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+              Conformément à la règle de modération protectrice <strong>FR-146</strong>, les comptes en accès libre disposent d’un volume encadré pour préserver la réflexion, éviter les sollicitations compulsives et cultiver la retenue propice aux desseins honorables.
+            </p>
+</div>
+<!-- Dynamic Counter Box -->
+<div class="bg-surface-sand border border-border-hairline rounded-xl p-4 text-center shrink-0 min-w-[220px]">
+<span class="font-meta text-caption text-ink-secondary uppercase tracking-wider block">Solde journalier</span>
+<div class="my-1 flex items-baseline justify-center gap-1">
+<span class="font-display text-display text-danger font-semibold">0</span>
+<span class="font-heading text-heading text-ink-secondary">/ 3</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+              messages restants sur votre quota quotidien d'initiation
+            </p>
+<div class="mt-2 text-caption text-ink-secondary/80 border-t border-border-hairline/60 pt-2">
+              Plafond dynamique actif : 3 msg/jour
+            </div>
+</div>
+</div>
+<!-- Ouaga-day Reset Countdown & Timing -->
+<div class="pt-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<div class="w-10 h-10 rounded-full bg-surface-sand flex items-center justify-center shrink-0 text-primary border border-border-hairline">
+<span class="material-symbols-outlined text-heading" data-icon="schedule">schedule</span>
+</div>
+<div>
+<p class="font-body-strong text-body-strong text-ink-primary">
+                Réinitialisation à minuit (Heure de Ouagadougou · UTC+0)
+              </p>
+<p class="font-meta text-meta text-ink-secondary">
+                Le renouvellement quotidien s'opère au lever du jour sans aucun frais.
+              </p>
+</div>
+</div>
+<div class="bg-surface-sand px-4 py-2 rounded-lg border border-border-hairline shrink-0 w-full sm:w-auto text-center sm:text-right">
+<span class="font-meta text-caption text-ink-secondary block">Délai d'attente estimé</span>
+<span class="font-title text-title text-primary font-semibold tracking-tight">Dans 07h 42m</span>
+</div>
+</div>
+<!-- FR-105: Audio oral tradition prompt component with Burkina national languages -->
+<div class="mt-5 bg-surface-sand/80 border border-border-hairline rounded-xl p-4">
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary text-ink-on-indigo flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-body" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<div>
+<p class="font-body-strong text-body text-ink-primary flex items-center gap-1.5">
+<span>Explication orale de la règle de retenue</span>
+<span class="font-meta text-caption bg-gold-soft/50 text-ink-primary px-2 py-0.5 rounded">Norme FR-105</span>
+</p>
+<p class="font-caption text-caption text-ink-secondary">
+                  Écoutez l'exhortation fraternelle relative à la patience et au rythme d'introduction.
+                </p>
+</div>
+</div>
+<!-- Audio Lang Toggles & Play Trigger -->
+<div class="flex items-center gap-2 w-full md:w-auto justify-end">
+<div class="inline-flex rounded-lg border border-border-hairline bg-surface-raised p-0.5 text-caption font-meta">
+<button class="px-2.5 py-1 rounded bg-primary text-ink-on-indigo" type="button">Français</button>
+<button class="px-2.5 py-1 rounded hover:bg-surface-sand text-ink-secondary" type="button">Mooré (mos)</button>
+<button class="px-2.5 py-1 rounded hover:bg-surface-sand text-ink-secondary" type="button">Dioula (dyu)</button>
+</div>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-primary text-ink-on-indigo font-meta text-caption hover:bg-mihrab transition-colors" type="button">
+<span class="material-symbols-outlined text-body" data-icon="play_arrow">play_arrow</span>
+<span>Écouter</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Sacred Ethical Guarantee Banner (Inviolable free safety features) -->
+<section class="bg-surface-indigo text-ink-on-indigo rounded-xl p-5 border border-gold/30">
+<div class="space-y-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-gold text-display shrink-0" data-icon="balance">balance</span>
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-title text-title text-gold font-semibold">Pacte d'Inviolabilité Éthique AnKanu</h2>
+<span class="px-2 py-0.5 rounded bg-gold/20 text-gold font-meta text-caption">Norme FR-044</span>
+</div>
+<p class="font-body text-body text-ink-on-indigo/90 mt-1">
+                « La dignité, la pudeur et la sécurité ne font l'objet d'aucun péage commercial. »
+              </p>
+</div>
+</div>
+<!-- Feature Grid: What remains 100% free and forever open -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2 border-t border-mihrab">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="mark_email_read">mark_email_read</span>
+<div>
+<span class="font-body-strong text-meta text-ink-on-indigo block">Lecture des répliques</span>
+<span class="font-caption text-caption text-ink-on-indigo/70">Consultez tous les messages reçus sans restriction.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="supervised_user_circle">supervised_user_circle</span>
+<div>
+<span class="font-body-strong text-meta text-ink-on-indigo block">Supervision du Tuteur (Wali)</span>
+<span class="font-caption text-caption text-ink-on-indigo/70">Accès miroir complet pour le tuteur légal déclaré.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="visibility_off">visibility_off</span>
+<div>
+<span class="font-body-strong text-meta text-ink-on-indigo block">Sceau de pudeur</span>
+<span class="font-caption text-caption text-ink-on-indigo/70">Floutage souverain des portraits toujours actif.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="gavel">gavel</span>
+<div>
+<span class="font-body-strong text-meta text-ink-on-indigo block">Médiation &amp; Signalement 24/7</span>
+<span class="font-caption text-caption text-ink-on-indigo/70">Intervention d'urgence du comité déontologique.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="badge">badge</span>
+<div>
+<span class="font-body-strong text-meta text-ink-on-indigo block">Vérification CNIB / Passeport</span>
+<span class="font-caption text-caption text-ink-on-indigo/70">Authentification régalienne gratuite à vie.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="favorite">favorite</span>
+<div>
+<span class="font-body-strong text-meta text-ink-on-indigo block">Invitations officielles</span>
+<span class="font-caption text-caption text-ink-on-indigo/70">Réception d'intention formelle familiale ouverte.</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Engagement Packs Section (components.pack-card) -->
+<section class="space-y-4">
+<div class="text-center max-w-2xl mx-auto space-y-1">
+<h2 class="font-title text-title text-ink-primary">
+            Poursuivre les échanges sans interruption : Packs d'Engagement Ta'aruf
+          </h2>
+<p class="font-body text-body text-ink-secondary">
+            Pour les frères et sœurs désireux d'approfondir les pourparlers sous le regard protecteur des tuteurs sans restriction journalière.
+          </p>
+</div>
+<!-- 3 Tier Cards Bento Layout -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+<!-- Tier 1: 1 Mois -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 flex flex-col justify-between hover:border-border-strong transition-all">
+<div class="space-y-4">
+<div>
+<div class="font-meta text-caption text-ink-secondary">POURPARLERS CIBLÉS</div>
+<h3 class="font-heading text-heading text-ink-primary">1 Mois d'Engagement</h3>
+<div class="mt-2 flex items-baseline gap-1">
+<span class="font-display text-display text-primary font-bold">25 000</span>
+<span class="font-body-strong text-body text-ink-secondary">FCFA</span>
+</div>
+<span class="text-caption text-ink-secondary font-meta">Paiement unique sans tacite reconduction</span>
+</div>
+<div class="h-px bg-border-hairline"></div>
+<ul class="space-y-2.5 text-caption font-body text-ink-secondary">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success text-body shrink-0" data-icon="done">done</span>
+<span>Messages et répliques illimités (levée intégrale de la limite quotidienne FR-146)</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success text-body shrink-0" data-icon="done">done</span>
+<span>Invitations formelles sans plafond</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success text-body shrink-0" data-icon="done">done</span>
+<span>Support d'assistance matrimonial sous 24h</span>
+</li>
+</ul>
+</div>
+<div class="pt-6">
+<button class="w-full py-2.5 px-4 rounded-full border border-border-strong text-ink-primary font-body-strong text-caption hover:bg-surface-sand transition-colors" onclick="selectTier('1 Mois', '25 000 FCFA')" type="button">
+                Sélectionner 1 Mois
+              </button>
+</div>
+</div>
+<!-- Tier 2: 3 Mois (Conseillé aux Familles - Recommandé) -->
+<div class="bg-surface-raised border-2 border-gold rounded-xl p-5 flex flex-col justify-between relative shadow-sm">
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold text-primary font-body-strong text-caption px-3 py-0.5 rounded-full uppercase tracking-wider">
+              Conseillé aux Familles
+            </div>
+<div class="space-y-4 pt-1">
+<div>
+<div class="font-meta text-caption text-secondary">RYTHME MATRIMONIAL CONSEILLÉ</div>
+<h3 class="font-heading text-heading text-ink-primary">3 Mois d'Accomplissement</h3>
+<div class="mt-2 flex items-baseline gap-1">
+<span class="font-display text-display text-primary font-bold">60 000</span>
+<span class="font-body-strong text-body text-ink-secondary">FCFA</span>
+<span class="text-caption text-success font-meta ml-2 bg-success-soft px-1.5 py-0.5 rounded">Économie 15 000 F</span>
+</div>
+<span class="text-caption text-ink-secondary font-meta">Durée moyenne d'un cheminement vers la Fatiha</span>
+</div>
+<div class="h-px bg-border-hairline"></div>
+<ul class="space-y-2.5 text-caption font-body text-ink-primary">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="verified">verified</span>
+<span class="font-body-strong">Messages illimités &amp; levée de tout délai de réponse</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="done">done</span>
+<span>Invitations formelles et requêtes d'entretien tuteur illimitées</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="done">done</span>
+<span>Priorité de revue humaine par les médiateurs assermentés</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-gold text-body shrink-0" data-icon="done">done</span>
+<span>Canal d'échange audio sécurisé entre tuteurs légaux</span>
+</li>
+</ul>
+</div>
+<div class="pt-6">
+<button class="w-full py-3 px-4 rounded-full bg-primary text-ink-on-indigo font-body-strong text-caption hover:bg-mihrab transition-all flex items-center justify-center gap-1.5 shadow-sm" onclick="selectTier('3 Mois', '60 000 FCFA')" type="button">
+<span>Choisir l'Option Recommandée</span>
+<span class="material-symbols-outlined text-body" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Tier 3: 6 Mois Sérénité -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 flex flex-col justify-between hover:border-border-strong transition-all">
+<div class="space-y-4">
+<div>
+<div class="font-meta text-caption text-ink-secondary">CHEMINEMENT ÉLARGI &amp; DIASPORA</div>
+<h3 class="font-heading text-heading text-ink-primary">6 Mois Sérénité Totale</h3>
+<div class="mt-2 flex items-baseline gap-1">
+<span class="font-display text-display text-primary font-bold">110 000</span>
+<span class="font-body-strong text-body text-ink-secondary">FCFA</span>
+</div>
+<span class="text-caption text-ink-secondary font-meta">Paiement forfaitaire sécurisé</span>
+</div>
+<div class="h-px bg-border-hairline"></div>
+<ul class="space-y-2.5 text-caption font-body text-ink-secondary">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success text-body shrink-0" data-icon="done">done</span>
+<span>Messages et échanges illimités sur 180 jours</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success text-body shrink-0" data-icon="done">done</span>
+<span>Assistance prioritaire aux démarches inter-villes et diaspora</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-success text-body shrink-0" data-icon="done">done</span>
+<span>Intermédiation conciliation de premier rang</span>
+</li>
+</ul>
+</div>
+<div class="pt-6">
+<button class="w-full py-2.5 px-4 rounded-full border border-border-strong text-ink-primary font-body-strong text-caption hover:bg-surface-sand transition-colors" onclick="selectTier('6 Mois', '110 000 FCFA')" type="button">
+                Sélectionner 6 Mois
+              </button>
+</div>
+</div>
+</div>
+<!-- No Auto-renew Distinctive Badge -->
+<div class="flex items-center justify-center gap-2 pt-1 text-center">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-sand border border-border-hairline text-caption font-meta text-ink-secondary">
+<span class="material-symbols-outlined text-success text-body" data-icon="lock_clock">lock_clock</span>
+<span>Pas de renouvellement automatique ni prélèvement tacite · Paiement unique par forfait</span>
+</span>
+</div>
+<!-- Payment Gateways & Call to Action Module -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<span class="font-body-strong text-body-strong text-ink-primary block">
+                Moyens de règlement locaux certifiés au Burkina Faso
+              </span>
+<span class="font-caption text-caption text-ink-secondary">
+                Transactions chiffrées de bout en bout via passerelles bancaires régulées BCEAO
+              </span>
+</div>
+<!-- Mobile Money Badges Burkina -->
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2.5 py-1 rounded border border-border-hairline bg-surface text-caption font-body-strong text-ink-primary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Orange Money BF
+              </span>
+<span class="px-2.5 py-1 rounded border border-border-hairline bg-surface text-caption font-body-strong text-ink-primary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Moov Africa
+              </span>
+<span class="px-2.5 py-1 rounded border border-border-hairline bg-surface text-caption font-body-strong text-ink-primary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-mihrab"></span> Wave Burkina
+              </span>
+<span class="px-2.5 py-1 rounded border border-border-hairline bg-surface text-caption font-body-strong text-ink-primary flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-gold"></span> Coris Bank
+              </span>
+</div>
+</div>
+<div class="pt-3 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2 text-ink-secondary font-meta text-caption w-full sm:w-auto">
+<span class="material-symbols-outlined text-heading text-primary" data-icon="lock">lock</span>
+<span>Forfait sélectionné : <strong class="text-ink-primary" id="selected-tier-label">3 Mois d'Accomplissement (60 000 FCFA)</strong></span>
+</div>
+<!-- Primary Action CTAs -->
+<div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+<button class="w-full sm:w-auto h-12 px-6 rounded-full bg-primary hover:bg-mihrab text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-all shadow-sm" onclick="triggerCheckout()" type="button">
+<span>Souscrire au Pack Engagement Illimité</span>
+<span class="material-symbols-outlined text-body" data-icon="lock_open">lock_open</span>
+</button>
+<a class="w-full sm:w-auto h-12 px-4 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-body text-meta flex items-center justify-center text-center transition-colors" href="#discussions">
+                Patienter jusqu'à minuit (Lecture seule)
+              </a>
+</div>
+</div>
+</div>
+</section>
+<!-- Dignified Chaperone & Wali Reassurance Box -->
+<section class="bg-staff-soft/50 border border-border-hairline rounded-xl p-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-staff text-ink-on-indigo flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-heading" data-icon="family_restroom">family_restroom</span>
+</div>
+<div class="space-y-0.5">
+<h4 class="font-heading text-heading text-ink-primary">Notification automatique au tuteur légal (Wali)</h4>
+<p class="font-caption text-caption text-ink-secondary">
+            Tout changement de statut d'engagement fait l'objet d'une attestation transmise sans délai au tuteur déclaré pour garantir la clarté et l'agrément des familles à chaque étape du ta'aruf.
+          </p>
+</div>
+</section>
+</div>
+</main>
+<!-- Editorial Minimal Footer (Shared Component Anchor) -->
+<footer class="bg-surface-sand border-t border-border-hairline mt-auto">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex flex-col sm:flex-row items-center gap-3 text-center sm:text-left">
+<span class="font-heading text-heading text-primary font-semibold">AnKanu</span>
+<span class="hidden sm:inline text-border-strong">·</span>
+<p class="font-caption text-caption text-ink-secondary">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+</div>
+<nav class="flex flex-wrap items-center justify-center gap-4 text-ink-secondary font-meta text-meta">
+<a class="hover:text-primary transition-colors" href="#confidentialite">Confidentialité &amp; Données</a>
+<span class="text-border-hairline">·</span>
+<a class="hover:text-primary transition-colors" href="#wali">Tuteurs Légaux (Wali)</a>
+<span class="text-border-hairline">·</span>
+<a class="hover:text-primary transition-colors" href="#ethique">Éthique &amp; Respect</a>
+</nav>
+</div>
+<div class="bg-surface-dim/40 py-2 border-t border-border-hairline/60">
+<div class="max-w-4xl mx-auto px-screen-pad flex flex-wrap items-center justify-between text-[11px] text-ink-secondary/70">
+<span>Hébergement souverain chiffré · Nœud Ouagadougou</span>
+<span>Conformité stricte : Respect de la pudeur &amp; Autorité parentale</span>
+</div>
+</div>
+</footer>
+<!-- Script for state simulator & UX interactions -->
+<script>
+    function setScreenState(stateKey) {
+      // Elements
+      const quotaContent = document.getElementById('main-quota-content');
+      const loadingState = document.getElementById('state-loading-spinner');
+      const payBanner = document.getElementById('banner-pay-unavailable');
+      const resetBanner = document.getElementById('banner-quota-reset');
+      const purchasedBanner = document.getElementById('banner-purchased');
+
+      // Simulator buttons
+      const buttons = {
+        quota_reached: document.getElementById('btn-state-quota'),
+        loading: document.getElementById('btn-state-loading'),
+        pay_unavailable: document.getElementById('btn-state-pay'),
+        quota_reset: document.getElementById('btn-state-reset'),
+        purchased: document.getElementById('btn-state-purchased')
+      };
+
+      // Reset button styles
+      Object.keys(buttons).forEach(key => {
+        if (key === stateKey) {
+          buttons[key].className = "px-2.5 py-1 rounded-full text-caption bg-gold text-indigo font-body-strong transition-all";
+        } else {
+          buttons[key].className = "px-2.5 py-1 rounded-full text-caption bg-indigo text-ink-on-indigo hover:bg-mihrab transition-all";
+        }
+      });
+
+      // Hide all dynamic banners first
+      payBanner.classList.add('hidden');
+      resetBanner.classList.add('hidden');
+      purchasedBanner.classList.add('hidden');
+      loadingState.classList.add('hidden');
+      quotaContent.classList.remove('hidden');
+
+      // State transitions
+      if (stateKey === 'loading') {
+        quotaContent.classList.add('hidden');
+        loadingState.classList.remove('hidden');
+      } else if (stateKey === 'pay_unavailable') {
+        payBanner.classList.remove('hidden');
+      } else if (stateKey === 'quota_reset') {
+        resetBanner.classList.remove('hidden');
+      } else if (stateKey === 'purchased') {
+        purchasedBanner.classList.remove('hidden');
+      }
+    }
+
+    function selectTier(name, price) {
+      const labelEl = document.getElementById('selected-tier-label');
+      if (labelEl) {
+        labelEl.textContent = `${name} (${price})`;
+      }
+    }
+
+    function triggerCheckout() {
+      // Simulate quick feedback
+      const label = document.getElementById('selected-tier-label').textContent;
+      alert(`Initialisation sécurisée du règlement pour : ${label}.\nRedirection vers la passerelle Mobile Money de votre choix (Orange Money BF, Moov Africa, Wave ou Coris Bank).`);
+    }
+  </script>
+</body></html>

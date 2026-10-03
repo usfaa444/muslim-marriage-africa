@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Favoris Privés | AnKanu - Ta'aruf Honorable</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-highest": "#e9e2d5",
+            "on-primary-fixed": "#001c3b",
+            "on-tertiary-container": "#88a5ce",
+            "gold-soft": "#E8D5A3",
+            "success": "#3D5C45",
+            "indigo-deep": "#15283F",
+            "ink-secondary": "#5C5346",
+            "tertiary-fixed": "#d3e4ff",
+            "focus-ring": "#1F3A5F",
+            "on-secondary-fixed-variant": "#5b4300",
+            "error": "#ba1a1a",
+            "surface-container-high": "#eee7db",
+            "secondary-container": "#fdd88a",
+            "background": "#fff9ee",
+            "secondary": "#755b18",
+            "surface-bright": "#fff9ee",
+            "on-primary-container": "#8ba4cf",
+            "blur-wash": "#C8BBA6",
+            "surface-container-lowest": "#ffffff",
+            "inverse-surface": "#333028",
+            "danger-soft": "#F3E0DC",
+            "on-tertiary-fixed": "#001c38",
+            "surface-container-low": "#faf3e6",
+            "primary-fixed-dim": "#aec8f4",
+            "on-secondary-container": "#785d1b",
+            "on-secondary": "#ffffff",
+            "primary-fixed": "#d5e3ff",
+            "gold": "#C4A35A",
+            "surface-raised": "#FFFBF4",
+            "staff-soft": "#EFE4DC",
+            "tertiary-fixed-dim": "#abc9f3",
+            "on-error": "#ffffff",
+            "secondary-fixed-dim": "#e5c276",
+            "surface-dim": "#e0d9cd",
+            "border-hairline": "#D9CDB8",
+            "on-surface-variant": "#43474e",
+            "error-container": "#ffdad6",
+            "on-tertiary": "#ffffff",
+            "inverse-on-surface": "#f7f0e3",
+            "border-strong": "#6F624C",
+            "on-surface": "#1e1b14",
+            "on-primary": "#ffffff",
+            "ink-primary": "#1B2433",
+            "primary-container": "#1f3a5f",
+            "on-primary-fixed-variant": "#2d476d",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-variant": "#e9e2d5",
+            "secondary-fixed": "#ffdf9c",
+            "tertiary": "#002546",
+            "surface-container": "#f4ede0",
+            "primary": "#032448",
+            "surface-sand": "#F4EDE0",
+            "indigo": "#1F3A5F",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "mihrab": "#2C4A6E",
+            "surface": "#fff9ee",
+            "outline-variant": "#c4c6cf",
+            "outline": "#74777f",
+            "on-secondary-fixed": "#251a00",
+            "disabled": "#B5A894",
+            "surface-tint": "#465f86",
+            "surface-indigo": "#15283F",
+            "tertiary-container": "#1b3b5e",
+            "staff": "#6B3D2E",
+            "on-background": "#1e1b14",
+            "inverse-primary": "#aec8f4",
+            "danger": "#8B3A3A",
+            "success-soft": "#DCE6DE",
+            "on-error-container": "#93000a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "screen-pad": "16px",
+            "2": "8px",
+            "3": "12px",
+            "7": "48px",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "5": "24px",
+            "1": "4px",
+            "6": "32px",
+            "space-md": "1rem",
+            "4": "16px",
+            "space-lg": "1.5rem",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""]
+          },
+          "fontSize": {
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-1 {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-indigo-deep">
+<!-- Top Global Header (Anchor Component) -->
+<header class="w-full bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab sticky top-0 z-40 transition-colors duration-150 ease-in-out">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<!-- Brand & Honorific Subtitle -->
+<div class="flex items-center gap-3">
+<a class="flex flex-col" href="#">
+<span class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold">AnKanu</span>
+<span class="font-caption text-caption text-ink-secondary dark:text-gold-soft tracking-wide">Ta'aruf Honorable &amp; Mariage Noble</span>
+</a>
+</div>
+<!-- Member Desktop Navigation Tabs -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Découvrir</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Invitations</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Discussions</a>
+<a class="text-primary dark:text-gold font-body-strong border-b-2 border-primary dark:border-gold pb-1 flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-base fill-1" data-icon="bookmark">bookmark</span>
+<span>Favoris</span>
+</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">Profil</a>
+</nav>
+<!-- Trailing Action: Return / Assistance -->
+<div class="flex items-center gap-4">
+<a class="font-meta text-meta text-ink-secondary dark:text-outline-variant hover:text-primary dark:hover:text-gold transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="help_outline">help_outline</span>
+<span class="hidden sm:inline">Assistance</span>
+</a>
+<div class="h-4 w-px bg-border-hairline dark:bg-mihrab hidden sm:block"></div>
+<a class="font-meta text-meta text-ink-secondary dark:text-outline-variant hover:text-primary dark:hover:text-gold transition-colors" href="#">
+          Retour à la Connexion
+        </a>
+</div>
+</div>
+</header>
+<!-- Interactive State Simulator Toolbar (For UX Audit) -->
+<aside class="w-full bg-surface-raised border-b border-border-hairline py-2.5 px-screen-pad sticky top-[57px] z-30 shadow-sm">
+<div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="tune">tune</span>
+<span class="font-meta text-meta text-ink-secondary">Audit États UX :</span>
+</div>
+<div class="inline-flex rounded-full p-0.5 bg-surface-sand border border-border-hairline text-caption font-meta">
+<button class="px-3 py-1 rounded-full bg-indigo text-ink-on-indigo transition-all font-medium" id="btn-state-active" onclick="switchState('active')">
+          1. Liste Active (3)
+        </button>
+<button class="px-3 py-1 rounded-full text-ink-secondary hover:text-ink-primary transition-all" id="btn-state-empty" onclick="switchState('empty')">
+          2. État Vide
+        </button>
+<button class="px-3 py-1 rounded-full text-ink-secondary hover:text-ink-primary transition-all" id="btn-state-loading" onclick="switchState('loading')">
+          3. Chargement
+        </button>
+<button class="px-3 py-1 rounded-full text-ink-secondary hover:text-ink-primary transition-all" id="btn-state-error" onclick="switchState('error')">
+          4. Erreur Sync
+        </button>
+</div>
+</div>
+</aside>
+<!-- Main Canvas Container -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-screen-pad py-6 md:py-8 flex flex-col gap-6">
+<!-- Sub-header & Breadcrumbs -->
+<nav aria-label="Fil d'Ariane" class="flex items-center justify-between text-meta font-meta text-ink-secondary">
+<a class="inline-flex items-center gap-1.5 text-indigo hover:underline font-body-strong transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+<span>Retour à Découvrir</span>
+</a>
+<span class="text-caption font-meta tracking-wide bg-surface-container px-2.5 py-1 rounded border border-border-hairline text-ink-secondary">
+        Profil / Favoris (FR-026)
+      </span>
+</nav>
+<!-- Strict Confidentiality Notice Banner (FR-026) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-4 md:p-5 flex items-start gap-3.5">
+<div class="p-2 rounded-full bg-surface-sand border border-border-hairline text-secondary flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-lg" data-icon="shield">shield</span>
+</div>
+<div class="space-y-1">
+<h2 class="font-body-strong text-body text-ink-primary flex items-center gap-2">
+<span>Confidentialité Canonique &amp; Pudeur Garantie</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-caption font-meta bg-success-soft text-success border border-border-hairline">
+            Norme FR-026
+          </span>
+</h2>
+<p class="font-body text-body text-ink-secondary">
+          Liste strictement privée et confidentielle (FR-026). Aucun utilisateur n'est informé de son ajout en favori. Absence totale de métrique marchande ou de fonction « Qui m'a ajouté ».
+        </p>
+</div>
+</section>
+<!-- Page Title & Section Overview -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-border-hairline pb-4">
+<div>
+<h1 class="font-display text-display text-primary tracking-tight">Favoris Privés</h1>
+<p class="font-body text-body text-ink-secondary mt-1">
+          Dossiers biographiques retenus pour examen serein et concertation avec le tuteur (<em class="italic">wali</em>).
+        </p>
+</div>
+<div class="self-start md:self-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-raised border border-border-hairline font-meta text-meta text-ink-secondary" id="counter-badge">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="lock">lock</span>
+<span><strong class="font-body-strong text-ink-primary">3</strong> dossiers enregistrés confidentiellement</span>
+</div>
+</div>
+<!-- VIEW 1: ACTIVE FAVORITES LIST (DEFAULT) -->
+<section class="space-y-4" id="view-active">
+<!-- Item 1: Aminata O. -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 md:p-6 transition-all hover:border-border-strong flex flex-col md:flex-row gap-5 items-start md:items-center justify-between">
+<div class="flex items-start gap-4">
+<!-- Sceau de Pudeur Portrait Token -->
+<div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-blur-wash border border-border-hairline relative flex items-center justify-center flex-shrink-0 overflow-hidden shadow-inner" title="Portrait protégé par le Sceau de Pudeur">
+<!-- Simulated blurred silhouette -->
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-sand/80 to-blur-wash/60 backdrop-blur-md"></div>
+<div class="relative z-10 flex flex-col items-center text-ink-secondary">
+<span class="material-symbols-outlined text-2xl text-border-strong" data-icon="lock">lock</span>
+<span class="font-caption text-[10px] tracking-wider uppercase mt-0.5 font-semibold text-border-strong">Sceau</span>
+</div>
+</div>
+<!-- Dossier Details -->
+<div class="space-y-2">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary">Aminata O.</h2>
+<span class="font-meta text-meta text-ink-secondary">27 ans • Ouagadougou (Baskuy)</span>
+<!-- Wali Verification Pill -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-caption font-meta bg-success-soft text-success border border-border-hairline">
+<span class="material-symbols-outlined text-xs fill-1" data-icon="verified_user">verified_user</span>
+<span>Wali vérifié (Mahram)</span>
+</span>
+</div>
+<p class="font-body text-body text-ink-secondary">
+              Enseignante en Lettres modernes • Engagement dans l'enseignement et l'éducation vertueuse.
+            </p>
+<!-- Trait Badges -->
+<div class="flex flex-wrap items-center gap-1.5 pt-1">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="location_on">location_on</span>
+<span>Même ville (Ouagadougou)</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="menu_book">menu_book</span>
+<span>Madhab Malékite</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="home">home</span>
+<span>Foyer monogame exclusif</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Dossier Actions -->
+<div class="flex flex-row md:flex-col items-center md:items-end gap-2.5 w-full md:w-auto pt-3 md:pt-0 border-t md:border-t-0 border-border-hairline flex-shrink-0">
+<a class="w-full md:w-auto text-center inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-indigo-deep transition-colors focus:ring-2 focus:ring-focus-ring" href="#">
+<span>Consulter le dossier</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<button class="w-full md:w-auto text-center inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full text-caption font-meta text-ink-secondary hover:text-danger hover:bg-danger-soft transition-colors border border-transparent hover:border-border-hairline" onclick="removeItem(this)" type="button">
+<span class="material-symbols-outlined text-xs" data-icon="bookmark_remove">bookmark_remove</span>
+<span>Retirer des favoris</span>
+</button>
+</div>
+</article>
+<!-- Item 2: Fatoumata S. -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 md:p-6 transition-all hover:border-border-strong flex flex-col md:flex-row gap-5 items-start md:items-center justify-between">
+<div class="flex items-start gap-4">
+<!-- Sceau de Pudeur Portrait Token -->
+<div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-blur-wash border border-border-hairline relative flex items-center justify-center flex-shrink-0 overflow-hidden shadow-inner" title="Portrait sous Sceau de Pudeur">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-sand/80 to-blur-wash/60 backdrop-blur-md"></div>
+<div class="relative z-10 flex flex-col items-center text-ink-secondary">
+<span class="material-symbols-outlined text-2xl text-border-strong" data-icon="lock">lock</span>
+<span class="font-caption text-[10px] tracking-wider uppercase mt-0.5 font-semibold text-border-strong">Sceau</span>
+</div>
+</div>
+<!-- Dossier Details -->
+<div class="space-y-2">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary">Fatoumata S.</h2>
+<span class="font-meta text-meta text-ink-secondary">25 ans • Bobo-Dioulasso</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-caption font-meta bg-surface-sand text-ink-secondary border border-border-hairline">
+<span class="material-symbols-outlined text-xs" data-icon="family_restroom">family_restroom</span>
+<span>Tuteur Wali désigné</span>
+</span>
+</div>
+<p class="font-body text-body text-ink-secondary">
+              Gestionnaire de projets associatifs • Développement communautaire et action sociale.
+            </p>
+<!-- Trait Badges -->
+<div class="flex flex-wrap items-center gap-1.5 pt-1">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="menu_book">menu_book</span>
+<span>Madhab Malékite</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="diversity_1">diversity_1</span>
+<span>Ouvert à l'entente familiale</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Dossier Actions -->
+<div class="flex flex-row md:flex-col items-center md:items-end gap-2.5 w-full md:w-auto pt-3 md:pt-0 border-t md:border-t-0 border-border-hairline flex-shrink-0">
+<a class="w-full md:w-auto text-center inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-indigo-deep transition-colors focus:ring-2 focus:ring-focus-ring" href="#">
+<span>Consulter le dossier</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<button class="w-full md:w-auto text-center inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full text-caption font-meta text-ink-secondary hover:text-danger hover:bg-danger-soft transition-colors border border-transparent hover:border-border-hairline" onclick="removeItem(this)" type="button">
+<span class="material-symbols-outlined text-xs" data-icon="bookmark_remove">bookmark_remove</span>
+<span>Retirer des favoris</span>
+</button>
+</div>
+</article>
+<!-- Item 3: Nafissatou D. -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 md:p-6 transition-all hover:border-border-strong flex flex-col md:flex-row gap-5 items-start md:items-center justify-between">
+<div class="flex items-start gap-4">
+<!-- Sceau de Pudeur Portrait Token -->
+<div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-blur-wash border border-border-hairline relative flex items-center justify-center flex-shrink-0 overflow-hidden shadow-inner" title="Portrait sous Sceau de Pudeur">
+<div class="absolute inset-0 bg-gradient-to-tr from-surface-sand/80 to-blur-wash/60 backdrop-blur-md"></div>
+<div class="relative z-10 flex flex-col items-center text-ink-secondary">
+<span class="material-symbols-outlined text-2xl text-border-strong" data-icon="lock">lock</span>
+<span class="font-caption text-[10px] tracking-wider uppercase mt-0.5 font-semibold text-border-strong">Sceau</span>
+</div>
+</div>
+<!-- Dossier Details -->
+<div class="space-y-2">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary">Nafissatou D.</h2>
+<span class="font-meta text-meta text-ink-secondary">29 ans • Ouagadougou (Ouaga 2000)</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-caption font-meta bg-success-soft text-success border border-border-hairline">
+<span class="material-symbols-outlined text-xs fill-1" data-icon="verified_user">verified_user</span>
+<span>Wali vérifié</span>
+</span>
+</div>
+<p class="font-body text-body text-ink-secondary">
+              Médecin généraliste • Pratique hospitalière, dévouement aux soins et équilibre de vie.
+            </p>
+<!-- Trait Badges -->
+<div class="flex flex-wrap items-center gap-1.5 pt-1">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="location_on">location_on</span>
+<span>Même ville (Ouagadougou)</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="schedule">schedule</span>
+<span>Salat à l'heure</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline font-caption text-caption text-ink-primary">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="menu_book">menu_book</span>
+<span>Madhab Malékite</span>
+</span>
+</div>
+</div>
+</div>
+<!-- Dossier Actions -->
+<div class="flex flex-row md:flex-col items-center md:items-end gap-2.5 w-full md:w-auto pt-3 md:pt-0 border-t md:border-t-0 border-border-hairline flex-shrink-0">
+<a class="w-full md:w-auto text-center inline-flex items-center justify-center gap-2 h-11 px-5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-indigo-deep transition-colors focus:ring-2 focus:ring-focus-ring" href="#">
+<span>Consulter le dossier</span>
+<span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</a>
+<button class="w-full md:w-auto text-center inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full text-caption font-meta text-ink-secondary hover:text-danger hover:bg-danger-soft transition-colors border border-transparent hover:border-border-hairline" onclick="removeItem(this)" type="button">
+<span class="material-symbols-outlined text-xs" data-icon="bookmark_remove">bookmark_remove</span>
+<span>Retirer des favoris</span>
+</button>
+</div>
+</article>
+</section>
+<!-- VIEW 2: EMPTY STATE (CANONICAL) -->
+<section class="hidden bg-surface-raised border border-border-hairline rounded-xl p-8 md:p-12 text-center flex flex-col items-center justify-center space-y-4" id="view-empty">
+<div class="w-16 h-16 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-border-strong mb-1">
+<span class="material-symbols-outlined text-3xl" data-icon="bookmark_border">bookmark_border</span>
+</div>
+<h2 class="font-heading text-heading text-ink-primary">Aucun favori.</h2>
+<p class="font-body text-body text-ink-secondary max-w-md mx-auto">
+        Vous n'avez actuellement aucun profil retenu dans vos favoris confidentiels. Prenez le temps d'examiner les dossiers présentés avec sagesse et discernement.
+      </p>
+<div class="pt-2">
+<a class="inline-flex items-center gap-2 h-12 px-6 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-indigo-deep transition-colors focus:ring-2 focus:ring-focus-ring" href="#">
+<span class="material-symbols-outlined text-base" data-icon="explore">explore</span>
+<span>Découvrir des profils de convenance</span>
+</a>
+</div>
+</section>
+<!-- VIEW 3: LOADING SKELETON STATE -->
+<section class="hidden space-y-4" id="view-loading">
+<!-- Skeleton Row 1 -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 md:p-6 flex flex-col md:flex-row gap-5 items-start md:items-center justify-between animate-pulse">
+<div class="flex items-start gap-4 w-full md:w-3/4">
+<div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-surface-container flex-shrink-0"></div>
+<div class="space-y-3 w-full">
+<div class="h-5 bg-surface-container rounded w-48"></div>
+<div class="h-4 bg-surface-container rounded w-3/4"></div>
+<div class="flex gap-2">
+<div class="h-6 bg-surface-container rounded w-28"></div>
+<div class="h-6 bg-surface-container rounded w-24"></div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-36 h-11 bg-surface-container rounded-full"></div>
+</div>
+<!-- Skeleton Row 2 -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 md:p-6 flex flex-col md:flex-row gap-5 items-start md:items-center justify-between animate-pulse">
+<div class="flex items-start gap-4 w-full md:w-3/4">
+<div class="w-16 h-16 md:w-20 md:h-20 rounded-xl bg-surface-container flex-shrink-0"></div>
+<div class="space-y-3 w-full">
+<div class="h-5 bg-surface-container rounded w-40"></div>
+<div class="h-4 bg-surface-container rounded w-2/3"></div>
+<div class="flex gap-2">
+<div class="h-6 bg-surface-container rounded w-24"></div>
+<div class="h-6 bg-surface-container rounded w-32"></div>
+</div>
+</div>
+</div>
+<div class="w-full md:w-36 h-11 bg-surface-container rounded-full"></div>
+</div>
+</section>
+<!-- VIEW 4: ERROR STATE ALERT -->
+<section class="hidden bg-surface-raised border border-border-hairline rounded-xl p-6 md:p-8" id="view-error">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-lg bg-danger-soft/60 border border-border-hairline">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-2xl flex-shrink-0 mt-0.5" data-icon="error_outline">error_outline</span>
+<div>
+<h2 class="font-body-strong text-body text-danger">Synchronisation interrompue</h2>
+<p class="font-body text-body text-ink-secondary mt-0.5">
+              Impossible d'actualiser la liste des favoris. Problème de synchronisation sécurisée avec le serveur souverain.
+            </p>
+</div>
+</div>
+<button class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-sand transition-colors flex-shrink-0" onclick="switchState('active')" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+<span>Réessayer</span>
+</button>
+</div>
+</section>
+<!-- Reassurance & Privacy Architectural Card -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 mt-4">
+<div class="flex items-start gap-3.5">
+<span class="material-symbols-outlined text-secondary text-xl flex-shrink-0" data-icon="enhanced_encryption">enhanced_encryption</span>
+<div class="space-y-1">
+<h3 class="font-heading text-heading text-ink-primary">Protection intégrale de la pudeur et du secret</h3>
+<p class="font-body text-body text-ink-secondary text-sm">
+            Conformément au protocole canonique FR-026, cette sélection n'est accessible que depuis votre session authentifiée. Zéro notification émise aux tiers. Zéro fonction « qui m'a ajouté ». Aucune traçabilité publique.
+          </p>
+</div>
+</div>
+</section>
+</main>
+<!-- Institutional Member Footer (Minimal Editorial) -->
+<footer class="w-full bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-12 transition-colors">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<!-- Editorial Legal & Ethical Copyright -->
+<div class="space-y-1 text-center md:text-left">
+<div class="font-heading text-heading text-primary dark:text-ink-on-indigo">AnKanu</div>
+<p class="font-caption text-caption text-ink-secondary dark:text-outline-variant max-w-lg">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè. Chiffrement souverain certifié conforme aux recommandations CIL Burkina Faso.
+        </p>
+</div>
+<!-- Compliance & Institutional Links -->
+<div class="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-2">
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">
+          Confidentialité &amp; Données
+        </a>
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">
+          Tuteurs Légaux (Wali)
+        </a>
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#">
+          Éthique &amp; Respect
+        </a>
+</div>
+</div>
+</footer>
+<!-- State Simulator Logic Script -->
+<script>
+    function switchState(state) {
+      const views = ['active', 'empty', 'loading', 'error'];
+      const buttons = {
+        'active': document.getElementById('btn-state-active'),
+        'empty': document.getElementById('btn-state-empty'),
+        'loading': document.getElementById('btn-state-loading'),
+        'error': document.getElementById('btn-state-error')
+      };
+      
+      views.forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) {
+          if (v === state) {
+            el.classList.remove('hidden');
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+      });
+
+      // Update button visual styles
+      Object.keys(buttons).forEach(key => {
+        const btn = buttons[key];
+        if (key === state) {
+          btn.className = "px-3 py-1 rounded-full bg-indigo text-ink-on-indigo transition-all font-medium";
+        } else {
+          btn.className = "px-3 py-1 rounded-full text-ink-secondary hover:text-ink-primary transition-all";
+        }
+      });
+
+      // Update counter visibility
+      const counter = document.getElementById('counter-badge');
+      if (counter) {
+        if (state === 'active') {
+          counter.style.opacity = '1';
+        } else {
+          counter.style.opacity = '0.4';
+        }
+      }
+    }
+
+    function removeItem(button) {
+      const article = button.closest('article');
+      if (article) {
+        article.style.transition = 'all 0.25s ease-out';
+        article.style.opacity = '0';
+        article.style.transform = 'translateY(-6px)';
+        setTimeout(() => {
+          article.remove();
+          const remaining = document.querySelectorAll('#view-active article').length;
+          const counter = document.getElementById('counter-badge');
+          if (counter) {
+            counter.innerHTML = `<span class="material-symbols-outlined text-sm text-secondary" data-icon="lock">lock</span> <span><strong class="font-body-strong text-ink-primary">${remaining}</strong> dossier${remaining > 1 ? 's' : ''} enregistré${remaining > 1 ? 's' : ''} confidentiellement</span>`;
+          }
+          if (remaining === 0) {
+            switchState('empty');
+          }
+        }, 250);
+      }
+    }
+  </script>
+</body></html>

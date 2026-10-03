@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vérification du Courrier Électronique — AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Verbatim Tailwind Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "staff-soft": "#EFE4DC",
+            "on-error-container": "#93000a",
+            "on-secondary-container": "#785d1b",
+            "secondary-fixed": "#ffdf9c",
+            "surface": "#fff9ee",
+            "primary": "#032448",
+            "primary-fixed": "#d5e3ff",
+            "ink-primary": "#1B2433",
+            "mihrab": "#2C4A6E",
+            "inverse-primary": "#aec8f4",
+            "tertiary-fixed-dim": "#abc9f3",
+            "staff": "#6B3D2E",
+            "secondary-fixed-dim": "#e5c276",
+            "surface-dim": "#e0d9cd",
+            "on-surface-variant": "#43474e",
+            "inverse-surface": "#333028",
+            "danger-soft": "#F3E0DC",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "secondary-container": "#fdd88a",
+            "on-primary-container": "#8ba4cf",
+            "disabled": "#B5A894",
+            "success": "#3D5C45",
+            "surface-raised": "#FFFBF4",
+            "primary-container": "#1f3a5f",
+            "secondary": "#755b18",
+            "ink-on-indigo": "#F4EDE0",
+            "error-container": "#ffdad6",
+            "blur-wash": "#C8BBA6",
+            "on-primary-fixed": "#001c3b",
+            "border-hairline": "#D9CDB8",
+            "background": "#fff9ee",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#f7f0e3",
+            "on-secondary-fixed": "#251a00",
+            "on-background": "#1e1b14",
+            "gold": "#C4A35A",
+            "on-primary-fixed-variant": "#2d476d",
+            "focus-ring": "#1F3A5F",
+            "danger": "#8B3A3A",
+            "on-error": "#ffffff",
+            "surface-sand": "#F4EDE0",
+            "outline-variant": "#c4c6cf",
+            "surface-container-low": "#faf3e6",
+            "on-tertiary-fixed": "#001c38",
+            "outline": "#74777f",
+            "primary-fixed-dim": "#aec8f4",
+            "tertiary": "#002546",
+            "success-soft": "#DCE6DE",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#f4ede0",
+            "gold-soft": "#E8D5A3",
+            "on-surface": "#1e1b14",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-primary": "#ffffff",
+            "surface-tint": "#465f86",
+            "on-tertiary-container": "#88a5ce",
+            "indigo-deep": "#15283F",
+            "surface-variant": "#e9e2d5",
+            "border-strong": "#6F624C",
+            "surface-container-highest": "#e9e2d5",
+            "ink-secondary": "#5C5346",
+            "indigo": "#1F3A5F",
+            "on-secondary": "#ffffff",
+            "surface-container-high": "#eee7db",
+            "surface-indigo": "#15283F",
+            "tertiary-fixed": "#d3e4ff",
+            "tertiary-container": "#1b3b5e",
+            "surface-bright": "#fff9ee"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "screen-pad": "16px",
+            "6": "32px",
+            "2": "8px",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "margin": "1rem",
+            "5": "24px",
+            "4": "16px",
+            "gutter": "16px",
+            "3": "12px",
+            "7": "48px",
+            "1": "4px",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""]
+          },
+          "fontSize": {
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body text-body min-h-full flex flex-col justify-between antialiased selection:bg-gold-soft selection:text-indigo-deep">
+<!-- Top Navigation Bar (Shared Component: TopNavBar with exact JSON bindings) -->
+<header class="w-full bg-surface border-b border-border-hairline">
+<div class="w-full max-w-5xl mx-auto px-screen-pad py-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<a class="text-title font-title text-primary tracking-tight flex items-baseline gap-2" href="#">
+<span>AnKanu</span>
+<span class="text-caption font-caption text-gold uppercase tracking-widest font-semibold text-[10px]">Ta'aruf Honorable</span>
+</a>
+</div>
+<nav aria-label="Navigation secondaire" class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary hover:text-ink-primary pb-1 text-meta font-meta transition-colors duration-200" href="#">Charte Éthique</a>
+<a class="text-ink-secondary hover:text-ink-primary pb-1 text-meta font-meta transition-colors duration-200" href="#">Le Processus Ta'aruf</a>
+</nav>
+<div class="flex items-center">
+<a class="inline-flex items-center gap-1.5 text-meta font-meta text-ink-secondary hover:text-primary transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Retour à l'accueil</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas (Narrow Folio Layout 640px) -->
+<main class="flex-grow py-7 px-screen-pad flex flex-col justify-center items-center">
+<div class="w-full max-w-[620px] mx-auto space-y-5">
+<!-- Breadcrumb / Process Hierarchy Step -->
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2 text-caption font-caption text-ink-secondary">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-indigo text-ink-on-indigo font-bold text-[11px]">1</span>
+<span class="font-medium text-ink-primary">Inscription initiale</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-border-strong text-indigo-deep font-semibold text-[11px]">2</span>
+<span class="font-semibold text-indigo">Vérification de courriel</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full border border-border-hairline text-ink-secondary text-[11px]">3</span>
+<span class="text-ink-secondary">Validation du Wali</span>
+</div>
+<span class="text-caption font-caption text-ink-secondary bg-surface-raised px-2.5 py-1 rounded-full border border-border-hairline">Norme FR-006</span>
+</div>
+<!-- Central Onboarding Card -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-7 shadow-none space-y-6">
+<!-- Header Seal & Typography -->
+<div class="text-center space-y-3">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-sand border border-border-hairline mx-auto text-indigo shadow-none relative">
+<span class="material-symbols-outlined text-[32px]">mark_email_unread</span>
+<div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-gold flex items-center justify-center text-indigo-deep border-2 border-surface-raised">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+</div>
+</div>
+<div class="space-y-1.5">
+<h1 class="text-title font-title text-indigo tracking-tight">Vérification du Courrier Électronique</h1>
+<p class="text-body font-body text-ink-secondary max-w-md mx-auto text-sm leading-relaxed">
+              Un lien de confirmation sécurisé a été transmis à votre adresse de notification confidentielle afin de sceller l'accès au sanctuaire de convenance.
+            </p>
+</div>
+</div>
+<!-- Confidential Recipient Record Badge -->
+<div class="bg-surface-sand border border-border-hairline rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-indigo-deep text-[22px]">alternate_email</span>
+<div>
+<span class="block text-meta font-meta text-ink-secondary">Adresse de notification désignée</span>
+<span class="text-body-strong font-body-strong text-ink-primary tracking-wide">tahir.sawadogo@courrier.bf</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-raised border border-border-hairline px-3 py-1 rounded-full self-start sm:self-center">
+<span class="material-symbols-outlined text-gold text-[15px]">lock</span>
+<span class="text-caption font-caption text-ink-secondary">Usage confidentiel — FR-006</span>
+</div>
+</div>
+<!-- Simulation State Selector (Interactive test bench for review of states) -->
+<div class="border-t border-b border-border-hairline py-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-caption font-caption text-ink-secondary uppercase tracking-wider font-semibold">Simuler les états FR-006</span>
+<span class="text-caption font-caption text-ink-secondary italic">Inspectez les variantes canoniques</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<button class="px-2.5 py-1.5 rounded text-caption font-meta transition-colors duration-150 border border-primary bg-primary text-ink-on-indigo text-center font-medium" id="btn-tab-waiting" onclick="setState('waiting')" type="button">
+              1. En attente
+            </button>
+<button class="px-2.5 py-1.5 rounded text-caption font-meta transition-colors duration-150 border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary text-center" id="btn-tab-expired" onclick="setState('expired')" type="button">
+              2. Expiré (Erreur)
+            </button>
+<button class="px-2.5 py-1.5 rounded text-caption font-meta transition-colors duration-150 border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary text-center" id="btn-tab-success" onclick="setState('success')" type="button">
+              3. Courrier validé
+            </button>
+</div>
+</div>
+<!-- Dynamic State Containers -->
+<!-- STATE 1: WAITING FOR LINK (DEFAULT) -->
+<div class="space-y-5" id="state-waiting">
+<div class="bg-surface-sand border border-border-hairline rounded-lg p-4 space-y-2">
+<div class="flex items-center gap-2">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-gold opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-gold"></span>
+</span>
+<span class="text-body-strong font-body-strong text-indigo-deep">En attente d'activation canonique</span>
+</div>
+<p class="text-meta font-meta text-ink-secondary leading-relaxed">
+              Veuillez cliquer sur le lien scellé reçu dans votre boîte de réception. La validation authentifie immédiatement votre compte et permet la désignation du wali ou tuteur moral.
+            </p>
+</div>
+<div class="space-y-3 pt-2">
+<div class="flex flex-col sm:flex-row gap-3">
+<button class="flex-1 inline-flex items-center justify-center gap-2 border border-border-strong text-ink-primary bg-transparent hover:bg-surface-sand rounded-full px-5 py-3 text-meta font-meta transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" id="resend-action-btn" onclick="triggerResend()" type="button">
+<span class="material-symbols-outlined text-[18px]" id="resend-icon">send</span>
+<span id="resend-label">Renvoyer un nouveau lien d'activation</span>
+</button>
+<a class="inline-flex items-center justify-center gap-1.5 border border-border-hairline text-ink-secondary hover:text-ink-primary bg-surface-sand rounded-full px-4 py-3 text-meta font-meta transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span>Modifier l'adresse</span>
+</a>
+</div>
+<!-- Feedback Notice -->
+<p class="text-caption font-caption text-ink-secondary text-center leading-normal" id="resend-feedback">
+              Chaque nouvel envoi rend caduc le lien précédent pour garantir la sécurité canonique de votre compte.
+            </p>
+</div>
+</div>
+<!-- STATE 2: EXPIRED / INVALID LINK -->
+<div class="hidden space-y-5" id="state-expired">
+<div class="bg-danger-soft border border-danger/30 rounded-lg p-4 space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-[20px]">warning</span>
+<span class="text-body-strong font-body-strong text-danger">Lien expiré ou caduc</span>
+</div>
+<p class="text-meta font-meta text-ink-primary leading-relaxed">
+              Ce lien de vérification a expiré ou a été invalidé par une nouvelle demande. Afin de protéger l'intégrité de vos correspondances, veuillez solliciter un lien d'activation récent.
+            </p>
+</div>
+<div class="space-y-3 pt-2">
+<button class="w-full inline-flex items-center justify-center gap-2 bg-indigo text-ink-on-indigo hover:bg-indigo-deep rounded-full px-6 py-3 text-body-strong font-body-strong transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" onclick="triggerResend(true)" type="button">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+<span>Demander un nouveau lien scellé</span>
+</button>
+<p class="text-caption font-caption text-ink-secondary text-center">
+              Le protocole délivrera une clé neuve valide pour une durée de 30 minutes.
+            </p>
+</div>
+</div>
+<!-- STATE 3: SUCCESS CONFIRMATION -->
+<div class="hidden space-y-5" id="state-success">
+<div class="bg-success-soft border border-success/30 rounded-lg p-4 space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-[22px]">verified</span>
+<span class="text-body-strong font-body-strong text-success">Courrier validé avec honneur</span>
+</div>
+<p class="text-meta font-meta text-ink-primary leading-relaxed">
+              Votre adresse a été vérifiée avec succès. Votre engagement d'honneur est authentifié et consigné dans le registre sécurisé d'AnKanu.
+            </p>
+</div>
+<div class="space-y-3 pt-2">
+<a class="w-full inline-flex items-center justify-center gap-2 bg-gold hover:bg-gold-soft text-indigo-deep rounded-full px-6 py-3 text-body-strong font-body-strong transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" href="#">
+<span>Continuer vers l'espace de convenance</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+<p class="text-caption font-caption text-ink-secondary text-center">
+              Étape suivante : Renseignement du contact du tuteur légal (Wali).
+            </p>
+</div>
+</div>
+<!-- Guardian & Respect Reassurance Box -->
+<div class="bg-staff-soft/60 border border-border-hairline rounded-lg p-4 space-y-2.5">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-staff text-[20px] mt-0.5">help_center</span>
+<div class="space-y-1">
+<h2 class="text-heading font-heading text-staff">Conseil de délivrabilité</h2>
+<p class="text-caption font-caption text-ink-secondary leading-relaxed">
+                Si le message tarde à apparaître sous deux minutes, vérifiez votre dossier de courriers indésirables (spams) ou confirmez l'exactitude de l'adresse auprès de l'accueil d'AnKanu.
+              </p>
+</div>
+</div>
+</div>
+<!-- Sovereign Security Attestation -->
+<div class="pt-2 flex items-center justify-center gap-2 text-caption font-caption text-ink-secondary">
+<span class="material-symbols-outlined text-[16px] text-border-strong">shield</span>
+<span>Hébergement souverain chiffré — Zéro exploitation commerciale ou revente de vos données.</span>
+</div>
+</section>
+<!-- Sub-card Assistance Link -->
+<div class="text-center space-y-1">
+<p class="text-meta font-meta text-ink-secondary">
+          Une difficulté persistante ? 
+          <a class="text-indigo font-semibold underline underline-offset-4 hover:text-mihrab transition-colors" href="#">Contacter le secrétariat éthique</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Web Footer (Shared Component: Footer with exact JSON bindings) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline">
+<div class="w-full max-w-5xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+<div class="space-y-1">
+<p class="text-caption font-caption text-ink-primary">
+          © AnKanu — Institution matrimoniale d'honneur et de ta'aruf. Hébergement souverain certifié Scaleway (Paris, France).
+        </p>
+</div>
+<div class="flex flex-wrap justify-center gap-x-5 gap-y-2">
+<a class="text-ink-secondary hover:text-ink-primary text-caption font-caption transition-colors duration-200" href="#">Charte de Confidentialité</a>
+<a class="text-ink-secondary hover:text-ink-primary text-caption font-caption transition-colors duration-200" href="#">Conditions du Wali</a>
+<a class="text-ink-secondary hover:text-ink-primary text-caption font-caption transition-colors duration-200" href="#">Mentions Légales</a>
+<a class="text-ink-secondary hover:text-ink-primary text-caption font-caption transition-colors duration-200" href="#">Sécurité &amp; Déontologie</a>
+</div>
+</div>
+</footer>
+<!-- Interactive State Controller Script -->
+<script>
+    function setState(stateName) {
+      const states = ['waiting', 'expired', 'success'];
+      states.forEach(s => {
+        const el = document.getElementById('state-' + s);
+        const tab = document.getElementById('btn-tab-' + s);
+        if (s === stateName) {
+          el.classList.remove('hidden');
+          tab.className = "px-2.5 py-1.5 rounded text-caption font-meta transition-colors duration-150 border border-primary bg-primary text-ink-on-indigo text-center font-medium";
+        } else {
+          el.classList.add('hidden');
+          tab.className = "px-2.5 py-1.5 rounded text-caption font-meta transition-colors duration-150 border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary text-center";
+        }
+      });
+    }
+
+    function triggerResend(fromExpired = false) {
+      const btn = document.getElementById('resend-action-btn');
+      const label = document.getElementById('resend-label');
+      const icon = document.getElementById('resend-icon');
+      const feedback = document.getElementById('resend-feedback');
+
+      if (fromExpired) {
+        setState('waiting');
+      }
+
+      if (!btn) return;
+
+      btn.disabled = true;
+      btn.classList.add('opacity-75', 'cursor-not-allowed');
+      label.textContent = "Envoi en cours...";
+      icon.textContent = "hourglass_top";
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.classList.remove('opacity-75', 'cursor-not-allowed');
+        label.textContent = "Nouveau lien transmis";
+        icon.textContent = "mark_email_read";
+        feedback.textContent = "Un nouveau lien valide vient d'être expédié à tahir.sawadogo@courrier.bf (délai de grâce 60s).";
+        feedback.classList.add('text-indigo-deep', 'font-medium');
+
+        setTimeout(() => {
+          label.textContent = "Renvoyer un nouveau lien d'activation";
+          icon.textContent = "send";
+        }, 5000);
+      }, 1200);
+    }
+  </script>
+</body></html>

@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu · Plafond d'invitations atteint (Sister Quota Wall)</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..800;1,300..800&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400..800;1,8..60,400..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom theme config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary": "#ffffff",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "ink-secondary": "#5C5346",
+            "on-tertiary-fixed": "#001c38",
+            "border-strong": "#6F624C",
+            "staff": "#6B3D2E",
+            "on-error": "#ffffff",
+            "on-surface-variant": "#43474e",
+            "gold-soft": "#E8D5A3",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-sand": "#F4EDE0",
+            "gold": "#C4A35A",
+            "surface-tint": "#465f86",
+            "primary-fixed": "#d5e3ff",
+            "surface-variant": "#e9e2d5",
+            "danger-soft": "#F3E0DC",
+            "on-secondary-fixed": "#251a00",
+            "ink-primary": "#1B2433",
+            "on-primary-container": "#8ba4cf",
+            "danger": "#8B3A3A",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#e5c276",
+            "secondary": "#755b18",
+            "mihrab": "#2C4A6E",
+            "focus-ring": "#1F3A5F",
+            "on-error-container": "#93000a",
+            "on-background": "#1e1b14",
+            "surface-container": "#f4ede0",
+            "surface-indigo": "#15283F",
+            "tertiary-fixed": "#d3e4ff",
+            "success": "#3D5C45",
+            "secondary-container": "#fdd88a",
+            "background": "#fff9ee",
+            "blur-wash": "#C8BBA6",
+            "on-primary-fixed-variant": "#2d476d",
+            "surface-container-lowest": "#ffffff",
+            "inverse-primary": "#aec8f4",
+            "error": "#ba1a1a",
+            "primary-fixed-dim": "#aec8f4",
+            "indigo": "#1F3A5F",
+            "surface-dim": "#e0d9cd",
+            "secondary-fixed": "#ffdf9c",
+            "surface": "#fff9ee",
+            "disabled": "#B5A894",
+            "primary-container": "#1f3a5f",
+            "outline": "#74777f",
+            "inverse-on-surface": "#f7f0e3",
+            "tertiary": "#002546",
+            "success-soft": "#DCE6DE",
+            "surface-container-low": "#faf3e6",
+            "on-secondary-fixed-variant": "#5b4300",
+            "surface-container-high": "#eee7db",
+            "surface-raised": "#FFFBF4",
+            "border-hairline": "#D9CDB8",
+            "on-primary-fixed": "#001c3b",
+            "surface-container-highest": "#e9e2d5",
+            "staff-soft": "#EFE4DC",
+            "outline-variant": "#c4c6cf",
+            "inverse-surface": "#333028",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-bright": "#fff9ee",
+            "on-secondary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "on-secondary-container": "#785d1b",
+            "tertiary-container": "#1b3b5e",
+            "on-tertiary-container": "#88a5ce",
+            "on-surface": "#1e1b14",
+            "primary": "#032448",
+            "indigo-deep": "#15283F"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "1": "4px",
+            "space-xl": "2rem",
+            "margin": "1rem",
+            "space-md": "1rem",
+            "gutter": "16px",
+            "3": "12px",
+            "screen-pad": "16px",
+            "6": "32px",
+            "space-lg": "1.5rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "2": "8px",
+            "7": "48px",
+            "5": "24px",
+            "4": "16px"
+          },
+          "fontFamily": {
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""]
+          },
+          "fontSize": {
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body text-body antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-ink-primary">
+<!-- Interactive Canon State Simulator Header (Administrative & Testing Strip) -->
+<aside aria-label="Simulateur canonique d'état" class="bg-surface-indigo text-ink-on-indigo text-caption font-caption border-b border-mihrab py-2 px-screen-pad">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center justify-center w-2 h-2 rounded-full bg-gold animate-pulse"></span>
+<span class="font-body-strong tracking-wide text-caption text-gold uppercase">Simulateur d'état canonique</span>
+<span class="text-ink-on-indigo opacity-60">| Normes FR-044 · AD-14 / AD-23</span>
+</div>
+<div aria-label="Boutons de prévisualisation canonique" class="flex flex-wrap items-center gap-1.5" id="simulator-controls" role="group">
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-gold text-indigo-deep font-semibold shadow-xs" data-sim="active" type="button">
+          1. Plafond Atteint
+        </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-mihrab/60 hover:bg-mihrab text-ink-on-indigo transition-colors" data-sim="loading" type="button">
+          2. Chargement Entitlement
+        </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-mihrab/60 hover:bg-mihrab text-ink-on-indigo transition-colors" data-sim="pay_unavailable" type="button">
+          3. Erreur PAY_UNAVAILABLE
+        </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-mihrab/60 hover:bg-mihrab text-ink-on-indigo transition-colors" data-sim="daily_reset" type="button">
+          4. Reset Quotidien
+        </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-mihrab/60 hover:bg-mihrab text-ink-on-indigo transition-colors" data-sim="success" type="button">
+          5. Achat Validé
+        </button>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Header -->
+<header class="bg-surface border-b border-border-hairline sticky top-0 z-40">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<!-- Logo Anchor with Western African Indigo & Gold seal -->
+<a aria-label="AnKanu · Retour à l'accueil" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-lg pr-2" href="#">
+<div class="w-10 h-10 rounded-full border-2 border-primary border-dashed p-0.5 flex items-center justify-center bg-surface-sand">
+<div class="w-full h-full rounded-full border border-gold flex items-center justify-center bg-surface-raised shadow-xs">
+<span class="font-title text-title text-primary font-bold leading-none">A</span>
+</div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-baseline gap-1">
+<span class="font-title text-title text-primary tracking-tight font-semibold">AnKanu</span>
+<span class="text-caption font-meta text-gold font-semibold uppercase tracking-widest text-[10px]">BF</span>
+</div>
+<span class="font-meta text-caption text-ink-secondary tracking-wider uppercase text-[10px]">Ta'aruf Honorable</span>
+</div>
+</a>
+<!-- Desktop Nav Links -->
+<nav aria-label="Navigation principale" class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors text-meta" href="#">Découvrir</a>
+<!-- Active link: Invitations -->
+<a aria-current="page" class="text-primary font-body-strong border-b-2 border-primary pb-1 text-meta flex items-center gap-1.5" href="#">
+<span>Invitations</span>
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+</a>
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors text-meta" href="#">Discussions</a>
+<a class="text-ink-secondary font-body hover:text-ink-primary transition-colors text-meta" href="#">Profil &amp; Pudeur</a>
+</nav>
+<!-- Trailing Auxiliary Link -->
+<div class="flex items-center gap-3">
+<a class="hidden sm:inline-flex items-center gap-1 text-meta font-meta text-staff bg-staff-soft px-3 py-1.5 rounded-full hover:bg-border-hairline transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">shield</span>
+<span>Espace Wali</span>
+</a>
+<a class="text-meta font-meta text-ink-secondary hover:text-primary transition-colors" href="#">
+          Assistance
+        </a>
+</div>
+</div>
+</header>
+<!-- Main Focal Experience Container -->
+<main class="flex-grow max-w-4xl w-full mx-auto px-screen-pad py-6 flex flex-col gap-6">
+<!-- Canonical Breadcrumb & Context Banner -->
+<section aria-label="Contexte de navigation" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-hairline pb-4">
+<nav aria-label="Fil d'ariane" class="flex items-center gap-2 text-caption font-meta text-ink-secondary">
+<a class="hover:text-primary transition-colors" href="#">Invitations</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-ink-secondary">Démarche d'alliance sacrée</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-body-strong">Plafond atteint</span>
+</nav>
+<div class="inline-flex items-center gap-1.5 bg-surface-raised border border-border-hairline px-2.5 py-1 rounded text-caption font-meta text-ink-secondary">
+<span class="material-symbols-outlined text-gold text-[16px]">verified</span>
+<span>Normes FR-044, FR-045, FR-105, FR-145 · AD-14 / AD-23</span>
+</div>
+</section>
+<!-- Global Dynamic Banner Container (For Alerts / Erreurs) -->
+<div class="space-y-4" id="dynamic-alert-container">
+<!-- Pay Unavailable simulated notification (Initially hidden or shown via JS) -->
+<div class="hidden bg-staff-soft border border-staff/30 rounded-xl p-4 transition-all" id="alert-pay-unavailable">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-staff text-[22px] mt-0.5">wifi_off</span>
+<div class="space-y-1">
+<h2 class="font-heading text-heading text-staff">Passerelle de paiement temporairement indisponible (PAY_UNAVAILABLE)</h2>
+<p class="font-body text-meta text-ink-primary leading-relaxed">
+              Le réseau interbancaire mobile (Orange Money BF, Moov Africa BF, Wave) connaît un ralentissement temporaire. L'envoi de nouvelles invitations d'initiation reste temporairement suspendu jusqu'au reset de Ouagadougou. 
+              <strong class="font-body-strong">Rappel déontologique :</strong> Vos échanges déjà établis, votre Sceau de pudeur et la consultation par votre Tuteur légal (Wali) restent 100% actifs et ininterrompus.
+            </p>
+</div>
+</div>
+</div>
+<!-- Success Purchase simulator notification -->
+<div class="hidden bg-success-soft border border-success/40 rounded-xl p-4 transition-all" id="alert-success">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-success text-[24px]">task_alt</span>
+<div class="space-y-1">
+<h2 class="font-heading text-heading text-success">Souscription confirmée · Accès Illimité Actif</h2>
+<p class="font-body text-meta text-ink-primary">
+              Bénédiction dans vos démarches. Vos droits d'engagement sont déverrouillés sans restriction de quota sous le regard bienveillant de votre tuteur. Vous pouvez transmettre une nouvelle invitation immédiatement.
+            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- MAIN CARD: SISTER QUOTA WALL EXPERIENCE -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl overflow-hidden shadow-xs" id="quota-wall-card">
+<!-- Card Architectural Header -->
+<div class="bg-surface-sand border-b border-border-hairline px-6 py-5">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full bg-gold-soft text-ink-primary font-meta text-caption uppercase tracking-wider font-semibold">
+                Règle de Tempérance Canonique
+              </span>
+<span class="text-caption font-meta text-ink-secondary">Cycle d'initiation</span>
+</div>
+<h1 class="font-title text-title md:text-display text-primary">
+              Plafond de courtoisie et d'initiation atteint
+            </h1>
+</div>
+<!-- Ouaga-day canonical reset timer badge -->
+<div class="bg-surface-raised border border-border-hairline rounded-lg px-4 py-2.5 flex items-center gap-3 shrink-0">
+<span class="material-symbols-outlined text-gold text-[22px]">hourglass_top</span>
+<div>
+<div class="text-[11px] uppercase tracking-wider font-meta text-ink-secondary font-medium">Réinitialisation Ouaga</div>
+<div class="font-title text-heading text-primary font-bold" id="countdown-timer">08h 42m 19s</div>
+<div class="text-[10px] font-meta text-ink-secondary">Heure nationale · UTC+0</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 1: Quota Status Explanation (Sister Quota) -->
+<div class="p-6 md:p-8 space-y-6">
+<!-- Quota metric visualization -->
+<div class="bg-surface-sand/70 rounded-xl p-5 border border-border-hairline flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-danger-soft border border-danger/30 flex items-center justify-center shrink-0">
+<span class="font-title text-title text-danger font-bold">0</span>
+</div>
+<div>
+<div class="font-heading text-heading text-primary">
+                0 invitation restante sur vos 3 invitations d'initiation
+              </div>
+<p class="font-body text-meta text-ink-secondary mt-0.5">
+                Quota gratuit d'honneur accordé aux soeurs et frères au démarrage de chaque phase.
+              </p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 self-start md:self-center px-3 py-1.5 rounded-full bg-surface-raised border border-border-hairline text-caption font-meta text-ink-secondary">
+<span class="material-symbols-outlined text-success text-[16px]">search_off</span>
+<span>Renouvellement gratuit au lever du jour</span>
+</div>
+</div>
+<!-- Solemn Calm Narrative (No shaming, no FOMO) -->
+<div class="prose max-w-none text-ink-secondary font-body space-y-3 leading-relaxed">
+<p>
+            Chère soeur en quête d'alliance noble, conformément à notre <strong class="text-ink-primary font-body-strong">règle de tempérance (Norme FR-044)</strong>, vos trois invitations d'honneur gratuites pour ce cycle ont été transmises à leurs destinataires.
+          </p>
+<p class="text-meta">
+            Le <em class="font-serif italic text-primary">ta'aruf burkinabè</em> privilégie la méditation des réponses, l'implication sereine des tuteurs légaux (Wali) et la pondération des intentions avant toute nouvelle sollicitation. Vous recouvrerez vos invitations d'initiation sans aucun frais dès minuit.
+          </p>
+</div>
+<!-- Audio prompt helper (FR-105: Mooré & Dioula sovereign guidance) -->
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-2.5">
+<button aria-label="Écouter l'explication vocale" class="w-9 h-9 rounded-full bg-indigo text-ink-on-indigo flex items-center justify-center hover:bg-mihrab transition-colors focus:ring-2 focus:ring-focus-ring" id="btn-audio-play" type="button">
+<span class="material-symbols-outlined text-[20px]" id="audio-icon">volume_up</span>
+</button>
+<div>
+<div class="text-meta font-body-strong text-primary">Écouter l'explication vocale (FR-105)</div>
+<div class="text-caption font-meta text-ink-secondary">Guidance audio conforme aux traditions orales</div>
+</div>
+</div>
+<div aria-label="Choix de la langue audio" class="flex items-center gap-2" role="group">
+<span class="text-caption font-meta text-ink-secondary hidden sm:inline">Langues nationales :</span>
+<button class="lang-pill px-3 py-1 rounded-full text-caption font-meta border border-indigo bg-indigo text-ink-on-indigo font-medium" data-lang="mos" type="button">
+              Mooré (mos)
+            </button>
+<button class="lang-pill px-3 py-1 rounded-full text-caption font-meta border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong font-medium transition-colors" data-lang="dyu" type="button">
+              Dioula (dyu)
+            </button>
+<button class="lang-pill px-3 py-1 rounded-full text-caption font-meta border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong font-medium transition-colors" data-lang="fr" type="button">
+              Français
+            </button>
+</div>
+</div>
+<hr class="border-border-hairline"/>
+<!-- Section 2: Pack Ta'aruf Premium (Formule Engagement & Alliances Bénies) -->
+<section aria-labelledby="formule-heading" class="space-y-5">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold text-[20px]">workspace_premium</span>
+<h2 class="font-title text-heading text-primary font-bold" id="formule-heading">
+                Poursuivre sans interruption : Formule Engagement &amp; Alliances Bénies
+              </h2>
+</div>
+<p class="font-body text-meta text-ink-secondary">
+              Pour les soeurs et familles souhaitant instruire plusieurs présentations en parallèle avec le concours continu de leur Wali.
+            </p>
+</div>
+<!-- Subscription Plan Tier Box -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Tier 1: 1 Month -->
+<label class="relative flex flex-col p-5 bg-surface rounded-xl border-2 border-border-hairline hover:border-border-strong cursor-pointer transition-all has-[:checked]:border-indigo has-[:checked]:bg-surface-raised">
+<input class="sr-only" name="pack_duration" type="radio" value="1m"/>
+<div class="flex justify-between items-start mb-2">
+<span class="font-heading text-heading text-primary">Formule Sereine</span>
+<span class="px-2 py-0.5 rounded text-caption font-meta bg-surface-sand text-ink-secondary">1 Mois</span>
+</div>
+<div class="flex items-baseline gap-1 my-1">
+<span class="font-title text-title font-bold text-primary">25 000</span>
+<span class="font-meta text-meta text-ink-secondary">FCFA</span>
+</div>
+<p class="text-caption font-meta text-ink-secondary mt-1">
+                Engagement ponctuel · Idéal pour finaliser les pourparlers engagés.
+              </p>
+<div class="mt-4 pt-3 border-t border-border-hairline text-caption font-meta text-ink-secondary flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-gold">check_circle</span>
+<span>Paiement unique sans reconduction</span>
+</div>
+</label>
+<!-- Tier 2: 3 Months Recommended -->
+<label class="relative flex flex-col p-5 bg-surface-raised rounded-xl border-2 border-gold cursor-pointer transition-all shadow-xs has-[:checked]:ring-2 has-[:checked]:ring-focus-ring">
+<input checked="" class="sr-only" name="pack_duration" type="radio" value="3m"/>
+<div class="absolute -top-3 right-4 bg-gold text-indigo-deep font-meta text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-xs">
+                Conseillé aux familles
+              </div>
+<div class="flex justify-between items-start mb-2">
+<span class="font-heading text-heading text-primary font-bold">Alliance &amp; Préservation</span>
+<span class="px-2 py-0.5 rounded text-caption font-meta bg-gold-soft text-ink-primary font-semibold">3 Mois</span>
+</div>
+<div class="flex items-baseline gap-1 my-1">
+<span class="font-title text-title font-bold text-primary">60 000</span>
+<span class="font-meta text-meta text-ink-secondary">FCFA</span>
+<span class="text-caption font-meta text-success ml-2">(Économie de 15 000 FCFA)</span>
+</div>
+<p class="text-caption font-meta text-ink-secondary mt-1">
+                Durée moyenne canonique préconisée pour une instruction vertueuse complète.
+              </p>
+<div class="mt-4 pt-3 border-t border-border-hairline text-caption font-meta text-primary font-body-strong flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-gold">verified</span>
+<span>Accompagnement tuteur prioritaire inclus</span>
+</div>
+</label>
+</div>
+<!-- Detailed Key Benefits List -->
+<div class="bg-surface-sand/40 border border-border-hairline rounded-xl p-5 space-y-3.5">
+<h3 class="font-meta text-meta font-body-strong text-primary tracking-wide uppercase text-[11px]">
+              Privilèges d'Alliance Inclus dans l'Engagement :
+            </h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-[20px] shrink-0 mt-0.5">all_inclusive</span>
+<div>
+<div class="font-body-strong text-meta text-primary">Invitations Ta'aruf illimitées</div>
+<p class="font-body text-caption text-ink-secondary mt-0.5">
+                    Aucun plafond bloquant de 15. Démarche sans entrave sous l'égide continue du tuteur.
+                  </p>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-[20px] shrink-0 mt-0.5">forum</span>
+<div>
+<div class="font-body-strong text-meta text-primary">Messagerie encadrée illimitée</div>
+<p class="font-body text-caption text-ink-secondary mt-0.5">
+                    Échanges continus et protégés avec les prétendants réciproquement agréés.
+                  </p>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-[20px] shrink-0 mt-0.5">verified_user</span>
+<div>
+<div class="font-body-strong text-meta text-primary">Instruction morale prioritaire</div>
+<p class="font-body text-caption text-ink-secondary mt-0.5">
+                    Canal direct et prioritaire entre le prétendant, le tuteur légal (Wali) et le comité.
+                  </p>
+</div>
+</div>
+</div>
+<!-- Guarantee text & payment methods -->
+<div class="pt-3 border-t border-border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-caption font-meta text-ink-secondary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-[18px]">lock</span>
+<span>Pas de renouvellement automatique ni prélèvement surprise.</span>
+</div>
+<div class="flex items-center gap-2 text-ink-primary font-medium">
+<span>Règlements souverains :</span>
+<span class="px-2 py-0.5 rounded bg-surface-raised border border-border-hairline">Orange Money BF</span>
+<span class="px-2 py-0.5 rounded bg-surface-raised border border-border-hairline">Moov Africa</span>
+<span class="px-2 py-0.5 rounded bg-surface-raised border border-border-hairline">Wave</span>
+<span class="px-2 py-0.5 rounded bg-surface-raised border border-border-hairline">Coris Bank</span>
+</div>
+</div>
+</div>
+<!-- Call to Actions -->
+<div class="flex flex-col sm:flex-row items-center gap-4 pt-2">
+<!-- Primary Action Button: Pill, Solid Indigo, 48px min height -->
+<button class="w-full sm:flex-1 h-12 px-6 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-mihrab focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-colors flex items-center justify-center gap-2" id="btn-subscribe" type="button">
+<span class="material-symbols-outlined text-[20px]">stars</span>
+<span>Souscrire au Pack Engagement Illimité</span>
+</button>
+<!-- Quiet Secondary Action: Patienter (no shaming) -->
+<button class="w-full sm:w-auto h-12 px-6 rounded-full border border-border-strong text-ink-primary font-body text-meta hover:bg-surface-sand focus:outline-none focus:ring-2 focus:ring-focus-ring transition-colors flex items-center justify-center gap-2" id="btn-wait" type="button">
+<span class="material-symbols-outlined text-[18px] text-ink-secondary">schedule</span>
+<span>Patienter jusqu'à la réinitialisation de minuit</span>
+</button>
+</div>
+</section>
+<hr class="border-border-hairline"/>
+<!-- Section 3: Inviolable Free Safety Guarantee (Safety Stays 100% Free - FR-045 / AD-14) -->
+<section aria-labelledby="guarantee-heading" class="bg-surface-sand/80 border border-border-hairline rounded-xl p-6 space-y-4">
+<div class="flex items-start gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-indigo text-gold flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">balance</span>
+</div>
+<div>
+<h3 class="font-heading text-heading text-primary font-bold" id="guarantee-heading">
+                Engagement Inviolable : La dignité, la pudeur et la sécurité ne font l'objet d'aucun péage
+              </h3>
+<p class="font-body text-meta text-ink-secondary mt-0.5">
+                Normes éthiques burkinabè FR-045 &amp; Décret déontologique AD-14. Même avec 0 invitation restante, vos droits sacrés restent gratuits et inaliénables :
+              </p>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2">
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-[18px] mt-0.5 shrink-0">check_circle</span>
+<div class="space-y-0.5">
+<div class="text-caption font-body-strong text-primary">Vérification d'identité &amp; vivacité</div>
+<div class="text-[11px] font-meta text-success font-semibold">100% Gratuite · Certifiée CNIB</div>
+</div>
+</div>
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-[18px] mt-0.5 shrink-0">check_circle</span>
+<div class="space-y-0.5">
+<div class="text-caption font-body-strong text-primary">Sceau de Pudeur &amp; Floutage (Blur)</div>
+<div class="text-[11px] font-meta text-success font-semibold">100% Gratuit · Contrôle total</div>
+</div>
+</div>
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-[18px] mt-0.5 shrink-0">check_circle</span>
+<div class="space-y-0.5">
+<div class="text-caption font-body-strong text-primary">Supervision par le Tuteur (Wali)</div>
+<div class="text-[11px] font-meta text-success font-semibold">100% Gratuite · Accès sanctuaire</div>
+</div>
+</div>
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-[18px] mt-0.5 shrink-0">check_circle</span>
+<div class="space-y-0.5">
+<div class="text-caption font-body-strong text-primary">Signalement déontologique &amp; Blocage</div>
+<div class="text-[11px] font-meta text-success font-semibold">100% Gratuit · Traitement 24/7</div>
+</div>
+</div>
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-[18px] mt-0.5 shrink-0">check_circle</span>
+<div class="space-y-0.5">
+<div class="text-caption font-body-strong text-primary">Discussions déjà acceptées</div>
+<div class="text-[11px] font-meta text-success font-semibold">100% Gratuite · Poursuite sans frais</div>
+</div>
+</div>
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-3 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-[18px] mt-0.5 shrink-0">check_circle</span>
+<div class="space-y-0.5">
+<div class="text-caption font-body-strong text-primary">Réception des requêtes entrantes</div>
+<div class="text-[11px] font-meta text-success font-semibold">100% Gratuite · Aucune censure</div>
+</div>
+</div>
+</div>
+<div class="text-[11px] font-meta text-ink-secondary italic pt-1">
+            * AnKanu ne commercialise aucune donnée personnelle et n'applique aucun algorithme d'engagement trompeur.
+          </div>
+</section>
+</div>
+</div>
+<!-- State 2: Simulated Loading Skeleton (Hidden by default, activated via simulator) -->
+<div class="hidden bg-surface-raised border border-border-hairline rounded-xl p-8 space-y-6 animate-pulse" id="quota-wall-skeleton">
+<div class="h-6 bg-border-hairline rounded w-1/3"></div>
+<div class="h-10 bg-border-hairline rounded w-2/3"></div>
+<div class="h-24 bg-surface-sand rounded-xl"></div>
+<div class="space-y-3">
+<div class="h-4 bg-border-hairline rounded w-full"></div>
+<div class="h-4 bg-border-hairline rounded w-5/6"></div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="h-32 bg-surface-sand rounded-xl"></div>
+<div class="h-32 bg-surface-sand rounded-xl"></div>
+</div>
+</div>
+</main>
+<!-- Institutional Platform Footer -->
+<footer class="bg-surface-sand border-t border-border-hairline mt-12">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="font-heading text-heading text-primary font-bold">AnKanu</span>
+<span class="text-caption font-meta text-ink-secondary">|</span>
+<p class="font-meta text-caption text-ink-secondary">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+</div>
+<nav aria-label="Liens réglementaires" class="flex flex-wrap items-center gap-4 text-meta font-meta">
+<a class="text-ink-secondary hover:text-primary transition-colors" href="#">Confidentialité &amp; Données</a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary hover:text-primary transition-colors" href="#">Tuteurs Légaux (Wali)</a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary hover:text-primary transition-colors" href="#">Éthique &amp; Respect</a>
+</nav>
+</div>
+<!-- Institutional Compliance Sub-footer -->
+<div class="w-full bg-surface-sand/90 border-t border-border-hairline py-3 px-screen-pad text-center">
+<div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-3 text-[11px] font-meta text-ink-secondary opacity-80">
+<span>Conformité Commission de l'Informatique et des Libertés (CIL Burkina Faso)</span>
+<span class="hidden sm:inline">•</span>
+<span>Hébergement souverain répliqué Ouagadougou / Scaleway</span>
+<span class="hidden sm:inline">•</span>
+<span>Gouvernance du Conseil des Sages et Tuteurs</span>
+</div>
+</div>
+</footer>
+<!-- Light Vanilla Script for Interactive State Simulator & Audio Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Elements
+      const simButtons = document.querySelectorAll('#simulator-controls button');
+      const wallCard = document.getElementById('quota-wall-card');
+      const skeletonCard = document.getElementById('quota-wall-skeleton');
+      const alertPay = document.getElementById('alert-pay-unavailable');
+      const alertSuccess = document.getElementById('alert-success');
+      const timerElement = document.getElementById('countdown-timer');
+      const audioBtn = document.getElementById('btn-audio-play');
+      const audioIcon = document.getElementById('audio-icon');
+      const langPills = document.querySelectorAll('.lang-pill');
+      const subscribeBtn = document.getElementById('btn-subscribe');
+      const waitBtn = document.getElementById('btn-wait');
+
+      // State Simulator Handler
+      function resetSimState() {
+        wallCard.classList.remove('hidden');
+        skeletonCard.classList.add('hidden');
+        alertPay.classList.add('hidden');
+        alertSuccess.classList.add('hidden');
+        
+        simButtons.forEach(btn => {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta bg-mihrab/60 hover:bg-mihrab text-ink-on-indigo transition-colors";
+        });
+      }
+
+      function setActiveButton(simKey) {
+        const btn = document.querySelector(`[data-sim="${simKey}"]`);
+        if (btn) {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta bg-gold text-indigo-deep font-semibold shadow-xs";
+        }
+      }
+
+      simButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const simType = button.getAttribute('data-sim');
+          resetSimState();
+          setActiveButton(simType);
+
+          switch (simType) {
+            case 'active':
+              // Default state
+              break;
+
+            case 'loading':
+              wallCard.classList.add('hidden');
+              skeletonCard.classList.remove('hidden');
+              break;
+
+            case 'pay_unavailable':
+              alertPay.classList.remove('hidden');
+              alertPay.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              break;
+
+            case 'daily_reset':
+              timerElement.textContent = "00h 00m 05s";
+              timerElement.classList.add('text-gold');
+              break;
+
+            case 'success':
+              alertSuccess.classList.remove('hidden');
+              alertSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+              break;
+          }
+        });
+      });
+
+      // Simple Ouagadougou Countdown simulation
+      let secondsRemaining = 8 * 3600 + 42 * 60 + 19;
+      setInterval(() => {
+        if (secondsRemaining > 0) {
+          secondsRemaining--;
+          const h = Math.floor(secondsRemaining / 3600);
+          const m = Math.floor((secondsRemaining % 3600) / 60);
+          const s = secondsRemaining % 60;
+          timerElement.textContent = `${String(h).padStart(2, '0')}h ${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+        }
+      }, 1000);
+
+      // Audio button toggle simulation
+      let isPlaying = false;
+      audioBtn.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        if (isPlaying) {
+          audioIcon.textContent = 'pause';
+          audioBtn.classList.remove('bg-indigo');
+          audioBtn.classList.add('bg-gold', 'text-indigo-deep');
+        } else {
+          audioIcon.textContent = 'volume_up';
+          audioBtn.classList.add('bg-indigo');
+          audioBtn.classList.remove('bg-gold', 'text-indigo-deep');
+        }
+      });
+
+      // Language selection simulation
+      langPills.forEach(pill => {
+        pill.addEventListener('click', () => {
+          langPills.forEach(p => {
+            p.className = "lang-pill px-3 py-1 rounded-full text-caption font-meta border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong font-medium transition-colors";
+          });
+          pill.className = "lang-pill px-3 py-1 rounded-full text-caption font-meta border border-indigo bg-indigo text-ink-on-indigo font-medium";
+        });
+      });
+
+      // Subscribe Action Simulation
+      subscribeBtn.addEventListener('click', () => {
+        const selectedPack = document.querySelector('input[name="pack_duration"]:checked')?.value || '3m';
+        const cost = selectedPack === '1m' ? '25 000 FCFA' : '60 000 FCFA';
+        
+        // Simulating immediate validation
+        resetSimState();
+        setActiveButton('success');
+        alertSuccess.classList.remove('hidden');
+        alertSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+
+      // Patienter Action
+      waitBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+</body></html>

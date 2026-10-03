@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Règles de la photographie · AnKanu</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary": "#032448",
+            "on-surface": "#1e1b14",
+            "indigo": "#1F3A5F",
+            "surface": "#fff9ee",
+            "surface-container-lowest": "#ffffff",
+            "surface-raised": "#FFFBF4",
+            "on-tertiary-container": "#88a5ce",
+            "on-primary-fixed-variant": "#2d476d",
+            "outline-variant": "#c4c6cf",
+            "inverse-surface": "#333028",
+            "on-background": "#1e1b14",
+            "ink-primary": "#1B2433",
+            "outline": "#74777f",
+            "surface-container-highest": "#e9e2d5",
+            "on-error-container": "#93000a",
+            "mihrab": "#2C4A6E",
+            "surface-bright": "#fff9ee",
+            "on-tertiary-fixed": "#001c38",
+            "error-container": "#ffdad6",
+            "staff-soft": "#EFE4DC",
+            "surface-dim": "#e0d9cd",
+            "surface-indigo": "#15283F",
+            "ink-secondary": "#5C5346",
+            "on-tertiary": "#ffffff",
+            "tertiary-fixed": "#d3e4ff",
+            "surface-sand": "#F4EDE0",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "border-strong": "#6F624C",
+            "surface-tint": "#465f86",
+            "inverse-on-surface": "#f7f0e3",
+            "tertiary": "#002546",
+            "secondary": "#755b18",
+            "gold-soft": "#E8D5A3",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#1b3b5e",
+            "border-hairline": "#D9CDB8",
+            "error": "#ba1a1a",
+            "success-soft": "#DCE6DE",
+            "indigo-deep": "#15283F",
+            "staff": "#6B3D2E",
+            "secondary-fixed": "#ffdf9c",
+            "surface-container-low": "#faf3e6",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-container-high": "#eee7db",
+            "on-secondary": "#ffffff",
+            "primary-container": "#1f3a5f",
+            "background": "#fff9ee",
+            "on-primary-container": "#8ba4cf",
+            "inverse-primary": "#aec8f4",
+            "focus-ring": "#1F3A5F",
+            "primary-fixed-dim": "#aec8f4",
+            "blur-wash": "#C8BBA6",
+            "on-secondary-container": "#785d1b",
+            "success": "#3D5C45",
+            "secondary-container": "#fdd88a",
+            "surface-variant": "#e9e2d5",
+            "on-secondary-fixed-variant": "#5b4300",
+            "gold": "#C4A35A",
+            "on-primary": "#ffffff",
+            "secondary-fixed-dim": "#e5c276",
+            "disabled": "#B5A894",
+            "surface-container": "#f4ede0",
+            "danger": "#8B3A3A",
+            "primary-fixed": "#d5e3ff",
+            "on-error": "#ffffff",
+            "tertiary-fixed-dim": "#abc9f3",
+            "on-primary-fixed": "#001c3b",
+            "danger-soft": "#F3E0DC",
+            "on-secondary-fixed": "#251a00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "gutter": "16px",
+            "5": "24px",
+            "2": "8px",
+            "4": "16px",
+            "screen-pad": "16px",
+            "3": "12px",
+            "6": "32px",
+            "1": "4px",
+            "space-sm": "0.5rem",
+            "7": "48px",
+            "space-xl": "2rem",
+            "margin": "1rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""]
+          },
+          "fontSize": {
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-ink-primary min-h-screen flex flex-col justify-between">
+<!-- Top Navigation (Shared Component mapped) -->
+<header class="bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab w-full">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<a aria-label="Retour à l'étape précédente" class="p-1 rounded text-ink-secondary hover:text-ink-primary transition-colors flex items-center" href="#back">
+<span class="material-symbols-outlined text-[20px]">arrow_back</span>
+</a>
+<div class="flex items-baseline gap-2">
+<span class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold">AnKanu</span>
+<span class="font-meta text-meta text-ink-secondary hidden sm:inline">| Engagement Matrimonial</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-4 font-meta text-meta">
+<span class="text-ink-secondary font-body hover:text-ink-primary transition-colors">Charte d'Honneur</span>
+<span class="text-ink-secondary font-body hover:text-ink-primary transition-colors">Assistance</span>
+</div>
+<a class="font-meta text-meta text-ink-secondary hover:text-primary transition-colors flex items-center gap-1" href="#login">
+<span class="material-symbols-outlined text-[16px]">lock</span>
+<span>Retour à la Connexion</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Progress Bar Sub-header -->
+<div class="w-full bg-surface-raised border-b border-border-hairline">
+<div class="w-full max-w-2xl mx-auto px-screen-pad py-2 flex items-center justify-between text-ink-secondary font-meta text-meta">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-gold">verified_user</span>
+<span>Étape d'accueil 3 sur 5</span>
+<span class="text-border-strong">·</span>
+<span class="text-ink-primary font-medium">Règles de la photographie</span>
+</div>
+<div aria-hidden="true" class="flex items-center gap-1.5">
+<span class="w-5 h-1 rounded-full bg-primary"></span>
+<span class="w-5 h-1 rounded-full bg-primary"></span>
+<span class="w-5 h-1 rounded-full bg-gold"></span>
+<span class="w-5 h-1 rounded-full bg-border-hairline"></span>
+<span class="w-5 h-1 rounded-full bg-border-hairline"></span>
+</div>
+</div>
+</div>
+<!-- Main Canvas Container -->
+<main class="w-full max-w-2xl mx-auto px-screen-pad py-6 flex-1 flex flex-col justify-start">
+<!-- Document Header -->
+<section class="mb-6">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-staff-soft text-staff font-meta text-meta mb-3">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span>Règle canonique · Décret de dignité AD-24</span>
+</div>
+<h1 class="font-display text-display text-primary tracking-tight mb-2">Exigences pour votre portrait matrimonial</h1>
+<p class="font-body text-body text-ink-secondary">
+        Le ta’aruf repose sur l'honnêteté sincère (<em class="italic">sidq</em>) et la bienséance coutumière. Ce cliché n'a pas vocation à séduire l'éphémère, mais à témoigner de votre identité réelle sous le regard bienveillant de votre tuteur légal (<em class="italic">wali</em>).
+      </p>
+</section>
+<!-- Audio Explanation Toggles (Mooré & Dioula Accessibility) -->
+<section aria-labelledby="audio-guide-heading" class="mb-6 p-4 rounded-xl bg-surface-raised border border-border-hairline">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+<div>
+<h2 class="font-heading text-heading text-primary" id="audio-guide-heading">Écoute guidée dans nos langues</h2>
+<p class="font-meta text-meta text-ink-secondary">Pour ceux qui préfèrent l'écoute orale des préceptes visuels.</p>
+</div>
+</div>
+<span class="inline-flex items-center text-xs font-meta text-ink-secondary bg-surface-sand px-2 py-0.5 rounded border border-border-hairline self-start sm:self-auto">
+          Son clair · 45 sec
+        </span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="audio-toggles-container">
+<!-- Mooré Button -->
+<button class="min-h-[44px] h-12 px-4 rounded-lg bg-surface-sand hover:bg-surface-dim active:bg-border-hairline border border-border-strong text-ink-primary flex items-center justify-between transition-colors focus:ring-2 focus:ring-focus-ring focus:outline-none" id="btn-moore" onclick="toggleAudio('moore')" type="button">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[20px]" id="icon-moore">play_circle</span>
+<div class="text-left">
+<div class="font-body-strong text-body-strong leading-none">Mooré (mos)</div>
+<div class="font-caption text-caption text-ink-secondary mt-0.5" id="status-moore">Kẽng n kẽele gom-biisã</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-ink-secondary text-[18px]">graphic_eq</span>
+</button>
+<!-- Dioula Button -->
+<button class="min-h-[44px] h-12 px-4 rounded-lg bg-surface-sand hover:bg-surface-dim active:bg-border-hairline border border-border-strong text-ink-primary flex items-center justify-between transition-colors focus:ring-2 focus:ring-focus-ring focus:outline-none" id="btn-dioula" onclick="toggleAudio('dioula')" type="button">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[20px]" id="icon-dioula">play_circle</span>
+<div class="text-left">
+<div class="font-body-strong text-body-strong leading-none">Dioula (dyu)</div>
+<div class="font-caption text-caption text-ink-secondary mt-0.5" id="status-dioula">Ja ladon kulu mɛn</div>
+</div>
+</div>
+<span class="material-symbols-outlined text-ink-secondary text-[18px]">graphic_eq</span>
+</button>
+</div>
+</section>
+<!-- Contrastive Rules (4 Fundamental Pillars: Visual DO / DONT Grid) -->
+<section aria-label="Règles fondamentales de la photo" class="space-y-4 mb-6">
+<!-- Rule 1: Modestie canonique -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 transition-all">
+<div class="flex items-start gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="font-heading text-heading">1</span>
+</div>
+<div>
+<h3 class="font-heading text-heading text-primary">Modestie &amp; Tenue Décente (Haya)</h3>
+<p class="font-meta text-meta text-ink-secondary">Vêtement digne, pudique et conforme aux traditions burkinabè et islamiques. Visage dégagé sans pose suggestive.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 pt-2 border-t border-border-hairline">
+<div class="flex items-start gap-2 bg-success-soft/50 p-2.5 rounded-lg border border-success/20">
+<span class="material-symbols-outlined text-success text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-success">Conforme :</strong> Port d'une tenue sobre (ex. Faso Dan Fani, boubou décent, voile couvrant ou col modeste).</span>
+</div>
+<div class="flex items-start gap-2 bg-danger-soft/60 p-2.5 rounded-lg border border-danger/20">
+<span class="material-symbols-outlined text-danger text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-danger">Refusé :</strong> Lunettes de soleil, grimaces, tenues moulantes, décolletés ou poses ostentatoires.</span>
+</div>
+</div>
+</article>
+<!-- Rule 2: Récence -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 transition-all">
+<div class="flex items-start gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="font-heading text-heading">2</span>
+</div>
+<div>
+<h3 class="font-heading text-heading text-primary">Fidélité au Temps Présent (Moins de 6 mois)</h3>
+<p class="font-meta text-meta text-ink-secondary">La photographie doit impérativement refléter votre apparence actuelle pour éviter toute tromperie morale.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 pt-2 border-t border-border-hairline">
+<div class="flex items-start gap-2 bg-success-soft/50 p-2.5 rounded-lg border border-success/20">
+<span class="material-symbols-outlined text-success text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-success">Conforme :</strong> Prise de vue récente (datant de moins de six mois révolus).</span>
+</div>
+<div class="flex items-start gap-2 bg-danger-soft/60 p-2.5 rounded-lg border border-danger/20">
+<span class="material-symbols-outlined text-danger text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-danger">Refusé :</strong> Photos d'enfance, portraits estudiantins d'il y a 5 ans ou coiffures obsolètes.</span>
+</div>
+</div>
+</article>
+<!-- Rule 3: Vérité & Authenticité sans filtre -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 transition-all">
+<div class="flex items-start gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="font-heading text-heading">3</span>
+</div>
+<div>
+<h3 class="font-heading text-heading text-primary">Vérité Visuelle Sans Altération Numérique</h3>
+<p class="font-meta text-meta text-ink-secondary">L'usage de filtres modifiant les traits, le teint ou le galbe du visage est formellement prohibé.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 pt-2 border-t border-border-hairline">
+<div class="flex items-start gap-2 bg-success-soft/50 p-2.5 rounded-lg border border-success/20">
+<span class="material-symbols-outlined text-success text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-success">Conforme :</strong> Cliché net, lumière naturelle du jour, grain d'appareil photographique non retouché.</span>
+</div>
+<div class="flex items-start gap-2 bg-danger-soft/60 p-2.5 rounded-lg border border-danger/20">
+<span class="material-symbols-outlined text-danger text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-danger">Refusé :</strong> Filtres lissants (Snapchat/TikTok), déformations IA, colorimétrie artificielle.</span>
+</div>
+</div>
+</article>
+<!-- Rule 4: Seul(e) sur le cliché -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 transition-all">
+<div class="flex items-start gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0 mt-0.5">
+<span class="font-heading text-heading">4</span>
+</div>
+<div>
+<h3 class="font-heading text-heading text-primary">Unique Sujet sur la Scène</h3>
+<p class="font-meta text-meta text-ink-secondary">Pour des raisons de respect de la vie privée des tiers, vous devez être la seule personne présente.</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3 pt-2 border-t border-border-hairline">
+<div class="flex items-start gap-2 bg-success-soft/50 p-2.5 rounded-lg border border-success/20">
+<span class="material-symbols-outlined text-success text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-success">Conforme :</strong> Cadrage buste ou plan moyen centré exclusivement sur le postulant.</span>
+</div>
+<div class="flex items-start gap-2 bg-danger-soft/60 p-2.5 rounded-lg border border-danger/20">
+<span class="material-symbols-outlined text-danger text-[18px] shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">cancel</span>
+<span class="font-meta text-meta text-ink-primary"><strong class="font-body-strong text-danger">Refusé :</strong> Photos découpées où apparaît l'épaule d'un ami, enfants, membres de la famille.</span>
+</div>
+</div>
+</article>
+</section>
+<!-- Guardian & Privacy Archival Box: Le Sceau de Pudeur (AD-24) -->
+<section aria-labelledby="sceau-pudeur-title" class="mb-6 p-4 rounded-xl bg-surface-indigo text-ink-on-indigo border border-mihrab relative overflow-hidden">
+<div class="relative z-10 flex items-start gap-3">
+<div class="p-2 rounded-full bg-gold/20 text-gold shrink-0">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">enhanced_encryption</span>
+</div>
+<div>
+<div class="flex items-center gap-2 mb-1">
+<h3 class="font-heading text-heading text-gold" id="sceau-pudeur-title">Garantie du Sceau de Pudeur (AD-24)</h3>
+<span class="text-[11px] px-2 py-0.5 rounded bg-primary text-gold font-meta tracking-wider uppercase">Chiffrement</span>
+</div>
+<p class="font-meta text-meta text-surface-sand/90 leading-relaxed">
+            Votre photographie <strong>ne sera jamais affichée publiquement en clair</strong> sur une galerie ouverte. Dès téléversement, elle reçoit un flou cryptographique côté serveur (<em class="italic">blur-wash souverain</em>). Elle n'est dévoilée qu'après acceptation formelle mutuelle des pourparlers, sous l'attestation continue de votre tuteur légal (Wali).
+          </p>
+<div class="mt-3 flex items-center gap-2 text-xs text-gold-soft font-meta">
+<span class="material-symbols-outlined text-[14px]">lock_reset</span>
+<span>Hébergement certifié et contrôle strict CIL (Burkina Faso)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Acknowledgement Form & Linear Action Flow -->
+<form class="space-y-4" id="photo-rules-form" onsubmit="event.preventDefault(); proceedToUpload();">
+<div class="p-4 rounded-xl bg-surface-raised border border-border-hairline">
+<label class="flex items-start gap-3 cursor-pointer select-none">
+<input class="mt-1 w-5 h-5 rounded border-border-strong text-indigo focus:ring-focus-ring focus:ring-offset-surface-raised" id="consent-checkbox" onchange="toggleSubmitButton()" type="checkbox"/>
+<span class="font-body text-body text-ink-primary">
+            J'atteste sur l'honneur que le cliché que je m'apprête à téléverser respecte la pudeur canonique, est récent, sans artifice trompeur, et m'engage avec sincérité (<em class="italic">Niyyah</em>) dans cette démarche.
+          </span>
+</label>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-3 pt-2">
+<!-- Return Button -->
+<a class="w-full sm:w-1/3 min-h-[44px] h-12 rounded-full border border-border-strong text-ink-primary bg-transparent hover:bg-surface-dim active:bg-border-hairline font-body-strong flex items-center justify-center transition-colors text-center" href="#previous-step">
+          Revenir en arrière
+        </a>
+<!-- Primary Confirmation Button (Min-height 48px, indigo fill) -->
+<button class="w-full sm:w-2/3 min-h-[48px] h-12 rounded-full bg-disabled text-ink-primary/50 font-body-strong flex items-center justify-center gap-2 cursor-not-allowed transition-all duration-200 shadow-none" disabled="" id="btn-submit" type="submit">
+<span>J'ai compris ces exigences</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</form>
+</main>
+<!-- Editorial Minimal Footer (Shared Component mapped) -->
+<footer class="bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-10">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+<span class="font-heading text-heading text-primary dark:text-ink-on-indigo">AnKanu</span>
+<span class="font-meta text-meta text-ink-secondary dark:text-outline-variant">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-4">
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#privacy">Confidentialité &amp; Données</a>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#wali">Tuteurs Légaux (Wali)</a>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors" href="#ethique">Éthique &amp; Respect</a>
+</div>
+</div>
+<div class="w-full border-t border-border-hairline/60 py-2 bg-surface-sand/80 text-center font-caption text-caption text-ink-secondary">
+      Infrastructure de confiance hébergée souverainement · Scaleway Paris &amp; Relais Ouagadougou · Conformité CIL Burkina Faso
+    </div>
+</footer>
+<!-- Audio and Form Interactive Scripts -->
+<script>
+    let activeAudio = null;
+
+    function toggleAudio(lang) {
+      const btnM = document.getElementById('btn-moore');
+      const btnD = document.getElementById('btn-dioula');
+      const iconM = document.getElementById('icon-moore');
+      const iconD = document.getElementById('icon-dioula');
+      const statM = document.getElementById('status-moore');
+      const statD = document.getElementById('status-dioula');
+
+      if (activeAudio === lang) {
+        // Stop current
+        activeAudio = null;
+        resetAudioUI();
+      } else {
+        activeAudio = lang;
+        resetAudioUI();
+
+        if (lang === 'moore') {
+          btnM.classList.remove('bg-surface-sand');
+          btnM.classList.add('bg-gold-soft', 'border-primary');
+          iconM.textContent = 'pause_circle';
+          statM.textContent = 'Écoute en cours (Mooré)...';
+        } else if (lang === 'dioula') {
+          btnD.classList.remove('bg-surface-sand');
+          btnD.classList.add('bg-gold-soft', 'border-primary');
+          iconD.textContent = 'pause_circle';
+          statD.textContent = 'Écoute en cours (Dioula)...';
+        }
+      }
+    }
+
+    function resetAudioUI() {
+      const btnM = document.getElementById('btn-moore');
+      const btnD = document.getElementById('btn-dioula');
+      const iconM = document.getElementById('icon-moore');
+      const iconD = document.getElementById('icon-dioula');
+      const statM = document.getElementById('status-moore');
+      const statD = document.getElementById('status-dioula');
+
+      btnM.classList.remove('bg-gold-soft', 'border-primary');
+      btnM.classList.add('bg-surface-sand');
+      iconM.textContent = 'play_circle';
+      statM.textContent = 'Kẽng n kẽele gom-biisã';
+
+      btnD.classList.remove('bg-gold-soft', 'border-primary');
+      btnD.classList.add('bg-surface-sand');
+      iconD.textContent = 'play_circle';
+      statD.textContent = 'Ja ladon kulu mɛn';
+    }
+
+    function toggleSubmitButton() {
+      const check = document.getElementById('consent-checkbox');
+      const submitBtn = document.getElementById('btn-submit');
+
+      if (check.checked) {
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('bg-disabled', 'cursor-not-allowed', 'text-ink-primary/50');
+        submitBtn.classList.add('bg-indigo', 'text-ink-on-indigo', 'hover:bg-primary', 'cursor-pointer');
+      } else {
+        submitBtn.disabled = true;
+        submitBtn.classList.remove('bg-indigo', 'text-ink-on-indigo', 'hover:bg-primary', 'cursor-pointer');
+        submitBtn.classList.add('bg-disabled', 'cursor-not-allowed', 'text-ink-primary/50');
+      }
+    }
+
+    function proceedToUpload() {
+      const check = document.getElementById('consent-checkbox');
+      if (check.checked) {
+        alert("Exigences canoniques validées. Redirection vers le module de téléversement sécurisé sous chiffrement 'Sceau de Pudeur'...");
+      }
+    }
+  </script>
+</body></html>

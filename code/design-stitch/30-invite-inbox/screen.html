@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Invitations | AnKanu - Ta'aruf Honorable</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-highest": "#e9e2d5",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-secondary-fixed-variant": "#5b4300",
+            "background": "#fff9ee",
+            "secondary-fixed-dim": "#e5c276",
+            "staff": "#6B3D2E",
+            "primary-container": "#1f3a5f",
+            "on-primary-fixed": "#001c3b",
+            "blur-wash": "#C8BBA6",
+            "on-background": "#1e1b14",
+            "secondary-container": "#fdd88a",
+            "surface-container-high": "#eee7db",
+            "on-tertiary-fixed": "#001c38",
+            "ink-on-indigo": "#F4EDE0",
+            "on-secondary-container": "#785d1b",
+            "surface-container-lowest": "#ffffff",
+            "surface": "#fff9ee",
+            "focus-ring": "#1F3A5F",
+            "primary-fixed-dim": "#aec8f4",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-variant": "#e9e2d5",
+            "surface-tint": "#465f86",
+            "indigo": "#1F3A5F",
+            "danger-soft": "#F3E0DC",
+            "border-hairline": "#D9CDB8",
+            "on-surface": "#1e1b14",
+            "surface-container-low": "#faf3e6",
+            "surface-dim": "#e0d9cd",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c4c6cf",
+            "surface-indigo": "#15283F",
+            "staff-soft": "#EFE4DC",
+            "indigo-deep": "#15283F",
+            "on-secondary": "#ffffff",
+            "success": "#3D5C45",
+            "ink-primary": "#1B2433",
+            "surface-bright": "#fff9ee",
+            "inverse-surface": "#333028",
+            "on-primary-container": "#8ba4cf",
+            "inverse-primary": "#aec8f4",
+            "danger": "#8B3A3A",
+            "on-tertiary": "#ffffff",
+            "primary": "#032448",
+            "primary-fixed": "#d5e3ff",
+            "on-surface-variant": "#43474e",
+            "ink-secondary": "#5C5346",
+            "surface-sand": "#F4EDE0",
+            "tertiary": "#002546",
+            "on-secondary-fixed": "#251a00",
+            "on-primary": "#ffffff",
+            "gold-soft": "#E8D5A3",
+            "tertiary-fixed": "#d3e4ff",
+            "mihrab": "#2C4A6E",
+            "border-strong": "#6F624C",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-raised": "#FFFBF4",
+            "secondary": "#755b18",
+            "on-tertiary-container": "#88a5ce",
+            "on-error": "#ffffff",
+            "gold": "#C4A35A",
+            "outline": "#74777f",
+            "tertiary-container": "#1b3b5e",
+            "success-soft": "#DCE6DE",
+            "on-primary-fixed-variant": "#2d476d",
+            "surface-container": "#f4ede0",
+            "disabled": "#B5A894",
+            "secondary-fixed": "#ffdf9c",
+            "error": "#ba1a1a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2rem",
+            "space-sm": "0.5rem",
+            "margin": "1rem",
+            "2": "8px",
+            "1": "4px",
+            "gutter": "16px",
+            "4": "16px",
+            "6": "32px",
+            "3": "12px",
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "screen-pad": "16px",
+            "7": "48px",
+            "space-xs": "0.25rem",
+            "5": "24px"
+          },
+          "fontFamily": {
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background-color: #D9CDB8;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-body text-body text-ink-primary bg-surface-sand selection:bg-gold-soft selection:text-ink-primary antialiased">
+<!-- Interactive Demo Bar (Simulateur d'états d'inbox canonique) -->
+<aside aria-label="Simulateur d'états" class="bg-surface-indigo border-b border-mihrab text-ink-on-indigo text-caption font-caption py-2 px-screen-pad">
+<div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2 h-2 rounded-full bg-gold"></span>
+<span class="font-meta text-meta text-gold font-semibold uppercase tracking-wider">Simulateur canonique</span>
+<span class="text-outline-variant hidden sm:inline">|</span>
+<span class="text-outline-variant hidden sm:inline">Vérification des parcours déontologiques (FR-037 / FR-040)</span>
+</div>
+<div class="flex items-center gap-1.5 overflow-x-auto custom-scroll py-0.5">
+<button class="px-2.5 py-1 rounded bg-mihrab text-ink-on-indigo text-caption font-meta transition-colors duration-150" id="sim-btn-received" onclick="setSimState('received')">1. Reçues (Défaut)</button>
+<button class="px-2.5 py-1 rounded hover:bg-mihrab/60 text-outline-variant hover:text-ink-on-indigo text-caption font-meta transition-colors duration-150" id="sim-btn-sent" onclick="setSimState('sent')">2. Envoyées</button>
+<button class="px-2.5 py-1 rounded hover:bg-mihrab/60 text-outline-variant hover:text-ink-on-indigo text-caption font-meta transition-colors duration-150" id="sim-btn-accepted" onclick="setSimState('accepted')">3. Acceptées</button>
+<button class="px-2.5 py-1 rounded hover:bg-mihrab/60 text-outline-variant hover:text-ink-on-indigo text-caption font-meta transition-colors duration-150" id="sim-btn-empty" onclick="setSimState('empty')">4. État Vide</button>
+<button class="px-2.5 py-1 rounded hover:bg-danger/40 text-danger-soft text-caption font-meta transition-colors duration-150" id="sim-btn-error" onclick="toggleErrorBanner()">5. Alerte Règle</button>
+</div>
+</div>
+</aside>
+<!-- Top Navigation Header (Shared Component Anchors) -->
+<header class="bg-surface dark:bg-surface-indigo text-primary dark:text-inverse-primary border-b border-border-hairline dark:border-mihrab sticky top-0 z-30">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between gap-4">
+<!-- Brand Cluster -->
+<div class="flex items-center gap-3">
+<a class="flex flex-col group focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-sm" href="#">
+<span class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold group-hover:text-indigo transition-colors duration-150">AnKanu</span>
+<span class="font-caption text-caption text-ink-secondary dark:text-outline-variant tracking-normal -mt-0.5">Ta'aruf Honorable &amp; Mariage Noble</span>
+</a>
+</div>
+<!-- Navigation Links (Desktop) -->
+<nav aria-label="Navigation principale" class="hidden md:flex items-center space-x-6">
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Découvrir</a>
+<!-- Active Tab : Invitations -->
+<a aria-current="page" class="text-primary dark:text-gold font-body-strong border-b-2 border-primary dark:border-gold pb-1" href="#">Invitations</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Discussions</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Profil</a>
+</nav>
+<!-- Trailing Action / Guardian Status -->
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-2 bg-staff-soft px-3 py-1.5 rounded-full border border-border-hairline" title="Chaperonnage actif selon la norme canonique">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+<span class="font-meta text-meta text-staff flex items-center gap-1 font-medium">
+<span aria-hidden="true" class="material-symbols-outlined text-[15px]">verified_user</span>
+<span>Wali notifié : <strong>Oumar O.</strong></span>
+</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Ethical Notice Banner (Conditionally active via button 5) -->
+<div class="hidden bg-danger-soft border-b border-danger/30 text-danger transition-all duration-200" id="alert-banner">
+<div class="max-w-4xl mx-auto px-screen-pad py-2.5 flex items-start sm:items-center justify-between gap-3 text-meta font-meta">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-[18px]">gavel</span>
+<span><strong>Alerte déontologique (AD-26) :</strong> Ce profil est actuellement engagé dans une démarche exclusive auprès d'une autre famille. Toute nouvelle ouverture est suspendue avec respect.</span>
+</div>
+<button aria-label="Fermer le message" class="text-danger hover:text-ink-primary p-0.5" onclick="toggleErrorBanner()">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+<!-- Main Canvas -->
+<main class="flex-grow w-full max-w-4xl mx-auto px-screen-pad py-6 sm:py-8 flex flex-col gap-6">
+<!-- Screen Sub-Header & Ethical Guarantee Banner -->
+<header class="border-b border-border-hairline pb-5">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+<div>
+<div class="flex items-center gap-2 mb-1.5">
+<span class="px-2 py-0.5 rounded text-caption font-meta bg-surface-container-high text-ink-secondary border border-border-hairline uppercase tracking-wide">Espace Démarches</span>
+<span class="text-caption font-meta text-ink-secondary">Cadre canonique Burkinabè</span>
+</div>
+<h1 class="font-title text-display text-primary tracking-tight">Invitations &amp; Démarches d'Alliance</h1>
+</div>
+<!-- Honorable Principles Pill -->
+<div class="inline-flex items-center gap-1.5 text-caption font-meta text-ink-secondary bg-surface-raised px-3 py-1.5 rounded-full border border-border-hairline">
+<span class="material-symbols-outlined text-gold text-[16px]">lock</span>
+<span>Pudeur garantie · Aucun profilage ludique</span>
+</div>
+</div>
+<p class="mt-3 font-body text-body text-ink-secondary max-w-3xl leading-relaxed">
+        Gestion sereine des demandes de ta'aruf. Conformément aux préceptes canoniques (FR-037 / FR-039), le statut matrimonial et l'intention quant à la polygamie sont notifiés avec clarté avant toute acceptation mutuelle.
+      </p>
+</header>
+<!-- Interactive Navigation Tabs for Lists (Segmented View) -->
+<section aria-label="Catégories d'invitations" class="border-b border-border-hairline">
+<div class="flex gap-2 sm:gap-6 overflow-x-auto pb-px custom-scroll">
+<!-- Tab 1: Reçues (Default) -->
+<button class="relative pb-3 text-body-strong font-body-strong text-primary border-b-2 border-primary flex items-center gap-2 focus:outline-none" id="tab-received" onclick="setSimState('received')">
+<span>Reçues</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-meta bg-primary text-ink-on-indigo">2 en attente</span>
+</button>
+<!-- Tab 2: Envoyées -->
+<button class="relative pb-3 text-body font-body text-ink-secondary hover:text-ink-primary border-b-2 border-transparent hover:border-border-hairline flex items-center gap-2 transition-colors focus:outline-none" id="tab-sent" onclick="setSimState('sent')">
+<span>Envoyées</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-meta bg-surface-container-high text-ink-secondary">1 active</span>
+</button>
+<!-- Tab 3: Acceptées -->
+<button class="relative pb-3 text-body font-body text-ink-secondary hover:text-ink-primary border-b-2 border-transparent hover:border-border-hairline flex items-center gap-2 transition-colors focus:outline-none" id="tab-accepted" onclick="setSimState('accepted')">
+<span>Acceptées</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-meta bg-success-soft text-success">1 alliance convenue</span>
+</button>
+</div>
+</section>
+<!-- CONTENT SECTION 1: INVITATIONS REÇUES (DEFAULT VIEW) -->
+<div class="space-y-6" id="view-received">
+<!-- Card 1 (Pending Invite: Tahir_Ouaga) -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6 transition-all relative">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-border-hairline pb-4">
+<div class="flex items-start gap-4">
+<!-- Sceau de pudeur: Flat blur wash thumbnail with covered-face pictogram -->
+<div class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-blur-wash border border-border-hairline flex flex-col items-center justify-center text-ink-secondary relative shrink-0" title="Identité visuelle protégée par le sceau de pudeur (FR-012)">
+<span class="material-symbols-outlined text-[26px] text-ink-primary/70">shield_person</span>
+<span class="text-[9px] font-meta tracking-tight text-ink-secondary mt-0.5 uppercase">Sceau actif</span>
+</div>
+<div>
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary">Tahir_Ouaga</h2>
+<span class="text-caption font-meta text-ink-secondary">· 29 ans · Ouagadougou, Baskuy</span>
+<!-- Stage Chip (FR-028) -->
+<span class="px-2 py-0.5 rounded bg-surface-sand text-ink-secondary font-meta text-caption border border-border-hairline">
+                  invite
+                </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+                Ingénieur agronome · Madhab Malékite
+              </p>
+<div class="mt-2 flex items-center gap-1.5 text-caption font-meta text-success">
+<span class="material-symbols-outlined text-[15px]">verified</span>
+<span>Tuteur familial désigné &amp; réceptif</span>
+</div>
+</div>
+</div>
+<!-- Date or Priority Tag -->
+<div class="text-right shrink-0">
+<span class="text-caption font-meta text-ink-secondary">Transmise il y a 2 jours</span>
+</div>
+</div>
+<!-- Essential disclosure BEFORE accept (Cadre canonique FR-037 & FR-024) -->
+<div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 bg-surface-sand/70 p-3.5 rounded-lg border border-border-hairline">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-ink-secondary text-[20px] mt-0.5">badge</span>
+<div>
+<span class="block font-meta text-meta text-ink-secondary">Statut civil &amp; matrimonial</span>
+<span class="font-body-strong text-body-strong text-ink-primary">Célibataire (Jamais marié)</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-ink-secondary text-[20px] mt-0.5">balance</span>
+<div>
+<span class="block font-meta text-meta text-ink-secondary">Intention quant à la polygamie (FR-024)</span>
+<span class="font-body-strong text-body-strong text-primary">Foyer strictement monogame <span class="font-meta text-meta text-ink-secondary font-normal">(Engagement solennel)</span></span>
+</div>
+</div>
+</div>
+<!-- Message Flash d'introduction (FR-146) -->
+<div class="mt-4 p-4 rounded-lg bg-surface-container-low border-l-2 border-gold border-r border-t border-b border-border-hairline">
+<div class="flex items-center gap-1.5 text-caption font-meta text-secondary mb-1">
+<span class="material-symbols-outlined text-[14px]">format_quote</span>
+<span>Message Flash d'introduction (FR-146)</span>
+</div>
+<p class="font-body text-body text-ink-primary italic">
+            « Salam aleykoum wa rahmatullah. Sensible à votre droiture et à la recommandation de votre tuteur, je sollicite respectueusement la permission d'engager un échange sous la bienveillance de nos familles. »
+          </p>
+</div>
+<!-- Actions Cluster -->
+<div class="mt-5 pt-4 border-t border-border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-3">
+<!-- Primary Action (Indigo, min-height 48px) -->
+<button class="min-h-[48px] px-6 py-2.5 rounded-full bg-indigo hover:bg-primary text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" onclick="handleAccept('Tahir_Ouaga')">
+<span class="material-symbols-outlined text-[18px]">handshake</span>
+<span>Accepter l'invitation</span>
+</button>
+<!-- Quiet Action (Text-only, min-height 44px, no confirm-shaming) -->
+<button class="min-h-[44px] px-4 py-2 text-ink-secondary hover:text-ink-primary font-meta text-meta flex items-center justify-center gap-1.5 transition-colors duration-150 hover:bg-surface-sand/80 rounded-full" onclick="handleQuietDecline('Tahir_Ouaga')">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span>Refuser discrètement</span>
+</button>
+</div>
+<!-- Trailing Dignity Policy (FR-040) -->
+<div class="text-caption font-meta text-ink-secondary max-w-xs text-left sm:text-right">
+            L'acceptation ouvre le salon chaperonné avec Wali. Aucun refus ne fait l'objet d'une relance.
+          </div>
+</div>
+</article>
+<!-- Card 2 (Pending Invite: Ibrahim_Kdg) -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6 transition-all relative">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-4 border-b border-border-hairline pb-4">
+<div class="flex items-start gap-4">
+<!-- Sceau de pudeur -->
+<div class="w-14 h-14 sm:w-16 sm:h-16 rounded-lg bg-blur-wash border border-border-hairline flex flex-col items-center justify-center text-ink-secondary relative shrink-0" title="Identité visuelle protégée par le sceau de pudeur (FR-012)">
+<span class="material-symbols-outlined text-[26px] text-ink-primary/70">shield_person</span>
+<span class="text-[9px] font-meta tracking-tight text-ink-secondary mt-0.5 uppercase">Sceau actif</span>
+</div>
+<div>
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary">Ibrahim_Kdg</h2>
+<span class="text-caption font-meta text-ink-secondary">· 33 ans · Bobo-Dioulasso</span>
+<!-- Stage Chip (FR-028) -->
+<span class="px-2 py-0.5 rounded bg-surface-sand text-ink-secondary font-meta text-caption border border-border-hairline">
+                  invite
+                </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+                Commerçant grossiste · Madhab Malékite
+              </p>
+<div class="mt-2 flex items-center gap-1.5 text-caption font-meta text-ink-secondary">
+<span class="material-symbols-outlined text-[15px] text-gold">verified</span>
+<span>Profil certifié sous protocole Ta'aruf</span>
+</div>
+</div>
+</div>
+<div class="text-right shrink-0">
+<span class="text-caption font-meta text-ink-secondary">Transmise hier</span>
+</div>
+</div>
+<!-- Essential disclosure BEFORE accept -->
+<div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 bg-surface-sand/70 p-3.5 rounded-lg border border-border-hairline">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-ink-secondary text-[20px] mt-0.5">badge</span>
+<div>
+<span class="block font-meta text-meta text-ink-secondary">Statut civil &amp; matrimonial</span>
+<span class="font-body-strong text-body-strong text-ink-primary">Divorcé (1 enfant sous garde conjointe)</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-ink-secondary text-[20px] mt-0.5">balance</span>
+<div>
+<span class="block font-meta text-meta text-ink-secondary">Intention quant à la polygamie (FR-024)</span>
+<span class="font-body-strong text-body-strong text-primary">Ouvert à une union équitable <span class="font-meta text-meta text-ink-secondary font-normal">(Respect du fiqh)</span></span>
+</div>
+</div>
+</div>
+<!-- Message Flash d'introduction (FR-146) -->
+<div class="mt-4 p-4 rounded-lg bg-surface-container-low border-l-2 border-border-strong border-r border-t border-b border-border-hairline">
+<div class="flex items-center gap-1.5 text-caption font-meta text-ink-secondary mb-1">
+<span class="material-symbols-outlined text-[14px]">format_quote</span>
+<span>Message Flash d'introduction (FR-146)</span>
+</div>
+<p class="font-body text-body text-ink-primary italic">
+            « Salam aleykoum. En quête d'une épouse pieuse pour bâtir un foyer vertueux selon la Sunnah. »
+          </p>
+</div>
+<!-- Actions Cluster -->
+<div class="mt-5 pt-4 border-t border-border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex flex-wrap items-center gap-3">
+<button class="min-h-[48px] px-6 py-2.5 rounded-full bg-indigo hover:bg-primary text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" onclick="handleAccept('Ibrahim_Kdg')">
+<span class="material-symbols-outlined text-[18px]">handshake</span>
+<span>Accepter l'invitation</span>
+</button>
+<button class="min-h-[44px] px-4 py-2 text-ink-secondary hover:text-ink-primary font-meta text-meta flex items-center justify-center gap-1.5 transition-colors duration-150 hover:bg-surface-sand/80 rounded-full" onclick="handleQuietDecline('Ibrahim_Kdg')">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span>Refuser discrètement</span>
+</button>
+</div>
+<div class="text-caption font-meta text-ink-secondary max-w-xs text-left sm:text-right">
+            Dossier d'alliance communicable à votre Wali sur simple agrément.
+          </div>
+</div>
+</article>
+<!-- Chaperone Assurance Banner -->
+<section class="bg-surface-indigo text-ink-on-indigo rounded-xl p-5 border border-mihrab flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-full bg-mihrab flex items-center justify-center shrink-0 text-gold">
+<span class="material-symbols-outlined text-[22px]">family_restroom</span>
+</div>
+<div>
+<h3 class="font-heading text-heading text-ink-on-indigo">Protocole de Modération &amp; Présence du Tuteur</h3>
+<p class="font-body text-meta text-outline-variant mt-0.5 max-w-xl">
+              Chaque invitation validée transmet une notification formelle au tuteur légal déclaré (<span class="text-gold font-medium">Oumar O.</span>). Les conversations s'exécutent au sein d'une assemblée numérique sécurisée exempte d'isolement privé (<em>khalwah</em>).
+            </p>
+</div>
+</div>
+<a class="shrink-0 px-4 py-2 rounded-full border border-gold text-gold hover:bg-gold/10 font-meta text-meta transition-colors duration-150" href="#">
+          Consulter la Charte
+        </a>
+</section>
+</div>
+<!-- CONTENT SECTION 2: INVITATIONS ENVOYÉES (SENT VIEW) -->
+<div class="space-y-4 hidden" id="view-sent">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 sm:p-5">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3 mb-4">
+<span class="font-meta text-meta text-ink-secondary font-semibold uppercase tracking-wider">Démarches initiées par vous</span>
+<span class="text-caption font-meta text-ink-secondary">1 en cours · 1 archivée</span>
+</div>
+<!-- Sent Row 1: Pending -->
+<div class="py-3.5 border-b border-border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-blur-wash border border-border-hairline flex items-center justify-center text-ink-secondary">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-heading text-heading text-ink-primary">Aminata_O</span>
+<span class="text-caption font-meta text-ink-secondary">· 27 ans · Ouagadougou</span>
+</div>
+<span class="text-caption font-meta text-ink-secondary">Démarche soumise le 12 Février</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="px-2.5 py-1 rounded-full text-caption font-meta bg-surface-sand text-ink-primary border border-border-hairline flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+<span>En attente d'instruction (invite)</span>
+</span>
+</div>
+</div>
+<!-- Sent Row 2: Declined (No guilt copy or lecture) -->
+<div class="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 opacity-90">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-ink-secondary">
+<span class="material-symbols-outlined text-[20px]">person_off</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-heading text-heading text-ink-primary">Nafissatou_D</span>
+<span class="text-caption font-meta text-ink-secondary">· 29 ans</span>
+</div>
+<span class="text-caption font-meta text-ink-secondary">Démarche close avec sérénité</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded-full text-caption font-meta bg-surface-sand text-ink-secondary border border-border-hairline">
+              Déclinée avec bienveillance
+            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- CONTENT SECTION 3: INVITATIONS ACCEPTÉES (ACCEPTED VIEW) -->
+<div class="space-y-4 hidden" id="view-accepted">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-hairline pb-4 mb-4">
+<div>
+<span class="font-meta text-meta text-success font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Alliance agréée mutuellement (FR-039)</span>
+</span>
+<h2 class="font-heading text-heading text-ink-primary mt-1">Fatoumata_S</h2>
+<p class="font-caption text-caption text-ink-secondary">25 ans · Bobo-Dioulasso · Étudiante Master Gestion</p>
+</div>
+<div class="text-left sm:text-right">
+<span class="px-2.5 py-1 rounded-full text-caption font-meta bg-success-soft text-success border border-success/30 inline-block">
+              Salon ouvert · Tuteur relié
+            </span>
+</div>
+</div>
+<div class="bg-surface-sand p-4 rounded-lg border border-border-hairline mb-5 text-meta font-meta text-ink-secondary">
+<p class="flex items-center gap-2 text-ink-primary font-medium mb-1">
+<span class="material-symbols-outlined text-primary text-[18px]">forum</span>
+<span>Salon de Ta'aruf sous le regard de Wali Oumar O.</span>
+</p>
+          L'autorisation matrimoniale est confirmée. Vos communications sont préservées sous le cadre protecteur de la Sunnah.
+        </div>
+<div class="flex flex-wrap items-center gap-3">
+<!-- Milestone Button (Ceremonial Gold) -->
+<a class="min-h-[48px] px-6 py-2.5 rounded-full bg-gold hover:bg-gold-soft text-indigo-deep font-body-strong text-body flex items-center justify-center gap-2 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-[18px]">chat</span>
+<span>Accéder à la discussion</span>
+</a>
+<button class="min-h-[44px] px-4 py-2 text-ink-secondary hover:text-ink-primary font-meta text-meta flex items-center gap-1 rounded-full border border-border-hairline hover:bg-surface-sand">
+<span>Consulter le dossier d'alliance</span>
+</button>
+</div>
+</div>
+</div>
+<!-- CONTENT SECTION 4: ÉTAT VIDE (EMPTY STATE DEMONSTRATION) -->
+<div class="hidden" id="view-empty">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-8 sm:p-12 text-center max-w-lg mx-auto my-6">
+<div class="w-16 h-16 mx-auto rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-ink-secondary mb-4">
+<span class="material-symbols-outlined text-[28px] text-border-strong">inbox</span>
+</div>
+<h2 class="font-heading text-title text-ink-primary mb-2">Aucune invitation.</h2>
+<p class="font-body text-body text-ink-secondary leading-relaxed mb-6">
+          Vos démarches d'alliance se construisent avec tempérance et sérénité. Dès qu'un prétendant formulera une démarche conforme à votre profil, elle sera présentée ici.
+        </p>
+<button class="px-5 py-2 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-meta text-meta transition-colors" onclick="setSimState('received')">
+          Revenir aux démarches en cours
+        </button>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component JSON Minimal Editorial) -->
+<footer class="bg-surface-sand dark:bg-surface-indigo text-primary dark:text-gold border-t border-border-hairline dark:border-mihrab mt-auto">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+<div>
+<p class="font-meta text-meta text-ink-secondary dark:text-outline-variant max-w-xl">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè. Chiffrement souverain certifié conforme aux recommandations CIL Burkina Faso.
+        </p>
+</div>
+<nav aria-label="Liens d'éthique et conformité" class="flex flex-wrap items-center justify-center gap-4 text-meta font-meta">
+<a class="text-ink-secondary dark:text-outline-variant hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Confidentialité &amp; Données</a>
+<span class="text-border-hairline dark:text-mihrab">·</span>
+<a class="text-ink-secondary dark:text-outline-variant hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Tuteurs Légaux (Wali)</a>
+<span class="text-border-hairline dark:text-mihrab">·</span>
+<a class="text-ink-secondary dark:text-outline-variant hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Éthique &amp; Respect</a>
+</nav>
+</div>
+</footer>
+<!-- Notification Toast (For interactive simulator actions) -->
+<div class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none" id="toast">
+<div class="bg-surface-indigo text-ink-on-indigo px-4 py-3 rounded-lg border border-mihrab shadow-sm flex items-center gap-3">
+<span class="material-symbols-outlined text-gold text-[20px]" id="toast-icon">check_circle</span>
+<span class="font-meta text-meta" id="toast-text">Action enregistrée selon les règles canoniques.</span>
+</div>
+</div>
+<!-- Client-side Logic for Demo & State Transitions -->
+<script>
+    function setSimState(state) {
+      // Hide all content views
+      document.getElementById('view-received').classList.add('hidden');
+      document.getElementById('view-sent').classList.add('hidden');
+      document.getElementById('view-accepted').classList.add('hidden');
+      document.getElementById('view-empty').classList.add('hidden');
+
+      // Reset Tab Styles
+      const tabs = ['received', 'sent', 'accepted'];
+      tabs.forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) {
+          el.className = "relative pb-3 text-body font-body text-ink-secondary hover:text-ink-primary border-b-2 border-transparent hover:border-border-hairline flex items-center gap-2 transition-colors focus:outline-none";
+        }
+      });
+
+      // Reset Simulator Buttons
+      const simBtns = ['received', 'sent', 'accepted', 'empty'];
+      simBtns.forEach(b => {
+        const btn = document.getElementById('sim-btn-' + b);
+        if (btn) {
+          btn.className = "px-2.5 py-1 rounded hover:bg-mihrab/60 text-outline-variant hover:text-ink-on-indigo text-caption font-meta transition-colors duration-150";
+        }
+      });
+
+      // Activate Chosen State
+      if (state === 'received') {
+        document.getElementById('view-received').classList.remove('hidden');
+        document.getElementById('tab-received').className = "relative pb-3 text-body-strong font-body-strong text-primary border-b-2 border-primary flex items-center gap-2 focus:outline-none";
+        document.getElementById('sim-btn-received').className = "px-2.5 py-1 rounded bg-mihrab text-ink-on-indigo text-caption font-meta transition-colors duration-150 font-semibold";
+      } else if (state === 'sent') {
+        document.getElementById('view-sent').classList.remove('hidden');
+        document.getElementById('tab-sent').className = "relative pb-3 text-body-strong font-body-strong text-primary border-b-2 border-primary flex items-center gap-2 focus:outline-none";
+        document.getElementById('sim-btn-sent').className = "px-2.5 py-1 rounded bg-mihrab text-ink-on-indigo text-caption font-meta transition-colors duration-150 font-semibold";
+      } else if (state === 'accepted') {
+        document.getElementById('view-accepted').classList.remove('hidden');
+        document.getElementById('tab-accepted').className = "relative pb-3 text-body-strong font-body-strong text-primary border-b-2 border-primary flex items-center gap-2 focus:outline-none";
+        document.getElementById('sim-btn-accepted').className = "px-2.5 py-1 rounded bg-mihrab text-ink-on-indigo text-caption font-meta transition-colors duration-150 font-semibold";
+      } else if (state === 'empty') {
+        document.getElementById('view-empty').classList.remove('hidden');
+        document.getElementById('sim-btn-empty').className = "px-2.5 py-1 rounded bg-mihrab text-ink-on-indigo text-caption font-meta transition-colors duration-150 font-semibold";
+      }
+    }
+
+    function toggleErrorBanner() {
+      const banner = document.getElementById('alert-banner');
+      banner.classList.toggle('hidden');
+    }
+
+    function showToast(message, icon = 'check_circle') {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toast-text');
+      const toastIcon = document.getElementById('toast-icon');
+      
+      toastText.textContent = message;
+      toastIcon.textContent = icon;
+      
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+        toast.classList.remove('translate-y-0', 'opacity-100');
+      }, 3500);
+    }
+
+    function handleAccept(pseudonym) {
+      showToast("Invitation de " + pseudonym + " acceptée. Le salon chaperonné avec Wali Oumar O. est créé.");
+      setTimeout(() => {
+        setSimState('accepted');
+      }, 1000);
+    }
+
+    function handleQuietDecline(pseudonym) {
+      showToast("Démarche déclinée avec discrétion pour " + pseudonym + ". Aucune notification blessante transmise.", "verified_user");
+    }
+  </script>
+</body></html>

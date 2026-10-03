@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-[#F4EDE0]">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Suspended-account screen — AnKanu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-sand": "#F4EDE0",
+            "surface-raised": "#FFFBF4",
+            "surface-indigo": "#15283F",
+            "ink-primary": "#1B2433",
+            "ink-secondary": "#5C5346",
+            "ink-on-indigo": "#F4EDE0",
+            "indigo": "#1F3A5F",
+            "indigo-deep": "#15283F",
+            "gold": "#C4A35A",
+            "gold-soft": "#E8D5A3",
+            "mihrab": "#2C4A6E",
+            "border-hairline": "#D9CDB8",
+            "border-strong": "#6F624C",
+            "focus-ring": "#1F3A5F",
+            "blur-wash": "#C8BBA6",
+            "danger": "#8B3A3A",
+            "danger-soft": "#F3E0DC",
+            "success": "#3D5C45",
+            "success-soft": "#DCE6DE",
+            "staff": "#6B3D2E",
+            "staff-soft": "#EFE4DC",
+            "disabled": "#B5A894"
+          },
+          borderRadius: {
+            "sm": "6px",
+            "md": "12px",
+            "lg": "20px",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "display": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "title": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "heading": ["\"Source Serif 4\"", "Georgia", "serif"],
+            "body": ["\"Source Sans 3\"", "system-ui", "sans-serif"],
+            "meta": ["\"Source Sans 3\"", "system-ui", "sans-serif"],
+            "caption": ["\"Source Sans 3\"", "system-ui", "sans-serif"]
+          },
+          fontSize: {
+            "display": ["28px", { lineHeight: "1.2", letterSpacing: "-0.01em", fontWeight: "600" }],
+            "title": ["22px", { lineHeight: "1.25", fontWeight: "600" }],
+            "heading": ["18px", { lineHeight: "1.3", fontWeight: "600" }],
+            "body": ["16px", { lineHeight: "1.5", fontWeight: "400" }],
+            "body-strong": ["16px", { lineHeight: "1.5", fontWeight: "600" }],
+            "meta": ["13px", { lineHeight: "1.4", letterSpacing: "0.01em", fontWeight: "500" }],
+            "caption": ["12px", { lineHeight: "1.4", fontWeight: "400" }]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-ink-primary">
+
+  <!-- Top Navigation Bar (Disabled member actions context, consistent AnKanu shell) -->
+  <header class="border-b border-border-hairline bg-surface-raised sticky top-0 z-30">
+    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <a href="#" class="font-title text-title text-indigo tracking-tight font-bold">
+          AnKanu
+        </a>
+        <!-- Member nav visibly disabled under suspension -->
+        <nav aria-label="Navigation principale" class="hidden md:flex items-center gap-6">
+          <span class="text-disabled font-body text-body cursor-not-allowed flex items-center gap-1.5" title="Accès suspendu">
+            <span>Découvrir</span>
+            <span class="material-symbols-outlined text-[14px]">lock</span>
+          </span>
+          <span class="text-disabled font-body text-body cursor-not-allowed flex items-center gap-1.5" title="Accès suspendu">
+            <span>Invitations</span>
+            <span class="material-symbols-outlined text-[14px]">lock</span>
+          </span>
+          <span class="text-disabled font-body text-body cursor-not-allowed flex items-center gap-1.5" title="Accès suspendu">
+            <span>Discussions</span>
+            <span class="material-symbols-outlined text-[14px]">lock</span>
+          </span>
+          <span class="text-disabled font-body text-body cursor-not-allowed flex items-center gap-1.5" title="Accès suspendu">
+            <span>Profil</span>
+            <span class="material-symbols-outlined text-[14px]">lock</span>
+          </span>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-danger-soft text-danger border border-danger/20 font-meta text-meta">
+          <span class="w-2 h-2 rounded-full bg-danger animate-pulse"></span>
+          <span>Mesure conservatoire active</span>
+        </div>
+        <button type="button" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-md border border-border-hairline bg-surface-sand text-ink-secondary hover:text-indigo text-meta font-meta transition-colors">
+          <span class="material-symbols-outlined text-[16px]">logout</span>
+          <span class="hidden sm:inline">Déconnexion</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Editorial Main Canvas (Single Focused Layout, Respectful Ouaga French) -->
+  <main class="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+
+    <!-- Suspension Notice Header / Breadcrumb -->
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-3 text-ink-secondary">
+      <div class="inline-flex items-center gap-2 font-meta text-meta">
+        <span class="material-symbols-outlined text-[16px] text-danger">shield_with_heart</span>
+        <span>Discipline de convenance matrimoniale · Article FR-085</span>
+      </div>
+      <span class="font-meta text-meta px-2.5 py-0.5 rounded-sm bg-surface-raised border border-border-hairline text-ink-secondary">
+        Dossier Réf. SANCT-2025-084-BF
+      </span>
+    </div>
+
+    <!-- Primary Focused Card: Suspension Notification -->
+    <div class="bg-surface-raised rounded-md border border-border-strong p-6 sm:p-8 md:p-10 shadow-none">
+      
+      <!-- Canonical Status Icon & Title -->
+      <div class="flex flex-col sm:flex-row sm:items-start gap-4 pb-6 border-b border-border-hairline">
+        <div class="w-12 h-12 rounded-md bg-danger-soft text-danger border border-danger/30 flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[28px]">pause_circle</span>
+        </div>
+        <div class="flex-1">
+          <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-sm bg-danger-soft text-danger font-caption text-caption uppercase tracking-wider font-semibold mb-2">
+            Interruption temporaire d'accès
+          </div>
+          <h1 class="font-display text-display text-indigo tracking-tight mb-2">
+            Votre compte fait l'objet d'une suspension temporaire
+          </h1>
+          <p class="font-body text-body text-ink-secondary leading-relaxed">
+            Par mesure de sérénité et conformément aux règles de bienséance d'AnKanu, les privilèges de votre espace matrimonial sont momentanément gelés suite au signalement d'une dissymétrie déontologique.
+          </p>
+        </div>
+      </div>
+
+      <!-- Published-status outcome in respectful Ouaga French -->
+      <div class="mt-6 space-y-4">
+        <div class="p-4 rounded-md bg-surface-sand border border-border-hairline">
+          <span class="font-meta text-meta text-ink-secondary uppercase tracking-wider font-semibold block mb-1">
+            Motif de la mesure conservatoire notifié par l'instructeur :
+          </span>
+          <p class="font-heading text-heading text-ink-primary italic font-normal">
+            « Écart présumé aux règles de convenance ou suspicion de contournement du cadre tutélaire dans les préliminaires de ta'aruf. »
+          </p>
+          <div class="mt-3 pt-3 border-t border-border-hairline/60 flex flex-wrap items-center justify-between text-meta text-ink-secondary gap-2">
+            <span>Notification enregistrée le 23 Octobre 2025 à Ouagadougou</span>
+            <span class="inline-flex items-center gap-1 text-ink-primary font-medium">
+              <span class="material-symbols-outlined text-[16px] text-indigo">schedule</span>
+              Durée conservatoire : 72 heures ouvrées
+            </span>
+          </div>
+        </div>
+
+        <!-- Tutor / Wali notification status -->
+        <div class="p-4 rounded-md bg-surface-sand border border-border-hairline flex items-start gap-3">
+          <span class="material-symbols-outlined text-indigo text-[20px] mt-0.5">verified_user</span>
+          <div>
+            <span class="font-body-strong text-body-strong text-indigo block">Information transmise au tuteur légal (Wali)</span>
+            <p class="font-body text-body text-ink-secondary mt-0.5">
+              Conformément à la protection mutuelle des familles, M. Oumar Ouedraogo a été tenu informé de la pause procédurale par message sobre sans divulgation attentatoire à la dignité.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Restricted Features Summary (Chat / Invite / Browse Disabled) -->
+      <div class="mt-8 pt-6 border-t border-border-hairline">
+        <h2 class="font-heading text-heading text-indigo mb-4 flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">block</span>
+          <span>Effets immédiats sur votre compte (FR-085)</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          
+          <div class="p-3.5 rounded-md bg-surface-sand/70 border border-border-hairline flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-disabled mb-1.5">
+                <span class="material-symbols-outlined text-[18px]">chat_bubble_outline</span>
+                <span class="font-body-strong text-body-strong">Salons de discussion</span>
+              </div>
+              <p class="font-caption text-caption text-ink-secondary">
+                Échanges textuels et notes vocales suspendus. Les historiques demeurent sous séquestre d'intégrité.
+              </p>
+            </div>
+            <span class="mt-3 text-[11px] font-meta uppercase font-semibold text-danger inline-block">Désactivé</span>
+          </div>
+
+          <div class="p-3.5 rounded-md bg-surface-sand/70 border border-border-hairline flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-disabled mb-1.5">
+                <span class="material-symbols-outlined text-[18px]">forward_to_inbox</span>
+                <span class="font-body-strong text-body-strong">Envoi d'invitations</span>
+              </div>
+              <p class="font-caption text-caption text-ink-secondary">
+                Transmission de nouvelles requêtes d'alliance ou acceptation de démarches temporairement bloquées.
+              </p>
+            </div>
+            <span class="mt-3 text-[11px] font-meta uppercase font-semibold text-danger inline-block">Désactivé</span>
+          </div>
+
+          <div class="p-3.5 rounded-md bg-surface-sand/70 border border-border-hairline flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-2 text-disabled mb-1.5">
+                <span class="material-symbols-outlined text-[18px]">visibility_off</span>
+                <span class="font-body-strong text-body-strong">Consultation de profils</span>
+              </div>
+              <p class="font-caption text-caption text-ink-secondary">
+                Recherche et navigation dans le sanctuaire neutralisées jusqu'à conclusion de l'instruction.
+              </p>
+            </div>
+            <span class="mt-3 text-[11px] font-meta uppercase font-semibold text-danger inline-block">Désactivé</span>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Legal Guarantee of Independent Re-examination (AD-18) -->
+      <div class="mt-6 p-4 rounded-md bg-surface-sand border border-border-hairline flex items-start gap-3">
+        <span class="material-symbols-outlined text-indigo text-[22px] shrink-0 mt-0.5">balance</span>
+        <div class="space-y-1">
+          <span class="font-body-strong text-body-strong text-indigo">
+            Garantie stricte du second réviseur humain indépendant (AD-18)
+          </span>
+          <p class="font-body text-body text-ink-secondary text-sm">
+            Conformément à la Charte d'Honneur d'AnKanu, tout recours ne sera <strong>jamais examiné par l'instructeur ayant prononcé la mesure</strong>, mais par un second officier assermenté du Conseil consultatif d'AnKanu siégeant à Ouagadougou.
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Area: Path to Appeal (FR-090) -->
+      <div class="mt-8 pt-6 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Primary Action: Submit Appeal -->
+        <a href="#" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 h-12 rounded-md bg-indigo text-ink-on-indigo font-body-strong text-body-strong hover:bg-indigo-deep transition-colors focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2">
+          <span class="material-symbols-outlined text-[18px]">gavel</span>
+          <span>Déposer un recours solennel (Appel FR-090)</span>
+        </a>
+
+        <!-- Quiet Action: Charter link -->
+        <a href="#" class="inline-flex items-center justify-center h-11 text-ink-secondary hover:text-indigo font-body text-body underline decoration-border-hairline hover:decoration-indigo transition-colors">
+          Consulter la charte déontologique intégrale
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Contextual Guidance / Reassurance Accordion Note -->
+    <div class="mt-6 bg-surface-raised/70 rounded-md border border-border-hairline p-5 text-sm text-ink-secondary">
+      <div class="flex items-center gap-2 font-body-strong text-body-strong text-ink-primary mb-1.5">
+        <span class="material-symbols-outlined text-[18px] text-indigo">info</span>
+        <span>Comment se déroule la suite de votre démarche ?</span>
+      </div>
+      <p class="leading-relaxed">
+        Vous disposez d'un délai forfaitaire de 7 jours calendaires pour formuler votre exposé contradictoire. À défaut de recours, le dossier est soumis à la délibération ordinaire du comité de bienséance. Aucune sanction ne donne lieu à une monétisation ni à un privilège commercial.
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Canonical AnKanu Minimal Footer -->
+  <footer class="border-t border-border-hairline bg-surface-sand mt-auto py-8">
+    <div class="w-full max-w-5xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+      <div class="space-y-1">
+        <p class="font-heading text-heading text-indigo font-semibold">AnKanu</p>
+        <p class="font-meta text-meta text-ink-secondary">
+          © 2025 AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+      </div>
+      <nav aria-label="Liens d'assistance et conformité" class="flex flex-wrap items-center justify-center gap-4 shrink-0">
+        <a href="#" class="text-ink-secondary font-meta text-meta hover:text-indigo underline decoration-border-hairline transition-colors">
+          Confidentialité &amp; Données
+        </a>
+        <a href="#" class="text-ink-secondary font-meta text-meta hover:text-indigo underline decoration-border-hairline transition-colors">
+          Tuteurs Légaux (Wali)
+        </a>
+        <a href="#" class="text-indigo font-meta text-meta underline decoration-border-hairline transition-colors font-medium">
+          Éthique &amp; Respect
+        </a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

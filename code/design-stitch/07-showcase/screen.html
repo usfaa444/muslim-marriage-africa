@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Showcase — Registre d'Alliances | AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom theme -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface": "#fff9ee",
+            "on-tertiary-fixed": "#341106",
+            "on-primary-container": "#8ba4cf",
+            "tertiary": "#3e190c",
+            "primary-container": "#1f3a5f",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-surface-variant": "#43474e",
+            "on-surface": "#1e1b14",
+            "on-secondary-fixed": "#251a00",
+            "surface-tint": "#465f86",
+            "secondary-container": "#fdd88a",
+            "surface-dim": "#e0d9cd",
+            "outline": "#74777f",
+            "tertiary-fixed-dim": "#f9b7a3",
+            "secondary": "#755b18",
+            "surface-container-low": "#faf3e6",
+            "on-tertiary-container": "#d29582",
+            "secondary-fixed-dim": "#e5c276",
+            "primary-fixed": "#d5e3ff",
+            "on-secondary": "#ffffff",
+            "surface-container": "#f4ede0",
+            "outline-variant": "#c4c6cf",
+            "background": "#fff9ee",
+            "tertiary-container": "#582e20",
+            "primary": "#032448",
+            "on-error": "#ffffff",
+            "tertiary-fixed": "#ffdbd0",
+            "primary-fixed-dim": "#aec8f4",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-primary": "#ffffff",
+            "on-error-container": "#93000a",
+            "inverse-surface": "#333028",
+            "secondary-fixed": "#ffdf9c",
+            "on-primary-fixed": "#001c3b",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed-variant": "#683b2c",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-background": "#1e1b14",
+            "surface-container-highest": "#e9e2d5",
+            "on-secondary-container": "#785d1b",
+            "error-container": "#ffdad6",
+            "surface-container-high": "#eee7db",
+            "surface-bright": "#fff9ee",
+            "inverse-primary": "#aec8f4",
+            "surface-variant": "#e9e2d5",
+            "inverse-on-surface": "#f7f0e3"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xl": "2.5rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "gutter": "1.5rem",
+            "space-md": "1rem",
+            "margin": "2.5rem",
+            "space-xs": "0.25rem",
+            "margin-mobile": "1.25rem",
+            "space-lg": "1.5rem"
+          },
+          "fontFamily": {
+            "label-lg": ["\"Source Sans 3\""],
+            "body-md": ["\"Source Sans 3\""],
+            "body-lg": ["\"Source Sans 3\""],
+            "title-lg": ["\"Source Serif 4\""],
+            "body-sm": ["\"Source Sans 3\""],
+            "label-sm": ["\"Source Sans 3\""],
+            "display-lg": ["\"Source Serif 4\""],
+            "label-md": ["\"Source Sans 3\""],
+            "headline-md": ["\"Source Serif 4\""],
+            "headline-lg": ["\"Source Serif 4\""],
+            "title-md": ["\"Source Sans 3\""],
+            "headline-sm": ["\"Source Serif 4\""],
+            "display-lg-mobile": ["\"Source Serif 4\""]
+          },
+          "fontSize": {
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "body-lg": ["17px", { "lineHeight": "26px", "fontWeight": "400" }],
+            "title-lg": ["18px", { "lineHeight": "26px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "display-lg-mobile": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .mihrab-arch {
+      border-top-left-radius: 9999px;
+      border-top-right-radius: 9999px;
+    }
+    .archival-border {
+      border: 1px solid #D9CDB8;
+    }
+    .archival-border-dark {
+      border: 1px solid #6F624C;
+    }
+    .paper-surface {
+      background-color: #FFFBF4;
+    }
+  </style>
+</head>
+<body class="bg-[#F4EDE0] text-on-surface antialiased min-h-screen selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TOP PUBLIC NAVIGATION BAR (Derived from Shared Component TopNavBar) -->
+<header class="bg-surface/90 backdrop-blur-md text-primary docked full-width top-0 sticky z-50 shadow-sm border-b border-secondary/15">
+<div class="max-w-[1160px] mx-auto flex items-center justify-between px-6 py-4 w-full">
+<!-- Logo Container -->
+<a class="flex items-center gap-3 group focus:outline-none" href="#">
+<img alt="AnKanu" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1XT71GSWnbOJt_CQi1DUvv4OW0K5SEJY_79ODEJ_F1YJK5llxVS3rjCqCmMEy6S9g_3-imJ0QkSSORiCIR6h0HbatDNrCM1wTP0NVB2Q-a1LWVCYqdsb7-i2f1xwQR8ApZZE2gnEdnDZamJRIxu9ZbE4jgetgouQU2Cv1R2-2S6slOfu6vCQuf0pvK3NT85Xyamb393v2NxjudldhTfP2MFTzn8HnjzwwLJUnYsBxF_6aqrqas5PVNKFEGs"/>
+</a>
+<!-- Desktop Nav Links -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors duration-200" href="#">La Vision</a>
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors duration-200" href="#">L'Académie</a>
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors duration-200" href="#">Comité Consultatif</a>
+<a class="text-on-surface-variant hover:text-primary font-label-md text-label-md transition-colors duration-200" href="#">Tarifs</a>
+<!-- Active Showcase Page Indicator -->
+<a class="text-primary border-b-2 border-secondary font-label-md text-label-md pb-1 flex items-center gap-1.5" href="#">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          Showcase
+        </a>
+</nav>
+<!-- Trailing CTAs -->
+<div class="flex items-center gap-4">
+<a class="hidden sm:inline-flex items-center text-on-surface-variant hover:text-primary font-label-md text-label-md px-3 py-2 transition-colors duration-200" href="#">
+          Se Connecter
+        </a>
+<a class="inline-flex items-center justify-center bg-primary-container hover:bg-[#15283F] text-surface-container font-label-md text-label-md px-5 min-h-[48px] rounded-xl transition-all duration-200 shadow-sm" href="#">
+          Commencer l'Engagement
+        </a>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="max-w-[1140px] mx-auto px-5 sm:px-6 py-10 md:py-16 flex flex-col gap-12 md:gap-16">
+<!-- HERO SECTION: Mihrab Arch Backdrop & Certified Integrity Counter -->
+<section class="paper-surface rounded-2xl archival-border p-8 md:p-14 relative overflow-hidden">
+<!-- Subtle Architectural Texture (Clean Sand / Arch motif) -->
+<div class="absolute -top-32 left-1/2 -translate-x-1/2 w-96 h-96 mihrab-arch border border-[#D9CDB8]/40 pointer-events-none opacity-50"></div>
+<div class="absolute -top-24 left-1/2 -translate-x-1/2 w-80 h-80 mihrab-arch border border-[#D9CDB8]/30 pointer-events-none opacity-50"></div>
+<div class="relative z-10 max-w-3xl mx-auto text-center flex flex-col items-center">
+<!-- Canonical Protocol Badge -->
+<div class="inline-flex items-center gap-2 bg-[#E8D5A3] text-on-surface border border-[#C4A35A] rounded-[6px] px-3 py-1 mb-6">
+<span class="material-symbols-outlined text-[15px] text-secondary" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="font-label-sm text-label-sm tracking-widest uppercase">Registre Public des Unions &amp; Alliances Bénies — FR-099 / AD-25</span>
+</div>
+<!-- Hero Headline -->
+<h1 class="font-headline-lg md:font-display-lg text-headline-lg md:text-display-lg text-primary tracking-tight mb-4">
+          Récits d'Alliances et Révélation du Chemin Noble
+        </h1>
+<!-- Sacred Intent & Haya Statement -->
+<p class="font-body-lg text-body-lg text-[#5C5346] leading-relaxed mb-8 max-w-2xl">
+          Des démarches sincères accomplies avec l'assentiment des familles et des tuteurs (<span class="italic font-title-lg text-primary">wali</span>). Chaque témoignage publié fait l'objet d'un accord formel et bilatéral des époux. Aucune mise en scène marchande, aucun faux compte-rendu.
+        </p>
+<!-- Certified Zero Artificial Metric Ledger (Sceau de Vérité) -->
+<div class="w-full max-w-md bg-surface-container rounded-xl archival-border-dark p-6 flex flex-col items-center shadow-sm">
+<div class="flex items-center gap-2 text-secondary mb-1">
+<span class="material-symbols-outlined text-lg">balance</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-[#6F624C]">Index d'Honnêteté Religieuse</span>
+</div>
+<div class="flex items-baseline gap-3 my-2">
+<span class="font-title-lg text-display-lg text-primary font-bold">0</span>
+<span class="font-headline-sm text-headline-sm text-[#5C5346]">Mariages confirmés</span>
+</div>
+<div class="w-12 h-px bg-[#D9CDB8] my-2"></div>
+<p class="font-body-sm text-body-sm text-[#5C5346] text-center italic">
+            « Compteur officiel scellé jusqu'au premier nikah formellement validé devant témoins et tuteurs. Zéro donnée fictive, aucun chiffre artificiel. »
+          </p>
+</div>
+</div>
+</section>
+<!-- SECTION 2: PRINCIPES DÉONTOLOGIQUES DE PUBLICATION (FR-100) -->
+<section class="flex flex-col gap-6">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#D9CDB8] pb-4">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest block mb-1">Normes Rédactionnelles Sacrées</span>
+<h2 class="font-headline-md text-headline-md text-primary">Principes Déontologiques de Publication (FR-100)</h2>
+</div>
+<div class="inline-flex items-center gap-2 text-[#5C5346] font-body-sm text-body-sm bg-surface-container-high px-3 py-1.5 rounded-lg border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-base">shield_lock</span>
+<span>Sanctuaire Anti-Voyeurisme</span>
+</div>
+</div>
+<!-- Bento Grid of Ethical Pillars -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+<!-- Pillar 1: Consent Stories Only -->
+<div class="paper-surface rounded-xl archival-border p-6 flex flex-col justify-between hover:border-primary transition-colors duration-200">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-4 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-xl">draw</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-2">Consentement Double &amp; Écrit</h3>
+<p class="font-body-sm text-body-sm text-[#5C5346] leading-relaxed">
+              Strictement aucun témoignage unilatéral. L'accord manuscrit ou authentifié des deux époux et de leurs tuteurs respectifs est impératif avant toute mention.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-[#D9CDB8]/60 flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm uppercase">FR-100.1</span>
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+</div>
+<!-- Pillar 2: Haya & Facial Modesty -->
+<div class="paper-surface rounded-xl archival-border p-6 flex flex-col justify-between hover:border-primary transition-colors duration-200">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-4 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-xl">visibility_off</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-2">Pudeur des Visages (Haya)</h3>
+<p class="font-body-sm text-body-sm text-[#5C5346] leading-relaxed">
+              Portraits anonymisés, silhouettes décentes ou floutage protecteur. Le visage de l'épouse et du foyer demeure protégé du regard public non sanctifié.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-[#D9CDB8]/60 flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm uppercase">FR-100.2</span>
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+</div>
+<!-- Pillar 3: No Chat Excerpts -->
+<div class="paper-surface rounded-xl archival-border p-6 flex flex-col justify-between hover:border-primary transition-colors duration-200">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-4 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-xl">block</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-2">Secret des Échanges Privés</h3>
+<p class="font-body-sm text-body-sm text-[#5C5346] leading-relaxed">
+              Interdiction absolue de divulguer des captures d'écran de messagerie, discussions intimes ou confidences partagées durant la phase de ta'aruf.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-[#D9CDB8]/60 flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm uppercase">FR-100.3</span>
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+</div>
+<!-- Pillar 4: Zero Fake Profiles -->
+<div class="paper-surface rounded-xl archival-border p-6 flex flex-col justify-between hover:border-primary transition-colors duration-200">
+<div>
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary mb-4 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-xl">verified_user</span>
+</div>
+<h3 class="font-title-md text-title-md text-primary mb-2">Inviolabilité des Témoignages</h3>
+<p class="font-body-sm text-body-sm text-[#5C5346] leading-relaxed">
+              Rejet des pratiques de faux avis marketing ou de personas inventées. Chaque ligne consignée dans les annales est auditable par le conseil des sages.
+            </p>
+</div>
+<div class="mt-6 pt-4 border-t border-[#D9CDB8]/60 flex items-center justify-between text-secondary">
+<span class="font-label-sm text-label-sm uppercase">FR-100.4</span>
+<span class="material-symbols-outlined text-sm">lock</span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: SHOWCASE PRINCIPALE (ÉTAT D'ATTENTE SOLENNEL + PROTOCOLE DE RECUEIL) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- LEFT: ÉTAT D'ATTENTE SOLENNEL / EMPTY STATE OFFICIEL (FR-099) -->
+<div class="lg:col-span-7 paper-surface rounded-2xl archival-border p-8 md:p-10 flex flex-col items-center text-center">
+<!-- Arche décorative en miniature avec cachet -->
+<div class="w-20 h-24 mihrab-arch border-2 border-[#D9CDB8] bg-surface-container flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-3xl text-secondary" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<div class="inline-flex items-center gap-2 bg-[#1F3A5F] text-[#F4EDE0] rounded-[6px] px-3 py-1 mb-4">
+<span class="material-symbols-outlined text-xs">hourglass_empty</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider">État des Annales : En attente du premier acte</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary mb-4">
+          La Vérité avant le Spectacle Commercial
+        </h3>
+<p class="font-body-md text-body-md text-[#5C5346] max-w-lg mb-8 leading-relaxed">
+          Aucun témoignage prématuré n'est diffusé avant la validation complète et la célébration du premier nikah devant témoins, imams et tuteurs légaux. Le compteur public demeure scellé à <strong class="text-primary font-bold">0</strong> en hommage à la rigueur théologique et à la confiance des familles du Burkina Faso.
+        </p>
+<!-- Signature Ledger Preview Box -->
+<div class="w-full bg-surface-container-low rounded-xl archival-border p-5 text-left mb-8">
+<div class="flex items-center justify-between border-b border-[#D9CDB8] pb-3 mb-3">
+<span class="font-label-sm text-label-sm text-secondary uppercase font-semibold">Protocole d'inscription au registre</span>
+<span class="font-label-sm text-label-sm text-[#5C5346]">Code : AK-BURKINA-2025</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-lg mt-0.5">menu_book</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+              « Dès que les premiers vœux de nikah seront prononcés sous la protection d'Allah et certifiés par le conseil des tuteurs, les récits d'honneur approuvés prendront place dans ce sanctuaire public. »
+            </p>
+</div>
+</div>
+<!-- Secondary Action: Découvrir la charte d'intégrité -->
+<div class="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+<a class="w-full sm:w-auto inline-flex items-center justify-center min-h-[44px] px-6 rounded-xl border border-[#D9CDB8] text-[#5C5346] hover:bg-[#EFE6D5] font-label-md text-label-md transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-base mr-2">description</span>
+            Découvrir la charte d'intégrité
+          </a>
+<a class="w-full sm:w-auto inline-flex items-center justify-center min-h-[44px] px-6 rounded-xl bg-primary-container text-surface-container hover:bg-[#15283F] font-label-md text-label-md transition-colors duration-200" href="#">
+            Participer au cheminement
+          </a>
+</div>
+</div>
+<!-- RIGHT: APERÇU DU PROTOCOLE DE RECUEIL DE CONSENTEMENT D'ALLIANCE -->
+<div class="lg:col-span-5 bg-surface-container rounded-2xl archival-border-dark p-8 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary">policy</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-[#6F624C]">Procédure de Certification</span>
+</div>
+<h3 class="font-title-lg text-title-lg text-primary mb-3">
+            Les 3 Piliers d'un Récit Homologué
+          </h3>
+<p class="font-body-sm text-body-sm text-[#5C5346] mb-6">
+            Avant toute mention dans le Showcase officiel AnKanu, chaque récit traverse un examen rigoureux selon le droit coutumier et musulman :
+          </p>
+<!-- Step 1 -->
+<div class="flex gap-4 pb-5 border-b border-[#D9CDB8]">
+<div class="w-8 h-8 rounded-full bg-[#1F3A5F] text-[#F4EDE0] flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+              1
+            </div>
+<div>
+<h4 class="font-title-md text-title-md text-primary mb-1">Double consentement écrit</h4>
+<p class="font-body-sm text-body-sm text-[#5C5346]">
+                Signature conjointe d'un accord de publication délimitant avec précision les termes autorisés et excluant toute intimité conjugale.
+              </p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-4 py-5 border-b border-[#D9CDB8]">
+<div class="w-8 h-8 rounded-full bg-[#6B3D2E] text-[#F4EDE0] flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+              2
+            </div>
+<div>
+<h4 class="font-title-md text-title-md text-primary mb-1">Approbation formelle du Wali</h4>
+<p class="font-body-sm text-body-sm text-[#5C5346]">
+                Confirmation expresse du tuteur légal garantissant que la mise en lumière respecte le rang, la pudeur et l'honneur de la lignée familiale.
+              </p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-4 pt-5">
+<div class="w-8 h-8 rounded-full bg-secondary text-surface-container flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+              3
+            </div>
+<div>
+<h4 class="font-title-md text-title-md text-primary mb-1">Voilement &amp; Anonymisation</h4>
+<p class="font-body-sm text-body-sm text-[#5C5346]">
+                Garantie d'absence de détails géolocalisés précis, pseudonymisation des identités ou masquage bienveillant par respect du secret conjugal.
+              </p>
+</div>
+</div>
+</div>
+<!-- Sealed Institutional Assurance Box -->
+<div class="mt-8 pt-4 border-t border-[#6F624C]/30 flex items-center gap-3">
+<span class="material-symbols-outlined text-2xl text-secondary">gavel</span>
+<span class="font-label-sm text-label-sm text-[#5C5346]">
+            Protocole certifié conforme à la jurisprudence malikite et au respect des traditions burkinabè.
+          </span>
+</div>
+</div>
+</section>
+<!-- BANDEAU DE RÉASSURANCE ÉTHIQUE & SLA (FR-099) -->
+<section class="paper-surface rounded-xl archival-border p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0 border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-2xl text-[#6B3D2E]">favorite</span>
+</div>
+<div>
+<h4 class="font-title-md text-title-md text-primary mb-1">Zéro Algorithme de Suggestion Amoureuse</h4>
+<p class="font-body-md text-body-md text-[#5C5346]">
+            Médiation humaine, souveraineté des familles au Burkina Faso et en Afrique de l'Ouest, sous le regard protecteur des tuteurs.
+          </p>
+</div>
+</div>
+<div class="shrink-0 flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<span class="block font-label-sm text-label-sm text-[#5C5346] uppercase">Engagement Moral</span>
+<span class="block font-title-sm text-body-sm text-primary font-bold">100% Modéré &amp; Vérifié</span>
+</div>
+<div class="w-px h-8 bg-[#D9CDB8] hidden sm:block"></div>
+<span class="material-symbols-outlined text-secondary text-3xl">verified</span>
+</div>
+</section>
+</main>
+<!-- FOOTER INSTITUTIONNEL ANKANU (Derived from Shared Component Footer) -->
+<footer class="bg-surface-container text-primary border-t border-secondary/20 w-full mt-12">
+<div class="max-w-[1160px] mx-auto px-6 py-12 w-full flex flex-col gap-8">
+<!-- Top Section: Brand & Purpose -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 pb-8 border-b border-[#D9CDB8]">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<span class="font-headline-md text-headline-md text-primary tracking-tight">AnKanu</span>
+<span class="text-xs px-2 py-0.5 rounded bg-surface-container-high border border-[#D9CDB8] text-[#5C5346] uppercase font-semibold">Ta'aruf Honorable</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xl">
+            L'alliance noble et sincère, sous le regard des tuteurs et dans le respect des valeurs de foi, de famille et de dignité islamique en terre ouest-africaine.
+          </p>
+</div>
+<!-- Sovereign Cloud & Canon Security Indicator -->
+<div class="flex items-center gap-3 bg-surface-bright px-4 py-2.5 rounded-xl border border-[#D9CDB8]">
+<span class="material-symbols-outlined text-xl text-primary">cloud_done</span>
+<div class="text-left">
+<span class="block font-label-sm text-label-sm font-semibold text-primary">Hébergement Souverain</span>
+<span class="block text-[11px] text-[#5C5346]">Infrastructure sécurisée en France (Scaleway) &amp; Chiffrement de bout en bout</span>
+</div>
+</div>
+</div>
+<!-- Footer Navigation Links -->
+<div class="flex flex-wrap gap-y-3 gap-x-6">
+<a class="text-on-surface-variant hover:text-primary font-body-sm text-body-sm transition-colors duration-200" href="#">Charte Éthique &amp; Wali</a>
+<a class="text-on-surface-variant hover:text-primary font-body-sm text-body-sm transition-colors duration-200" href="#">L'Académie Pré-Maritale</a>
+<a class="text-on-surface-variant hover:text-primary font-body-sm text-body-sm transition-colors duration-200" href="#">Conseil Consultatif</a>
+<a class="text-on-surface-variant hover:text-primary font-body-sm text-body-sm transition-colors duration-200" href="#">Politique de Pudeur &amp; Confidentialité</a>
+<a class="text-on-surface-variant hover:text-primary font-body-sm text-body-sm transition-colors duration-200" href="#">Conditions Générales</a>
+<a class="text-on-surface-variant hover:text-primary font-body-sm text-body-sm transition-colors duration-200" href="#">Foire Aux Questions</a>
+</div>
+<!-- Bottom Bar: Copyright & Solemn Dedication -->
+<div class="pt-6 border-t border-[#D9CDB8]/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-center sm:text-left">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          © 2025 AnKanu. Tous droits réservés. L'alliance noble et sincère, sous le regard des tuteurs et dans le respect des valeurs de foi.
+        </p>
+<div class="flex items-center gap-2 text-secondary font-label-sm text-label-sm">
+<span>Burkina Faso</span>
+<span>•</span>
+<span>Afrique de l'Ouest</span>
+<span>•</span>
+<span>Conformité FR-099 &amp; FR-100</span>
+</div>
+</div>
+</div>
+</footer>
+</body></html>

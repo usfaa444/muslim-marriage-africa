@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu Administration — T&amp;S Visit Signals (FR-027)</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#d3e4ff",
+            "secondary": "#755b18",
+            "danger-soft": "#F3E0DC",
+            "on-tertiary": "#ffffff",
+            "surface-bright": "#fff9ee",
+            "on-secondary-fixed-variant": "#5b4300",
+            "staff": "#6B3D2E",
+            "ink-secondary": "#5C5346",
+            "surface-tint": "#465f86",
+            "inverse-on-surface": "#f7f0e3",
+            "surface": "#fff9ee",
+            "on-primary": "#ffffff",
+            "on-surface": "#1e1b14",
+            "success": "#3D5C45",
+            "on-secondary-fixed": "#251a00",
+            "on-primary-fixed": "#001c3b",
+            "mihrab": "#2C4A6E",
+            "surface-variant": "#e9e2d5",
+            "surface-dim": "#e0d9cd",
+            "on-tertiary-fixed": "#001c38",
+            "surface-indigo": "#15283F",
+            "primary": "#032448",
+            "error": "#ba1a1a",
+            "on-background": "#1e1b14",
+            "indigo": "#1F3A5F",
+            "focus-ring": "#1F3A5F",
+            "surface-raised": "#FFFBF4",
+            "primary-fixed": "#d5e3ff",
+            "on-secondary-container": "#785d1b",
+            "inverse-primary": "#aec8f4",
+            "ink-on-indigo": "#F4EDE0",
+            "background": "#fff9ee",
+            "gold-soft": "#E8D5A3",
+            "tertiary": "#002546",
+            "secondary-fixed": "#ffdf9c",
+            "border-strong": "#6F624C",
+            "on-surface-variant": "#43474e",
+            "border-hairline": "#D9CDB8",
+            "primary-fixed-dim": "#aec8f4",
+            "ink-primary": "#1B2433",
+            "outline": "#74777f",
+            "surface-container-high": "#eee7db",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#8ba4cf",
+            "danger": "#8B3A3A",
+            "on-tertiary-container": "#88a5ce",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed-dim": "#e5c276",
+            "disabled": "#B5A894",
+            "surface-container-highest": "#e9e2d5",
+            "gold": "#C4A35A",
+            "blur-wash": "#C8BBA6",
+            "tertiary-container": "#1b3b5e",
+            "indigo-deep": "#15283F",
+            "on-primary-fixed-variant": "#2d476d",
+            "outline-variant": "#c4c6cf",
+            "success-soft": "#DCE6DE",
+            "on-error": "#ffffff",
+            "surface-container-low": "#faf3e6",
+            "inverse-surface": "#333028",
+            "surface-container": "#f4ede0",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-secondary": "#ffffff",
+            "error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-sand": "#F4EDE0",
+            "primary-container": "#1f3a5f",
+            "staff-soft": "#EFE4DC",
+            "secondary-container": "#fdd88a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "space-xs": "0.25rem",
+            "6": "32px",
+            "3": "12px",
+            "screen-pad": "16px",
+            "margin": "1rem",
+            "7": "48px",
+            "5": "24px",
+            "gutter": "16px",
+            "4": "16px",
+            "2": "8px",
+            "1": "4px",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem"
+          },
+          "fontFamily": {
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""]
+          },
+          "fontSize": {
+            "meta": ["13px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+            "heading": ["18px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "body": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "display": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+            "caption": ["12px", {"lineHeight": "1.4", "fontWeight": "400"}],
+            "body-strong": ["16px", {"lineHeight": "1.5", "fontWeight": "600"}],
+            "title": ["22px", {"lineHeight": "1.25", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col bg-surface-sand text-ink-primary antialiased selection:bg-gold-soft selection:text-ink-primary">
+<!-- TOP APP BAR (from Shared Components JSON: TopNavBar) -->
+<header class="bg-surface-raised dark:bg-surface-indigo border-b border-border-hairline dark:border-border-strong sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-7xl mx-auto">
+<!-- Brand & Platform Identity -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-surface-indigo flex items-center justify-center text-gold border border-gold/40 shadow-sm">
+<span class="material-symbols-outlined text-gold" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-heading font-heading text-primary dark:text-gold tracking-tight font-bold">AnKanu Administration</span>
+<span class="bg-staff text-surface-raised font-meta text-caption px-2 py-0.5 rounded-full uppercase tracking-wider font-semibold">Équipe seulement</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary">Console Contrôle &amp; Déontologie • Juridiction CIL Burkina Faso</p>
+</div>
+</div>
+<!-- Institutional Links from JSON -->
+<nav class="hidden lg:flex items-center gap-5 ml-4">
+<a class="text-ink-secondary dark:text-surface-sand hover:text-primary dark:hover:text-gold font-body transition-colors text-meta py-1" href="#">Dossiers de Ta'aruf</a>
+<a class="text-ink-secondary dark:text-surface-sand hover:text-primary dark:hover:text-gold font-body transition-colors text-meta py-1" href="#">Médiations &amp; Wali</a>
+<a class="text-primary dark:text-gold border-b-2 border-primary dark:border-gold font-body-strong pb-1 text-meta flex items-center gap-1.5" href="#">
+<span>Conformité CIL BF</span>
+<span class="w-1.5 h-1.5 rounded-full bg-danger inline-block"></span>
+</a>
+<a class="text-ink-secondary dark:text-surface-sand hover:text-primary dark:hover:text-gold font-body transition-colors text-meta py-1" href="#">Registres d'Audit</a>
+</nav>
+</div>
+<!-- Trailing Controls & Officer Stamp -->
+<div class="flex items-center gap-3">
+<div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded bg-surface-sand border border-border-hairline">
+<span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
+<div class="text-left">
+<p class="font-meta text-caption text-ink-primary font-semibold">Inspecteur CIL #BF-8840</p>
+<p class="font-caption text-[11px] text-ink-secondary">Antenne Ouagadougou</p>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-2 rounded text-ink-secondary hover:bg-surface-sand dark:hover:bg-primary-container transition-colors duration-150" title="Notifications réglementaires">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 rounded text-ink-secondary hover:bg-surface-sand dark:hover:bg-primary-container transition-colors duration-150" title="Actes de justice &amp; déontologie">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+</button>
+<button class="p-2 rounded text-ink-secondary hover:bg-surface-sand dark:hover:bg-primary-container transition-colors duration-150" title="Session Inspecteur CIL">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</button>
+</div>
+<div class="w-8 h-8 rounded-full border border-border-strong overflow-hidden bg-primary/10 flex items-center justify-center" title="Portrait de l'administrateur de garde AnKanu">
+<img class="w-full h-full object-cover" data-alt="Portrait sobre et officiel d'un inspecteur burkinabè de la Commission de l'Informatique et des Libertés, vêtu d'une chemise traditionnelle en cotonnade Faso Dan Fani bleu indigo, éclairage doux institutionnel et regard bienveillant et solennel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4r-1cTsy6gi7d8Fl8FbXs77nSrLvLwkLdouyIHHGJAl5V18mutYhuPUM4LSNZgxMIZkJUrzctIcZn4PcS769BJgFta-7K47X21f4ELd9atRUjZhYR5oQdhfEUNaL-7v-7dE4AwhTRaUd97xk8FIVB76igs3jYs-vlEuPqDt2g1aE0_OMukcaTuALHLt6I261pVk7DeiDIhxmaSK9o1h94lXXQ6a_dfKGd2RMkVVmvvl2haj6n63qkm25iAGWvna_BGSr_tY-bzdFb"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SUB-HEADER CONTEXT BAR & AUDIT SIMULATION TOGGLES -->
+<section class="bg-surface-sand border-b border-border-hairline py-3 px-6 shadow-sm">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+<!-- Breadcrumb & Context Title -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 text-caption font-caption text-ink-secondary">
+<span>Modérateur</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Menu Contrôle &amp; Déontologie</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="font-semibold text-ink-primary">Signaux comportementaux T&amp;S (FR-027)</span>
+</div>
+<span class="hidden sm:inline-block h-3.5 w-px bg-border-hairline"></span>
+<span class="bg-staff-soft text-staff text-caption font-meta px-2.5 py-0.5 rounded-full font-medium border border-border-hairline">
+          Surveillance déontologique sans profilage commercial
+        </span>
+</div>
+<!-- Simulation State Bar for CIL Audit Reviews -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 text-caption font-meta">
+<span class="text-ink-secondary text-caption mr-1 font-medium">Scénarios d'audit :</span>
+<button class="px-2.5 py-1 rounded-md bg-surface-indigo text-ink-on-indigo font-medium border border-surface-indigo flex items-center gap-1" id="sim-btn-active" onclick="switchState('active')">
+<span class="w-2 h-2 rounded-full bg-gold"></span>
+<span>1. File active (3 cas)</span>
+</button>
+<button class="px-2.5 py-1 rounded-md bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline" id="sim-btn-empty" onclick="switchState('empty')">
+          2. File vide (Sain)
+        </button>
+<button class="px-2.5 py-1 rounded-md bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline" id="sim-btn-error" onclick="switchState('error')">
+          3. Erreur passerelle CIL
+        </button>
+<button class="px-2.5 py-1 rounded-md bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline" id="sim-btn-sealed" onclick="switchState('sealed')">
+          4. Action scellée
+        </button>
+</div>
+</div>
+</section>
+<!-- CANONICAL RULE BANNER: INVIOLABILITÉ ET REFUS ABSOLU DU VOYEURISME (FR-027) -->
+<div class="bg-surface-indigo text-ink-on-indigo border-b border-border-strong px-6 py-2.5">
+<div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gold" style="font-variation-settings: 'FILL' 1;">visibility_off</span>
+<p class="font-meta text-caption text-surface-sand leading-tight">
+<strong class="text-gold font-semibold uppercase tracking-wide">Règle de Pudeur &amp; Intégrité (FR-027) :</strong>
+          Aucun profil membre n'a accès à la liste des visiteurs de son profil (Interdiction formelle des listes de visiteurs côté membre). Détection backend exclusive pour préserver la quiétude et prévenir le voyeurisme numérique.
+        </p>
+</div>
+<div class="hidden xl:flex items-center gap-2 text-caption font-meta text-gold-soft whitespace-nowrap">
+<span class="material-symbols-outlined text-[16px]">gavel</span>
+<span>Seuil limite canonique : 50 fiches / 24h</span>
+</div>
+</div>
+</div>
+<!-- MAIN OPERATOR WORKSPACE (Two-Pane Layout from 768px/1024px) -->
+<div class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col">
+<!-- ERROR BANNER (Contextual State: Scenario 3) -->
+<div class="hidden mb-6 p-4 rounded-xl bg-danger-soft border border-danger/40 text-danger flex items-start justify-between gap-3" id="state-error-banner">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-[22px] mt-0.5">warning</span>
+<div>
+<h4 class="font-body-strong text-body font-semibold text-danger">Rupture de flux de télémétrie CIL-04 (Ouagadougou / Scaleway)</h4>
+<p class="font-body text-meta text-ink-secondary mt-0.5">Le pipeline d'ingestion d'événements de consultation anonymisés est temporairement suspendu par mesure de sécurité cryptographique. Les compteurs de saturation sont conservés en cache immuable.</p>
+</div>
+</div>
+<button class="text-caption font-meta uppercase font-bold text-danger hover:underline px-2 py-1" onclick="switchState('active')">Réessayer la synchronisation</button>
+</div>
+<!-- SEALED CONFIRMATION BANNER (Contextual State: Scenario 4) -->
+<div class="hidden mb-6 p-4 rounded-xl bg-success-soft border border-success/40 text-success flex items-center justify-between" id="state-sealed-banner">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-success" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<h4 class="font-body-strong text-body font-semibold text-success">Décision conservatoire scellée au Registre d'Audit CIL</h4>
+<p class="font-body text-meta text-ink-secondary">Le protocole #DEC-BF-2025-0914 a été horodaté et notifié au pôle modération. Suspension de consultation de 24h active.</p>
+</div>
+</div>
+<button class="font-meta text-caption text-ink-primary font-semibold hover:underline" onclick="switchState('active')">Reprendre la file active</button>
+</div>
+<!-- WORKSPACE CONTAINER -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start flex-1" id="state-workspace">
+<!-- LEFT PANE: SIGNAL QUEUE / ALERTES DE VOYEURISME (4 Cols on LG) -->
+<aside class="lg:col-span-5 flex flex-col gap-4">
+<!-- Queue Header with Filters & Staff Pill -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<h2 class="font-heading text-heading text-ink-primary">File Déontologique</h2>
+<span class="bg-staff text-surface-raised font-meta text-[11px] px-2 py-0.5 rounded-full font-semibold">Équipe seulement</span>
+</div>
+<span class="text-caption font-meta text-danger font-semibold bg-danger-soft px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+              3 alertes actives
+            </span>
+</div>
+<p class="font-body text-caption text-ink-secondary leading-relaxed">
+            Profils ayant franchi la règle canonique FR-027 : <strong>&gt;50 consultations en 24h</strong> sans démarche d'alliance sincère (*Ta'aruf*).
+          </p>
+<!-- Search / Filter Mini Bar -->
+<div class="mt-3 flex items-center gap-2">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-secondary text-[18px]">search</span>
+<input class="w-full pl-8 pr-3 py-1.5 text-meta font-body bg-surface-sand border border-border-hairline rounded-lg focus:ring-1 focus:ring-focus-ring focus:border-border-strong text-ink-primary placeholder:text-ink-secondary/60" placeholder="Filtrer par pseudonyme ou ville..." type="text"/>
+</div>
+<button class="p-1.5 rounded-lg border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary" title="Filtrer">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+</button>
+</div>
+</div>
+<!-- QUEUE LIST (Bento-style stacked records) -->
+<div class="space-y-3" id="queue-cards-container">
+<!-- ITEM 1: SELECTED (Karim_Kdg) -->
+<div class="cursor-pointer bg-surface-raised border-2 border-indigo rounded-xl p-4 shadow-sm transition-all duration-150 relative overflow-hidden" id="card-karim" onclick="selectCase('karim')">
+<div class="absolute top-0 left-0 bottom-0 w-1.5 bg-indigo"></div>
+<div class="flex items-start justify-between gap-2 pl-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-heading text-heading text-ink-primary">Karim_Kdg</span>
+<span class="bg-success-soft text-success text-[11px] font-meta px-1.5 py-0.2 rounded font-medium border border-success/30">CNIB Vérifiée</span>
+<span class="bg-staff text-surface-raised text-[10px] font-meta px-1.5 py-0.2 rounded font-bold uppercase">Staff</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-0.5">Arr. Baskuy, Ouagadougou • Membre depuis 3 mois</p>
+</div>
+<span class="bg-danger text-surface-raised text-[11px] font-meta font-bold px-2 py-0.5 rounded-full">
+                Seuil franchi
+              </span>
+</div>
+<!-- Quantitative Telemetry Pills -->
+<div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-border-hairline pl-2">
+<div class="bg-surface-sand p-2 rounded-lg border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Consultations 24h</span>
+<span class="font-body-strong text-body text-danger font-bold">64 profils</span>
+</div>
+<div class="bg-surface-sand p-2 rounded-lg border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Invitations</span>
+<span class="font-body-strong text-body text-ink-primary font-bold">0 émise</span>
+</div>
+<div class="bg-surface-sand p-2 rounded-lg border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Temps / Fiche</span>
+<span class="font-body-strong text-body text-danger font-bold">4.2s (Zapping)</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-3 text-caption font-meta pl-2 text-ink-secondary">
+<span class="flex items-center gap-1 text-danger font-medium">
+<span class="material-symbols-outlined text-[15px]">timer</span>
+                SLA d'instruction : 4h restantes
+              </span>
+<span class="text-ink-secondary">Détecté il y a 2h</span>
+</div>
+</div>
+<!-- ITEM 2: OUSMANE_B -->
+<div class="cursor-pointer bg-surface-raised border border-border-hairline hover:border-border-strong rounded-xl p-4 shadow-sm transition-all duration-150 relative" id="card-ousmane" onclick="selectCase('ousmane')">
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-heading text-heading text-ink-primary">Ousmane_B</span>
+<span class="bg-surface-sand text-ink-secondary text-[11px] font-meta px-1.5 py-0.2 rounded font-medium border border-border-hairline">Bobo-Dioulasso</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-0.5">Secteur 15 • Consultation exhaustive nocturne</p>
+</div>
+<span class="bg-danger-soft text-danger text-[11px] font-meta font-semibold px-2 py-0.5 rounded-full">
+                52 / 24h
+              </span>
+</div>
+<div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-border-hairline">
+<div class="bg-surface-sand p-1.5 rounded border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Consultations</span>
+<span class="font-body-strong text-meta text-ink-primary font-semibold">52 profils</span>
+</div>
+<div class="bg-surface-sand p-1.5 rounded border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Invitations</span>
+<span class="font-body-strong text-meta text-ink-primary font-semibold">0 émise</span>
+</div>
+<div class="bg-surface-sand p-1.5 rounded border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Période</span>
+<span class="font-body-strong text-meta text-ink-primary font-semibold">01h - 04h matin</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2.5 text-caption font-meta text-ink-secondary">
+<span class="text-ink-secondary">Curiosité nocturne passive</span>
+<span>Détecté il y a 5h</span>
+</div>
+</div>
+<!-- ITEM 3: SOULEY_OUAGA -->
+<div class="cursor-pointer bg-surface-raised border border-border-hairline hover:border-border-strong rounded-xl p-4 shadow-sm transition-all duration-150 relative" id="card-souley" onclick="selectCase('souley')">
+<div class="flex items-start justify-between gap-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-heading text-heading text-ink-primary">Souley_Ouaga</span>
+<span class="bg-surface-sand text-ink-secondary text-[11px] font-meta px-1.5 py-0.2 rounded font-medium border border-border-hairline">Ouaga 2000</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-0.5">Zone Sud • Profil récidiviste sous surveillance</p>
+</div>
+<span class="bg-danger-soft text-danger text-[11px] font-meta font-semibold px-2 py-0.5 rounded-full">
+                58 / 14h
+              </span>
+</div>
+<div class="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-border-hairline">
+<div class="bg-surface-sand p-1.5 rounded border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Consultations</span>
+<span class="font-body-strong text-meta text-ink-primary font-semibold">58 profils</span>
+</div>
+<div class="bg-surface-sand p-1.5 rounded border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Invitations</span>
+<span class="font-body-strong text-meta text-ink-primary font-semibold">0 émise</span>
+</div>
+<div class="bg-surface-sand p-1.5 rounded border border-border-hairline">
+<span class="font-caption text-[11px] text-ink-secondary block">Antécédent</span>
+<span class="font-body-strong text-meta text-staff font-semibold">1 rappel FR-027</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2.5 text-caption font-meta text-ink-secondary">
+<span class="text-staff font-medium">Récidive potentielle</span>
+<span>Détecté il y a 7h</span>
+</div>
+</div>
+</div>
+<!-- EMPTY STATE (Contextual State: Scenario 2) -->
+<div class="hidden bg-surface-raised border border-border-hairline rounded-xl p-8 text-center" id="state-empty-container">
+<div class="w-12 h-12 mx-auto rounded-full bg-success-soft flex items-center justify-center text-success mb-3">
+<span class="material-symbols-outlined text-[24px]">verified</span>
+</div>
+<h3 class="font-heading text-heading text-ink-primary mb-1">File Déontologique Conforme</h3>
+<p class="font-body text-meta text-ink-secondary max-w-sm mx-auto">
+            Aucun membre n'a franchi le seuil de 50 profils consultés en 24h. Le climat de recueillement et de respect mutuel est parfaitement préservé.
+          </p>
+</div>
+<!-- LEGAL & AUDIT GUARANTEE NOTICE -->
+<div class="bg-staff-soft/60 border border-border-hairline rounded-xl p-3.5 text-caption font-meta text-ink-secondary">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-staff text-[18px] mt-0.5">policy</span>
+<div>
+<span class="font-semibold text-staff">Conformité CIL (Loi 010-2004/AN) :</span>
+              Les signaux ci-dessus sont des métriques agrégées sans journalisation nominative des tiers consultés. Aucun algorithme commercial d'engagement n'est déployé.
+            </div>
+</div>
+</div>
+</aside>
+<!-- RIGHT PANE: DETAILED CASE INSTRUCTION & BEHAVIORAL TELEMETRY (7 Cols on LG) -->
+<main class="lg:col-span-7 flex flex-col gap-5">
+<!-- CASE HEADER CARD -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border-hairline pb-4">
+<div>
+<div class="flex items-center gap-2">
+<span class="text-caption font-caption text-ink-secondary uppercase tracking-wider font-semibold">Instruction Déontologique</span>
+<span class="text-border-strong">•</span>
+<span class="text-caption font-caption text-primary font-bold">Dossier T&amp;S #VISIT-2025-042</span>
+<span class="bg-staff text-surface-raised text-[10px] font-meta px-2 py-0.5 rounded-full font-bold uppercase">Équipe seulement</span>
+</div>
+<h1 class="font-display text-display text-ink-primary tracking-tight mt-1" id="case-title">
+                Profil « Karim_Kdg »
+              </h1>
+<p class="font-body text-meta text-ink-secondary" id="case-subtitle">
+                Identifiant CNIB vérifié • Arrondissement de Baskuy, Ouagadougou
+              </p>
+</div>
+<div class="flex sm:flex-col items-end gap-1">
+<span class="bg-danger text-surface-raised font-meta text-caption px-3 py-1 rounded-full font-semibold">
+                Saturation Passive Critique
+              </span>
+<span class="font-caption text-caption text-ink-secondary">Saisine automatique par passerelle CIL-BF</span>
+</div>
+</div>
+<!-- BENTO METRIC BREAKDOWN (FR-027 Core Metrics) -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+<div class="bg-surface-sand p-3 rounded-lg border border-border-hairline">
+<div class="flex items-center justify-between text-ink-secondary mb-1">
+<span class="font-caption text-[11px] uppercase tracking-wide font-semibold">Compteur 24h</span>
+<span class="material-symbols-outlined text-[16px] text-danger">browse_activity</span>
+</div>
+<p class="font-title text-title text-danger font-bold" id="m-views">64</p>
+<p class="font-caption text-[11px] text-ink-secondary mt-0.5">Seuil limite : 50 fiches</p>
+</div>
+<div class="bg-surface-sand p-3 rounded-lg border border-border-hairline">
+<div class="flex items-center justify-between text-ink-secondary mb-1">
+<span class="font-caption text-[11px] uppercase tracking-wide font-semibold">Invitations</span>
+<span class="material-symbols-outlined text-[16px] text-ink-secondary">forward_to_inbox</span>
+</div>
+<p class="font-title text-title text-ink-primary font-bold" id="m-invites">0</p>
+<p class="font-caption text-[11px] text-ink-secondary mt-0.5">Ratio d'inhibition : 100%</p>
+</div>
+<div class="bg-surface-sand p-3 rounded-lg border border-border-hairline">
+<div class="flex items-center justify-between text-ink-secondary mb-1">
+<span class="font-caption text-[11px] uppercase tracking-wide font-semibold">Temps moyen</span>
+<span class="material-symbols-outlined text-[16px] text-danger">speed</span>
+</div>
+<p class="font-title text-title text-danger font-bold" id="m-time">4.2s</p>
+<p class="font-caption text-[11px] text-ink-secondary mt-0.5">Indice de zapping profane</p>
+</div>
+<div class="bg-surface-sand p-3 rounded-lg border border-border-hairline">
+<div class="flex items-center justify-between text-ink-secondary mb-1">
+<span class="font-caption text-[11px] uppercase tracking-wide font-semibold">Sceau Pudeur</span>
+<span class="material-symbols-outlined text-[16px] text-success">lock</span>
+</div>
+<p class="font-title text-title text-ink-primary font-bold" id="m-reveals">0</p>
+<p class="font-caption text-[11px] text-ink-secondary mt-0.5">Zéro demande de flou</p>
+</div>
+</div>
+</div>
+<!-- DIAGNOSTIC DÉONTOLOGIQUE & PATTERN EXPLANATION -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 shadow-sm space-y-4">
+<div class="flex items-center gap-2 border-b border-border-hairline pb-3">
+<span class="material-symbols-outlined text-secondary text-[20px]">psychology_alt</span>
+<h3 class="font-heading text-heading text-ink-primary">Analyse Comportementale &amp; Diagnostic Déontologique</h3>
+</div>
+<div class="p-3.5 rounded-lg bg-surface-sand border-l-4 border-secondary space-y-2">
+<h4 class="font-body-strong text-body font-semibold text-ink-primary">
+              Détection d'un usage détourné assimilé à de la curiosité profane ou voyeurisme passif (FR-027)
+            </h4>
+<p class="font-body text-meta text-ink-secondary leading-relaxed" id="case-narrative">
+              Le profil a fait défiler 64 fiches de prétendantes en 18 heures avec une rétention moyenne de 4.2 secondes par profil. Ce comportement traduit une consultation compulsive de type « catalogue profane », en rupture totale avec la démarche posée du *Ta'aruf* qui requiert lecture méditée et respect de la sacralité de la recherche maritale. Aucune prise de contact formelle n'a été engagée.
+            </p>
+</div>
+<!-- Strict Safeguard Reminder -->
+<div class="flex items-start gap-3 p-3 rounded-lg bg-surface-indigo/5 border border-border-hairline text-caption font-meta text-ink-secondary">
+<span class="material-symbols-outlined text-primary text-[18px] mt-0.5">shield</span>
+<div>
+<strong class="text-primary font-semibold">Garantie d'étanchéité et d'absence de stigmate :</strong>
+              Le membre concerné ignore qu'il fait l'objet d'un signalement T&amp;S. De même, aucune des sœurs consultées ne reçoit de notification de visite, conformément à l'absence stricte de compteurs de popularité sur AnKanu.
+            </div>
+</div>
+</div>
+<!-- CONSERVATORY SANCTIONS SELECTOR (FR-027 / FR-085) -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 shadow-sm space-y-4">
+<div class="flex items-center justify-between border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-staff text-[20px]">balance</span>
+<h3 class="font-heading text-heading text-ink-primary">Mesures Conservatoires Prévues (CIL Burkina Faso)</h3>
+</div>
+<span class="text-caption font-meta text-ink-secondary">Obligation de motivation écrite</span>
+</div>
+<!-- Radio Options for Officer -->
+<div class="space-y-3">
+<!-- Option A -->
+<label class="flex items-start gap-3 p-3.5 rounded-xl border border-border-strong bg-surface-sand/80 cursor-pointer hover:bg-surface-sand transition-colors">
+<input checked="" class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="sanction_type" type="radio" value="level_1"/>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body text-ink-primary font-semibold">Option A (Échelon 1) — Rappel protocolaire de pudeur par SMS &amp; Suspension 24h</span>
+<span class="bg-gold-soft text-ink-primary text-caption font-meta px-2 py-0.5 rounded font-medium">Recommandé</span>
+</div>
+<p class="font-body text-meta text-ink-secondary mt-1">
+                  Envoi d'un message bienveillant rappelant l'éthique de la démarche matrimoniale. Suspension temporaire de l'accès aux fiches pendant 24 heures pour encourager l'introspection.
+                </p>
+</div>
+</label>
+<!-- Option B -->
+<label class="flex items-start gap-3 p-3.5 rounded-xl border border-border-hairline bg-surface-raised cursor-pointer hover:bg-surface-sand transition-colors">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="sanction_type" type="radio" value="level_2"/>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body text-ink-primary font-semibold">Option B (Échelon 2) — Gel temporaire et quota strict (3 fiches / jour pendant 7j)</span>
+<span class="bg-danger-soft text-danger text-caption font-meta px-2 py-0.5 rounded font-medium">Rigoureux</span>
+</div>
+<p class="font-body text-meta text-ink-secondary mt-1">
+                  Restriction sévère de la consultation en lecture seule. Notification protocolaire au Wali du prétendant s'il est formellement rattaché au compte.
+                </p>
+</div>
+</label>
+<!-- Option C -->
+<label class="flex items-start gap-3 p-3.5 rounded-xl border border-border-hairline bg-surface-raised cursor-pointer hover:bg-surface-sand transition-colors">
+<input class="mt-1 text-indigo focus:ring-focus-ring border-border-strong" name="sanction_type" type="radio" value="level_0"/>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-body-strong text-body text-ink-primary font-semibold">Option C — Classement sans suite motivé</span>
+<span class="bg-surface-sand text-ink-secondary text-caption font-meta px-2 py-0.5 rounded font-medium">Levée d'alerte</span>
+</div>
+<p class="font-body text-meta text-ink-secondary mt-1">
+                  Justification d'une recherche géographique large légitime lors de la première installation de l'application, sans intention de voyeurisme avérée.
+                </p>
+</div>
+</label>
+</div>
+<!-- Officer Motivation Input -->
+<div class="pt-2">
+<label class="block font-meta text-caption text-ink-secondary mb-1" for="officer-notes">
+              Motivation légale de l'officier instructeur (Obligatoire pour audit CIL) :
+            </label>
+<textarea class="w-full bg-surface-sand border border-border-hairline rounded-lg p-3 text-meta font-body text-ink-primary focus:ring-1 focus:ring-focus-ring focus:border-border-strong placeholder:text-ink-secondary/60" id="officer-notes" placeholder="Précisez les motifs de la mesure au titre de l'article FR-027 du code de déontologie AnKanu..." rows="3"></textarea>
+</div>
+<!-- Action Submission Bar -->
+<div class="pt-3 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2 text-caption font-meta text-ink-secondary">
+<span class="material-symbols-outlined text-[16px] text-gold">verified_user</span>
+<span>Scellement cryptographique sous autorité CIL Ouagadougou</span>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="w-full sm:w-auto px-4 py-2.5 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand text-meta font-semibold transition-colors" onclick="resetForm()" type="button">
+                Réinitialiser
+              </button>
+<button class="w-full sm:w-auto min-h-[48px] px-6 py-2.5 rounded-full bg-indigo text-ink-on-indigo hover:bg-indigo-deep text-meta font-body-strong transition-all duration-150 flex items-center justify-center gap-2 shadow-sm" onclick="executeSeal()" type="button">
+<span class="material-symbols-outlined text-gold" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<span>Consigner et sceller la décision T&amp;S (CIL BF)</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- INSTITUTIONAL FOOTER -->
+<footer class="bg-surface-raised border-t border-border-hairline mt-auto py-4 px-6">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-caption font-meta text-ink-secondary">
+<div class="flex items-center gap-3">
+<span class="font-semibold text-ink-primary">AnKanu Administration Déontologique</span>
+<span>•</span>
+<span>Conforme à la Loi 010-2004/AN relative à la protection des données à caractère personnel</span>
+<span>•</span>
+<span>Autorisation CIL Burkina Faso n°2024-CIL-BF/091</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="flex items-center gap-1.5 text-success">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+          Serveurs souverains chiffrés (Scaleway Paris / Relais Ouaga)
+        </span>
+<span>•</span>
+<span>Zéro profilage publicitaire</span>
+</div>
+</div>
+</footer>
+<!-- SCRIPT LOGIC FOR STATE SWITCHING & CASE SELECTION -->
+<script>
+    const cases = {
+      karim: {
+        id: "VISIT-2025-042",
+        title: "Profil « Karim_Kdg »",
+        subtitle: "Identifiant CNIB vérifié • Arrondissement de Baskuy, Ouagadougou",
+        views: "64",
+        invites: "0",
+        time: "4.2s",
+        reveals: "0",
+        narrative: "Le profil a fait défiler 64 fiches de prétendantes en 18 heures avec une rétention moyenne de 4.2 secondes par profil. Ce comportement traduit une consultation compulsive de type « catalogue profane », en rupture totale avec la démarche posée du Ta'aruf qui requiert lecture méditée et respect de la sacralité de la recherche maritale. Aucune prise de contact formelle n'a été engagée."
+      },
+      ousmane: {
+        id: "VISIT-2025-043",
+        title: "Profil « Ousmane_B »",
+        subtitle: "Résident Secteur 15 • Bobo-Dioulasso",
+        views: "52",
+        invites: "0",
+        time: "6.8s",
+        reveals: "0",
+        narrative: "Consultation intégrale et concentrée entre 01h15 et 04h00 du matin. 52 profils féminins visualisés sans aucune consultation des critères religieux ou de garde chaperonnée (Wali). Comportement nocturne passif nécessitant rappel protocolaire déontologique."
+      },
+      souley: {
+        id: "VISIT-2025-044",
+        title: "Profil « Souley_Ouaga »",
+        subtitle: "Zone Sud • Ouaga 2000 (Récidive signalée)",
+        views: "58",
+        invites: "0",
+        time: "5.1s",
+        reveals: "1",
+        narrative: "Deuxième saisine en 30 jours pour saturation de requêtes passives. 58 profils parcourus en moins de 14 heures sans aucune lettre d'intention transmise aux Walis respectifs. Risque avéré de curiosité mondaine sans intention d'alliance."
+      }
+    };
+
+    function selectCase(key) {
+      const data = cases[key];
+      if (!data) return;
+
+      // Update text fields
+      document.getElementById('case-title').innerText = data.title;
+      document.getElementById('case-subtitle').innerText = data.subtitle;
+      document.getElementById('m-views').innerText = data.views;
+      document.getElementById('m-invites').innerText = data.invites;
+      document.getElementById('m-time').innerText = data.time;
+      document.getElementById('m-reveals').innerText = data.reveals;
+      document.getElementById('case-narrative').innerText = data.narrative;
+
+      // Highlight cards
+      ['karim', 'ousmane', 'souley'].forEach(k => {
+        const el = document.getElementById('card-' + k);
+        if (el) {
+          if (k === key) {
+            el.className = "cursor-pointer bg-surface-raised border-2 border-indigo rounded-xl p-4 shadow-sm transition-all duration-150 relative overflow-hidden";
+          } else {
+            el.className = "cursor-pointer bg-surface-raised border border-border-hairline hover:border-border-strong rounded-xl p-4 shadow-sm transition-all duration-150 relative";
+          }
+        }
+      });
+    }
+
+    function switchState(state) {
+      const workspace = document.getElementById('state-workspace');
+      const errBanner = document.getElementById('state-error-banner');
+      const sealedBanner = document.getElementById('state-sealed-banner');
+      const queueList = document.getElementById('queue-cards-container');
+      const emptyCont = document.getElementById('state-empty-container');
+
+      // Reset button styles
+      ['active', 'empty', 'error', 'sealed'].forEach(s => {
+        const btn = document.getElementById('sim-btn-' + s);
+        if (btn) {
+          if (s === state) {
+            btn.className = "px-2.5 py-1 rounded-md bg-surface-indigo text-ink-on-indigo font-medium border border-surface-indigo flex items-center gap-1";
+          } else {
+            btn.className = "px-2.5 py-1 rounded-md bg-surface-raised text-ink-secondary hover:text-ink-primary border border-border-hairline";
+          }
+        }
+      });
+
+      // Default hide
+      errBanner.classList.add('hidden');
+      sealedBanner.classList.add('hidden');
+      emptyCont.classList.add('hidden');
+      queueList.classList.remove('hidden');
+
+      if (state === 'active') {
+        selectCase('karim');
+      } else if (state === 'empty') {
+        queueList.classList.add('hidden');
+        emptyCont.classList.remove('hidden');
+      } else if (state === 'error') {
+        errBanner.classList.remove('hidden');
+      } else if (state === 'sealed') {
+        sealedBanner.classList.remove('hidden');
+      }
+    }
+
+    function executeSeal() {
+      const notes = document.getElementById('officer-notes').value.trim();
+      switchState('sealed');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetForm() {
+      document.getElementById('officer-notes').value = '';
+    }
+  </script>
+</body></html>

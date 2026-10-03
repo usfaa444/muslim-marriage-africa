@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu Administration - Académie &amp; Homologation</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "ink-on-indigo": "#F4EDE0",
+            "surface-variant": "#e9e2d5",
+            "secondary": "#755b18",
+            "outline": "#74777f",
+            "surface-bright": "#fff9ee",
+            "focus-ring": "#1F3A5F",
+            "surface-container": "#f4ede0",
+            "ink-primary": "#1B2433",
+            "tertiary": "#002546",
+            "on-secondary-fixed-variant": "#5b4300",
+            "surface-tint": "#465f86",
+            "on-tertiary-container": "#88a5ce",
+            "on-secondary-fixed": "#251a00",
+            "border-strong": "#6F624C",
+            "mihrab": "#2C4A6E",
+            "on-surface-variant": "#43474e",
+            "indigo": "#1F3A5F",
+            "danger": "#8B3A3A",
+            "danger-soft": "#F3E0DC",
+            "inverse-surface": "#333028",
+            "on-surface": "#1e1b14",
+            "primary": "#032448",
+            "tertiary-fixed": "#d3e4ff",
+            "error-container": "#ffdad6",
+            "gold-soft": "#E8D5A3",
+            "border-hairline": "#D9CDB8",
+            "on-error": "#ffffff",
+            "surface-sand": "#F4EDE0",
+            "on-secondary": "#ffffff",
+            "primary-fixed-dim": "#aec8f4",
+            "on-tertiary": "#ffffff",
+            "error": "#ba1a1a",
+            "secondary-container": "#fdd88a",
+            "inverse-on-surface": "#f7f0e3",
+            "gold": "#C4A35A",
+            "surface-dim": "#e0d9cd",
+            "background": "#fff9ee",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-primary": "#ffffff",
+            "disabled": "#B5A894",
+            "on-error-container": "#93000a",
+            "staff": "#6B3D2E",
+            "surface-raised": "#FFFBF4",
+            "success": "#3D5C45",
+            "secondary-fixed": "#ffdf9c",
+            "on-primary-container": "#8ba4cf",
+            "surface-container-high": "#eee7db",
+            "secondary-fixed-dim": "#e5c276",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-primary-fixed": "#001c3b",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-highest": "#e9e2d5",
+            "indigo-deep": "#15283F",
+            "staff-soft": "#EFE4DC",
+            "primary-container": "#1f3a5f",
+            "blur-wash": "#C8BBA6",
+            "on-secondary-container": "#785d1b",
+            "surface": "#fff9ee",
+            "surface-container-low": "#faf3e6",
+            "success-soft": "#DCE6DE",
+            "outline-variant": "#c4c6cf",
+            "on-background": "#1e1b14",
+            "ink-secondary": "#5C5346",
+            "inverse-primary": "#aec8f4",
+            "tertiary-fixed-dim": "#abc9f3",
+            "surface-indigo": "#15283F",
+            "primary-fixed": "#d5e3ff",
+            "tertiary-container": "#1b3b5e",
+            "on-tertiary-fixed": "#001c38"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "1": "4px",
+            "space-sm": "0.5rem",
+            "7": "48px",
+            "margin": "1rem",
+            "3": "12px",
+            "space-xl": "2rem",
+            "gutter": "16px",
+            "space-md": "1rem",
+            "screen-pad": "16px",
+            "5": "24px",
+            "space-xs": "0.25rem",
+            "space-lg": "1.5rem",
+            "2": "8px",
+            "4": "16px",
+            "6": "32px"
+          },
+          "fontFamily": {
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #F4EDE0;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #D9CDB8;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-body text-ink-primary bg-surface-sand antialiased selection:bg-gold-soft selection:text-indigo-deep">
+<!-- ================= TOP INSTITUTIONAL BAR (Shared TopNavBar) ================= -->
+<header class="w-full bg-surface-raised border-b border-border-hairline sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-7xl mx-auto">
+<!-- Brand & Entity -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo text-2xl" data-icon="policy">policy</span>
+<span class="text-heading font-heading text-primary tracking-tight font-bold">AnKanu Administration</span>
+</div>
+<div class="h-4 w-px bg-border-hairline hidden sm:block"></div>
+<div class="hidden sm:flex items-center gap-2">
+<span class="bg-staff text-surface-raised text-[10px] tracking-wider uppercase font-bold px-2 py-0.5 rounded-sm">Équipe seulement</span>
+<span class="text-caption font-caption text-ink-secondary">Matricule : BF-CIL-OP-0841</span>
+</div>
+</div>
+<!-- Navigation Links from Shared Schema -->
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-ink-secondary hover:text-primary font-body text-meta transition-colors" href="#">Dossiers de Ta'aruf</a>
+<a class="text-ink-secondary hover:text-primary font-body text-meta transition-colors" href="#">Médiations &amp; Wali</a>
+<a class="text-primary border-b-2 border-primary font-body-strong text-meta pb-1" href="#">Conformité CIL BF</a>
+<a class="text-ink-secondary hover:text-primary font-body text-meta transition-colors" href="#">Registres d'Audit</a>
+</nav>
+<!-- Trailing Action Badges & Inspector Profile -->
+<div class="flex items-center gap-3">
+<div class="hidden md:flex items-center gap-1.5 px-3 py-1 bg-surface-sand rounded-full border border-border-hairline">
+<span class="w-2 h-2 rounded-full bg-success"></span>
+<span class="text-caption font-caption text-ink-primary font-medium">Session Inspecteur CIL</span>
+</div>
+<div class="flex items-center gap-1 border-l border-border-hairline pl-3">
+<button class="p-1.5 rounded text-ink-secondary hover:bg-surface-sand transition-colors" title="Jurisprudence">
+<span class="material-symbols-outlined text-xl" data-icon="gavel">gavel</span>
+</button>
+<button class="p-1.5 rounded text-ink-secondary hover:bg-surface-sand transition-colors" title="Audit Sécurité">
+<span class="material-symbols-outlined text-xl" data-icon="verified_user">verified_user</span>
+</button>
+<button class="p-1.5 rounded text-ink-secondary hover:bg-surface-sand transition-colors relative" title="Notifications réglementaires">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+</div>
+<!-- Operator Avatar Sceau -->
+<div class="flex items-center gap-2 pl-2">
+<div class="w-8 h-8 rounded-full bg-indigo-deep text-surface-sand flex items-center justify-center font-heading text-xs font-bold ring-1 ring-gold">
+            AK
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- ================= BREADCRUMB & REGULATORY METADATA BAR ================= -->
+<section class="bg-surface-bright border-b border-border-hairline px-6 py-2.5">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+<!-- Breadcrumb -->
+<nav class="flex items-center gap-2 text-caption font-caption text-ink-secondary">
+<span class="hover:text-ink-primary cursor-pointer">Operator</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="hover:text-ink-primary cursor-pointer">Académie &amp; Conseil Consultatif</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-ink-primary font-semibold">Publication &amp; Homologation (FR-141 / FR-115)</span>
+</nav>
+<!-- Sovereign Status Tokens -->
+<div class="flex items-center gap-3 text-caption font-caption text-ink-secondary">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-gold" data-icon="lock">lock</span>
+          Chiffrement souverain (Burkina Faso / UEMOA)
+        </span>
+<span class="h-3 w-px bg-border-hairline"></span>
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-indigo" data-icon="dns">dns</span>
+          Nœud miroir : Ouagadougou / Paris (Scaleway Sovereign)
+        </span>
+</div>
+</div>
+</section>
+<!-- ================= STATE SIMULATOR BAR (Operator Testing Console) ================= -->
+<section class="bg-indigo-deep text-surface-sand px-6 py-3 border-b border-border-strong">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-gold text-lg" data-icon="terminal">terminal</span>
+<span class="text-meta font-meta text-gold-soft uppercase tracking-wider font-semibold">Simulateur d'état Opérateur :</span>
+<span class="text-caption font-caption text-surface-variant hidden lg:inline">Basculez entre les cas d'évaluation canonique FR-141</span>
+</div>
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+<!-- State 1: Nominal -->
+<button class="state-btn active-state px-2.5 py-1 text-caption font-caption rounded bg-surface-sand text-indigo-deep font-semibold shadow-sm transition-all whitespace-nowrap" id="btn-state-nominal" onclick="setScreenState('nominal')">
+          1. Nominal (5 articles prêts)
+        </button>
+<!-- State 2: Incomplet -->
+<button class="state-btn px-2.5 py-1 text-caption font-caption rounded bg-indigo text-surface-sand hover:bg-mihrab border border-border-strong transition-all whitespace-nowrap" id="btn-state-incomplete" onclick="setScreenState('incomplete')">
+          2. Incomplet (&lt; 5 articles bloquant)
+        </button>
+<!-- State 3: Loading -->
+<button class="state-btn px-2.5 py-1 text-caption font-caption rounded bg-indigo text-surface-sand hover:bg-mihrab border border-border-strong transition-all whitespace-nowrap" id="btn-state-loading" onclick="setScreenState('loading')">
+          3. Enregistrement (Loading)
+        </button>
+<!-- State 4: Erreur Avis Manquant -->
+<button class="state-btn px-2.5 py-1 text-caption font-caption rounded bg-indigo text-surface-sand hover:bg-mihrab border border-border-strong transition-all whitespace-nowrap" id="btn-state-missing-scholar" onclick="setScreenState('missing_scholar')">
+          4. Erreur : Visa théologique manquant
+        </button>
+<!-- State 5: Succès Public -->
+<button class="state-btn px-2.5 py-1 text-caption font-caption rounded bg-indigo text-surface-sand hover:bg-mihrab border border-border-strong transition-all whitespace-nowrap" id="btn-state-success" onclick="setScreenState('success')">
+          5. Succès (Public 200 actif)
+        </button>
+</div>
+</div>
+</section>
+<!-- ================= MAIN OPERATOR WORKSPACE (Two-Pane Layout) ================= -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col">
+<!-- Active Error / Warning Banner Component (FR-141 Guardrail) -->
+<div class="hidden mb-6 bg-danger-soft border-l-4 border-danger p-4 rounded-r-lg" id="banner-theological-error">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-2xl" data-icon="gavel">gavel</span>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h3 class="text-heading font-heading text-danger font-semibold">Publication impossible : Visa du collège théologique manquant (FR-141)</h3>
+<span class="bg-staff text-surface-raised text-[10px] uppercase font-bold px-1.5 py-0.5 rounded">Règle bloquante</span>
+</div>
+<p class="text-body text-ink-primary mt-1 text-sm">
+            Le quorum de révision par les jurisconsultes assermentés de l'Académie n'est pas réuni. Conformément à la clause de déontologie islamique et d'agrément moral, l'accès public à l'URL <code class="font-mono bg-surface-sand px-1.5 py-0.5 rounded text-xs text-indigo-deep font-bold">/academie</code> demeure verrouillé en HTTP 404 (Herméticité canonique).
+          </p>
+</div>
+</div>
+</div>
+<!-- Active Success Notification Banner -->
+<div class="hidden mb-6 bg-success-soft border-l-4 border-success p-4 rounded-r-lg" id="banner-success-live">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-success text-2xl" data-icon="verified">verified</span>
+<div class="flex-1">
+<h3 class="text-heading font-heading text-success font-semibold">Académie scellée et accessible publiquement (HTTP 200 OK)</h3>
+<p class="text-body text-ink-primary mt-1 text-sm">
+            Le corpus complet des 5 articles canoniques et le visa contradictoire du Conseil Consultatif sont attestés sur le registre d'audit immuable. Horodatage blockchain privé Burkinabè : <span class="font-mono text-xs font-semibold">2025-05-18T10:42:01+00:00 (Nœud CIL-BF)</span>.
+          </p>
+</div>
+</div>
+</div>
+<!-- Two-Pane Layout Container -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<!-- ================= LEFT PANE: SYLLABUS & CORPUS DES 5 ARTICLES ================= -->
+<section class="md:col-span-6 lg:col-span-7 flex flex-col gap-4">
+<!-- Left Pane Header -->
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-5">
+<div class="flex items-center justify-between pb-3 border-b border-border-hairline">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-indigo text-2xl" data-icon="auto_stories">auto_stories</span>
+<div>
+<h2 class="text-title font-title text-indigo-deep">Corpus Pédagogique Canonique</h2>
+<p class="text-caption font-caption text-ink-secondary">Syllabus fondamental pré-matrimonial obligatoire (5 articles requis)</p>
+</div>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 bg-success-soft text-success text-caption font-caption rounded-full font-semibold border border-success/30" id="badge-corpus-status">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+<span>5 / 5 Articles Homologués</span>
+</div>
+</div>
+<!-- Quorum Indicator -->
+<div class="mt-4 flex items-center justify-between text-meta font-meta">
+<span class="text-ink-secondary">Exigence canonique d'exhaustivité :</span>
+<span class="font-semibold text-primary" id="article-count-label">5 sur 5 validés (Quorum plein)</span>
+</div>
+<div class="w-full bg-surface-sand h-2 rounded-full overflow-hidden mt-1.5">
+<div class="bg-indigo h-full w-full transition-all duration-300" id="article-progress-bar"></div>
+</div>
+</div>
+<!-- 5 Articles List Container (Can switch to blocking empty-state) -->
+<div class="flex flex-col gap-3" id="articles-container">
+<!-- Article 1 -->
+<article class="article-item bg-surface-raised border border-border-hairline hover:border-border-strong rounded-lg p-4 transition-all duration-150">
+<div class="flex items-start justify-between gap-3">
+<div class="flex gap-3">
+<span class="flex-shrink-0 w-7 h-7 rounded-full bg-surface-sand text-indigo font-bold text-caption flex items-center justify-center border border-border-hairline">1</span>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="bg-surface-sand text-ink-secondary border border-border-hairline text-caption font-caption px-2 py-0.5 rounded">FR-071 / FR-074</span>
+<span class="text-caption font-caption text-ink-secondary">Tutelle légale &amp; Médiation</span>
+</div>
+<h4 class="text-heading font-heading text-ink-primary mt-1 leading-snug">
+                    Le rôle protecteur du Wali et le protocole de délégation
+                  </h4>
+<div class="mt-2 flex items-center gap-4 text-caption font-caption text-ink-secondary">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-gold" data-icon="history_edu">history_edu</span>
+<span class="text-ink-primary font-medium" data-scholar-bind="lead_jurisconsult">Collège Jurisconsultes (Réf. Th-01)</span>
+</span>
+<span class="text-border-hairline">•</span>
+<span>Visa : 14 Safar 1446</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-success-soft text-success">
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+                Approuvé
+              </span>
+</div>
+</article>
+<!-- Article 2 -->
+<article class="article-item bg-surface-raised border border-border-hairline hover:border-border-strong rounded-lg p-4 transition-all duration-150">
+<div class="flex items-start justify-between gap-3">
+<div class="flex gap-3">
+<span class="flex-shrink-0 w-7 h-7 rounded-full bg-surface-sand text-indigo font-bold text-caption flex items-center justify-center border border-border-hairline">2</span>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="bg-surface-sand text-ink-secondary border border-border-hairline text-caption font-caption px-2 py-0.5 rounded">FR-056</span>
+<span class="text-caption font-caption text-ink-secondary">Fiançailles &amp; Droit matrimonial</span>
+</div>
+<h4 class="text-heading font-heading text-ink-primary mt-1 leading-snug">
+                    La dot (Mahr) selon la Sunnah : entre mesure, facilité et engagement sacré
+                  </h4>
+<div class="mt-2 flex items-center gap-4 text-caption font-caption text-ink-secondary">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-gold" data-icon="history_edu">history_edu</span>
+<span class="text-ink-primary font-medium" data-scholar-bind="hadith_chair">Chaire de Hadith &amp; Fiqh Familial</span>
+</span>
+<span class="text-border-hairline">•</span>
+<span>Visa : 16 Safar 1446</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-success-soft text-success">
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+                Approuvé
+              </span>
+</div>
+</article>
+<!-- Article 3 -->
+<article class="article-item bg-surface-raised border border-border-hairline hover:border-border-strong rounded-lg p-4 transition-all duration-150">
+<div class="flex items-start justify-between gap-3">
+<div class="flex gap-3">
+<span class="flex-shrink-0 w-7 h-7 rounded-full bg-surface-sand text-indigo font-bold text-caption flex items-center justify-center border border-border-hairline">3</span>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="bg-surface-sand text-ink-secondary border border-border-hairline text-caption font-caption px-2 py-0.5 rounded">Canonique</span>
+<span class="text-caption font-caption text-ink-secondary">Éthique relationnelle</span>
+</div>
+<h4 class="text-heading font-heading text-ink-primary mt-1 leading-snug">
+                    Droits mutuels des conjoints : construire la Mawadda et la Rahma
+                  </h4>
+<div class="mt-2 flex items-center gap-4 text-caption font-caption text-ink-secondary">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-gold" data-icon="history_edu">history_edu</span>
+<span class="text-ink-primary font-medium" data-scholar-bind="theology_panel">Comité d'Agrément Moral Ouagadougou</span>
+</span>
+<span class="text-border-hairline">•</span>
+<span>Visa : 18 Safar 1446</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-success-soft text-success">
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+                Approuvé
+              </span>
+</div>
+</article>
+<!-- Article 4 -->
+<article class="article-item bg-surface-raised border border-border-hairline hover:border-border-strong rounded-lg p-4 transition-all duration-150">
+<div class="flex items-start justify-between gap-3">
+<div class="flex gap-3">
+<span class="flex-shrink-0 w-7 h-7 rounded-full bg-surface-sand text-indigo font-bold text-caption flex items-center justify-center border border-border-hairline">4</span>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="bg-surface-sand text-ink-secondary border border-border-hairline text-caption font-caption px-2 py-0.5 rounded">FR-083</span>
+<span class="text-caption font-caption text-ink-secondary">Modération numérique &amp; Pudeur</span>
+</div>
+<h4 class="text-heading font-heading text-ink-primary mt-1 leading-snug">
+                    Le principe de Haya dans les correspondances écrites du Ta'aruf
+                  </h4>
+<div class="mt-2 flex items-center gap-4 text-caption font-caption text-ink-secondary">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-gold" data-icon="history_edu">history_edu</span>
+<span class="text-ink-primary font-medium" data-scholar-bind="ethics_council">Délégation aux Bonnes Mœurs CIL</span>
+</span>
+<span class="text-border-hairline">•</span>
+<span>Visa : 20 Safar 1446</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-success-soft text-success">
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+                Approuvé
+              </span>
+</div>
+</article>
+<!-- Article 5 (Can be dynamically suppressed in incomplete state) -->
+<article class="article-item bg-surface-raised border border-border-hairline hover:border-border-strong rounded-lg p-4 transition-all duration-150" id="article-item-5">
+<div class="flex items-start justify-between gap-3">
+<div class="flex gap-3">
+<span class="flex-shrink-0 w-7 h-7 rounded-full bg-surface-sand text-indigo font-bold text-caption flex items-center justify-center border border-border-hairline">5</span>
+<div>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="bg-surface-sand text-ink-secondary border border-border-hairline text-caption font-caption px-2 py-0.5 rounded">FR-022</span>
+<span class="text-caption font-caption text-ink-secondary">Honnêteté contractuelle</span>
+</div>
+<h4 class="text-heading font-heading text-ink-primary mt-1 leading-snug">
+                    La totale transparence sur le statut matrimonial et les charges familiales
+                  </h4>
+<div class="mt-2 flex items-center gap-4 text-caption font-caption text-ink-secondary">
+<span class="inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-gold" data-icon="history_edu">history_edu</span>
+<span class="text-ink-primary font-medium" data-scholar-bind="civil_canon">Chambre Notariale Islamique de Bobo</span>
+</span>
+<span class="text-border-hairline">•</span>
+<span>Visa : 22 Safar 1446</span>
+</div>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-caption font-caption font-semibold bg-success-soft text-success">
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+                Approuvé
+              </span>
+</div>
+</article>
+</div>
+<!-- Blocking Empty State (Triggered when less than 5 articles) -->
+<div class="hidden bg-surface-raised border-2 border-dashed border-danger/60 rounded-lg p-8 text-center" id="blocking-empty-state">
+<div class="w-12 h-12 mx-auto rounded-full bg-danger-soft text-danger flex items-center justify-center mb-3">
+<span class="material-symbols-outlined text-2xl" data-icon="lock_clock">lock_clock</span>
+</div>
+<h3 class="text-heading font-heading text-danger font-bold">Corpus Incomplet : Moins de 5 articles canoniques</h3>
+<p class="text-body text-ink-secondary max-w-md mx-auto mt-2 text-sm">
+            Règle canonique stricte FR-141 : L'académie exige impérativement les cinq traités d'instruction théologique homologués. Le 5ème article (FR-022 Transparence matrimoniale) est actuellement manquant ou en cours de rédaction.
+          </p>
+<div class="mt-5 inline-flex items-center gap-2 px-4 py-2 bg-surface-sand text-ink-primary border border-border-hairline rounded text-caption font-caption font-medium">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="block">block</span>
+            Publication publique strictement verrouillée (HTTP 404 actif)
+          </div>
+</div>
+<!-- Footnote CIL & Sovereign Data -->
+<div class="bg-surface-raised/50 border border-border-hairline rounded-lg p-3 text-caption font-caption text-ink-secondary flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-indigo" data-icon="security">security</span>
+<span>Réglementation Burkinabè CIL : Les métadonnées d'agrément théologique sont répliquées sans aucun traceur publicitaire ou télémétrie commerciale.</span>
+</div>
+</section>
+<!-- ================= RIGHT PANE: DOSSIER D'AGRÉMENT THÉOLOGIQUE & PUBLICATION ================= -->
+<section class="md:col-span-6 lg:col-span-5 flex flex-col gap-4">
+<!-- Dossier d'homologation collégiale Card -->
+<div class="bg-surface-raised border border-border-hairline rounded-lg p-5">
+<div class="flex items-center justify-between pb-3 border-b border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold text-2xl" data-icon="verified_user">verified_user</span>
+<div>
+<h3 class="text-heading font-heading text-indigo-deep">Agrément du Collège Théologique</h3>
+<p class="text-caption font-caption text-ink-secondary">Visa contradictoire &amp; quorum consultatif (FR-141)</p>
+</div>
+</div>
+<span class="bg-surface-sand text-ink-secondary text-caption font-caption px-2 py-0.5 rounded border border-border-hairline">
+              FR-115
+            </span>
+</div>
+<!-- Dynamic Scholar Registry Bound Authority (Zero Hardcoded Chrome Names) -->
+<div class="mt-4 bg-surface-sand/60 border border-border-hairline rounded-lg p-3.5">
+<div class="flex items-center justify-between">
+<span class="text-caption font-caption uppercase tracking-wider text-ink-secondary font-semibold">Autorités Assermentées Assignées :</span>
+<span class="text-[11px] font-mono text-indigo font-medium">REG-BF-ISLAMIC-2025</span>
+</div>
+<div class="mt-3 space-y-2.5" id="scholar-registry-list">
+<!-- Item 1: Bound from verified authority -->
+<div class="flex items-center justify-between text-meta font-meta bg-surface-raised p-2 rounded border border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-indigo" data-icon="account_balance">account_balance</span>
+<span class="text-ink-primary" data-scholar-field="authority_1">Représentant Présidence Conseil Supérieur</span>
+</div>
+<span class="text-caption font-caption px-2 py-0.5 rounded bg-success-soft text-success font-semibold inline-flex items-center gap-1" id="scholar-status-1">
+<span class="material-symbols-outlined text-xs" data-icon="check">check</span> Signé
+                </span>
+</div>
+<!-- Item 2: Bound from verified authority -->
+<div class="flex items-center justify-between text-meta font-meta bg-surface-raised p-2 rounded border border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-indigo" data-icon="school">school</span>
+<span class="text-ink-primary" data-scholar-field="authority_2">Doyen Faculté de Droit Islamique (Bobo)</span>
+</div>
+<span class="text-caption font-caption px-2 py-0.5 rounded bg-success-soft text-success font-semibold inline-flex items-center gap-1" id="scholar-status-2">
+<span class="material-symbols-outlined text-xs" data-icon="check">check</span> Signé
+                </span>
+</div>
+<!-- Item 3: Bound from verified authority -->
+<div class="flex items-center justify-between text-meta font-meta bg-surface-raised p-2 rounded border border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-indigo" data-icon="gavel">gavel</span>
+<span class="text-ink-primary" data-scholar-field="authority_3">Jurisconsulte Référent Tutelles &amp; Familles</span>
+</div>
+<span class="text-caption font-caption px-2 py-0.5 rounded bg-success-soft text-success font-semibold inline-flex items-center gap-1" id="scholar-status-3">
+<span class="material-symbols-outlined text-xs" data-icon="check">check</span> Signé
+                </span>
+</div>
+</div>
+<!-- Cryptographic Stamp & Hash -->
+<div class="mt-3 pt-3 border-t border-border-hairline text-caption font-caption flex flex-col gap-1 text-ink-secondary">
+<div class="flex justify-between items-center">
+<span>Empreinte cryptographique SHA-256 :</span>
+<span class="font-mono text-[11px] text-indigo-deep font-bold" id="crypto-stamp">8f3a9e2...d41b09</span>
+</div>
+<div class="flex justify-between items-center">
+<span>Horodatage UTC scellé :</span>
+<span class="font-mono text-[11px]">18 Mai 2025 • 09:14:22 GMT</span>
+</div>
+</div>
+</div>
+<!-- Publication Canonical Switch & 404 Notice -->
+<div class="mt-5 pt-4 border-t border-border-hairline">
+<div class="flex items-start justify-between gap-4">
+<div>
+<label class="text-heading font-heading text-ink-primary cursor-pointer" for="canonical-toggle">
+                  Exposition Publique Canonique
+                </label>
+<p class="text-caption font-caption text-ink-secondary mt-0.5">
+                  Route publique ciblée : <code class="bg-surface-sand text-indigo px-1 py-0.5 rounded font-mono text-xs font-semibold">ankanu.bf/academie</code>
+</p>
+</div>
+<!-- Switch Input -->
+<div class="relative inline-block w-12 mr-2 align-middle select-none">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-indigo checked:right-0 right-6 checked:border-gold transition-all duration-200" id="canonical-toggle" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-indigo cursor-pointer" for="canonical-toggle"></label>
+</div>
+</div>
+<!-- Hermeticity status notice -->
+<div class="mt-3 p-3 bg-surface-sand rounded border border-border-hairline flex items-start gap-2.5" id="hermeticity-notice">
+<span class="material-symbols-outlined text-indigo text-lg mt-0.5" data-icon="visibility">visibility</span>
+<div class="text-caption font-caption text-ink-secondary">
+<strong class="text-ink-primary">Principe d'Herméticité Canonique :</strong>
+                Tant que les 5 articles et l'agrément théologique ne sont pas collégialement scellés, toute tentative d'accès anonyme ou public à l'URL renvoie strictement un code HTTP <strong>404 Non Trouvé</strong>.
+              </div>
+</div>
+</div>
+<!-- Action Buttons Form -->
+<div class="mt-6 flex flex-col gap-3">
+<!-- Primary Action Button: 48px Solid Indigo with Ink-on-indigo text -->
+<button class="w-full h-12 bg-indigo hover:bg-indigo-deep text-ink-on-indigo rounded-full font-body-strong flex items-center justify-center gap-2 text-base transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-focus-ring focus:ring-offset-2" id="btn-seal-publication" onclick="handleSealAction()">
+<span class="material-symbols-outlined text-gold" data-icon="verified">verified</span>
+<span>Enregistrer &amp; Sceller la publication</span>
+</button>
+<!-- Secondary Ghost Button -->
+<button class="w-full h-11 bg-transparent hover:bg-surface-sand text-ink-primary border border-border-strong rounded-full font-body text-sm flex items-center justify-center gap-2 transition-colors duration-150" id="btn-defer-review" onclick="handleDeferAction()">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span>Différer la révision contradictoire</span>
+</button>
+</div>
+</div>
+<!-- Chaperone / Guardian Oversight Card -->
+<div class="bg-surface-indigo text-surface-sand rounded-lg p-5 border border-border-strong">
+<div class="flex items-center gap-2 pb-2 border-b border-border-strong/60">
+<span class="material-symbols-outlined text-gold text-xl" data-icon="family_restroom">family_restroom</span>
+<h4 class="text-heading font-heading text-surface-sand text-base font-semibold">Garantie Wali &amp; Familles</h4>
+</div>
+<p class="text-caption font-caption text-surface-variant mt-2.5 leading-relaxed">
+            Les enseignements publiés dans l'Académie constituent la charte déontologique contractuelle imposée à tous les prétendants et tuteurs légaux lors de l'ouverture d'une médiation de mariage.
+          </p>
+<div class="mt-3 flex items-center gap-2 text-[11px] text-gold-soft font-mono">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="lock">lock</span>
+            Protection intégrale contre les abus d'autorité ou dérives informelles.
+          </div>
+</div>
+</section>
+</div>
+</main>
+<!-- ================= INLINE VANILLA JS FOR STATE SIMULATION & INTERACTIVITY ================= -->
+<script>
+    // System State Controller
+    let currentState = 'nominal';
+
+    function setScreenState(state) {
+      currentState = state;
+      
+      // Update Simulator buttons visual state
+      document.querySelectorAll('.state-btn').forEach(btn => {
+        btn.classList.remove('bg-surface-sand', 'text-indigo-deep', 'font-semibold');
+        btn.classList.add('bg-indigo', 'text-surface-sand');
+      });
+
+      const activeBtn = document.getElementById(`btn-state-${state.replace('_', '-')}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-indigo', 'text-surface-sand');
+        activeBtn.classList.add('bg-surface-sand', 'text-indigo-deep', 'font-semibold');
+      }
+
+      // Reset base visibility
+      const errorBanner = document.getElementById('banner-theological-error');
+      const successBanner = document.getElementById('banner-success-live');
+      const articlesContainer = document.getElementById('articles-container');
+      const emptyState = document.getElementById('blocking-empty-state');
+      const articleItem5 = document.getElementById('article-item-5');
+      const progressBar = document.getElementById('article-progress-bar');
+      const countLabel = document.getElementById('article-count-label');
+      const corpusBadge = document.getElementById('badge-corpus-status');
+      const scholarStatus3 = document.getElementById('scholar-status-3');
+      const sealBtn = document.getElementById('btn-seal-publication');
+      const toggle = document.getElementById('canonical-toggle');
+
+      // Default state reset
+      errorBanner.classList.add('hidden');
+      successBanner.classList.add('hidden');
+      articlesContainer.classList.remove('hidden');
+      emptyState.classList.add('hidden');
+      articleItem5.classList.remove('hidden');
+      sealBtn.innerHTML = `<span class="material-symbols-outlined text-gold" data-icon="verified">verified</span><span>Enregistrer &amp; Sceller la publication</span>`;
+      sealBtn.classList.remove('bg-disabled', 'cursor-not-allowed');
+      sealBtn.classList.add('bg-indigo', 'hover:bg-indigo-deep');
+      sealBtn.removeAttribute('disabled');
+      toggle.checked = true;
+
+      if (state === 'nominal') {
+        progressBar.style.width = '100%';
+        countLabel.textContent = '5 sur 5 validés (Quorum plein)';
+        corpusBadge.className = 'flex items-center gap-1.5 px-3 py-1 bg-success-soft text-success text-caption font-caption rounded-full font-semibold border border-success/30';
+        corpusBadge.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span><span>5 / 5 Articles Homologués</span>`;
+        
+        scholarStatus3.className = 'text-caption font-caption px-2 py-0.5 rounded bg-success-soft text-success font-semibold inline-flex items-center gap-1';
+        scholarStatus3.innerHTML = `<span class="material-symbols-outlined text-xs">check</span> Signé`;
+      } 
+      else if (state === 'incomplete') {
+        // Less than 5 articles: Show blocking empty state
+        articleItem5.classList.add('hidden');
+        articlesContainer.classList.add('hidden');
+        emptyState.classList.remove('hidden');
+        
+        progressBar.style.width = '80%';
+        countLabel.textContent = '4 sur 5 validés (Incomplet)';
+        corpusBadge.className = 'flex items-center gap-1.5 px-3 py-1 bg-danger-soft text-danger text-caption font-caption rounded-full font-semibold border border-danger/30';
+        corpusBadge.innerHTML = `<span class="material-symbols-outlined text-sm">error</span><span>4 / 5 - Publication Bloquée</span>`;
+
+        toggle.checked = false;
+        sealBtn.classList.remove('bg-indigo', 'hover:bg-indigo-deep');
+        sealBtn.classList.add('bg-disabled', 'cursor-not-allowed');
+        sealBtn.setAttribute('disabled', 'true');
+        sealBtn.innerHTML = `<span class="material-symbols-outlined">block</span><span>Corpus Incomplet (&lt; 5 articles)</span>`;
+      } 
+      else if (state === 'loading') {
+        sealBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-gold" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Enregistrement &amp; Horodatage en cours...</span>
+        `;
+        sealBtn.setAttribute('disabled', 'true');
+      } 
+      else if (state === 'missing_scholar') {
+        // Scholar review missing error
+        errorBanner.classList.remove('hidden');
+        scholarStatus3.className = 'text-caption font-caption px-2 py-0.5 rounded bg-danger-soft text-danger font-semibold inline-flex items-center gap-1';
+        scholarStatus3.innerHTML = `<span class="material-symbols-outlined text-xs">pending</span> Visa en attente`;
+        
+        toggle.checked = false;
+        sealBtn.classList.remove('bg-indigo', 'hover:bg-indigo-deep');
+        sealBtn.classList.add('bg-disabled', 'cursor-not-allowed');
+        sealBtn.setAttribute('disabled', 'true');
+        sealBtn.innerHTML = `<span class="material-symbols-outlined">gavel</span><span>Visa théologique requis</span>`;
+      } 
+      else if (state === 'success') {
+        // Success published state
+        successBanner.classList.remove('hidden');
+        toggle.checked = true;
+        sealBtn.innerHTML = `<span class="material-symbols-outlined text-gold">done_all</span><span>Publication Scellée (Public 200 OK)</span>`;
+      }
+    }
+
+    function handleSealAction() {
+      if (currentState === 'nominal') {
+        setScreenState('loading');
+        setTimeout(() => {
+          setScreenState('success');
+        }, 900);
+      }
+    }
+
+    function handleDeferAction() {
+      alert("Demande de prorogation soumise au secrétariat du Conseil Consultatif AnKanu.");
+    }
+  </script>
+</body></html>

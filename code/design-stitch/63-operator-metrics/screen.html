@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background text-on-background" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu Console — Métriques Opérateur &amp; Déontologie</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 strictly -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#f9f9ff",
+            "on-background": "#131c2a",
+            "on-error": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "surface-bright": "#f9f9ff",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed": "#ffdbd0",
+            "surface-variant": "#dae3f7",
+            "surface-container-highest": "#dae3f7",
+            "on-tertiary-container": "#d29582",
+            "surface-container": "#e7eeff",
+            "on-surface-variant": "#43474e",
+            "secondary-fixed": "#ffdf9c",
+            "on-tertiary": "#ffffff",
+            "inverse-surface": "#283140",
+            "surface-dim": "#d1daef",
+            "surface-container-low": "#f0f3ff",
+            "error": "#ba1a1a",
+            "on-primary-fixed": "#001c3b",
+            "tertiary-fixed-dim": "#f9b7a3",
+            "on-secondary-fixed": "#251a00",
+            "on-tertiary-fixed": "#341106",
+            "inverse-primary": "#aec8f4",
+            "surface-tint": "#465f86",
+            "inverse-on-surface": "#ecf1ff",
+            "outline-variant": "#c4c6cf",
+            "primary-container": "#1f3a5f",
+            "outline": "#74777f",
+            "surface": "#f9f9ff",
+            "primary-fixed-dim": "#aec8f4",
+            "error-container": "#ffdad6",
+            "secondary-fixed-dim": "#e5c276",
+            "tertiary-container": "#582e20",
+            "primary": "#032448",
+            "on-primary-container": "#8ba4cf",
+            "on-primary": "#ffffff",
+            "primary-fixed": "#d5e3ff",
+            "on-surface": "#131c2a",
+            "secondary-container": "#fdd88a",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-tertiary-fixed-variant": "#683b2c",
+            "secondary": "#755b18",
+            "surface-container-high": "#dfe8fd",
+            "on-error-container": "#93000a",
+            "tertiary": "#3e190c",
+            "on-secondary-container": "#785d1b"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter": "1.25rem",
+            "margin": "2rem",
+            "space-md": "1rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem"
+          },
+          "fontFamily": {
+            "title-md": ["\"Source Serif 4\""],
+            "headline-lg": ["\"Source Serif 4\""],
+            "body-sm": ["\"Source Sans 3\""],
+            "headline-md": ["\"Source Serif 4\""],
+            "body-md": ["\"Source Sans 3\""],
+            "body-lg": ["\"Source Sans 3\""],
+            "metric-num": ["\"Source Sans 3\""],
+            "label-md": ["\"Source Sans 3\""],
+            "headline-lg-mobile": ["\"Source Serif 4\""],
+            "label-sm": ["\"Source Sans 3\""],
+            "headline-sm": ["\"Source Serif 4\""],
+            "headline-xl-mobile": ["\"Source Serif 4\""],
+            "headline-xl": ["\"Source Serif 4\""]
+          },
+          "fontSize": {
+            "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "metric-num": ["28px", { "lineHeight": "32px", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600" }],
+            "headline-lg-mobile": ["26px", { "lineHeight": "32px", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "headline-xl-mobile": ["30px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "headline-xl": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f0f3ff;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c4c6cf;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-body-md text-on-surface bg-background antialiased selection:bg-secondary selection:text-surface-container-lowest">
+<!-- ================= TOP APP BAR (Shared Components JSON Anchor) ================= -->
+<header class="bg-surface-container-lowest text-primary border-b border-outline-variant flex justify-between items-center w-full px-space-lg h-16 max-w-full z-40 shrink-0">
+<div class="flex items-center space-x-space-md">
+<div class="flex items-center space-x-space-sm">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="shield_person">shield_person</span>
+<span class="text-headline-sm font-headline-sm font-bold text-primary tracking-tight">AnKanu Console</span>
+</div>
+<div class="h-5 w-px bg-outline-variant"></div>
+<!-- Search bar on left as mandated by JSON -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-2 text-on-surface-variant text-lg" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded text-body-sm pl-8 pr-3 py-1.5 focus:outline-none focus:border-primary text-on-surface placeholder:text-on-surface-variant" placeholder="Dossier N°, CNIB, Mat..." type="text"/>
+</div>
+</div>
+<!-- Mandatory JSON nav links -->
+<nav class="hidden md:flex items-center space-x-space-lg h-full">
+<a class="h-full flex items-center px-1 text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Audits CIL</a>
+<a class="h-full flex items-center px-1 text-label-md font-label-md border-b-2 border-primary text-primary font-bold" href="#">Vérifications</a>
+<a class="h-full flex items-center px-1 text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Médiations</a>
+<a class="h-full flex items-center px-1 text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Déontologie</a>
+</nav>
+<!-- Trailing actions from JSON -->
+<div class="flex items-center space-x-space-sm">
+<div class="hidden lg:flex items-center space-x-2 mr-2">
+<button class="px-space-sm py-1.5 rounded text-label-sm font-label-sm bg-surface-container-low text-on-surface border border-outline-variant hover:bg-surface-container transition-colors">
+          Journal d'Audit
+        </button>
+<button class="px-space-sm py-1.5 rounded text-label-sm font-label-sm bg-tertiary-container text-surface-container-lowest hover:bg-tertiary transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="crisis_alert">crisis_alert</span>
+          Signalement SLA
+        </button>
+</div>
+<div class="flex items-center space-x-1 border-l border-outline-variant pl-space-sm">
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded" title="Notifications">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded" title="Déontologie CIL">
+<span class="material-symbols-outlined text-xl" data-icon="shield_person">shield_person</span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-low rounded" title="Arbitrage &amp; Recours">
+<span class="material-symbols-outlined text-xl" data-icon="gavel">gavel</span>
+</button>
+</div>
+<!-- Officer Profile Anchor -->
+<div class="flex items-center pl-2 space-x-2">
+<div class="w-8 h-8 rounded-full bg-primary text-surface-container-lowest flex items-center justify-center font-bold text-xs border border-primary-container">
+          KT
+        </div>
+<div class="hidden xl:flex flex-col text-left">
+<span class="text-label-sm font-label-sm leading-tight text-primary">M. K. Traoré</span>
+<span class="text-[10px] text-on-surface-variant">CIL-BF-2026</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ================= MASTER SHELL WITH OPERATOR DRAWER ================= -->
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar (Operator Drawer from Shared Components JSON) -->
+<aside class="w-64 bg-surface-container-low border-r border-outline-variant flex flex-col justify-between shrink-0 p-space-md select-none hidden md:flex">
+<div class="flex flex-col space-y-space-md">
+<!-- Drawer Header -->
+<div class="pb-space-sm border-b border-outline-variant flex flex-col space-y-1">
+<div class="flex items-center justify-between">
+<span class="text-title-md font-title-md font-bold text-primary">AnKanu Contrôle</span>
+<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container tracking-wider">
+              CIL BF
+            </span>
+</div>
+<span class="text-label-sm font-label-sm text-tertiary-container font-bold tracking-wider">
+            ÉQUIPE SEULEMENT • CIL BURKINA
+          </span>
+</div>
+<!-- CTA from JSON -->
+<button class="w-full bg-primary hover:bg-primary-container text-surface-container-lowest py-2 px-3 rounded text-label-md font-label-md flex items-center justify-center space-x-2 transition-colors">
+<span class="material-symbols-outlined text-base" data-icon="edit_note">edit_note</span>
+<span>Consigner Intervention</span>
+</button>
+<!-- 6 Main Tabs from JSON (Active State Logic: 'Vue Métriques Globales' is active for this screen) -->
+<nav class="flex flex-col space-y-1">
+<!-- 1. Vue Métriques Globales (ACTIVE) -->
+<a class="bg-surface-container-high text-primary border-l-4 border-primary font-semibold flex items-center space-x-2.5 px-3 py-2 rounded-r transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="analytics" data-weight="fill">analytics</span>
+<span class="text-label-sm font-label-sm">Vue Métriques Globales</span>
+</a>
+<!-- 2. Dossiers Vetting (N1/N2/N3) -->
+<a class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center space-x-2.5 px-3 py-2 rounded-r transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="verified_user">verified_user</span>
+<span class="text-label-sm font-label-sm">Dossiers Vetting (N1/N2/N3)</span>
+</a>
+<!-- 3. File Décalée Scan & CNIB -->
+<a class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center justify-between px-3 py-2 rounded-r transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<span class="material-symbols-outlined text-lg" data-icon="pending_actions">pending_actions</span>
+<span class="text-label-sm font-label-sm">File Décalée Scan &amp; CNIB</span>
+</div>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant" id="nav-deferred-count">14</span>
+</a>
+<!-- 4. Arbitrage & Recours (FR-090) -->
+<a class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center space-x-2.5 px-3 py-2 rounded-r transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="balance">balance</span>
+<span class="text-label-sm font-label-sm">Arbitrage &amp; Recours (FR-090)</span>
+</a>
+<!-- 5. Conformité Déontologique CIL -->
+<a class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center space-x-2.5 px-3 py-2 rounded-r transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="policy">policy</span>
+<span class="text-label-sm font-label-sm">Conformité Déontologique CIL</span>
+</a>
+<!-- 6. Surveillance Registre & SLA -->
+<a class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center justify-between px-3 py-2 rounded-r transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<span class="material-symbols-outlined text-lg" data-icon="crisis_alert">crisis_alert</span>
+<span class="text-label-sm font-label-sm">Surveillance Registre &amp; SLA</span>
+</div>
+<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-surface-container-highest text-primary" id="nav-sla-pill">0</span>
+</a>
+</nav>
+</div>
+<!-- Drawer Footer with mandated footer tabs -->
+<div class="pt-space-md border-t border-outline-variant flex flex-col space-y-1">
+<a class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center space-x-2.5 px-3 py-1.5 rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="menu_book">menu_book</span>
+<span class="text-label-sm font-label-sm">Normes Légales</span>
+</a>
+<a class="text-on-surface-variant hover:bg-surface-container hover:text-on-surface flex items-center space-x-2.5 px-3 py-1.5 rounded transition-colors" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="history_edu">history_edu</span>
+<span class="text-label-sm font-label-sm">Journal Système</span>
+</a>
+<div class="mt-2 p-2 bg-surface-container rounded border border-outline-variant/60 flex items-center space-x-2 text-[11px] text-on-surface-variant">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="verified">verified</span>
+<span>Nœud CIL-BF Ouaga v2.4</span>
+</div>
+</div>
+</aside>
+<!-- ================= MAIN OPERATOR WORKSPACE ================= -->
+<main class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar bg-background">
+<!-- SUBHEADER / SOVEREIGN ANCHOR BAR -->
+<section class="bg-surface-container-lowest border-b border-outline-variant px-space-lg py- space-y-3">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-tertiary-container/10 border border-tertiary-container text-tertiary-container uppercase tracking-wider">
+<span class="material-symbols-outlined text-xs mr-1" data-icon="admin_panel_settings">admin_panel_settings</span>
+                Équipe seulement
+              </span>
+<span class="text-body-sm text-on-surface-variant">Console Opérateur d'AnKanu • Déontologie &amp; Métriques de Régulation</span>
+</div>
+<h1 class="text-headline-md font-headline-md text-primary tracking-tight">
+              Observatoire Canonique &amp; Métriques Temps Réel (FR-092 / FR-142)
+            </h1>
+</div>
+<!-- Live meta indicators and actions -->
+<div class="flex flex-wrap items-center gap-3">
+<div class="flex items-center space-x-2 bg-surface-container-low px-3 py-1.5 rounded border border-outline-variant text-body-sm">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="text-on-surface font-medium">Ouagadougou (GMT+0) :</span>
+<span class="font-mono text-primary font-bold" id="live-clock">14:32:08 UTC</span>
+</div>
+<div class="flex items-center space-x-2 bg-surface-container-low px-3 py-1.5 rounded border border-outline-variant text-body-sm">
+<span class="text-on-surface-variant">Officier :</span>
+<span class="font-semibold text-primary">M. K. Traoré</span>
+<span class="text-xs px-1 rounded bg-surface-container text-on-surface-variant">L2 Déontologue</span>
+</div>
+<button class="flex items-center space-x-1.5 bg-primary hover:bg-primary-container text-surface-container-lowest px-3 py-1.5 rounded text-label-md font-label-md transition-all active:scale-95 shadow-sm" id="btn-refresh" onclick="triggerRefresh()">
+<span class="material-symbols-outlined text-sm" data-icon="refresh" id="refresh-icon">refresh</span>
+<span id="refresh-label">Actualiser les métriques</span>
+</button>
+</div>
+</div>
+<!-- BANC D'AUDIT / INTERACTIVE STATE SIMULATOR BAR (FR-092 / AD-20) -->
+<div class="pt-2 border-t border-outline-variant/60 flex flex-wrap items-center justify-between gap-2 text-body-sm">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="tune">tune</span>
+              Banc de simulation d'audit :
+            </span>
+<div class="inline-flex rounded border border-outline-variant bg-surface-container-low p-0.5">
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded transition-all bg-surface-container-lowest text-primary shadow-xs font-bold border border-outline-variant/40" id="sim-btn-nominal" onclick="setSimState('nominal')">
+                1. Nominal (Défaut scellé)
+              </button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded text-on-surface-variant hover:text-primary transition-all" id="sim-btn-sla" onclick="setSimState('sla-alert')">
+                2. Alerte SLA (FR-013/083)
+              </button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded text-on-surface-variant hover:text-primary transition-all" id="sim-btn-deferred" onclick="setSimState('scan-deferred')">
+                3. Afflux Scans Différés
+              </button>
+<button class="px-2.5 py-1 text-label-sm font-label-sm rounded text-on-surface-variant hover:text-primary transition-all" id="sim-btn-loading" onclick="setSimState('loading')">
+                4. Actualisation (Loading)
+              </button>
+</div>
+</div>
+<span class="text-xs text-on-surface-variant italic">
+            Conforme Délibération CIL N° 2026-08/PRES/CIL relative aux algorithmes de filtrage déontologique
+          </span>
+</div>
+</section>
+<!-- DASHBOARD BODY: 12-COLUMN SOVEREIGN GRID -->
+<div class="p-space-lg space-y-space-lg">
+<!-- ================= 1. CARTOUCHES D'INTÉGRITÉ CANONIQUE (3 Bento Cards) ================= -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Card 1: Zéro Complaisance Commerciale -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-surface-container-low -mr-8 -mt-8 rounded-full transform pointer-events-none"></div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container">
+                  ÉQUIPE SEULEMENT
+                </span>
+<span class="material-symbols-outlined text-secondary" data-icon="verified">verified</span>
+</div>
+<h3 class="text-title-md font-title-md text-primary mb-1">Zéro complaisance commerciale</h3>
+<p class="text-body-sm text-on-surface-variant leading-relaxed">
+                Interdiction absolue de profils fantômes, d'inflation de scores ou de statut « en ligne » simulé. Tous les compteurs sont rigoureusement audités.
+              </p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Statut d'authenticité :</span>
+<span class="inline-flex items-center text-xs font-bold text-primary bg-surface-container px-2 py-0.5 rounded">
+                100% Vérifiable (AD-20)
+              </span>
+</div>
+</div>
+<!-- Card 2: Mariages Doublement Confirmés (SEALED ZERO) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md flex flex-col justify-between relative">
+<div class="h-1 bg-secondary absolute top-0 left-0 right-0"></div>
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container">
+                  ÉQUIPE SEULEMENT
+                </span>
+<span class="material-symbols-outlined text-secondary" data-icon="handshake" data-weight="fill">handshake</span>
+</div>
+<h3 class="text-title-md font-title-md text-primary mb-0.5">Mariages doublement confirmés</h3>
+<span class="text-[11px] font-medium text-secondary uppercase tracking-wider block mb-2">Dual-confirmed marriages</span>
+<div class="flex items-baseline space-x-2 my-2">
+<span class="text-metric-num font-metric-num text-primary" id="sealed-marriages">0</span>
+<span class="text-body-sm font-semibold text-on-surface-variant">union scellée</span>
+</div>
+<p class="text-body-sm text-on-surface-variant leading-relaxed">
+                Registre scellé au lancement de la plateforme. Exige la double attestation conjointe des époux sous visa formel du Wali assermenté.
+              </p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between text-[11px] text-on-surface-variant">
+<span>Prochain cycle de déclaration :</span>
+<span class="font-mono font-semibold text-primary">Fin T2 2026</span>
+</div>
+</div>
+<!-- Card 3: Taux d'infirmation des recours (AD-18) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container">
+                  ÉQUIPE SEULEMENT
+                </span>
+<span class="material-symbols-outlined text-primary" data-icon="balance">balance</span>
+</div>
+<h3 class="text-title-md font-title-md text-primary mb-0.5">Infirmation des recours</h3>
+<span class="text-[11px] font-medium text-on-surface-variant uppercase tracking-wider block mb-2">Appeal Overturns (AD-18 / L2 Réviseur)</span>
+<div class="flex items-baseline space-x-2 my-2">
+<span class="text-metric-num font-metric-num text-primary" id="appeal-rate">18.4%</span>
+<span class="text-body-sm text-on-surface-variant font-medium">(23 / 125 arbitrages)</span>
+</div>
+<p class="text-body-sm text-on-surface-variant leading-relaxed">
+                Indice mesurant l'indépendance critique du second réviseur humain L2 cassant un refus algorithmique ou une décision N1 contestée.
+              </p>
+</div>
+<div class="mt-4 pt-3 border-t border-outline-variant flex items-center justify-between text-body-sm">
+<span class="text-on-surface-variant">Conformité CIL cible :</span>
+<span class="text-xs font-semibold text-primary bg-surface-container px-2 py-0.5 rounded">15% à 25% (Sain)</span>
+</div>
+</div>
+</div>
+<!-- ================= 2. SPLIT ANALYTICAL CANVAS (7 Cols / 5 Cols) ================= -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md">
+<!-- LEFT PANE: 7 COLUMNS (Dossiers Vetting N1/N2/N3 & Files Scans Différés) -->
+<div class="lg:col-span-7 space-y-space-md">
+<!-- VETTING BY TIER (FR-092) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md space-y-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant gap-2">
+<div>
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container">
+                      ÉQUIPE SEULEMENT
+                    </span>
+<h2 class="text-title-md font-title-md text-primary">Membres vérifiés par palier déontologique</h2>
+</div>
+<p class="text-body-sm text-on-surface-variant">Distribution stricte selon l'instruction souveraine FR-092 &amp; gratuité FR-044</p>
+</div>
+<span class="text-label-sm font-label-sm px-2.5 py-1 rounded bg-surface-container text-primary font-bold">
+                  Total Actifs : 1,482
+                </span>
+</div>
+<!-- Palier 1: Vérification Civile & CNIB / Passeport -->
+<div class="p-3 bg-surface-container-low rounded border border-outline-variant space-y-2">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<div class="w-7 h-7 rounded bg-primary text-surface-container-lowest flex items-center justify-center font-bold text-xs">
+                      N1
+                    </div>
+<div>
+<h4 class="text-body-md font-semibold text-primary">Niveau 1 — Vérification Civile &amp; Pièce d'Identité (CNIB/Passeport)</h4>
+<p class="text-[12px] text-on-surface-variant">Gratuité inaliénable garantie (FR-044) • Contrôle de concordance patronymique</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-metric-num font-metric-num text-primary" id="stat-n1">1,482</span>
+<span class="block text-[11px] text-on-surface-variant">100% de la base</span>
+</div>
+</div>
+<!-- Progress visual -->
+<div class="w-full bg-outline-variant/40 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 100%"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1">
+<span>948 CNIB Burkina Faso • 412 Passeports CEDEAO • 122 Attestations Consulaires</span>
+<span class="font-medium text-primary">0 frais facturés</span>
+</div>
+</div>
+<!-- Palier 2: Vivacité Faciale & Sceau de Pudeur -->
+<div class="p-3 bg-surface-container-low rounded border border-outline-variant space-y-2">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<div class="w-7 h-7 rounded bg-secondary text-surface-container-lowest flex items-center justify-center font-bold text-xs">
+                      N2
+                    </div>
+<div>
+<h4 class="text-body-md font-semibold text-primary">Niveau 2 — Vivacité Faciale &amp; Sceau de Pudeur</h4>
+<p class="text-[12px] text-on-surface-variant">Vérification passive anti-hypertrucages (No Deepfake) • Cadrage décent respecté</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-metric-num font-metric-num text-secondary" id="stat-n2">1,219</span>
+<span class="block text-[11px] text-on-surface-variant">82.2% validés</span>
+</div>
+</div>
+<!-- Progress visual -->
+<div class="w-full bg-outline-variant/40 h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 82.2%"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1">
+<span>263 dossiers en attente d'instruction manuelle ou de reprise de cliché</span>
+<span class="font-medium text-secondary">Zéro IA générative admise</span>
+</div>
+</div>
+<!-- Palier 3: Agrément Formel du Tuteur Légal (Wali) -->
+<div class="p-3 bg-surface-container-low rounded border border-outline-variant space-y-2">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<div class="w-7 h-7 rounded bg-tertiary-container text-surface-container-lowest flex items-center justify-center font-bold text-xs">
+                      N3
+                    </div>
+<div>
+<h4 class="text-body-md font-semibold text-primary">Niveau 3 — Agrément Formel du Tuteur Légal (Wali assermenté)</h4>
+<p class="text-[12px] text-on-surface-variant">Contact validé par appel vocal souverain ou attestation légalisée de tutelle</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-metric-num font-metric-num text-tertiary-container" id="stat-n3">884</span>
+<span class="block text-[11px] text-on-surface-variant">59.6% chaperonnés</span>
+</div>
+</div>
+<!-- Progress visual -->
+<div class="w-full bg-outline-variant/40 h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary-container h-full rounded-full" style="width: 59.6%"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1">
+<span>Indispensable pour l'ouverture des salons de correspondance directe</span>
+<span class="font-medium text-tertiary-container">Protocole Wali AnKanu</span>
+</div>
+</div>
+</div>
+<!-- FILE DES SCANS DIFFÉRÉS (SCAN-DEFERRED CANONIQUE) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md space-y-space-md transition-all" id="panel-deferred">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-outline-variant gap-2">
+<div>
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container">
+                      ÉQUIPE SEULEMENT
+                    </span>
+<h3 class="text-title-md font-title-md text-primary">File des Scans Différés (Scan-deferred)</h3>
+</div>
+<p class="text-body-sm text-on-surface-variant">Règle de transparence inviolable : Tout retard de connectivité rurale est audité en clair</p>
+</div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-on-surface-variant">En attente :</span>
+<span class="px-2.5 py-1 rounded bg-surface-container text-primary font-mono font-bold text-body-sm" id="badge-scan-deferred">
+                    14 éléments
+                  </span>
+</div>
+</div>
+<!-- Transparence Banner -->
+<div class="p-3 bg-surface-container rounded border-l-4 border-secondary text-body-sm flex items-start space-x-3">
+<span class="material-symbols-outlined text-secondary shrink-0 mt-0.5" data-icon="policy">policy</span>
+<div class="space-y-1">
+<span class="font-semibold text-primary">Principe Déontologique "Scan-deferred never hidden"</span>
+<p class="text-on-surface-variant text-body-sm">
+                    Les fragments multimédias (notes vocales en Mooré/Dioula ou scans CNIB en bande passante EDGE/2G dégradée) sont immédiatement enregistrés dans l'arbre d'audit SHA-256 sans masquer la file à l'officier instructeur.
+                  </p>
+</div>
+</div>
+<!-- Table of Deferred items -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse text-body-sm">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container-low text-on-surface-variant text-label-sm font-label-sm">
+<th class="py-2 px-3">RÉFÉRENCE</th>
+<th class="py-2 px-3">NATURE PIÈCE</th>
+<th class="py-2 px-3">ORIGINE RÉSEAU</th>
+<th class="py-2 px-3">ATTENTE</th>
+<th class="py-2 px-3 text-right">ACTION</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/60 font-body-sm" id="deferred-table-body">
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-3 font-mono font-medium text-primary">DEF-2026-0981</td>
+<td class="py-2.5 px-3">
+<div class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="mic">mic</span>
+<span>Audio Déclaration (Mooré)</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-on-surface-variant">Kaya (Relais 2G)</td>
+<td class="py-2.5 px-3 font-mono text-xs">03h 12m</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-0.5 rounded text-xs font-semibold bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant">
+                          Assigner
+                        </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-3 font-mono font-medium text-primary">DEF-2026-0982</td>
+<td class="py-2.5 px-3">
+<div class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-sm text-primary" data-icon="badge">badge</span>
+<span>CNIB Verso Flou (Scan décalé)</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-on-surface-variant">Bobo-Dioulasso (3G)</td>
+<td class="py-2.5 px-3 font-mono text-xs">01h 45m</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-0.5 rounded text-xs font-semibold bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant">
+                          Assigner
+                        </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="py-2.5 px-3 font-mono font-medium text-primary">DEF-2026-0984</td>
+<td class="py-2.5 px-3">
+<div class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-sm text-tertiary-container" data-icon="verified_user">verified_user</span>
+<span>Accord Parental Wali (Vocal Dioula)</span>
+</div>
+</td>
+<td class="py-2.5 px-3 text-on-surface-variant">Banfora (Satellite)</td>
+<td class="py-2.5 px-3 font-mono text-xs">00h 28m</td>
+<td class="py-2.5 px-3 text-right">
+<button class="px-2 py-0.5 rounded text-xs font-semibold bg-surface-container hover:bg-surface-container-high text-primary border border-outline-variant">
+                          Assigner
+                        </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- RIGHT PANE: 5 COLUMNS (SLA-breach monitoring, Délais FR-142, Journal CIL) -->
+<div class="lg:col-span-5 space-y-space-md">
+<!-- SLA BREACH & SURVEILLANCE DES DÉLAIS (FR-142 / FR-013 / FR-083) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md space-y-space-md transition-all" id="panel-sla">
+<div class="flex items-center justify-between pb-3 border-b border-outline-variant">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container">
+                    ÉQUIPE SEULEMENT
+                  </span>
+<h3 class="text-title-md font-title-md text-primary">Surveillance des Délais SLA (FR-142)</h3>
+</div>
+<span class="px-2 py-0.5 rounded text-xs font-bold bg-surface-container text-primary" id="sla-global-badge">
+                  100% Conforme
+                </span>
+</div>
+<!-- SLA Item 1: Revue Gratuite des Profils (FR-013) -->
+<div class="p-3 bg-surface-container-low rounded border border-outline-variant space-y-2">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-secondary">SLA Profils (FR-013)</span>
+<h4 class="text-body-md font-semibold text-primary">Admission Humaine Déontologique</h4>
+<p class="text-[12px] text-on-surface-variant">Engagement max : 24h ouvrées (tolérance 48h)</p>
+</div>
+<div class="text-right">
+<span class="font-mono font-bold text-primary text-sm" id="sla-time-profiles">11h 24m moy.</span>
+<span class="block text-[10px] text-on-surface-variant">Cible ≤ 24h00</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-body-sm pt-1">
+<div class="flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-on-surface-variant text-xs">En approche (&gt;18h) :</span>
+<span class="font-bold text-primary text-xs" id="sla-near-profiles">3 dossiers</span>
+</div>
+<div class="flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant" id="sla-breach-indicator-1"></span>
+<span class="text-on-surface-variant text-xs">Dépassement (Breach) :</span>
+<span class="font-bold text-on-surface-variant text-xs" id="sla-breached-profiles">0</span>
+</div>
+</div>
+</div>
+<!-- SLA Item 2: Arbitrage des Signalements (FR-083 / FR-085) -->
+<div class="p-3 bg-surface-container-low rounded border border-outline-variant space-y-2">
+<div class="flex items-start justify-between">
+<div>
+<span class="text-label-sm font-label-sm uppercase tracking-wider text-tertiary-container">SLA Arbitrage (FR-083 / FR-085)</span>
+<h4 class="text-body-md font-semibold text-primary">Signalements &amp; Atteintes à la Pudeur</h4>
+<p class="text-[12px] text-on-surface-variant">Traitement impératif sous 24h par officier assermenté</p>
+</div>
+<div class="text-right">
+<span class="font-mono font-bold text-primary text-sm" id="sla-time-reports">04h 18m moy.</span>
+<span class="block text-[10px] text-on-surface-variant">Cible ≤ 24h00</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-body-sm pt-1">
+<div class="flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-on-surface-variant text-xs">Priorité Khalwa / Propos déplacés :</span>
+<span class="font-bold text-primary text-xs" id="sla-khalwa-count">1 dossier</span>
+</div>
+<div class="flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-outline-variant" id="sla-breach-indicator-2"></span>
+<span class="text-on-surface-variant text-xs">Dépassement (Breach) :</span>
+<span class="font-bold text-on-surface-variant text-xs" id="sla-breached-reports">0</span>
+</div>
+</div>
+</div>
+<!-- SLA Operational Notice -->
+<div class="hidden p-3 bg-error-container/30 border border-error rounded text-body-sm space-y-1" id="sla-alert-banner">
+<div class="flex items-center space-x-1.5 text-error font-bold">
+<span class="material-symbols-outlined text-base" data-icon="warning">warning</span>
+<span>Alerte SLA Déclenchée (FR-142)</span>
+</div>
+<p class="text-xs text-on-surface">
+                  2 dossiers de vérification ont franchi le seuil des 24 heures. Notification automatique transmise au superviseur CIL Burkina Faso.
+                </p>
+</div>
+</div>
+<!-- JOURNAL D'HORODATAGE & SCELLÉ CIL BURKINA FASO -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-space-md space-y-space-md">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container">
+                    ÉQUIPE SEULEMENT
+                  </span>
+<h3 class="text-title-md font-title-md text-primary">Sceau d'Audit CIL &amp; Ancrage Cryptographique</h3>
+</div>
+<span class="material-symbols-outlined text-secondary" data-icon="lock" data-weight="fill">lock</span>
+</div>
+<div class="space-y-2 text-body-sm font-mono bg-surface-container-low p-3 rounded border border-outline-variant/80 text-[11px] leading-relaxed">
+<div class="flex justify-between text-on-surface-variant">
+<span>Racine Merkle actuelle :</span>
+<span class="text-primary font-bold">0x8f2a...7c19</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Horodatage scellé CIL :</span>
+<span class="text-primary" id="sealed-timestamp">2026-03-31T14:30:00Z</span>
+</div>
+<div class="flex justify-between text-on-surface-variant">
+<span>Réplication souveraine :</span>
+<span class="text-secondary font-bold">Ouaga DataCenter ↔ Scaleway FR</span>
+</div>
+<div class="break-all pt-1 border-t border-outline-variant/60 text-[10px] text-on-surface-variant">
+                  SHA-256 : <span class="text-primary">e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant italic">
+                Enregistrement immuable certifié conforme à la Loi n° 001-2021/AN du Burkina Faso régissant la protection des données à caractère personnel.
+              </p>
+</div>
+</div>
+</div>
+</div>
+<!-- ================= INSTITUTIONAL FOOTER ================= -->
+<footer class="mt-auto bg-surface-container-lowest border-t border-outline-variant px-space-lg py-4">
+<div class="flex flex-col md:flex-row items-center justify-between text-body-sm text-on-surface-variant gap-3">
+<div class="flex items-center space-x-3">
+<span class="inline-block px-1.5 py-0.5 rounded text-[10px] font-bold bg-tertiary-container/10 border border-tertiary-container text-tertiary-container uppercase tracking-wider">
+              ÉQUIPE SEULEMENT
+            </span>
+<span>Console Opérateur Déontologique AnKanu • Nœud Ouagadougou</span>
+</div>
+<div class="flex items-center space-x-6 text-xs">
+<span>Régulation CIL BF #001-2021/AN</span>
+<span class="h-3 w-px bg-outline-variant"></span>
+<span>Assermentation Opérateur L2/L3 Active</span>
+<span class="h-3 w-px bg-outline-variant"></span>
+<span class="text-primary font-semibold">Chiffrement Souverain SHA-256</span>
+</div>
+</div>
+</footer>
+</main>
+</div>
+<!-- ================= JAVASCRIPT STATE SIMULATOR & INTERACTIVITY ================= -->
+<script>
+    // Live Clock Simulation (GMT+0 Ouagadougou)
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getUTCHours()).padStart(2, '0');
+      const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+      const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+      const clockEl = document.getElementById('live-clock');
+      if (clockEl) {
+        clockEl.textContent = `${hours}:${minutes}:${seconds} UTC`;
+      }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // State Management for the interactive simulator bar
+    let currentState = 'nominal';
+
+    function setSimState(state) {
+      currentState = state;
+      
+      // Update Buttons styling
+      const buttons = ['nominal', 'sla', 'deferred', 'loading'];
+      buttons.forEach(b => {
+        const el = document.getElementById(`sim-btn-${b}`);
+        if (!el) return;
+        el.className = "px-2.5 py-1 text-label-sm font-label-sm rounded transition-all text-on-surface-variant hover:text-primary";
+      });
+
+      const activeBtnMap = {
+        'nominal': 'sim-btn-nominal',
+        'sla-alert': 'sim-btn-sla',
+        'scan-deferred': 'sim-btn-deferred',
+        'loading': 'sim-btn-loading'
+      };
+      
+      const activeEl = document.getElementById(activeBtnMap[state]);
+      if (activeEl) {
+        activeEl.className = "px-2.5 py-1 text-label-sm font-label-sm rounded transition-all bg-surface-container-lowest text-primary shadow-xs font-bold border border-outline-variant/40";
+      }
+
+      // Elements to modify based on simulator
+      const slaAlertBanner = document.getElementById('sla-alert-banner');
+      const slaGlobalBadge = document.getElementById('sla-global-badge');
+      const slaBreachedProfiles = document.getElementById('sla-breached-profiles');
+      const slaBreachedReports = document.getElementById('sla-breached-reports');
+      const slaInd1 = document.getElementById('sla-breach-indicator-1');
+      const slaInd2 = document.getElementById('sla-breach-indicator-2');
+      const badgeDeferred = document.getElementById('badge-scan-deferred');
+      const navDeferred = document.getElementById('nav-deferred-count');
+      const navSlaPill = document.getElementById('nav-sla-pill');
+      const refreshIcon = document.getElementById('refresh-icon');
+      const refreshLabel = document.getElementById('refresh-label');
+
+      if (state === 'nominal') {
+        // Nominal default sealed counters
+        slaAlertBanner.classList.add('hidden');
+        slaGlobalBadge.textContent = "100% Conforme";
+        slaGlobalBadge.className = "px-2 py-0.5 rounded text-xs font-bold bg-surface-container text-primary";
+        slaBreachedProfiles.textContent = "0";
+        slaBreachedReports.textContent = "0";
+        slaInd1.className = "w-2 h-2 rounded-full bg-outline-variant";
+        slaInd2.className = "w-2 h-2 rounded-full bg-outline-variant";
+        badgeDeferred.textContent = "14 éléments";
+        navDeferred.textContent = "14";
+        navSlaPill.textContent = "0";
+        navSlaPill.className = "text-[10px] font-bold px-1.5 py-0.5 rounded bg-surface-container-highest text-primary";
+        refreshIcon.classList.remove('animate-spin');
+        refreshLabel.textContent = "Actualiser les métriques";
+      } 
+      else if (state === 'sla-alert') {
+        // SLA Breach Alert state
+        slaAlertBanner.classList.remove('hidden');
+        slaGlobalBadge.textContent = "ALERTE BREACH (2)";
+        slaGlobalBadge.className = "px-2 py-0.5 rounded text-xs font-bold bg-error-container text-on-error-container animate-pulse";
+        slaBreachedProfiles.textContent = "2 dossiers";
+        slaBreachedReports.textContent = "0";
+        slaInd1.className = "w-2 h-2 rounded-full bg-error animate-ping";
+        slaInd2.className = "w-2 h-2 rounded-full bg-outline-variant";
+        navSlaPill.textContent = "2 ALERTE";
+        navSlaPill.className = "text-[10px] font-bold px-1.5 py-0.5 rounded bg-error text-surface-container-lowest animate-pulse";
+        refreshIcon.classList.remove('animate-spin');
+        refreshLabel.textContent = "Actualiser les métriques";
+      } 
+      else if (state === 'scan-deferred') {
+        // Afflux Scans Différés (rural 2G load)
+        slaAlertBanner.classList.add('hidden');
+        slaGlobalBadge.textContent = "Réseau Dégradé 2G/EDGE";
+        slaGlobalBadge.className = "px-2 py-0.5 rounded text-xs font-bold bg-secondary-container text-on-secondary-container";
+        badgeDeferred.textContent = "68 éléments (Afflux)";
+        badgeDeferred.className = "px-2.5 py-1 rounded bg-secondary-container text-on-secondary-container font-mono font-bold text-body-sm";
+        navDeferred.textContent = "68";
+        navDeferred.className = "text-[10px] font-bold px-1.5 py-0.5 rounded bg-secondary-container text-on-secondary-container";
+        refreshIcon.classList.remove('animate-spin');
+        refreshLabel.textContent = "Actualiser les métriques";
+      } 
+      else if (state === 'loading') {
+        // Refreshing loading state
+        refreshIcon.classList.add('animate-spin');
+        refreshLabel.textContent = "Synchronisation Nœud CIL...";
+        setTimeout(() => {
+          if (currentState === 'loading') {
+            setSimState('nominal');
+          }
+        }, 1500);
+      }
+    }
+
+    function triggerRefresh() {
+      setSimState('loading');
+    }
+  </script>
+</body></html>

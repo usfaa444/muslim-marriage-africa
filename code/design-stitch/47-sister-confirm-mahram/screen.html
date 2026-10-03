@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sister confirm Mahram</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'surface-sand': '#F4EDE0',
+            'surface-raised': '#FFFBF4',
+            'surface-indigo': '#15283F',
+            'ink-primary': '#1B2433',
+            'ink-secondary': '#5C5346',
+            'ink-on-indigo': '#F4EDE0',
+            'indigo': '#1F3A5F',
+            'indigo-deep': '#15283F',
+            'gold': '#C4A35A',
+            'gold-soft': '#E8D5A3',
+            'mihrab': '#2C4A6E',
+            'border-hairline': '#D9CDB8',
+            'border-strong': '#6F624C',
+            'focus-ring': '#1F3A5F',
+            'blur-wash': '#C8BBA6',
+            'danger': '#8B3A3A',
+            'danger-soft': '#F3E0DC',
+            'success': '#3D5C45',
+            'success-soft': '#DCE6DE',
+            'staff': '#6B3D2E',
+            'staff-soft': '#EFE4DC',
+            'disabled': '#B5A894'
+          },
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif']
+          },
+          borderRadius: {
+            sm: '6px',
+            md: '12px',
+            lg: '20px',
+            full: '9999px'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #F4EDE0;
+      color: #1B2433;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-serif-title {
+      font-family: 'Source Serif 4', Georgia, serif;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-surface-sand text-ink-primary flex flex-col justify-between selection:bg-gold-soft selection:text-indigo-deep">
+
+  <!-- Interactive State Simulator Banner (Audit & Canonical QA) -->
+  <aside class="bg-surface-raised border-b border-border-hairline py-2.5 px-4 text-xs font-sans text-ink-secondary" aria-label="Banc d'audit déontologique">
+    <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1 font-semibold text-indigo">
+          <span class="material-symbols-outlined text-sm">tune</span>
+          Simulation d'état (FR-073 · AD-12) :
+        </span>
+        <span class="hidden sm:inline text-ink-secondary text-[11px]">Accès consécutif à la notification d'agrément</span>
+      </div>
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <button type="button" onclick="setState('initial')" id="btn-state-initial" class="px-2.5 py-1 rounded bg-indigo text-ink-on-indigo font-medium text-[11px] transition-all">
+          1. Notification reçue (Défaut)
+        </button>
+        <button type="button" onclick="openConfirmDialog()" id="btn-state-dialog" class="px-2.5 py-1 rounded bg-surface-sand text-ink-primary border border-border-hairline hover:border-border-strong text-[11px] transition-all">
+          2. Dialogue de confirmation
+        </button>
+        <button type="button" onclick="openExpireDialog()" id="btn-state-expire" class="px-2.5 py-1 rounded bg-surface-sand text-ink-primary border border-border-hairline hover:border-border-strong text-[11px] transition-all">
+          3. Dialogue laisser expirer (7j)
+        </button>
+        <button type="button" onclick="setState('confirmed')" id="btn-state-confirmed" class="px-2.5 py-1 rounded bg-surface-sand text-ink-primary border border-border-hairline hover:border-border-strong text-[11px] transition-all">
+          4. Confirmé + Liste d'octroi vide
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Top Navigation (Standard Sister Member Chrome) -->
+  <header class="w-full bg-surface-sand border-b border-border-hairline">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Brand Logo / Product Mark -->
+      <a href="#" class="flex items-center gap-3 group focus:outline-none" aria-label="Retour à l'accueil AnKanu">
+        <div class="w-9 h-9 rounded-full border border-indigo flex items-center justify-center bg-surface-raised relative">
+          <span class="font-serif-title font-bold text-indigo text-lg">A</span>
+          <span class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-gold"></span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-serif-title text-xl font-bold tracking-tight text-indigo leading-tight">AnKanu</span>
+          <span class="text-[9px] font-semibold text-ink-secondary tracking-widest uppercase -mt-0.5">Ta'aruf Honorable</span>
+        </div>
+      </a>
+
+      <!-- Member Navigation Tabs -->
+      <nav class="hidden md:flex items-center gap-8 text-sm" aria-label="Navigation principale">
+        <a href="#" class="text-ink-secondary hover:text-ink-primary py-1 transition-colors">Découvrir</a>
+        <a href="#" class="text-ink-secondary hover:text-ink-primary py-1 transition-colors">Invitations</a>
+        <a href="#" class="text-ink-secondary hover:text-ink-primary py-1 transition-colors">Discussions</a>
+        <a href="#" class="text-indigo font-semibold border-b-2 border-indigo py-1 flex items-center gap-1.5">
+          <span>Profil</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-gold" title="Notification en attente"></span>
+        </a>
+      </nav>
+
+      <!-- Trailing Action -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-border-hairline bg-surface-raised hover:border-border-strong text-xs text-ink-secondary hover:text-indigo transition-colors" title="Notification FR-073">
+          <span class="material-symbols-outlined text-sm text-gold">notifications_active</span>
+          <span class="font-medium">Notification d'attache</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-10">
+
+    <!-- Breadcrumb / Notification Origin Context -->
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-3 text-xs text-ink-secondary">
+      <div class="flex items-center gap-2">
+        <a href="#" class="hover:text-indigo flex items-center gap-1 transition-colors">
+          <span class="material-symbols-outlined text-sm">arrow_back</span>
+          <span>Notifications</span>
+        </a>
+        <span class="text-border-hairline">/</span>
+        <span class="text-ink-primary font-medium">Validation tutélaire du Mahram</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="inline-flex items-center gap-1 bg-surface-raised border border-border-hairline px-2.5 py-0.5 rounded text-[11px] font-mono text-ink-secondary">
+          FR-073 · AD-12
+        </span>
+        <span class="inline-flex items-center gap-1 text-[11px] text-ink-secondary">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+          Délai de réflexion : 7 jours
+        </span>
+      </div>
+    </div>
+
+    <!-- VIEW 1: Initial Pending State (Reached from notification) -->
+    <section id="view-initial" class="space-y-6">
+      <!-- Header Banner / Editorial Title -->
+      <div class="text-center sm:text-left space-y-2">
+        <h1 class="font-serif-title text-2xl sm:text-3xl text-indigo font-semibold tracking-tight">
+          Confirmation du tuteur légal (Mahram)
+        </h1>
+        <p class="text-sm sm:text-base text-ink-secondary leading-relaxed">
+          Votre tuteur désigné a validé le code d'honneur par SMS. Conformément à la règle de souveraineté de la sœur (FR-073), son rattachement à votre sanctuaire requiert votre accord formel préalable.
+        </p>
+      </div>
+
+      <!-- Mahram Identification Card -->
+      <div class="bg-surface-raised border border-border-hairline rounded-md p-6 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-border-hairline">
+          <div class="flex items-start sm:items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-surface-sand border border-border-hairline flex items-center justify-center text-indigo flex-shrink-0">
+              <span class="material-symbols-outlined text-2xl">verified_user</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="font-serif-title text-lg font-bold text-ink-primary">El Hadj Ousmane Sawadogo</h2>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-success-soft text-success text-[11px] font-medium border border-success/20">
+                  <span class="material-symbols-outlined text-xs">check_circle</span>
+                  OTP validé
+                </span>
+              </div>
+              <p class="text-xs text-ink-secondary mt-0.5">
+                Qualité déclarée : <strong class="text-ink-primary font-medium">Père (Paternel) · Tuteur canonique</strong>
+              </p>
+            </div>
+          </div>
+          <div class="text-left sm:text-right text-xs text-ink-secondary bg-surface-sand/50 sm:bg-transparent p-2.5 sm:p-0 rounded border sm:border-0 border-border-hairline">
+            <div class="font-medium text-ink-primary">+226 70 •• •• 84</div>
+            <div class="text-[11px]">Ouagadougou (Burkina Faso)</div>
+          </div>
+        </div>
+
+        <!-- Inviolable Safeguard Notice (AD-12) -->
+        <div class="bg-surface-sand/70 rounded-md p-4 border border-border-hairline space-y-2">
+          <div class="flex items-start gap-2.5">
+            <span class="material-symbols-outlined text-indigo text-lg flex-shrink-0 mt-0.5">security</span>
+            <div class="space-y-1">
+              <h3 class="text-xs font-semibold text-indigo uppercase tracking-wider">
+                Garantie d'inviolabilité tutélaire (Norme AD-12)
+              </h3>
+              <p class="text-xs text-ink-secondary leading-relaxed">
+                <strong class="text-ink-primary font-medium">Après confirmation, votre tuteur ne sera PAS rattaché d'office à toutes vos conversations.</strong> Vous conserverez la pleine liberté d'octroyer ou non sa présence salon par salon. Aucun prétendant ne peut vous imposer un tuteur sans votre libre consentement bilatéral.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expiration Countdown & Autonomous Right -->
+        <div class="flex items-center gap-3 text-xs text-ink-secondary pt-1">
+          <span class="material-symbols-outlined text-sm text-gold">timer</span>
+          <span>
+            Délai d'arbitrage autonome : <strong class="text-ink-primary font-medium">7 jours restants</strong>. Sans action de votre part, la demande devient caduque sans pénalité.
+          </span>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="pt-4 border-t border-border-hairline flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <button type="button" onclick="openExpireDialog()" class="min-h-[44px] px-4 py-2.5 text-xs text-ink-secondary hover:text-danger hover:underline transition-colors flex items-center justify-center gap-1.5 order-2 sm:order-1 focus:ring-1 focus:ring-danger rounded-md">
+            <span class="material-symbols-outlined text-sm">schedule</span>
+            <span>Laisser expirer les 7 jours (ignorer ou rejeter)</span>
+          </button>
+
+          <button type="button" onclick="openConfirmDialog()" class="min-h-[48px] px-6 py-2.5 bg-indigo hover:bg-indigo-deep text-ink-on-indigo text-sm font-semibold rounded-md shadow-sm hover:shadow transition-all flex items-center justify-center gap-2 order-1 sm:order-2 focus:ring-2 focus:ring-gold-soft focus:outline-none">
+            <span class="material-symbols-outlined text-base text-gold-soft">check</span>
+            <span>Confirmer le tuteur légal</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Explanatory Footnote -->
+      <div class="p-4 rounded-md border border-border-hairline bg-surface-raised/50 text-xs text-ink-secondary flex items-start gap-2.5">
+        <span class="material-symbols-outlined text-ink-secondary text-base mt-0.5">info</span>
+        <p class="leading-relaxed">
+          Notification reçue après authentification SMS du tuteur. Cette étape garantit la loyauté du processus ta'aruf burkinabè : le père ou tuteur est reconnu comme garant moral, tout en respectant l'intimité et l'assentiment souverain de la postulante.
+        </p>
+      </div>
+    </section>
+
+    <!-- VIEW 2: Confirmed State + Empty Grant List (AD-12 requirement) -->
+    <section id="view-confirmed" class="hidden space-y-6">
+      <!-- Confirmation Banner -->
+      <div class="bg-surface-raised border border-success/30 rounded-md p-6 space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-success-soft text-success flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-2xl">check</span>
+          </div>
+          <div>
+            <h2 class="font-serif-title text-xl text-indigo font-bold">
+              Tuteur légal confirmé avec succès
+            </h2>
+            <p class="text-xs text-ink-secondary">
+              M. El Hadj Ousmane Sawadogo (Père) est désormais enregistré comme votre Mahram de référence.
+            </p>
+          </div>
+        </div>
+
+        <div class="bg-surface-sand p-3.5 rounded border border-border-hairline text-xs text-ink-secondary flex items-start gap-2.5 mt-2">
+          <span class="material-symbols-outlined text-indigo text-base mt-0.5">shield</span>
+          <p>
+            <strong class="text-ink-primary font-medium">Protection FR-073 active :</strong> Votre Mahram est authentifié mais n'accède à aucune discussion sans votre accord explicite. Chaque octroi d'accès s'opère individuellement pour chaque prétendant agréé.
+          </p>
+        </div>
+      </div>
+
+      <!-- Empty Grant List Section (Part of Mahram attach states) -->
+      <div class="bg-surface-raised border border-border-hairline rounded-md p-6 space-y-5">
+        <div class="flex items-center justify-between pb-3 border-b border-border-hairline">
+          <div>
+            <h3 class="font-serif-title text-base font-semibold text-ink-primary">
+              Salons avec présence tutélaire octroyée
+            </h3>
+            <p class="text-xs text-ink-secondary">
+              Discussions où le bandeau « Un wali lit cette discussion » est actuellement actif
+            </p>
+          </div>
+          <span class="px-2.5 py-0.5 rounded-full bg-surface-sand border border-border-hairline text-xs font-mono text-ink-secondary">
+            0 salon actif
+          </span>
+        </div>
+
+        <!-- Empty State Component -->
+        <div class="text-center py-10 px-4 space-y-3 bg-surface-sand/40 rounded-md border border-dashed border-border-hairline">
+          <div class="w-12 h-12 rounded-full bg-surface-raised border border-border-hairline flex items-center justify-center mx-auto text-ink-secondary">
+            <span class="material-symbols-outlined text-2xl">forum</span>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm font-serif-title font-semibold text-ink-primary">
+              Aucun salon de discussion n'est encore octroyé à votre tuteur
+            </p>
+            <p class="text-xs text-ink-secondary max-w-md mx-auto leading-relaxed">
+              Conformément à la norme AD-12, la confirmation de votre tuteur ne l'attache pas automatiquement à vos pourparlers. Vous pourrez lui ouvrir l'accès dès l'acceptation d'une invitation sérieuse.
+            </p>
+          </div>
+          <div class="pt-2">
+            <a href="#" class="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 bg-surface-raised border border-border-strong hover:border-indigo text-indigo text-xs font-semibold rounded-md transition-all">
+              <span class="material-symbols-outlined text-sm">chat</span>
+              <span>Consulter mes discussions en cours</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Action to return or manage -->
+        <div class="pt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-ink-secondary">
+          <button type="button" onclick="setState('initial')" class="hover:text-indigo underline transition-colors">
+            ← Revenir à l'écran de décision initiale
+          </button>
+          <a href="#" class="hover:text-indigo font-medium flex items-center gap-1 transition-colors">
+            <span>Gérer les paramètres du sanctuaire</span>
+            <span class="material-symbols-outlined text-xs">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- DIALOG 1: Confirm Mahram Dialog -->
+  <div id="dialog-confirm" class="fixed inset-0 z-50 bg-indigo-deep/60 backdrop-blur-sm flex items-center justify-center p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="dialog-confirm-title">
+    <div class="bg-surface-raised border border-border-hairline rounded-md max-w-lg w-full p-6 space-y-5 shadow-xl animate-fade-in">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-surface-sand border border-indigo/20 flex items-center justify-center text-indigo flex-shrink-0">
+            <span class="material-symbols-outlined text-xl">gavel</span>
+          </div>
+          <div>
+            <h2 id="dialog-confirm-title" class="font-serif-title text-lg font-bold text-indigo">
+              Sceller la confirmation du Mahram
+            </h2>
+            <p class="text-xs text-ink-secondary">Ratification formelle par la sœur (FR-073)</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeAllDialogs()" class="text-ink-secondary hover:text-ink-primary p-1" aria-label="Fermer la boîte de dialogue">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs text-ink-secondary leading-relaxed bg-surface-sand/60 p-4 rounded border border-border-hairline">
+        <p>
+          En confirmant <strong class="text-ink-primary">El Hadj Ousmane Sawadogo</strong> comme tuteur légal :
+        </p>
+        <ul class="space-y-2 list-none">
+          <li class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-success text-sm flex-shrink-0 mt-0.5">check_circle</span>
+            <span>Il recevra une notification attestant de votre accord officiel.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-indigo text-sm flex-shrink-0 mt-0.5">shield</span>
+            <span><strong class="text-ink-primary">Il ne sera pas rattaché à chaque conversation</strong> : votre liste d'octroi démarre vide, sous votre seule décision.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="material-symbols-outlined text-indigo text-sm flex-shrink-0 mt-0.5">lock_reset</span>
+            <span>Vous pourrez révoquer ou ajuster ce mandat tutélaire à tout moment dans votre profil.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-end gap-3 pt-2 border-t border-border-hairline">
+        <button type="button" onclick="closeAllDialogs()" class="w-full sm:w-auto min-h-[44px] px-4 py-2 text-xs font-medium text-ink-secondary hover:text-ink-primary transition-colors">
+          Annuler
+        </button>
+        <button type="button" onclick="executeConfirm()" class="w-full sm:w-auto min-h-[48px] px-6 py-2.5 bg-indigo hover:bg-indigo-deep text-ink-on-indigo text-xs font-semibold rounded-md transition-all flex items-center justify-center gap-1.5 focus:ring-2 focus:ring-gold-soft">
+          <span class="material-symbols-outlined text-sm text-gold-soft">done</span>
+          <span>Confirmer solennellement</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIALOG 2: Let 7-day expire (Ignore or Reject) Dialog -->
+  <div id="dialog-expire" class="fixed inset-0 z-50 bg-indigo-deep/60 backdrop-blur-sm flex items-center justify-center p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="dialog-expire-title">
+    <div class="bg-surface-raised border border-border-hairline rounded-md max-w-lg w-full p-6 space-y-5 shadow-xl animate-fade-in">
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-danger-soft text-danger flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-xl">hourglass_bottom</span>
+          </div>
+          <div>
+            <h2 id="dialog-expire-title" class="font-serif-title text-lg font-bold text-ink-primary">
+              Laisser expirer ou refuser l'attache
+            </h2>
+            <p class="text-xs text-ink-secondary">Délai d'extinction de 7 jours · Sans préjudice moral</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeAllDialogs()" class="text-ink-secondary hover:text-ink-primary p-1" aria-label="Fermer la boîte de dialogue">
+          <span class="material-symbols-outlined text-lg">close</span>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs text-ink-secondary leading-relaxed bg-surface-sand/60 p-4 rounded border border-border-hairline">
+        <p>
+          Vous pouvez choisir entre deux postures souveraines :
+        </p>
+        <div class="space-y-2">
+          <div class="p-3 bg-surface-raised rounded border border-border-hairline">
+            <strong class="text-ink-primary block mb-0.5">1. Laisser le délai de 7 jours expirer [ASSUMPTION]</strong>
+            <span>La demande s'éteint automatiquement sans notification abrupte ni stigmatisation familiale. Vous conservez votre rythme sans pression.</span>
+          </div>
+          <div class="p-3 bg-surface-raised rounded border border-border-hairline">
+            <strong class="text-ink-primary block mb-0.5">2. Rejeter immédiatement</strong>
+            <span>Clôture instantanée de la demande si le numéro ou la personne ne correspond pas à votre volonté.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-end gap-2.5 pt-2 border-t border-border-hairline">
+        <button type="button" onclick="closeAllDialogs()" class="w-full sm:w-auto min-h-[44px] px-4 py-2 text-xs font-medium text-ink-secondary hover:text-ink-primary transition-colors">
+          Revenir
+        </button>
+        <button type="button" onclick="executeRejectImmediate()" class="w-full sm:w-auto min-h-[44px] px-4 py-2 bg-surface-raised border border-danger/40 text-danger hover:bg-danger-soft text-xs font-medium rounded-md transition-colors">
+          Rejeter immédiatement
+        </button>
+        <button type="button" onclick="executeLetExpire()" class="w-full sm:w-auto min-h-[44px] px-5 py-2.5 bg-indigo hover:bg-indigo-deep text-ink-on-indigo text-xs font-semibold rounded-md transition-all">
+          Laisser s'écouler les 7 jours
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar (Standard Sister Member Chrome) -->
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-raised border-t border-border-hairline z-40 px-4 flex items-center justify-around text-[10px]" aria-label="Navigation mobile">
+    <a href="#" class="flex flex-col items-center gap-1 text-ink-secondary">
+      <span class="material-symbols-outlined text-xl">explore</span>
+      <span>Découvrir</span>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 text-ink-secondary">
+      <span class="material-symbols-outlined text-xl">mail</span>
+      <span>Invitations</span>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 text-ink-secondary">
+      <span class="material-symbols-outlined text-xl">forum</span>
+      <span>Discussions</span>
+    </a>
+    <a href="#" class="flex flex-col items-center gap-1 text-indigo font-bold relative">
+      <span class="material-symbols-outlined text-xl">person</span>
+      <span>Profil</span>
+      <span class="absolute top-0 right-2 w-1.5 h-1.5 rounded-full bg-gold"></span>
+    </a>
+  </nav>
+
+  <!-- Editorial Institutional Footer -->
+  <footer class="w-full bg-surface-sand border-t border-border-hairline py-8 mb-16 md:mb-0 text-xs text-ink-secondary">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-serif-title font-bold text-indigo">AnKanu</span>
+        <span class="text-border-hairline">•</span>
+        <span>Conformité CIL (Burkina Faso) · Hébergement souverain Scaleway France</span>
+      </div>
+      <div class="flex items-center gap-4 text-[11px]">
+        <a href="#" class="hover:text-indigo underline transition-colors">Charte des Tuteurs (Wali)</a>
+        <a href="#" class="hover:text-indigo underline transition-colors">Pudeur & Chaperonnage</a>
+        <a href="#" class="hover:text-indigo underline transition-colors">Assistance Déontologique</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for Interactive State Switching & Dialogs -->
+  <script>
+    function openConfirmDialog() {
+      closeAllDialogs();
+      document.getElementById('dialog-confirm').classList.remove('hidden');
+    }
+
+    function openExpireDialog() {
+      closeAllDialogs();
+      document.getElementById('dialog-expire').classList.remove('hidden');
+    }
+
+    function closeAllDialogs() {
+      document.getElementById('dialog-confirm').classList.add('hidden');
+      document.getElementById('dialog-expire').classList.add('hidden');
+    }
+
+    function executeConfirm() {
+      closeAllDialogs();
+      setState('confirmed');
+    }
+
+    function executeLetExpire() {
+      closeAllDialogs();
+      alert("Demande mise en attente déontologique : le tuteur restera inactif et la demande expirera de plein droit à l'issue des 7 jours.");
+    }
+
+    function executeRejectImmediate() {
+      closeAllDialogs();
+      alert("Demande d'attache refusée discrètement. Aucune modification n'a été apportée à votre compte.");
+    }
+
+    function setState(state) {
+      const viewInitial = document.getElementById('view-initial');
+      const viewConfirmed = document.getElementById('view-confirmed');
+      const btnInitial = document.getElementById('btn-state-initial');
+      const btnConfirmed = document.getElementById('btn-state-confirmed');
+
+      if (state === 'confirmed') {
+        viewInitial.classList.add('hidden');
+        viewConfirmed.classList.remove('hidden');
+        btnConfirmed.className = "px-2.5 py-1 rounded bg-indigo text-ink-on-indigo font-medium text-[11px] transition-all";
+        btnInitial.className = "px-2.5 py-1 rounded bg-surface-sand text-ink-primary border border-border-hairline hover:border-border-strong text-[11px] transition-all";
+      } else {
+        viewConfirmed.classList.add('hidden');
+        viewInitial.classList.remove('hidden');
+        btnInitial.className = "px-2.5 py-1 rounded bg-indigo text-ink-on-indigo font-medium text-[11px] transition-all";
+        btnConfirmed.className = "px-2.5 py-1 rounded bg-surface-sand text-ink-primary border border-border-hairline hover:border-border-strong text-[11px] transition-all";
+      }
+    }
+
+    // Keyboard support (Escape closes dialogs)
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        closeAllDialogs();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Vérification d'Identité Tutélaire (Wali/Mahram)</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS & Theme Config -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#5b4300",
+            "gold-soft": "#E8D5A3",
+            "focus-ring": "#1F3A5F",
+            "surface-variant": "#e9e2d5",
+            "primary-fixed": "#d5e3ff",
+            "indigo": "#1F3A5F",
+            "primary": "#032448",
+            "secondary": "#755b18",
+            "on-primary": "#ffffff",
+            "surface-sand": "#F4EDE0",
+            "surface-raised": "#FFFBF4",
+            "surface-container-low": "#faf3e6",
+            "blur-wash": "#C8BBA6",
+            "ink-secondary": "#5C5346",
+            "on-surface-variant": "#43474e",
+            "surface-container": "#f4ede0",
+            "outline": "#74777f",
+            "on-secondary": "#ffffff",
+            "tertiary-container": "#1b3b5e",
+            "secondary-container": "#fdd88a",
+            "ink-primary": "#1B2433",
+            "tertiary": "#002546",
+            "secondary-fixed-dim": "#e5c276",
+            "mihrab": "#2C4A6E",
+            "tertiary-fixed-dim": "#abc9f3",
+            "inverse-on-surface": "#f7f0e3",
+            "on-tertiary": "#ffffff",
+            "surface-tint": "#465f86",
+            "surface-container-highest": "#e9e2d5",
+            "outline-variant": "#c4c6cf",
+            "surface-bright": "#fff9ee",
+            "inverse-primary": "#aec8f4",
+            "surface": "#fff9ee",
+            "gold": "#C4A35A",
+            "on-error": "#ffffff",
+            "on-secondary-container": "#785d1b",
+            "primary-fixed-dim": "#aec8f4",
+            "border-strong": "#6F624C",
+            "surface-container-high": "#eee7db",
+            "on-background": "#1e1b14",
+            "danger": "#8B3A3A",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-primary-container": "#8ba4cf",
+            "background": "#fff9ee",
+            "inverse-surface": "#333028",
+            "danger-soft": "#F3E0DC",
+            "on-primary-fixed": "#001c3b",
+            "indigo-deep": "#15283F",
+            "success": "#3D5C45",
+            "on-tertiary-fixed": "#001c38",
+            "on-surface": "#1e1b14",
+            "ink-on-indigo": "#F4EDE0",
+            "disabled": "#B5A894",
+            "tertiary-fixed": "#d3e4ff",
+            "staff-soft": "#EFE4DC",
+            "on-error-container": "#93000a",
+            "primary-container": "#1f3a5f",
+            "border-hairline": "#D9CDB8",
+            "success-soft": "#DCE6DE",
+            "surface-indigo": "#15283F",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "secondary-fixed": "#ffdf9c",
+            "surface-dim": "#e0d9cd",
+            "on-tertiary-container": "#88a5ce",
+            "staff": "#6B3D2E",
+            "on-secondary-fixed": "#251a00",
+            "on-primary-fixed-variant": "#2d476d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "screen-pad": "16px",
+            "margin": "1rem",
+            "5": "24px",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "1": "4px",
+            "space-xl": "2rem",
+            "4": "16px",
+            "gutter": "16px",
+            "3": "12px",
+            "space-sm": "0.5rem",
+            "6": "32px",
+            "7": "48px",
+            "2": "8px",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined[data-weight="fill"] {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body text-body min-h-screen flex flex-col antialiased selection:bg-gold-soft selection:text-indigo">
+<!-- TOP APP BAR (Shared Component: TopNavBar Anchor) -->
+<header class="w-full bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-margin md:px-margin-desktop h-16 flex items-center justify-between">
+<!-- Brand & Space Indicator -->
+<div class="flex items-center space-x-3">
+<a class="font-heading text-heading font-semibold text-primary dark:text-inverse-primary tracking-normal flex items-center gap-2" href="#">
+<span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+          AnKanu — Espace Tuteur Légal
+        </a>
+</div>
+<!-- Navigation links (Strictly Guardian Canonical: No Casual Discovery/Invitations) -->
+<nav class="hidden md:flex items-center space-x-6">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 font-meta text-meta" href="#">Salons sous tutelle</a>
+<a class="text-primary dark:text-inverse-primary border-b-2 border-primary dark:border-inverse-primary pb-1 font-semibold font-meta text-meta" href="#">Attestations d'honneur</a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors duration-150 font-meta text-meta" href="#">Assistance déontologique</a>
+</nav>
+<!-- Trailing Action Icons and Guardian Status Badge -->
+<div class="flex items-center space-x-3">
+<div class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-variant border border-border-hairline text-ink-secondary text-caption font-meta">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Statut actuel : Déclaratif</span>
+</div>
+<button class="p-2 text-primary hover:bg-surface-container transition-all duration-200 rounded-full" title="Protocole Wali" type="button">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</button>
+<button class="p-2 text-primary hover:bg-surface-container transition-all duration-200 rounded-full relative" title="Notifications" type="button">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-gold"></span>
+</button>
+<button class="hidden lg:inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary text-on-primary font-meta text-meta font-semibold hover:bg-indigo-deep transition-all duration-150 active:scale-[0.99]" type="button">
+<span class="material-symbols-outlined text-caption" data-icon="lock">lock</span>
+<span>Session Chaperon</span>
+</button>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-grow w-full max-w-4xl mx-auto px-screen-pad py-6 space-y-6">
+<!-- BREADCRUMB / FIL D'ARIANE DISCRET (FR-078) -->
+<nav class="flex items-center gap-2 font-meta text-meta text-ink-secondary">
+<a class="hover:text-indigo underline-offset-4 hover:underline" href="#">Paramètres Tuteur</a>
+<span class="material-symbols-outlined text-caption" data-icon="chevron_right">chevron_right</span>
+<a class="hover:text-indigo underline-offset-4 hover:underline" href="#">Sécurité du Sanctuaire</a>
+<span class="material-symbols-outlined text-caption" data-icon="chevron_right">chevron_right</span>
+<span class="text-ink-primary font-body-strong">Vérification d'Identité Tutélaire</span>
+</nav>
+<!-- BANQUE DE TEST INTERACTIF / SIMULATEUR D'AUDIT DÉONTOLOGIQUE (FR-078 / AD-13) -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-4 space-y-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-hairline pb-2">
+<div class="flex items-center gap-2 text-indigo">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+<span class="font-meta text-meta font-bold tracking-wide uppercase">Banc d'audit déontologique FR-078 / AD-13 (Simulation d'états)</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary bg-surface-sand px-2 py-0.5 rounded border border-border-hairline">Contrôle de conformité CIL-BF</span>
+</div>
+<div class="flex flex-wrap gap-2 pt-1" id="state-selector-group">
+<button class="px-3 py-1 text-caption font-meta rounded-full border border-border-strong bg-indigo text-ink-on-indigo transition-all" id="btn-state-default" onclick="setAuditState('default')" type="button">
+          1. Saisie / Déclaratif (Optionnel)
+        </button>
+<button class="px-3 py-1 text-caption font-meta rounded-full border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong transition-all" id="btn-state-uploading" onclick="setAuditState('uploading')" type="button">
+          2. Pièce CNIB téléversée
+        </button>
+<button class="px-3 py-1 text-caption font-meta rounded-full border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong transition-all" id="btn-state-liveness" onclick="setAuditState('liveness')" type="button">
+          3. Vivacité en cours
+        </button>
+<button class="px-3 py-1 text-caption font-meta rounded-full border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong transition-all" id="btn-state-success" onclick="setAuditState('success')" type="button">
+          4. Homologation réussie
+        </button>
+<button class="px-3 py-1 text-caption font-meta rounded-full border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong transition-all" id="btn-state-retry" onclick="setAuditState('retry')" type="button">
+          5. Échec vivacité (Sans pénalité)
+        </button>
+</div>
+</div>
+<!-- BANNIÈRE DE CADRAGE CANONIQUE & LÉGAL (FR-078 / AD-13) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-gold"></div>
+<div class="flex items-start gap-4">
+<div class="w-10 h-10 rounded-full bg-gold-soft/40 flex items-center justify-center text-secondary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-title" data-icon="shield">shield</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<h1 class="font-title text-title text-indigo font-semibold">Vérification de l'Identité Tutélaire (Wali / Chaperon)</h1>
+<span class="px-2.5 py-0.5 rounded-full bg-gold-soft text-on-secondary-fixed-variant font-meta text-caption font-semibold">
+              Démarche Purement Optionnelle
+            </span>
+</div>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+            Conformément aux préceptes du <em>ta'aruf</em> noble et aux dispositions d'éthique matrimoniale burkinabè, 
+            le statut de tuteur légal repose fondamentalement sur l'agrément bilatéral et le témoignage d'honneur moral. 
+            La vérification biométrique et d'état civil ci-dessous est <strong>facultative</strong> ; elle est mise à disposition 
+            pour inspirer une quiétude absolue auprès des familles et prétendants respectueux.
+          </p>
+<div class="pt-2 flex flex-wrap items-center gap-4 text-caption font-meta text-ink-secondary">
+<span class="inline-flex items-center gap-1.5 text-success font-body-strong">
+<span class="material-symbols-outlined text-meta" data-icon="check_circle">check_circle</span>
+              Aucun justificatif de parenté papier exigé
+            </span>
+<span class="inline-flex items-center gap-1.5 text-ink-secondary">
+<span class="material-symbols-outlined text-meta" data-icon="verified">verified</span>
+              Délivrance du sceau « Wali Vérifié &amp; Assermenté »
+            </span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 1 : PIÈCE D'IDENTITÉ OFFICIELLE -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 space-y-5">
+<div class="flex items-start justify-between border-b border-border-hairline pb-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-indigo text-on-primary flex items-center justify-center font-meta text-caption">1</span>
+<h2 class="font-heading text-heading text-indigo font-semibold">Document d'Identification Officiel</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+            Carte Nationale d'Identité Burkinabè (CNIB) ou Passeport diplomatique / ordinaire en cours de validité.
+          </p>
+</div>
+<span class="material-symbols-outlined text-border-strong" data-icon="badge">badge</span>
+</div>
+<!-- Zone de dépôt / téléversement sobre -->
+<div class="border-2 border-dashed border-border-hairline hover:border-border-strong rounded-xl p-6 bg-surface-sand/40 transition-colors text-center space-y-3 cursor-pointer" id="id-dropzone">
+<div class="w-12 h-12 rounded-full bg-surface-raised border border-border-hairline mx-auto flex items-center justify-center text-indigo">
+<span class="material-symbols-outlined text-title" data-icon="upload_file">upload_file</span>
+</div>
+<div class="space-y-1">
+<p class="font-body-strong text-body-strong text-indigo">Sélectionner ou glisser le recto de votre CNIB / Passeport</p>
+<p class="font-meta text-meta text-ink-secondary">Formats acceptés : PDF, PNG, JPEG (Cliché net, sans reflet, max. 8 Mo)</p>
+</div>
+<div class="pt-2 flex justify-center">
+<button class="px-4 py-2 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-sand transition-all" type="button">
+            Parcourir les fichiers sécurisés
+          </button>
+</div>
+</div>
+<!-- Indicateur d'état du document téléversé (masqué ou affiché dynamiquement) -->
+<div class="hidden p-4 rounded-lg bg-surface-container-low border border-border-hairline flex items-center justify-between" id="id-uploaded-preview">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-success text-title" data-icon="task_alt">task_alt</span>
+<div>
+<p class="font-body-strong text-body-strong text-ink-primary" id="doc-filename">CNIB_OUAGA_B12984931.jpg</p>
+<p class="font-caption text-caption text-ink-secondary">Chiffrement AES-256 local • Identifiant vérifié conforme par l'algorithme d'intégrité CIL</p>
+</div>
+</div>
+<button class="text-caption font-meta text-danger hover:underline" onclick="setAuditState('default')" type="button">Remplacer</button>
+</div>
+<!-- Mention d'honneur explicite -->
+<div class="p-3.5 rounded-lg bg-staff-soft/50 border border-border-hairline flex items-start gap-3">
+<span class="material-symbols-outlined text-staff shrink-0" data-icon="gavel">gavel</span>
+<div class="space-y-0.5">
+<h4 class="font-meta text-meta font-bold text-staff">Dispense statutaire de certificat d'arbre généalogique</h4>
+<p class="font-caption text-caption text-ink-secondary leading-relaxed">
+            Pour préserver la dignité des lignées et éviter toute lourdeur administrative superflue, aucun acte de naissance ni certificat de tutelle papier n'est réclamé. La tutelle est ratifiée de plein droit par l'acceptation conjointe dans l'espace privé de votre pupille.
+          </p>
+</div>
+</div>
+</section>
+<!-- SECTION 2 : TEST DE VIVACITÉ FACIALE SOBRE (LIVENESS CAPTURE) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 space-y-5">
+<div class="flex items-start justify-between border-b border-border-hairline pb-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-indigo text-on-primary flex items-center justify-center font-meta text-caption">2</span>
+<h2 class="font-heading text-heading text-indigo font-semibold">Attestation de Vivacité Faciale Passive ({components.liveness-capture})</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+            Confirmation instantanée sans conservation vidéo, respectant la pudeur et l'absence de tout filtre d'altération.
+          </p>
+</div>
+<span class="material-symbols-outlined text-border-strong" data-icon="face">face</span>
+</div>
+<!-- Assistances linguistiques orales (FR-105: Mooré, Dioula, Français) -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface-sand/70 p-3 rounded-lg border border-border-hairline">
+<div class="flex items-center gap-2 text-ink-primary font-meta text-meta">
+<span class="material-symbols-outlined text-secondary" data-icon="record_voice_over">record_voice_over</span>
+<span>Instructions vocales guidées (FR-105) :</span>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1 rounded bg-surface-raised border border-border-strong font-meta text-caption text-indigo font-semibold shadow-xs" type="button">
+            Mooré (mos)
+          </button>
+<button class="px-2.5 py-1 rounded bg-surface-raised border border-border-hairline font-meta text-caption text-ink-secondary hover:border-border-strong" type="button">
+            Dioula (dyu)
+          </button>
+<button class="px-2.5 py-1 rounded bg-surface-raised border border-border-hairline font-meta text-caption text-ink-secondary hover:border-border-strong" type="button">
+            Français (fr)
+          </button>
+</div>
+</div>
+<!-- Interface de capture avec mire ovale sobre -->
+<div class="relative bg-indigo-deep text-ink-on-indigo rounded-xl p-6 flex flex-col items-center justify-center min-h-[320px] overflow-hidden">
+<!-- Mire ovale sobre -->
+<div class="relative w-52 h-64 rounded-[50%] border-2 border-dashed border-gold-soft/80 flex flex-col items-center justify-center transition-all duration-300" id="liveness-frame">
+<div class="text-center p-4 space-y-2" id="liveness-placeholder">
+<span class="material-symbols-outlined text-4xl text-gold-soft" data-icon="person">person</span>
+<p class="font-meta text-caption text-ink-on-indigo/80">Positionnez votre visage au centre du cadre ovale</p>
+</div>
+<div class="hidden text-center p-4 space-y-3" id="liveness-scanning">
+<div class="w-8 h-8 rounded-full border-2 border-gold border-t-transparent animate-spin mx-auto"></div>
+<p class="font-meta text-caption text-gold-soft font-medium">Analyse passive de réflectance Sahel-Lighting...</p>
+</div>
+<div class="hidden text-center p-4 space-y-2" id="liveness-done">
+<span class="material-symbols-outlined text-4xl text-gold" data-icon="check_circle">check_circle</span>
+<p class="font-meta text-caption text-ink-on-indigo font-bold">Vivacité authentifiée avec honneur</p>
+</div>
+<div class="hidden text-center p-4 space-y-2" id="liveness-failed">
+<span class="material-symbols-outlined text-4xl text-danger-soft" data-icon="replay">replay</span>
+<p class="font-meta text-caption text-danger-soft font-bold">Luminosité insuffisante</p>
+<p class="font-meta text-caption text-ink-on-indigo/70 text-[11px]">Veuillez vous tourner vers une lumière douce du jour</p>
+</div>
+</div>
+<!-- Instructions en direct au bas du cadreur -->
+<div class="mt-4 text-center space-y-1">
+<p class="font-meta text-meta text-gold-soft" id="liveness-instruction-text">
+            Clignez doucement des yeux ou inclinez légèrement la tête sans sourire artificiel
+          </p>
+<p class="font-caption text-caption text-ink-on-indigo/60">
+            Conforme CIL : les images de vivacité ne sont jamais enregistrées en base distante
+          </p>
+</div>
+<!-- Bouton de déclenchement sobre -->
+<div class="mt-4">
+<button class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gold text-indigo font-meta text-meta font-bold hover:bg-gold-soft transition-all" onclick="startLivenessSimulation()" type="button">
+<span class="material-symbols-outlined text-meta" data-icon="photo_camera">photo_camera</span>
+<span>Initier la capture de vivacité</span>
+</button>
+</div>
+</div>
+</section>
+<!-- SECTION 3 : PÉRIMÈTRE D'OCTROI CIRCONSCRIT (GRANT-SCOPED / FR-074) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 space-y-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-indigo text-title shrink-0" data-icon="policy">policy</span>
+<div class="space-y-1">
+<h3 class="font-heading text-heading text-indigo font-semibold">Périmètre d'octroi circonscrit (« Grant-Scoped » — Norme FR-074)</h3>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+            L'homologation d'identité <strong>n'octroie aucun droit de lecture universel ni surveillance globale</strong> sur la vie de votre pupille.
+            Votre autorité de médiation s'exerce de façon étanche salon par salon :
+          </p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+<div class="p-3.5 rounded-lg bg-surface-sand/60 border border-border-hairline space-y-1.5">
+<div class="flex items-center gap-2 text-indigo font-body-strong text-body-strong">
+<span class="material-symbols-outlined text-meta" data-icon="check">check</span>
+<span>Salons formellement autorisés</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary">
+            Vous supervisez avec bienveillance les échanges et validez les rendez-vous en présence d'un tiers dans les salons où la pupille a validé votre rôle de wali.
+          </p>
+</div>
+<div class="p-3.5 rounded-lg bg-surface-sand/60 border border-border-hairline space-y-1.5">
+<div class="flex items-center gap-2 text-danger font-body-strong text-body-strong">
+<span class="material-symbols-outlined text-meta" data-icon="close">close</span>
+<span>Inviolabilité du secret de conscience</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary">
+            Aucun accès aux correspondances privées antérieures, carnets de notes spirituelles ni aux salons non agréés par votre pupille.
+          </p>
+</div>
+</div>
+</section>
+<!-- SECTION 4 : SÉCURITÉ DU PUPITRE PARTAGÉ / CODE PIN SANCTUARISÉ (FR-020) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 space-y-4">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-indigo text-title shrink-0" data-icon="dialpad">dialpad</span>
+<div class="space-y-1">
+<h3 class="font-heading text-heading text-indigo font-semibold">Sécurité du Terminal Partagé (Spécification FR-020)</h3>
+<p class="font-meta text-meta text-ink-secondary">
+              Au sein des foyers où un ordinateur ou une tablette est utilisé par plusieurs membres de la famille, le pupitre du Wali est protégé par un PIN à 6 chiffres.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-2 text-success font-meta text-caption">
+<span class="material-symbols-outlined text-meta" data-icon="lock">lock</span>
+<span>Verrouillé par défaut</span>
+</div>
+</div>
+<div class="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-border-hairline pt-4">
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1">Code PIN du Sanctuaire Wali</label>
+<div class="flex items-center gap-2">
+<input class="w-36 px-3 py-1.5 rounded-lg bg-surface-sand border border-border-hairline font-mono tracking-widest text-center text-ink-primary focus:outline-none" maxlength="6" readonly="" type="password" value="••••••"/>
+<button class="px-3 py-1.5 rounded-lg border border-border-hairline hover:border-border-strong text-caption font-meta text-ink-primary" type="button">
+              Modifier le code
+            </button>
+</div>
+</div>
+<p class="font-caption text-caption text-ink-secondary max-w-xs">
+          Déconnexion automatique de l'interface du Tuteur après 7 minutes d'inactivité afin de préserver la chasteté des regards.
+        </p>
+</div>
+</section>
+<!-- BANDEAU DE STATUT D'HOMOLOGATION FINALE (RÉVÉLÉ LORS DU SUCCÈS) -->
+<div class="hidden bg-surface-indigo text-ink-on-indigo p-6 rounded-xl border border-gold space-y-3" id="badge-homologation-result">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gold text-display" data-icon="workspace_premium">workspace_premium</span>
+<div>
+<span class="inline-block px-2.5 py-0.5 rounded-full bg-gold text-indigo font-meta text-caption font-bold tracking-wide uppercase">
+            Attestation Active
+          </span>
+<h3 class="font-title text-title text-gold-soft font-semibold">Badge conféré : « Wali Vérifié &amp; Assermenté »</h3>
+</div>
+</div>
+<p class="font-body text-body text-ink-on-indigo/90 leading-relaxed">
+        Votre identité d'état civil burkinabè ainsi que votre vivacité faciale ont été validées sous le sceau de déontologie AnKanu n° WALI-BF-2025-8842.
+        Ce sceau d'honneur s'affiche désormais sur la fiche de médiation transmise aux prétendants solennels.
+      </p>
+</div>
+<!-- ACTIONS DE CLÔTURE ET VALIDATION -->
+<div class="pt-4 pb-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border-hairline">
+<!-- Bouton silencieux / déclaration sans pièce -->
+<button class="w-full sm:w-auto px-6 py-3 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-raised transition-all" onclick="setAuditState('default')" type="button">
+        Conserver le statut déclaratif sans pièce
+      </button>
+<!-- Bouton principal d'homologation -->
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full bg-indigo text-ink-on-indigo font-meta text-meta font-bold hover:bg-indigo-deep transition-all shadow-sm active:scale-[0.99]" onclick="setAuditState('success')" type="button">
+<span class="material-symbols-outlined text-meta" data-icon="verified_user">verified_user</span>
+<span>Transmettre pour homologation déontologique</span>
+</button>
+</div>
+</main>
+<!-- PIED DE PAGE INSTITUTIONNEL ANKANU (Shared Component: Footer Anchor) -->
+<footer class="w-full bg-surface-container-low dark:bg-surface-container border-t border-outline-variant dark:border-outline mt-auto">
+<div class="w-full max-w-7xl mx-auto px-margin md:px-margin-desktop py-space-xl flex flex-col md:flex-row justify-between items-center gap-space-lg">
+<!-- Branding & Copyright -->
+<div class="space-y-1 text-center md:text-left">
+<p class="font-heading text-heading font-semibold text-primary dark:text-inverse-primary">
+          AnKanu Matrimonial
+        </p>
+<p class="font-caption text-caption text-on-surface-variant dark:text-outline-variant max-w-xl">
+          © 2025 AnKanu Matrimonial. Tous droits réservés. Plateforme de ta'aruf noble et gouvernance matrimoniale selon les rites authentiques et le droit burkinabè.
+        </p>
+</div>
+<!-- Liens institutionnels & Déontologie -->
+<div class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 font-caption text-caption">
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary underline underline-offset-4 transition-colors duration-150" href="#">
+          Charte des Tuteurs (Wali)
+        </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary underline underline-offset-4 transition-colors duration-150" href="#">
+          Pudeur &amp; Chaperonnage
+        </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary underline underline-offset-4 transition-colors duration-150" href="#">
+          Mentions Légales
+        </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary underline underline-offset-4 transition-colors duration-150" href="#">
+          Conformité CIL Burkina Faso
+        </a>
+<a class="text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-inverse-primary underline underline-offset-4 transition-colors duration-150" href="#">
+          Hébergement Souverain Scaleway (Paris / Ouagadougou)
+        </a>
+</div>
+</div>
+</footer>
+<!-- SCRIPT POUR L'ORCHESTRATION D'ÉTATS DU BANC D'AUDIT (FR-078 & AD-13) -->
+<script>
+    function setAuditState(state) {
+      // Boutons de simulation
+      const states = ['default', 'uploading', 'liveness', 'success', 'retry'];
+      states.forEach(s => {
+        const btn = document.getElementById('btn-state-' + s);
+        if (btn) {
+          if (s === state) {
+            btn.className = "px-3 py-1 text-caption font-meta rounded-full border border-border-strong bg-indigo text-ink-on-indigo transition-all";
+          } else {
+            btn.className = "px-3 py-1 text-caption font-meta rounded-full border border-border-hairline bg-surface-sand text-ink-primary hover:border-border-strong transition-all";
+          }
+        }
+      });
+
+      // Éléments UI à manipuler
+      const dropzone = document.getElementById('id-dropzone');
+      const uploadedPreview = document.getElementById('id-uploaded-preview');
+      const livenessFrame = document.getElementById('liveness-frame');
+      const pPlaceholder = document.getElementById('liveness-placeholder');
+      const pScanning = document.getElementById('liveness-scanning');
+      const pDone = document.getElementById('liveness-done');
+      const pFailed = document.getElementById('liveness-failed');
+      const instrText = document.getElementById('liveness-instruction-text');
+      const badgeResult = document.getElementById('badge-homologation-result');
+
+      // Réinitialisation par défaut
+      dropzone.classList.remove('hidden');
+      uploadedPreview.classList.add('hidden');
+      badgeResult.classList.add('hidden');
+      pPlaceholder.classList.remove('hidden');
+      pScanning.classList.add('hidden');
+      pDone.classList.add('hidden');
+      pFailed.classList.add('hidden');
+      livenessFrame.className = "relative w-52 h-64 rounded-[50%] border-2 border-dashed border-gold-soft/80 flex flex-col items-center justify-center transition-all duration-300";
+      instrText.innerText = "Clignez doucement des yeux ou inclinez légèrement la tête sans sourire artificiel";
+
+      if (state === 'uploading') {
+        dropzone.classList.add('hidden');
+        uploadedPreview.classList.remove('hidden');
+      } else if (state === 'liveness') {
+        dropzone.classList.add('hidden');
+        uploadedPreview.classList.remove('hidden');
+        pPlaceholder.classList.add('hidden');
+        pScanning.classList.remove('hidden');
+        livenessFrame.className = "relative w-52 h-64 rounded-[50%] border-2 border-solid border-gold flex flex-col items-center justify-center transition-all duration-300";
+        instrText.innerText = "Maintien de la pose en cours. Ne quittez pas l'axe optique...";
+      } else if (state === 'success') {
+        dropzone.classList.add('hidden');
+        uploadedPreview.classList.remove('hidden');
+        pPlaceholder.classList.add('hidden');
+        pDone.classList.remove('hidden');
+        livenessFrame.className = "relative w-52 h-64 rounded-[50%] border-2 border-solid border-gold bg-indigo flex flex-col items-center justify-center transition-all duration-300 shadow-md";
+        badgeResult.classList.remove('hidden');
+        instrText.innerText = "Vivacité et intégrité confirmées avec honneur.";
+      } else if (state === 'retry') {
+        dropzone.classList.add('hidden');
+        uploadedPreview.classList.remove('hidden');
+        pPlaceholder.classList.add('hidden');
+        pFailed.classList.remove('hidden');
+        livenessFrame.className = "relative w-52 h-64 rounded-[50%] border-2 border-dashed border-danger-soft flex flex-col items-center justify-center transition-all duration-300";
+        instrText.innerText = "Tentative sans pénalité. Ajustez votre source lumineuse et réessayez à votre rythme.";
+      }
+    }
+
+    function startLivenessSimulation() {
+      setAuditState('liveness');
+      setTimeout(() => {
+        setAuditState('success');
+      }, 2200);
+    }
+  </script>
+</body></html>

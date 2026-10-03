@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Notifications — AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400;1,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#755b18",
+            "error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#abc9f3",
+            "primary": "#032448",
+            "primary-fixed-dim": "#aec8f4",
+            "blur-wash": "#C8BBA6",
+            "on-surface": "#1e1b14",
+            "surface": "#fff9ee",
+            "surface-container": "#f4ede0",
+            "surface-indigo": "#15283F",
+            "outline-variant": "#c4c6cf",
+            "on-primary-fixed-variant": "#2d476d",
+            "border-hairline": "#D9CDB8",
+            "surface-container-low": "#faf3e6",
+            "inverse-surface": "#333028",
+            "staff-soft": "#EFE4DC",
+            "surface-bright": "#fff9ee",
+            "inverse-primary": "#aec8f4",
+            "ink-on-indigo": "#F4EDE0",
+            "primary-container": "#1f3a5f",
+            "ink-secondary": "#5C5346",
+            "error": "#ba1a1a",
+            "secondary-container": "#fdd88a",
+            "on-error-container": "#93000a",
+            "mihrab": "#2C4A6E",
+            "on-primary-fixed": "#001c3b",
+            "on-surface-variant": "#43474e",
+            "surface-container-highest": "#e9e2d5",
+            "on-primary": "#ffffff",
+            "focus-ring": "#1F3A5F",
+            "indigo": "#1F3A5F",
+            "success": "#3D5C45",
+            "ink-primary": "#1B2433",
+            "gold-soft": "#E8D5A3",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "border-strong": "#6F624C",
+            "on-error": "#ffffff",
+            "on-primary-container": "#8ba4cf",
+            "surface-variant": "#e9e2d5",
+            "secondary-fixed": "#ffdf9c",
+            "background": "#fff9ee",
+            "surface-dim": "#e0d9cd",
+            "outline": "#74777f",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#002546",
+            "surface-tint": "#465f86",
+            "surface-sand": "#F4EDE0",
+            "on-secondary-fixed": "#251a00",
+            "indigo-deep": "#15283F",
+            "surface-container-high": "#eee7db",
+            "gold": "#C4A35A",
+            "on-secondary": "#ffffff",
+            "on-tertiary-container": "#88a5ce",
+            "danger-soft": "#F3E0DC",
+            "success-soft": "#DCE6DE",
+            "primary-fixed": "#d5e3ff",
+            "tertiary-fixed": "#d3e4ff",
+            "on-secondary-container": "#785d1b",
+            "on-secondary-fixed-variant": "#5b4300",
+            "disabled": "#B5A894",
+            "on-tertiary-fixed": "#001c38",
+            "secondary-fixed-dim": "#e5c276",
+            "surface-raised": "#FFFBF4",
+            "on-background": "#1e1b14",
+            "danger": "#8B3A3A",
+            "tertiary-container": "#1b3b5e",
+            "on-tertiary": "#ffffff",
+            "staff": "#6B3D2E"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""]
+          },
+          "fontSize": {
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-1 {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-primary">
+<!-- TopNavBar (Shared Component JSON anchor) -->
+<header class="w-full bg-surface border-b border-border-hairline sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand & Chaperone Status Anchor -->
+<div class="flex items-center space-x-6">
+<a class="flex items-center space-x-2 group" href="#">
+<span class="w-8 h-8 rounded-full bg-surface-indigo flex items-center justify-center text-gold border border-gold/40 shadow-none">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</span>
+<span class="font-title text-title text-primary font-bold tracking-tight">AnKanu</span>
+</a>
+<!-- Desktop Navigation Links from JSON -->
+<nav class="hidden md:flex items-center space-x-6 pl-4 border-l border-border-hairline">
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Invitations</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Discussions</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#">Profil</a>
+</nav>
+</div>
+<!-- Trailing actions & Notifications Active Target -->
+<div class="flex items-center space-x-3 sm:space-x-4">
+<!-- Chaperone badge (Guardian Presence) -->
+<div class="hidden sm:flex items-center space-x-1.5 px-3 py-1 rounded-full bg-staff-soft border border-border-hairline text-staff">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span class="font-meta text-meta">Wali notifié : Oumar O.</span>
+</div>
+<!-- Notifications Bell Icon (Active focus state with discreet counter) -->
+<button aria-label="Notifications" class="relative p-2 rounded-full text-primary bg-surface-container border border-border-hairline hover:bg-surface transition-colors" id="nav-bell-btn" title="Notifications actives">
+<span class="material-symbols-outlined text-[20px] fill-1">notifications</span>
+<span class="absolute -top-1 -right-1 w-4 h-4 bg-gold text-primary font-caption text-[10px] font-bold rounded-full flex items-center justify-center border border-surface-raised" id="bell-counter">3</span>
+</button>
+<!-- Assistance Action from JSON -->
+<a class="hidden sm:flex items-center space-x-1 text-ink-secondary hover:text-primary font-meta text-meta transition-colors duration-150 pl-2" href="#">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span>Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Canonical State Switcher / Convenance Auditor Toolbar -->
+<aside class="w-full bg-surface-container-low border-b border-border-hairline py-2 px-4">
+<div class="max-w-3xl mx-auto flex flex-wrap items-center justify-between gap-2 text-ink-secondary">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-gold"></span>
+<span class="font-meta text-meta text-ink-secondary">Mode audit de convenance :</span>
+</div>
+<div class="flex items-center gap-1.5 overflow-x-auto text-xs">
+<button class="px-3 py-1 rounded-full font-meta text-meta bg-primary text-ink-on-indigo transition-all" id="btn-state-active" onclick="switchState('active')">État 1 : Alertes actives</button>
+<button class="px-3 py-1 rounded-full font-meta text-meta bg-surface-raised border border-border-hairline text-ink-secondary hover:text-primary transition-all" id="btn-state-empty" onclick="switchState('empty')">État 2 : Aucune alerte</button>
+<button class="px-3 py-1 rounded-full font-meta text-meta bg-surface-raised border border-border-hairline text-ink-secondary hover:text-primary transition-all" id="btn-state-refused" onclick="switchState('refused')">État 3 : Push refusé (FR-052)</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Container: max-w-3xl for noble editorial manuscript flow -->
+<main class="flex-grow w-full max-w-3xl mx-auto px-4 sm:px-6 py-8">
+<!-- Screen Title & Guardian Reassurance Header -->
+<header class="mb-8">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-gold text-[22px]">notifications_active</span>
+<span class="font-meta text-meta text-ink-secondary tracking-wide uppercase">Registre de Convenance</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary px-2.5 py-0.5 rounded bg-surface-container border border-border-hairline">
+          Normes FR-052 · FR-053
+        </span>
+</div>
+<h1 class="font-display text-display text-primary font-bold tracking-tight">Notifications</h1>
+<p class="font-body text-body text-ink-secondary mt-1">
+        Flux confidentiel des actes d'alliance, requêtes de pudeur et attestations tutélaires sous le regard du Wali.
+      </p>
+</header>
+<!-- SECTION 1: BANDEAUX D'AUTORISATION PUSH & ÉTAT CANONIQUE FR-052 -->
+<!-- Push Dialog A: Prompt Initial (Active State) -->
+<section class="mb-8 bg-surface-raised rounded-xl border border-border-hairline p-5 shadow-none transition-all" id="push-prompt-box">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-start space-x-3.5">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex-shrink-0 flex items-center justify-center text-primary border border-border-hairline">
+<span class="material-symbols-outlined text-[22px]">devices_other</span>
+</div>
+<div>
+<h2 class="font-heading text-heading text-primary font-semibold">Autoriser les alertes de convenance sur cet appareil</h2>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+              Recevez les avis solennels de votre Wali et les requêtes matrimoniales dès leur enregistrement légal.
+            </p>
+</div>
+</div>
+<div class="flex items-center space-x-2.5 w-full sm:w-auto justify-end flex-shrink-0">
+<button class="px-4 py-2 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-container transition-colors" onclick="dismissPushPrompt()">
+            Ignorer
+          </button>
+<button class="px-4 py-2 rounded-full bg-primary text-ink-on-indigo font-meta text-meta font-medium hover:bg-mihrab transition-colors flex items-center space-x-1.5 shadow-none" onclick="activatePushPrompt()">
+<span class="material-symbols-outlined text-[16px]">notifications</span>
+<span>Activer les notifications push</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Push Dialog B: État d'Erreur / Refus Conforme FR-052 (Initially hidden or shown via switcher) -->
+<section class="hidden mb-8 bg-surface-raised rounded-xl border-l-4 border-l-secondary border-t border-r border-b border-border-hairline p-4 transition-all" id="push-refused-banner">
+<div class="flex items-start space-x-3.5">
+<span class="material-symbols-outlined text-secondary text-[22px] flex-shrink-0 mt-0.5">info</span>
+<div class="flex-grow">
+<p class="font-body-strong text-body-strong text-ink-primary text-sm sm:text-base">
+            Notification système refusée : le compteur d'alertes in-app continue de s'incrémenter fidèlement sans perte d'information (Norme FR-052).
+          </p>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+            Votre recueillement reste garanti dans le salon. Les transmissions tutélaires et avis d'alliance demeurent horodatés et scellés ci-dessous.
+          </p>
+</div>
+</div>
+</section>
+<!-- SECTION 2: LISTE IN-APP DES NOTIFICATIONS (Templates + IDs horodatés) -->
+<div class="space-y-4" id="notifications-wrapper">
+<!-- NOTIFICATION 1: Démarche / Invitation reçue (FR-038) -->
+<article class="bg-surface-raised rounded-xl border border-border-hairline p-5 relative overflow-hidden transition-all hover:border-border-strong">
+<div class="absolute top-0 right-0 w-2 h-full bg-gold"></div>
+<div class="flex items-start gap-4">
+<!-- Retenue Thumb: {components.blur-photo} — Pudeur absolue -->
+<div class="w-12 h-12 rounded-lg bg-blur-wash border border-border-hairline flex-shrink-0 flex items-center justify-center text-ink-secondary" title="Sceau de pudeur actif">
+<span class="material-symbols-outlined text-[24px]">visibility_off</span>
+</div>
+<div class="flex-grow pr-3">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-meta bg-gold-soft/50 text-secondary border border-gold/30">
+                  Démarche d'Alliance (FR-038)
+                </span>
+<span class="font-caption text-caption text-ink-secondary">Réf. INV-2025-084</span>
+</div>
+<time class="font-caption text-caption text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+                Aujourd'hui, 14:15
+              </time>
+</div>
+<p class="font-body text-body text-ink-primary">
+              Nouvelle démarche d'alliance initiée par <span class="font-semibold text-primary">Tahir_Ouaga</span> — Foyer monogame exclusif. Sous le regard du Wali.
+            </p>
+<div class="mt-3.5 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border-hairline/60">
+<span class="font-meta text-meta text-ink-secondary flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-[16px] text-success">verified_user</span>
+<span>Chaperonnage notifié au tuteur Oumar O.</span>
+</span>
+<button class="px-4 py-1.5 rounded-full bg-primary text-ink-on-indigo font-meta text-meta font-medium hover:bg-mihrab transition-colors flex items-center space-x-1">
+<span>Examiner la démarche</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+<!-- NOTIFICATION 2: Requête de dévoilement mutuel (Reveal request, FR-056) -->
+<article class="bg-surface-raised rounded-xl border border-border-hairline p-5 relative overflow-hidden transition-all hover:border-border-strong">
+<div class="absolute top-0 right-0 w-2 h-full bg-gold"></div>
+<div class="flex items-start gap-4">
+<!-- Retenue Thumb: Sceau de pudeur -->
+<div class="w-12 h-12 rounded-lg bg-blur-wash border border-border-hairline flex-shrink-0 flex items-center justify-center text-ink-secondary" title="Sceau de pudeur actif">
+<span class="material-symbols-outlined text-[24px]">lock</span>
+</div>
+<div class="flex-grow pr-3">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-meta bg-surface-container border border-border-hairline text-ink-primary">
+                  Sceau de Pudeur (FR-056)
+                </span>
+<span class="font-caption text-caption text-ink-secondary">Réf. REV-041</span>
+</div>
+<time class="font-caption text-caption text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+                Hier, 19:30
+              </time>
+</div>
+<p class="font-body text-body text-ink-primary">
+              Demande de levée mutuelle du Sceau de Pudeur transmise pour la correspondance avec <span class="font-semibold text-primary">Tahir_Ouaga</span>. Décision soumise à votre agrément et à celui du tuteur légal.
+            </p>
+<div class="mt-3.5 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border-hairline/60">
+<div class="flex items-center space-x-1.5 text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-[16px] text-secondary">family_restroom</span>
+<span>Accord du Wali requis pour dévoilement de visage</span>
+</div>
+<div class="flex items-center space-x-2">
+<button class="px-3 py-1 rounded-full border border-border-strong text-ink-secondary font-meta text-meta hover:bg-surface-container transition-colors">
+                  Aviser plus tard
+                </button>
+<button class="px-3.5 py-1 rounded-full bg-gold text-primary font-meta text-meta font-semibold hover:bg-gold-soft transition-colors">
+                  Consulter avec le Wali
+                </button>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- NOTIFICATION 3: Présence tutélaire / Mahram (Guardian presence record) -->
+<article class="bg-surface-raised rounded-xl border border-border-hairline p-5 relative overflow-hidden transition-all hover:border-border-strong">
+<div class="flex items-start gap-4">
+<!-- Guardian Icon Tile -->
+<div class="w-12 h-12 rounded-lg bg-staff-soft border border-border-hairline flex-shrink-0 flex items-center justify-center text-staff" title="Supervision légale du Wali">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<div class="flex-grow">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-meta bg-staff-soft text-staff border border-border-hairline">
+                  Surveillance Tutélaire
+                </span>
+<span class="font-caption text-caption text-ink-secondary">Réf. WAL-109</span>
+</div>
+<time class="font-caption text-caption text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+                Hier, 11:05
+              </time>
+</div>
+<p class="font-body text-body text-ink-primary">
+              Le tuteur légal <span class="font-semibold text-primary">Oumar O.</span> a consulté les récents échanges du salon d'alliance — Bénédiction et surveillance active confirmées.
+            </p>
+<div class="mt-3 pt-2 text-ink-secondary font-meta text-meta flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-[15px] text-success">done_all</span>
+<span>Registre d'intégrité sauvegardé selon la jurisprudence matrimoniale.</span>
+</div>
+</div>
+</div>
+</article>
+<!-- NOTIFICATION 4: Décision de modération et homologation déontologique (FR-012) -->
+<article class="bg-surface-raised rounded-xl border border-border-hairline p-5 relative overflow-hidden transition-all hover:border-border-strong">
+<div class="flex items-start gap-4">
+<!-- Certified Moderation Tile -->
+<div class="w-12 h-12 rounded-lg bg-success-soft border border-border-hairline flex-shrink-0 flex items-center justify-center text-success" title="Homologation officielle">
+<span class="material-symbols-outlined text-[24px]">gavel</span>
+</div>
+<div class="flex-grow">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-meta bg-success-soft text-success border border-border-hairline">
+                  Homologation Déontologique (FR-012)
+                </span>
+<span class="font-caption text-caption text-ink-secondary">Réf. CIL-OUAG-902</span>
+</div>
+<time class="font-caption text-caption text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+                18 févr. 2025
+              </time>
+</div>
+<p class="font-body text-body text-ink-primary">
+              Homologation de conformité accordée : votre nouveau justificatif CNIB et serment de convenance ont été validés par l'officier assermenté.
+            </p>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+              Statut de compte : <strong>Vérifié &amp; Assermenté</strong>. Vos démarches jouissent de la mention d'honneur officielle.
+            </p>
+</div>
+</div>
+</article>
+<!-- NOTIFICATION 5: Message reçu dans un salon agréé (No Chat body, strictly chaperoned) -->
+<article class="bg-surface-raised rounded-xl border border-border-hairline p-5 relative overflow-hidden transition-all hover:border-border-strong">
+<div class="flex items-start gap-4">
+<!-- Retenue Thumb -->
+<div class="w-12 h-12 rounded-lg bg-blur-wash border border-border-hairline flex-shrink-0 flex items-center justify-center text-ink-secondary" title="Retenue de correspondance">
+<span class="material-symbols-outlined text-[24px]">forum</span>
+</div>
+<div class="flex-grow">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-meta bg-surface-container border border-border-hairline text-ink-primary">
+                  Salon d'Alliance
+                </span>
+<span class="font-caption text-caption text-ink-secondary">Réf. MSG-884</span>
+</div>
+<time class="font-caption text-caption text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+                16 févr. 2025
+              </time>
+</div>
+<p class="font-body text-body text-ink-primary">
+              Nouveau message de bienséance reçu dans le salon chaperonné avec <span class="font-semibold text-primary">Fatoumata_S.</span> — Aucun extrait textuel affiché pour préserver le recueillement.
+            </p>
+<div class="mt-3.5 flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-border-hairline/60">
+<span class="font-meta text-meta text-ink-secondary italic">
+                Salon accessible uniquement sous présence active du modérateur ou tuteur.
+              </span>
+<button class="px-4 py-1.5 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-container transition-colors flex items-center space-x-1">
+<span>Ouvrir le salon d'alliance</span>
+<span class="material-symbols-outlined text-[16px]">north_east</span>
+</button>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- SECTION 3: EMPTY STATE (ÉTAT 2: "Aucune alerte." - Solennel & Paisible) -->
+<div class="hidden py-16 px-6 text-center bg-surface-raised rounded-xl border border-border-hairline" id="empty-state-view">
+<div class="w-16 h-16 rounded-full bg-surface-container mx-auto flex items-center justify-center text-gold border border-border-hairline mb-4">
+<span class="material-symbols-outlined text-[32px]">spa</span>
+</div>
+<h2 class="font-heading text-title text-primary font-semibold">Aucune alerte.</h2>
+<p class="font-body text-body text-ink-secondary max-w-md mx-auto mt-2">
+        Votre sanctuaire de ta'aruf est paisible. Toute démarche ou sollicitation des tuteurs apparaîtra ici.
+      </p>
+<div class="mt-6 inline-flex items-center space-x-2 text-ink-secondary font-meta text-meta bg-surface-sand px-3 py-1.5 rounded-full border border-border-hairline">
+<span class="material-symbols-outlined text-[16px] text-success">shield</span>
+<span>Registre sous veille du tuteur légal Oumar O.</span>
+</div>
+</div>
+<!-- Jurisprudence & Dignity Assurance Tile -->
+<div class="mt-10 p-4 rounded-xl bg-surface-indigo text-ink-on-indigo flex items-start space-x-3.5">
+<span class="material-symbols-outlined text-gold text-[22px] flex-shrink-0 mt-0.5">balance</span>
+<div>
+<h3 class="font-heading text-heading text-ink-on-indigo font-medium">Principe de Pudeur et d'Inviolabilité AnKanu</h3>
+<p class="font-caption text-caption text-ink-on-indigo/80 mt-1 leading-relaxed">
+          Conformément au rite de convenance matrimoniale, aucun numéro téléphonique, lien externe ni visuel non flouté n'est communiqué au sein du registre d'alertes. Chaque notification fait l'objet d'un archivage immuable supervisé par le Wali.
+        </p>
+</div>
+</div>
+</main>
+<!-- Footer (Shared Component JSON anchor) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline mt-auto">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Copyright & Sovereign Hosting Note -->
+<div class="max-w-2xl text-center md:text-left">
+<div class="flex items-center justify-center md:justify-start space-x-2 mb-2">
+<span class="font-title text-title text-primary font-bold">AnKanu</span>
+<span class="font-caption text-caption text-ink-secondary px-2 py-0.5 rounded bg-surface border border-border-hairline">
+            Burkina Faso
+          </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary leading-relaxed">
+          © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+</div>
+<!-- Legal Links from JSON -->
+<nav class="flex flex-wrap items-center justify-center gap-6">
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">Confidentialité &amp; Données</a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">Tuteurs Légaux (Wali)</a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#">Éthique &amp; Respect</a>
+</nav>
+</div>
+</footer>
+<!-- Interactivity Script for Canonical State Simulation -->
+<script>
+    function switchState(state) {
+      const activeList = document.getElementById('notifications-wrapper');
+      const emptyView = document.getElementById('empty-state-view');
+      const pushPrompt = document.getElementById('push-prompt-box');
+      const pushRefused = document.getElementById('push-refused-banner');
+      const bellCounter = document.getElementById('bell-counter');
+
+      // Buttons
+      const btnActive = document.getElementById('btn-state-active');
+      const btnEmpty = document.getElementById('btn-state-empty');
+      const btnRefused = document.getElementById('btn-state-refused');
+
+      // Reset button styles
+      [btnActive, btnEmpty, btnRefused].forEach(btn => {
+        btn.className = "px-3 py-1 rounded-full font-meta text-meta bg-surface-raised border border-border-hairline text-ink-secondary hover:text-primary transition-all";
+      });
+
+      if (state === 'active') {
+        btnActive.className = "px-3 py-1 rounded-full font-meta text-meta bg-primary text-ink-on-indigo transition-all";
+        activeList.classList.remove('hidden');
+        emptyView.classList.add('hidden');
+        pushPrompt.classList.remove('hidden');
+        pushRefused.classList.add('hidden');
+        bellCounter.textContent = '3';
+        bellCounter.classList.remove('hidden');
+      } else if (state === 'empty') {
+        btnEmpty.className = "px-3 py-1 rounded-full font-meta text-meta bg-primary text-ink-on-indigo transition-all";
+        activeList.classList.add('hidden');
+        emptyView.classList.remove('hidden');
+        pushPrompt.classList.remove('hidden');
+        pushRefused.classList.add('hidden');
+        bellCounter.textContent = '0';
+        bellCounter.classList.add('hidden');
+      } else if (state === 'refused') {
+        btnRefused.className = "px-3 py-1 rounded-full font-meta text-meta bg-primary text-ink-on-indigo transition-all";
+        activeList.classList.remove('hidden');
+        emptyView.classList.add('hidden');
+        pushPrompt.classList.add('hidden');
+        pushRefused.classList.remove('hidden');
+        bellCounter.textContent = '3';
+        bellCounter.classList.remove('hidden');
+      }
+    }
+
+    function dismissPushPrompt() {
+      document.getElementById('push-prompt-box').classList.add('hidden');
+    }
+
+    function activatePushPrompt() {
+      const pushBox = document.getElementById('push-prompt-box');
+      pushBox.innerHTML = `
+        <div class="flex items-center space-x-3 text-success">
+          <span class="material-symbols-outlined text-[24px]">check_circle</span>
+          <span class="font-body-strong text-body-strong">Alertes push de convenance autorisées pour cet appareil.</span>
+        </div>
+      `;
+      setTimeout(() => {
+        pushBox.style.opacity = '0';
+        setTimeout(() => pushBox.classList.add('hidden'), 300);
+      }, 2500);
+    }
+  </script>
+</body></html>

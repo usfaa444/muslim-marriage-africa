@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Appel Solennel &amp; Réexamen Déontologique (AD-18)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Script -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-variant": "#e9e2d5",
+            "secondary-container": "#fdd88a",
+            "success": "#3D5C45",
+            "surface-container": "#f4ede0",
+            "on-secondary": "#ffffff",
+            "inverse-primary": "#aec8f4",
+            "ink-on-indigo": "#F4EDE0",
+            "on-primary-container": "#8ba4cf",
+            "ink-primary": "#1B2433",
+            "secondary-fixed": "#ffdf9c",
+            "on-primary": "#ffffff",
+            "focus-ring": "#1F3A5F",
+            "surface-container-high": "#eee7db",
+            "disabled": "#B5A894",
+            "secondary": "#755b18",
+            "gold-soft": "#E8D5A3",
+            "surface-dim": "#e0d9cd",
+            "primary-fixed-dim": "#aec8f4",
+            "staff": "#6B3D2E",
+            "primary-fixed": "#d5e3ff",
+            "on-tertiary": "#ffffff",
+            "on-error": "#ffffff",
+            "tertiary-fixed-dim": "#abc9f3",
+            "secondary-fixed-dim": "#e5c276",
+            "on-tertiary-container": "#88a5ce",
+            "on-secondary-fixed": "#251a00",
+            "primary-container": "#1f3a5f",
+            "danger": "#8B3A3A",
+            "on-secondary-container": "#785d1b",
+            "indigo-deep": "#15283F",
+            "background": "#fff9ee",
+            "outline": "#74777f",
+            "on-secondary-fixed-variant": "#5b4300",
+            "blur-wash": "#C8BBA6",
+            "gold": "#C4A35A",
+            "indigo": "#1F3A5F",
+            "inverse-surface": "#333028",
+            "on-background": "#1e1b14",
+            "outline-variant": "#c4c6cf",
+            "mihrab": "#2C4A6E",
+            "staff-soft": "#EFE4DC",
+            "error": "#ba1a1a",
+            "on-error-container": "#93000a",
+            "on-tertiary-fixed": "#001c38",
+            "surface-container-highest": "#e9e2d5",
+            "surface": "#fff9ee",
+            "surface-raised": "#FFFBF4",
+            "primary": "#032448",
+            "on-primary-fixed": "#001c3b",
+            "surface-container-lowest": "#ffffff",
+            "tertiary": "#002546",
+            "tertiary-fixed": "#d3e4ff",
+            "on-primary-fixed-variant": "#2d476d",
+            "border-hairline": "#D9CDB8",
+            "border-strong": "#6F624C",
+            "surface-sand": "#F4EDE0",
+            "surface-container-low": "#faf3e6",
+            "surface-tint": "#465f86",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-surface": "#1e1b14",
+            "surface-bright": "#fff9ee",
+            "ink-secondary": "#5C5346",
+            "danger-soft": "#F3E0DC",
+            "inverse-on-surface": "#f7f0e3",
+            "error-container": "#ffdad6",
+            "surface-indigo": "#15283F",
+            "success-soft": "#DCE6DE",
+            "on-surface-variant": "#43474e",
+            "tertiary-container": "#1b3b5e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "screen-pad": "16px",
+            "margin": "1rem",
+            "4": "16px",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem",
+            "2": "8px",
+            "space-xs": "0.25rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "5": "24px",
+            "7": "48px",
+            "1": "4px",
+            "3": "12px",
+            "6": "32px",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-body text-body text-ink-primary bg-surface selection:bg-gold-soft selection:text-ink-primary">
+<!-- AUDIT & STATE SIMULATION HARNESS (FR-090 Canonical Context) -->
+<aside aria-label="Simulateur d'états d'instruction pour audit déontologique" class="w-full bg-surface-sand border-b border-border-hairline py-2 px-4">
+<div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-ink-secondary">
+<div class="flex items-center gap-2">
+<span class="inline-block w-2 h-2 rounded-full bg-gold"></span>
+<span class="font-meta text-meta uppercase tracking-wider text-ink-primary">Contrôle d'instruction contradictoire (AD-18 / FR-090)</span>
+</div>
+<div aria-label="États de réexamen" class="flex flex-wrap items-center gap-1.5" role="tablist">
+<button class="px-2.5 py-1 rounded text-caption font-meta transition-colors duration-150 bg-primary text-ink-on-indigo" id="btn-state-form" onclick="setAuditState('state-form')" type="button">1. Formulaire actif</button>
+<button class="px-2.5 py-1 rounded text-caption font-meta transition-colors duration-150 bg-surface-raised text-ink-secondary hover:text-primary border border-border-hairline" id="btn-state-loading" onclick="setAuditState('state-loading')" type="button">2. Soumission (Horodatage)</button>
+<button class="px-2.5 py-1 rounded text-caption font-meta transition-colors duration-150 bg-surface-raised text-ink-secondary hover:text-primary border border-border-hairline" id="btn-state-submitted" onclick="setAuditState('state-submitted')" type="button">3. En arbitrage indépendant</button>
+<button class="px-2.5 py-1 rounded text-caption font-meta transition-colors duration-150 bg-surface-raised text-ink-secondary hover:text-primary border border-border-hairline" id="btn-state-expired" onclick="setAuditState('state-expired')" type="button">4. Délai forclos (7 jours)</button>
+</div>
+</div>
+</aside>
+<!-- TOP APP BAR (Shared Components JSON execution) -->
+<header class="w-full bg-surface dark:bg-surface border-b border-border-hairline dark:border-border-hairline docked full-width top-0 z-30">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand & Canonical Subject Context -->
+<div class="flex items-center gap-6">
+<a class="font-title text-title text-primary dark:text-primary font-bold tracking-tight flex items-center gap-2" href="#">
+<span>AnKanu</span>
+</a>
+<div class="hidden sm:flex items-center gap-2 pl-4 border-l border-border-hairline">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-danger-soft text-danger font-meta text-caption">
+<span class="material-symbols-outlined text-[14px]">gavel</span>
+<span>Mesure conservatoire active</span>
+</span>
+<span class="font-meta text-caption text-ink-secondary">Dossier Réf. SANCT-2025-084-BF</span>
+</div>
+</div>
+<!-- Navigation links (Semantic mapping for TopNavBar) -->
+<nav aria-label="Navigation principale" class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Invitations</a>
+<a class="text-ink-secondary dark:text-ink-secondary font-body text-body pb-1 hover:text-primary dark:hover:text-primary transition-colors duration-150" href="#">Discussions</a>
+<a class="text-primary dark:text-primary font-body-strong text-body-strong border-b-2 border-primary dark:border-primary pb-1" href="#">Profil</a>
+</nav>
+<!-- Trailing Actions (JSON Anchors) -->
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex items-center gap-1 text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-gold" data-icon="verified_user">verified_user</span>
+<span>Wali notifié : Oumar O.</span>
+</div>
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border-hairline text-ink-secondary font-meta text-meta hover:text-primary transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-ink-secondary" data-icon="help_outline">help_outline</span>
+<span>Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- MAIN EDITORIAL CONTENT CANVAS (Focused Dossier: Narrow Folio Layout) -->
+<main class="flex-1 w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-10">
+<!-- BREADCRUMB & REGULATORY HEADING -->
+<div class="mb-6">
+<div class="flex items-center gap-2 text-ink-secondary font-meta text-meta mb-2">
+<a class="hover:text-primary flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Avis de sanction</span>
+</a>
+<span class="text-border-strong">/</span>
+<span class="text-ink-primary font-body-strong">Procédure de recours contradictoire</span>
+</div>
+<h1 class="font-display text-display text-primary tracking-tight">Déposition d'appel solennel</h1>
+<p class="font-body text-body text-ink-secondary mt-1">
+        Exercice des voies de réexamen déontologique garanti par les normes Burkinabè de médiation matrimoniale honorable.
+      </p>
+</div>
+<!-- SANCTION CONTEXT CARD (Ground Truth / Clear Dossier) -->
+<section aria-labelledby="sanction-dossier-heading" class="bg-surface-raised border border-border-hairline rounded-xl p-5 mb-8">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-border-hairline">
+<div>
+<span class="font-meta text-caption text-ink-secondary uppercase tracking-wider block mb-1">Objet du contentieux déontologique</span>
+<h2 class="font-heading text-heading text-ink-primary" id="sanction-dossier-heading">Suspension temporaire de convenance (72h)</h2>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">Identifiant de session : <span class="font-mono text-ink-primary">US-OUA-4890-S</span> • Notification transmise le 23 Octobre 2025</p>
+</div>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-danger-soft text-danger font-meta text-meta self-start">
+<span class="w-1.5 h-1.5 rounded-full bg-danger"></span>
+<span>Mesure conservatoire</span>
+</span>
+</div>
+<!-- Detail Points -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 text-ink-secondary font-body text-body">
+<div>
+<span class="font-meta text-meta text-ink-secondary block">Motif initial notifié par l'instructeur :</span>
+<p class="font-body-strong text-body-strong text-ink-primary mt-1">
+            « Écart présumé aux règles de convenance ou suspicion de contournement du cadre tutélaire dans les préliminaires de ta'aruf. »
+          </p>
+</div>
+<div>
+<span class="font-meta text-meta text-ink-secondary block">Statut du tuteur légal (Wali) :</span>
+<p class="font-body text-body text-ink-primary mt-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-success text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span>M. Oumar Ouedraogo informé par SMS &amp; portail dédié</span>
+</p>
+</div>
+</div>
+<!-- Legal Guarantee Box (FR-090 / AD-18 Strict Guarantee) -->
+<div class="mt-5 p-4 rounded-lg bg-surface-sand border border-border-hairline">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-indigo mt-0.5" data-weight="fill" style="font-variation-settings: 'FILL' 1;">shield</span>
+<div>
+<h3 class="font-body-strong text-body-strong text-primary">Garantie stricte du second réviseur humain indépendant (AD-18)</h3>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+              Conformément à l'article FR-090 de la Charte d'Honneur, votre recours ne sera <strong class="text-ink-primary">jamais réexaminé par l'instructeur ayant prononcé la mesure</strong>, mais par un second officier assermenté du Conseil consultatif d'AnKanu, siégeant à Ouagadougou.
+            </p>
+<p class="font-meta text-meta text-ink-secondary mt-1.5">
+<strong class="text-ink-primary">Effet de l'infirmation :</strong> Toute annulation de sanction rétablit immédiatement l'intégralité de vos privilèges matrimoniaux et inscrit une attestation d'honneur rectificative au registre d'intégrité (SM-C3).
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- STATE 1: ACTIVE FORM -->
+<div class="space-y-6" id="view-form">
+<form class="space-y-6" id="appeal-form" onsubmit="event.preventDefault(); simulateSubmission();">
+<!-- Field 1: Clarification & Counter-Statement -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6 space-y-3">
+<div class="flex items-center justify-between">
+<label class="block font-heading text-heading text-ink-primary" for="appeal-statement">
+              1. Exposé contradictoire et clarification solennelle
+            </label>
+<span class="font-meta text-meta text-ink-secondary" id="char-counter">0 / 1200 caractères</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+            Veuillez exposer avec sérénité et véracité les faits, le contexte de l'échange incriminé et les intentions sincères ayant guidé votre démarche.
+          </p>
+<div class="relative">
+<textarea class="w-full bg-surface-raised border border-border-hairline rounded-lg p-3 text-ink-primary font-body text-body placeholder:text-disabled focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-all duration-150 resize-y" id="appeal-statement" maxlength="1200" name="appeal_statement" oninput="updateCharCount(this)" placeholder="Exposez respectueusement votre version des faits et la nature de vos échanges avec la postulante et son tuteur..." required="" rows="6"></textarea>
+</div>
+<p class="font-caption text-caption text-ink-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span>Tout propos injurieux ou polémique envers la modération ou la partie adverse entraîne le rejet immédiat du recours.</span>
+</p>
+</div>
+<!-- Field 2: Solemn Attestation (Sidq & Niyyah) -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6 space-y-4">
+<h2 class="font-heading text-heading text-ink-primary">
+            2. Attestation de sincérité matrimoniale (Sidq &amp; Niyyah)
+          </h2>
+<p class="font-meta text-meta text-ink-secondary">
+            L'engagement au sein du sanctuaire d'AnKanu repose sur la droiture d'intention (*Niyyah*) devant Dieu et les témoins légaux.
+          </p>
+<div class="space-y-3 pt-2">
+<label class="flex items-start gap-3 cursor-pointer group">
+<input class="mt-1 w-4 h-4 rounded text-indigo border-border-hairline focus:ring-focus-ring focus:ring-offset-2 cursor-pointer" name="attestation_intention" required="" type="checkbox"/>
+<span class="font-body text-body text-ink-primary group-hover:text-primary transition-colors">
+                J'atteste sur l'honneur que ma démarche sur AnKanu s'inscrit exclusivement dans la recherche d'une alliance maritale légale et vertueuse (Zawaj / Ta'aruf honorable), exempte de toute velléité de distraction ou de légèreté.
+              </span>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<input class="mt-1 w-4 h-4 rounded text-indigo border-border-hairline focus:ring-focus-ring focus:ring-offset-2 cursor-pointer" name="attestation_guardian_respect" required="" type="checkbox"/>
+<span class="font-body text-body text-ink-primary group-hover:text-primary transition-colors">
+                Je reconnais le rôle inviolable du tuteur légal (*Wali*) et certifie n'avoir cherché à aucun moment à soutirer des contacts privés ou à contourner la surveillance bienveillante de la famille.
+              </span>
+</label>
+</div>
+</div>
+<!-- Field 3: Complementary Documents / Proofs -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6 space-y-3">
+<div class="flex items-center justify-between">
+<h2 class="font-heading text-heading text-ink-primary">
+              3. Justificatifs ou attestations complémentaires
+            </h2>
+<span class="font-meta text-caption text-ink-secondary">Optionnel</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+            Vous pouvez joindre un écrit de soutien de votre propre tuteur, une copie d'attestation CNIB certifiée, ou une capture d'écran contextuelle sous sceau.
+          </p>
+<div class="border-2 border-dashed border-border-hairline rounded-lg p-6 text-center bg-surface-sand/40 hover:bg-surface-sand transition-colors cursor-pointer" onclick="document.getElementById('file-upload').click()">
+<span class="material-symbols-outlined text-ink-secondary text-3xl mb-2">cloud_upload</span>
+<p class="font-body-strong text-body-strong text-ink-primary">Déposer un document ou attestation du tuteur</p>
+<p class="font-caption text-caption text-ink-secondary mt-1">Formats PDF, JPG, PNG sous chiffrement souverain • Max. 8 Mo</p>
+<input class="hidden" id="file-upload" onchange="handleFileSelected(this)" type="file"/>
+</div>
+<div class="hidden items-center justify-between p-3 bg-surface-sand rounded-lg border border-border-hairline" id="file-preview">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-indigo">description</span>
+<span class="font-body text-body text-ink-primary text-sm" id="file-name">attestation_wali_ouaga.pdf</span>
+</div>
+<button class="text-danger hover:text-ink-primary font-meta text-caption flex items-center gap-1" onclick="removeFile()" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span> Retirer
+            </button>
+</div>
+</div>
+<!-- Field 4: Solemn Pledge to the Code of Modesty (Haya) -->
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-5 sm:p-6 space-y-3">
+<h2 class="font-heading text-heading text-ink-primary">
+            4. Réaffirmation de la charte de convenance et de pudeur (Haya)
+          </h2>
+<div class="p-3 bg-staff-soft rounded-lg text-staff font-body text-body text-sm leading-relaxed">
+            « Le mariage honorable commence par un comportement digne. Tout échange au sein d'AnKanu est une porte vers la constitution d'un foyer musulman solide au Burkina Faso. »
+          </div>
+<label class="flex items-start gap-3 cursor-pointer group pt-1">
+<input class="mt-1 w-4 h-4 rounded text-indigo border-border-hairline focus:ring-focus-ring focus:ring-offset-2 cursor-pointer" name="attestation_code_conduct" required="" type="checkbox"/>
+<span class="font-body text-body text-ink-primary group-hover:text-primary transition-colors">
+              Je renouvelle mon serment d'adopter un langage mesuré, exempt de compliments déplacés, et d'accepter avec humilité la décision arbitrale indépendante du Conseil.
+            </span>
+</label>
+</div>
+<!-- Actions Cluster -->
+<div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border-hairline">
+<a class="font-body text-body text-ink-secondary hover:text-primary order-2 sm:order-1 transition-colors" href="#">
+            Consulter la Charte déontologique intégrale
+          </a>
+<button class="w-full sm:w-auto min-h-[48px] px-8 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body-strong hover:bg-mihrab transition-colors duration-150 flex items-center justify-center gap-2 shadow-none order-1 sm:order-2" type="submit">
+<span class="material-symbols-outlined text-[20px]" data-icon="verified_user">verified_user</span>
+<span>Déposer le recours d'honneur</span>
+</button>
+</div>
+</form>
+</div>
+<!-- STATE 2: LOADING / SUBMISSION IN PROGRESS -->
+<div class="hidden bg-surface-raised border border-border-hairline rounded-xl p-8 sm:p-12 text-center space-y-6" id="view-loading">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-sand text-indigo animate-pulse">
+<span class="material-symbols-outlined text-3xl">hourglass_top</span>
+</div>
+<div class="max-w-md mx-auto space-y-2">
+<h2 class="font-heading text-heading text-ink-primary">Enregistrement et scellement du recours</h2>
+<p class="font-body text-body text-ink-secondary">
+          Horodatage cryptographique et attribution automatique d'un magistrat instructeur indépendant sur le cluster Scaleway Ouagadougou...
+        </p>
+</div>
+<div class="w-48 mx-auto bg-surface-sand h-1.5 rounded-full overflow-hidden">
+<div class="bg-indigo h-full w-2/3 animate-pulse"></div>
+</div>
+<p class="font-meta text-caption text-ink-secondary">Norme AD-18 • Chiffrement souverain asymétrique RSA-4096</p>
+</div>
+<!-- STATE 3: SUBMITTED (Success: In Independent Review Queue) -->
+<div class="hidden bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-10 space-y-6" id="view-submitted">
+<div class="flex items-center gap-3 pb-4 border-b border-border-hairline">
+<div class="w-10 h-10 rounded-full bg-success-soft text-success flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-caption font-meta bg-success-soft text-success">Appel dûment réceptionné</span>
+<h2 class="font-heading text-heading text-ink-primary mt-0.5">Recours consigné sous le N° APP-2025-084-R2</h2>
+</div>
+</div>
+<div class="space-y-4 text-ink-primary font-body text-body">
+<p>
+          Votre mémoire contradictoire a été transmis avec succès au <strong>Second Officier du Conseil d'Arbitrage</strong> (dossier anonymisé vis-à-vis de l'instructeur initial).
+        </p>
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline space-y-3 font-meta text-meta">
+<div class="flex justify-between items-center py-1 border-b border-border-hairline/60">
+<span class="text-ink-secondary">Délai statutaire d'instruction :</span>
+<span class="font-body-strong text-ink-primary">Sous 24 à 48 heures ouvrées</span>
+</div>
+<div class="flex justify-between items-center py-1 border-b border-border-hairline/60">
+<span class="text-ink-secondary">Réviseur désigné :</span>
+<span class="font-body-strong text-ink-primary">Conseil Consultatif Indépendant (Section Ta'aruf)</span>
+</div>
+<div class="flex justify-between items-center py-1">
+<span class="text-ink-secondary">Notification du Wali :</span>
+<span class="text-success font-body-strong">SMS de confirmation expédié à M. Oumar O.</span>
+</div>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+          Pendant ce réexamen, votre statut d'accès demeure temporairement préservé sans altération de votre profil ni perte de vos historiques de convenance.
+        </p>
+</div>
+<div class="pt-4 flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-border-hairline">
+<a class="w-full sm:w-auto px-6 py-2.5 rounded-full border border-border-strong text-ink-primary font-body-strong text-body text-center hover:bg-surface-sand transition-colors" href="#">
+          Télécharger l'accusé de réception (PDF)
+        </a>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-mihrab transition-colors" onclick="setAuditState('state-form')">
+          Retour au dossier
+        </button>
+</div>
+</div>
+<!-- STATE 4: EXPIRED / WINDOW CLOSED (Error / Forclusion) -->
+<div class="hidden bg-surface-raised border border-danger/30 rounded-xl p-6 sm:p-10 space-y-6" id="view-expired">
+<div class="flex items-center gap-3 pb-4 border-b border-border-hairline">
+<div class="w-10 h-10 rounded-full bg-danger-soft text-danger flex items-center justify-center">
+<span class="material-symbols-outlined text-2xl">event_busy</span>
+</div>
+<div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-caption font-meta bg-danger-soft text-danger">Délai forclos</span>
+<h2 class="font-heading text-heading text-ink-primary mt-0.5">Fenêtre de recours contradictoire expirée</h2>
+</div>
+</div>
+<div class="space-y-4 text-ink-primary font-body text-body">
+<p>
+          En application de la disposition <strong>FR-090</strong> régissant les recours au sein de la communauté AnKanu, la recevabilité d'un appel est strictement circonscrite à un délai de <strong>7 jours francs</strong> suivant la notification formelle de la mesure.
+        </p>
+<div class="p-4 rounded-lg bg-surface-sand border border-border-hairline font-meta text-meta space-y-2">
+<p class="text-ink-secondary">
+            Date de notification initiale : <span class="text-ink-primary font-body-strong">12 Octobre 2025 à 14h30 UTC</span>
+</p>
+<p class="text-ink-secondary">
+            Échéance de recours forclose : <span class="text-danger font-body-strong">19 Octobre 2025 à 23h59 UTC (+ 4 jours de dépassement)</span>
+</p>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+          La décision initiale est désormais devenue définitive au sens de la déontologie matrimoniale. Seule une saisine directe et conjointe émise par le tuteur légal (*Wali*) auprès du secrétariat général peut faire l'objet d'une réouverture exceptionnelle.
+        </p>
+</div>
+<div class="pt-4 flex flex-col sm:flex-row items-center justify-end gap-3 border-t border-border-hairline">
+<a class="w-full sm:w-auto px-6 py-2.5 rounded-full border border-border-strong text-ink-primary font-body-strong text-body text-center hover:bg-surface-sand transition-colors" href="#">
+          Procédure dérogatoire du Wali
+        </a>
+<a class="w-full sm:w-auto px-6 py-2.5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body text-center hover:bg-mihrab transition-colors" href="#">
+          Contacter le Secrétariat
+        </a>
+</div>
+</div>
+</main>
+<!-- INSTITUTIONAL FOOTER (Shared Components JSON execution) -->
+<footer class="w-full bottom-0 bg-surface-sand dark:bg-surface-sand border-t border-border-hairline dark:border-border-hairline mt-auto">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Regulatory / CIL Burkina Faso notice -->
+<div class="max-w-2xl text-center md:text-left space-y-2">
+<div class="flex items-center justify-center md:justify-start gap-2">
+<span class="font-title text-title text-primary dark:text-primary font-bold">AnKanu</span>
+<span class="inline-block w-1 h-1 rounded-full bg-gold"></span>
+<span class="font-meta text-caption text-ink-secondary">Éthique &amp; Fiqh du Ta'aruf</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary dark:text-ink-secondary leading-relaxed">
+          © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+<p class="font-caption text-caption text-ink-secondary">
+          Garantie de non-monétisation : Aucune sanction ni aucun appel ne fait l'objet d'un paiement ou d'un privilège commercial.
+        </p>
+</div>
+<!-- Legal & Guardian Links (JSON exact links) -->
+<div class="flex flex-wrap items-center justify-center md:justify-end gap-6 text-center">
+<a class="text-ink-secondary dark:text-ink-secondary font-meta text-meta hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#">Confidentialité &amp; Données</a>
+<a class="text-ink-secondary dark:text-ink-secondary font-meta text-meta hover:text-primary dark:hover:text-primary underline decoration-border-hairline dark:decoration-border-hairline transition-colors duration-150" href="#">Tuteurs Légaux (Wali)</a>
+<a class="text-primary dark:text-primary font-meta text-meta underline transition-colors duration-150" href="#">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- SCRIPT FOR STATE SIMULATION & INTERACTION -->
+<script>
+    function updateCharCount(el) {
+      const counter = document.getElementById('char-counter');
+      counter.textContent = `${el.value.length} / 1200 caractères`;
+    }
+
+    function handleFileSelected(input) {
+      if (input.files && input.files[0]) {
+        document.getElementById('file-name').textContent = input.files[0].name;
+        document.getElementById('file-preview').classList.remove('hidden');
+        document.getElementById('file-preview').classList.add('flex');
+      }
+    }
+
+    function removeFile() {
+      const input = document.getElementById('file-upload');
+      input.value = '';
+      document.getElementById('file-preview').classList.add('hidden');
+      document.getElementById('file-preview').classList.remove('flex');
+    }
+
+    function simulateSubmission() {
+      setAuditState('state-loading');
+      setTimeout(() => {
+        setAuditState('state-submitted');
+      }, 1500);
+    }
+
+    function setAuditState(stateId) {
+      const states = ['state-form', 'state-loading', 'state-submitted', 'state-expired'];
+      const views = {
+        'state-form': 'view-form',
+        'state-loading': 'view-loading',
+        'state-submitted': 'view-submitted',
+        'state-expired': 'view-expired'
+      };
+
+      // Reset tabs
+      states.forEach(s => {
+        const btn = document.getElementById(`btn-${s}`);
+        const view = document.getElementById(views[s]);
+        if (s === stateId) {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta transition-colors duration-150 bg-primary text-ink-on-indigo";
+          view.classList.remove('hidden');
+        } else {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta transition-colors duration-150 bg-surface-raised text-ink-secondary hover:text-primary border border-border-hairline";
+          view.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body></html>

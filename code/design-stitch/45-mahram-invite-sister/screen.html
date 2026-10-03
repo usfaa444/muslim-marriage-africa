@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Invitation du Tuteur Légal (Mahram)</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined (Exact literal transcription) -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Exact Tailwind Theme Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface-variant": "#43474e",
+            "surface-tint": "#465f86",
+            "surface-container-high": "#eee7db",
+            "surface-indigo": "#15283F",
+            "outline": "#74777f",
+            "surface-container-highest": "#e9e2d5",
+            "on-tertiary-fixed": "#001c38",
+            "ink-secondary": "#5C5346",
+            "on-error-container": "#93000a",
+            "on-primary-container": "#8ba4cf",
+            "tertiary-fixed-dim": "#abc9f3",
+            "tertiary-container": "#1b3b5e",
+            "on-surface": "#1e1b14",
+            "mihrab": "#2C4A6E",
+            "focus-ring": "#1F3A5F",
+            "surface": "#fff9ee",
+            "disabled": "#B5A894",
+            "inverse-on-surface": "#f7f0e3",
+            "on-secondary-fixed": "#251a00",
+            "on-primary-fixed-variant": "#2d476d",
+            "success-soft": "#DCE6DE",
+            "staff": "#6B3D2E",
+            "on-error": "#ffffff",
+            "ink-primary": "#1B2433",
+            "ink-on-indigo": "#F4EDE0",
+            "outline-variant": "#c4c6cf",
+            "on-primary-fixed": "#001c3b",
+            "gold-soft": "#E8D5A3",
+            "inverse-primary": "#aec8f4",
+            "on-secondary-fixed-variant": "#5b4300",
+            "primary": "#032448",
+            "border-hairline": "#D9CDB8",
+            "on-tertiary": "#ffffff",
+            "surface-container-low": "#faf3e6",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "success": "#3D5C45",
+            "surface-raised": "#FFFBF4",
+            "on-tertiary-container": "#88a5ce",
+            "error": "#ba1a1a",
+            "secondary-container": "#fdd88a",
+            "on-secondary": "#ffffff",
+            "gold": "#C4A35A",
+            "surface-container": "#f4ede0",
+            "on-background": "#1e1b14",
+            "primary-container": "#1f3a5f",
+            "secondary-fixed": "#ffdf9c",
+            "tertiary-fixed": "#d3e4ff",
+            "inverse-surface": "#333028",
+            "primary-fixed-dim": "#aec8f4",
+            "background": "#fff9ee",
+            "indigo": "#1F3A5F",
+            "blur-wash": "#C8BBA6",
+            "surface-sand": "#F4EDE0",
+            "staff-soft": "#EFE4DC",
+            "surface-bright": "#fff9ee",
+            "surface-dim": "#e0d9cd",
+            "border-strong": "#6F624C",
+            "danger-soft": "#F3E0DC",
+            "primary-fixed": "#d5e3ff",
+            "danger": "#8B3A3A",
+            "indigo-deep": "#15283F",
+            "secondary": "#755b18",
+            "tertiary": "#002546",
+            "surface-container-lowest": "#ffffff",
+            "surface-variant": "#e9e2d5",
+            "on-secondary-container": "#785d1b",
+            "secondary-fixed-dim": "#e5c276"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "6": "32px",
+            "space-md": "1rem",
+            "7": "48px",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "5": "24px",
+            "1": "4px",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "4": "16px",
+            "margin": "1rem",
+            "3": "12px",
+            "2": "8px",
+            "screen-pad": "16px",
+            "gutter": "16px"
+          },
+          "fontFamily": {
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-surface-sand text-ink-primary font-body text-body antialiased flex flex-col justify-between selection:bg-gold-soft selection:text-ink-primary">
+<!-- TOP NAVIGATION BAR (Shared Component JSON exact binding) -->
+<header class="w-full bg-surface border-b border-border-hairline z-40 sticky top-0">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand & Canonical Identity -->
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-2 group focus:outline-none" href="#home">
+<span class="w-7 h-7 rounded-full bg-indigo-deep text-gold flex items-center justify-center font-heading text-heading">
+<span class="material-symbols-outlined text-[17px]" style="font-variation-settings: 'FILL' 1;">mosque</span>
+</span>
+<span class="font-title text-title text-primary font-bold tracking-tight">AnKanu</span>
+</a>
+<!-- Platform Links (Discussions is mapped active per context) -->
+<nav class="hidden md:flex items-center gap-7 pt-1">
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#decouvrir">Découvrir</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#invitations">Invitations</a>
+<a class="text-primary font-body-strong text-body-strong border-b-2 border-primary pb-1" href="#discussions">Discussions</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#profil">Profil</a>
+</nav>
+</div>
+<!-- Trailing Guardian & Assistance Actions (From Shared JSON) -->
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container border border-border-hairline text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-gold text-[18px]" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>Wali notifié : Oumar O.</span>
+</div>
+<a class="inline-flex items-center gap-1 text-primary hover:text-primary transition-colors duration-150 font-meta text-meta px-2.5 py-1" href="#assistance">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+<span class="hidden sm:inline">Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- CANONICAL STATE SIMULATOR (Audit UX Toolbar for Evaluator Testing) -->
+<section class="bg-surface-container-high border-b border-border-hairline px-4 py-2.5">
+<div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-ink-secondary">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">tune</span>
+<span class="font-meta text-meta text-ink-primary font-medium">Banc d'audit déontologique (AD-12) :</span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5">
+<button class="px-2.5 py-1 rounded bg-surface-raised border border-border-strong text-ink-primary font-caption text-caption shadow-xs" id="btn-state-empty" onclick="setAuditState('empty')" type="button">1. Saisie vide</button>
+<button class="px-2.5 py-1 rounded bg-surface-sand border border-border-hairline text-ink-secondary font-caption text-caption hover:bg-surface-raised" id="btn-state-loading" onclick="setAuditState('loading')" type="button">2. Envoi OTP</button>
+<button class="px-2.5 py-1 rounded bg-surface-sand border border-border-hairline text-ink-secondary font-caption text-caption hover:bg-surface-raised" id="btn-state-error" onclick="setAuditState('error')" type="button">3. Rejet Ami/Tiers</button>
+<button class="px-2.5 py-1 rounded bg-surface-sand border border-border-hairline text-ink-secondary font-caption text-caption hover:bg-surface-raised" id="btn-state-success" onclick="setAuditState('success')" type="button">4. Succès délivré</button>
+</div>
+</div>
+</section>
+<!-- MAIN EDITORIAL FOLIO CANVAS -->
+<main class="flex-grow w-full max-w-3xl mx-auto px-4 sm:px-6 py-8 md:py-10">
+<!-- BREADCRUMB & JURISDICTION -->
+<div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+<nav aria-label="Fil d'ariane" class="flex items-center gap-2 font-meta text-meta text-ink-secondary">
+<a class="hover:text-primary transition-colors" href="#discussions">Discussions</a>
+<span class="text-border-strong text-[11px]">•</span>
+<span class="text-ink-primary font-body-strong text-body-strong">Chaperonnage &amp; Protection</span>
+</nav>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-surface-sand border border-border-hairline font-caption text-caption text-ink-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Norme FR-071 · Décret AD-12</span>
+</div>
+</div>
+<!-- SOVEREIGNTY NOTIFICATION CARD (NOT FORCED / DÉMARCHE VOLONTAIRE) -->
+<section class="mb-6 p-4 rounded-xl bg-surface-raised border border-border-hairline flex items-start gap-3.5">
+<span class="material-symbols-outlined text-secondary text-[22px] mt-0.5 shrink-0" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+<div>
+<h2 class="font-heading text-heading text-ink-primary font-semibold">Démarche volontaire &amp; non contraignante</h2>
+<p class="font-body text-body text-ink-secondary mt-1">
+          Chère sœur, vous cheminez selon votre propre discernement et votre rythme souverain. Ce rattachement de chaperonnage est conçu pour vous offrir un rempart honorable et bienveillant, sans hâte imposée.
+        </p>
+</div>
+</section>
+<!-- SECTION TITLE & SPIRITUAL REASSURANCE -->
+<header class="mb-8">
+<h1 class="font-display text-display text-primary tracking-tight">
+        Invitation du Tuteur Légal (Mahram)
+      </h1>
+<p class="font-body text-body text-ink-secondary mt-2 leading-relaxed">
+        Désignez un protecteur naturel (père, frère germain ou oncle paternel) pour veiller sur le respect des convenances et valider le cadre de votre échange ta'aruf au Burkina Faso.
+      </p>
+</header>
+<!-- AUDIO PROMPT ACCESSIBILITY BLOCK ({components.audio-prompt}) -->
+<section aria-labelledby="audio-guidance-title" class="mb-8 rounded-xl bg-surface-indigo text-ink-on-indigo p-5 sm:p-6 relative overflow-hidden">
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold text-[20px]">hearing</span>
+<span class="font-meta text-meta text-gold-soft uppercase tracking-wider font-semibold" id="audio-guidance-title">
+              Guidance vocale communautaire
+            </span>
+</div>
+<p class="font-heading text-heading text-ink-on-indigo font-normal">
+            Comprendre le rôle protecteur du Mahram sans pression
+          </p>
+<p class="font-caption text-caption text-on-primary-container">
+            Écoutez l'explication éthique dans votre langue de confiance usuelle.
+          </p>
+</div>
+<!-- Audio Player & Language Toggles -->
+<div class="flex flex-col sm:flex-end gap-3 w-full sm:w-auto">
+<div class="inline-flex rounded-lg bg-surface-indigo/90 p-1 border border-primary-container self-start sm:self-end">
+<button class="px-2.5 py-1 text-xs font-meta rounded text-ink-on-indigo hover:text-white transition" id="lang-mos" onclick="switchLanguage('mos')" type="button">Mooré (mos)</button>
+<button class="px-2.5 py-1 text-xs font-meta rounded text-ink-on-indigo hover:text-white transition" id="lang-dyu" onclick="switchLanguage('dyu')" type="button">Dioula (dyu)</button>
+<button class="px-2.5 py-1 text-xs font-meta rounded bg-mihrab text-white font-medium shadow-xs" id="lang-fr" onclick="switchLanguage('fr')" type="button">Français (fr)</button>
+</div>
+<div class="flex items-center gap-3">
+<button aria-label="Écouter l'explication vocale" class="w-12 h-12 rounded-full bg-gold hover:bg-gold-soft text-indigo-deep flex items-center justify-center transition shadow-sm active:scale-95 focus:outline-none focus:ring-2 focus:ring-gold" id="play-button" onclick="toggleAudio()" type="button">
+<span class="material-symbols-outlined text-[26px]" id="play-icon" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<div class="flex flex-col">
+<span class="font-caption text-caption text-ink-on-indigo" id="audio-status">Lecture audio prête (01:42)</span>
+<span class="font-caption text-caption text-gold-soft" id="audio-lang-label">Version intégrale en Français</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- MAIN INTERACTIVE FORM CARD -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8 relative">
+<!-- Alert / Status Zone (Dynamic feedback based on Canonical State) -->
+<div class="hidden mb-6 rounded-lg p-4 transition-all duration-200" id="status-container">
+<!-- Injected via JavaScript -->
+</div>
+<!-- INVIOLABLE SECURITY GUARANTEE BANNER -->
+<div class="mb-6 p-3.5 rounded-lg bg-surface-sand border border-border-hairline flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">lock</span>
+<p class="font-caption text-caption text-ink-secondary leading-normal">
+<strong class="text-ink-primary font-semibold">Règle de sécurité inviolable AD-12 :</strong> Le prétendant ne peut en aucun cas rattacher ou substituer un tuteur à votre place. Tout échange demeure sous votre contrôle total.
+        </p>
+</div>
+<form class="space-y-6" id="invite-form" onsubmit="handleFormSubmit(event)">
+<!-- RELATIONSHIP SELECTION (CANONICAL TIES ONLY) -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-2" for="relationship-select">
+            Lien de parenté canonique (Mahram reconnu) *
+          </label>
+<div class="relative">
+<select class="w-full bg-surface-raised border border-border-hairline rounded-lg px-4 py-3 text-ink-primary font-body text-body focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:outline-none appearance-none pr-10" id="relationship-select" onchange="validateRelationship()" required="">
+<option disabled="" selected="" value="">Sélectionnez le statut de votre tuteur</option>
+<option value="father">Père (Géniteur &amp; Tuteur naturel)</option>
+<option value="brother">Frère germain ou consanguin majeur</option>
+<option value="uncle">Oncle paternel (Lien de sang)</option>
+<option value="guardian">Tuteur légal désigné (Mandatement coutumier / Cadi)</option>
+<option class="text-danger" value="friend">Ami ou tiers d'agrément (Interdit AD-12)</option>
+</select>
+<span class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-ink-secondary">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</div>
+<!-- Dynamic Canonical Rejection Warning -->
+<p class="hidden mt-2 font-caption text-caption text-danger flex items-center gap-1.5" id="friend-warning">
+<span class="material-symbols-outlined text-[16px]">cancel</span>
+<span>Règle AD-12 : Tout lien profane, ami ou tiers non légitime est strictement rejeté par la règle canonique.</span>
+</p>
+</div>
+<!-- PHONE NUMBER INPUT (BURKINA FASO +226 FORMAT) -->
+<div>
+<div class="flex items-center justify-between mb-2">
+<label class="block font-meta text-meta text-ink-secondary" for="phone-input">
+              Numéro de téléphone du Tuteur (+226 Burkina Faso / Sahel) *
+            </label>
+<span class="font-caption text-caption text-ink-secondary">Format : 70 / 76 / 60...</span>
+</div>
+<div class="flex rounded-lg border border-border-hairline bg-surface-raised focus-within:border-border-strong focus-within:ring-2 focus-within:ring-focus-ring overflow-hidden">
+<div class="inline-flex items-center gap-2 px-3.5 bg-surface-container border-r border-border-hairline text-ink-primary font-meta text-meta">
+<span class="font-semibold text-secondary">🇧🇫 +226</span>
+</div>
+<input class="w-full bg-transparent px-4 py-3 text-ink-primary font-body text-body placeholder:text-ink-secondary/50 focus:outline-none border-0" id="phone-input" pattern="[0-9 ]{8,12}" placeholder="70 12 34 56" required="" type="tel"/>
+</div>
+<p class="mt-1.5 font-caption text-caption text-ink-secondary">
+            Un SMS protocolaire officiel contenant les instructions de chaperonnage sera transmis sans divulgation de détails privés.
+          </p>
+</div>
+<!-- REASSURANCE: NO CHAT MESSAGE SENT AS HER -->
+<div class="p-3.5 rounded-lg bg-surface-sand/70 border border-border-hairline flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+<span class="font-caption text-caption text-ink-secondary">
+<strong>Garantie de sérénité :</strong> Aucun message de clavardage n'est envoyé en votre nom. La notification transmise est purement institutionnelle.
+          </span>
+</div>
+<!-- CALL TO ACTION BUTTONS -->
+<div class="pt-4 flex flex-col sm:flex-row items-center gap-3">
+<!-- Primary CTA Button (min-height 48px, rounded-full) -->
+<button class="w-full sm:flex-1 min-h-[48px] px-6 py-3 rounded-full bg-indigo hover:bg-primary-container text-ink-on-indigo font-body-strong text-body-strong flex items-center justify-center gap-2 shadow-xs transition active:opacity-90" id="submit-button" type="submit">
+<span class="material-symbols-outlined text-[19px]">send</span>
+<span id="button-label">Transmettre l'invitation au tuteur (SMS officiel)</span>
+</button>
+<!-- Quiet Decline / Defer Later Button -->
+<button class="w-full sm:w-auto min-h-[48px] px-5 py-3 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-meta text-meta transition active:opacity-80" onclick="deferAction()" type="button">
+            Différer et continuer sans tuteur immédiat
+          </button>
+</div>
+</form>
+</section>
+<!-- TRUST & JURISDICTION COMPLIANCE BADGES -->
+<section class="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+<div class="p-4 rounded-lg bg-surface border border-border-hairline">
+<span class="material-symbols-outlined text-mihrab text-[24px] mb-1">policy</span>
+<h3 class="font-body-strong text-body-strong text-ink-primary text-sm font-semibold">Conformité CIL Burkina</h3>
+<p class="font-caption text-caption text-ink-secondary mt-0.5">Droit et protection des données personnelles.</p>
+</div>
+<div class="p-4 rounded-lg bg-surface border border-border-hairline">
+<span class="material-symbols-outlined text-mihrab text-[24px] mb-1">enhanced_encryption</span>
+<h3 class="font-body-strong text-body-strong text-ink-primary text-sm font-semibold">Hébergement Souverain</h3>
+<p class="font-caption text-caption text-ink-secondary mt-0.5">Données chiffrées Ouagadougou / Scaleway Paris.</p>
+</div>
+<div class="p-4 rounded-lg bg-surface border border-border-hairline">
+<span class="material-symbols-outlined text-mihrab text-[24px] mb-1">balance</span>
+<h3 class="font-body-strong text-body-strong text-ink-primary text-sm font-semibold">Éthique Sunnah &amp; Coutume</h3>
+<p class="font-caption text-caption text-ink-secondary mt-0.5">Cadre protecteur respectueux des familles.</p>
+</div>
+</section>
+</main>
+<!-- FOOTER (Exact Shared Component JSON Binding) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline mt-12">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+<div class="space-y-2 max-w-2xl">
+<div class="flex items-center justify-center md:justify-start gap-2">
+<span class="font-title text-title text-primary font-bold">AnKanu</span>
+<span class="text-ink-secondary text-xs">• Matrimonial digne</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary leading-relaxed">
+          © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-6">
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#confidentialite">Confidentialité &amp; Données</a>
+<a class="text-primary font-meta text-meta underline" href="#tuteurs">Tuteurs Légaux (Wali)</a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#ethique">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- JAVASCRIPT FOR INTERACTIVE STATES & AUDIT RUNNER -->
+<script>
+    // State simulator controller
+    function setAuditState(state) {
+      const statusBox = document.getElementById('status-container');
+      const phoneInput = document.getElementById('phone-input');
+      const select = document.getElementById('relationship-select');
+      const submitBtn = document.getElementById('submit-button');
+      const btnLabel = document.getElementById('button-label');
+      const friendWarning = document.getElementById('friend-warning');
+
+      // Update test buttons appearance
+      ['empty', 'loading', 'error', 'success'].forEach(s => {
+        const b = document.getElementById('btn-state-' + s);
+        if (b) {
+          if (s === state) {
+            b.className = 'px-2.5 py-1 rounded bg-surface-raised border border-border-strong text-ink-primary font-caption text-caption shadow-xs';
+          } else {
+            b.className = 'px-2.5 py-1 rounded bg-surface-sand border border-border-hairline text-ink-secondary font-caption text-caption hover:bg-surface-raised';
+          }
+        }
+      });
+
+      // Reset dynamic alerts
+      statusBox.classList.add('hidden');
+      statusBox.innerHTML = '';
+      friendWarning.classList.add('hidden');
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+
+      if (state === 'empty') {
+        phoneInput.value = '';
+        select.value = '';
+        btnLabel.innerText = "Transmettre l'invitation au tuteur (SMS officiel)";
+      } 
+      else if (state === 'loading') {
+        phoneInput.value = '70 88 45 12';
+        select.value = 'father';
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+        btnLabel.innerText = "Génération du code d'attachement OTP...";
+        statusBox.classList.remove('hidden');
+        statusBox.className = 'mb-6 rounded-lg p-4 bg-surface-sand border border-border-hairline flex items-center gap-3';
+        statusBox.innerHTML = `
+          <span class="material-symbols-outlined text-secondary animate-spin text-[22px]">progress_activity</span>
+          <div>
+            <p class="font-body-strong text-body-strong text-ink-primary">Envoi en cours via la passerelle SMS Faso...</p>
+            <p class="font-caption text-caption text-ink-secondary">Vérification de l'intégrité canonique et création du jeton sécurisé.</p>
+          </div>
+        `;
+      } 
+      else if (state === 'error') {
+        select.value = 'friend';
+        phoneInput.value = '76 54 32 10';
+        friendWarning.classList.remove('hidden');
+        statusBox.classList.remove('hidden');
+        statusBox.className = 'mb-6 rounded-lg p-4 bg-danger-soft border border-danger/30 flex items-start gap-3';
+        statusBox.innerHTML = `
+          <span class="material-symbols-outlined text-danger text-[22px] mt-0.5">report_problem</span>
+          <div>
+            <h4 class="font-heading text-heading text-danger font-semibold">Rejet déontologique AD-12 (Friend Class Rejected)</h4>
+            <p class="font-body text-body text-ink-primary mt-0.5">
+              La désignation d'un ami ou tiers sans lien canonique de sang ou de tutelle légitime est formellement inadmissible. Veuillez sélectionner votre père, oncle ou frère.
+            </p>
+          </div>
+        `;
+        btnLabel.innerText = "Action non permise";
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+      } 
+      else if (state === 'success') {
+        phoneInput.value = '70 12 34 56';
+        select.value = 'father';
+        btnLabel.innerText = "Invitation transmise";
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+        statusBox.classList.remove('hidden');
+        statusBox.className = 'mb-6 rounded-lg p-4 bg-success-soft border border-success/30 flex items-start gap-3';
+        statusBox.innerHTML = `
+          <span class="material-symbols-outlined text-success text-[24px] mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          <div>
+            <h4 class="font-heading text-heading text-success font-semibold">Invitation délivrée avec honneur</h4>
+            <p class="font-body text-body text-ink-primary mt-1">
+              Un message protocolaire avec code d'accès sécurisé a été délivré par SMS au <strong>+226 70 12 34 56</strong>. Votre tuteur légal recevra les directives sans intrusion dans vos confidences.
+            </p>
+            <p class="font-caption text-caption text-ink-secondary mt-2">Horodatage certifié CIL : ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}</p>
+          </div>
+        `;
+      }
+    }
+
+    // Audio Explanation State
+    let isPlaying = false;
+    function toggleAudio() {
+      isPlaying = !isPlaying;
+      const playIcon = document.getElementById('play-icon');
+      const audioStatus = document.getElementById('audio-status');
+      if (isPlaying) {
+        playIcon.innerText = 'pause';
+        audioStatus.innerText = 'Lecture en cours... (Écoute pieuse)';
+      } else {
+        playIcon.innerText = 'play_arrow';
+        audioStatus.innerText = 'Lecture audio en pause';
+      }
+    }
+
+    function switchLanguage(lang) {
+      const label = document.getElementById('audio-lang-label');
+      ['mos', 'dyu', 'fr'].forEach(l => {
+        const btn = document.getElementById('lang-' + l);
+        if (l === lang) {
+          btn.className = 'px-2.5 py-1 text-xs font-meta rounded bg-mihrab text-white font-medium shadow-xs';
+        } else {
+          btn.className = 'px-2.5 py-1 text-xs font-meta rounded text-ink-on-indigo hover:text-white transition';
+        }
+      });
+
+      if (lang === 'mos') {
+        label.innerText = 'Version en langue nationale Mooré (mos)';
+      } else if (lang === 'dyu') {
+        label.innerText = 'Version en langue nationale Dioula (dyu)';
+      } else {
+        label.innerText = 'Version intégrale en Français (fr)';
+      }
+    }
+
+    // Immediate form field relationship validation
+    function validateRelationship() {
+      const select = document.getElementById('relationship-select');
+      const friendWarning = document.getElementById('friend-warning');
+      const submitBtn = document.getElementById('submit-button');
+
+      if (select.value === 'friend') {
+        friendWarning.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+      } else {
+        friendWarning.classList.add('hidden');
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('opacity-60', 'cursor-not-allowed');
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const select = document.getElementById('relationship-select');
+      if (select.value === 'friend') {
+        setAuditState('error');
+        return;
+      }
+      setAuditState('loading');
+      setTimeout(() => {
+        setAuditState('success');
+      }, 1200);
+    }
+
+    function deferAction() {
+      alert("Votre choix souverain est respecté. Vous continuez votre parcours sans tuteur immédiat. Vous pourrez y revenir à tout moment depuis votre profil.");
+    }
+  </script>
+</body></html>

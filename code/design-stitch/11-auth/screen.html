@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Auth (signup / login)</title>
+<!-- Typography: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with form plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-surface-variant": "#43474e",
+            "on-tertiary-fixed": "#001c38",
+            "surface-indigo": "#15283F",
+            "primary-container": "#1f3a5f",
+            "on-secondary-fixed": "#251a00",
+            "surface-dim": "#e0d9cd",
+            "surface-container-highest": "#e9e2d5",
+            "on-error-container": "#93000a",
+            "tertiary-fixed-dim": "#abc9f3",
+            "secondary-fixed": "#ffdf9c",
+            "on-primary": "#ffffff",
+            "ink-secondary": "#5C5346",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-secondary": "#ffffff",
+            "on-tertiary-container": "#88a5ce",
+            "on-primary-fixed": "#001c3b",
+            "on-secondary-fixed-variant": "#5b4300",
+            "success-soft": "#DCE6DE",
+            "gold-soft": "#E8D5A3",
+            "tertiary": "#002546",
+            "on-background": "#1e1b14",
+            "ink-on-indigo": "#F4EDE0",
+            "staff": "#6B3D2E",
+            "disabled": "#B5A894",
+            "border-hairline": "#D9CDB8",
+            "mihrab": "#2C4A6E",
+            "ink-primary": "#1B2433",
+            "staff-soft": "#EFE4DC",
+            "surface-container-low": "#faf3e6",
+            "on-secondary-container": "#785d1b",
+            "tertiary-container": "#1b3b5e",
+            "outline-variant": "#c4c6cf",
+            "secondary": "#755b18",
+            "on-surface": "#1e1b14",
+            "surface-container-lowest": "#ffffff",
+            "gold": "#C4A35A",
+            "primary-fixed": "#d5e3ff",
+            "outline": "#74777f",
+            "error-container": "#ffdad6",
+            "on-primary-fixed-variant": "#2d476d",
+            "danger-soft": "#F3E0DC",
+            "error": "#ba1a1a",
+            "inverse-surface": "#333028",
+            "indigo-deep": "#15283F",
+            "danger": "#8B3A3A",
+            "background": "#fff9ee",
+            "surface-variant": "#e9e2d5",
+            "primary": "#032448",
+            "tertiary-fixed": "#d3e4ff",
+            "surface-sand": "#F4EDE0",
+            "blur-wash": "#C8BBA6",
+            "surface-container-high": "#eee7db",
+            "surface-bright": "#fff9ee",
+            "surface": "#fff9ee",
+            "border-strong": "#6F624C",
+            "inverse-primary": "#aec8f4",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-raised": "#FFFBF4",
+            "indigo": "#1F3A5F",
+            "secondary-container": "#fdd88a",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#f4ede0",
+            "focus-ring": "#1F3A5F",
+            "secondary-fixed-dim": "#e5c276",
+            "primary-fixed-dim": "#aec8f4",
+            "success": "#3D5C45",
+            "on-error": "#ffffff",
+            "surface-tint": "#465f86",
+            "on-primary-container": "#8ba4cf"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "screen-pad": "16px",
+            "2": "8px",
+            "1": "4px",
+            "space-xs": "0.25rem",
+            "margin": "1rem",
+            "6": "32px",
+            "space-md": "1rem",
+            "3": "12px",
+            "7": "48px",
+            "5": "24px",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "gutter": "16px",
+            "4": "16px"
+          },
+          "fontFamily": {
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Architectural subtle focus indicator */
+    input:focus, select:focus, textarea:focus, button:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface-sand text-ink-primary font-body antialiased flex flex-col justify-between selection:bg-gold-soft selection:text-ink-primary">
+<!-- Top App Bar / Solemn Anchor Header (Consistent with Shared Components JSON) -->
+<header class="w-full bg-surface border-b border-border-hairline z-30">
+<div class="w-full max-w-5xl mx-auto px-screen-pad py-4 flex items-center justify-between">
+<!-- Wordmark & Subtitle -->
+<div class="flex items-baseline space-x-3">
+<span class="text-title font-title text-primary tracking-tight">AnKanu</span>
+<span class="text-caption font-meta uppercase tracking-widest text-ink-secondary hidden sm:inline-block border-l border-border-hairline pl-3">
+          TA'ARUF HONORABLE
+        </span>
+</div>
+<!-- Trailing Action -->
+<a aria-label="Retour à l'accueil" class="inline-flex items-center space-x-1.5 text-meta font-meta text-ink-secondary hover:text-ink-primary transition-colors duration-150 py-1 px-2 rounded-lg hover:bg-surface-container-high" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Retour à l'accueil</span>
+</a>
+</div>
+</header>
+<!-- Main Canvas: Centered Courtyard Folio Card -->
+<main class="flex-grow flex items-center justify-center px-screen-pad py-8 md:py-12">
+<div class="w-full max-w-[640px] bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-10 transition-all duration-200">
+<!-- Guardian & Dignity Banner -->
+<div class="mb-8 rounded-lg bg-surface-indigo text-ink-on-indigo p-4 flex items-start space-x-3.5 border border-mihrab">
+<span class="material-symbols-outlined text-gold mt-0.5 text-[22px]">verified_user</span>
+<div>
+<h2 class="text-meta font-body-strong tracking-wide text-gold">CADRE D'HONNEUR &amp; TIERS DE CONFIANCE</h2>
+<p class="text-caption font-caption text-ink-on-indigo/80 mt-1 leading-relaxed">
+            Toute démarche est supervisée dans le respect des règles déontologiques islamiques. Absence totale de mise en scène mercantile ou de superficialité.
+          </p>
+</div>
+</div>
+<!-- Mode Switcher: Inscription / Connexion -->
+<div aria-label="Authentification mode" class="flex border-b border-border-hairline mb-8" role="tablist">
+<button aria-controls="panel-signup" aria-selected="true" class="flex-1 pb-3 text-center font-body-strong text-body border-b-2 border-indigo text-indigo transition-all duration-150" id="tab-signup" onclick="switchAuthMode('signup')" role="tab" type="button">
+          Inscription (Nouveau folio)
+        </button>
+<button aria-controls="panel-login" aria-selected="false" class="flex-1 pb-3 text-center font-meta text-meta text-ink-secondary border-b-2 border-transparent hover:text-ink-primary transition-all duration-150" id="tab-login" onclick="switchAuthMode('login')" role="tab" type="button">
+          Connexion (Membres)
+        </button>
+</div>
+<!-- SIGNUP PANEL (Default) -->
+<section aria-labelledby="tab-signup" class="space-y-6" id="panel-signup" role="tabpanel">
+<!-- Section Header -->
+<div class="text-left space-y-1.5">
+<h1 class="text-display font-display text-primary">Démarche d'Alliance Sacrée</h1>
+<p class="text-body font-body text-ink-secondary">
+            L'accès aux fiches biographiques exige l'engagement du prétendant et la présence informée d'un Wali référent.
+          </p>
+</div>
+<!-- 19+ Discretionary Notice per A1 legal constraint -->
+<div class="rounded-lg bg-surface-sand border border-border-hairline px-4 py-3 flex items-center space-x-3 text-ink-secondary">
+<span class="material-symbols-outlined text-ink-secondary text-[20px]">info</span>
+<span class="text-meta font-meta">Chemin réservé aux adultes de 19 ans et plus.</span>
+</div>
+<form class="space-y-6" id="signup-form" onsubmit="event.preventDefault();">
+<!-- Gender selection (FR-003) -->
+<div class="space-y-2">
+<span class="block text-meta font-meta text-ink-secondary">Rôle dans la démarche (Genre légal)</span>
+<div aria-label="Rôle dans la démarche" class="grid grid-cols-2 gap-3" role="radiogroup">
+<label class="flex items-center justify-center space-x-2.5 h-12 rounded-xl border border-indigo bg-surface text-ink-primary font-body-strong cursor-pointer transition-all" id="label-role-sister">
+<input checked="" class="sr-only" name="gender_role" onchange="selectRole('soeur')" type="radio" value="soeur"/>
+<span class="material-symbols-outlined text-[18px] text-indigo">female</span>
+<span>Sœur</span>
+</label>
+<label class="flex items-center justify-center space-x-2.5 h-12 rounded-xl border border-border-hairline bg-surface-raised text-ink-secondary font-meta cursor-pointer hover:border-border-strong transition-all" id="label-role-brother">
+<input class="sr-only" name="gender_role" onchange="selectRole('frere')" type="radio" value="frere"/>
+<span class="material-symbols-outlined text-[18px]">male</span>
+<span>Frère</span>
+</label>
+</div>
+<p class="text-caption font-caption text-ink-secondary italic pt-0.5">
+              Immuable après enregistrement initial sans intervention d'un officier et audit déontologique.
+            </p>
+</div>
+<!-- Pseudonym Field -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center">
+<label class="block text-meta font-meta text-ink-secondary" for="pseudonym">Pseudonyme de convenance</label>
+<span class="inline-flex items-center text-caption font-meta text-success" id="pseudo-status">
+<span class="material-symbols-outlined text-[15px] mr-1">check_circle</span>
+                Disponible
+              </span>
+</div>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded-xl border border-border-strong bg-surface-raised text-ink-primary font-body focus:ring-2 focus:ring-focus-ring focus:border-border-strong" id="pseudonym" name="pseudonym" placeholder="Ex. Tahir_Al_Burkini" required="" type="text" value="Tahir_Ouaga"/>
+</div>
+<p class="text-caption font-caption text-ink-secondary">
+              Doit être unique. Aucun nom outrageant ou superficiel.
+            </p>
+</div>
+<!-- Email Field -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center">
+<label class="block text-meta font-meta text-ink-secondary" for="email">Adresse électronique de notification</label>
+<span class="text-caption font-meta text-ink-secondary">Usage confidentiel</span>
+</div>
+<input class="w-full h-12 px-4 rounded-xl border border-border-hairline bg-surface-raised text-ink-primary font-body focus:ring-2 focus:ring-focus-ring focus:border-border-strong" id="email" name="email" placeholder="votre.nom@courrier.bf" required="" type="email"/>
+<p class="text-caption font-caption text-ink-secondary">
+              Ne sera jamais dévoilée aux prétendants sans votre aval et celui de votre Wali.
+            </p>
+</div>
+<!-- Password Field & Published Rules Box -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="block text-meta font-meta text-ink-secondary" for="password">Mot de passe</label>
+<button class="text-caption font-meta text-ink-secondary hover:text-ink-primary flex items-center space-x-1" onclick="togglePasswordVisibility('password', this)" type="button">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Afficher</span>
+</button>
+</div>
+<input class="w-full h-12 px-4 rounded-xl border border-border-hairline bg-surface-raised text-ink-primary font-body focus:ring-2 focus:ring-focus-ring focus:border-border-strong" id="password" name="password" oninput="evaluatePasswordStrength(this.value)" placeholder="••••••••••••" required="" type="password"/>
+<!-- Published Rules Box -->
+<div class="bg-surface-sand/80 border border-border-hairline rounded-lg p-3 text-caption font-caption space-y-1.5">
+<span class="font-body-strong block text-ink-primary">Exigences de robustesse cryptographique :</span>
+<ul class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-ink-secondary" id="password-criteria">
+<li class="flex items-center space-x-1.5" id="rule-len">
+<span class="material-symbols-outlined text-[14px] text-disabled">circle</span>
+<span>Minimum 10 caractères</span>
+</li>
+<li class="flex items-center space-x-1.5" id="rule-num">
+<span class="material-symbols-outlined text-[14px] text-disabled">circle</span>
+<span>1 chiffre requis</span>
+</li>
+<li class="flex items-center space-x-1.5" id="rule-upper">
+<span class="material-symbols-outlined text-[14px] text-disabled">circle</span>
+<span>1 lettre majuscule</span>
+</li>
+<li class="flex items-center space-x-1.5" id="rule-sym">
+<span class="material-symbols-outlined text-[14px] text-disabled">circle</span>
+<span>1 symbole déontologique</span>
+</li>
+</ul>
+</div>
+</div>
+<!-- Bot Check / Accessible Human Verification Box -->
+<div class="space-y-1.5">
+<span class="block text-meta font-meta text-ink-secondary">Contrôle d'intégrité déontologique</span>
+<div class="rounded-xl border border-border-hairline bg-surface-sand p-3.5 flex items-center justify-between" id="captcha-box">
+<div class="flex items-center space-x-3">
+<input class="w-5 h-5 rounded border-border-strong text-indigo focus:ring-focus-ring cursor-pointer" id="human-verify" onchange="toggleHumanVerification(this)" type="checkbox"/>
+<div>
+<label class="text-meta font-body-strong text-ink-primary cursor-pointer block" for="human-verify">
+                    Je confirme être une personne physique responsable
+                  </label>
+<p class="text-caption font-caption text-ink-secondary" id="captcha-text-state">
+                    En attente de confirmation tactile ou clavier
+                  </p>
+</div>
+</div>
+<div class="flex items-center space-x-1 text-ink-secondary text-caption font-meta px-2.5 py-1 rounded bg-surface border border-border-hairline" id="captcha-badge">
+<span class="material-symbols-outlined text-[16px]">shield_person</span>
+<span id="captcha-badge-text">Non certifié</span>
+</div>
+</div>
+</div>
+<!-- Sincerity Pledge Box (FR-001, FR-089) -->
+<div class="rounded-xl border border-border-hairline bg-surface-sand p-4.5 space-y-3">
+<div class="flex items-center space-x-2 border-b border-border-hairline pb-2.5">
+<span class="material-symbols-outlined text-gold text-[20px]">auto_stories</span>
+<h3 class="text-heading font-heading text-primary">Engagement de Sincérité &amp; Serment devant Allah</h3>
+</div>
+<p class="text-caption font-body text-ink-primary leading-relaxed">
+              En initiant ce folio, je fais le serment solennel devant Allah d'agir avec piété, honneur et transparence totale. J'atteste sur l'honneur que cette démarche vise exclusivement la conclusion d'une union légitime (Nikah), en accord avec la Sunnah.
+            </p>
+<div class="p-3 bg-surface-raised rounded border border-border-hairline text-caption font-body-strong text-staff">
+<strong class="font-bold">Obligation de clarté :</strong> Transparence absolue et déclarée sur toute union matrimoniale antérieure ou en cours (célibat, veuvage, divorce ou polygamie statutaire déclarée).
+            </div>
+<label class="flex items-start space-x-3 cursor-pointer pt-1">
+<input class="w-5 h-5 mt-0.5 rounded border-border-strong text-indigo focus:ring-focus-ring" id="pledge-check" onchange="validateSubmissionState()" required="" type="checkbox"/>
+<span class="text-caption font-meta text-ink-primary leading-normal">
+                Je certifie sur l'honneur l'exactitude de ma situation maritale et adhère sans réserve à la charte déontologique (Archivage probant FR-089).
+              </span>
+</label>
+</div>
+<!-- Remember-me toggle / checkbox (FR-008) -->
+<div class="flex items-center justify-between pt-1">
+<label class="flex items-center space-x-2.5 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded border-border-strong text-indigo focus:ring-focus-ring" id="remember-device" type="checkbox"/>
+<span class="text-meta font-meta text-ink-secondary">Maintenir la session de convenance active</span>
+</label>
+<span class="text-caption font-meta text-ink-secondary underline cursor-help" title="Déconnexion automatique après 14 jours d'inactivité ou sur appareil public">Politique de session</span>
+</div>
+<!-- Primary Submit Action -->
+<div class="space-y-2 pt-2">
+<button class="w-full h-12 px-6 rounded-xl font-body-strong text-body transition-colors duration-200 flex items-center justify-center space-x-2 bg-disabled text-ink-primary/60 cursor-not-allowed" disabled="" id="btn-submit-signup" type="submit">
+<span class="material-symbols-outlined text-[18px]">how_to_reg</span>
+<span>Sceller l'engagement &amp; Créer le compte</span>
+</button>
+<p class="text-caption font-caption text-ink-secondary text-center">
+              Votre compte sera créé mais restera non public jusqu'à la vérification de conformité et validation de tuteur (FR-012, FR-014).
+            </p>
+</div>
+<!-- Separator -->
+<div class="relative flex py-2 items-center">
+<div class="flex-grow border-t border-border-hairline"></div>
+<span class="flex-shrink mx-4 text-caption font-meta uppercase text-ink-secondary">Ou voie d'authentification alternative</span>
+<div class="flex-grow border-t border-border-hairline"></div>
+</div>
+<!-- Alternative Provider: Google Allowed (Apple Explicitly Forbidden) -->
+<div class="space-y-2">
+<button class="w-full h-12 px-4 rounded-xl border border-border-strong bg-surface hover:bg-surface-sand text-ink-primary font-meta flex items-center justify-center space-x-3 transition-colors" type="button">
+<svg class="w-4 h-4" viewbox="0 0 24 24">
+<path d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.15z" fill="#4285F4"></path>
+<path d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z" fill="#34A853"></path>
+<path d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z" fill="#FBBC05"></path>
+<path d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z" fill="#EA4335"></path>
+</svg>
+<span>Continuer via Google</span>
+</button>
+<p class="text-caption font-caption text-ink-secondary text-center italic">
+              Email et mot de passe demeurent fonctionnels en cas d'indisponibilité du service tiers.
+            </p>
+</div>
+</form>
+</section>
+<!-- LOGIN PANEL (Toggled view) -->
+<section aria-labelledby="tab-login" class="hidden space-y-6" id="panel-login" role="tabpanel">
+<div class="text-left space-y-1.5">
+<h2 class="text-display font-display text-primary">Reprendre votre Folio</h2>
+<p class="text-body font-body text-ink-secondary">
+            Accédez à votre espace sécurisé, vos correspondances chaperonnées et le registre de votre démarche.
+          </p>
+</div>
+<form class="space-y-5" id="login-form" onsubmit="event.preventDefault();">
+<div class="space-y-1.5">
+<label class="block text-meta font-meta text-ink-secondary" for="login-ident">Identifiant ou Adresse électronique</label>
+<input class="w-full h-12 px-4 rounded-xl border border-border-hairline bg-surface-raised text-ink-primary font-body focus:ring-2 focus:ring-focus-ring focus:border-border-strong" id="login-ident" placeholder="Pseudonyme scellé ou email" required="" type="text"/>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center">
+<label class="block text-meta font-meta text-ink-secondary" for="login-pass">Mot de passe</label>
+<a class="text-caption font-meta text-ink-secondary hover:text-ink-primary underline" href="#">Recours Wali / Perte</a>
+</div>
+<input class="w-full h-12 px-4 rounded-xl border border-border-hairline bg-surface-raised text-ink-primary font-body focus:ring-2 focus:ring-focus-ring focus:border-border-strong" id="login-pass" placeholder="••••••••••••" required="" type="password"/>
+</div>
+<div class="flex items-center justify-between">
+<label class="flex items-center space-x-2.5 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded border-border-strong text-indigo focus:ring-focus-ring" type="checkbox"/>
+<span class="text-meta font-meta text-ink-secondary">Conserver la session active</span>
+</label>
+</div>
+<button class="w-full h-12 px-6 rounded-xl font-body-strong text-body bg-indigo hover:bg-indigo-deep text-ink-on-indigo transition-colors flex items-center justify-center space-x-2 shadow-none" type="button">
+<span class="material-symbols-outlined text-[18px]">lock_open</span>
+<span>Accéder au folio d'honneur</span>
+</button>
+</form>
+</section>
+<!-- AUDIT & DISCLOSURE SPECIMENS (Simulated System States) -->
+<div class="mt-10 pt-6 border-t border-border-hairline space-y-3">
+<span class="block text-caption font-meta text-ink-secondary uppercase tracking-wider">
+          Indicateurs de conformité &amp; gestion des rejets (Exemples directeurs)
+        </span>
+<!-- Conflict Display: Pseudonym Conflict Alert -->
+<div class="rounded-lg bg-danger-soft/60 border border-danger/30 p-3 flex items-start space-x-2.5 text-danger">
+<span class="material-symbols-outlined text-[18px] mt-0.5">error</span>
+<div class="text-caption font-body">
+<strong class="font-body-strong">Conflit d'identifiant :</strong> Ce pseudonyme est déjà scellé sur un autre folio acté. Veuillez choisir une désignation alternative.
+          </div>
+</div>
+<!-- Captcha Fail Alert -->
+<div class="rounded-lg bg-danger-soft/60 border border-danger/30 p-3 flex items-start space-x-2.5 text-danger">
+<span class="material-symbols-outlined text-[18px] mt-0.5">sentiment_very_dissatisfied</span>
+<div class="text-caption font-body">
+<strong class="font-body-strong">Échec de validation :</strong> Échec de validation de la vérification humaine (Tentative signalée à l'officier de sécurité).
+          </div>
+</div>
+<!-- Rate-Limiting Notice -->
+<div class="rounded-lg bg-staff-soft border border-border-hairline p-3 flex items-start space-x-2.5 text-staff">
+<span class="material-symbols-outlined text-[18px] mt-0.5">hourglass_bottom</span>
+<div class="text-caption font-body">
+<strong class="font-body-strong">Protection anti-intrusion active :</strong> Cadence de requêtes régulée. Toute requête massive fait l'objet d'un gel préventif du terminal.
+          </div>
+</div>
+</div>
+</div>
+</main>
+<!-- Institutional Footer (Conforming strictly to Shared Components JSON) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline">
+<div class="w-full max-w-5xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+<div>
+<p class="text-caption font-caption text-ink-primary">
+          © AnKanu — Institution matrimoniale d'honneur et de ta'aruf. Hébergement souverain certifié Scaleway (Paris, France).
+        </p>
+<p class="text-caption font-caption text-ink-secondary mt-0.5">
+          Zéro pistage publicitaire, respect intégral de la pudeur et des données du foyer.
+        </p>
+</div>
+<nav aria-label="Liens institutionnels" class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-caption font-caption">
+<a class="text-ink-secondary hover:text-ink-primary transition-colors" href="#">Charte de Confidentialité</a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors" href="#">Conditions du Wali</a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors" href="#">Mentions Légales</a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors" href="#">Sécurité &amp; Déontologie</a>
+</nav>
+</div>
+</footer>
+<!-- Light interactions: tabs, validations, pledge enforcement -->
+<script>
+    function switchAuthMode(mode) {
+      const tabSignup = document.getElementById('tab-signup');
+      const tabLogin = document.getElementById('tab-login');
+      const panelSignup = document.getElementById('panel-signup');
+      const panelLogin = document.getElementById('panel-login');
+
+      if (mode === 'signup') {
+        tabSignup.classList.add('border-indigo', 'text-indigo', 'font-body-strong');
+        tabSignup.classList.remove('border-transparent', 'text-ink-secondary', 'font-meta');
+        tabSignup.setAttribute('aria-selected', 'true');
+
+        tabLogin.classList.remove('border-indigo', 'text-indigo', 'font-body-strong');
+        tabLogin.classList.add('border-transparent', 'text-ink-secondary', 'font-meta');
+        tabLogin.setAttribute('aria-selected', 'false');
+
+        panelSignup.classList.remove('hidden');
+        panelLogin.classList.add('hidden');
+      } else {
+        tabLogin.classList.add('border-indigo', 'text-indigo', 'font-body-strong');
+        tabLogin.classList.remove('border-transparent', 'text-ink-secondary', 'font-meta');
+        tabLogin.setAttribute('aria-selected', 'true');
+
+        tabSignup.classList.remove('border-indigo', 'text-indigo', 'font-body-strong');
+        tabSignup.classList.add('border-transparent', 'text-ink-secondary', 'font-meta');
+        tabSignup.setAttribute('aria-selected', 'false');
+
+        panelLogin.classList.remove('hidden');
+        panelSignup.classList.add('hidden');
+      }
+    }
+
+    function selectRole(role) {
+      const labelSister = document.getElementById('label-role-sister');
+      const labelBrother = document.getElementById('label-role-brother');
+
+      if (role === 'soeur') {
+        labelSister.className = "flex items-center justify-center space-x-2.5 h-12 rounded-xl border border-indigo bg-surface text-ink-primary font-body-strong cursor-pointer transition-all";
+        labelBrother.className = "flex items-center justify-center space-x-2.5 h-12 rounded-xl border border-border-hairline bg-surface-raised text-ink-secondary font-meta cursor-pointer hover:border-border-strong transition-all";
+      } else {
+        labelBrother.className = "flex items-center justify-center space-x-2.5 h-12 rounded-xl border border-indigo bg-surface text-ink-primary font-body-strong cursor-pointer transition-all";
+        labelSister.className = "flex items-center justify-center space-x-2.5 h-12 rounded-xl border border-border-hairline bg-surface-raised text-ink-secondary font-meta cursor-pointer hover:border-border-strong transition-all";
+      }
+    }
+
+    function togglePasswordVisibility(fieldId, btn) {
+      const input = document.getElementById(fieldId);
+      const spanIcon = btn.querySelector('.material-symbols-outlined');
+      const spanText = btn.querySelector('span:not(.material-symbols-outlined)');
+      if (input.type === 'password') {
+        input.type = 'text';
+        spanIcon.textContent = 'visibility_off';
+        spanText.textContent = 'Masquer';
+      } else {
+        input.type = 'password';
+        spanIcon.textContent = 'visibility';
+        spanText.textContent = 'Afficher';
+      }
+    }
+
+    function evaluatePasswordStrength(val) {
+      const hasLength = val.length >= 10;
+      const hasNumber = /[0-9]/.test(val);
+      const hasUpper = /[A-Z]/.test(val);
+      const hasSymbol = /[^A-Za-z0-9]/.test(val);
+
+      updateRule('rule-len', hasLength);
+      updateRule('rule-num', hasNumber);
+      updateRule('rule-upper', hasUpper);
+      updateRule('rule-sym', hasSymbol);
+
+      validateSubmissionState();
+    }
+
+    function updateRule(elementId, isValid) {
+      const el = document.getElementById(elementId);
+      const icon = el.querySelector('.material-symbols-outlined');
+      if (isValid) {
+        icon.textContent = 'check_circle';
+        icon.className = 'material-symbols-outlined text-[14px] text-success';
+        el.classList.add('text-success');
+        el.classList.remove('text-ink-secondary');
+      } else {
+        icon.textContent = 'circle';
+        icon.className = 'material-symbols-outlined text-[14px] text-disabled';
+        el.classList.remove('text-success');
+        el.classList.add('text-ink-secondary');
+      }
+    }
+
+    function toggleHumanVerification(chk) {
+      const badge = document.getElementById('captcha-badge');
+      const badgeText = document.getElementById('captcha-badge-text');
+      const textState = document.getElementById('captcha-text-state');
+
+      if (chk.checked) {
+        badge.className = 'flex items-center space-x-1 text-success text-caption font-meta px-2.5 py-1 rounded bg-success-soft border border-success/30';
+        badgeText.textContent = 'Humain certifié';
+        textState.textContent = 'Vérification de présence humaine certifiée';
+        textState.className = 'text-caption font-meta text-success';
+      } else {
+        badge.className = 'flex items-center space-x-1 text-ink-secondary text-caption font-meta px-2.5 py-1 rounded bg-surface border border-border-hairline';
+        badgeText.textContent = 'Non certifié';
+        textState.textContent = 'En attente de confirmation tactile ou clavier';
+        textState.className = 'text-caption font-caption text-ink-secondary';
+      }
+      validateSubmissionState();
+    }
+
+    function validateSubmissionState() {
+      const pledgeChecked = document.getElementById('pledge-check').checked;
+      const humanChecked = document.getElementById('human-verify').checked;
+      const passwordVal = document.getElementById('password').value;
+      const isPasswordValid = passwordVal.length >= 10 && /[0-9]/.test(passwordVal) && /[A-Z]/.test(passwordVal) && /[^A-Za-z0-9]/.test(passwordVal);
+
+      const btn = document.getElementById('btn-submit-signup');
+      if (pledgeChecked && humanChecked && isPasswordValid) {
+        btn.disabled = false;
+        btn.className = "w-full h-12 px-6 rounded-xl font-body-strong text-body transition-colors duration-200 flex items-center justify-center space-x-2 bg-indigo hover:bg-indigo-deep text-ink-on-indigo cursor-pointer";
+      } else {
+        btn.disabled = true;
+        btn.className = "w-full h-12 px-6 rounded-xl font-body-strong text-body transition-colors duration-200 flex items-center justify-center space-x-2 bg-disabled text-ink-primary/60 cursor-not-allowed";
+      }
+    }
+  </script>
+</body></html>

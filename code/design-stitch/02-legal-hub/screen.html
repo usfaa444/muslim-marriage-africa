@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Espace Juridique &amp; Conformité | Legal Hub</title>
+<!-- Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#2d476d",
+            "on-primary": "#ffffff",
+            "blur-wash": "#C8BBA6",
+            "success": "#3D5C45",
+            "on-secondary-fixed": "#251a00",
+            "on-background": "#1a1c1e",
+            "surface-bright": "#faf9fc",
+            "on-tertiary-container": "#c69d60",
+            "surface-container-highest": "#e3e2e5",
+            "on-secondary-fixed-variant": "#5b4300",
+            "surface-tint": "#465f86",
+            "mihrab": "#2C4A6E",
+            "staff": "#6B3D2E",
+            "on-surface": "#1a1c1e",
+            "indigo": "#1F3A5F",
+            "on-secondary": "#ffffff",
+            "on-tertiary-fixed": "#281800",
+            "on-surface-variant": "#43474e",
+            "danger": "#8B3A3A",
+            "secondary-fixed-dim": "#e5c276",
+            "surface-container-low": "#f4f3f7",
+            "inverse-primary": "#aec8f4",
+            "gold-soft": "#E8D5A3",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-sand": "#F4EDE0",
+            "staff-soft": "#EFE4DC",
+            "surface-container": "#efedf1",
+            "danger-soft": "#F3E0DC",
+            "primary-fixed-dim": "#aec8f4",
+            "surface-container-lowest": "#ffffff",
+            "ink-secondary": "#5C5346",
+            "disabled": "#B5A894",
+            "inverse-on-surface": "#f1f0f4",
+            "outline-variant": "#c4c6cf",
+            "on-error-container": "#93000a",
+            "surface": "#faf9fc",
+            "on-primary-fixed": "#001c3b",
+            "secondary-fixed": "#ffdf9c",
+            "error-container": "#ffdad6",
+            "ink-primary": "#1B2433",
+            "border-strong": "#6F624C",
+            "on-error": "#ffffff",
+            "tertiary-fixed-dim": "#ecbf7f",
+            "surface-raised": "#FFFBF4",
+            "primary": "#032448",
+            "secondary": "#755b18",
+            "outline": "#74777f",
+            "tertiary": "#342000",
+            "secondary-container": "#fdd88a",
+            "on-secondary-container": "#785d1b",
+            "background": "#faf9fc",
+            "border-hairline": "#D9CDB8",
+            "tertiary-container": "#503400",
+            "on-tertiary-fixed-variant": "#5f410c",
+            "surface-indigo": "#15283F",
+            "primary-fixed": "#d5e3ff",
+            "primary-container": "#1f3a5f",
+            "on-tertiary": "#ffffff",
+            "gold": "#C4A35A",
+            "surface-dim": "#dad9dd",
+            "focus-ring": "#1F3A5F",
+            "surface-variant": "#e3e2e5",
+            "surface-container-high": "#e9e7eb",
+            "on-primary-container": "#8ba4cf",
+            "indigo-deep": "#15283F",
+            "success-soft": "#DCE6DE",
+            "tertiary-fixed": "#ffddb0",
+            "error": "#ba1a1a",
+            "inverse-surface": "#2f3033"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "16px",
+            "gutter": "16px",
+            "space-lg": "16px",
+            "space-xs": "4px",
+            "space-2xl": "32px",
+            "space-xl": "24px",
+            "space-md": "12px",
+            "space-sm": "8px",
+            "space-3xl": "48px"
+          },
+          "fontFamily": {
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .arch-motif {
+      border-radius: 20px 20px 0 0;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body text-body antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-indigo-deep">
+<!-- Top Navigation Bar (Shared Component) -->
+<header class="sticky top-0 z-50 bg-surface-container-low shadow-sm border-b border-outline-variant/30">
+<div class="w-full px-space-lg md:px-margin max-w-7xl mx-auto flex justify-between items-center py-space-sm">
+<!-- Wordmark with Arch/Mihrab Geometry -->
+<a class="flex items-center gap-space-sm group focus:outline-none" href="#">
+<div class="w-8 h-8 rounded-t-lg rounded-b-sm bg-indigo flex items-center justify-center text-gold-soft shadow-inner">
+<span class="material-symbols-outlined text-gold-soft text-heading" data-icon="shield">shield</span>
+</div>
+<div class="flex flex-col">
+<span class="text-heading font-heading tracking-tight text-primary">AnKanu</span>
+<span class="text-caption font-caption text-ink-secondary -mt-1 hidden sm:inline">Espace Juridique &amp; Conformité</span>
+</div>
+</a>
+<!-- Desktop Links -->
+<nav class="hidden md:flex items-center gap-space-xl">
+<a class="border-b-2 border-secondary text-primary font-meta text-meta pb-1" href="#">Portail Principal</a>
+<a class="text-on-surface-variant font-meta text-meta hover:text-secondary transition-colors duration-150" href="#charte">Charte Éthique &amp; Pudeur</a>
+<a class="text-on-surface-variant font-meta text-meta hover:text-secondary transition-colors duration-150" href="#registre">Registre RGPD</a>
+<a class="text-on-surface-variant font-meta text-meta hover:text-secondary transition-colors duration-150" href="#dpo">Contact DPO</a>
+</nav>
+<!-- Trailing Action -->
+<div class="flex items-center gap-space-md">
+<a class="inline-flex items-center gap-space-xs px-space-md py-space-sm rounded-lg bg-indigo text-ink-on-indigo font-body-strong text-meta hover:bg-indigo-deep transition-all duration-150 shadow-sm" href="/">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+<span>Retour au Sanctuaire</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Editorial Sub-header Hero Banner -->
+<section class="bg-surface-raised border-b border-border-hairline py-space-2xl px-space-lg md:px-margin">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-lg">
+<div class="max-w-3xl">
+<div class="inline-flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-gold-soft/50 border border-border-hairline text-ink-secondary text-caption font-meta mb-space-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>Habilitation &amp; Conformité Souveraine — République Française &amp; UE</span>
+</div>
+<h1 class="text-display font-display text-indigo-deep tracking-tight mb-space-xs">
+            Hub Juridique, Éthique &amp; Sanctuarisation
+          </h1>
+<p class="text-body font-body text-ink-secondary leading-relaxed">
+            Consultez les quatre piliers contractuels régissant le cheminement noble du mariage (ta'aruf / nikah / khitba) sur AnKanu. Nos protocoles excluent toute monétisation prédatrice, tout traceur commercial et tout compromis sur la pudeur des familles.
+          </p>
+</div>
+<!-- Quick Summary Badge -->
+<div class="flex flex-wrap md:flex-col items-start gap-space-xs p-space-md rounded-xl bg-surface-sand border border-border-hairline min-w-[240px]">
+<span class="text-caption font-caption text-ink-secondary">Dernière révision notifiée</span>
+<span class="text-body-strong font-body-strong text-primary">14 Novembre 2024</span>
+<span class="text-caption font-meta text-success flex items-center gap-1 mt-1">
+<span class="w-2 h-2 rounded-full bg-success"></span> Registre CIL / DPO certifié
+          </span>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content Layout with Sticky Sidebar Anchor Navigation -->
+<div class="max-w-7xl mx-auto w-full px-space-lg md:px-margin py-space-2xl flex-grow">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-2xl">
+<!-- Sticky Sidebar Navigation (Anchor index) -->
+<aside class="lg:col-span-4 xl:col-span-3">
+<div class="sticky top-24 space-y-space-lg">
+<div class="bg-surface-raised border border-border-hairline rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center gap-space-sm pb-space-md border-b border-border-hairline mb-space-md">
+<div class="w-8 h-8 rounded bg-surface-sand flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary leading-tight">Sommaire Juridique</h3>
+<p class="text-caption font-caption text-ink-secondary">Conformité RGPD &amp; CNIL</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="sidebar-anchor flex items-center gap-space-sm text-primary font-body-strong text-meta rounded-lg px-space-md py-space-sm bg-surface-sand border-l-2 border-secondary hover:bg-surface-sand transition-all" href="#section-mentions-legales">
+<span class="material-symbols-outlined text-secondary" data-icon="gavel">gavel</span>
+<span>1. Mentions Légales</span>
+</a>
+<a class="sidebar-anchor flex items-center gap-space-sm text-ink-secondary font-body text-meta rounded-lg px-space-md py-space-sm hover:bg-surface-sand hover:text-primary transition-all" href="#section-cgv">
+<span class="material-symbols-outlined text-outline" data-icon="contract">contract</span>
+<span>2. CGV &amp; Remboursements</span>
+</a>
+<a class="sidebar-anchor flex items-center gap-space-sm text-ink-secondary font-body text-meta rounded-lg px-space-md py-space-sm hover:bg-surface-sand hover:text-primary transition-all" href="#section-traceurs">
+<span class="material-symbols-outlined text-outline" data-icon="cookie">cookie</span>
+<span>3. Traceurs &amp; Cookies</span>
+</a>
+<a class="sidebar-anchor flex items-center gap-space-sm text-ink-secondary font-body text-meta rounded-lg px-space-md py-space-sm hover:bg-surface-sand hover:text-primary transition-all" href="#section-confidentialite">
+<span class="material-symbols-outlined text-outline" data-icon="shield">shield</span>
+<span>4. Confidentialité &amp; Pudeur</span>
+</a>
+<a class="sidebar-anchor flex items-center gap-space-sm text-ink-secondary font-body text-meta rounded-lg px-space-md py-space-sm hover:bg-surface-sand hover:text-primary transition-all" href="#section-souverainete">
+<span class="material-symbols-outlined text-outline" data-icon="cloud_done">cloud_done</span>
+<span>5. Hébergement Souverain</span>
+</a>
+<a class="sidebar-anchor flex items-center gap-space-sm text-ink-secondary font-body text-meta rounded-lg px-space-md py-space-sm hover:bg-surface-sand hover:text-primary transition-all" href="#section-dpo">
+<span class="material-symbols-outlined text-outline" data-icon="verified_user">verified_user</span>
+<span>6. Délégué aux Données (DPO)</span>
+</a>
+</nav>
+<div class="mt-space-lg pt-space-md border-t border-border-hairline">
+<a class="w-full flex items-center justify-center gap-space-xs px-space-md py-space-sm rounded-lg border border-border-strong text-ink-primary font-body-strong text-meta hover:bg-surface-sand transition-all text-center" href="mailto:dpo@ankanu.com?subject=Demande%20Archive%20Juridique%20PDF">
+<span class="material-symbols-outlined text-secondary" data-icon="download">download</span>
+<span>Télécharger l'Archive Légale (PDF)</span>
+</a>
+</div>
+</div>
+<!-- Ethical Guarantee Callout -->
+<div class="bg-indigo-deep text-ink-on-indigo rounded-xl p-space-md border border-border-strong/40">
+<div class="flex items-center gap-space-xs text-gold-soft mb-2">
+<span class="material-symbols-outlined" data-icon="policy" style="font-variation-settings: 'FILL' 1;">policy</span>
+<span class="text-caption font-meta tracking-wider uppercase">Garantie Déontologique</span>
+</div>
+<p class="text-caption font-body text-ink-on-indigo/90 leading-relaxed">
+              AnKanu est une institution matrimoniale solennelle. Nos algorithmes ne cherchent pas à retenir l'attention mais à formaliser des unions licites sous le regard du tuteur (Wali).
+            </p>
+</div>
+</div>
+</aside>
+<!-- Main Editorial Content Columns -->
+<main class="lg:col-span-8 xl:col-span-9 space-y-space-2xl">
+<!-- DOCUMENT 1: MENTIONS LÉGALES -->
+<article class="scroll-mt-28 bg-surface-raised rounded-xl border border-border-strong p-space-xl md:p-space-2xl shadow-sm" id="section-mentions-legales">
+<div class="flex items-center justify-between border-b border-border-hairline pb-space-md mb-space-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-sand flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="gavel">gavel</span>
+</div>
+<div>
+<span class="text-caption font-meta text-secondary tracking-widest uppercase">Document Officiel N° 1</span>
+<h2 class="text-title font-title text-indigo-deep">Mentions Légales</h2>
+</div>
+</div>
+<span class="text-caption font-caption bg-surface-sand px-space-sm py-1 rounded text-ink-secondary border border-border-hairline hidden sm:inline-block">
+              Réf. ML-FR-2024
+            </span>
+</div>
+<div class="space-y-space-lg text-ink-secondary font-body">
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">1.1. Éditeur de la Plateforme</h3>
+<p class="leading-relaxed">
+                Le service <strong class="text-ink-primary font-body-strong">AnKanu</strong> (accessible via le domaine officiel <code class="bg-surface-sand px-1.5 py-0.5 rounded text-meta text-primary">ankanu.com</code>) est édité et exploité par la société :
+              </p>
+<div class="mt-space-md bg-surface-sand rounded-lg p-space-md border border-border-hairline grid grid-cols-1 sm:grid-cols-2 gap-space-md text-meta">
+<div>
+<span class="block text-caption font-caption text-ink-secondary">Dénomination Sociale :</span>
+<span class="font-body-strong text-ink-primary">AnKanu S.A.S.</span>
+</div>
+<div>
+<span class="block text-caption font-caption text-ink-secondary">Capital Social :</span>
+<span class="font-body-strong text-ink-primary">25 000,00 € (entièrement libéré)</span>
+</div>
+<div>
+<span class="block text-caption font-caption text-ink-secondary">Registre du Commerce &amp; Sociétés :</span>
+<span class="font-body-strong text-ink-primary">R.C.S. Paris B 921 445 812</span>
+</div>
+<div>
+<span class="block text-caption font-caption text-ink-secondary">Numéro de TVA Intracommunautaire :</span>
+<span class="font-body-strong text-ink-primary">FR 48 921445812</span>
+</div>
+<div class="sm:col-span-2">
+<span class="block text-caption font-caption text-ink-secondary">Siège Social Institutionnel :</span>
+<span class="font-body-strong text-ink-primary">24 Rue de la Paix, 75002 Paris, France</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">1.2. Direction de la Publication &amp; Responsabilité Éditoriale</h3>
+<p class="leading-relaxed">
+<strong class="text-ink-primary font-body-strong">Directeur de la publication :</strong> Présidence du Conseil de Gouvernance Éthique AnKanu S.A.S.<br/>
+<strong class="text-ink-primary font-body-strong">Contact institutionnel officiel :</strong> <a class="text-primary underline hover:text-secondary" href="mailto:legal@ankanu.com">legal@ankanu.com</a> ou par voie postale au siège social avec accusé de réception.
+              </p>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">1.3. Vocation et Nature du Service</h3>
+<p class="leading-relaxed">
+                AnKanu est une plateforme matrimoniale rigoureusement encadrée facilitant les démarches d'union légitime selon les préceptes de l'éthique musulmane (Khitba, Ta'aruf sous la bienveillance du Wali / tuteur légal, et préparation au Nikah). AnKanu proscrit formellement toute pratique assimilée aux rencontres éphémères ou informelles.
+              </p>
+</div>
+</div>
+</article>
+<!-- DOCUMENT 2: CGV / CONDITIONS GÉNÉRALES DE VENTE & REMBOURSEMENTS -->
+<article class="scroll-mt-28 bg-surface-raised rounded-xl border border-border-hairline p-space-xl md:p-space-2xl shadow-sm" id="section-cgv">
+<div class="flex items-center justify-between border-b border-border-hairline pb-space-md mb-space-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-sand flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="contract">contract</span>
+</div>
+<div>
+<span class="text-caption font-meta text-secondary tracking-widest uppercase">Document Officiel N° 2</span>
+<h2 class="text-title font-title text-indigo-deep">Conditions Générales de Vente &amp; Remboursements</h2>
+</div>
+</div>
+<span class="text-caption font-caption bg-surface-sand px-space-sm py-1 rounded text-ink-secondary border border-border-hairline hidden sm:inline-block">
+              Tarification Honnête
+            </span>
+</div>
+<div class="space-y-space-lg text-ink-secondary font-body">
+<div class="p-space-md bg-gold-soft/30 rounded-lg border border-gold/40 text-ink-primary text-body">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-secondary mt-0.5" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<strong class="font-body-strong block text-primary">Engagement d'Honnêteté Contractuelle Sans Rétention :</strong>
+<span>Chez AnKanu, aucun abonnement n'est à tacite reconduction. Vous ne serez jamais prélevé à votre insu. Nos forfaits sont des engagements ponctuels et transparents.</span>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">2.1. Grille Tarifaire Solemnelle &amp; Forfaits d'Accompagnement</h3>
+<p class="leading-relaxed mb-space-md">
+                L'accès à l'espace de mise en relation familiale et au protocole d'introduction requiert la souscription de l'un de nos packs d'homologation vérifiée :
+              </p>
+<!-- Bento Price Comparison Table -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Pack 1 -->
+<div class="p-space-lg rounded-xl border border-border-hairline bg-surface-sand/60 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-space-sm">
+<span class="text-meta font-meta text-secondary uppercase tracking-wider">Pack Intégrité</span>
+<span class="text-caption font-caption bg-surface-raised px-2 py-0.5 rounded border border-border-hairline text-ink-secondary">6 Mois de démarche</span>
+</div>
+<div class="flex items-baseline gap-1 my-2">
+<span class="text-display font-display text-primary">190 €</span>
+<span class="text-caption font-caption text-ink-secondary">TTC</span>
+<span class="text-caption font-caption text-ink-secondary ml-2">(ou 125 000 F CFA XOF)</span>
+</div>
+<ul class="space-y-2 text-meta text-ink-secondary mt-space-md">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-meta" data-icon="check_circle">check_circle</span>
+                        Vérification d'identité et de célibat par un vérificateur assermenté
+                      </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-meta" data-icon="check_circle">check_circle</span>
+                        Validation et inclusion obligatoire du contact du tuteur légal (Wali)
+                      </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-meta" data-icon="check_circle">check_circle</span>
+                        Chiffrement intégral des clichés et visionnage protégé
+                      </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-danger text-meta" data-icon="close">close</span>
+<span class="text-ink-secondary">Aucun renouvellement automatique</span>
+</li>
+</ul>
+</div>
+<div class="mt-space-lg pt-space-md border-t border-border-hairline text-caption font-caption text-ink-secondary">
+                    Paiement unique en une seule échéance sécurisée.
+                  </div>
+</div>
+<!-- Pack 2 -->
+<div class="p-space-lg rounded-xl border-2 border-primary bg-surface-raised flex flex-col justify-between shadow-sm relative">
+<div class="absolute -top-3 right-4 bg-primary text-ink-on-indigo text-caption font-meta px-3 py-0.5 rounded-full uppercase tracking-wider">
+                    Recommandé Famille
+                  </div>
+<div>
+<div class="flex justify-between items-start mb-space-sm">
+<span class="text-meta font-meta text-secondary uppercase tracking-wider">Pack Sanctuaire &amp; Khitba</span>
+<span class="text-caption font-caption bg-gold-soft/40 px-2 py-0.5 rounded border border-gold/30 text-ink-primary">12 Mois d'accompagnement</span>
+</div>
+<div class="flex items-baseline gap-1 my-2">
+<span class="text-display font-display text-primary">380 €</span>
+<span class="text-caption font-caption text-ink-secondary">TTC</span>
+<span class="text-caption font-caption text-ink-secondary ml-2">(ou 250 000 F CFA XOF)</span>
+</div>
+<ul class="space-y-2 text-meta text-ink-secondary mt-space-md">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-meta" data-icon="check_circle">check_circle</span>
+                        Toutes les prérogatives du Pack Intégrité
+                      </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-meta" data-icon="check_circle">check_circle</span>
+                        Médiation déontologique facilitée lors de la coordination des familles
+                      </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-meta" data-icon="check_circle">check_circle</span>
+                        Vérification d'antécédents éthiques étendue
+                      </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-success text-meta" data-icon="check_circle">check_circle</span>
+                        Assistance téléphonique prioritaire de l'officier de conformité
+                      </li>
+</ul>
+</div>
+<div class="mt-space-lg pt-space-md border-t border-border-hairline text-caption font-caption text-ink-secondary">
+                    Clôture automatique du dossier dès conclusion du mariage religieux ou civil.
+                  </div>
+</div>
+</div>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">2.2. Droit Légal de Rétractation (14 Jours)</h3>
+<p class="leading-relaxed">
+                Conformément aux dispositions des articles L. 221-18 et suivants du Code de la consommation français, l'adhérent dispose d'un délai légal de <strong>quatorze (14) jours calendaires</strong> révolus à compter de la validation du paiement pour exercer son droit de rétractation sans avoir à justifier de motifs ni à payer de pénalités.
+              </p>
+<p class="leading-relaxed mt-2">
+                Le remboursement intégral s'effectue via le même moyen de paiement utilisé sous 7 jours ouvrés suivant la réception de la notification de renonciation adressée à <code class="bg-surface-sand px-1.5 py-0.5 rounded text-meta">remboursements@ankanu.com</code>.
+              </p>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">2.3. Politique d'Annulation &amp; Remboursement Post-Vérification</h3>
+<p class="leading-relaxed">
+                Si un adhérent décide d'interrompre sa démarche après vérification de son dossier mais avant toute mise en relation effective, un remboursement au prorata temporis est opéré de plein droit, minoré de frais de dossier incompressibles plafonnés à 35 € (23 000 XOF) correspondant aux diligences humaines d'assermentation.
+              </p>
+</div>
+</div>
+</article>
+<!-- DOCUMENT 3: POLITIQUE DE COOKIES & TRACEURS -->
+<article class="scroll-mt-28 bg-surface-raised rounded-xl border border-border-hairline p-space-xl md:p-space-2xl shadow-sm" id="section-traceurs">
+<div class="flex items-center justify-between border-b border-border-hairline pb-space-md mb-space-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-sand flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="cookie">cookie</span>
+</div>
+<div>
+<span class="text-caption font-meta text-secondary tracking-widest uppercase">Document Officiel N° 3</span>
+<h2 class="text-title font-title text-indigo-deep">Politique de Cookies &amp; Absence de Traceurs Tiers</h2>
+</div>
+</div>
+<span class="text-caption font-caption bg-surface-sand px-space-sm py-1 rounded text-ink-secondary border border-border-hairline hidden sm:inline-block">
+              Zéro Pixel Publicitaire
+            </span>
+</div>
+<div class="space-y-space-lg text-ink-secondary font-body">
+<!-- Explicit refusal declaration -->
+<div class="p-space-lg rounded-xl bg-surface-sand border-l-4 border-primary">
+<h4 class="font-body-strong text-primary text-heading mb-1">Refus Catégorique de la Monétisation Comportementale</h4>
+<p class="text-body text-ink-secondary leading-relaxed">
+                AnKanu n'intègre <strong>aucun pixel publicitaire tiers</strong> (aucun tag Meta, Google Ads, TikTok, Criteo ou affilié). Nous refusons que la quête d'une épouse ou d'un époux soit transformée en ciblage programmatique ou revendue à des fins marketing.
+              </p>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">3.1. Tableau des Traceurs Strictement Nécessaires</h3>
+<p class="leading-relaxed mb-space-md">
+                Les seuls témoins techniques déposés sur votre terminal sont strictement nécessaires au fonctionnement sécurisé de votre espace personnel (conformément aux lignes directrices CNIL exemptées de consentement) :
+              </p>
+<div class="overflow-x-auto border border-border-hairline rounded-lg">
+<table class="w-full text-left text-meta">
+<thead class="bg-surface-sand border-b border-border-hairline text-ink-primary font-body-strong">
+<tr>
+<th class="p-space-md">Identifiant</th>
+<th class="p-space-md">Finalité Unique</th>
+<th class="p-space-md">Durée de Conservation</th>
+<th class="p-space-md">Tiers Destinataire</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-border-hairline bg-surface-raised">
+<tr>
+<td class="p-space-md font-mono text-caption text-primary">__session_sanctuaire</td>
+<td class="p-space-md">Maintien de la connexion sécurisée et jeton CSRF d'intégrité</td>
+<td class="p-space-md">Session de navigation (détruit à la fermeture)</td>
+<td class="p-space-md text-success font-body-strong">Aucun (Strictement interne)</td>
+</tr>
+<tr>
+<td class="p-space-md font-mono text-caption text-primary">__auth_pudeur_token</td>
+<td class="p-space-md">Chiffrement symétrique des requêtes d'affichage des photos protégées</td>
+<td class="p-space-md">24 heures maximum</td>
+<td class="p-space-md text-success font-body-strong">Aucun (Strictement interne)</td>
+</tr>
+<tr>
+<td class="p-space-md font-mono text-caption text-primary">__matomo_souverain</td>
+<td class="p-space-md">Mesure d'audience anonymisée auto-hébergée (sans collecte d'adresses IP)</td>
+<td class="p-space-md">6 mois</td>
+<td class="p-space-md text-success font-body-strong">Hébergeur Scaleway Paris</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div>
+<h3 class="text-heading font-heading text-primary mb-space-xs">3.2. Mesure d'Audience Éthique Souveraine</h3>
+<p class="leading-relaxed">
+                Notre mesure de performance s'effectue via une instance indépendante hébergée sur nos propres machines en France, paramétrée selon les préconisations strictes de la CNIL (anonymisation complète des octets de l'IP, absence de recoupement multi-domaines, et respect permanent du signal navigateur <code class="bg-surface-sand px-1.5 py-0.5 rounded text-caption">Do Not Track</code>).
+              </p>
+</div>
+</div>
+</article>
+<!-- DOCUMENT 4: POLITIQUE DE CONFIDENTIALITÉ & PUDEUR (FR-120, AD-5, AD-19) -->
+<article class="scroll-mt-28 bg-surface-raised rounded-xl border border-border-hairline p-space-xl md:p-space-2xl shadow-sm" id="section-confidentialite">
+<div class="flex items-center justify-between border-b border-border-hairline pb-space-md mb-space-xl">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-sand flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="shield">shield</span>
+</div>
+<div>
+<span class="text-caption font-meta text-secondary tracking-widest uppercase">Document Officiel N° 4</span>
+<h2 class="text-title font-title text-indigo-deep">Politique de Confidentialité &amp; Sanctuaire de Pudeur</h2>
+</div>
+</div>
+<span class="text-caption font-caption bg-surface-sand px-space-sm py-1 rounded text-ink-secondary border border-border-hairline hidden sm:inline-block">
+              Normes FR-120 / AD-5 / AD-19
+            </span>
+</div>
+<div class="space-y-space-lg text-ink-secondary font-body">
+<p class="leading-relaxed">
+              La préservation de la réputation des familles et l'honneur (Iffah) des prétendant(e)s constituent le fondement même d'AnKanu. En application des standards de protection renforcés <strong class="text-ink-primary font-body-strong">FR-120</strong>, <strong class="text-ink-primary font-body-strong">AD-5</strong> et <strong class="text-ink-primary font-body-strong">AD-19</strong>, les dispositions ci-après s'imposent sans dérogation possible.
+            </p>
+<!-- 3 Columns Bento Grid on Security Rules -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Item 1: Sanctuaire de pudeur & Photos -->
+<div class="bg-surface-sand rounded-xl p-space-md border border-border-hairline flex flex-col justify-between">
+<div>
+<div class="w-8 h-8 rounded-full bg-indigo text-gold-soft flex items-center justify-center mb-space-sm">
+<span class="material-symbols-outlined text-meta" data-icon="lock">lock</span>
+</div>
+<h4 class="font-body-strong text-primary text-heading mb-1">Chiffrement des Photos</h4>
+<p class="text-meta text-ink-secondary leading-relaxed">
+                    Les clichés ne sont jamais indexés publiquement. Ils subissent un floutage cryptographique (AES-256) et ne sont dévoilés qu'après accord mutuel formalisé et autorisation du Wali.
+                  </p>
+</div>
+<div class="mt-space-md pt-2 border-t border-border-hairline text-caption font-caption text-secondary">
+                  Norme AD-5 : Pas de capture autorisée
+                </div>
+</div>
+<!-- Item 2: Correspondances familiales -->
+<div class="bg-surface-sand rounded-xl p-space-md border border-border-hairline flex flex-col justify-between">
+<div>
+<div class="w-8 h-8 rounded-full bg-indigo text-gold-soft flex items-center justify-center mb-space-sm">
+<span class="material-symbols-outlined text-meta" data-icon="family_restroom">family_restroom</span>
+</div>
+<h4 class="font-body-strong text-primary text-heading mb-1">Supervision du Tuteur</h4>
+<p class="text-meta text-ink-secondary leading-relaxed">
+                    Les échanges préliminaires intègrent en copie certifiée le contact légal du tuteur (Wali). Aucun canal privé secret n'est encouragé sur la plateforme.
+                  </p>
+</div>
+<div class="mt-space-md pt-2 border-t border-border-hairline text-caption font-caption text-secondary">
+                  Norme FR-120 : Intégrité Ta'aruf
+                </div>
+</div>
+<!-- Item 3: Droit à l'effacement -->
+<div class="bg-surface-sand rounded-xl p-space-md border border-border-hairline flex flex-col justify-between">
+<div>
+<div class="w-8 h-8 rounded-full bg-indigo text-gold-soft flex items-center justify-center mb-space-sm">
+<span class="material-symbols-outlined text-meta" data-icon="delete_forever">delete_forever</span>
+</div>
+<h4 class="font-body-strong text-primary text-heading mb-1">Purge Immédiate</h4>
+<p class="text-meta text-ink-secondary leading-relaxed">
+                    Sur simple demande ou dès confirmation du mariage, l'ensemble des correspondances privées, pièces d'identité et photos sont purgées définitivement sous 48h.
+                  </p>
+</div>
+<div class="mt-space-md pt-2 border-t border-border-hairline text-caption font-caption text-secondary">
+                  Norme AD-19 : Effacement Certifié
+                </div>
+</div>
+</div>
+<!-- SECTION SOUVERAINETÉ (Obligation légale inaliénable) -->
+<div class="scroll-mt-28 mt-space-xl p-space-xl rounded-xl bg-surface-sand border-2 border-border-strong" id="section-souverainete">
+<div class="flex items-start gap-space-md">
+<span class="material-symbols-outlined text-primary text-heading" data-icon="cloud_done">cloud_done</span>
+<div class="space-y-space-sm">
+<h3 class="text-heading font-heading text-primary">
+                    5. Mention Obligatoire d'Hébergement Souverain Européen
+                  </h3>
+<p class="text-body text-ink-secondary leading-relaxed">
+                    Conformément aux directives de sécurité juridique et au Règlement Général sur la Protection des Données (RGPD 2016/679), les données des postulants et de leurs familles sont hébergées au sein d'infrastructures physiques sous souveraineté exclusive française et européenne :
+                  </p>
+<div class="bg-surface-raised p-space-md rounded-lg border border-border-hairline space-y-1 text-meta">
+<p><strong class="text-primary font-body-strong">Prestataire d'Hébergement Souverain :</strong> Scaleway S.A.S. (Groupe Iliad)</p>
+<p><strong class="text-primary font-body-strong">Localisation des Datacenters :</strong> Paris / Île-de-France (Datacenters DC2 &amp; DC4 - Souterrains certifiés)</p>
+<p><strong class="text-primary font-body-strong">Certifications d'Excellence :</strong> ISO 27001, HDS (Hébergeur de Données de Santé pour les volets biométriques certifiés), et immunité totale contre toute juridiction extraterritoriale non reconnue par l'UE.</p>
+</div>
+<p class="text-caption font-caption text-ink-secondary italic">
+                    Aucun transfert de données personnelles n'est effectué hors de l'Espace Économique Européen (EEE) ou des accords de réciprocité agréés par la Commission Européenne.
+                  </p>
+</div>
+</div>
+</div>
+<!-- SECTION DPO / CIL -->
+<div class="scroll-mt-28 mt-space-lg p-space-xl rounded-xl bg-surface-sand border border-border-hairline" id="section-dpo">
+<div class="flex items-start gap-space-md">
+<span class="material-symbols-outlined text-primary text-heading" data-icon="verified_user">verified_user</span>
+<div class="space-y-space-sm">
+<h3 class="text-heading font-heading text-primary">
+                    6. Désignation Officielle du Délégué aux Données (DPO / CIL)
+                  </h3>
+<p class="text-body text-ink-secondary leading-relaxed">
+                    Un Correspondant Informatique et Libertés / Data Protection Officer (CIL / DPO) indépendant est dûment déclaré auprès de la CNIL sous la désignation officielle AnKanu DPO-FR-49102.
+                  </p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-space-xs text-meta">
+<div class="p-space-sm bg-surface-raised rounded border border-border-hairline">
+<span class="text-caption font-caption text-ink-secondary block">Canal Direct DPO :</span>
+<a class="text-primary font-body-strong underline hover:text-secondary" href="mailto:dpo@ankanu.com">dpo@ankanu.com</a>
+</div>
+<div class="p-space-sm bg-surface-raised rounded border border-border-hairline">
+<span class="text-caption font-caption text-ink-secondary block">Délai d'Instruction Maximum :</span>
+<span class="text-ink-primary font-body-strong">72 heures ouvrées</span>
+</div>
+</div>
+<p class="text-caption font-caption text-ink-secondary pt-2">
+                    Si vous estimez après nous avoir contactés que vos droits sur vos données ne sont pas respectés, vous conservez le droit légal d'introduire une réclamation auprès de l'autorité de contrôle nationale : la Commission Nationale de l'Informatique et des Libertés (CNIL) — 3 Place de Fontenoy, 75007 Paris.
+                  </p>
+</div>
+</div>
+</div>
+</div>
+</article>
+</main>
+</div>
+</div>
+<!-- Solemn Footer (Shared Component) -->
+<footer class="bg-surface-container-low border-t border-outline-variant/30 mt-space-3xl">
+<div class="w-full px-space-lg md:px-margin max-w-7xl mx-auto py-space-xl flex flex-col gap-space-md text-center md:text-left">
+<!-- Top Row: Marriages counter and status -->
+<div class="flex flex-col md:flex-row items-center justify-between gap-space-lg pb-space-lg border-b border-border-hairline">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-full bg-gold-soft/50 border border-gold flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-secondary" data-icon="favorite" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+<div class="text-left">
+<div class="text-meta font-meta text-ink-secondary">Compteur d'Intégrité Matrimoniale</div>
+<div class="text-title font-title text-indigo-deep">Mariages confirmés : 0</div>
+</div>
+</div>
+<div class="text-meta text-ink-secondary max-w-md text-left md:text-right">
+<span class="font-body-strong text-primary">Engagement Zéro Artifice :</span> Notre compteur reflète fidèlement la réalité des unions bénies et scellées, sans surenchère publicitaire.
+        </div>
+</div>
+<!-- Links Row -->
+<div class="flex flex-wrap items-center justify-center md:justify-start gap-x-space-xl gap-y-space-sm pt-space-sm">
+<a class="text-primary font-meta text-meta hover:underline underline-offset-4 transition-colors" href="#section-mentions-legales">Mentions Légales</a>
+<a class="text-primary font-meta text-meta hover:underline underline-offset-4 transition-colors" href="#section-cgv">CGU / CGV</a>
+<a class="text-primary font-meta text-meta hover:underline underline-offset-4 transition-colors" href="#section-traceurs">Gestion des Cookies</a>
+<a class="text-primary font-meta text-meta hover:underline underline-offset-4 transition-colors" href="#section-dpo">Contact DPO / CIL</a>
+<a class="text-primary font-meta text-meta hover:underline underline-offset-4 transition-colors" href="#section-souverainete">Attestation de Souveraineté</a>
+</div>
+<!-- Mandatory Copyright & Sovereignty Notice -->
+<p class="text-caption font-caption text-on-surface-variant max-w-4xl mx-auto md:mx-0 leading-relaxed pt-space-xs">
+        © 2024 AnKanu S.A.S. — Tous droits réservés. Hébergé en France au sein d'infrastructures certifiées SecNumCloud &amp; HDS. Conforme aux délibérations CNIL et au Règlement Européen sur la Protection des Données (RGPD 2016/679). Plateforme dédiée à la sacralisation de la khitba et à la préservation de la pudeur familiale.
+      </p>
+</div>
+</footer>
+<!-- Subtle Script for active sidebar links on scroll -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sections = document.querySelectorAll('article[id], div[id^="section-"]');
+      const navLinks = document.querySelectorAll('.sidebar-anchor');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 160;
+          if (pageYOffset >= sectionTop) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('bg-surface-sand', 'text-primary', 'font-body-strong', 'border-l-2', 'border-secondary');
+          link.classList.add('text-ink-secondary', 'font-body');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.remove('text-ink-secondary', 'font-body');
+            link.classList.add('bg-surface-sand', 'text-primary', 'font-body-strong', 'border-l-2', 'border-secondary');
+          }
+        });
+      });
+    });
+  </script>
+</body></html>

@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operator sister-reach mode</title>
+  <!-- Google Fonts: Source Serif 4 & Source Sans 3 (Strict AnKanu typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons for calm, solemn iconography -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: {
+              DEFAULT: '#F4EDE0',
+              canvas: '#F4EDE0',
+            },
+            raised: '#FFFBF4',
+            indigo: {
+              DEFAULT: '#1F3A5F',
+              deep: '#15283F',
+            },
+            ink: {
+              primary: '#1B2433',
+              secondary: '#5C5346',
+              onIndigo: '#F4EDE0',
+            },
+            gold: {
+              DEFAULT: '#C4A35A',
+              soft: '#E8D5A3',
+            },
+            mihrab: '#2C4A6E',
+            staff: {
+              DEFAULT: '#6B3D2E',
+              soft: '#EFE4DC',
+            },
+            danger: {
+              DEFAULT: '#8B3A3A',
+              soft: '#F3E0DC',
+            },
+            success: {
+              DEFAULT: '#3D5C45',
+              soft: '#DCE6DE',
+            },
+            border: {
+              hairline: '#D9CDB8',
+              strong: '#6F624C',
+            },
+            blurwash: '#C8BBA6',
+            disabled: '#B5A894',
+          },
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            sm: '6px',
+            md: '12px',
+            lg: '20px',
+            full: '9999px',
+          },
+          boxShadow: {
+            subtle: '0 1px 3px 0 rgba(27, 36, 51, 0.05)',
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body {
+      background-color: #F4EDE0;
+      color: #1B2433;
+      font-family: 'Source Sans 3', system-ui, sans-serif;
+    }
+    .font-title {
+      font-family: 'Source Serif 4', Georgia, serif;
+    }
+    /* Inviolable staff badge */
+    .staff-badge {
+      background-color: #6B3D2E;
+      color: #FFFBF4;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      border-radius: 6px;
+      padding: 2px 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col justify-between selection:bg-indigo-deep selection:text-white">
+
+  <!-- ================= TOP CONSOLE HEADER (STAFF ONLY) ================= -->
+  <header class="w-full bg-[#15283F] border-b border-[#2C4A6E] text-sand px-4 sm:px-6 lg:px-8 py-3 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand & Section Breadcrumb -->
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <!-- Sovereign Arch & Seal -->
+          <div class="w-8 h-8 rounded bg-[#1F3A5F] border border-gold-soft flex items-center justify-center text-gold-soft font-serif font-bold text-base">
+            A
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-serif font-bold tracking-tight text-white text-lg">AnKanu</span>
+              <span class="staff-badge">Équipe seulement</span>
+            </div>
+            <p class="text-[11px] text-[#D9CDB8] tracking-wider uppercase">Console Régulation & Politiques Opératoires</p>
+          </div>
+        </div>
+
+        <div class="hidden md:flex items-center text-xs text-[#D9CDB8]/80 gap-2 border-l border-white/15 pl-4">
+          <a href="#" class="hover:text-white transition-colors">Operator pricing / policy</a>
+          <i class="ph ph-caret-right text-[10px]"></i>
+          <span class="text-gold-soft font-medium">Sister-reach mode (FR-145)</span>
+        </div>
+      </div>
+
+      <!-- Operator Identity & Audit Context -->
+      <div class="flex items-center gap-4 text-xs">
+        <div class="hidden sm:flex flex-col text-right">
+          <span class="text-white font-medium">Officier Assermenté : O. Sawadogo</span>
+          <span class="text-[#D9CDB8] text-[11px]">Matricule : BF-REG-2026-08 · Scaleway Ouagadougou</span>
+        </div>
+        <div class="flex items-center gap-2 bg-[#1F3A5F] border border-[#2C4A6E] px-2.5 py-1.5 rounded-sm text-sand">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-[11px] font-mono">BANC AD-27 ACTIF</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= SIMULATION INTERACTIVE STATES CONTROLLER ================= -->
+  <section class="bg-[#EFE4DC] border-b border-[#D9CDB8] py-2 px-4 sm:px-6">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2 text-staff font-semibold">
+        <i class="ph-bold ph-sliders"></i>
+        <span>Simulateur d'états d'écran (Banc de conformité) :</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <button id="btnStateNominal" onclick="setState('nominal')" class="px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-[#6B3D2E] text-white shadow-sm border border-[#6B3D2E]">
+          1. Nominal (FR-145 Default)
+        </button>
+        <button id="btnStateQuota" onclick="setState('quota')" class="px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-raised text-ink-primary hover:bg-[#FAF3E6] border border-border-hairline">
+          2. Mode Quota Frères
+        </button>
+        <button id="btnStateLoading" onclick="setState('loading')" class="px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-raised text-ink-primary hover:bg-[#FAF3E6] border border-border-hairline">
+          3. Enregistrement (Loading)
+        </button>
+        <button id="btnStateSuccess" onclick="setState('success')" class="px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-raised text-ink-primary hover:bg-[#FAF3E6] border border-border-hairline">
+          4. Succès scellé (Audité)
+        </button>
+        <button id="btnStateError" onclick="setState('error')" class="px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-raised text-ink-primary hover:bg-[#FAF3E6] border border-border-hairline">
+          5. Erreur de validation (403 / Invalide)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MAIN OPERATOR WORKSPACE (TWO-PANE FROM 768px) ================= -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- PAGE HERO & CANONICAL SPEC IDENTIFIER -->
+    <div class="mb-8">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-2">
+        <div class="flex items-center gap-3">
+          <span class="staff-badge">Équipe seulement</span>
+          <span class="text-xs font-mono tracking-wider text-ink-secondary uppercase">Normes FR-145 · FR-044 · FR-045 · AD-27 · AD-14 · AD-21</span>
+        </div>
+        <div class="inline-flex items-center gap-1.5 text-xs text-staff bg-staff-soft/80 border border-staff/20 px-3 py-1 rounded-sm">
+          <i class="ph ph-shield-check text-sm"></i>
+          <span>Garantie non-rétroactive : s'applique strictement aux démarches futures</span>
+        </div>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-title font-bold text-ink-primary tracking-tight">
+        Operator sister-reach mode
+      </h1>
+      <p class="text-ink-secondary text-sm sm:text-base mt-1.5 max-w-3xl leading-relaxed">
+        Définition canonique du régime d'envoi des invitations pour les postulantes soeurs (<em class="italic font-serif">sister_reach_mode</em>). Toute altération engage la responsabilité de l'officier instructeur et génère un scellé cryptographique consigné au registre CIL Burkina Faso.
+      </p>
+    </div>
+
+    <!-- ERROR BANNER (STATE CONTROLLED) -->
+    <div id="errorBanner" class="hidden mb-6 bg-danger-soft border-l-4 border-danger p-4 rounded-r-md">
+      <div class="flex items-start gap-3">
+        <i class="ph-fill ph-warning-circle text-danger text-xl flex-shrink-0 mt-0.5"></i>
+        <div class="text-sm">
+          <h2 class="font-bold text-danger text-sm">Erreur de validation & rejet déontologique</h2>
+          <p class="text-ink-primary mt-1 text-xs sm:text-sm">
+            Valeur non conforme ou tentative d'injection non autorisée. La doctrine AnKanu proscrit formellement tout mode « brother-free » ou dispensation asymétrique non certifiée. Seules les valeurs <code class="font-mono bg-white/70 px-1 py-0.5 rounded text-danger">free_unlimited</code> et <code class="font-mono bg-white/70 px-1 py-0.5 rounded text-danger">same_quota_as_brothers</code> sont valides.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS AUDIT BANNER (STATE CONTROLLED) -->
+    <div id="successBanner" class="hidden mb-6 bg-success-soft border-l-4 border-success p-4 rounded-r-md">
+      <div class="flex items-start gap-3">
+        <i class="ph-fill ph-check-circle text-success text-xl flex-shrink-0 mt-0.5"></i>
+        <div class="text-sm">
+          <h2 class="font-bold text-success text-sm">Scellé déontologique enregistré (Audité)</h2>
+          <p class="text-ink-primary mt-1 text-xs sm:text-sm">
+            Paramètre mis à jour avec succès : <strong id="successModeLabel">free_unlimited (Illimité gracieux)</strong>. Le registre CIL n° BF-REG-2026-08 a été certifié. Les invitations de soeurs déjà transmises conservent leur intégrité sans rétroaction. Les interfaces membres refléteront ce barème dès leur prochaine consultation.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TWO-PANE RESPONSIVE CONTAINER (STACK ON MOBILE, 2-PANE FROM 768px) -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start">
+      
+      <!-- ================= PANE 1: OPERATOR CONTROLS (LEFT/PRIMARY) ================= -->
+      <div class="md:col-span-7 lg:col-span-8 flex flex-col gap-6">
+
+        <!-- SECTION: SISTER REACH MODE CARD -->
+        <div class="bg-raised border border-border-hairline rounded-md p-5 sm:p-6 shadow-subtle relative overflow-hidden">
+          
+          <!-- Top Card Meta -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-border-hairline">
+            <div class="flex items-center gap-2">
+              <span class="staff-badge">Équipe seulement</span>
+              <h2 class="font-serif font-bold text-lg text-ink-primary">Régime d'envoi d'invitations des Sœurs</h2>
+            </div>
+            <span class="text-xs font-mono text-staff font-semibold bg-staff-soft px-2 py-0.5 rounded-sm">
+              Norme FR-145 / AD-27
+            </span>
+          </div>
+
+          <!-- Description and Inviolability Note -->
+          <p class="text-xs sm:text-sm text-ink-secondary mt-4 leading-relaxed">
+            Sélectionnez la règle d'attribution des sollicitations matrimoniales d'initiation applicables aux comptes féminins. Par décret de décence coutumière et de bienséance islamique au Burkina Faso, la valeur par défaut est <strong>free_unlimited</strong>.
+          </p>
+
+          <!-- CONTROL 1: OPERATOR REACH MODE (EXACTLY TWO CANONICAL OPTIONS) -->
+          <div class="mt-6 space-y-3" role="radiogroup" aria-label="Sister reach mode options">
+
+            <!-- OPTION 1: free_unlimited (DEFAULT) -->
+            <label id="labelUnlimited" onclick="selectReachMode('free_unlimited')" class="flex items-start gap-4 p-4 rounded-md border-2 border-indigo bg-sand/40 cursor-pointer transition-all hover:bg-sand/60 relative">
+              <input type="radio" name="sister_reach_mode" id="radioUnlimited" value="free_unlimited" checked class="mt-1 h-4 w-4 text-indigo focus:ring-staff">
+              <div class="flex-grow">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-sm sm:text-base font-semibold text-ink-primary">
+                    free_unlimited
+                  </span>
+                  <span class="text-xs bg-indigo text-sand px-2 py-0.5 rounded-sm font-semibold tracking-wide">
+                    CANONIQUE (DÉFAUT)
+                  </span>
+                </div>
+                <p class="text-xs sm:text-sm text-ink-secondary mt-1 leading-relaxed">
+                  Invitations d'alliance gratuites et illimitées pour les sœurs. Aucune barrière tarifaire pour amorcer une démarche honorable.
+                </p>
+                <div class="mt-2 flex flex-wrap items-center gap-3 text-[11px] text-ink-secondary">
+                  <span class="flex items-center gap-1 text-staff font-medium">
+                    <i class="ph-bold ph-shield-check"></i> Sanctuaire inviolable : 0 FCFA d'initiation
+                  </span>
+                  <span>•</span>
+                  <span>Quota de courtoisie de messages encadré</span>
+                </div>
+              </div>
+            </label>
+
+            <!-- OPTION 2: same_quota_as_brothers -->
+            <label id="labelQuota" onclick="selectReachMode('same_quota_as_brothers')" class="flex items-start gap-4 p-4 rounded-md border border-border-hairline bg-raised hover:bg-sand/30 cursor-pointer transition-all relative">
+              <input type="radio" name="sister_reach_mode" id="radioQuota" value="same_quota_as_brothers" class="mt-1 h-4 w-4 text-indigo focus:ring-staff">
+              <div class="flex-grow">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <span class="text-sm sm:text-base font-semibold text-ink-primary">
+                    same_quota_as_brothers
+                  </span>
+                  <span class="text-xs bg-sand border border-border-hairline text-ink-secondary px-2 py-0.5 rounded-sm font-medium">
+                    Parité stricte
+                  </span>
+                </div>
+                <p class="text-xs sm:text-sm text-ink-secondary mt-1 leading-relaxed">
+                  Les sœurs partagent exactement le quota d'initiation gratuit des frères (3 invitations gratuites par cycle), puis déverrouillage via le forfait engagement solidaire.
+                </p>
+                <div class="mt-2 flex flex-wrap items-center gap-3 text-[11px] text-ink-secondary">
+                  <span class="flex items-center gap-1 text-ink-secondary font-medium">
+                    <i class="ph ph-scales"></i> Même barème journalier que les prétendants
+                  </span>
+                  <span>•</span>
+                  <span>Accès gratuit aux salons acceptés préservé</span>
+                </div>
+              </div>
+            </label>
+
+          </div>
+
+          <!-- BANNED DOCTRINE REMINDER: NO BROTHER-FREE VALUE -->
+          <div class="mt-4 p-3 bg-sand/60 border border-border-hairline rounded-sm flex items-center gap-3 text-xs text-ink-secondary">
+            <i class="ph-fill ph-prohibit text-staff text-base flex-shrink-0"></i>
+            <span>
+              <strong>Règle d'équité matrimoniale :</strong> Aucun mode « brother-free » ou gratuité arbitraire discriminatoire n'existe dans le système. La solennité exige le respect mutuel des deux lignées.
+            </span>
+          </div>
+
+        </div>
+
+        <!-- CONTROL 2: OPERATOR MESSAGE CAP (SITS NEXT TO THIS AS SPECIFIED) -->
+        <div class="bg-raised border border-border-hairline rounded-md p-5 sm:p-6 shadow-subtle">
+          
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-border-hairline">
+            <div class="flex items-center gap-2">
+              <span class="staff-badge">Équipe seulement</span>
+              <h2 class="font-serif font-bold text-lg text-ink-primary">Plafond de messages quotidiens (daily_message_cap)</h2>
+            </div>
+            <span class="text-xs font-mono text-staff font-semibold bg-staff-soft px-2 py-0.5 rounded-sm">
+              Norme FR-146 / AD-14
+            </span>
+          </div>
+
+          <p class="text-xs sm:text-sm text-ink-secondary mt-4 leading-relaxed">
+            Ajustement du volume d'échanges d'initiation autorisés par 24h avant accord bilatéral du tuteur (Wali). Ce plafond prévient le bavardage vain (<em class="italic font-serif">kalam fariq</em>) et préserve la réserve spirituelle.
+          </p>
+
+          <!-- Input Group: Dynamic Admin Value (No locked static number in label) -->
+          <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+            
+            <div>
+              <label for="inputMessageCap" class="block text-xs font-semibold uppercase tracking-wider text-ink-secondary mb-1.5">
+                Cap journalier en vigueur (<span id="capDisplayLabel">3 messages / jour</span>)
+              </label>
+              <div class="relative flex items-center">
+                <button type="button" onclick="decrementCap()" class="h-12 w-12 flex items-center justify-center bg-sand hover:bg-sand/80 border border-border-hairline rounded-l-md text-ink-primary font-bold transition-colors">
+                  <i class="ph ph-minus"></i>
+                </button>
+                <input type="number" id="inputMessageCap" min="1" max="15" value="3" class="h-12 w-full text-center font-bold text-base bg-white border-y border-border-hairline text-ink-primary focus:outline-none focus:ring-2 focus:ring-indigo">
+                <button type="button" onclick="incrementCap()" class="h-12 w-12 flex items-center justify-center bg-sand hover:bg-sand/80 border border-border-hairline rounded-r-md text-ink-primary font-bold transition-colors">
+                  <i class="ph ph-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Cap Contextual Rules -->
+            <div class="text-xs text-ink-secondary bg-sand/40 border border-border-hairline p-3 rounded-md">
+              <div class="font-semibold text-ink-primary mb-1">Règle de bienséance active :</div>
+              <p class="leading-relaxed">
+                Réinitialisation automatique à minuit (Heure légale d'Ouagadougou, GMT+0). N'affecte en aucun cas la messagerie illimitée des salons chaperonnés validés.
+              </p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ACTION BAR / SAVE AUDIT BUTTON (SINGLE PRIMARY INDIGO 48px) -->
+        <div class="bg-raised border border-border-hairline rounded-md p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-2 text-xs text-ink-secondary">
+            <i class="ph ph-lock-key text-staff text-base"></i>
+            <span>Scellement horodaté transmis au journal d'audit Scaleway / CIL-BF</span>
+          </div>
+
+          <div class="flex items-center gap-3 w-full sm:w-auto">
+            <button type="button" onclick="resetToCanonical()" class="w-full sm:w-auto h-[44px] px-4 rounded-md border border-border-hairline bg-sand/50 text-ink-secondary text-xs sm:text-sm font-medium hover:bg-sand hover:text-ink-primary transition-colors focus:ring-2 focus:ring-border-strong">
+              Rétablir l'état canonique
+            </button>
+            <button id="btnSaveAudit" type="button" onclick="saveConfiguration()" class="w-full sm:w-auto h-[48px] px-6 rounded-md bg-indigo text-sand hover:bg-indigo-deep text-sm font-semibold tracking-wide shadow-sm transition-all focus:ring-2 focus:ring-gold flex items-center justify-center gap-2">
+              <span id="btnSaveText">Enregistrer & Sceller au Registre CIL</span>
+              <i id="btnSaveIcon" class="ph-bold ph-shield-check text-base"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= PANE 2: AUDIT LOGS, SPEC SUMMARY & STATUS (RIGHT) ================= -->
+      <div class="md:col-span-5 lg:col-span-4 flex flex-col gap-6">
+
+        <!-- CURRENT STATUS SUMMARY CARD (EMPTY / INITIAL VIEW) -->
+        <div class="bg-raised border border-border-hairline rounded-md p-5 shadow-subtle">
+          <div class="flex items-center justify-between pb-3 border-b border-border-hairline mb-4">
+            <span class="text-xs font-semibold uppercase tracking-wider text-ink-secondary">Statut Actif en Base</span>
+            <span class="staff-badge">Équipe seulement</span>
+          </div>
+
+          <dl class="space-y-3 text-xs">
+            <div class="flex justify-between items-baseline py-1 border-b border-border-hairline/50">
+              <dt class="text-ink-secondary">Régime soeurs actuel :</dt>
+              <dd id="sidebarCurrentMode" class="font-mono font-bold text-indigo">free_unlimited</dd>
+            </div>
+            <div class="flex justify-between items-baseline py-1 border-b border-border-hairline/50">
+              <dt class="text-ink-secondary">Plafond messages actuel :</dt>
+              <dd id="sidebarCurrentCap" class="font-mono font-bold text-ink-primary">3 msg / jour</dd>
+            </div>
+            <div class="flex justify-between items-baseline py-1 border-b border-border-hairline/50">
+              <dt class="text-ink-secondary">Dernière homologation :</dt>
+              <dd class="text-ink-primary">Hier, 16:42 GMT</dd>
+            </div>
+            <div class="flex justify-between items-baseline py-1 border-b border-border-hairline/50">
+              <dt class="text-ink-secondary">Officier instructeur :</dt>
+              <dd class="text-ink-primary">O. Sawadogo (BF-08)</dd>
+            </div>
+            <div class="flex justify-between items-baseline py-1">
+              <dt class="text-ink-secondary">Portée d'application :</dt>
+              <dd class="text-staff font-medium">Invites ultérieures uniquement</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- CANONICAL SPEC & REGULATORY MATRIX -->
+        <div class="bg-raised border border-border-hairline rounded-md p-5 shadow-subtle">
+          <div class="flex items-center gap-2 mb-3">
+            <i class="ph-bold ph-book-open-text text-staff text-base"></i>
+            <h3 class="font-serif font-bold text-sm text-ink-primary">Cadre Réglementaire AnKanu</h3>
+          </div>
+          
+          <ul class="space-y-2.5 text-xs text-ink-secondary">
+            <li class="flex items-start gap-2">
+              <i class="ph-bold ph-check text-staff mt-0.5"></i>
+              <span><strong>FR-145 :</strong> Définition stricte des régimes d'accès aux invitations sœurs.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="ph-bold ph-check text-staff mt-0.5"></i>
+              <span><strong>FR-044 :</strong> Préservation de la gratuité fondamentale de la vérification CNIL.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="ph-bold ph-check text-staff mt-0.5"></i>
+              <span><strong>AD-27 :</strong> Séparation étanche entre les démarches antérieures et les règles révisées.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="ph-bold ph-check text-staff mt-0.5"></i>
+              <span><strong>AD-21 :</strong> Nullité formelle de tout algorithme incitatif ou manipulation d'engagement.</span>
+            </li>
+          </ul>
+
+          <div class="mt-4 pt-3 border-t border-border-hairline text-[11px] text-ink-secondary">
+            <p>
+              Toute modification nécessite l'accréditation L2 de la commission de conciliation matrimoniale d'Ouagadougou.
+            </p>
+          </div>
+        </div>
+
+        <!-- RECENT AUDIT LOGS TRAIL -->
+        <div class="bg-raised border border-border-hairline rounded-md p-5 shadow-subtle">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-serif font-bold text-sm text-ink-primary">Traces d'Audit Récentes</h3>
+            <span class="text-[10px] font-mono text-ink-secondary">REGISTRE AD-27</span>
+          </div>
+
+          <div class="space-y-3 text-xs">
+            <div class="p-2.5 bg-sand/50 rounded-sm border border-border-hairline">
+              <div class="flex items-center justify-between text-[11px] text-ink-secondary mb-1">
+                <span class="font-medium text-staff">Reconduction canonique</span>
+                <span>Il y a 18h</span>
+              </div>
+              <p class="text-ink-primary text-xs font-mono">mode: free_unlimited | cap: 3</p>
+              <span class="text-[10px] text-ink-secondary">Signé: sawadogo_officier@ankanu.bf</span>
+            </div>
+
+            <div class="p-2.5 bg-sand/50 rounded-sm border border-border-hairline">
+              <div class="flex items-center justify-between text-[11px] text-ink-secondary mb-1">
+                <span class="font-medium text-ink-primary">Validation seuil Ramadan</span>
+                <span>12 Fév 2026</span>
+              </div>
+              <p class="text-ink-primary text-xs font-mono">mode: free_unlimited | cap: 4</p>
+              <span class="text-[10px] text-ink-secondary">Signé: commission_sages@ankanu.bf</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ================= OPERATOR CONSOLE FOOTER ================= -->
+  <footer class="w-full bg-[#15283F] border-t border-[#2C4A6E] text-sand py-4 px-4 sm:px-6 mt-12 text-xs">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <div class="flex items-center gap-2">
+        <span class="font-serif font-bold text-white tracking-tight">AnKanu</span>
+        <span class="text-gold-soft font-mono text-[11px]">• Console Opérateur Assermenté</span>
+      </div>
+      <p class="text-[#D9CDB8] text-[11px]">
+        Conforme aux délibérations CIL Burkina Faso (Loi n° 001-2021/AN) · Hébergement souverain Scaleway (Paris / Réplication Ouagadougou)
+      </p>
+      <div class="flex items-center gap-3 text-[#D9CDB8] text-[11px]">
+        <span>Protocole FR-145</span>
+        <span>•</span>
+        <span class="staff-badge">Équipe seulement</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= INTERACTIVE SCRIPT (COMPLIANCE TESTING & INTERACTIONS) ================= -->
+  <script>
+    let currentMode = 'free_unlimited';
+    let currentCap = 3;
+    let currentState = 'nominal';
+
+    function selectReachMode(mode) {
+      if (currentState === 'loading') return;
+      currentMode = mode;
+      
+      const labelUnlimited = document.getElementById('labelUnlimited');
+      const labelQuota = document.getElementById('labelQuota');
+      const radioUnlimited = document.getElementById('radioUnlimited');
+      const radioQuota = document.getElementById('radioQuota');
+
+      if (mode === 'free_unlimited') {
+        radioUnlimited.checked = true;
+        labelUnlimited.className = "flex items-start gap-4 p-4 rounded-md border-2 border-indigo bg-sand/40 cursor-pointer transition-all relative";
+        labelQuota.className = "flex items-start gap-4 p-4 rounded-md border border-border-hairline bg-raised hover:bg-sand/30 cursor-pointer transition-all relative";
+      } else {
+        radioQuota.checked = true;
+        labelQuota.className = "flex items-start gap-4 p-4 rounded-md border-2 border-staff bg-sand/40 cursor-pointer transition-all relative";
+        labelUnlimited.className = "flex items-start gap-4 p-4 rounded-md border border-border-hairline bg-raised hover:bg-sand/30 cursor-pointer transition-all relative";
+      }
+    }
+
+    function incrementCap() {
+      if (currentState === 'loading') return;
+      const input = document.getElementById('inputMessageCap');
+      let val = parseInt(input.value, 10);
+      if (val < 15) {
+        val++;
+        input.value = val;
+        currentCap = val;
+        document.getElementById('capDisplayLabel').innerText = val + " messages / jour";
+      }
+    }
+
+    function decrementCap() {
+      if (currentState === 'loading') return;
+      const input = document.getElementById('inputMessageCap');
+      let val = parseInt(input.value, 10);
+      if (val > 1) {
+        val--;
+        input.value = val;
+        currentCap = val;
+        document.getElementById('capDisplayLabel').innerText = val + " messages / jour";
+      }
+    }
+
+    function resetToCanonical() {
+      selectReachMode('free_unlimited');
+      const input = document.getElementById('inputMessageCap');
+      input.value = 3;
+      currentCap = 3;
+      document.getElementById('capDisplayLabel').innerText = "3 messages / jour";
+      hideBanners();
+    }
+
+    function hideBanners() {
+      document.getElementById('errorBanner').classList.add('hidden');
+      document.getElementById('successBanner').classList.add('hidden');
+    }
+
+    function saveConfiguration() {
+      setState('loading');
+      setTimeout(() => {
+        setState('success');
+      }, 700);
+    }
+
+    function setState(state) {
+      currentState = state;
+      hideBanners();
+
+      // Reset Simulation Button styles
+      const buttons = ['btnStateNominal', 'btnStateQuota', 'btnStateLoading', 'btnStateSuccess', 'btnStateError'];
+      buttons.forEach(id => {
+        const btn = document.getElementById(id);
+        btn.className = "px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-raised text-ink-primary hover:bg-[#FAF3E6] border border-border-hairline";
+      });
+
+      const btnSave = document.getElementById('btnSaveAudit');
+      const btnSaveText = document.getElementById('btnSaveText');
+      const btnSaveIcon = document.getElementById('btnSaveIcon');
+
+      // Reset Save button to nominal
+      btnSave.disabled = false;
+      btnSave.className = "w-full sm:w-auto h-[48px] px-6 rounded-md bg-indigo text-sand hover:bg-indigo-deep text-sm font-semibold tracking-wide shadow-sm transition-all focus:ring-2 focus:ring-gold flex items-center justify-center gap-2";
+      btnSaveText.innerText = "Enregistrer & Sceller au Registre CIL";
+      btnSaveIcon.className = "ph-bold ph-shield-check text-base";
+
+      if (state === 'nominal') {
+        document.getElementById('btnStateNominal').className = "px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-[#6B3D2E] text-white shadow-sm border border-[#6B3D2E]";
+        selectReachMode('free_unlimited');
+        document.getElementById('sidebarCurrentMode').innerText = 'free_unlimited';
+        document.getElementById('sidebarCurrentCap').innerText = '3 msg / jour';
+      } 
+      else if (state === 'quota') {
+        document.getElementById('btnStateQuota').className = "px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-[#6B3D2E] text-white shadow-sm border border-[#6B3D2E]";
+        selectReachMode('same_quota_as_brothers');
+        document.getElementById('sidebarCurrentMode').innerText = 'same_quota_as_brothers';
+      }
+      else if (state === 'loading') {
+        document.getElementById('btnStateLoading').className = "px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-[#6B3D2E] text-white shadow-sm border border-[#6B3D2E]";
+        btnSave.disabled = true;
+        btnSave.className = "w-full sm:w-auto h-[48px] px-6 rounded-md bg-indigo/80 text-sand/80 text-sm font-semibold tracking-wide flex items-center justify-center gap-2 cursor-wait";
+        btnSaveText.innerText = "Chiffrement & scellement en cours...";
+        btnSaveIcon.className = "ph-bold ph-spinner animate-spin text-base";
+      }
+      else if (state === 'success') {
+        document.getElementById('btnStateSuccess').className = "px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-[#6B3D2E] text-white shadow-sm border border-[#6B3D2E]";
+        document.getElementById('successBanner').classList.remove('hidden');
+        document.getElementById('successModeLabel').innerText = currentMode === 'free_unlimited' ? 'free_unlimited (Illimité gracieux)' : 'same_quota_as_brothers (Parité)';
+        document.getElementById('sidebarCurrentMode').innerText = currentMode;
+        document.getElementById('sidebarCurrentCap').innerText = currentCap + " msg / jour";
+      }
+      else if (state === 'error') {
+        document.getElementById('btnStateError').className = "px-2.5 py-1 rounded-sm text-xs font-medium transition-all bg-[#6B3D2E] text-white shadow-sm border border-[#6B3D2E]";
+        document.getElementById('errorBanner').classList.remove('hidden');
+      }
+    }
+  </script>
+</body>
+</html>

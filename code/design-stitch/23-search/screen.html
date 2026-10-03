@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Recherche &amp; Convenance Matrimoniale Honorable</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with custom configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "outline-variant": "#c4c6cf",
+            "blur-wash": "#C8BBA6",
+            "surface-container-lowest": "#ffffff",
+            "secondary": "#755b18",
+            "border-strong": "#6F624C",
+            "on-surface": "#1e1b14",
+            "surface-container-high": "#eee7db",
+            "error-container": "#ffdad6",
+            "surface-indigo": "#15283F",
+            "secondary-fixed-dim": "#e5c276",
+            "on-secondary": "#ffffff",
+            "ink-on-indigo": "#F4EDE0",
+            "tertiary-fixed-dim": "#abc9f3",
+            "ink-secondary": "#5C5346",
+            "border-hairline": "#D9CDB8",
+            "success-soft": "#DCE6DE",
+            "error": "#ba1a1a",
+            "staff-soft": "#EFE4DC",
+            "outline": "#74777f",
+            "surface-tint": "#465f86",
+            "surface-sand": "#F4EDE0",
+            "surface-container-low": "#faf3e6",
+            "on-surface-variant": "#43474e",
+            "inverse-primary": "#aec8f4",
+            "on-tertiary-fixed": "#001c38",
+            "inverse-surface": "#333028",
+            "surface-variant": "#e9e2d5",
+            "on-error-container": "#93000a",
+            "on-error": "#ffffff",
+            "gold-soft": "#E8D5A3",
+            "on-primary": "#ffffff",
+            "ink-primary": "#1B2433",
+            "focus-ring": "#1F3A5F",
+            "danger": "#8B3A3A",
+            "surface-bright": "#fff9ee",
+            "on-primary-container": "#8ba4cf",
+            "on-secondary-container": "#785d1b",
+            "surface-dim": "#e0d9cd",
+            "background": "#fff9ee",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-background": "#1e1b14",
+            "tertiary": "#002546",
+            "secondary-container": "#fdd88a",
+            "on-secondary-fixed": "#251a00",
+            "secondary-fixed": "#ffdf9c",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "indigo-deep": "#15283F",
+            "on-tertiary-container": "#88a5ce",
+            "success": "#3D5C45",
+            "surface-container": "#f4ede0",
+            "gold": "#C4A35A",
+            "primary-fixed": "#d5e3ff",
+            "surface-container-highest": "#e9e2d5",
+            "primary-fixed-dim": "#aec8f4",
+            "inverse-on-surface": "#f7f0e3",
+            "on-secondary-fixed-variant": "#5b4300",
+            "danger-soft": "#F3E0DC",
+            "tertiary-container": "#1b3b5e",
+            "primary": "#032448",
+            "surface-raised": "#FFFBF4",
+            "mihrab": "#2C4A6E",
+            "surface": "#fff9ee",
+            "on-primary-fixed": "#001c3b",
+            "indigo": "#1F3A5F",
+            "tertiary-fixed": "#d3e4ff",
+            "disabled": "#B5A894",
+            "staff": "#6B3D2E",
+            "on-tertiary": "#ffffff",
+            "primary-container": "#1f3a5f"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "4": "16px",
+            "space-md": "1rem",
+            "gutter": "16px",
+            "space-xl": "2rem",
+            "6": "32px",
+            "space-xs": "0.25rem",
+            "3": "12px",
+            "screen-pad": "16px",
+            "7": "48px",
+            "2": "8px",
+            "space-sm": "0.5rem",
+            "5": "24px",
+            "1": "4px",
+            "space-lg": "1.5rem",
+            "margin": "1rem"
+          },
+          "fontFamily": {
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-indigo-deep min-h-screen flex flex-col">
+<!-- ================= TOP BAR (Shared Component: TopNavBar Anchor) ================= -->
+<header class="w-full bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab sticky top-0 z-40">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<a class="flex items-center gap-2 group" href="#">
+<div class="w-8 h-8 rounded-lg bg-surface-indigo text-gold flex items-center justify-center border border-border-hairline">
+<span class="material-symbols-outlined text-lg" data-icon="diversity_1">diversity_1</span>
+</div>
+<span class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold">AnKanu</span>
+</a>
+<div class="hidden sm:block h-4 w-px bg-border-hairline"></div>
+<span class="hidden sm:inline font-meta text-meta text-ink-secondary">Ta'aruf Honorable &amp; Mariage Noble</span>
+</div>
+<!-- Mandatory Navigation Links & Back Action -->
+<nav class="flex items-center gap-4 sm:gap-6">
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors hidden md:inline" href="#charte">Charte d'Honneur</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors hidden md:inline" href="#assistance">Assistance</a>
+<a class="font-meta text-meta px-3 py-1.5 rounded-full border border-border-strong text-ink-primary hover:bg-surface-raised transition-colors flex items-center gap-1.5" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+<span>Retour à la Connexion</span>
+</a>
+</nav>
+</div>
+<!-- Member Primary Navigation Sub-bar -->
+<div class="w-full bg-surface-raised border-t border-border-hairline/60">
+<div class="w-full max-w-4xl mx-auto px-screen-pad flex items-center justify-between overflow-x-auto py-1">
+<div class="flex items-center space-x-6 sm:space-x-8 text-sm">
+<a class="text-primary dark:text-gold font-body-strong border-b-2 border-primary dark:border-gold py-2.5 flex items-center gap-2 whitespace-nowrap" href="#">
+<span class="material-symbols-outlined text-base" data-icon="search">search</span>
+<span>Découvrir</span>
+</a>
+<a class="text-ink-secondary hover:text-ink-primary font-body py-2.5 flex items-center gap-2 whitespace-nowrap transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="mark_email_unread">mark_email_unread</span>
+<span>Invitations</span>
+</a>
+<a class="text-ink-secondary hover:text-ink-primary font-body py-2.5 flex items-center gap-2 whitespace-nowrap transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="shield">shield</span>
+<span>Discussions Protégées</span>
+</a>
+<a class="text-ink-secondary hover:text-ink-primary font-body py-2.5 flex items-center gap-2 whitespace-nowrap transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="account_circle">account_circle</span>
+<span>Profil Personnel</span>
+</a>
+</div>
+<div class="hidden lg:flex items-center gap-2 font-caption text-caption text-ink-secondary bg-surface-sand px-3 py-1 rounded-full border border-border-hairline">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="verified_user">verified_user</span>
+<span>Espace Wali Connecté</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ================= MAIN FOCUSED CANVAS ================= -->
+<main class="flex-grow w-full max-w-4xl mx-auto px-screen-pad py-6 space-y-6">
+<!-- Reassurance Banner: Guardian & Chaperone Status -->
+<section class="bg-staff-soft rounded-xl p-4 border border-border-hairline flex items-start sm:items-center justify-between gap-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-staff mt-0.5 sm:mt-0" data-icon="family_restroom">family_restroom</span>
+<div>
+<h2 class="font-body-strong text-body-strong text-staff">Cadre Déontologique et Surveillance Fraternelle</h2>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+            Chaque mise en relation respecte le principe du Ta'aruf islamique burkinabè : nulle conversation bilatérale secrète, accompagnement bienveillant des familles.
+          </p>
+</div>
+</div>
+<div class="hidden md:flex flex-col items-end flex-shrink-0">
+<span class="inline-flex items-center gap-1 font-caption text-caption bg-surface-raised px-2.5 py-1 rounded-full border border-border-hairline text-ink-secondary">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+          Protocole FR-024 / AD-16
+        </span>
+</div>
+</section>
+<!-- Refined Search & Filter Card (FR-024, FR-025, FR-136, FR-146, AD-16) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 md:p-6 space-y-5">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-border-hairline gap-2">
+<div>
+<h1 class="font-heading text-heading text-primary">Recherche de Convenance Matrimoniale</h1>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">Définissez vos attentes fondamentales pour une alliance honorable et pérenne.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-caption text-caption text-ink-secondary">Pudeur préservée</span>
+<span class="material-symbols-outlined text-base text-gold" data-icon="lock_open_right">lock_open_right</span>
+</div>
+</div>
+<!-- Filters Grid -->
+<form class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" onsubmit="event.preventDefault();">
+<!-- 1. Ville / Région -->
+<div class="space-y-1.5">
+<label class="block font-meta text-meta text-ink-secondary" for="filter-city">
+            Ville / Région de résidence
+          </label>
+<div class="relative">
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-3 py-2 text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring/20 focus:outline-none transition-all" id="filter-city">
+<option selected="" value="ouaga">Ouagadougou (Centre / Kadiogo)</option>
+<option value="bobo">Bobo-Dioulasso (Hauts-Bassins)</option>
+<option value="koudougou">Koudougou (Boulkiemdé)</option>
+<option value="fada">Fada N'Gourma (Est)</option>
+<option value="diaspora">Diaspora Burkinabè (Côte d'Ivoire, France, Sénégal...)</option>
+</select>
+</div>
+</div>
+<!-- 2. Statut Matrimonial -->
+<div class="space-y-1.5">
+<label class="block font-meta text-meta text-ink-secondary" for="filter-status">
+            Statut matrimonial
+          </label>
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-3 py-2 text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring/20 focus:outline-none transition-all" id="filter-status">
+<option value="all">Tous les statuts honorables</option>
+<option selected="" value="single">Célibataire (Jamais marié(e))</option>
+<option value="widowed">Veuf / Veuve</option>
+<option value="divorced">Divorcé(e)</option>
+</select>
+</div>
+<!-- 3. École de jurisprudence (Madhab) -->
+<div class="space-y-1.5">
+<label class="block font-meta text-meta text-ink-secondary" for="filter-madhab">
+            Jurisprudence (Madhab)
+          </label>
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-3 py-2 text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring/20 focus:outline-none transition-all" id="filter-madhab">
+<option selected="" value="malikite">Madhab Malikite (Tradition majoritaire)</option>
+<option value="chafiite">Madhab Chafi'ite</option>
+<option value="hanafite">Madhab Hanafite</option>
+<option value="hanbalite">Madhab Hanbalite</option>
+<option value="sunnah">Conforme à la Sunnah (Indifférent)</option>
+</select>
+</div>
+<!-- 4. Tranche d'âge honorable -->
+<div class="space-y-1.5">
+<label class="block font-meta text-meta text-ink-secondary" for="filter-age">
+            Tranche d'âge honorable
+          </label>
+<div class="grid grid-cols-2 gap-2">
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-3 py-2 text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring/20 focus:outline-none transition-all" id="filter-age-min">
+<option value="20">Min: 20 ans</option>
+<option selected="" value="22">Min: 22 ans</option>
+<option value="25">Min: 25 ans</option>
+<option value="30">Min: 30 ans</option>
+</select>
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-3 py-2 text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring/20 focus:outline-none transition-all" id="filter-age-max">
+<option value="28">Max: 28 ans</option>
+<option selected="" value="32">Max: 32 ans</option>
+<option value="38">Max: 38 ans</option>
+<option value="45">Max: 45 ans</option>
+</select>
+</div>
+</div>
+<!-- 5. Intention matrimoniale / Polygamie -->
+<div class="space-y-1.5 md:col-span-2 lg:col-span-2">
+<label class="block font-meta text-meta text-ink-secondary" for="filter-intent">
+            Intention matrimoniale &amp; Structure du Foyer
+          </label>
+<select class="w-full bg-surface-raised border border-border-hairline rounded-xl px-3 py-2 text-body text-ink-primary focus:border-border-strong focus:ring-2 focus:ring-focus-ring/20 focus:outline-none transition-all" id="filter-intent">
+<option selected="" value="monogamy">Foyer monogame exclusif (Engagement solennel)</option>
+<option value="plural_respectful">Foyer pluriel équitable et respectueux (Conforme Sharia)</option>
+<option value="open">Ouvert à la concertation familiale</option>
+</select>
+</div>
+<!-- Action Buttons -->
+<div class="md:col-span-2 lg:col-span-3 pt-2 flex flex-col sm:flex-row items-center justify-end gap-3">
+<button class="w-full sm:w-auto px-5 py-2.5 rounded-full border border-border-strong text-ink-primary font-meta hover:bg-surface-sand transition-colors" type="reset">
+            Réinitialiser
+          </button>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-full bg-indigo text-ink-on-indigo font-body-strong hover:bg-primary transition-colors flex items-center justify-center gap-2" type="submit">
+<span class="material-symbols-outlined text-lg" data-icon="tune">tune</span>
+<span>Appliquer les filtres de convenance</span>
+</button>
+</div>
+</form>
+</section>
+<!-- Controls Bar: Results Counter & Layout Switcher -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+<p class="font-body text-body text-ink-primary">
+<span class="font-body-strong">4 profils honorables</span> correspondant à vos critères de convenance
+        </p>
+</div>
+<!-- card-grid-toggle Specification -->
+<div class="inline-flex p-1 bg-surface-sand border border-border-hairline rounded-xl" role="tablist">
+<button aria-selected="true" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all bg-surface-raised text-primary shadow-xs" id="toggle-focused" onclick="setView('focused')">
+<span class="material-symbols-outlined text-base" data-icon="branding_watermark">branding_watermark</span>
+<span>Fiche Unique Focalisée</span>
+</button>
+<button aria-selected="false" class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all text-ink-secondary hover:text-ink-primary" id="toggle-lite" onclick="setView('lite')">
+<span class="material-symbols-outlined text-base" data-icon="grid_view">grid_view</span>
+<span>Grille Découverte Lite (2 col)</span>
+</button>
+</div>
+</div>
+<!-- VIEW 1: Focused Card Presentation (AD-16, FR-024) -->
+<div class="space-y-6 block" id="view-focused">
+<article class="bg-surface-raised border border-border-strong/20 rounded-xl overflow-hidden p-6 md:p-8 space-y-6">
+<!-- Upper Grid: Sceau de Pudeur & Essential Honorifics -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+<!-- Photo Container: Sceau de Pudeur -->
+<div class="md:col-span-5 flex flex-col items-center">
+<div class="w-full aspect-[4/5] bg-blur-wash/40 rounded-xl border border-border-hairline flex flex-col items-center justify-center p-6 text-center relative overflow-hidden group">
+<!-- Geometric subtle Islamic star/texture outline -->
+<div class="absolute inset-0 opacity-10 flex items-center justify-center pointer-events-none">
+<span class="material-symbols-outlined text-9xl text-border-strong" data-icon="shield">shield</span>
+</div>
+<div class="w-16 h-16 rounded-full bg-surface-raised border border-border-hairline flex items-center justify-center text-border-strong mb-3 relative z-10 shadow-xs">
+<span class="material-symbols-outlined text-2xl text-secondary" data-icon="visibility_off">visibility_off</span>
+</div>
+<h3 class="font-heading text-body-strong text-primary relative z-10">Sceau de Pudeur Actif</h3>
+<p class="font-caption text-caption text-ink-secondary mt-2 relative z-10 leading-relaxed px-2">
+                Photo sous le sceau de pudeur — Dévoilement mutuel sur accord du Wali et acceptation de l'invitation.
+              </p>
+<div class="mt-4 inline-flex items-center gap-1.5 px-3 py-1 bg-surface-sand/80 rounded-full border border-border-hairline font-caption text-caption text-ink-secondary relative z-10">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="verified">verified</span>
+<span>Identité certifiée AnKanu</span>
+</div>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-2.5 text-center flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" data-icon="info">info</span>
+              Réf. Dossier: AK-BF-2025-084
+            </p>
+</div>
+<!-- Dossier Details -->
+<div class="md:col-span-7 space-y-5">
+<!-- Header Row -->
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-3">
+<h2 class="font-display text-display text-primary tracking-tight">Aminata_O</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-sand text-ink-secondary font-meta text-meta border border-border-hairline">
+                    27 ans
+                  </span>
+</div>
+<p class="font-meta text-meta text-ink-secondary flex items-center gap-1.5 mt-1">
+<span class="material-symbols-outlined text-base text-gold" data-icon="location_on">location_on</span>
+<span>Ouagadougou (Arrondissement de Baskuy, Kadiogo)</span>
+</p>
+</div>
+<!-- Deontological Bookmark (NOT A HEART) -->
+<button class="w-11 h-11 rounded-full border border-border-hairline bg-surface flex items-center justify-center text-ink-secondary hover:text-gold hover:border-gold transition-colors" title="Ajouter aux dossiers suivis avec convenance">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark">bookmark</span>
+</button>
+</div>
+<!-- Profession & Status Line -->
+<div class="p-3.5 bg-surface-sand/50 rounded-xl border border-border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" data-icon="school">school</span>
+<span class="font-body-strong text-ink-primary">Enseignante en Lettres &amp; Éducation morale</span>
+</div>
+<span class="font-meta text-meta text-ink-secondary">Statut : Célibataire</span>
+</div>
+<!-- Shared Traits Chips (components.shared-trait) -->
+<div class="space-y-2">
+<h4 class="font-meta text-meta text-ink-secondary font-semibold">Points de convenance partagée :</h4>
+<div class="flex flex-wrap gap-2">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-sand text-ink-primary rounded-md border border-border-hairline text-xs font-medium">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="home_pin">home_pin</span>
+                  Même ville (Ouagadougou)
+                </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-sand text-ink-primary rounded-md border border-border-hairline text-xs font-medium">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="menu_book">menu_book</span>
+                  Madhab Malikite en commun
+                </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-sand text-ink-primary rounded-md border border-border-hairline text-xs font-medium">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="favorite_border">favorite_border</span>
+                  Foyer monogame mutuel
+                </span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface-sand text-ink-primary rounded-md border border-border-hairline text-xs font-medium">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="schedule">schedule</span>
+                  Pratique assidue de la prière
+                </span>
+</div>
+</div>
+<!-- Bio / Vision du Foyer (Sidq & Niyyah) -->
+<div class="space-y-2 pt-1 border-t border-border-hairline">
+<h4 class="font-title text-heading text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-lg text-gold" data-icon="auto_awesome">auto_awesome</span>
+<span>Vision du Foyer &amp; Intentions (Sidq &amp; Niyyah)</span>
+</h4>
+<blockquote class="italic text-ink-primary bg-surface-bright p-4 rounded-xl border-l-2 border-gold text-sm leading-relaxed">
+                « Recherche d'une alliance sereine sous la bénédiction des familles et le respect strict de la Sunnah prophétique. J'aspire à un foyer bâti sur la piété sincère, la douceur dans la parole, l'entraide intellectuelle et l'éducation vertueuse de la future lignée. Mon tuteur légal (oncle paternel) valide et supervise mon cheminement. »
+              </blockquote>
+</div>
+<!-- Tuteur Chaperone Note -->
+<div class="flex items-center gap-3 text-xs text-ink-secondary bg-staff-soft/60 px-3 py-2 rounded-lg border border-border-hairline">
+<span class="material-symbols-outlined text-staff text-sm" data-icon="gavel">gavel</span>
+<span>Tuteur d'attachement : Oumar O. (Présent pour tout échange officiel post-invitation)</span>
+</div>
+</div>
+</div>
+<!-- Card Footprint & Action Controls -->
+<div class="pt-5 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="w-full sm:w-auto flex items-center gap-2">
+<!-- Button Quiet (Passer discrètement) -->
+<button class="w-1/2 sm:w-auto px-4 py-2.5 rounded-full border border-border-hairline text-ink-secondary font-meta text-meta hover:bg-surface-sand hover:text-ink-primary transition-colors flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-sm" data-icon="close">close</span>
+<span>Passer discrètement</span>
+</button>
+<!-- Button Secondary (Message de convenance / Ice-breaker) -->
+<button class="w-1/2 sm:w-auto px-4 py-2.5 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-sand transition-colors flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+<span>Message de convenance</span>
+</button>
+</div>
+<!-- Button Primary (Transmettre une Invitation Ta'aruf) -->
+<button class="w-full sm:w-auto px-6 py-3 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-primary transition-all flex items-center justify-center gap-2 shadow-xs group">
+<span class="material-symbols-outlined text-gold transition-transform group-hover:scale-110" data-icon="send">send</span>
+<span>Transmettre une Invitation Ta'aruf</span>
+</button>
+</div>
+</article>
+<!-- Pagination for Focused Dossiers -->
+<div class="flex items-center justify-between px-2 pt-2 text-sm text-ink-secondary">
+<button class="flex items-center gap-1 hover:text-ink-primary transition-colors opacity-50 cursor-not-allowed">
+<span class="material-symbols-outlined text-base" data-icon="chevron_left">chevron_left</span>
+<span>Dossier précédent</span>
+</button>
+<span class="font-meta text-meta text-ink-primary">Dossier 1 sur 4</span>
+<button class="flex items-center gap-1 hover:text-ink-primary font-medium transition-colors">
+<span>Dossier suivant</span>
+<span class="material-symbols-outlined text-base" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- VIEW 2: Discovery Lite Grid (2 Columns, Text-first with compact blur thumbnail) -->
+<div class="space-y-6 hidden" id="view-lite">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Lite Card 1: Aminata_O -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 flex flex-col justify-between hover:border-border-strong/40 transition-colors">
+<div class="space-y-3">
+<div class="flex items-start gap-3">
+<!-- Compact Thumbnail with Sceau de Pudeur -->
+<div class="w-16 h-20 rounded-lg bg-blur-wash/40 border border-border-hairline flex flex-col items-center justify-center flex-shrink-0 text-ink-secondary">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+<span class="font-caption text-[9px] uppercase tracking-wider text-ink-secondary mt-1">Pudeur</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="font-heading text-heading text-primary truncate">Aminata_O</h3>
+<span class="font-meta text-meta text-ink-secondary">27 ans</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary truncate flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="location_on">location_on</span>
+                  Ouagadougou (Centre)
+                </p>
+<p class="font-caption text-caption text-secondary font-medium mt-1">Madhab Malikite · Monogame</p>
+</div>
+</div>
+<p class="text-xs text-ink-primary line-clamp-2 italic bg-surface-bright p-2 rounded border-l border-gold">
+              « Alliance sereine sous la bénédiction des familles et respect strict de la Sunnah... »
+            </p>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Enseignante</span>
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Wali validé</span>
+</div>
+</div>
+<div class="pt-3 mt-3 border-t border-border-hairline flex items-center justify-between gap-2">
+<button class="p-1.5 rounded-full border border-border-hairline text-ink-secondary hover:text-gold" title="Garder en mémoire">
+<span class="material-symbols-outlined text-base" data-icon="bookmark">bookmark</span>
+</button>
+<button class="flex-grow py-2 px-3 rounded-full bg-indigo text-ink-on-indigo font-meta text-xs hover:bg-primary transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="send">send</span>
+<span>Inviter au Ta'aruf</span>
+</button>
+</div>
+</article>
+<!-- Lite Card 2: Fatimata_K -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 flex flex-col justify-between hover:border-border-strong/40 transition-colors">
+<div class="space-y-3">
+<div class="flex items-start gap-3">
+<!-- Compact Thumbnail with Sceau de Pudeur -->
+<div class="w-16 h-20 rounded-lg bg-blur-wash/40 border border-border-hairline flex flex-col items-center justify-center flex-shrink-0 text-ink-secondary">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+<span class="font-caption text-[9px] uppercase tracking-wider text-ink-secondary mt-1">Pudeur</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="font-heading text-heading text-primary truncate">Fatimata_K</h3>
+<span class="font-meta text-meta text-ink-secondary">24 ans</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary truncate flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="location_on">location_on</span>
+                  Bobo-Dioulasso (Sya)
+                </p>
+<p class="font-caption text-caption text-secondary font-medium mt-1">Madhab Malikite · Monogame</p>
+</div>
+</div>
+<p class="text-xs text-ink-primary line-clamp-2 italic bg-surface-bright p-2 rounded border-l border-gold">
+              « Étudiante en master de santé publique. Désir d'un compagnon pieux, travailleur et respectueux des aînés. »
+            </p>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Santé publique</span>
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Wali validé</span>
+</div>
+</div>
+<div class="pt-3 mt-3 border-t border-border-hairline flex items-center justify-between gap-2">
+<button class="p-1.5 rounded-full border border-border-hairline text-ink-secondary hover:text-gold" title="Garder en mémoire">
+<span class="material-symbols-outlined text-base" data-icon="bookmark">bookmark</span>
+</button>
+<button class="flex-grow py-2 px-3 rounded-full bg-indigo text-ink-on-indigo font-meta text-xs hover:bg-primary transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="send">send</span>
+<span>Inviter au Ta'aruf</span>
+</button>
+</div>
+</article>
+<!-- Lite Card 3: Mariam_S -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 flex flex-col justify-between hover:border-border-strong/40 transition-colors">
+<div class="space-y-3">
+<div class="flex items-start gap-3">
+<div class="w-16 h-20 rounded-lg bg-blur-wash/40 border border-border-hairline flex flex-col items-center justify-center flex-shrink-0 text-ink-secondary">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+<span class="font-caption text-[9px] uppercase tracking-wider text-ink-secondary mt-1">Pudeur</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="font-heading text-heading text-primary truncate">Mariam_S</h3>
+<span class="font-meta text-meta text-ink-secondary">29 ans</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary truncate flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="location_on">location_on</span>
+                  Koudougou (Boulkiemdé)
+                </p>
+<p class="font-caption text-caption text-secondary font-medium mt-1">Madhab Malikite · Monogame</p>
+</div>
+</div>
+<p class="text-xs text-ink-primary line-clamp-2 italic bg-surface-bright p-2 rounded border-l border-gold">
+              « Comptable agréée. Attachée aux valeurs familiales mossi et à la droiture morale sous la foi islamique. »
+            </p>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Gestion / Audit</span>
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Père Wali</span>
+</div>
+</div>
+<div class="pt-3 mt-3 border-t border-border-hairline flex items-center justify-between gap-2">
+<button class="p-1.5 rounded-full border border-border-hairline text-ink-secondary hover:text-gold" title="Garder en mémoire">
+<span class="material-symbols-outlined text-base" data-icon="bookmark">bookmark</span>
+</button>
+<button class="flex-grow py-2 px-3 rounded-full bg-indigo text-ink-on-indigo font-meta text-xs hover:bg-primary transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="send">send</span>
+<span>Inviter au Ta'aruf</span>
+</button>
+</div>
+</article>
+<!-- Lite Card 4: Nassiratou_D -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-4 flex flex-col justify-between hover:border-border-strong/40 transition-colors">
+<div class="space-y-3">
+<div class="flex items-start gap-3">
+<div class="w-16 h-20 rounded-lg bg-blur-wash/40 border border-border-hairline flex flex-col items-center justify-center flex-shrink-0 text-ink-secondary">
+<span class="material-symbols-outlined text-lg" data-icon="lock">lock</span>
+<span class="font-caption text-[9px] uppercase tracking-wider text-ink-secondary mt-1">Pudeur</span>
+</div>
+<div class="flex-grow min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="font-heading text-heading text-primary truncate">Nassiratou_D</h3>
+<span class="font-meta text-meta text-ink-secondary">26 ans</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary truncate flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="location_on">location_on</span>
+                  Ouagadougou (Somgandé)
+                </p>
+<p class="font-caption text-caption text-secondary font-medium mt-1">Madhab Malikite · Monogame</p>
+</div>
+</div>
+<p class="text-xs text-ink-primary line-clamp-2 italic bg-surface-bright p-2 rounded border-l border-gold">
+              « Pharmacienne d'officine. Recherche d'un foyer stable, axé sur l'apprentissage mutuel de la religion et le calme. »
+            </p>
+<div class="flex flex-wrap gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Santé</span>
+<span class="px-2 py-0.5 rounded bg-surface-sand text-[11px] text-ink-secondary border border-border-hairline">Wali désigné</span>
+</div>
+</div>
+<div class="pt-3 mt-3 border-t border-border-hairline flex items-center justify-between gap-2">
+<button class="p-1.5 rounded-full border border-border-hairline text-ink-secondary hover:text-gold" title="Garder en mémoire">
+<span class="material-symbols-outlined text-base" data-icon="bookmark">bookmark</span>
+</button>
+<button class="flex-grow py-2 px-3 rounded-full bg-indigo text-ink-on-indigo font-meta text-xs hover:bg-primary transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-xs text-gold" data-icon="send">send</span>
+<span>Inviter au Ta'aruf</span>
+</button>
+</div>
+</article>
+</div>
+</div>
+<!-- Integrity & Walls Sovereign Notice (Burkina Sovereign Hosting) -->
+<aside class="bg-surface-raised border border-border-hairline rounded-xl p-4 text-xs text-ink-secondary flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="security">security</span>
+<span><strong>Médiation surveillée :</strong> Aucun échange n'a lieu hors de la visibilité des tuteurs légaux désignés. Zéro mise en scène superficielle.</span>
+</div>
+<div class="flex items-center gap-3 text-ink-secondary flex-shrink-0">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-success" data-icon="cloud_done">cloud_done</span>
+          Hébergement Souverain Scaleway
+        </span>
+</div>
+</aside>
+</main>
+<!-- ================= FOOTER (Shared Component: Minimal Editorial Anchor) ================= -->
+<footer class="w-full bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-12">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-heading text-heading text-primary dark:text-ink-on-indigo">AnKanu</span>
+<p class="font-caption text-caption text-ink-secondary dark:text-outline-variant text-center md:text-left">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+</div>
+<nav class="flex flex-wrap items-center justify-center gap-4 text-center">
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#confidentialite">
+          Confidentialité &amp; Données
+        </a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#tuteurs">
+          Tuteurs Légaux (Wali)
+        </a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-200" href="#ethique">
+          Éthique &amp; Respect
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Inline Script for Card-Grid Toggle Interaction -->
+<script>
+    function setView(viewType) {
+      const viewFocused = document.getElementById('view-focused');
+      const viewLite = document.getElementById('view-lite');
+      const btnFocused = document.getElementById('toggle-focused');
+      const btnLite = document.getElementById('toggle-lite');
+
+      if (viewType === 'focused') {
+        viewFocused.classList.remove('hidden');
+        viewFocused.classList.add('block');
+        viewLite.classList.add('hidden');
+        viewLite.classList.remove('block');
+
+        btnFocused.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all bg-surface-raised text-primary shadow-xs";
+        btnFocused.setAttribute('aria-selected', 'true');
+        btnLite.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all text-ink-secondary hover:text-ink-primary";
+        btnLite.setAttribute('aria-selected', 'false');
+      } else {
+        viewLite.classList.remove('hidden');
+        viewLite.classList.add('block');
+        viewFocused.classList.add('hidden');
+        viewFocused.classList.remove('block');
+
+        btnLite.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all bg-surface-raised text-primary shadow-xs";
+        btnLite.setAttribute('aria-selected', 'true');
+        btnFocused.className = "flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-sm font-medium transition-all text-ink-secondary hover:text-ink-primary";
+        btnFocused.setAttribute('aria-selected', 'false');
+      }
+    }
+  </script>
+</body></html>

@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanction</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'surface-sand': '#F4EDE0',
+            'surface-raised': '#FFFBF4',
+            'surface-indigo': '#15283F',
+            'ink-primary': '#1B2433',
+            'ink-secondary': '#5C5346',
+            'ink-on-indigo': '#F4EDE0',
+            'indigo': '#1F3A5F',
+            'indigo-deep': '#15283F',
+            'gold': '#C4A35A',
+            'gold-soft': '#E8D5A3',
+            'mihrab': '#2C4A6E',
+            'border-hairline': '#D9CDB8',
+            'border-strong': '#6F624C',
+            'focus-ring': '#1F3A5F',
+            'danger': '#8B3A3A',
+            'danger-soft': '#F3E0DC',
+            'success': '#3D5C45',
+            'success-soft': '#DCE6DE',
+            'staff': '#6B3D2E',
+            'staff-soft': '#EFE4DC',
+            'disabled': '#B5A894'
+          },
+          fontFamily: {
+            serif: ['"Source Serif 4"', 'Georgia', 'serif'],
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+  </style>
+</head>
+<body class="bg-surface-sand text-ink-primary font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-gold-soft selection:text-indigo-deep">
+
+  <!-- ==================== BANDEAU STAFF AUDIT & NAVIGATION TECHNIQUE ==================== -->
+  <header class="bg-surface-indigo text-ink-on-indigo border-b border-mihrab sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <!-- Brand & Context -->
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-gold inline-block"></span>
+            <span class="font-serif font-bold text-xl tracking-tight text-ink-on-indigo">AnKanu</span>
+          </div>
+          <span class="text-xs uppercase tracking-widest text-gold-soft/80 font-semibold border-l border-mihrab pl-3">
+            Console Déontologique
+          </span>
+          <!-- Staff-only badge -->
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-staff text-surface-raised tracking-wide ml-2">
+            Équipe seulement
+          </span>
+        </div>
+
+        <!-- Navigation Staff -->
+        <nav class="hidden md:flex items-center gap-6 text-sm text-ink-on-indigo/80">
+          <a href="#" class="hover:text-gold-soft transition-colors flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+            Dossier #FLAG-2025-091
+          </a>
+          <a href="#" class="hover:text-gold-soft transition-colors">Registre d'Assermentation</a>
+          <a href="#" class="hover:text-gold-soft transition-colors">Contrôle CIL-BF</a>
+        </nav>
+
+        <!-- Officier assermenté -->
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <div class="text-xs font-semibold text-ink-on-indigo">Officier Assermenté (Ouaga)</div>
+            <div class="text-[11px] text-gold-soft">Horodatage GMT+0 · Conforme AD-10</div>
+          </div>
+          <div class="w-9 h-9 rounded bg-mihrab border border-gold/40 flex items-center justify-center text-xs font-bold text-gold-soft">
+            OA
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BANDEAU SIMULATEUR D'ÉTATS CANONIQUES -->
+    <div class="bg-indigo-deep/95 border-t border-mihrab/80 px-4 py-2">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 text-xs">
+        <div class="flex items-center gap-2 text-gold-soft font-medium">
+          <span class="material-symbols-outlined text-sm text-gold">tune</span>
+          <span class="font-semibold uppercase tracking-wider text-[11px]">Banc de Simulation Déontologique :</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-1.5" id="state-buttons">
+          <button onclick="setState('empty')" id="btn-empty" class="px-2.5 py-1 rounded text-[11px] font-semibold bg-surface-raised text-indigo border border-gold transition-colors">
+            1. Action non sélectionnée (Empty)
+          </button>
+          <button onclick="setState('warning')" id="btn-warning" class="px-2.5 py-1 rounded text-[11px] font-medium bg-mihrab/60 text-ink-on-indigo hover:bg-mihrab transition-colors">
+            2. Choix : Avertissement
+          </button>
+          <button onclick="setState('suspend')" id="btn-suspend" class="px-2.5 py-1 rounded text-[11px] font-medium bg-mihrab/60 text-ink-on-indigo hover:bg-mihrab transition-colors">
+            3. Choix : Suspension (72h)
+          </button>
+          <button onclick="setState('other')" id="btn-other" class="px-2.5 py-1 rounded text-[11px] font-medium bg-mihrab/60 text-ink-on-indigo hover:bg-mihrab transition-colors">
+            4. Autre action publiée
+          </button>
+          <button onclick="setState('loading')" id="btn-loading" class="px-2.5 py-1 rounded text-[11px] font-medium bg-mihrab/60 text-ink-on-indigo hover:bg-mihrab transition-colors">
+            5. Enregistrement + Audit (Loading)
+          </button>
+          <button onclick="setState('error_ai')" id="btn-error" class="px-2.5 py-1 rounded text-[11px] font-medium bg-danger/40 text-danger-soft hover:bg-danger/60 transition-colors">
+            6. Erreur : Détection IA non autorisée
+          </button>
+          <button onclick="setState('success')" id="btn-success" class="px-2.5 py-1 rounded text-[11px] font-medium bg-success/40 text-success-soft hover:bg-success/60 transition-colors">
+            7. Succès : Sanction scellée
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== BANDEAU DÉONTOLOGIQUE INFORMATIF ==================== -->
+  <div class="bg-surface-raised border-b border-border-hairline py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <a href="#" class="text-xs font-semibold text-indigo hover:underline flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">folder_open</span>
+          Dossier d'instruction : FLAG-2025-091
+        </a>
+        <span class="text-border-strong text-xs">/</span>
+        <span class="text-xs text-ink-secondary">Arrêté de Sanction Déontologique</span>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <span class="inline-flex items-center gap-1 text-ink-secondary">
+          <span class="material-symbols-outlined text-[16px] text-indigo">verified_user</span>
+          Implements: <strong class="font-semibold text-ink-primary">FR-085 · FR-144 · AD-10</strong>
+        </span>
+        <span class="border-l border-border-hairline pl-3 text-ink-secondary">
+          Atteinte constatée : <strong>Tentative de contournement du cadre tutélaire (Wali)</strong>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CONTENU PRINCIPAL (TWO-PANE LAYOUT >= 768px) ==================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+    
+    <!-- Alerte statut technique : Erreur IA (affichée selon l'état) -->
+    <div id="alert-error-ai" class="hidden mb-6 p-4 rounded-md bg-danger-soft border border-danger text-ink-primary">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-danger text-2xl">block</span>
+        <div class="flex-1">
+          <h4 class="font-serif font-bold text-sm text-danger">Rejet canonique d'application : Tentative d'arbitrage automatisé (AD-10)</h4>
+          <p class="text-xs text-ink-secondary mt-1">
+            <strong>Erreur : Cannot apply as AI.</strong> Conformément aux normes déontologiques fondamentales d'AnKanu et à la Charte d'Honneur, <em>aucun algorithme, script prédictif ou automate de détection ne dispose du pouvoir de prononcer une sanction</em>. Seule la signature manuelle d'un officier assermenté humain authentifié peut sceller un avertissement, une suspension ou une radiation.
+          </p>
+          <div class="mt-2 text-[11px] text-danger font-medium">
+            Référence audit : SEC-ERR-CANNOT_APPLY_AS_AI · Tracé au registre de conformité CIL-BF.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alerte statut technique : Succès (affichée selon l'état) -->
+    <div id="alert-success" class="hidden mb-6 p-4 rounded-md bg-success-soft border border-success text-ink-primary">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-success text-2xl fill">task_alt</span>
+        <div class="flex-1">
+          <h4 class="font-serif font-bold text-sm text-success">Sanction déontologique consignée & Membre notifié</h4>
+          <p class="text-xs text-ink-secondary mt-1">
+            La décision d'instruction a été inscrite de manière inaltérable au registre d'arbitrage. Le membre <strong id="success-target">Moussa_B</strong> a reçu la notification de statut officiel en français respectueux ouagalais. Le tuteur légal (Wali Oumar O.) a été informé selon les convenances de réserve.
+          </p>
+          <div class="mt-3 flex items-center gap-3">
+            <button onclick="setState('empty')" class="px-3 py-1.5 bg-success text-surface-raised rounded text-xs font-semibold hover:bg-success/90 transition-colors">
+              Poursuivre le parcours (Report → Strike → Ban)
+            </button>
+            <span class="text-[11px] text-ink-secondary">Réf. scellée : BF-SANCT-2025-084-CONFIRMED</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRILLE TWO-PANE STAFF -->
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+      
+      <!-- ==================== VOLET GAUCHE : DOSSIER DU CAS & PIÈCES D'INSTRUCTION (4 Cols) ==================== -->
+      <aside class="md:col-span-5 lg:col-span-4 flex flex-col gap-4">
+        
+        <!-- CARTE RÉSUMÉ DU DOSSIER D'INSTRUCTION -->
+        <div class="bg-surface-raised border border-border-hairline rounded-md p-4 shadow-none">
+          <div class="flex items-center justify-between pb-3 border-b border-border-hairline">
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-staff text-surface-raised">
+              Équipe seulement
+            </span>
+            <span class="text-xs text-ink-secondary font-mono">FLAG-2025-091</span>
+          </div>
+
+          <!-- Personne mise en cause -->
+          <div class="mt-3">
+            <div class="text-[11px] uppercase tracking-wider text-ink-secondary font-semibold">Postulant faisant l'objet du signalement</div>
+            <div class="flex items-center gap-3 mt-1.5">
+              <div class="w-10 h-10 rounded bg-surface-sand border border-border-strong flex items-center justify-center font-serif font-bold text-indigo">
+                MB
+              </div>
+              <div>
+                <h3 class="font-serif font-bold text-base text-ink-primary leading-tight">Moussa_B</h3>
+                <p class="text-xs text-ink-secondary">CNIB vérifiée n° B11029482 (Faso) · 29 ans</p>
+              </div>
+            </div>
+            
+            <div class="mt-3 bg-surface-sand/70 rounded p-2.5 border border-border-hairline text-xs space-y-1">
+              <div class="flex justify-between">
+                <span class="text-ink-secondary">Salon concerné :</span>
+                <span class="font-medium text-ink-primary">Tahir_Ouaga & Aminata_O</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-ink-secondary">Tuteur légal (Wali) :</span>
+                <span class="font-medium text-ink-primary">Oumar O. Sawadogo</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-ink-secondary">Localisation :</span>
+                <span class="font-medium text-ink-primary">Ouagadougou (Baskuy)</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-ink-secondary">Antécédents d'éthique :</span>
+                <span class="font-semibold text-success">0 avertissement antérieur</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Transcription de l'élément signalé -->
+          <div class="mt-4 pt-3 border-t border-border-hairline">
+            <div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-ink-secondary font-semibold">
+              <span>Élément délivré sous contrôle</span>
+              <span class="text-ink-secondary">Horodaté 14:15 GMT</span>
+            </div>
+            <div class="mt-2 p-3 rounded bg-surface-sand border-l-2 border-staff text-xs leading-relaxed text-ink-primary italic">
+              « Salam aleykoum ma sœur. Afin d'éviter la lenteur des échanges avec les aînés, voici mon numéro direct <strong>+226 70 12 34 56</strong>. Écrivez-moi sur WhatsApp directement afin que nous discutions seuls à seuls sans que votre tuteur n'ait à valider chaque mot. »
+            </div>
+            <p class="mt-1.5 text-[11px] text-danger flex items-center gap-1 font-medium">
+              <span class="material-symbols-outlined text-[14px]">warning</span>
+              Détection de tentative d'isolement illicite (khalwa numérique) & contournement de tutelle.
+            </p>
+          </div>
+        </div>
+
+        <!-- RAPPEL CANONIQUE INVIOLABLE (FR-069 & AD-10) -->
+        <div class="bg-surface-raised border border-border-hairline rounded-md p-4">
+          <div class="flex items-center gap-2 text-indigo font-semibold text-xs mb-2">
+            <span class="material-symbols-outlined text-base">balance</span>
+            <span>Règles d'instruction canonique</span>
+          </div>
+          <ul class="text-xs text-ink-secondary space-y-2 leading-relaxed">
+            <li class="flex items-start gap-1.5">
+              <span class="text-indigo font-bold">•</span>
+              <span><strong>Échelle des sanctions (FR-085) :</strong> Gradation solennelle du rappel à l'ordre à la suspension conservatoire jusqu'au bannissement définitif.</span>
+            </li>
+            <li class="flex items-start gap-1.5">
+              <span class="text-indigo font-bold">•</span>
+              <span><strong>Seuil d'invisibilité Photo (FR-069) :</strong> Le Photo Strike 3 entraîne un retrait immédiat sous le voile de pudeur pour 24 heures incompressibles.</span>
+            </li>
+            <li class="flex items-start gap-1.5">
+              <span class="text-indigo font-bold">•</span>
+              <span><strong>Zéro passe-droit marchand :</strong> La souscription à un pack payant ou à la révision accélérée <em>ne dispense jamais</em> de l'instruction du flag ni n'accorde d'immunité.</span>
+            </li>
+            <li class="flex items-start gap-1.5">
+              <span class="text-indigo font-bold">•</span>
+              <span><strong>Contrôle humain strict :</strong> Toute sanction automatisée par algorithme ou IA est formellement nulle et non avenue (Norme AD-10).</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- STATUT DU FORFAIT DU MEMBRE -->
+        <div class="p-3 bg-surface-sand/80 border border-border-hairline rounded-md text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-ink-secondary">Niveau de souscription :</span>
+            <span class="font-semibold text-indigo">Pack Alliance & Familles (Actif)</span>
+          </div>
+          <p class="mt-1 text-[11px] text-ink-secondary leading-normal">
+            Note de conformité : Le statut payant n'interrompt pas la procédure disciplinaire (Norme d'inviolabilité FR-044).
+          </p>
+        </div>
+
+      </aside>
+
+      <!-- ==================== VOLET DROIT : FORME D'ARBITRAGE DE LA SANCTION (8 Cols) ==================== -->
+      <section class="md:col-span-7 lg:col-span-8 flex flex-col gap-5">
+        
+        <!-- EN-TÊTE DE LA FORMULAIRE D'ARBITRAGE -->
+        <div class="bg-surface-raised border border-border-hairline rounded-md p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-staff text-surface-raised">
+                  Équipe seulement
+                </span>
+                <span class="text-xs uppercase tracking-wider text-ink-secondary font-semibold">Console Déontologique · Sanction</span>
+              </div>
+              <h1 class="font-serif font-bold text-2xl text-ink-primary mt-1">
+                Prononcé de Sanction Canonique
+              </h1>
+              <p class="text-xs text-ink-secondary mt-1 max-w-2xl">
+                En qualité d'officier assermenté d'AnKanu siégeant à Ouagadougou, déterminez la mesure disciplinaire adaptée à l'écart constaté. Votre arbitrage engage l'honneur de la démarche et sera consigné sous sceau CIL.
+              </p>
+            </div>
+            
+            <div class="text-right">
+              <span class="inline-block px-2.5 py-1 rounded bg-surface-sand border border-border-strong text-xs font-mono font-medium text-ink-primary">
+                FR-085 / FR-144
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ÉTAPE 1 : CHOIX DE L'ACTION CANONIQUE {components.sanction-action} -->
+        <div class="bg-surface-raised border border-border-hairline rounded-md p-5">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo text-ink-on-indigo text-xs font-bold flex items-center justify-center">1</span>
+              <h2 class="font-serif font-semibold text-lg text-ink-primary">
+                Sélection de la mesure disciplinaire (Humain assermenté)
+              </h2>
+            </div>
+            <span class="text-xs text-danger font-medium flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">person</span>
+              IA exclue (AD-10)
+            </span>
+          </div>
+
+          <p class="text-xs text-ink-secondary mb-4">
+            Choisissez l'une des trois actions canoniques autorisées par la jurisprudence d'AnKanu :
+          </p>
+
+          <!-- LES 3 ACTIONS CANONIQUES : Avertissement (staff) | Suspension (danger) | Autre action publiée (secondary) -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5" id="sanction-actions-group">
+            
+            <!-- OPTION 1 : AVERTISSEMENT (STAFF ACCENT) -->
+            <label id="card-action-warning" class="relative flex flex-col p-4 rounded-md border-2 border-border-hairline bg-surface-raised hover:border-staff cursor-pointer transition-all duration-150">
+              <input type="radio" name="sanction_action" value="warning" class="sr-only" onchange="selectSanction('warning')">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded bg-staff-soft flex items-center justify-center text-staff">
+                  <span class="material-symbols-outlined text-lg">info</span>
+                </span>
+                <span class="text-[11px] font-semibold text-staff uppercase tracking-wider">Échelon 1</span>
+              </div>
+              <h3 class="font-serif font-bold text-sm text-ink-primary mt-3">1. Avertissement</h3>
+              <p class="text-[11px] text-ink-secondary mt-1 leading-normal">
+                Rappel solennel aux règles de convenance de ta'aruf. Le profil demeure actif sous surveillance fraternelle accrue.
+              </p>
+              <div class="mt-3 pt-2 border-t border-border-hairline text-[10px] text-staff font-semibold">
+                Accent Staff · Sans coupure
+              </div>
+            </label>
+
+            <!-- OPTION 2 : SUSPENSION (DANGER ACCENT) -->
+            <label id="card-action-suspend" class="relative flex flex-col p-4 rounded-md border-2 border-border-hairline bg-surface-raised hover:border-danger cursor-pointer transition-all duration-150">
+              <input type="radio" name="sanction_action" value="suspend" class="sr-only" onchange="selectSanction('suspend')">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded bg-danger-soft flex items-center justify-center text-danger">
+                  <span class="material-symbols-outlined text-lg">pause_circle</span>
+                </span>
+                <span class="text-[11px] font-semibold text-danger uppercase tracking-wider">Échelon 2</span>
+              </div>
+              <h3 class="font-serif font-bold text-sm text-ink-primary mt-3">2. Suspension</h3>
+              <p class="text-[11px] text-ink-secondary mt-1 leading-normal">
+                Gel conservatoire temporaire de 72 heures ouvrées. Interdiction d'échanges, retrait des recherches, voie de recours ouverte.
+              </p>
+              <div class="mt-3 pt-2 border-t border-border-hairline text-[10px] text-danger font-semibold">
+                Accent Danger · Voie FR-090
+              </div>
+            </label>
+
+            <!-- OPTION 3 : AUTRE ACTION PUBLIÉE (SECONDARY ACCENT) -->
+            <label id="card-action-other" class="relative flex flex-col p-4 rounded-md border-2 border-border-hairline bg-surface-raised hover:border-indigo cursor-pointer transition-all duration-150">
+              <input type="radio" name="sanction_action" value="other" class="sr-only" onchange="selectSanction('other')">
+              <div class="flex items-center justify-between">
+                <span class="w-8 h-8 rounded bg-surface-sand flex items-center justify-center text-indigo">
+                  <span class="material-symbols-outlined text-lg">gavel</span>
+                </span>
+                <span class="text-[11px] font-semibold text-indigo uppercase tracking-wider">Échelon 3</span>
+              </div>
+              <h3 class="font-serif font-bold text-sm text-ink-primary mt-3">3. Autre action publiée</h3>
+              <p class="text-[11px] text-ink-secondary mt-1 leading-normal">
+                Clôture sans suite motivée, arbitrage de conciliation ou saisine directe du Conseil des Sages (Voie de radiation / Ban).
+              </p>
+              <div class="mt-3 pt-2 border-t border-border-hairline text-[10px] text-indigo font-semibold">
+                Action Publiée · Registre CIL
+              </div>
+            </label>
+
+          </div>
+
+          <!-- BAN SUR L'ÉCHELLE DES SANCTIONS (RAPPEL FR-085) -->
+          <div class="mt-4 p-3 bg-surface-sand/60 border border-border-hairline rounded text-xs flex items-start gap-2.5">
+            <span class="material-symbols-outlined text-ink-secondary text-base mt-0.5">info</span>
+            <div class="text-[11px] text-ink-secondary leading-normal">
+              <strong>Précision déontologique quant au Bannissement (FR-085) :</strong> Le bannissement définitif (access denied complet avec inscription au dénylist d'infrastructure) se situe au sommet de l'échelle des sanctions. L'officier peut y parvenir par l'option <em>« Autre action publiée : Saisine pour radiation »</em> après récidive ou manquement délibéré majeur.
+            </div>
+          </div>
+        </div>
+
+        <!-- ÉTAPE 2 : PARAMÉTRAGE CANONIQUE & PHOTO STRIKE (FR-069) -->
+        <div class="bg-surface-raised border border-border-hairline rounded-md p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-indigo text-ink-on-indigo text-xs font-bold flex items-center justify-center">2</span>
+            <h2 class="font-serif font-semibold text-lg text-ink-primary">
+              Paramètres d'application & Seuil de pudeur (Photo Strike)
+            </h2>
+          </div>
+
+          <div class="space-y-4">
+            
+            <!-- PHOTO STRIKE 3 -> 24h PALIER OBLIGATOIRE (FR-069) -->
+            <div class="p-3.5 rounded-md bg-surface-sand border border-border-strong">
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5">
+                  <span class="material-symbols-outlined text-staff text-xl mt-0.5">visibility_off</span>
+                  <div>
+                    <div class="text-xs font-bold text-ink-primary flex items-center gap-2">
+                      <span>Règle FR-069 : Seuil Photo Strike 3 → 24h incompressibles</span>
+                      <span class="inline-flex items-center px-1.5 py-0.2 rounded text-[10px] bg-staff-soft text-staff font-semibold">Palier publié</span>
+                    </div>
+                    <p class="text-xs text-ink-secondary mt-1 leading-relaxed">
+                      En cas de manquement lié au regard ou d'abus de demande de dévoilement, l'application du strike entraîne le voilage total et immédiat des clichés sous le sceau de pudeur (fond monochrome + pictogramme inviolable) pendant une durée de 24 heures minimum.
+                    </p>
+                  </div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer flex-shrink-0 mt-1">
+                  <input type="checkbox" id="check-strike" checked class="sr-only peer">
+                  <div class="w-9 h-5 bg-border-strong peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-surface-raised after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-raised after:border-border-hairline after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-staff"></div>
+                </label>
+              </div>
+            </div>
+
+            <!-- MOTIF OFFICIEL DE LA SANCTION (OUAGA FRENCH RESPECTUEUX) -->
+            <div>
+              <label for="motif-select" class="block text-xs font-semibold text-ink-primary mb-1">
+                Motif canonique principal qualifié (Horodaté CIL) *
+              </label>
+              <select id="motif-select" class="w-full min-h-[48px] px-3 py-2 bg-surface-raised border border-border-strong rounded-md text-sm text-ink-primary focus:outline-none focus:ring-2 focus:ring-focus-ring">
+                <option value="circumvention">Tentative manifeste de contournement du cadre tutélaire (FR-074 / AD-10)</option>
+                <option value="indecent">Propos inconvenants attentatoires à la pudeur rituelle (haya)</option>
+                <option value="false_status">Dissimulation de situation matrimoniale ou polygamique non déclarée</option>
+                <option value="harassment">Insistance déplacée après refus ou réserve exprimée par la sœur</option>
+                <option value="finance">Sollicitation financière non agréée / suspicion de dol</option>
+              </select>
+            </div>
+
+            <!-- EXPOSÉ CIRCONSTANCIÉ DE L'OFFICIER -->
+            <div>
+              <label for="expose-text" class="block text-xs font-semibold text-ink-primary mb-1">
+                Motivation juridique et morale rédigée par l'instructeur *
+              </label>
+              <textarea id="expose-text" rows="3" class="w-full p-3 bg-surface-raised border border-border-strong rounded-md text-xs text-ink-primary focus:outline-none focus:ring-2 focus:ring-focus-ring leading-relaxed" placeholder="Consignez avec sobriété et droiture les éléments de fait motivant la décision..."></textarea>
+              <p class="text-[11px] text-ink-secondary mt-1">
+                Cette mention sera communiquée au membre et au Conseil d'arbitrage en cas de saisine de recours (FR-090).
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ÉTAPE 3 : NOTIFICATION DU MEMBRE (RESPECTFUL OUAGA FRENCH) -->
+        <div class="bg-surface-raised border border-border-hairline rounded-md p-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-indigo text-ink-on-indigo text-xs font-bold flex items-center justify-center">3</span>
+            <h2 class="font-serif font-semibold text-lg text-ink-primary">
+              Notification officielle transmise au membre
+            </h2>
+          </div>
+
+          <div class="bg-surface-sand p-4 rounded-md border border-border-hairline">
+            <div class="flex items-center justify-between text-xs text-ink-secondary mb-2">
+              <span class="font-semibold text-indigo flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-sm">mail</span>
+                Message protocolaire en français respectueux de convenance ouagalaise
+              </span>
+              <span class="font-mono text-[11px]">Canal SMS + In-App Sanctuaire</span>
+            </div>
+
+            <!-- Aperçu de la notification générée en français ouagalais digne -->
+            <div id="notification-preview" class="p-3 bg-surface-raised rounded border border-border-hairline text-xs text-ink-primary leading-relaxed">
+              « Honorable frère Moussa_B. Par la présente notification sous sceau de la modération déontologique d'AnKanu à Ouagadougou, nous vous informons avec bienveillance et gravité qu'un manquement aux règles sacrées de respect du tuteur légal (Wali) a été constaté dans vos échanges récents. Afin de préserver la paix des familles et la bienséance de votre démarche, veuillez prendre acte de la mesure ci-après arrêtée. Le respect scrupuleux de nos coutumes et de nos valeurs sanctifie votre recherche d'alliance. »
+            </div>
+
+            <div class="mt-2.5 flex items-center justify-between text-[11px] text-ink-secondary">
+              <span>Information simultanée transmise au tuteur : <strong>Oumar O. Sawadogo (Wali)</strong></span>
+              <span class="text-success font-medium">Sans diffamation publique</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ÉTAPE 4 : SIGNATURE CANONIQUE & DÉCISION FINALE (BARRE D'ACTION) -->
+        <div class="bg-surface-raised border border-border-hairline rounded-md p-5 flex flex-col gap-4">
+          <div class="flex items-start gap-3 text-xs text-ink-secondary">
+            <span class="material-symbols-outlined text-indigo text-base mt-0.5">verified</span>
+            <div class="leading-relaxed">
+              <strong>Engagement sous serment de l'officier instructeur :</strong> J'atteste sur l'honneur avoir instruit le dossier de manière humaine, équitable et contradictoire, sans recourir à un automatisme d'intelligence artificielle ni à un arbitrage prédictif mercantile.
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-border-hairline">
+            <!-- Bouton quiet pour retour/annulation discrète -->
+            <button type="button" onclick="history.back()" class="w-full sm:w-auto min-h-[44px] px-4 text-ink-secondary hover:text-ink-primary font-medium text-xs transition-colors flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-base">close</span>
+              Différer l'arbitrage et retourner au dossier
+            </button>
+
+            <!-- Bouton d'action principal {components.button-primary} -->
+            <button type="button" id="btn-submit-sanction" onclick="executeSanction()" class="w-full sm:w-auto min-h-[48px] px-6 bg-indigo hover:bg-indigo-deep text-ink-on-indigo rounded-md font-semibold text-sm transition-all duration-150 flex items-center justify-center gap-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-gold-soft">
+              <span class="material-symbols-outlined text-base">gavel</span>
+              <span id="btn-submit-text">Sceller la sanction déontologique</span>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== PIED DE PAGE MINIMAL STAFF INSTITUTIONNEL ==================== -->
+  <footer class="bg-surface-sand border-t border-border-hairline py-6 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-ink-secondary">
+      <div class="flex items-center gap-3">
+        <span class="font-serif font-bold text-ink-primary text-sm">AnKanu</span>
+        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-staff text-surface-raised">
+          Équipe seulement
+        </span>
+        <span>Infrastructure souveraine hébergée Scaleway · Réplication Ouagadougou</span>
+      </div>
+
+      <div class="flex items-center gap-4 text-[11px]">
+        <span>Conforme Loi 010-2004/AN CIL Burkina Faso</span>
+        <span class="text-border-strong">•</span>
+        <span>Protocole FR-085 / FR-144 / AD-10</span>
+        <span class="text-border-strong">•</span>
+        <span class="text-indigo font-medium">Zéro algorithme marchand</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT DE SIMULATION D'ÉTATS TECHNIQUES ==================== -->
+  <script>
+    let currentAction = null;
+
+    // Met à jour la sélection de sanction canonique
+    function selectSanction(action) {
+      currentAction = action;
+      
+      const cardWarning = document.getElementById('card-action-warning');
+      const cardSuspend = document.getElementById('card-action-suspend');
+      const cardOther = document.getElementById('card-action-other');
+      const btnSubmitText = document.getElementById('btn-submit-text');
+      const notifPreview = document.getElementById('notification-preview');
+      const exposeText = document.getElementById('expose-text');
+
+      // Reset styles
+      [cardWarning, cardSuspend, cardOther].forEach(el => {
+        el.classList.remove('border-staff', 'border-danger', 'border-indigo', 'bg-staff-soft/20', 'bg-danger-soft/20', 'bg-surface-sand');
+        el.classList.add('border-border-hairline');
+      });
+
+      if (action === 'warning') {
+        cardWarning.classList.remove('border-border-hairline');
+        cardWarning.classList.add('border-staff', 'bg-staff-soft/30');
+        btnSubmitText.textContent = "Notifier l'Avertissement solennel (Staff)";
+        exposeText.value = "Rappel canonique des dispositions de l'article FR-074 relatif à la sainteté de l'accord du tuteur légal (Wali). Premier rappel sans suspension d'accès.";
+        notifPreview.innerHTML = "« Cher frère Moussa_B. Dans la quiétude de votre recherche matrimoniale, l'instructeur d'AnKanu vous adresse un <strong>avertissement fraternel solennel</strong> suite à votre tentative de solliciter un contact hors de la vue bienveillante de la tutelle. La loyauté de la khitba exige que chaque écrit soit partagé avec les garants. Veuillez poursuivre votre démarche avec la réserve coutumière qui sied à notre communauté. »";
+      } else if (action === 'suspend') {
+        cardSuspend.classList.remove('border-border-hairline');
+        cardSuspend.classList.add('border-danger', 'bg-danger-soft/30');
+        btnSubmitText.textContent = "Sceller la Suspension conservatoire (72h)";
+        exposeText.value = "Interruption temporaire de 72h ouvrées prononcée pour tentative délibérée de contournement tutélaire et proposition de khalwa numérique directe via WhatsApp.";
+        notifPreview.innerHTML = "« Frère Moussa_B. Par mesure conservatoire de sérénité et conformément à la règle FR-085, votre compte fait l'objet d'une <strong>suspension temporaire de 72 heures</strong>. Vos privilèges de messagerie et de recherche sont temporairement suspendus. Une voie de recours solennel (Appel contradictoire FR-090) vous est ouverte depuis votre sanctuaire sous 7 jours. »";
+      } else if (action === 'other') {
+        cardOther.classList.remove('border-border-hairline');
+        cardOther.classList.add('border-indigo', 'bg-surface-sand');
+        btnSubmitText.textContent = "Consigner l'Action publiée au Registre CIL";
+        exposeText.value = "Saisine de conciliation tripartite avec convocation du tuteur ou transfert au Conseil des Sages pour examen de radiation (Ban sur l'échelle des sanctions).";
+        notifPreview.innerHTML = "« Frère Moussa_B. Votre dossier fait l'objet d'une <strong>procédure déontologique spéciale inscrite au registre d'arbitrage</strong>. Une invitation à conciliation devant les aînés et le tuteur légal a été émise. Toute récidive entraînera l'interdiction définitive d'accès (Ban canonique). »";
+      }
+    }
+
+    // Gestion du banc de simulation d'états
+    function setState(state) {
+      const alertError = document.getElementById('alert-error-ai');
+      const alertSuccess = document.getElementById('alert-success');
+      const btnSubmit = document.getElementById('btn-submit-sanction');
+      const btnSubmitText = document.getElementById('btn-submit-text');
+      const exposeText = document.getElementById('expose-text');
+
+      // Réinitialiser les alertes
+      alertError.classList.add('hidden');
+      alertSuccess.classList.add('hidden');
+      btnSubmit.disabled = false;
+      btnSubmit.classList.remove('opacity-60', 'cursor-not-allowed');
+
+      // Reset état boutons simulateur
+      document.querySelectorAll('#state-buttons button').forEach(b => {
+        b.classList.remove('bg-surface-raised', 'text-indigo', 'border', 'border-gold', 'font-semibold');
+        b.classList.add('bg-mihrab/60', 'text-ink-on-indigo', 'font-medium');
+      });
+
+      const currentBtn = document.getElementById('btn-' + (state.includes('error') ? 'error' : state));
+      if (currentBtn) {
+        currentBtn.classList.remove('bg-mihrab/60', 'text-ink-on-indigo', 'font-medium');
+        currentBtn.classList.add('bg-surface-raised', 'text-indigo', 'border', 'border-gold', 'font-semibold');
+      }
+
+      if (state === 'empty') {
+        currentAction = null;
+        document.querySelectorAll('input[name="sanction_action"]').forEach(r => r.checked = false);
+        ['card-action-warning', 'card-action-suspend', 'card-action-other'].forEach(id => {
+          const el = document.getElementById(id);
+          el.classList.remove('border-staff', 'border-danger', 'border-indigo', 'bg-staff-soft/30', 'bg-danger-soft/30', 'bg-surface-sand');
+          el.classList.add('border-border-hairline');
+        });
+        btnSubmitText.textContent = "Sélectionner une mesure ci-dessus";
+        exposeText.value = "";
+      } else if (state === 'warning') {
+        selectSanction('warning');
+      } else if (state === 'suspend') {
+        selectSanction('suspend');
+      } else if (state === 'other') {
+        selectSanction('other');
+      } else if (state === 'loading') {
+        selectSanction('suspend');
+        btnSubmit.disabled = true;
+        btnSubmit.classList.add('opacity-60', 'cursor-not-allowed');
+        btnSubmitText.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin mr-1">sync</span> Écriture au registre CIL + Audit en cours...';
+      } else if (state === 'error_ai') {
+        alertError.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (state === 'success') {
+        selectSanction('suspend');
+        alertSuccess.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function executeSanction() {
+      if (!currentAction) {
+        alert("Veuillez sélectionner l'une des 3 actions canoniques avant de sceller l'arbitrage.");
+        return;
+      }
+      setState('loading');
+      setTimeout(() => {
+        setState('success');
+      }, 900);
+    }
+
+    // Initialisation sur l'état "Action non sélectionnée"
+    document.addEventListener('DOMContentLoaded', () => {
+      setState('empty');
+    });
+  </script>
+</body>
+</html>

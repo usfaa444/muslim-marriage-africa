@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu — Forfaits d'Engagement Ta'aruf</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "background": "#fff9ee",
+            "surface-raised": "#FFFBF4",
+            "primary-container": "#1f3a5f",
+            "on-background": "#1e1b14",
+            "on-secondary-fixed-variant": "#5b4300",
+            "indigo": "#1F3A5F",
+            "outline-variant": "#c4c6cf",
+            "tertiary": "#002546",
+            "secondary-container": "#fdd88a",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#785d1b",
+            "surface-container-high": "#eee7db",
+            "inverse-surface": "#333028",
+            "focus-ring": "#1F3A5F",
+            "primary-fixed-dim": "#aec8f4",
+            "mihrab": "#2C4A6E",
+            "surface-indigo": "#15283F",
+            "on-tertiary-container": "#88a5ce",
+            "on-primary": "#ffffff",
+            "danger-soft": "#F3E0DC",
+            "border-strong": "#6F624C",
+            "surface-bright": "#fff9ee",
+            "secondary": "#755b18",
+            "gold-soft": "#E8D5A3",
+            "error-container": "#ffdad6",
+            "success": "#3D5C45",
+            "tertiary-fixed-dim": "#abc9f3",
+            "on-secondary-fixed": "#251a00",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#d3e4ff",
+            "ink-secondary": "#5C5346",
+            "secondary-fixed-dim": "#e5c276",
+            "border-hairline": "#D9CDB8",
+            "surface-container": "#f4ede0",
+            "staff": "#6B3D2E",
+            "on-error": "#ffffff",
+            "ink-primary": "#1B2433",
+            "blur-wash": "#C8BBA6",
+            "on-surface": "#1e1b14",
+            "secondary-fixed": "#ffdf9c",
+            "disabled": "#B5A894",
+            "surface-container-highest": "#e9e2d5",
+            "surface-variant": "#e9e2d5",
+            "on-error-container": "#93000a",
+            "inverse-primary": "#aec8f4",
+            "ink-on-indigo": "#F4EDE0",
+            "surface-container-low": "#faf3e6",
+            "indigo-deep": "#15283F",
+            "primary-fixed": "#d5e3ff",
+            "outline": "#74777f",
+            "gold": "#C4A35A",
+            "on-primary-container": "#8ba4cf",
+            "staff-soft": "#EFE4DC",
+            "on-tertiary-fixed": "#001c38",
+            "surface-sand": "#F4EDE0",
+            "on-tertiary": "#ffffff",
+            "surface-tint": "#465f86",
+            "danger": "#8B3A3A",
+            "surface-dim": "#e0d9cd",
+            "on-primary-fixed-variant": "#2d476d",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "primary": "#032448",
+            "inverse-on-surface": "#f7f0e3",
+            "on-surface-variant": "#43474e",
+            "on-primary-fixed": "#001c3b",
+            "surface": "#fff9ee",
+            "success-soft": "#DCE6DE",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-container": "#1b3b5e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "margin": "1rem",
+            "screen-pad": "16px",
+            "1": "4px",
+            "6": "32px",
+            "3": "12px",
+            "7": "48px",
+            "2": "8px",
+            "5": "24px",
+            "space-xs": "0.25rem",
+            "gutter": "16px",
+            "4": "16px",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2rem",
+            "space-sm": "0.5rem"
+          },
+          "fontFamily": {
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Subtle custom pattern to honor Burkinabè woven artisanal heritage */
+    .sahel-texture {
+      background-image: radial-gradient(#d9cdb8 0.75px, transparent 0.75px);
+      background-size: 16px 16px;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-surface-sand text-ink-primary font-body text-body antialiased selection:bg-gold-soft selection:text-indigo">
+<!-- STATE SIMULATOR BAR (Mandatory Audit & Deontological QA Header) -->
+<aside aria-label="Simulateur d'états d'homologation" class="bg-surface-indigo text-ink-on-indigo text-caption font-caption py-2.5 px-4 border-b border-indigo">
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold text-base" data-icon="policy">policy</span>
+<span class="font-body-strong text-gold">Contrôle de Conformité Éthique &amp; CIL :</span>
+<span class="opacity-80 hidden sm:inline">Vérification des règles d'inaliénabilité matrimoniale</span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5" id="simulator-buttons">
+<button class="px-2.5 py-1 rounded bg-mihrab text-ink-on-indigo hover:bg-opacity-90 font-meta text-caption transition-colors border border-primary-fixed-dim/30" id="btn-state-1" onclick="setSimState(1)">1. Normal (Frère / Sœur standard)</button>
+<button class="px-2.5 py-1 rounded bg-indigo hover:bg-mihrab text-ink-on-indigo font-meta text-caption transition-colors border border-primary-fixed-dim/30" id="btn-state-2" onclick="setSimState(2)">2. Sœur « free_unlimited »</button>
+<button class="px-2.5 py-1 rounded bg-indigo hover:bg-mihrab text-ink-on-indigo font-meta text-caption transition-colors border border-primary-fixed-dim/30" id="btn-state-3" onclick="setSimState(3)">3. Redirection Passerelle</button>
+<button class="px-2.5 py-1 rounded bg-indigo hover:bg-mihrab text-ink-on-indigo font-meta text-caption transition-colors border border-primary-fixed-dim/30" id="btn-state-4" onclick="setSimState(4)">4. Erreur PAY_UNAVAILABLE</button>
+<button class="px-2.5 py-1 rounded bg-indigo hover:bg-mihrab text-ink-on-indigo font-meta text-caption transition-colors border border-primary-fixed-dim/30" id="btn-state-5" onclick="setSimState(5)">5. Succès &amp; Quittance Scellée</button>
+</div>
+</div>
+</aside>
+<!-- TOP APP BAR (from Shared Components JSON) -->
+<header class="w-full bg-surface border-b border-border-hairline sticky top-0 z-40">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+<!-- Brand Logo Anchor -->
+<div class="flex items-center gap-8">
+<a class="flex items-center gap-2 group" href="#home">
+<span class="w-8 h-8 rounded-full bg-surface-indigo flex items-center justify-center text-gold font-serif font-bold text-lg shadow-sm border border-gold/40">A</span>
+<span class="font-title text-title text-primary font-bold tracking-tight">AnKanu</span>
+</a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#decouvrir">Découvrir</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#invitations">Invitations</a>
+<a class="text-ink-secondary font-body text-body pb-1 hover:text-primary transition-colors duration-150" href="#discussions">Discussions</a>
+<!-- Active Nav item matches the user settings/account billing intent -->
+<a class="text-primary font-body-strong text-body-strong border-b-2 border-primary pb-1" href="#profil">Profil</a>
+</nav>
+</div>
+<!-- Trailing Action: Wali Mediator Banner & Assistance -->
+<div class="flex items-center gap-3">
+<!-- Chaperone Indicator Tag -->
+<div class="flex items-center gap-2 bg-staff-soft px-3 py-1.5 rounded-full border border-border-hairline" title="Tuteur légal associé et informé des démarches">
+<span class="material-symbols-outlined text-staff text-sm fill" data-icon="verified_user">verified_user</span>
+<span class="font-meta text-meta text-staff font-semibold">Wali notifié : Oumar O.</span>
+</div>
+<a class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-ink-secondary hover:text-primary text-meta font-meta transition-colors duration-150" href="#assistance">
+<span class="material-symbols-outlined text-base" data-icon="help_outline">help_outline</span>
+<span>Assistance</span>
+</a>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+<!-- Breadcrumbs -->
+<nav aria-label="Fil d'Ariane" class="mb-4">
+<ol class="flex items-center space-x-2 font-meta text-meta text-ink-secondary">
+<li>
+<a class="hover:text-primary underline decoration-border-hairline transition-colors" href="#compte">Compte &amp; Paramètres</a>
+</li>
+<li class="flex items-center">
+<span class="material-symbols-outlined text-sm text-disabled" data-icon="chevron_right">chevron_right</span>
+</li>
+<li aria-current="page" class="font-semibold text-ink-primary">
+          Forfaits d'Engagement Ta'aruf
+        </li>
+</ol>
+</nav>
+<!-- HEADER TITLE & PHILOSOPHY BLOCK -->
+<section class="mb-8">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+<div>
+<h1 class="font-display text-display text-primary tracking-tight">Forfaits d'Engagement Ta'aruf</h1>
+<p class="mt-2 text-ink-secondary font-body text-body max-w-3xl leading-relaxed">
+            Contribution honorable dédiée à la rémunération de la vérification humaine (CNIB), au respect scrupuleux de la pudeur et à la médiation des tuteurs (wali). Zéro abonnement caché, aucun prélèvement abusif.
+          </p>
+</div>
+<div class="shrink-0 flex items-center gap-2 bg-surface-raised border border-border-hairline px-3.5 py-2 rounded-xl text-center shadow-xs">
+<span class="material-symbols-outlined text-gold" data-icon="lock">lock</span>
+<div class="text-left">
+<span class="block text-caption font-caption text-ink-secondary uppercase tracking-wider">Habilitation</span>
+<span class="font-meta text-meta font-bold text-ink-primary">Protocole FR-044</span>
+</div>
+</div>
+</div>
+<!-- INVIOLABLE BANNER: Zero auto-renewal + Audio Explanations -->
+<div class="mt-6 p-4 sm:p-5 rounded-xl bg-surface-raised border border-gold/60 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+<div class="flex items-start sm:items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-gold-soft/50 text-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl" data-icon="event_busy">event_busy</span>
+</div>
+<div>
+<span class="inline-flex items-center gap-1.5 text-secondary font-body-strong text-body-strong">
+<span>Pas de renouvellement automatique</span>
+<span class="inline-block w-2 h-2 rounded-full bg-success"></span>
+</span>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+              Chaque forfait prend fin de plein droit à l'heure indiquée. Aucun prélèvement futur n'est enregistré.
+            </p>
+</div>
+</div>
+<!-- Audio prompt with Mooré, Dioula, French toggles -->
+<div class="bg-surface-sand p-2.5 rounded-lg border border-border-hairline flex flex-col sm:flex-row items-center gap-3">
+<div class="flex items-center gap-2 text-ink-primary">
+<button class="w-8 h-8 rounded-full bg-indigo text-ink-on-indigo flex items-center justify-center hover:opacity-90 active:scale-95 transition-all shadow-xs" title="Écouter l'explication audio">
+<span class="material-symbols-outlined text-base fill" data-icon="play_arrow">play_arrow</span>
+</button>
+<span class="font-meta text-meta font-semibold">Explication vocale :</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded text-caption font-caption bg-surface-raised text-primary font-bold border border-primary/20 hover:bg-gold-soft/30 transition-colors">Mooré (mos)</button>
+<button class="px-2.5 py-1 rounded text-caption font-caption bg-surface-raised text-ink-secondary hover:text-primary border border-border-hairline transition-colors">Dioula (dyu)</button>
+<button class="px-2.5 py-1 rounded text-caption font-caption bg-surface-raised text-ink-secondary hover:text-primary border border-border-hairline transition-colors">Français</button>
+</div>
+</div>
+</div>
+</section>
+<!-- STATE 4 INJECTION: PAY_UNAVAILABLE BANNER (Hidden by default, shown via simulator) -->
+<section class="hidden mb-8 p-5 bg-danger-soft/60 border border-danger rounded-xl" id="state-error-view">
+<div class="flex items-start gap-3.5">
+<span class="material-symbols-outlined text-danger text-2xl" data-icon="warning">warning</span>
+<div>
+<h3 class="font-heading text-heading text-danger">Incident Technique de Paiement (PAY_UNAVAILABLE)</h3>
+<p class="font-body text-body text-ink-primary mt-1">
+            La liaison vers la plateforme de règlement mobile locale rencontre un ralentissement ponctuel.
+          </p>
+<div class="mt-3 p-3 bg-surface-raised rounded-lg border border-border-hairline">
+<span class="font-body-strong text-body-strong text-success flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm fill" data-icon="check_circle">check_circle</span>
+              Continuité Sécurisée &amp; Gratuité de Secours Garantie
+            </span>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+              Pendant cet incident, les échanges engagés et le contrôle Wali demeurent parfaitement fonctionnels. Aucun profil n'est bloqué ni pénalisé. Vous pouvez réitérer sans frais ultérieurement.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- STATE 5 INJECTION: SUCCESS & SEALED QUITTANCE (Hidden by default, shown via simulator) -->
+<section class="hidden mb-8 p-6 bg-surface-raised border-2 border-gold rounded-xl shadow-sm" id="state-success-view">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-full bg-success-soft text-success flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-2xl fill" data-icon="verified">verified</span>
+</div>
+<div>
+<span class="font-caption text-caption uppercase text-gold font-bold tracking-widest">Actif &amp; Scellé</span>
+<h2 class="font-heading text-heading text-primary mt-0.5">Pack Alliance &amp; Familles Validé</h2>
+<p class="font-body text-body text-ink-secondary mt-1">
+              Quittance certifiée émise au greffe numérique AnKanu. Votre Wali a reçu une notification de confirmation par SMS et espace dédié.
+            </p>
+<div class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 bg-surface-sand rounded border border-border-hairline font-meta text-meta">
+<span class="material-symbols-outlined text-base text-primary" data-icon="event_available">event_available</span>
+<span>Échéance ferme sans reconduction : <strong>24 janvier 2026 à 23:59 UTC</strong></span>
+</div>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg border border-border-strong text-ink-primary font-meta text-meta flex items-center gap-1.5 hover:bg-surface-sand">
+<span class="material-symbols-outlined text-base" data-icon="download">download</span>
+<span>Télécharger la quittance</span>
+</button>
+</div>
+</section>
+<!-- AUDIENCE CONTEXT & ENTITLEMENT DISPLAY -->
+<section class="mb-6 bg-surface-sand border border-border-hairline p-4 rounded-xl flex items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-surface-raised border border-border-hairline flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg" data-icon="person">person</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-body-strong text-body-strong text-ink-primary" id="audience-role-label">Profil Frère — Quota de Messagerie &amp; Présentation</span>
+<span class="px-2 py-0.5 rounded-full text-caption font-caption bg-secondary-container text-on-secondary-container" id="audience-tier-badge">Formule Standard</span>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-0.5" id="audience-explainer">
+            Le forfait déverrouille l'envoi direct de messages et la revue prioritaire par l'officier matrimonial sans limite de quota quotidien.
+          </p>
+</div>
+</div>
+<div class="hidden md:block text-right">
+<span class="font-caption text-caption text-ink-secondary block">Juridiction</span>
+<span class="font-meta text-meta font-bold text-ink-primary">Burkina Faso (UEMOA)</span>
+</div>
+</section>
+<!-- PACK CARDS BENTO GRID (1 / 3 / 6 Months) -->
+<section class="mb-10">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- 1. Pack Découverte (1 Mois) -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-6 flex flex-col justify-between transition-all hover:border-border-strong">
+<div>
+<div class="flex justify-between items-start mb-3">
+<span class="text-caption font-caption tracking-wider uppercase font-semibold text-ink-secondary">Rythme Initial</span>
+<span class="text-caption font-caption px-2 py-0.5 bg-surface-sand rounded border border-border-hairline text-ink-secondary">30 Jours</span>
+</div>
+<h3 class="font-heading text-heading text-primary">Pack Découverte</h3>
+<p class="font-caption text-caption text-ink-secondary mt-1">Pour engager une première démarche ciblée dans la sérénité.</p>
+<div class="my-5 pb-5 border-b border-border-hairline">
+<div class="flex items-baseline gap-1">
+<span class="font-display text-display text-indigo font-bold">25 000</span>
+<span class="font-meta text-meta font-semibold text-ink-secondary">FCFA</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary block mt-0.5">Paiement forfaitaire unique</span>
+<div class="mt-2 text-caption font-caption text-staff bg-staff-soft/60 px-2 py-1 rounded inline-block">
+                Échéance ferme : 24 nov. 2025 (23:59 UTC)
+              </div>
+</div>
+<ul class="space-y-3 font-meta text-meta text-ink-primary mb-6">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-lg shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Invitations et messages sans quota journalier</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-lg shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Support d'assistance matrimonial sous 24h</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-lg shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Traitement diligent du dossier en file assermentée</span>
+</li>
+</ul>
+</div>
+<button class="w-full py-3 px-4 rounded-full border-1.5 border-border-strong text-ink-primary font-body-strong text-body hover:bg-surface-sand active:opacity-90 transition-all text-center" onclick="selectPack(1)">
+            Sélectionner 1 Mois
+          </button>
+</article>
+<!-- 2. Pack Alliance & Familles (3 Mois) — RECOMMENDED -->
+<article class="bg-surface-raised border-2 border-indigo relative rounded-xl p-6 flex flex-col justify-between shadow-md ring-2 ring-gold/40">
+<!-- Recommended Badge Anchor -->
+<div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo text-gold px-4 py-1 rounded-full text-caption font-body-strong uppercase tracking-wider shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm fill" data-icon="star">star</span>
+<span>Rythme Matrimonial Conseillé</span>
+</div>
+<div>
+<div class="flex justify-between items-start mb-3 mt-1">
+<span class="text-caption font-caption tracking-wider uppercase font-semibold text-secondary">Idéal Fiançailles</span>
+<span class="text-caption font-caption px-2 py-0.5 bg-gold-soft text-ink-primary font-bold rounded">Économie 15 000 F</span>
+</div>
+<h3 class="font-heading text-heading text-primary">Pack Alliance &amp; Familles</h3>
+<p class="font-caption text-caption text-ink-secondary mt-1">Temps adapté à la consultation des tuteurs et aux convenances.</p>
+<div class="my-5 pb-5 border-b border-border-hairline">
+<div class="flex items-baseline gap-1">
+<span class="font-display text-display text-indigo font-bold">60 000</span>
+<span class="font-meta text-meta font-semibold text-ink-secondary">FCFA</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary block mt-0.5">Soit 20 000 FCFA/mois (Paiement unique)</span>
+<div class="mt-2 text-caption font-caption text-indigo bg-gold-soft/40 px-2 py-1 rounded inline-block font-semibold">
+                Échéance ferme : 24 janv. 2026 (23:59 UTC)
+              </div>
+</div>
+<ul class="space-y-3 font-meta text-meta text-ink-primary mb-6">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-indigo text-lg shrink-0 mt-0.5" data-icon="verified">verified</span>
+<span><strong>Invitations &amp; messagerie illimitées</strong> (levée intégrale de la règle FR-146)</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-indigo text-lg shrink-0 mt-0.5" data-icon="verified">verified</span>
+<span>Priorité de revue humaine par les officiers assermentés (file prioritaire)</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-indigo text-lg shrink-0 mt-0.5" data-icon="verified">verified</span>
+<span>Canal de concertation audio sécurisé pour les tuteurs légaux (Wali)</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-indigo text-lg shrink-0 mt-0.5" data-icon="verified">verified</span>
+<span>Médiation neutre en cas d'interrogation sur les antécédents civils</span>
+</li>
+</ul>
+</div>
+<button class="w-full py-3.5 px-4 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-mihrab active:opacity-90 shadow transition-all text-center" id="cta-pack-main" onclick="selectPack(3)">
+            Souscrire au Pack 3 Mois (60 000 FCFA)
+          </button>
+</article>
+<!-- 3. Pack Khitba & Sérénité (6 Mois) -->
+<article class="bg-surface-raised border border-border-hairline rounded-xl p-6 flex flex-col justify-between transition-all hover:border-border-strong">
+<div>
+<div class="flex justify-between items-start mb-3">
+<span class="text-caption font-caption tracking-wider uppercase font-semibold text-ink-secondary">Engagement Approfondi</span>
+<span class="text-caption font-caption px-2 py-0.5 bg-surface-sand rounded border border-border-hairline text-ink-secondary">180 Jours</span>
+</div>
+<h3 class="font-heading text-heading text-primary">Pack Khitba &amp; Sérénité</h3>
+<p class="font-caption text-caption text-ink-secondary mt-1">Conçu pour les démarches impliquant la diaspora et plusieurs régions.</p>
+<div class="my-5 pb-5 border-b border-border-hairline">
+<div class="flex items-baseline gap-1">
+<span class="font-display text-display text-indigo font-bold">110 000</span>
+<span class="font-meta text-meta font-semibold text-ink-secondary">FCFA</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary block mt-0.5">Paiement unique sans reconduction</span>
+<div class="mt-2 text-caption font-caption text-staff bg-staff-soft/60 px-2 py-1 rounded inline-block">
+                Échéance ferme : 24 avril 2026 (23:59 UTC)
+              </div>
+</div>
+<ul class="space-y-3 font-meta text-meta text-ink-primary mb-6">
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-lg shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Accompagnement étendu jusqu'à la khitba ou au nikah</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-lg shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Messagerie et invitations illimitées pendant 180 jours</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-lg shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Assistance prioritaire aux démarches inter-villes et diaspora</span>
+</li>
+<li class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-success text-lg shrink-0 mt-0.5" data-icon="check">check</span>
+<span>Protocole de conciliation d'honneur sous supervision assermentée</span>
+</li>
+</ul>
+</div>
+<button class="w-full py-3 px-4 rounded-full border-1.5 border-border-strong text-ink-primary font-body-strong text-body hover:bg-surface-sand active:opacity-90 transition-all text-center" onclick="selectPack(6)">
+            Sélectionner 6 Mois
+          </button>
+</article>
+</div>
+</section>
+<!-- PAYMENT METHODS & HOSTED RAIL SELECTION (BURKINA FASO CERTIFIED) -->
+<section class="mb-10 bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8">
+<div class="flex items-center gap-3 mb-6 pb-4 border-b border-border-hairline">
+<span class="w-9 h-9 rounded-full bg-gold-soft/50 text-indigo flex items-center justify-center font-bold">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+</span>
+<div>
+<h2 class="font-heading text-heading text-primary">Règlement Forfaitaire Sécurisé (Passerelle BF)</h2>
+<p class="font-caption text-caption text-ink-secondary">Transactions locales traitées sous chiffrement direct BCEAO/CIL. Aucun stockage de code PIN.</p>
+</div>
+</div>
+<!-- Payment Rail Selector Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+<!-- Orange Money BF -->
+<label class="relative flex flex-col p-4 rounded-xl border-2 border-indigo bg-surface-container-low cursor-pointer transition-all">
+<input checked="" class="absolute top-4 right-4 text-indigo focus:ring-focus-ring" name="payment_rail" type="radio" value="orange"/>
+<div class="flex items-center gap-2 mb-2">
+<span class="w-7 h-7 rounded bg-[#FF7900] text-white flex items-center justify-center font-bold text-xs">OM</span>
+<span class="font-body-strong text-body-strong text-ink-primary">Orange Money BF</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary">Validation via notification push ou code USSD *144*4*6#</span>
+<span class="mt-3 inline-block font-meta text-meta text-success font-semibold">Sans frais de retrait</span>
+</label>
+<!-- Moov Money BF -->
+<label class="relative flex flex-col p-4 rounded-xl border border-border-hairline hover:border-border-strong bg-surface-raised cursor-pointer transition-all">
+<input class="absolute top-4 right-4 text-indigo focus:ring-focus-ring" name="payment_rail" type="radio" value="moov"/>
+<div class="flex items-center gap-2 mb-2">
+<span class="w-7 h-7 rounded bg-[#005CA9] text-white flex items-center justify-center font-bold text-xs">MO</span>
+<span class="font-body-strong text-body-strong text-ink-primary">Moov Africa BF</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary">Paiement marchand direct Moov Money sécurisé</span>
+<span class="mt-3 inline-block font-meta text-meta text-ink-secondary">Validation par PIN sécurisé</span>
+</label>
+<!-- Wave Burkina / Coris -->
+<label class="relative flex flex-col p-4 rounded-xl border border-border-hairline hover:border-border-strong bg-surface-raised cursor-pointer transition-all">
+<input class="absolute top-4 right-4 text-indigo focus:ring-focus-ring" name="payment_rail" type="radio" value="wave"/>
+<div class="flex items-center gap-2 mb-2">
+<span class="w-7 h-7 rounded bg-[#1DC3F6] text-white flex items-center justify-center font-bold text-xs">W</span>
+<span class="font-body-strong text-body-strong text-ink-primary">Wave / Coris Bank</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary">QR code instantané ou push Coris Money</span>
+<span class="mt-3 inline-block font-meta text-meta text-ink-secondary">Accréditation UEMOA</span>
+</label>
+<!-- Cartes Bancaires UEMOA -->
+<label class="relative flex flex-col p-4 rounded-xl border border-border-hairline hover:border-border-strong bg-surface-raised cursor-pointer transition-all">
+<input class="absolute top-4 right-4 text-indigo focus:ring-focus-ring" name="payment_rail" type="radio" value="card"/>
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary" data-icon="credit_card">credit_card</span>
+<span class="font-body-strong text-body-strong text-ink-primary">Cartes Bancaires</span>
+</div>
+<span class="font-caption text-caption text-ink-secondary">Visa / Mastercard / GIM-UEMOA (Diaspora incluse)</span>
+<span class="mt-3 inline-block font-meta text-meta text-ink-secondary">Authentification 3D-Secure</span>
+</label>
+</div>
+<!-- Action Confirmation Bar -->
+<div class="pt-4 border-t border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-2 text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-success text-base fill" data-icon="lock">lock</span>
+<span>Chiffrement TLS 1.3 souverain hébergé localement</span>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+<a class="text-ink-secondary hover:text-primary font-meta text-meta order-2 sm:order-1 underline decoration-border-hairline transition-colors" href="#decouvrir">
+            Différer et rester en accès libre encadré
+          </a>
+<button class="w-full sm:w-auto px-6 py-3.5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body hover:bg-mihrab active:opacity-90 shadow-sm transition-all flex items-center justify-center gap-2 order-1 sm:order-2" id="main-submit-btn" onclick="triggerPayment()">
+<span>Valider et être redirigé vers la passerelle sécurisée (60 000 FCFA)</span>
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+<!-- STRICT CANON & DEONTOLOGICAL GUARANTEES (FR-044, FR-045, FR-106, AD-14, AD-21) -->
+<section class="mb-12 bg-surface-raised border border-border-hairline rounded-xl p-6 sm:p-8">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="gavel">gavel</span>
+<h2 class="font-heading text-heading text-primary">Engagements Déontologiques Inaliénables (Burkina Faso)</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Left: Principle of Human Review without privilege -->
+<div class="space-y-3">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-lg shrink-0 mt-0.5" data-icon="verified_user">verified_user</span>
+<p class="font-meta text-meta text-ink-secondary">
+<strong class="text-ink-primary font-semibold">Aucun passe-droit matrimonial :</strong> La file prioritaire rémunère l'instruction humaine méticuleuse des dossiers par nos équipes. Elle n'exempte jamais de la vérification rigoureuse d'identité CNIB, du floutage souverain (Sceau de Pudeur), ni de l'agrément obligatoire du tuteur légal (Wali).
+            </p>
+</div>
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-gold text-lg shrink-0 mt-0.5" data-icon="money_off">money_off</span>
+<p class="font-meta text-meta text-ink-secondary">
+<strong class="text-ink-primary font-semibold">Zéro reconduction cachée :</strong> Conformément à nos règles éthiques certifiées, AnKanu ne conserve aucun mandat d'autorisation de prélèvement tacite. Vous demeurez l'unique maître de vos engagements.
+            </p>
+</div>
+</div>
+<!-- Right: What is ALWAYS free for everyone -->
+<div class="bg-surface-sand p-4 rounded-xl border border-border-hairline">
+<span class="font-body-strong text-body-strong text-primary block mb-2">
+            Droits inaliénables toujours gratuits pour tous :
+          </span>
+<ul class="space-y-2 font-caption text-caption text-ink-secondary">
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+<span>Vérification d'identité et de vivacité (CNIB / Passeport)</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+<span>Sceau de Pudeur et gestion souveraine du floutage d'image</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+<span>Présence, transparence et droit de regard du tuteur légal (Wali)</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+<span>Signalement déontologique immédiat et blocage d'invisibilité total</span>
+</li>
+<li class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-success"></span>
+<span>Poursuite des discussions déjà engagées après acceptation mutuelle</span>
+</li>
+</ul>
+</div>
+</div>
+</section>
+</main>
+<!-- MODAL REDIRECTION SIMULATION (State 3) -->
+<div class="fixed inset-0 bg-ink-primary/60 backdrop-blur-xs z-50 hidden flex items-center justify-center p-4" id="modal-redirect">
+<div class="bg-surface-raised max-w-md w-full rounded-2xl border border-border-strong p-6 text-center shadow-xl">
+<div class="w-12 h-12 rounded-full border-4 border-indigo border-t-gold animate-spin mx-auto mb-4"></div>
+<h3 class="font-heading text-heading text-primary">Redirection vers Orange Money BF...</h3>
+<p class="font-meta text-meta text-ink-secondary mt-2">
+        Connexion au portail de validation certifié. Veuillez garder votre téléphone allumé pour approuver la notification push sécurisée.
+      </p>
+<div class="mt-4 p-3 bg-surface-sand rounded-lg border border-border-hairline text-caption font-caption text-ink-secondary">
+        Montant forfaitaire unique : <strong>60 000 FCFA</strong> (Sans abonnement)
+      </div>
+<button class="mt-5 text-caption font-caption text-ink-secondary hover:text-danger underline" onclick="setSimState(1)">
+        Annuler et revenir à la page
+      </button>
+</div>
+</div>
+<!-- FOOTER (from Shared Components JSON) -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline mt-auto">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Legal Text and Sovereignty Anchor -->
+<div class="text-center md:text-left max-w-3xl">
+<p class="font-meta text-meta text-ink-secondary leading-relaxed">
+          © AnKanu — Plateforme d'engagement matrimonial digne et honorable au Burkina Faso. Conforme CIL (Commission de l'Informatique et des Libertés, Burkina Faso). Hébergement souverain chiffré Scaleway Paris / Ouagadougou.
+        </p>
+<span class="inline-block mt-2 font-caption text-caption text-secondary">
+          Zéro algorithme prédateur • Zéro monétisation de la vulnérabilité affective.
+        </span>
+</div>
+<!-- Mandatory Footer Links -->
+<nav aria-label="Liens légaux" class="flex flex-wrap justify-center gap-6 shrink-0">
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#confidentialite">
+          Confidentialité &amp; Données
+        </a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#wali">
+          Tuteurs Légaux (Wali)
+        </a>
+<a class="text-ink-secondary font-meta text-meta hover:text-primary underline decoration-border-hairline transition-colors duration-150" href="#ethique">
+          Éthique &amp; Respect
+        </a>
+</nav>
+</div>
+</footer>
+<!-- SCRIPT FOR STATE SIMULATION & INTERACTION -->
+<script>
+    let currentSelectedMonths = 3;
+    let currentPrice = "60 000 FCFA";
+
+    function selectPack(months) {
+      currentSelectedMonths = months;
+      const mainSubmitBtn = document.getElementById('main-submit-btn');
+      if (months === 1) {
+        currentPrice = "25 000 FCFA";
+      } else if (months === 3) {
+        currentPrice = "60 000 FCFA";
+      } else if (months === 6) {
+        currentPrice = "110 000 FCFA";
+      }
+      mainSubmitBtn.querySelector('span:first-child').innerText = `Valider et être redirigé vers la passerelle sécurisée (${currentPrice})`;
+    }
+
+    function triggerPayment() {
+      setSimState(3);
+    }
+
+    function setSimState(stateIndex) {
+      // Update buttons highlight in simulator bar
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`btn-state-${i}`);
+        if (i === stateIndex) {
+          btn.className = "px-2.5 py-1 rounded bg-gold text-indigo font-body-strong text-caption border border-gold";
+        } else {
+          btn.className = "px-2.5 py-1 rounded bg-indigo hover:bg-mihrab text-ink-on-indigo font-meta text-caption border border-primary-fixed-dim/30";
+        }
+      }
+
+      const redirectModal = document.getElementById('modal-redirect');
+      const errorView = document.getElementById('state-error-view');
+      const successView = document.getElementById('state-success-view');
+      const audienceRoleLabel = document.getElementById('audience-role-label');
+      const audienceTierBadge = document.getElementById('audience-tier-badge');
+      const audienceExplainer = document.getElementById('audience-explainer');
+
+      // Reset dynamic views
+      redirectModal.classList.add('hidden');
+      errorView.classList.add('hidden');
+      successView.classList.add('hidden');
+
+      if (stateIndex === 1) {
+        // Normal Brother / Standard
+        audienceRoleLabel.innerText = "Profil Frère — Quota de Messagerie & Présentation";
+        audienceTierBadge.innerText = "Formule Standard";
+        audienceTierBadge.className = "px-2 py-0.5 rounded-full text-caption font-caption bg-secondary-container text-on-secondary-container";
+        audienceExplainer.innerText = "Le forfait déverrouille l'envoi direct de messages et la revue prioritaire par l'officier matrimonial sans limite de quota quotidien.";
+      } else if (stateIndex === 2) {
+        // Sister free_unlimited reach mode
+        audienceRoleLabel.innerText = "Profil Sœur — Mode « free_unlimited » actif";
+        audienceTierBadge.innerText = "Reach Invitations Inclus";
+        audienceTierBadge.className = "px-2 py-0.5 rounded-full text-caption font-caption bg-success-soft text-success font-semibold";
+        audienceExplainer.innerText = "Vos invitations sont déjà intégrales et gratuites. Ce forfait permet de lever le plafond journalier des échanges écrits et de garantir l'assistance prioritaire 24h.";
+      } else if (stateIndex === 3) {
+        // Redirection loading state
+        redirectModal.classList.remove('hidden');
+      } else if (stateIndex === 4) {
+        // PAY_UNAVAILABLE error state
+        errorView.classList.remove('hidden');
+        window.scrollTo({ top: 120, behavior: 'smooth' });
+      } else if (stateIndex === 5) {
+        // Success & sealed quittance state
+        successView.classList.remove('hidden');
+        window.scrollTo({ top: 120, behavior: 'smooth' });
+      }
+    }
+
+    // Initialize Simulator Button 1 as Active
+    setSimState(1);
+  </script>
+</body></html>

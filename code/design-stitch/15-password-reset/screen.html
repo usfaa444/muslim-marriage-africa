@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Réinitialisation du mot de passe — AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-primary-fixed-variant": "#2d476d",
+            "success": "#3D5C45",
+            "on-tertiary": "#ffffff",
+            "gold": "#C4A35A",
+            "error": "#ba1a1a",
+            "tertiary-container": "#1b3b5e",
+            "surface-container-low": "#faf3e6",
+            "primary-fixed-dim": "#aec8f4",
+            "surface-tint": "#465f86",
+            "surface-sand": "#F4EDE0",
+            "tertiary": "#002546",
+            "danger-soft": "#F3E0DC",
+            "surface-container": "#f4ede0",
+            "surface-indigo": "#15283F",
+            "on-secondary-container": "#785d1b",
+            "on-secondary-fixed": "#251a00",
+            "on-secondary": "#ffffff",
+            "on-background": "#1e1b14",
+            "indigo": "#1F3A5F",
+            "secondary-fixed": "#ffdf9c",
+            "success-soft": "#DCE6DE",
+            "indigo-deep": "#15283F",
+            "disabled": "#B5A894",
+            "surface-container-high": "#eee7db",
+            "background": "#fff9ee",
+            "secondary-fixed-dim": "#e5c276",
+            "primary-container": "#1f3a5f",
+            "surface-bright": "#fff9ee",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-dim": "#e0d9cd",
+            "primary": "#032448",
+            "surface": "#fff9ee",
+            "on-secondary-fixed-variant": "#5b4300",
+            "mihrab": "#2C4A6E",
+            "primary-fixed": "#d5e3ff",
+            "inverse-primary": "#aec8f4",
+            "on-surface-variant": "#43474e",
+            "ink-primary": "#1B2433",
+            "inverse-surface": "#333028",
+            "surface-container-lowest": "#ffffff",
+            "staff-soft": "#EFE4DC",
+            "blur-wash": "#C8BBA6",
+            "secondary": "#755b18",
+            "staff": "#6B3D2E",
+            "on-error-container": "#93000a",
+            "surface-variant": "#e9e2d5",
+            "on-primary": "#ffffff",
+            "focus-ring": "#1F3A5F",
+            "on-tertiary-fixed": "#001c38",
+            "on-surface": "#1e1b14",
+            "on-error": "#ffffff",
+            "gold-soft": "#E8D5A3",
+            "border-strong": "#6F624C",
+            "error-container": "#ffdad6",
+            "outline-variant": "#c4c6cf",
+            "surface-raised": "#FFFBF4",
+            "on-primary-container": "#8ba4cf",
+            "danger": "#8B3A3A",
+            "tertiary-fixed-dim": "#abc9f3",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "on-tertiary-container": "#88a5ce",
+            "border-hairline": "#D9CDB8",
+            "secondary-container": "#fdd88a",
+            "outline": "#74777f",
+            "on-primary-fixed": "#001c3b",
+            "surface-container-highest": "#e9e2d5",
+            "ink-secondary": "#5C5346",
+            "tertiary-fixed": "#d3e4ff",
+            "ink-on-indigo": "#F4EDE0"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "1": "4px",
+            "space-md": "1rem",
+            "5": "24px",
+            "gutter": "16px",
+            "3": "12px",
+            "space-lg": "1.5rem",
+            "6": "32px",
+            "margin": "1rem",
+            "2": "8px",
+            "7": "48px",
+            "screen-pad": "16px",
+            "4": "16px"
+          },
+          "fontFamily": {
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="min-h-full flex flex-col bg-surface-sand text-ink-primary font-body antialiased selection:bg-gold-soft selection:text-indigo">
+<!-- Top Minimal Header (Auth Flow) -->
+<header class="w-full bg-surface border-b border-border-hairline">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-4 flex items-center justify-between">
+<div class="flex items-baseline space-x-3">
+<span class="font-title text-title text-indigo tracking-tight font-semibold">AnKanu</span>
+<span class="hidden sm:inline-block font-meta text-caption text-ink-secondary tracking-wider uppercase border-l border-border-hairline pl-3">Ta'aruf Honorable</span>
+</div>
+<a class="inline-flex items-center gap-1.5 font-meta text-meta text-ink-secondary hover:text-indigo transition-colors duration-150 py-1" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Retour à la Connexion</span>
+</a>
+</div>
+</header>
+<!-- Interactive State Selector Bar (Specification Walkthrough FR-008) -->
+<div class="w-full bg-surface-raised border-b border-border-hairline py-2">
+<div class="max-w-4xl mx-auto px-screen-pad flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="font-meta text-caption font-semibold text-ink-secondary uppercase">États FR-008 :</span>
+</div>
+<div class="flex items-center gap-1.5 overflow-x-auto py-1">
+<button class="state-tab px-3 py-1 rounded-full font-meta text-caption bg-indigo text-ink-on-indigo transition-colors" id="tab-state-1" onclick="switchState('state-1')">1. Demande d'envoi</button>
+<button class="state-tab px-3 py-1 rounded-full font-meta text-caption text-ink-secondary hover:bg-surface-sand transition-colors" id="tab-state-2" onclick="switchState('state-2')">2. Envoi en cours</button>
+<button class="state-tab px-3 py-1 rounded-full font-meta text-caption text-ink-secondary hover:bg-surface-sand transition-colors" id="tab-state-3" onclick="switchState('state-3')">3. Nouveau mot de passe</button>
+<button class="state-tab px-3 py-1 rounded-full font-meta text-caption text-ink-secondary hover:bg-surface-sand transition-colors" id="tab-state-4" onclick="switchState('state-4')">4. Erreur discrète</button>
+<button class="state-tab px-3 py-1 rounded-full font-meta text-caption text-ink-secondary hover:bg-surface-sand transition-colors" id="tab-state-5" onclick="switchState('state-5')">5. Succès &amp; Révocation</button>
+</div>
+</div>
+</div>
+<!-- Main Canvas -->
+<main class="flex-grow flex items-center justify-center px-screen-pad py-8 md:py-12">
+<div class="w-full max-w-xl mx-auto bg-surface-raised border border-border-strong rounded-[12px] p-6 sm:p-8 md:p-10 transition-all duration-200">
+<!-- Card Header -->
+<div class="mb-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-sand border border-border-hairline text-ink-secondary font-meta text-caption mb-4">
+<span class="w-1.5 h-1.5 rounded-full bg-gold"></span>
+<span>PROTOCOLE FR-008 · SÉCURITÉ DU FOYER</span>
+</div>
+<h1 class="font-display text-display text-indigo text-left mb-3">
+          Réinitialisation du Mot de Passe
+        </h1>
+<p class="font-body text-body text-ink-secondary leading-relaxed text-left">
+          Pour préserver la sacralité et l'intégrité de vos correspondances et de vos informations familiales, tout renouvellement d'accès suit une procédure stricte et sécurisée.
+        </p>
+</div>
+<div class="w-full h-[1px] bg-border-hairline mb-8"></div>
+<!-- STATE 1: Request form (Initial empty & typing state) -->
+<section class="state-panel block space-y-6" id="state-1">
+<form class="space-y-6" onsubmit="event.preventDefault(); switchState('state-2');">
+<div class="space-y-2">
+<div class="flex justify-between items-baseline">
+<label class="font-meta text-meta text-ink-secondary" for="email-field">
+                Adresse électronique vérifiée
+              </label>
+<span class="font-caption text-caption text-ink-secondary">Obligatoire</span>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-raised border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-[12px] px-4 py-3 font-body text-body text-ink-primary placeholder:text-ink-secondary/60 outline-none transition-all duration-150" id="email-field" oninput="handleEmailInput(this.value)" placeholder="ex. foyer.ouedraogo@kanu.bf" required="" type="email" value="mariam.sawadogo@famille.bf"/>
+<span class="material-symbols-outlined absolute right-3.5 top-3.5 text-ink-secondary/70 pointer-events-none text-[20px]">
+                mail
+              </span>
+</div>
+</div>
+<!-- Helper Note: Single use expiring link -->
+<div class="p-4 rounded-[12px] bg-surface-sand border border-border-hairline flex items-start gap-3">
+<span class="material-symbols-outlined text-gold shrink-0 mt-0.5 text-[20px]">
+              schedule
+            </span>
+<div class="space-y-1">
+<p class="font-body-strong text-meta text-ink-primary">
+                Lien unique à durée limitée
+              </p>
+<p class="font-body text-caption text-ink-secondary leading-normal">
+                Si un compte honorable correspond à cette adresse, un lien d'accès vous sera transmis. Par précaution déontologique, ce lien expire dans <strong>15 minutes</strong> et ne pourra être utilisé qu'une seule fois.
+              </p>
+</div>
+</div>
+<!-- Primary Submit Button -->
+<button class="w-full h-12 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 hover:bg-mihrab focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-colors duration-150 shadow-none" id="btn-submit-request" type="submit">
+<span>Transmettre le lien d'accès</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</form>
+</section>
+<!-- STATE 2: Loading & Sent Status -->
+<section class="state-panel hidden space-y-6" id="state-2">
+<div class="p-6 rounded-[12px] bg-surface-sand border border-border-hairline text-center space-y-4">
+<div class="w-12 h-12 mx-auto rounded-full bg-surface-raised border border-border-hairline flex items-center justify-center text-indigo">
+<span class="material-symbols-outlined text-[24px] animate-pulse">mark_email_read</span>
+</div>
+<div class="space-y-1">
+<h2 class="font-heading text-heading text-indigo">Envoi du lien sécurisé en cours...</h2>
+<p class="font-body text-body text-ink-secondary">
+              Les instructions de réinitialisation ont été confiées au protocole d'expédition pour l'adresse fournie.
+            </p>
+</div>
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success-soft text-success font-meta text-caption border border-success/20">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span>Lien valable 15 minutes · Un seul usage garanti</span>
+</div>
+</div>
+<div class="p-4 rounded-[12px] bg-surface-raised border border-border-hairline space-y-2">
+<h3 class="font-body-strong text-meta text-ink-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-gold text-[18px]">info</span>
+            Conseils de vigilance familiale
+          </h3>
+<p class="font-body text-caption text-ink-secondary leading-relaxed">
+            Consultez votre boîte de messagerie personnelle ainsi que vos courriers indésirables. Si le lien n'apparaît pas d'ici deux minutes, vous pouvez solliciter une nouvelle expédition.
+          </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-3">
+<button class="flex-1 h-12 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 hover:bg-mihrab transition-colors duration-150" onclick="switchState('state-3')" type="button">
+<span>Simuler l'ouverture du lien reçu</span>
+<span class="material-symbols-outlined text-[18px]">link</span>
+</button>
+<button class="h-12 px-6 rounded-full border border-border-strong text-ink-primary font-body-strong text-body hover:bg-surface-sand transition-colors duration-150" onclick="switchState('state-1')" type="button">
+            Réessayer
+          </button>
+</div>
+</section>
+<!-- STATE 3: New Password form -->
+<section class="state-panel hidden space-y-6" id="state-3">
+<form class="space-y-5" onsubmit="event.preventDefault(); switchState('state-5');">
+<div class="space-y-2">
+<label class="block font-meta text-meta text-ink-secondary" for="new-pass">
+              Nouveau mot de passe
+            </label>
+<div class="relative">
+<input class="w-full bg-surface-raised border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-[12px] px-4 py-3 font-body text-body text-ink-primary outline-none" id="new-pass" required="" type="password" value="Barakah2025!Honor"/>
+<button class="absolute right-3.5 top-3.5 text-ink-secondary hover:text-ink-primary" onclick="togglePassVisibility('new-pass')" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+<p class="font-caption text-caption text-ink-secondary">Au minimum 12 caractères avec lettres, chiffres et symbole noble.</p>
+</div>
+<div class="space-y-2">
+<label class="block font-meta text-meta text-ink-secondary" for="confirm-pass">
+              Confirmation du mot de passe
+            </label>
+<div class="relative">
+<input class="w-full bg-surface-raised border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-[12px] px-4 py-3 font-body text-body text-ink-primary outline-none" id="confirm-pass" required="" type="password" value="Barakah2025!Honor"/>
+<button class="absolute right-3.5 top-3.5 text-ink-secondary hover:text-ink-primary" onclick="togglePassVisibility('confirm-pass')" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<!-- Explicit session revocation warning notice -->
+<div class="p-4 rounded-[12px] bg-staff-soft/60 border border-staff/30 flex items-start gap-3">
+<span class="material-symbols-outlined text-staff shrink-0 mt-0.5 text-[20px]">
+              phonelink_erase
+            </span>
+<div class="space-y-1">
+<p class="font-body-strong text-meta text-staff">
+                Révocation immédiate des accès tiers
+              </p>
+<p class="font-body text-caption text-ink-primary leading-normal">
+                La validation de ce nouveau mot de passe invalidera immédiatement toutes les sessions antérieures actives sur d'autres appareils, à l'exception de la session présente.
+              </p>
+</div>
+</div>
+<button class="w-full h-12 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 hover:bg-mihrab focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 transition-colors duration-150" type="submit">
+<span>Valider et renouveler l'accès</span>
+<span class="material-symbols-outlined text-[18px]">key</span>
+</button>
+</form>
+</section>
+<!-- STATE 4: Dispassionate / Modest Error State -->
+<section class="state-panel hidden space-y-6" id="state-4">
+<div class="p-6 rounded-[12px] bg-danger-soft/60 border border-danger/30 space-y-4">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-danger/10 text-danger flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">gpp_maybe</span>
+</div>
+<div class="space-y-1 text-left">
+<h2 class="font-heading text-heading text-danger">Lien expiré ou adresse inconnue</h2>
+<p class="font-body text-body text-ink-primary leading-relaxed">
+                Par mesure de discrétion et de protection de la pudeur, aucun indice public sur l'existence du compte n'est divulgué.
+              </p>
+</div>
+</div>
+<div class="p-3 bg-surface-raised rounded-lg border border-border-hairline text-left">
+<p class="font-caption text-caption text-ink-secondary leading-normal">
+              Si vous êtes le tuteur légal (Wali) ou le candidat titulaire de cette démarche, veuillez vous assurer de l'exactitude des informations saisies ou solliciter une nouvelle émission sous le contrôle de notre assistance.
+            </p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row gap-3">
+<button class="flex-1 h-12 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 hover:bg-mihrab transition-colors duration-150" onclick="switchState('state-1')" type="button">
+<span>Reprendre la demande</span>
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+<a class="h-12 px-6 rounded-full border border-border-strong text-ink-primary font-body-strong text-body inline-flex items-center justify-center hover:bg-surface-sand transition-colors duration-150" href="#">
+            Assistance Tuteur
+          </a>
+</div>
+</section>
+<!-- STATE 5: Success state -->
+<section class="state-panel hidden space-y-6 text-center" id="state-5">
+<div class="w-16 h-16 mx-auto rounded-full bg-success-soft text-success border border-success/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]">verified</span>
+</div>
+<div class="space-y-2">
+<h2 class="font-display text-title text-indigo">
+            Mot de passe renouvelé · Anciennes sessions révoquées
+          </h2>
+<p class="font-body text-body text-ink-secondary max-w-md mx-auto leading-relaxed">
+            Votre clé d'accès a été mise à jour avec succès. Toutes vos correspondances, protocoles de chaperonnage et fiches familiales demeurent protégés sous ce nouvel identifiant.
+          </p>
+</div>
+<div class="p-4 rounded-[12px] bg-surface-sand border border-border-hairline text-left flex items-center gap-3">
+<span class="material-symbols-outlined text-success text-[22px]">check_circle</span>
+<span class="font-meta text-meta text-ink-primary">
+            Session locale active et reconnue pour 30 jours.
+          </span>
+</div>
+<a class="w-full h-12 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-body flex items-center justify-center gap-2 hover:bg-mihrab transition-colors duration-150" href="#">
+<span>Accéder à mon espace Ta'aruf</span>
+<span class="material-symbols-outlined text-[18px]">login</span>
+</a>
+</section>
+<!-- Bottom Security & Sovereignty Note -->
+<div class="mt-8 pt-6 border-t border-border-hairline">
+<div class="flex items-start gap-3 text-left">
+<span class="material-symbols-outlined text-gold shrink-0 mt-0.5 text-[20px]">
+            security
+          </span>
+<p class="font-caption text-caption text-ink-secondary leading-relaxed">
+            Chiffrement de bout en bout et hébergement souverain en France (Scaleway). Zéro traitement publicitaire de vos identifiants.
+          </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Editorial & Institutional Footer -->
+<footer class="w-full bg-surface-sand border-t border-border-hairline mt-auto">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="text-center md:text-left space-y-0.5">
+<p class="font-caption text-caption text-ink-secondary">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </p>
+<p class="font-caption text-[11px] text-ink-secondary/70">
+          Infrastructure souveraine hébergée en Union Européenne (Scaleway Paris DC).
+        </p>
+</div>
+<nav aria-label="Liens légaux" class="flex flex-wrap items-center justify-center gap-6">
+<a class="font-meta text-meta text-ink-secondary hover:text-indigo transition-colors duration-200" href="#">
+          Charte de Confidentialité
+        </a>
+<a class="font-meta text-meta text-ink-secondary hover:text-indigo transition-colors duration-200" href="#">
+          Sécurité &amp; Déontologie
+        </a>
+<a class="font-meta text-meta text-ink-secondary hover:text-indigo transition-colors duration-200" href="#">
+          Assistance Tuteur
+        </a>
+</nav>
+</div>
+</footer>
+<!-- State Switching Logic -->
+<script>
+    function switchState(stateId) {
+      // Hide all panels
+      document.querySelectorAll('.state-panel').forEach(function(panel) {
+        panel.classList.add('hidden');
+        panel.classList.remove('block');
+      });
+
+      // Show selected panel
+      var activePanel = document.getElementById(stateId);
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+        activePanel.classList.add('block');
+      }
+
+      // Update walkthrough tab styles
+      document.querySelectorAll('.state-tab').forEach(function(tab) {
+        tab.classList.remove('bg-indigo', 'text-ink-on-indigo');
+        tab.classList.add('text-ink-secondary');
+      });
+
+      var activeTab = document.getElementById('tab-' + stateId);
+      if (activeTab) {
+        activeTab.classList.remove('text-ink-secondary');
+        activeTab.classList.add('bg-indigo', 'text-ink-on-indigo');
+      }
+    }
+
+    function togglePassVisibility(inputId) {
+      var field = document.getElementById(inputId);
+      if (field) {
+        field.type = field.type === 'password' ? 'text' : 'password';
+      }
+    }
+
+    function handleEmailInput(val) {
+      var btn = document.getElementById('btn-submit-request');
+      if (!btn) return;
+      if (val && val.includes('@') && val.includes('.')) {
+        btn.classList.remove('bg-disabled', 'cursor-not-allowed');
+        btn.classList.add('bg-indigo', 'hover:bg-mihrab');
+        btn.disabled = false;
+      } else {
+        btn.classList.add('bg-disabled', 'cursor-not-allowed');
+        btn.classList.remove('bg-indigo', 'hover:bg-mihrab');
+        btn.disabled = true;
+      }
+    }
+  </script>
+</body></html>

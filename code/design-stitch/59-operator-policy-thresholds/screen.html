@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand text-ink-primary" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Operator policy / thresholds — AnKanu Console Déontologique</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-tertiary-fixed-variant": "#2a486c",
+            "secondary-fixed-dim": "#e5c276",
+            "ink-primary": "#1B2433",
+            "surface-dim": "#e0d9cd",
+            "primary": "#032448",
+            "on-secondary": "#ffffff",
+            "on-primary-fixed": "#001c3b",
+            "surface-container-low": "#faf3e6",
+            "inverse-primary": "#aec8f4",
+            "gold-soft": "#E8D5A3",
+            "disabled": "#B5A894",
+            "on-primary-container": "#8ba4cf",
+            "ink-on-indigo": "#F4EDE0",
+            "error-container": "#ffdad6",
+            "primary-container": "#1f3a5f",
+            "on-primary-fixed-variant": "#2d476d",
+            "ink-secondary": "#5C5346",
+            "surface-variant": "#e9e2d5",
+            "success-soft": "#DCE6DE",
+            "on-tertiary-container": "#88a5ce",
+            "tertiary-fixed": "#d3e4ff",
+            "on-secondary-fixed": "#251a00",
+            "inverse-surface": "#333028",
+            "blur-wash": "#C8BBA6",
+            "secondary-fixed": "#ffdf9c",
+            "tertiary-fixed-dim": "#abc9f3",
+            "danger-soft": "#F3E0DC",
+            "focus-ring": "#1F3A5F",
+            "on-secondary-container": "#785d1b",
+            "indigo": "#1F3A5F",
+            "on-surface": "#1e1b14",
+            "background": "#fff9ee",
+            "tertiary": "#002546",
+            "surface-sand": "#F4EDE0",
+            "danger": "#8B3A3A",
+            "gold": "#C4A35A",
+            "surface-container-highest": "#e9e2d5",
+            "success": "#3D5C45",
+            "border-strong": "#6F624C",
+            "outline-variant": "#c4c6cf",
+            "secondary-container": "#fdd88a",
+            "surface-container-high": "#eee7db",
+            "secondary": "#755b18",
+            "staff": "#6B3D2E",
+            "on-tertiary-fixed": "#001c38",
+            "on-background": "#1e1b14",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-tertiary": "#ffffff",
+            "indigo-deep": "#15283F",
+            "outline": "#74777f",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "surface-indigo": "#15283F",
+            "surface-tint": "#465f86",
+            "surface-container": "#f4ede0",
+            "surface-raised": "#FFFBF4",
+            "on-error": "#ffffff",
+            "border-hairline": "#D9CDB8",
+            "inverse-on-surface": "#f7f0e3",
+            "on-error-container": "#93000a",
+            "surface": "#fff9ee",
+            "mihrab": "#2C4A6E",
+            "surface-container-lowest": "#ffffff",
+            "staff-soft": "#EFE4DC",
+            "surface-bright": "#fff9ee",
+            "tertiary-container": "#1b3b5e",
+            "primary-fixed": "#d5e3ff",
+            "primary-fixed-dim": "#aec8f4",
+            "on-surface-variant": "#43474e"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "margin": "1rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "6": "32px",
+            "4": "16px",
+            "gutter": "16px",
+            "space-md": "1rem",
+            "7": "48px",
+            "1": "4px",
+            "screen-pad": "16px",
+            "2": "8px",
+            "3": "12px",
+            "5": "24px"
+          },
+          "fontFamily": {
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"]
+          },
+          "fontSize": {
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-full flex flex-col font-body text-body bg-surface-sand selection:bg-gold-soft selection:text-ink-primary antialiased">
+<!-- Interactive States Bar (Top Simulator for Review) -->
+<aside aria-label="Simulateur d'états d'interface" class="w-full bg-surface-indigo text-ink-on-indigo text-caption font-meta border-b border-border-strong px-4 py-2 flex flex-wrap items-center justify-between gap-3 shadow-sm z-50">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-caption font-meta bg-staff text-ink-on-indigo border border-gold-soft/30 tracking-wide uppercase">
+        Simulation d'états d'écran
+      </span>
+<span class="text-ink-on-indigo/80">Spécification FR-140 · AD-10</span>
+</div>
+<div class="flex items-center gap-1.5 flex-wrap">
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-surface-raised/20 text-ink-on-indigo hover:bg-surface-raised/30 transition-colors border border-transparent" id="btn-state-nominal" onclick="setScreenState('nominal')" type="button">
+        1. Configuration nominale
+      </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-surface-indigo text-ink-on-indigo/80 hover:bg-surface-raised/20 transition-colors border border-transparent" id="btn-state-loading" onclick="setScreenState('loading')" type="button">
+        2. Enregistrement en cours (Loading)
+      </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-surface-indigo text-ink-on-indigo/80 hover:bg-surface-raised/20 transition-colors border border-transparent" id="btn-state-error" onclick="setScreenState('error')" type="button">
+        3. Erreur de validation (&lt;70%)
+      </button>
+<button class="px-2.5 py-1 rounded text-caption font-meta bg-surface-indigo text-ink-on-indigo/80 hover:bg-surface-raised/20 transition-colors border border-transparent" id="btn-state-success" onclick="setScreenState('success')" type="button">
+        4. Succès scellé CIL
+      </button>
+</div>
+</aside>
+<!-- Top App Bar / Console Déontologique Staff Header -->
+<header class="w-full bg-surface-raised border-b border-border-hairline sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<!-- Brand & Staff Badge Anchor -->
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2 group" href="#console">
+<span class="text-primary font-title text-title tracking-tight font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-gold" style="font-variation-settings: 'FILL' 1;">balance</span>
+            AnKanu
+          </span>
+<span class="text-ink-secondary text-meta font-meta hidden sm:inline-block">/ Console Opérateur</span>
+</a>
+<!-- {components.staff-only-badge} -->
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-staff-soft text-staff border border-staff/20 text-caption font-meta font-semibold uppercase tracking-wider">
+<span class="material-symbols-outlined text-caption" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<span>Équipe seulement</span>
+</div>
+</div>
+<!-- Navigation Tabs (Desktop Web) -->
+<nav class="hidden md:flex items-center space-x-6 text-meta font-meta">
+<a class="text-primary border-b-2 border-primary pb-1 font-semibold flex items-center gap-1" href="#regulation">
+<span>Régulation &amp; Politiques</span>
+</a>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors duration-150" href="#arbitrage">
+          Files d'arbitrage
+        </a>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors duration-150" href="#tarifs">
+          Tarifs &amp; Packs
+        </a>
+<a class="text-ink-secondary hover:text-ink-primary transition-colors duration-150 flex items-center gap-1" href="#audit-cil">
+<span>Audit CIL / Traces</span>
+</a>
+</nav>
+<!-- Trailing Operator Identity -->
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-meta font-body-strong text-ink-primary">Réviseur I. Sawadogo</p>
+<p class="text-caption font-meta text-ink-secondary">Opérateur Assermenté · Bur. Ouaga</p>
+</div>
+<div class="h-9 w-9 rounded-full bg-surface-indigo text-ink-on-indigo flex items-center justify-center font-meta text-meta border border-gold-soft">
+          IS
+        </div>
+</div>
+</div>
+</header>
+<!-- Breadcrumb and Context Banner -->
+<section class="bg-surface-sand border-b border-border-hairline py-3">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-2">
+<nav aria-label="Fil d'ariane" class="flex items-center gap-2 text-meta font-meta text-ink-secondary">
+<a class="hover:text-ink-primary transition-colors" href="#console">Console Opérateur</a>
+<span class="text-border-strong font-caption">/</span>
+<span class="text-ink-primary font-semibold">Politiques de modération &amp; Seuils (FR-140 · AD-10)</span>
+</nav>
+<div class="flex items-center gap-2 text-caption font-meta text-ink-secondary">
+<span class="inline-block w-2 h-2 rounded-full bg-success"></span>
+<span>Environnement de production souverain (Scaleway Paris / Relais Ouaga)</span>
+</div>
+</div>
+</section>
+<!-- Interactive Feedback Banners (Conditional States) -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-4">
+<!-- State: Loading Simulation -->
+<div class="hidden rounded-xl border border-border-hairline bg-surface-raised p-4 shadow-sm animate-pulse flex items-center justify-between gap-4" id="state-banner-loading">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-title animate-spin">progress_activity</span>
+<div>
+<p class="text-body-strong font-body-strong text-primary">Sauvegarde des seuils opératoires...</p>
+<p class="text-caption font-meta text-ink-secondary">Signature cryptographique du protocole d'arbitrage en cours d'inscription sur le registre CIL.</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded bg-surface-sand text-ink-secondary text-caption font-meta font-medium">Requête signée par jeton Wali-Auth</span>
+</div>
+<!-- State: Error Simulation -->
+<div class="hidden rounded-xl border border-danger/30 bg-danger-soft p-4 shadow-sm flex items-start justify-between gap-4" id="state-banner-error">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-danger text-title mt-0.5">error</span>
+<div>
+<p class="text-body-strong font-body-strong text-danger font-semibold">Erreur de validation opératoire</p>
+<p class="text-body font-body text-ink-primary mt-0.5">
+            Le seuil de confiance ne peut être inférieur à <span class="font-semibold text-danger">70%</span> (Norme canonique de protection déontologique AD-10). Un abaissement supplémentaire compromettrait la préservation de la pudeur (*haya*) et l'honneur familial.
+          </p>
+</div>
+</div>
+<button class="text-danger hover:text-ink-primary" onclick="dismissBanner('state-banner-error')">
+<span class="material-symbols-outlined text-body">close</span>
+</button>
+</div>
+<!-- State: Success Simulation -->
+<div class="hidden rounded-xl border border-success/30 bg-success-soft p-4 shadow-sm flex items-start justify-between gap-4" id="state-banner-success">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-success text-title mt-0.5" style="font-variation-settings: 'FILL' 1;">verified</span>
+<div>
+<p class="text-body-strong font-body-strong text-success font-semibold">Modification auditée et consignée sous sceau CIL</p>
+<p class="text-body font-body text-ink-primary mt-0.5">
+            Les nouveaux seuils s'appliquent aux analyses subséquentes uniquement. Le renouvellement automatique demeure inconditionnellement désactivé. Empreinte SHA-256 enregistrée dans la chambre d'audit.
+          </p>
+</div>
+</div>
+<button class="text-success hover:text-ink-primary" onclick="dismissBanner('state-banner-success')">
+<span class="material-symbols-outlined text-body">close</span>
+</button>
+</div>
+</div>
+<!-- Main Content Layout (Narrow Editorial Folio Architecture) -->
+<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full">
+<!-- Title & Sovereign Intent Section -->
+<div class="mb-8">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="px-2 py-0.5 rounded-full bg-staff-soft text-staff text-caption font-meta font-semibold uppercase tracking-wider">
+              Console Opérateur · AD-10
+            </span>
+<span class="text-caption font-meta text-ink-secondary">Révision d'autorité matrimoniale</span>
+</div>
+<h1 class="text-display font-display text-primary tracking-tight">
+            Politiques de modération &amp; Seuils opératoires
+          </h1>
+</div>
+<div class="flex items-center gap-2">
+<div class="px-3 py-1.5 rounded-lg bg-surface-raised border border-border-hairline text-caption font-meta flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">gavel</span>
+<span class="text-ink-secondary">Droit burkinabè &amp; Charte Wali 2025</span>
+</div>
+</div>
+</div>
+<p class="mt-2 text-body font-body text-ink-secondary max-w-3xl">
+        Définition des bornes algorithmiques d'assistance et des protocoles d'arbitrage. Sur AnKanu, toute intervention respecte la souveraineté du tuteur légal (*wali*) et l'inviolabilité du secret de correspondance ordonnée.
+      </p>
+</div>
+<!-- Bento Grid Structure -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- LEFT COLUMN (Main Regulatory Folio): 8 Cols -->
+<div class="lg:col-span-8 space-y-6">
+<!-- 1. MANDATORY POLICY PILLARS CARD (High-Dignity Indigo / Parchment Frame) -->
+<section aria-labelledby="pillar-title" class="bg-surface-indigo text-ink-on-indigo rounded-xl p-6 border border-border-strong relative overflow-hidden">
+<div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none text-gold">
+<span class="material-symbols-outlined" style="font-size: 180px; font-variation-settings: 'FILL' 1;">policy</span>
+</div>
+<div class="relative z-10">
+<div class="flex items-center justify-between gap-2 mb-3">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-gold/20 text-gold-soft border border-gold/30 text-caption font-meta font-semibold tracking-wide uppercase">
+<span class="material-symbols-outlined text-caption">verified</span>
+                Piliers déontologiques inaltérables
+              </span>
+<span class="text-caption font-meta text-ink-on-indigo/70">Article 4 · Décret Ta'aruf</span>
+</div>
+<h2 class="text-title font-heading text-ink-on-indigo mb-4" id="pillar-title">
+              Deux principes absolus régissant l'algorithme
+            </h2>
+<!-- Exact required phrases highlighted prominently -->
+<div class="space-y-4">
+<!-- Required Statement 1 -->
+<div class="p-4 rounded-lg bg-surface-raised/10 border border-gold-soft/30 backdrop-blur-sm">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-gold-soft text-heading mt-0.5" style="font-variation-settings: 'FILL' 1;">mark_email_read</span>
+<div>
+<span class="text-caption font-meta uppercase tracking-wider text-gold-soft font-semibold block mb-0.5">
+                      Règle de transmission immédiate
+                    </span>
+<p class="text-body-strong font-body-strong text-ink-on-indigo text-base font-semibold">
+                      « Messages delivered then scanned »
+                    </p>
+<p class="text-caption font-body text-ink-on-indigo/80 mt-1">
+                      Modération a posteriori : les messages sont d'abord délivrés au destinataire et au tuteur légal, puis scannés de manière asynchrone pour préserver la confiance et la spontanéité sincère de l'échange.
+                    </p>
+</div>
+</div>
+</div>
+<!-- Required Statement 2 -->
+<div class="p-4 rounded-lg bg-surface-raised/10 border border-gold-soft/30 backdrop-blur-sm">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-gold-soft text-heading mt-0.5" style="font-variation-settings: 'FILL' 1;">person_alert</span>
+<div>
+<span class="text-caption font-meta uppercase tracking-wider text-gold-soft font-semibold block mb-0.5">
+                      Primauté humaine exclusive
+                    </span>
+<p class="text-body-strong font-body-strong text-ink-on-indigo text-base font-semibold">
+                      « AI flags a human; AI does not silently delete, block, or hold »
+                    </p>
+<p class="text-caption font-body text-ink-on-indigo/80 mt-1">
+                      L'IA alerte un réviseur humain assermenté ; l'IA ne supprime, ne bloque ni ne retient jamais un message en secret. Seul l'arbitre humain et le tuteur détiennent le pouvoir d'intervention.
+                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. CORE OPERATOR CONTROLS (Folio Card) -->
+<section aria-labelledby="controls-title" class="bg-surface-raised rounded-xl p-6 border border-border-hairline space-y-6">
+<div class="flex flex-wrap items-center justify-between border-b border-border-hairline pb-4 gap-2">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="text-title font-heading text-primary" id="controls-title">
+                  Paramétrage des déclencheurs
+                </h2>
+<!-- Staff Badge component -->
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-staff-soft text-staff text-caption font-meta font-semibold">
+                  Équipe seulement
+                </span>
+</div>
+<p class="text-caption font-meta text-ink-secondary">
+                Ajustement en temps réel des sensibilités de filtrage et des mesures graduées
+              </p>
+</div>
+<span class="text-caption font-meta text-ink-secondary bg-surface-sand px-2 py-1 rounded border border-border-hairline">
+              Norme AD-10 active
+            </span>
+</div>
+<!-- Control 1: Flag Confidence Threshold Slider -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<div>
+<label class="text-body-strong font-body-strong text-ink-primary block" for="confidence-slider">
+                  Seuil de confiance de signalement automatique IA (Confidence Threshold)
+                </label>
+<p class="text-caption font-meta text-ink-secondary">
+                  Pourcentage de certitude requis avant qu'une alerte ne soit soumise à l'arbitrage humain.
+                </p>
+</div>
+<div class="text-right">
+<span class="text-heading font-heading text-primary font-bold px-3 py-1 bg-surface-sand rounded-lg border border-border-hairline" id="confidence-value">
+                  85%
+                </span>
+<span class="block text-caption font-meta text-success font-medium mt-0.5">Tolérance stricte</span>
+</div>
+</div>
+<!-- Custom Slider -->
+<div class="pt-2">
+<input class="w-full h-2 bg-surface-sand rounded-lg appearance-none cursor-pointer accent-indigo border border-border-hairline" id="confidence-slider" max="98" min="65" oninput="updateConfidence(this.value)" step="1" type="range" value="85"/>
+<div class="flex justify-between text-caption font-meta text-ink-secondary mt-1.5 px-0.5">
+<span class="text-danger">65% (Seuil illégal &lt;70%)</span>
+<span class="text-ink-secondary">75% (Modéré)</span>
+<span class="text-primary font-semibold">85% (Canonique recommandé)</span>
+<span class="text-ink-secondary">95% (Élevé)</span>
+</div>
+</div>
+<!-- Warning notice if dragged near 70% -->
+<div class="hidden text-caption font-meta text-danger bg-danger-soft p-2.5 rounded-lg border border-danger/20 flex items-center gap-2" id="slider-warning">
+<span class="material-symbols-outlined text-caption">warning</span>
+<span>Avertissement : En deçà de 70%, la validation échouera conformément au protocole AD-10.</span>
+</div>
+</div>
+<!-- Control 2: Photo-Strike Count Stepper -->
+<div class="pt-4 border-t border-border-hairline space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div>
+<label class="text-body-strong font-body-strong text-ink-primary block">
+                  Seuil Photo-Strike (Nombre de récidives avant retrait temporaire de cliché)
+                </label>
+<p class="text-caption font-meta text-ink-secondary">
+                  Nombre de signalements motivés validés par un arbitre sur une fenêtre glissante de 24h.
+                </p>
+</div>
+<!-- Stepper Control -->
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 rounded-lg bg-surface-sand border border-border-hairline hover:bg-surface-dim active:scale-95 transition flex items-center justify-center text-ink-primary font-bold" onclick="decrementStrikes()" type="button">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<div class="w-16 h-10 rounded-lg bg-surface-raised border border-border-strong flex items-center justify-center text-heading font-heading font-bold text-primary" id="strikes-counter">
+                  3
+                </div>
+<button class="w-10 h-10 rounded-lg bg-surface-sand border border-border-hairline hover:bg-surface-dim active:scale-95 transition flex items-center justify-center text-ink-primary font-bold" onclick="incrementStrikes()" type="button">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-sand p-3 rounded-lg border border-border-hairline flex items-center justify-between text-caption font-meta">
+<span class="text-ink-secondary">Sanction consécutive : Mise en veilleuse du portrait durant 48h sous notification au Wali.</span>
+<span class="font-semibold text-primary">Fenêtre glissante : 24 heures</span>
+</div>
+</div>
+<!-- Control 3: Subsequent Scans Only Selector / Notice -->
+<div class="pt-4 border-t border-border-hairline space-y-3">
+<div>
+<span class="text-body-strong font-body-strong text-ink-primary block">
+                Champ d'application temporelle des règles modifiées
+              </span>
+<p class="text-caption font-meta text-ink-secondary">
+                Règle constitutionnelle de non-rétroactivité des jugements déontologiques.
+              </p>
+</div>
+<div class="rounded-xl border border-border-strong/40 bg-surface-sand p-4">
+<div class="flex items-start gap-3">
+<div class="mt-0.5">
+<input checked="" class="text-indigo focus:ring-focus-ring w-4 h-4 cursor-pointer" id="subsequent-only" name="scan-scope" readonly="" type="radio"/>
+</div>
+<div>
+<label class="text-body-strong font-body-strong text-primary block cursor-pointer" for="subsequent-only">
+                    « S'applique uniquement aux scans ultérieurs — Aucune rétroactivité, ne réécrit jamais silencieusement les décisions passées »
+                  </label>
+<p class="text-caption font-meta text-ink-secondary mt-1">
+                    Verrouillage strict (AD-10) : Toutes les conversations antérieures déjà délivrées et archivées demeurent scellées selon les paramètres en vigueur au moment de leur transit. Aucun rescannage rétroactif des archives ne peut être exécuté sans commission paritaire légale.
+                  </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. ACTIONS AND COMMIT PROTOCOL -->
+<section aria-labelledby="actions-title" class="bg-surface-raised rounded-xl p-6 border border-border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-gold text-display" style="font-variation-settings: 'FILL' 1;">security</span>
+<div>
+<h3 class="text-heading font-heading text-primary" id="actions-title">
+                Consignation au journal d'audit CIL
+              </h3>
+<p class="text-caption font-meta text-ink-secondary">
+                Toute modification génère un certificat cryptographique attribué à l'opérateur.
+              </p>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto">
+<button class="px-4 py-2.5 rounded-full border border-border-strong text-ink-primary font-meta text-meta hover:bg-surface-sand transition-colors active:scale-[0.99] w-full sm:w-auto text-center" onclick="resetToCanon()" type="button">
+              Rétablir les valeurs de référence canoniques
+            </button>
+<button class="px-6 py-2.5 rounded-full bg-indigo text-ink-on-indigo font-body-strong text-meta hover:bg-indigo-deep transition-all shadow-sm active:scale-[0.99] flex items-center justify-center gap-2 w-full sm:w-auto" id="btn-save-thresholds" onclick="saveThresholds()" type="button">
+<span class="material-symbols-outlined text-meta">lock</span>
+<span>Enregistrer et sceller les seuils</span>
+</button>
+</div>
+</section>
+</div>
+<!-- RIGHT COLUMN (Staff Summary & Packs Dossier): 4 Cols -->
+<aside class="lg:col-span-4 space-y-6">
+<!-- Staff Only Identification Banner -->
+<div class="bg-staff-soft rounded-xl p-4 border border-staff/30 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-staff" style="font-variation-settings: 'FILL' 1;">lock_person</span>
+<div>
+<p class="text-meta font-body-strong text-staff uppercase tracking-wider">Accès Réviseur Restreint</p>
+<p class="text-caption font-meta text-ink-secondary">Session active : 14 min restantes</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-raised text-staff text-caption font-meta font-bold">FR-140</span>
+</div>
+<!-- SHARED OPERATOR SUMMARY: Pricing, Engagement & Courtoisie Plafonds -->
+<div class="bg-surface-raised rounded-xl p-5 border border-border-hairline space-y-5">
+<div class="border-b border-border-hairline pb-3">
+<div class="flex items-center justify-between">
+<h3 class="text-heading font-heading text-primary">
+                Packs d'engagement &amp; Plafonds
+              </h3>
+<span class="material-symbols-outlined text-ink-secondary text-meta">payments</span>
+</div>
+<p class="text-caption font-meta text-ink-secondary mt-0.5">
+              Rappel des conditions d'usage non-marchandisées selon la Charte AnKanu
+            </p>
+</div>
+<!-- Pack Prices Breakdown -->
+<div class="space-y-3">
+<p class="text-caption font-meta uppercase tracking-wider text-ink-secondary font-semibold">
+              Tarification forfaitaire noble (Non récurrente)
+            </p>
+<div class="space-y-2">
+<div class="p-2.5 rounded-lg bg-surface-sand border border-border-hairline flex items-center justify-between">
+<div>
+<p class="text-meta font-body-strong text-primary">Engagement 1 Mois</p>
+<p class="text-caption font-meta text-ink-secondary">Pourparlers initiaux encadrés</p>
+</div>
+<span class="text-meta font-heading font-bold text-ink-primary">25 000 FCFA</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-sand border border-border-hairline flex items-center justify-between">
+<div>
+<p class="text-meta font-body-strong text-primary">Engagement 3 Mois</p>
+<p class="text-caption font-meta text-ink-secondary">Recherche familiale mûrie</p>
+</div>
+<span class="text-meta font-heading font-bold text-ink-primary">60 000 FCFA</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-sand border border-border-hairline flex items-center justify-between">
+<div>
+<p class="text-meta font-body-strong text-primary">Engagement 6 Mois</p>
+<p class="text-caption font-meta text-ink-secondary">Accomplissement du contrat (*nikah*)</p>
+</div>
+<span class="text-meta font-heading font-bold text-ink-primary">110 000 FCFA</span>
+</div>
+</div>
+</div>
+<!-- Plafonds de courtoisie & No tacite reconduction -->
+<div class="pt-3 border-t border-border-hairline space-y-3">
+<p class="text-caption font-meta uppercase tracking-wider text-ink-secondary font-semibold">
+              Garanties éthiques intégrées
+            </p>
+<div class="space-y-2.5">
+<div class="flex items-start gap-2.5 text-caption font-meta">
+<span class="material-symbols-outlined text-gold text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<div>
+<strong class="text-ink-primary font-semibold">Plafond de courtoisie :</strong>
+<span class="text-ink-secondary"> 3 messages par jour en accès libre afin de prévenir le bavardage vain (*kalam fariq*) et d'inciter à l'entretien direct avec le Wali.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5 text-caption font-meta">
+<span class="material-symbols-outlined text-primary text-base mt-0.5" style="font-variation-settings: 'FILL' 1;">block</span>
+<div>
+<strong class="text-ink-primary font-semibold">0 reconduction tacite :</strong>
+<span class="text-ink-secondary"> Aucun prélèvement automatique récurrent. L'engagement s'éteint naturellement sans reconduction furtive.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Chaperone Verification status -->
+<div class="p-3 rounded-lg bg-surface-indigo text-ink-on-indigo border border-border-strong text-caption font-meta">
+<div class="flex items-center gap-1.5 font-semibold text-gold-soft mb-1">
+<span class="material-symbols-outlined text-base">verified_user</span>
+<span>Agrément CIL Burkina Faso</span>
+</div>
+<p class="text-ink-on-indigo/80">
+              Conformité stricte à la Loi n° 001-2021/AN relative à la protection des données à caractère personnel.
+            </p>
+</div>
+</div>
+<!-- Recent Audit Log Extract -->
+<div class="bg-surface-raised rounded-xl p-5 border border-border-hairline space-y-3">
+<div class="flex items-center justify-between border-b border-border-hairline pb-2">
+<h4 class="text-meta font-heading text-primary">Derniers ajustements de seuils</h4>
+<span class="text-caption font-meta text-ink-secondary">Registre AD-10</span>
+</div>
+<div class="space-y-2 text-caption font-meta">
+<div class="flex items-start justify-between">
+<div>
+<p class="font-semibold text-ink-primary">Seuil IA fixé à 85%</p>
+<p class="text-ink-secondary">Par : O. Ouedraogo (Réviseur en chef)</p>
+</div>
+<span class="text-ink-secondary">Hier, 16:42</span>
+</div>
+<div class="flex items-start justify-between border-t border-border-hairline/60 pt-2">
+<div>
+<p class="font-semibold text-ink-primary">Photo-Strike vérifié à 3</p>
+<p class="text-ink-secondary">Consigné par session Wali-Ouaga</p>
+</div>
+<span class="text-ink-secondary">12 Fév 2025</span>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer (Shared Component JSON Blueprint Applied) -->
+<footer class="w-full bg-surface-container-low border-t border-border-hairline mt-12 py-6">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+<!-- Brand & Mission statement -->
+<div class="space-y-1">
+<div class="flex items-center justify-center md:justify-start gap-2">
+<span class="text-primary font-heading text-heading font-semibold">AnKanu Matrimonial</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-staff-soft text-staff text-caption font-meta">
+            Console Déontologique
+          </span>
+</div>
+<p class="text-caption font-meta text-ink-secondary max-w-2xl">
+          © 2025 AnKanu Matrimonial. Tous droits réservés. Plateforme de ta'aruf noble et gouvernance matrimoniale selon les rites authentiques et le droit burkinabè.
+        </p>
+</div>
+<!-- Legal & Sovereign Links -->
+<nav aria-label="Liens institutionnels" class="flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-2 text-caption font-meta text-ink-secondary">
+<a class="hover:text-primary underline underline-offset-4 transition-colors" href="#charte">Charte des Tuteurs (Wali)</a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors" href="#pudeur">Pudeur &amp; Chaperonnage</a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors" href="#mentions">Mentions Légales</a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors" href="#cil">Conformité CIL Burkina Faso</a>
+<a class="hover:text-primary underline underline-offset-4 transition-colors" href="#hebergement">Hébergement Souverain Scaleway (Paris / Ouagadougou)</a>
+</nav>
+</div>
+</footer>
+<!-- Micro-interactions & State Simulation Engine -->
+<script>
+    let currentConfidence = 85;
+    let currentStrikes = 3;
+
+    function updateConfidence(val) {
+      currentConfidence = parseInt(val, 10);
+      const valEl = document.getElementById('confidence-value');
+      const warningEl = document.getElementById('slider-warning');
+      
+      valEl.innerText = currentConfidence + '%';
+
+      if (currentConfidence < 70) {
+        warningEl.classList.remove('hidden');
+        valEl.classList.add('text-danger');
+        valEl.classList.remove('text-primary');
+      } else {
+        warningEl.classList.add('hidden');
+        valEl.classList.remove('text-danger');
+        valEl.classList.add('text-primary');
+      }
+    }
+
+    function incrementStrikes() {
+      if (currentStrikes < 7) {
+        currentStrikes++;
+        document.getElementById('strikes-counter').innerText = currentStrikes;
+      }
+    }
+
+    function decrementStrikes() {
+      if (currentStrikes > 1) {
+        currentStrikes--;
+        document.getElementById('strikes-counter').innerText = currentStrikes;
+      }
+    }
+
+    function dismissBanner(bannerId) {
+      document.getElementById(bannerId).classList.add('hidden');
+    }
+
+    function resetToCanon() {
+      document.getElementById('confidence-slider').value = 85;
+      updateConfidence(85);
+      currentStrikes = 3;
+      document.getElementById('strikes-counter').innerText = '3';
+      setScreenState('nominal');
+    }
+
+    function saveThresholds() {
+      if (currentConfidence < 70) {
+        setScreenState('error');
+      } else {
+        setScreenState('loading');
+        setTimeout(() => {
+          setScreenState('success');
+        }, 1200);
+      }
+    }
+
+    function setScreenState(state) {
+      const bannerLoading = document.getElementById('state-banner-loading');
+      const bannerError = document.getElementById('state-banner-error');
+      const bannerSuccess = document.getElementById('state-banner-success');
+
+      bannerLoading.classList.add('hidden');
+      bannerError.classList.add('hidden');
+      bannerSuccess.classList.add('hidden');
+
+      // Update button highlights
+      ['nominal', 'loading', 'error', 'success'].forEach(s => {
+        const btn = document.getElementById(`btn-state-${s}`);
+        if (s === state) {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta bg-surface-raised text-primary font-bold transition-colors border border-gold-soft";
+        } else {
+          btn.className = "px-2.5 py-1 rounded text-caption font-meta bg-surface-indigo text-ink-on-indigo/80 hover:bg-surface-raised/20 transition-colors border border-transparent";
+        }
+      });
+
+      if (state === 'loading') {
+        bannerLoading.classList.remove('hidden');
+      } else if (state === 'error') {
+        bannerError.classList.remove('hidden');
+      } else if (state === 'success') {
+        bannerSuccess.classList.remove('hidden');
+      }
+    }
+  </script>
+</body></html>

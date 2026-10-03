@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface-sand" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Operator pricing | Console Régulation Économique AnKanu</title>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS via CDN with form plugin -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration with Design System Tokens -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#fdd88a",
+            "border-hairline": "#D9CDB8",
+            "on-surface-variant": "#43474e",
+            "on-tertiary": "#ffffff",
+            "primary-fixed": "#d5e3ff",
+            "inverse-primary": "#aec8f4",
+            "border-strong": "#6F624C",
+            "outline-variant": "#c4c6cf",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "ink-primary": "#1B2433",
+            "on-primary-fixed": "#001c3b",
+            "danger": "#8B3A3A",
+            "on-error-container": "#93000a",
+            "tertiary": "#002546",
+            "secondary-fixed-dim": "#e5c276",
+            "surface-indigo": "#15283F",
+            "error": "#ba1a1a",
+            "gold-soft": "#E8D5A3",
+            "surface-variant": "#e9e2d5",
+            "inverse-surface": "#333028",
+            "staff-soft": "#EFE4DC",
+            "surface-dim": "#e0d9cd",
+            "on-primary-fixed-variant": "#2d476d",
+            "mihrab": "#2C4A6E",
+            "gold": "#C4A35A",
+            "on-tertiary-fixed": "#001c38",
+            "tertiary-fixed-dim": "#abc9f3",
+            "danger-soft": "#F3E0DC",
+            "on-primary-container": "#8ba4cf",
+            "primary-container": "#1f3a5f",
+            "on-surface": "#1e1b14",
+            "focus-ring": "#1F3A5F",
+            "outline": "#74777f",
+            "surface-container-high": "#eee7db",
+            "error-container": "#ffdad6",
+            "success": "#3D5C45",
+            "secondary": "#755b18",
+            "tertiary-container": "#1b3b5e",
+            "indigo-deep": "#15283F",
+            "disabled": "#B5A894",
+            "background": "#fff9ee",
+            "tertiary-fixed": "#d3e4ff",
+            "indigo": "#1F3A5F",
+            "ink-on-indigo": "#F4EDE0",
+            "success-soft": "#DCE6DE",
+            "surface-container-highest": "#e9e2d5",
+            "primary": "#032448",
+            "on-secondary-fixed-variant": "#5b4300",
+            "on-background": "#1e1b14",
+            "on-error": "#ffffff",
+            "surface-container-low": "#faf3e6",
+            "surface-container": "#f4ede0",
+            "surface-bright": "#fff9ee",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#ffdf9c",
+            "on-secondary-container": "#785d1b",
+            "on-primary": "#ffffff",
+            "ink-secondary": "#5C5346",
+            "on-secondary-fixed": "#251a00",
+            "surface": "#fff9ee",
+            "surface-sand": "#F4EDE0",
+            "surface-tint": "#465f86",
+            "blur-wash": "#C8BBA6",
+            "surface-raised": "#FFFBF4",
+            "inverse-on-surface": "#f7f0e3",
+            "primary-fixed-dim": "#aec8f4",
+            "on-tertiary-container": "#88a5ce",
+            "staff": "#6B3D2E"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "5": "24px",
+            "3": "12px",
+            "space-md": "1rem",
+            "7": "48px",
+            "2": "8px",
+            "space-xs": "0.25rem",
+            "1": "4px",
+            "margin": "1rem",
+            "6": "32px",
+            "gutter": "16px",
+            "space-sm": "0.5rem",
+            "screen-pad": "16px",
+            "space-xl": "2rem",
+            "4": "16px"
+          },
+          "fontFamily": {
+            "heading": ["\"Source Serif 4\", Georgia, serif"],
+            "body-strong": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "display": ["\"Source Serif 4\", Georgia, serif"],
+            "title": ["\"Source Serif 4\", Georgia, serif"],
+            "caption": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "body": ["\"Source Sans 3\", system-ui, sans-serif"],
+            "meta": ["\"Source Sans 3\", system-ui, sans-serif"]
+          },
+          "fontSize": {
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="h-full bg-surface-sand text-ink-primary antialiased font-body flex flex-col selection:bg-gold-soft selection:text-ink-primary">
+<!-- TOP APP BAR (Shared Institutional Admin Header) -->
+<header class="bg-surface-raised border-b border-border-hairline sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-7xl mx-auto">
+<!-- Left: Institutional Brand Anchor -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-surface-indigo flex items-center justify-center text-gold shadow-sm">
+<span class="material-symbols-outlined text-xl" data-icon="gavel" style="font-variation-settings: 'FILL' 1;">gavel</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-heading font-heading text-primary tracking-tight">AnKanu Administration</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-caption font-meta bg-staff-soft text-staff border border-border-hairline">
+<span class="w-1.5 h-1.5 rounded-full bg-staff"></span>
+                Équipe seulement
+              </span>
+</div>
+<p class="text-caption font-caption text-ink-secondary">Pôle Régulation &amp; Éthique Monétaire • Ouagadougou, BF</p>
+</div>
+</div>
+</div>
+<!-- Center: Staff Navigation Links -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary hover:text-primary font-body transition-colors" href="#">Dossiers de Ta'aruf</a>
+<a class="text-ink-secondary hover:text-primary font-body transition-colors" href="#">Médiations &amp; Wali</a>
+<a class="text-primary border-b-2 border-primary font-body-strong pb-1" href="#">Conformité CIL BF</a>
+<a class="text-ink-secondary hover:text-primary font-body transition-colors" href="#">Registres d'Audit</a>
+</nav>
+<!-- Right: Badges & Inspector Session Profile -->
+<div class="flex items-center gap-3">
+<div class="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-sand border border-border-hairline text-ink-secondary text-caption font-meta">
+<span class="material-symbols-outlined text-base text-success" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>BCEAO / XOF Validé</span>
+</div>
+<button class="p-2 rounded-full hover:bg-surface-sand text-ink-secondary transition-colors" title="Notifications réglementaires" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+</button>
+<div class="h-6 w-px bg-border-hairline"></div>
+<div class="flex items-center gap-2.5 pl-1">
+<div class="w-8 h-8 rounded-full bg-primary text-gold flex items-center justify-center font-meta text-caption font-body-strong border border-border-strong">
+            OP
+          </div>
+<div class="text-left hidden sm:block">
+<span class="block text-meta font-meta text-ink-primary font-body-strong leading-none">Session Inspecteur CIL</span>
+<span class="text-caption font-caption text-ink-secondary">Habilitation Niv. 3 (AD-14)</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN WRAPPER (Side Drawer + Administrative Folio Content) -->
+<div class="flex-1 flex max-w-7xl w-full mx-auto">
+<!-- ADMIN SIDE DRAWER (Predictable Shell from Shared Components) -->
+<aside class="hidden lg:flex w-72 flex-col justify-between py-6 px-4 bg-surface-sand border-r border-border-hairline shrink-0">
+<div class="space-y-6">
+<!-- Drawer Header -->
+<div class="px-2">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-staff" data-icon="shield_lock" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<h3 class="text-title font-title text-indigo-deep">Console Opérateur</h3>
+</div>
+<p class="text-caption font-caption text-ink-secondary">Juridiction CIL Burkina Faso • Accès Restreint</p>
+</div>
+<!-- Navigation Tabs -->
+<nav class="space-y-1">
+<a class="flex items-center gap-3 text-ink-secondary px-4 py-3 font-body hover:bg-surface-raised transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="folder_supervised">folder_supervised</span>
+<span class="text-meta font-meta">Dossiers d'Agrément</span>
+</a>
+<a class="flex items-center gap-3 text-ink-secondary px-4 py-3 font-body hover:bg-surface-raised transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="family_restroom">family_restroom</span>
+<span class="text-meta font-meta">Supervision Wali &amp; Familles</span>
+</a>
+<a class="flex items-center gap-3 bg-surface-raised text-primary border-l-4 border-indigo px-4 py-3 font-body-strong rounded-r-lg shadow-sm" href="#">
+<span class="material-symbols-outlined text-lg text-primary" data-icon="policy" style="font-variation-settings: 'FILL' 1;">policy</span>
+<span class="text-meta font-meta">Conformité CIL &amp; Données</span>
+</a>
+<a class="flex items-center gap-3 text-ink-secondary px-4 py-3 font-body hover:bg-surface-raised transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="history_edu">history_edu</span>
+<span class="text-meta font-meta">Registre d'Audit Immuable</span>
+</a>
+<a class="flex items-center gap-3 text-ink-secondary px-4 py-3 font-body hover:bg-surface-raised transition-colors rounded-lg" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="shield_lock">shield_lock</span>
+<span class="text-meta font-meta">Paramètres Déontologiques</span>
+</a>
+</nav>
+</div>
+<!-- Drawer Footer & Sovereign Badge -->
+<div class="space-y-4 pt-6 border-t border-border-hairline">
+<div class="p-3 bg-surface-raised rounded-lg border border-border-hairline">
+<div class="flex items-center gap-2 mb-1.5">
+<span class="material-symbols-outlined text-sm text-staff" data-icon="database">database</span>
+<span class="text-caption font-meta font-body-strong text-staff">Stockage Souverain</span>
+</div>
+<p class="text-caption font-caption text-ink-secondary">
+            Instance CIL-BF N° 2024-089-BF/OUA. Hébergement Scaleway France avec miroir chiffré Ouagadougou.
+          </p>
+</div>
+<div class="space-y-1">
+<a class="flex items-center gap-3 text-ink-secondary px-3 py-2 text-caption font-meta hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="security">security</span>
+<span>Journal de Sécurité</span>
+</a>
+<a class="flex items-center gap-3 text-danger px-3 py-2 text-caption font-meta hover:bg-danger-soft transition-colors rounded" href="#">
+<span class="material-symbols-outlined text-base" data-icon="logout">logout</span>
+<span>Déconnexion Sécurisée</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- MAIN EDITORIAL CONTENT FOLIO -->
+<main class="flex-1 px-4 sm:px-6 lg:px-8 py-8 overflow-y-auto">
+<div class="max-w-4xl mx-auto space-y-8">
+<!-- HEADER & CONTEXT BLOCK -->
+<header class="space-y-4 pb-6 border-b border-border-hairline">
+<!-- Institutional Breadcrumb -->
+<nav class="flex items-center gap-2 text-caption font-caption text-ink-secondary">
+<span>Opérateur</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span>Politiques Économiques &amp; Forfaits</span>
+<span class="material-symbols-outlined text-xs" data-icon="chevron_right">chevron_right</span>
+<span class="text-primary font-body-strong">Tarification Canonique</span>
+</nav>
+<div class="flex flex-wrap items-start justify-between gap-4">
+<div>
+<div class="flex items-center gap-3 mb-1">
+<h1 class="text-display font-display text-primary tracking-tight">Operator pricing</h1>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-caption font-meta bg-staff-soft text-staff border border-border-hairline font-body-strong">
+<span class="material-symbols-outlined text-sm" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+                  Équipe seulement
+                </span>
+</div>
+<p class="text-body font-body text-ink-secondary">
+                Régulation des forfaits d'engagement matrimonial, garde-fous monétaires et quotas de bienséance (FR-139, FR-106, FR-145, AD-14).
+              </p>
+</div>
+<div class="text-right">
+<div class="inline-block px-3 py-1.5 rounded-lg bg-surface-raised border border-border-hairline shadow-sm">
+<span class="block text-caption font-meta text-ink-secondary">Dernier scellement CIL</span>
+<span class="text-meta font-meta text-primary font-body-strong">12 Oct 2024 • 14:32 GMT</span>
+</div>
+</div>
+</div>
+<!-- Metadata Legal Anchor Bar -->
+<div class="flex flex-wrap items-center gap-y-2 gap-x-6 py-2.5 px-4 bg-surface-raised rounded-lg border border-border-hairline text-caption font-meta text-ink-secondary">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-primary" data-icon="account_balance">account_balance</span>
+<span>Juridiction Burkina Faso (CIL / BCEAO)</span>
+</div>
+<span class="text-border-hairline">•</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-gold" data-icon="payments">payments</span>
+<span>Monnaie officielle : Franc CFA (XOF)</span>
+</div>
+<span class="text-border-hairline">•</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-base text-staff" data-icon="verified">verified</span>
+<span>Audit trail immuable (AD-14)</span>
+</div>
+</div>
+<!-- AUDIT BENCH STATE SIMULATOR BAR -->
+<div class="p-3 bg-surface-raised/80 rounded-xl border border-border-hairline space-y-2">
+<div class="flex items-center justify-between text-caption font-meta text-ink-secondary">
+<span class="flex items-center gap-1 font-body-strong text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="science">science</span>
+                Banc de test des états d'audit de tarification :
+              </span>
+<span class="text-caption">Simulateur interactif pour validation inspecteur</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<button class="px-2.5 py-1.5 rounded text-caption font-meta border border-indigo bg-indigo text-ink-on-indigo font-body-strong text-left transition-all" id="btn-state-1" onclick="setAuditState(1)" type="button">
+                1. Tarifs nominaux
+              </button>
+<button class="px-2.5 py-1.5 rounded text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary text-left transition-all" id="btn-state-2" onclick="setAuditState(2)" type="button">
+                2. Modification en cours
+              </button>
+<button class="px-2.5 py-1.5 rounded text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary text-left transition-all" id="btn-state-3" onclick="setAuditState(3)" type="button">
+                3. Erreur montant nul
+              </button>
+<button class="px-2.5 py-1.5 rounded text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary text-left transition-all" id="btn-state-4" onclick="setAuditState(4)" type="button">
+                4. Scellé CIL (Succès)
+              </button>
+</div>
+<!-- Dynamic State Feedback Banner -->
+<div class="flex items-center gap-2 p-2.5 rounded bg-surface-sand border border-border-hairline text-caption font-meta text-ink-primary" id="state-banner">
+<span class="material-symbols-outlined text-base text-success" data-icon="check_circle" id="state-icon">check_circle</span>
+<span id="state-text">État nominal : Grille canonique active certifiée sans anomalie. Enregistrements monétaires conformes aux barèmes nationaux.</span>
+</div>
+</div>
+</header>
+<!-- SECTION 1: FORFAITS D'ENGAGEMENT TA'ARUF -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="text-title font-title text-indigo-deep">Forfaits d'Engagement Ta'aruf</h2>
+<span class="px-2 py-0.5 rounded text-caption font-meta bg-surface-sand border border-border-hairline text-ink-secondary">FR-139 / FR-106</span>
+</div>
+<p class="text-caption font-caption text-ink-secondary">
+                Participation forfaitaire symbolique pour l'instruction et la médiation de respectabilité.
+              </p>
+</div>
+<span class="text-caption font-meta text-ink-secondary italic hidden sm:inline">Paiement unique • Aucune dette</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Duration 1 Mois -->
+<div class="bg-surface-raised p-5 rounded-xl border border-border-hairline flex flex-col justify-between space-y-4 transition-all hover:border-border-strong shadow-sm">
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-caption font-meta font-body-strong uppercase tracking-wider text-ink-secondary">Échelon 1</span>
+<span class="px-2 py-0.5 rounded text-caption font-meta bg-surface-sand text-ink-secondary">1 Mois</span>
+</div>
+<h3 class="text-heading font-heading text-primary">Pack Découverte Ta'aruf</h3>
+<p class="text-caption font-caption text-ink-secondary">
+                  Pour les démarches initiales et la prise de contact accompagnée d'un premier médiateur ou wali.
+                </p>
+</div>
+<div class="space-y-3 pt-2 border-t border-border-hairline">
+<div>
+<label class="block text-meta font-meta text-ink-secondary mb-1" for="price-1m">
+                    Prix forfaitaire officiel (FCFA)
+                  </label>
+<div class="relative">
+<input class="w-full h-12 bg-surface-raised border border-border-strong rounded-lg px-3.5 pr-14 text-body font-body-strong text-ink-primary focus:ring-2 focus:ring-focus-ring focus:border-border-strong transition-all" id="price-1m" min="5000" oninput="calculateRatios()" step="500" type="number" value="25000"/>
+<span class="absolute right-3.5 top-3.5 text-meta font-meta text-ink-secondary pointer-events-none">XOF</span>
+</div>
+</div>
+<div class="bg-surface-sand p-2.5 rounded border border-border-hairline text-caption font-meta text-ink-secondary flex justify-between items-center">
+<span>Coût mensuel calculé :</span>
+<span class="font-body-strong text-primary text-body" id="ratio-1m">25 000 FCFA</span>
+</div>
+</div>
+</div>
+<!-- Duration 3 Mois (Recommandé) -->
+<div class="bg-surface-raised p-5 rounded-xl border-2 border-primary flex flex-col justify-between space-y-4 relative shadow-md">
+<div class="absolute -top-3 left-4 px-3 py-0.5 rounded-full bg-primary text-gold text-caption font-meta font-body-strong uppercase tracking-wider">
+                Recommandation Canonique
+              </div>
+<div class="space-y-2 pt-1">
+<div class="flex items-center justify-between">
+<span class="text-caption font-meta font-body-strong uppercase tracking-wider text-primary">Échelon 2</span>
+<span class="px-2 py-0.5 rounded text-caption font-meta bg-gold-soft/50 text-indigo-deep font-body-strong">3 Mois</span>
+</div>
+<h3 class="text-heading font-heading text-primary">Pack Alliance &amp; Familles</h3>
+<p class="text-caption font-caption text-ink-secondary">
+                  Cadre temporel idéal pour l'étude réciproque approfondie, les entrevues encadrées et la consultation des tuteurs.
+                </p>
+</div>
+<div class="space-y-3 pt-2 border-t border-border-hairline">
+<div>
+<label class="block text-meta font-meta text-ink-secondary mb-1" for="price-3m">
+                    Prix forfaitaire officiel (FCFA)
+                  </label>
+<div class="relative">
+<input class="w-full h-12 bg-surface-raised border border-border-strong rounded-lg px-3.5 pr-14 text-body font-body-strong text-ink-primary focus:ring-2 focus:ring-focus-ring focus:border-border-strong transition-all" id="price-3m" min="5000" oninput="calculateRatios()" step="500" type="number" value="60000"/>
+<span class="absolute right-3.5 top-3.5 text-meta font-meta text-ink-secondary pointer-events-none">XOF</span>
+</div>
+</div>
+<div class="bg-surface-sand p-2.5 rounded border border-border-hairline text-caption font-meta text-ink-secondary flex justify-between items-center">
+<span>Coût mensuel amorti :</span>
+<span class="font-body-strong text-primary text-body" id="ratio-3m">20 000 FCFA</span>
+</div>
+</div>
+</div>
+<!-- Duration 6 Mois -->
+<div class="bg-surface-raised p-5 rounded-xl border border-border-hairline flex flex-col justify-between space-y-4 transition-all hover:border-border-strong shadow-sm">
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-caption font-meta font-body-strong uppercase tracking-wider text-ink-secondary">Échelon 3</span>
+<span class="px-2 py-0.5 rounded text-caption font-meta bg-surface-sand text-ink-secondary">6 Mois</span>
+</div>
+<h3 class="text-heading font-heading text-primary">Pack Khitba &amp; Sérénité</h3>
+<p class="text-caption font-caption text-ink-secondary">
+                  Délai étendu pour familles géographiquement distantes (diaspora ou inter-provinces du Burkina Faso).
+                </p>
+</div>
+<div class="space-y-3 pt-2 border-t border-border-hairline">
+<div>
+<label class="block text-meta font-meta text-ink-secondary mb-1" for="price-6m">
+                    Prix forfaitaire officiel (FCFA)
+                  </label>
+<div class="relative">
+<input class="w-full h-12 bg-surface-raised border border-border-strong rounded-lg px-3.5 pr-14 text-body font-body-strong text-ink-primary focus:ring-2 focus:ring-focus-ring focus:border-border-strong transition-all" id="price-6m" min="5000" oninput="calculateRatios()" step="500" type="number" value="110000"/>
+<span class="absolute right-3.5 top-3.5 text-meta font-meta text-ink-secondary pointer-events-none">XOF</span>
+</div>
+</div>
+<div class="bg-surface-sand p-2.5 rounded border border-border-hairline text-caption font-meta text-ink-secondary flex justify-between items-center">
+<span>Coût mensuel amorti :</span>
+<span class="font-body-strong text-primary text-body" id="ratio-6m">~18 333 FCFA</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Inviolable Protection Clause Callout -->
+<div class="p-3.5 bg-surface-raised rounded-lg border-l-4 border-indigo flex items-start gap-3">
+<span class="material-symbols-outlined text-indigo text-xl shrink-0 mt-0.5" data-icon="policy">policy</span>
+<div class="text-caption font-caption text-ink-secondary">
+<span class="font-body-strong text-ink-primary">Règle d'équité monétaire FR-106 / AD-14 :</span>
+              Toute modification de tarification est horodatée dans le registre d'audit et 
+              <span class="font-body-strong text-primary">ne s'applique jamais rétroactivement aux forfaits souscrits en cours</span>.
+              L'usager conserve son engagement sans surcoût jusqu'au terme de sa durée de validité.
+            </div>
+</div>
+</section>
+<!-- SECTION 2: STATUT DE RECONDUCTION TACITE (AUTO-RENEW PROHIBITION) -->
+<section class="space-y-3">
+<div class="bg-surface-raised p-6 rounded-xl border border-border-hairline space-y-4">
+<div class="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-staff text-2xl" data-icon="shield_lock" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<h3 class="text-title font-title text-indigo-deep">Reconduction Tacite &amp; Prélèvement Récurrent</h3>
+</div>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-caption font-meta bg-danger-soft text-danger border border-danger/20 font-body-strong">
+<span class="material-symbols-outlined text-sm" data-icon="block">block</span>
+                STRICTEMENT DÉSACTIVÉ (Inviolable)
+              </span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+<div class="md:col-span-8 space-y-2">
+<p class="text-body font-body text-ink-primary font-body-strong">
+                  Cette plateforme proscrit le prélèvement récurrent automatique et non consenti. Les forfaits expirent de plein droit à leur échéance.
+                </p>
+<p class="text-caption font-caption text-ink-secondary leading-relaxed">
+                  Conformément au code déontologique d'AnKanu et aux exigences de transparence financière de la CIL Burkina Faso, aucun système de renouvellement automatique ou de rétention par débit furtif n'est implémenté dans l'infrastructure de paiement. Le réengagement requiert une démarche volontaire et explicite du fidèle et de sa famille.
+                </p>
+</div>
+<!-- ZERO CONTROL DISPLAY (Locked Indicator) -->
+<div class="md:col-span-4 bg-surface-sand p-4 rounded-lg border border-border-hairline text-center space-y-2">
+<div class="w-10 h-10 mx-auto rounded-full bg-disabled/40 flex items-center justify-center text-ink-secondary">
+<span class="material-symbols-outlined text-xl" data-icon="lock">lock</span>
+</div>
+<div class="text-caption font-meta font-body-strong text-ink-secondary">
+                  Verrou Système CIL-04
+                </div>
+<p class="text-caption font-caption text-ink-secondary">
+                  Aucun interrupteur de dérogation n'est disponible sur cette console. Statut codé en dur dans le noyau.
+                </p>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: POLITIQUES D'ACCÈS ET QUOTAS -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="text-title font-title text-indigo-deep">Politiques d'Accès et Quotas de Bienséance</h2>
+<span class="px-2.5 py-0.5 rounded text-caption font-meta bg-staff-soft text-staff border border-border-hairline font-body-strong">
+                  Équipe seulement
+                </span>
+</div>
+<p class="text-caption font-caption text-ink-secondary">
+                Régulation de l'interaction et équilibre des genres selon les principes traditionnels Burkinabè.
+              </p>
+</div>
+</div>
+<div class="space-y-4">
+<!-- ROW 1: sister-reach-mode -->
+<div class="bg-surface-raised p-5 rounded-xl border border-border-hairline space-y-4 shadow-sm" id="reach-mode-panel">
+<div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-caption font-meta bg-staff-soft text-staff border border-border-hairline font-body-strong">
+                    Équipe seulement
+                  </span>
+<span class="text-meta font-meta font-body-strong text-ink-primary">
+                    Mode d'accès des Sœurs (sister_reach_mode)
+                  </span>
+</div>
+<span class="text-caption font-caption text-ink-secondary">Règle FR-145</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Option A: free_unlimited -->
+<label class="relative flex flex-col justify-between p-4 rounded-lg cursor-pointer transition-all border-2 border-staff bg-staff-soft/20" id="opt-free-label">
+<div class="flex items-start gap-3">
+<input checked="" class="mt-1 text-staff focus:ring-staff border-border-strong" name="sister_reach_mode" onchange="toggleSisterReach('free_unlimited')" type="radio" value="free_unlimited"/>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="text-body font-body-strong text-ink-primary">Accès Intégral Sans Forfait</span>
+<span class="px-1.5 py-0.2 rounded text-caption font-meta bg-success-soft text-success">Défaut canonique</span>
+</div>
+<p class="text-caption font-caption text-ink-secondary">
+                        Gratuité pleine des invitations et médiations pour les sœurs et leurs tuteurs (*wali*). Aucune barrière monétaire pour la sollicitation protectrice.
+                      </p>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-border-hairline/60 flex items-center gap-1.5 text-caption font-meta text-staff">
+<span class="material-symbols-outlined text-sm" data-icon="female">female</span>
+<span>Favorise la protection et l'initiative sereine des familles</span>
+</div>
+</label>
+<!-- Option B: same_quota_as_brothers -->
+<label class="relative flex flex-col justify-between p-4 rounded-lg cursor-pointer transition-all border border-border-hairline bg-surface-raised hover:border-border-strong" id="opt-quota-label">
+<div class="flex items-start gap-3">
+<input class="mt-1 text-staff focus:ring-staff border-border-strong" name="sister_reach_mode" onchange="toggleSisterReach('same_quota_as_brothers')" type="radio" value="same_quota_as_brothers"/>
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="text-body font-body-strong text-ink-primary">Même quota que les frères</span>
+<span class="px-1.5 py-0.2 rounded text-caption font-meta bg-surface-sand text-ink-secondary">Symétrique</span>
+</div>
+<p class="text-caption font-caption text-ink-secondary">
+                        3 invitations d'initiation gratuites par cycle, puis souscription requise à un pack d'engagement pour toute démarche additionnelle.
+                      </p>
+</div>
+</div>
+<div class="mt-3 pt-2 border-t border-border-hairline/60 flex items-center gap-1.5 text-caption font-meta text-ink-secondary">
+<span class="material-symbols-outlined text-sm" data-icon="balance">balance</span>
+<span>Équité formelle des seuils de sollicitation</span>
+</div>
+</label>
+</div>
+<div class="text-caption font-caption text-ink-secondary italic bg-surface-sand/60 p-2.5 rounded border border-border-hairline flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-staff" data-icon="info">info</span>
+<span>Note d'intégrité doctrinale : Le mode d'exemption monétaire pour les frères (brother-free) est rigoureusement prohibé par le protocole Ta'aruf.</span>
+</div>
+</div>
+<!-- ROW 2: operator-message-cap -->
+<div class="bg-surface-raised p-5 rounded-xl border border-border-hairline space-y-4 shadow-sm">
+<div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-border-hairline">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-caption font-meta bg-staff-soft text-staff border border-border-hairline font-body-strong">
+                    Équipe seulement
+                  </span>
+<span class="text-meta font-meta font-body-strong text-ink-primary">
+                    Plafond quotidien de messages d'initiation (daily_message_cap)
+                  </span>
+</div>
+<span class="text-caption font-caption text-ink-secondary">FR-146 (Pondération)</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="space-y-1 max-w-xl">
+<div class="text-body font-body-strong text-primary">
+                    Plafond actif : <span class="underline decoration-staff font-bold text-staff" id="cap-display">3 messages / jour</span> par prétendant
+                  </div>
+<p class="text-caption font-caption text-ink-secondary">
+                    Régule le rythme d'échange pour prévenir la dispersion, décourager les comportements impulsifs et favoriser la pondération familiale conforme à la bienséance coutumière.
+                  </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-32">
+<label class="sr-only" for="message-cap-input">Plafond quotidien</label>
+<div class="relative">
+<input class="w-full h-12 bg-surface-raised border border-border-strong rounded-lg px-3 pr-10 text-body font-body-strong text-center text-ink-primary focus:ring-2 focus:ring-focus-ring" id="message-cap-input" max="10" min="1" oninput="updateMessageCap(this.value)" type="number" value="3"/>
+<span class="absolute right-3 top-3.5 text-caption font-meta text-ink-secondary">/ j</span>
+</div>
+</div>
+<span class="text-caption font-meta text-ink-secondary">(Bornes : 1 à 10)</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 4: VALIDATION, JOURNAL D'AUDIT ET SAUVEGARDE -->
+<section class="bg-surface-raised p-6 rounded-xl border border-border-hairline space-y-6 shadow-sm">
+<div class="border-b border-border-hairline pb-4">
+<h3 class="text-title font-title text-indigo-deep">Visa Hiérarchique &amp; Enregistrement Sécurisé</h3>
+<p class="text-caption font-caption text-ink-secondary">
+              Tout ajustement tarifaire ou de quota fait l'objet d'un scellement cryptographique dans le journal d'audit AD-14.
+            </p>
+</div>
+<form class="space-y-6" onsubmit="handleFormSubmit(event)">
+<!-- Audit Justification Input -->
+<div class="space-y-1.5">
+<label class="block text-meta font-meta text-ink-primary font-body-strong" for="audit-reason">
+                Motif d'instruction ou visa hiérarchique CIL (obligatoire) <span class="text-danger">*</span>
+</label>
+<textarea class="w-full bg-surface-sand border border-border-hairline rounded-lg p-3 text-body font-body text-ink-primary focus:bg-surface-raised focus:ring-2 focus:ring-focus-ring focus:border-border-strong transition-all" id="audit-reason" placeholder="Exemple : Application de l'arrêté ministériel N° 2024-CIL/MEN sur l'encadrement des services numériques familiaux..." required="" rows="3"></textarea>
+<p class="text-caption font-caption text-ink-secondary">
+                Mentionnez la référence officielle ou la délibération du conseil de surveillance AnKanu justifiant ce changement.
+              </p>
+</div>
+<!-- Validation Error Alert Container (hidden by default) -->
+<div class="hidden p-4 rounded-lg bg-danger-soft border border-danger/30 text-danger space-y-1" id="validation-error">
+<div class="flex items-center gap-2 font-body-strong text-meta">
+<span class="material-symbols-outlined text-base" data-icon="error">error</span>
+<span>Erreur d'intégrité monétaire</span>
+</div>
+<p class="text-caption font-caption" id="validation-error-text">
+                Un forfait ne peut être fixé à 0 FCFA ou à une valeur négative. Les forfaits d'engagement doivent refléter une charge de gestion réelle.
+              </p>
+</div>
+<!-- Action Buttons Bar -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-border-hairline">
+<button class="w-full sm:w-auto px-6 py-3 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-body-strong text-body transition-colors" onclick="resetToDefaults()" type="button">
+                Réinitialiser aux valeurs d'origine
+              </button>
+<button class="w-full sm:w-auto px-8 py-3 rounded-full bg-indigo text-ink-on-indigo hover:bg-indigo-deep font-body-strong text-body flex items-center justify-center gap-2 shadow-sm transition-transform active:scale-[0.99]" id="btn-submit" type="submit">
+<span class="material-symbols-outlined text-xl" data-icon="verified_user">verified_user</span>
+<span>Enregistrer et sceller les modifications tarifaires</span>
+</button>
+</div>
+</form>
+<!-- Sovereignty & Hosting Footnote -->
+<div class="pt-4 border-t border-border-hairline text-caption font-caption text-ink-secondary flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-base text-staff" data-icon="cloud_done">cloud_done</span>
+<span>Hébergement souverain certifié : Scaleway Paris avec réplication temps réel chiffrée Ouagadougou.</span>
+</div>
+<span class="font-meta text-ink-secondary">AD-14 Hash Registry : SHA-256 Enabled</span>
+</div>
+</section>
+</div>
+</main>
+</div>
+<!-- JAVASCRIPT FOR BENCH SIMULATOR & MICRO-INTERACTIONS -->
+<script>
+    // Price Ratio Calculation
+    function calculateRatios() {
+      const p1 = parseFloat(document.getElementById('price-1m').value) || 0;
+      const p3 = parseFloat(document.getElementById('price-3m').value) || 0;
+      const p6 = parseFloat(document.getElementById('price-6m').value) || 0;
+
+      document.getElementById('ratio-1m').innerText = p1.toLocaleString('fr-FR') + ' FCFA';
+      document.getElementById('ratio-3m').innerText = Math.round(p3 / 3).toLocaleString('fr-FR') + ' FCFA';
+      document.getElementById('ratio-6m').innerText = '~' + Math.round(p6 / 6).toLocaleString('fr-FR') + ' FCFA';
+    }
+
+    // Toggle sister reach styling
+    function toggleSisterReach(mode) {
+      const optFree = document.getElementById('opt-free-label');
+      const optQuota = document.getElementById('opt-quota-label');
+
+      if (mode === 'free_unlimited') {
+        optFree.className = "relative flex flex-col justify-between p-4 rounded-lg cursor-pointer transition-all border-2 border-staff bg-staff-soft/20";
+        optQuota.className = "relative flex flex-col justify-between p-4 rounded-lg cursor-pointer transition-all border border-border-hairline bg-surface-raised hover:border-border-strong";
+      } else {
+        optQuota.className = "relative flex flex-col justify-between p-4 rounded-lg cursor-pointer transition-all border-2 border-staff bg-staff-soft/20";
+        optFree.className = "relative flex flex-col justify-between p-4 rounded-lg cursor-pointer transition-all border border-border-hairline bg-surface-raised hover:border-border-strong";
+      }
+    }
+
+    // Update Message Cap Value
+    function updateMessageCap(val) {
+      const cap = Math.min(Math.max(parseInt(val) || 1, 1), 10);
+      document.getElementById('cap-display').innerText = cap + ' message' + (cap > 1 ? 's' : '') + ' / jour';
+    }
+
+    // State Simulator Management
+    function setAuditState(stateId) {
+      // Reset buttons style
+      for (let i = 1; i <= 4; i++) {
+        const btn = document.getElementById('btn-state-' + i);
+        if (i === stateId) {
+          btn.className = "px-2.5 py-1.5 rounded text-caption font-meta border border-indigo bg-indigo text-ink-on-indigo font-body-strong text-left transition-all";
+        } else {
+          btn.className = "px-2.5 py-1.5 rounded text-caption font-meta border border-border-hairline bg-surface-sand text-ink-secondary hover:text-ink-primary text-left transition-all";
+        }
+      }
+
+      const banner = document.getElementById('state-banner');
+      const icon = document.getElementById('state-icon');
+      const text = document.getElementById('state-text');
+      const errorBox = document.getElementById('validation-error');
+
+      errorBox.classList.add('hidden');
+
+      if (stateId === 1) {
+        // State 1: Nominal
+        document.getElementById('price-1m').value = 25000;
+        document.getElementById('price-3m').value = 60000;
+        document.getElementById('price-6m').value = 110000;
+        document.getElementById('message-cap-input').value = 3;
+        document.getElementById('audit-reason').value = "";
+        updateMessageCap(3);
+        calculateRatios();
+
+        banner.className = "flex items-center gap-2 p-2.5 rounded bg-surface-sand border border-border-hairline text-caption font-meta text-ink-primary";
+        icon.innerText = "check_circle";
+        icon.className = "material-symbols-outlined text-base text-success";
+        text.innerText = "État 1 (Nominal en vigueur) : Grille canonique active certifiée CIL sans réserve.";
+      } 
+      else if (stateId === 2) {
+        // State 2: Modification in progress
+        document.getElementById('price-1m').value = 28000;
+        document.getElementById('price-3m').value = 65000;
+        document.getElementById('price-6m').value = 120000;
+        document.getElementById('audit-reason').value = "Révision trimestrielle de la contribution de médiation.";
+        calculateRatios();
+
+        banner.className = "flex items-center gap-2 p-2.5 rounded bg-secondary-container/40 border border-secondary text-caption font-meta text-ink-primary";
+        icon.innerText = "pending";
+        icon.className = "material-symbols-outlined text-base text-secondary";
+        text.innerText = "État 2 (Modification en cours) : Paramètres modifiés dans l'interface, en attente de visa formel.";
+      } 
+      else if (stateId === 3) {
+        // State 3: Integrity error (Zero amount)
+        document.getElementById('price-1m').value = 0;
+        calculateRatios();
+        errorBox.classList.remove('hidden');
+        document.getElementById('validation-error-text').innerText = "Erreur fatale FR-106 : Le forfait 1 Mois est fixé à 0 FCFA. Les forfaits d'engagement ne peuvent être nuls pour des raisons de viabilité du réseau de médiateurs.";
+
+        banner.className = "flex items-center gap-2 p-2.5 rounded bg-danger-soft border border-danger/40 text-caption font-meta text-danger";
+        icon.innerText = "warning";
+        icon.className = "material-symbols-outlined text-base text-danger";
+        text.innerText = "État 3 (Validation bloquée) : Échec de l'invariant de cohérence monétaire (montant nul interdit).";
+      } 
+      else if (stateId === 4) {
+        // State 4: Sealed
+        document.getElementById('price-1m').value = 25000;
+        document.getElementById('price-3m').value = 60000;
+        document.getElementById('price-6m').value = 110000;
+        document.getElementById('audit-reason').value = "Visa validé sous le sceau CIL-BF-2024/09.";
+        calculateRatios();
+
+        banner.className = "flex items-center gap-2 p-2.5 rounded bg-success-soft border border-success/40 text-caption font-meta text-success";
+        icon.innerText = "verified";
+        icon.className = "material-symbols-outlined text-base text-success";
+        text.innerText = "État 4 (Changement consigné au registre CIL) : Transaction scellée sur le registre immuable AD-14 avec horodatage UTC.";
+      }
+    }
+
+    // Reset default action
+    function resetToDefaults() {
+      setAuditState(1);
+    }
+
+    // Form submission simulation
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const p1 = parseFloat(document.getElementById('price-1m').value) || 0;
+      const p3 = parseFloat(document.getElementById('price-3m').value) || 0;
+      const p6 = parseFloat(document.getElementById('price-6m').value) || 0;
+
+      if (p1 <= 0 || p3 <= 0 || p6 <= 0) {
+        setAuditState(3);
+        return;
+      }
+
+      setAuditState(4);
+    }
+
+    // Initial run
+    calculateRatios();
+  </script>
+</body></html>

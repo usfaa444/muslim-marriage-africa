@@ -2506,8 +2506,8 @@ Brief named surfaces used only to confirm scope (P13 status page, P43 suspended-
 
 ---
 
-# 8. What this folder does not contain
+# 8. Stitch files in this folder
 
-No Stitch HTML. No Stitch PNG. Mock HTML was not used.
+Founder-approved HTML and PNG are on disk. Map: `MANIFEST.md`. Tokens: `tokens/DESIGN.md` (copy; layout is the PNG) and `tokens/stitch-design-system.json`.
 
-After founder approval, Stitch downloads belong here as exact filenames bound to the **named** screens above — still no invented screens, and no invented elements listed as Unspecified or Gaps.
+Each named inventory screen has one folder: `NN-slug/screen.html` and `NN-slug/screen.png` (66 / 66). Gaps G1–G25 and Unspecified chrome were not invented. Extra Stitch assets not on the approved map were not downloaded. Mock HTML was not used.

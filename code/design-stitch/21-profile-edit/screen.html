@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-surface" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Édition du Folio Personnel | AnKanu</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..900;1,300..900&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400..900;1,8..60,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config Verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-fixed": "#d3e4ff",
+            "gold-soft": "#E8D5A3",
+            "inverse-primary": "#aec8f4",
+            "success-soft": "#DCE6DE",
+            "success": "#3D5C45",
+            "secondary-fixed-dim": "#e5c276",
+            "on-surface": "#1e1b14",
+            "on-primary": "#ffffff",
+            "surface-tint": "#465f86",
+            "disabled": "#B5A894",
+            "staff-soft": "#EFE4DC",
+            "danger": "#8B3A3A",
+            "surface": "#fff9ee",
+            "surface-bright": "#fff9ee",
+            "border-hairline": "#D9CDB8",
+            "primary-fixed-dim": "#aec8f4",
+            "error": "#ba1a1a",
+            "staff": "#6B3D2E",
+            "gold": "#C4A35A",
+            "surface-container-low": "#faf3e6",
+            "surface-raised": "#FFFBF4",
+            "indigo-deep": "#15283F",
+            "on-primary-fixed-variant": "#2d476d",
+            "surface-variant": "#e9e2d5",
+            "on-secondary-fixed": "#251a00",
+            "on-tertiary-fixed-variant": "#2a486c",
+            "border-strong": "#6F624C",
+            "surface-indigo": "#15283F",
+            "on-secondary-container": "#785d1b",
+            "secondary": "#755b18",
+            "inverse-surface": "#333028",
+            "focus-ring": "#1F3A5F",
+            "danger-soft": "#F3E0DC",
+            "on-error": "#ffffff",
+            "on-tertiary-container": "#88a5ce",
+            "ink-on-indigo": "#F4EDE0",
+            "ink-secondary": "#5C5346",
+            "tertiary-container": "#1b3b5e",
+            "mihrab": "#2C4A6E",
+            "on-tertiary-fixed": "#001c38",
+            "indigo": "#1F3A5F",
+            "background": "#fff9ee",
+            "surface-dim": "#e0d9cd",
+            "on-primary-fixed": "#001c3b",
+            "secondary-fixed": "#ffdf9c",
+            "blur-wash": "#C8BBA6",
+            "outline": "#74777f",
+            "tertiary-fixed-dim": "#abc9f3",
+            "on-primary-container": "#8ba4cf",
+            "surface-container-lowest": "#ffffff",
+            "outline-variant": "#c4c6cf",
+            "secondary-container": "#fdd88a",
+            "on-background": "#1e1b14",
+            "on-surface-variant": "#43474e",
+            "surface-container-highest": "#e9e2d5",
+            "on-secondary-fixed-variant": "#5b4300",
+            "inverse-on-surface": "#f7f0e3",
+            "surface-container": "#f4ede0",
+            "primary-container": "#1f3a5f",
+            "tertiary": "#002546",
+            "on-tertiary": "#ffffff",
+            "error-container": "#ffdad6",
+            "surface-sand": "#F4EDE0",
+            "surface-container-high": "#eee7db",
+            "primary-fixed": "#d5e3ff",
+            "ink-primary": "#1B2433",
+            "primary": "#032448",
+            "on-secondary": "#ffffff",
+            "on-error-container": "#93000a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "7": "48px",
+            "4": "16px",
+            "gutter": "16px",
+            "space-lg": "1.5rem",
+            "3": "12px",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "6": "32px",
+            "5": "24px",
+            "2": "8px",
+            "space-xl": "2rem",
+            "screen-pad": "16px",
+            "margin": "1rem",
+            "1": "4px",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "heading": ["\"Source Serif 4, Georgia, serif\""],
+            "caption": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "display": ["\"Source Serif 4, Georgia, serif\""],
+            "title": ["\"Source Serif 4, Georgia, serif\""],
+            "meta": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body-strong": ["\"Source Sans 3, system-ui, sans-serif\""],
+            "body": ["\"Source Sans 3, system-ui, sans-serif\""]
+          },
+          "fontSize": {
+            "heading": ["18px", { "lineHeight": "1.3", "fontWeight": "600" }],
+            "caption": ["12px", { "lineHeight": "1.4", "fontWeight": "400" }],
+            "display": ["28px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title": ["22px", { "lineHeight": "1.25", "fontWeight": "600" }],
+            "meta": ["13px", { "lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500" }],
+            "body-strong": ["16px", { "lineHeight": "1.5", "fontWeight": "600" }],
+            "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="min-h-full bg-surface text-ink-primary font-body text-body selection:bg-gold-soft selection:text-ink-primary antialiased flex flex-col">
+<!-- TOP APP BAR (Shared Components: TopNavBar applied) -->
+<header class="bg-surface dark:bg-surface-indigo border-b border-border-hairline dark:border-mihrab sticky top-0 z-40">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<a class="font-title text-title text-primary dark:text-ink-on-indigo tracking-tight font-semibold flex items-center gap-2" href="#">
+<span class="inline-block w-2.5 h-2.5 rounded-full bg-gold"></span>
+          AnKanu
+        </a>
+<span class="hidden sm:inline-block text-border-hairline">|</span>
+<span class="hidden sm:inline-block font-meta text-meta text-ink-secondary">Ta'aruf Honorable</span>
+</div>
+<!-- Member Module Nav Links -->
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Découvrir</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Invitations</a>
+<a class="text-ink-secondary dark:text-outline-variant font-body hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Discussions</a>
+<!-- Active destination based on semantic intent: Profil -->
+<a class="text-primary dark:text-gold font-body-strong border-b-2 border-primary dark:border-gold pb-1" href="#">Profil</a>
+</nav>
+<!-- Trailing Action -->
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center gap-1.5 font-meta text-meta text-primary dark:text-inverse-primary hover:text-gold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Retour à la Connexion</span>
+</a>
+</div>
+</div>
+</header>
+<!-- SECONDARY BREADCRUMB & RETURN ACTION BAR -->
+<div class="bg-surface-sand border-b border-border-hairline">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-2 flex items-center justify-between">
+<div class="flex items-center gap-2 font-meta text-meta text-ink-secondary">
+<a class="hover:text-primary transition-colors" href="#">Espace Membre</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Mon Profil</a>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-ink-primary font-semibold">Édition du Folio</span>
+</div>
+<a class="inline-flex items-center gap-1 font-meta text-meta text-ink-secondary hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span>Quitter sans enregistrer</span>
+</a>
+</div>
+</div>
+<!-- MAIN EDITORIAL CONTAINER -->
+<main class="flex-grow w-full max-w-3xl mx-auto px-screen-pad py-6 sm:py-8 space-y-6">
+<!-- PAGE HEADER & HONEST INTENT -->
+<section class="space-y-2">
+<div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-staff-soft text-staff font-caption text-caption">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+<span>Espace Certifié · Conformité Éthique Burkinabè</span>
+</div>
+<h1 class="font-display text-display text-primary tracking-tight">Édition du Folio Personnel</h1>
+<p class="font-body text-body text-ink-secondary leading-relaxed">
+        Renseignez vos éléments biographiques et spirituels avec véracité (<em class="italic text-ink-primary font-serif">Sidq</em>). Toute modification doctrinale ou matrimoniale est préservée sous le regard de votre tuteur légal.
+      </p>
+</section>
+<!-- STATUS ALERTS (SIMULABLE BANNER CONTAINERS) -->
+<div class="hidden rounded-xl p-4 bg-success-soft border border-success/30 flex items-start gap-3" id="alertSuccess">
+<span class="material-symbols-outlined text-success mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div class="space-y-0.5">
+<p class="font-body-strong text-body-strong text-success">Modifications enregistrées avec succès</p>
+<p class="font-meta text-meta text-ink-secondary">Les nouveaux éléments biographiques ont été actualisés. Tout cliché importé est actuellement étiqueté "Non encore public" et soumis à la vérification humaine assermentée.</p>
+</div>
+</div>
+<div class="hidden rounded-xl p-4 bg-danger-soft border border-danger/30 flex items-start gap-3" id="alertError">
+<span class="material-symbols-outlined text-danger mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
+<div class="space-y-0.5">
+<p class="font-body-strong text-body-strong text-danger">Rejet de conformité du dossier</p>
+<p class="font-meta text-meta text-danger" id="alertErrorMessage">Veuillez renseigner les champs obligatoires conformément aux règles matrimoniales.</p>
+</div>
+</div>
+<!-- FORM START -->
+<form class="space-y-6" id="profileForm" novalidate="" onsubmit="return false;">
+<!-- SECTION: JAUGE DE COMPLÉTUDE RESPECTUEUSE ({components.completeness-meter}) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold" style="font-variation-settings: 'FILL' 1;">hourglass_top</span>
+<h2 class="font-heading text-heading text-primary">Intégrité &amp; Complétude du Folio</h2>
+</div>
+<span class="font-meta text-meta text-primary font-semibold px-2 py-0.5 bg-surface-sand rounded-full border border-border-hairline">
+            85% complété
+          </span>
+</div>
+<!-- Metric bar -->
+<div class="w-full bg-surface-sand h-2 rounded-full overflow-hidden border border-border-hairline">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 85%;"></div>
+</div>
+<!-- Explicit polite notice without moral judgment -->
+<div class="flex items-start gap-2 pt-1 text-ink-secondary font-meta text-meta">
+<span class="material-symbols-outlined text-[18px] text-ink-secondary shrink-0">info</span>
+<p>
+            Pour débloquer l'envoi et la réception d'invitations formelles (<em class="italic">Ta'aruf</em>), <span class="font-semibold text-ink-primary">il manque : École de jurisprudence (madhhab)</span>. Tous les autres prérequis de base sont satisfaits.
+          </p>
+</div>
+</section>
+<!-- SECTION: SCEAU DE PUDEUR & GESTION DES PHOTOGRAPHIES (FR-017, AD-26) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 space-y-5">
+<div class="border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">visibility_off</span>
+<h2 class="font-heading text-heading text-primary">Portrait Matrimonial &amp; Sceau de Pudeur</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+            Les visages sont voilés par défaut. Aucune image brute n'est accessible publiquement aux visiteurs anonymes.
+          </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
+<!-- Active Photo under blur -->
+<div class="bg-surface-sand border border-border-hairline rounded-xl p-4 flex flex-col items-center text-center space-y-3">
+<div class="relative w-36 h-44 rounded-xl overflow-hidden border-2 border-border-hairline bg-indigo-deep flex items-center justify-center group shadow-none">
+<!-- Blurred photo representation with data-alt -->
+<div class="absolute inset-0 bg-cover bg-center filter blur-md opacity-60 scale-105" data-alt="Dignified West African portrait of a thoughtful burkinabe man in traditional bazin riche clothing, positioned in soft studio light with warm earth tones, deep indigo fabric accents, and modest aesthetic tailored for noble marital introductions." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAdOAQyWCA3CHnx5kkgqPD39YDUlFs4revYxiSAKmKEQOxCuzctd6JnsBrT-2BRB26L_MzMbdrcIaOUUTEzV21T6yGmIGPDZj9UXw4BissDuxVCyR9b2pMPVX7TjaB7EsHB0Obq5lcf1YBvOv8v3eMoYcUlzgEoFp8R3jhG-zKWEwWTakC8X8mFxxbHePIwblShBGGhL2LBVabVxg-inVT1WfnVhhIIKG_OQaIUXUc3FYy7VqzHU6P0s1RnEk1LtkwiXHruCq2EogoD')"></div>
+<!-- Cryptographic blur shield badge -->
+<div class="relative z-10 flex flex-col items-center p-2 text-ink-on-indigo text-center space-y-1">
+<span class="material-symbols-outlined text-[32px] text-gold" style="font-variation-settings: 'FILL' 1;">shield_lock</span>
+<span class="font-caption text-caption tracking-tight">Sceau actif</span>
+</div>
+</div>
+<div class="space-y-1">
+<span class="inline-flex items-center gap-1 font-caption text-caption text-success bg-success-soft px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Validée par l'administration
+              </span>
+<p class="font-meta text-meta text-ink-primary font-semibold">Actuellement en ligne sous flou cryptographique</p>
+<p class="font-caption text-caption text-ink-secondary">Homologation délivrée le 14 Janvier 2025</p>
+</div>
+</div>
+<!-- Upload / Replacement Module -->
+<div class="space-y-3">
+<label class="block font-meta text-meta text-ink-secondary">Proposer un nouveau cliché</label>
+<div class="border-2 border-dashed border-border-hairline hover:border-border-strong rounded-xl p-4 text-center cursor-pointer transition-colors bg-surface-bright flex flex-col items-center justify-center space-y-2">
+<span class="material-symbols-outlined text-primary text-[28px]">add_a_photo</span>
+<div class="space-y-0.5">
+<span class="font-body-strong text-body-strong text-primary block">Sélectionner une photo</span>
+<span class="font-caption text-caption text-ink-secondary block">Format JPEG ou PNG (max. 6 Mo)</span>
+</div>
+<input accept="image/*" class="hidden" id="newPhotoInput" type="file"/>
+</div>
+<!-- Regulatory Note -->
+<div class="p-3 bg-surface-sand rounded-lg border border-border-hairline space-y-1.5 font-meta text-meta">
+<div class="flex items-center gap-1.5 text-staff font-semibold">
+<span class="material-symbols-outlined text-[16px]">policy</span>
+<span>Règle de transition assermentée</span>
+</div>
+<p class="text-ink-secondary text-[12px] leading-relaxed">
+                En cas de nouveau cliché, l'ancienne photo reste active pendant la modération humaine assermentée ; la nouvelle est étiquetée <strong class="text-ink-primary">« Non encore publique »</strong> jusqu'à homologation complète.
+              </p>
+</div>
+<p class="font-caption text-caption text-ink-secondary italic">
+              Exigence de décence : tenue sobre et digne, exempte de filtres artificiels, lunettes noires ou artifices trompeurs.
+            </p>
+</div>
+</div>
+<!-- REVEAL POLICY SELECTOR (FR-057) -->
+<div class="border-t border-border-hairline pt-4 space-y-3">
+<label class="block font-body-strong text-body-strong text-primary">
+            Politique de Dévoilement du Visage (Reveal Policy)
+          </label>
+<p class="font-meta text-meta text-ink-secondary">
+            Définissez dans quelles circonstances formelles votre portrait sera révélé avec netteté à votre prétendant(e).
+          </p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+<!-- Option 1: on_accept -->
+<label class="relative flex flex-col p-3 rounded-xl border border-border-hairline hover:border-border-strong bg-surface cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-surface-sand transition-colors">
+<input checked="" class="sr-only" name="reveal_policy" type="radio" value="on_accept"/>
+<div class="flex items-center justify-between pb-1">
+<span class="material-symbols-outlined text-primary text-[20px]">how_to_reg</span>
+<span class="w-3.5 h-3.5 rounded-full border border-border-strong flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-primary block"></span>
+</span>
+</div>
+<span class="font-body-strong text-body-strong text-ink-primary">Après acceptation</span>
+<span class="font-caption text-caption text-ink-secondary mt-1">Dévoilement mutuel dès que l'invitation formelle est agréée par les deux parties.</span>
+</label>
+<!-- Option 2: on_request -->
+<label class="relative flex flex-col p-3 rounded-xl border border-border-hairline hover:border-border-strong bg-surface cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-surface-sand transition-colors">
+<input class="sr-only" name="reveal_policy" type="radio" value="on_request"/>
+<div class="flex items-center justify-between pb-1">
+<span class="material-symbols-outlined text-ink-secondary text-[20px]">front_hand</span>
+<span class="w-3.5 h-3.5 rounded-full border border-border-hairline"></span>
+</div>
+<span class="font-body-strong text-body-strong text-ink-primary">Sur demande formelle</span>
+<span class="font-caption text-caption text-ink-secondary mt-1">Accordé au cas par cas après examen de la demande d'accès.</span>
+</label>
+<!-- Option 3: never -->
+<label class="relative flex flex-col p-3 rounded-xl border border-border-hairline hover:border-border-strong bg-surface cursor-pointer has-[:checked]:border-primary has-[:checked]:bg-surface-sand transition-colors">
+<input class="sr-only" name="reveal_policy" type="radio" value="never"/>
+<div class="flex items-center justify-between pb-1">
+<span class="material-symbols-outlined text-ink-secondary text-[20px]">family_restroom</span>
+<span class="w-3.5 h-3.5 rounded-full border border-border-hairline"></span>
+</div>
+<span class="font-body-strong text-body-strong text-ink-primary">Préservé sous le voile</span>
+<span class="font-caption text-caption text-ink-secondary mt-1">Dévoilement physique exclusif lors de la rencontre officielle avec le tuteur (wali).</span>
+</label>
+</div>
+</div>
+</section>
+<!-- SECTION: INFORMATIONS CIVILES & PARCOURS DE VIE (FR-018, FR-021) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 space-y-4">
+<div class="border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person</span>
+<h2 class="font-heading text-heading text-primary">Informations Civiles &amp; Parcours de Vie</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+            Données authentifiées d'après l'extrait d'acte ou la CNIB burkinabè.
+          </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Âge & Date de naissance -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1">Date de naissance (Vérifiée)</label>
+<div class="relative">
+<input class="w-full bg-surface-sand text-ink-secondary border border-border-hairline rounded-xl px-3 py-2.5 font-body text-body cursor-not-allowed" readonly="" type="text" value="18 Mai 1993 (31 ans)"/>
+<span class="material-symbols-outlined absolute right-3 top-3 text-[18px] text-success" title="Pièce d'identité homologuée">verified_user</span>
+</div>
+<p class="font-caption text-caption text-ink-secondary mt-1">Modifiable uniquement auprès du secrétariat AnKanu.</p>
+</div>
+<!-- Statut Matrimonial -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1" for="maritalStatus">
+              Statut matrimonial actuel <span class="text-danger">*</span>
+</label>
+<select class="w-full bg-surface-raised text-ink-primary border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl px-3 py-2.5 font-body text-body transition-colors" id="maritalStatus">
+<option value="single">Célibataire (Jamais marié)</option>
+<option selected="" value="married">Marié(e)</option>
+<option value="divorced">Divorcé(e)</option>
+<option value="widowed">Veuf (Veuve)</option>
+</select>
+</div>
+<!-- Ville de résidence -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1" for="city">
+              Ville de résidence <span class="text-danger">*</span>
+</label>
+<select class="w-full bg-surface-raised text-ink-primary border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl px-3 py-2.5 font-body text-body transition-colors" id="city">
+<option selected="" value="ouaga">Ouagadougou</option>
+<option value="bobo">Bobo-Dioulasso</option>
+<option value="koudougou">Koudougou</option>
+<option value="ouahigouya">Ouahigouya</option>
+<option value="banfora">Banfora</option>
+<option value="diaspora">Diaspora Burkinabè (Afrique de l'Ouest / Europe / Amérique)</option>
+</select>
+</div>
+<!-- Origine / Région d'attache -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1" for="culturalOrigin">Région d'attache culturelle</label>
+<input class="w-full bg-surface-raised text-ink-primary border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl px-3 py-2.5 font-body text-body transition-colors" id="culturalOrigin" placeholder="Ex: Grand Ouest, Passoré, Sahel..." type="text" value="Plateau-Central (Zorgho)"/>
+</div>
+<!-- Niveau d'études -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1" for="education">Niveau d'études académiques</label>
+<select class="w-full bg-surface-raised text-ink-primary border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl px-3 py-2.5 font-body text-body transition-colors" id="education">
+<option value="secondaire">Secondaire / Enseignement général</option>
+<option value="bac">Baccalauréat</option>
+<option value="licence">Licence / Diplôme supérieur</option>
+<option selected="" value="master">Master / Diplôme d'ingénieur</option>
+<option value="doctorat">Doctorat</option>
+<option value="madrasa">Études islamiques spécialisées</option>
+</select>
+</div>
+<!-- Profession / Activité honorable -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1" for="profession">Profession honorable exercée</label>
+<input class="w-full bg-surface-raised text-ink-primary border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl px-3 py-2.5 font-body text-body transition-colors" id="profession" type="text" value="Auditeur financier &amp; Enseignant vacataire"/>
+</div>
+</div>
+<!-- Description Personnelle -->
+<div class="pt-2">
+<div class="flex items-center justify-between mb-1">
+<label class="block font-meta text-meta text-ink-secondary" for="bio">
+              Description personnelle &amp; aspirations du foyer
+            </label>
+<span class="font-caption text-caption text-ink-secondary">Mesuré et sincère</span>
+</div>
+<textarea class="w-full bg-surface-raised text-ink-primary border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl p-3 font-body text-body transition-colors" id="bio" placeholder="Présentez avec pudeur et sobriété vos principes de vie, votre attachement à la piété filiale et l'équilibre que vous recherchez au sein de votre foyer..." rows="4">Élevé dans le respect strict des traditions de dignité familiale et des préceptes de l'Islam. Recherche une compagne pieuse, bienveillante, attachée à l'apprentissage spirituel et à l'éducation saine des enfants. Vie quotidienne simple, partagée entre engagements professionnels et moments de recueillement.</textarea>
+</div>
+</section>
+<!-- SECTION: PRATIQUE RELIGIEUSE & PROJET MATRIMONIAL (FR-021, FR-022) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 space-y-4">
+<div class="border-b border-border-hairline pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-gold">mosque</span>
+<h2 class="font-heading text-heading text-primary">Pratique Religieuse &amp; Projet Matrimonial</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-1">
+            Déclaration canonique essentielle assurant la concordance des valeurs et la loyauté de l'union.
+          </p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Madhhab (Currently missing in profile meter) -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1" for="madhhabSelect">
+              École de jurisprudence (Madhhab) <span class="text-danger">*</span>
+</label>
+<select class="w-full bg-surface-raised text-ink-primary border-2 border-primary/50 focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl px-3 py-2.5 font-body text-body transition-colors" id="madhhabSelect">
+<option disabled="" selected="" value="">-- Sélectionner votre madhhab --</option>
+<option value="malikite">École Malékite (Répandue au Burkina Faso)</option>
+<option value="hanafite">École Hanafite</option>
+<option value="chafeite">École Chaféite</option>
+<option value="hanbalite">École Hanbalite</option>
+<option value="attachement_sunna">Attachement à la Sunna sans affiliation exclusive</option>
+</select>
+<p class="font-caption text-caption text-ink-secondary mt-1">Ce critère est requis pour débloquer la jauge d'échange.</p>
+</div>
+<!-- Assiduité à la pratique -->
+<div>
+<label class="block font-meta text-meta text-ink-secondary mb-1" for="prayerCommitment">Assiduité à la Salat</label>
+<select class="w-full bg-surface-raised text-ink-primary border border-border-hairline focus:border-border-strong focus:ring-2 focus:ring-focus-ring focus:ring-offset-2 rounded-xl px-3 py-2.5 font-body text-body transition-colors" id="prayerCommitment">
+<option value="punctual_mosque">Toujours à l'heure, à la mosquée pour les prières collectives</option>
+<option selected="" value="punctual_home">Régulière et assidue à l'heure prescrite</option>
+<option value="learning">En perfectionnement continu et consolidation</option>
+</select>
+</div>
+</div>
+<!-- RÈGLE DE POLYGAMIE FR-022 (Conditionnelle & Vérifiée) -->
+<div class="p-4 rounded-xl bg-surface-sand border border-border-hairline space-y-3" id="polygamyBlock">
+<div class="flex items-start gap-2.5">
+<span class="material-symbols-outlined text-primary text-[22px] mt-0.5">balance</span>
+<div>
+<h3 class="font-body-strong text-body-strong text-primary">Engagement sur la Polygamie (FR-022)</h3>
+<p class="font-meta text-meta text-ink-secondary">
+                En conformité avec la jurisprudence islamique et la charte d'honnêteté AnKanu, tout profil masculin au statut « Marié » doit obligatoirement déclarer son intention polygame sincère.
+              </p>
+</div>
+</div>
+<div class="pt-1">
+<label class="block font-meta text-meta text-ink-secondary mb-1.5">
+              Intention de foyer polygame déclarée : <span class="text-danger">*</span>
+</label>
+<div class="flex items-center gap-6">
+<label class="inline-flex items-center gap-2 cursor-pointer font-body text-body text-ink-primary">
+<input checked="" class="text-primary focus:ring-focus-ring w-4 h-4 border-border-hairline" name="polygamy_intent" type="radio" value="yes"/>
+<span>Oui, le projet s'inscrit dans un cadre polygame loyal</span>
+</label>
+<label class="inline-flex items-center gap-2 cursor-pointer font-body text-body text-ink-primary">
+<input class="text-primary focus:ring-focus-ring w-4 h-4 border-border-hairline" name="polygamy_intent" type="radio" value="no"/>
+<span>Non</span>
+</label>
+</div>
+</div>
+<!-- Dynamic Warning alert for Rule 22 -->
+<div class="hidden p-3 rounded-lg bg-danger-soft border border-danger/30 text-danger font-meta text-meta flex items-center gap-2" id="polygamyWarning">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+<span><strong>Rejet de conformité :</strong> Un profil ayant déclaré le statut « Marié » requiert impérativement une intention polygame déclarée (« Oui ») afin de protéger l'éthique et la bonne foi matrimoniale.</span>
+</div>
+</div>
+</section>
+<!-- SECTION: SÉCURITÉ & PROTECTION DU SANCTUAIRE (CODE PIN) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 space-y-4">
+<div class="flex items-center justify-between">
+<div class="space-y-0.5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">lock</span>
+<h2 class="font-heading text-heading text-primary">Verrouillage de Sanctuaire (Code PIN)</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary">
+              Sécurise les correspondances et la consultation du folio sur smartphone familial partagé.
+            </p>
+</div>
+<!-- Switch Toggle -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="pinToggle" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-sand peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-border-hairline after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<div class="p-4 bg-surface-sand rounded-xl border border-border-hairline grid grid-cols-1 sm:grid-cols-2 gap-4 items-center" id="pinConfigBlock">
+<div>
+<span class="font-body-strong text-body-strong text-ink-primary block">Code PIN à 4 chiffres</span>
+<span class="font-caption text-caption text-ink-secondary block">Demandé après 5 minutes d'inactivité</span>
+</div>
+<div class="flex items-center justify-start sm:justify-end gap-2">
+<input class="w-10 h-11 text-center bg-surface-raised border border-border-hairline rounded-lg font-heading text-heading text-primary" maxlength="1" readonly="" type="password" value="4"/>
+<input class="w-10 h-11 text-center bg-surface-raised border border-border-hairline rounded-lg font-heading text-heading text-primary" maxlength="1" readonly="" type="password" value="8"/>
+<input class="w-10 h-11 text-center bg-surface-raised border border-border-hairline rounded-lg font-heading text-heading text-primary" maxlength="1" readonly="" type="password" value="2"/>
+<input class="w-10 h-11 text-center bg-surface-raised border border-border-hairline rounded-lg font-heading text-heading text-primary" maxlength="1" readonly="" type="password" value="9"/>
+<button class="ml-2 font-meta text-meta text-primary hover:text-gold transition-colors font-semibold" type="button">Modifier</button>
+</div>
+</div>
+</section>
+<!-- SECTION: MISE EN PAUSE TEMPORAIRE DU COMPTE / LIFE-PAUSES (FR-023) -->
+<section class="bg-surface-raised border border-border-hairline rounded-xl p-5 space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border-hairline pb-3">
+<div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-staff">bedtime</span>
+<h2 class="font-heading text-heading text-primary">Mise en Retrait Temporaire (Pause de Convenance)</h2>
+</div>
+<p class="font-meta text-meta text-ink-secondary mt-0.5">
+              Suspendez momentanément la réception de demandes en préservant intactes vos homologations.
+            </p>
+</div>
+<button class="self-start sm:self-auto px-4 py-2 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-meta text-meta transition-colors flex items-center gap-1.5" id="togglePauseBtn" type="button">
+<span class="material-symbols-outlined text-[16px]">pause_circle</span>
+<span>Configurer une pause</span>
+</button>
+</div>
+<!-- Life-pause expand drawer -->
+<div class="hidden space-y-3 p-4 bg-surface-sand rounded-xl border border-border-hairline" id="pauseDrawer">
+<p class="font-meta text-meta text-ink-primary font-semibold">Sélectionnez le motif canonique de votre retrait :</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+<label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-border-hairline text-ink-primary font-meta text-meta cursor-pointer">
+<input checked="" class="text-primary focus:ring-focus-ring" name="pause_reason" type="radio" value="ramadan"/>
+<span>Mois béni de Ramadan (Recueillement)</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-border-hairline text-ink-primary font-meta text-meta cursor-pointer">
+<input class="text-primary focus:ring-focus-ring" name="pause_reason" type="radio" value="exams"/>
+<span>Examens / Concours nationaux</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-border-hairline text-ink-primary font-meta text-meta cursor-pointer">
+<input class="text-primary focus:ring-focus-ring" name="pause_reason" type="radio" value="travel"/>
+<span>Voyage / Déplacement professionnel</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg bg-surface border border-border-hairline text-ink-primary font-meta text-meta cursor-pointer">
+<input class="text-primary focus:ring-focus-ring" name="pause_reason" type="radio" value="mourning"/>
+<span>Deuil familial / Période de réserve</span>
+</label>
+</div>
+<div class="pt-2">
+<label class="block font-meta text-meta text-ink-secondary mb-1">Motif particulier (optionnel)</label>
+<input class="w-full bg-surface text-ink-primary border border-border-hairline rounded-xl px-3 py-2 font-body text-body" placeholder="Précision libre si convenance..." type="text"/>
+</div>
+<!-- Reassurance clause -->
+<div class="flex items-center gap-2 pt-2 text-staff font-caption text-caption">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>Réactivation en un clic sans reprise du parcours initial — vérifications d'identité préservées.</span>
+</div>
+</div>
+</section>
+<!-- SECTION: ACTIONS DE VALIDATION -->
+<section class="pt-4 flex flex-col-reverse sm:flex-row items-center justify-end gap-3 border-t border-border-hairline">
+<button class="w-full sm:w-auto px-6 py-3 rounded-full border border-border-strong text-ink-primary hover:bg-surface-sand font-body-strong text-body-strong transition-colors text-center" type="button">
+          Annuler
+        </button>
+<button class="w-full sm:w-auto px-7 py-3 rounded-full bg-primary hover:bg-indigo-deep text-ink-on-indigo font-body-strong text-body-strong transition-colors flex items-center justify-center gap-2 shadow-none" id="saveButton" type="button">
+<span class="hidden animate-spin material-symbols-outlined text-[18px]" id="saveSpinner">progress_activity</span>
+<span id="saveText">Enregistrer les modifications</span>
+</button>
+</section>
+</form>
+</main>
+<!-- GUARDIAN & CHAPERONE RECALL BANNER -->
+<div class="bg-staff-soft/60 border-t border-border-hairline mt-10">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-staff text-[24px]">supervised_user_circle</span>
+<div class="text-staff">
+<p class="font-body-strong text-body-strong">Supervision et Protection Familiale</p>
+<p class="font-meta text-meta">Votre tuteur matrimonial (Wali) reçoit une notification récapitulative lors de toute modification majeure.</p>
+</div>
+</div>
+<a class="shrink-0 font-meta text-meta text-primary underline hover:text-gold transition-colors" href="#">
+        Statut du Wali : Homologué
+      </a>
+</div>
+</div>
+<!-- MINIMAL EDITORIAL FOOTER (Shared Components: Footer applied) -->
+<footer class="bg-surface-sand dark:bg-surface-indigo border-t border-border-hairline dark:border-mihrab mt-auto">
+<div class="w-full max-w-4xl mx-auto px-screen-pad py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+<span class="font-heading text-heading text-primary dark:text-ink-on-indigo font-semibold">AnKanu</span>
+<span class="text-ink-secondary dark:text-outline-variant font-caption text-caption">
+          © 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè.
+        </span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-4">
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Confidentialité &amp; Données</a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Tuteurs Légaux (Wali)</a>
+<span class="text-border-hairline">•</span>
+<a class="text-ink-secondary dark:text-outline-variant font-meta text-meta hover:text-ink-primary dark:hover:text-ink-on-indigo transition-colors duration-150" href="#">Éthique &amp; Respect</a>
+</div>
+</div>
+</footer>
+<!-- SCRIPT: INTERACTION & CONFORMANCE VALIDATION -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const maritalStatus = document.getElementById('maritalStatus');
+      const polygamyBlock = document.getElementById('polygamyBlock');
+      const polygamyWarning = document.getElementById('polygamyWarning');
+      const madhhabSelect = document.getElementById('madhhabSelect');
+      const saveButton = document.getElementById('saveButton');
+      const saveSpinner = document.getElementById('saveSpinner');
+      const saveText = document.getElementById('saveText');
+      const alertSuccess = document.getElementById('alertSuccess');
+      const alertError = document.getElementById('alertError');
+      const alertErrorMessage = document.getElementById('alertErrorMessage');
+      const togglePauseBtn = document.getElementById('togglePauseBtn');
+      const pauseDrawer = document.getElementById('pauseDrawer');
+      const pinToggle = document.getElementById('pinToggle');
+      const pinConfigBlock = document.getElementById('pinConfigBlock');
+
+      // Toggle Pause Drawer
+      togglePauseBtn.addEventListener('click', () => {
+        pauseDrawer.classList.toggle('hidden');
+      });
+
+      // Toggle PIN block
+      pinToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          pinConfigBlock.classList.remove('hidden');
+        } else {
+          pinConfigBlock.classList.add('hidden');
+        }
+      });
+
+      // Polygamy Rule 22 reactive state
+      function checkPolygamyRule() {
+        const isMarried = maritalStatus.value === 'married';
+        const polygamyRadio = document.querySelector('input[name="polygamy_intent"]:checked');
+        const polygamyVal = polygamyRadio ? polygamyRadio.value : 'no';
+
+        if (isMarried && polygamyVal === 'no') {
+          polygamyWarning.classList.remove('hidden');
+          return false;
+        } else {
+          polygamyWarning.classList.add('hidden');
+          return true;
+        }
+      }
+
+      // Event listeners for radio & select
+      maritalStatus.addEventListener('change', checkPolygamyRule);
+      document.querySelectorAll('input[name="polygamy_intent"]').forEach(radio => {
+        radio.addEventListener('change', checkPolygamyRule);
+      });
+
+      // Save Profile with full validation checks
+      saveButton.addEventListener('click', () => {
+        // Reset banners
+        alertSuccess.classList.add('hidden');
+        alertError.classList.add('hidden');
+
+        // Validation 1: Madhhab presence
+        if (!madhhabSelect.value) {
+          alertErrorMessage.textContent = "Rejet : Veuillez renseigner votre école de jurisprudence (madhhab) afin de compléter votre dossier canonique.";
+          alertError.classList.remove('hidden');
+          madhhabSelect.focus();
+          window.scrollTo({ top: madhhabSelect.offsetTop - 120, behavior: 'smooth' });
+          return;
+        }
+
+        // Validation 2: Polygamy Rule (FR-022)
+        const polygamyValid = checkPolygamyRule();
+        if (!polygamyValid) {
+          alertErrorMessage.textContent = "Rejet de conformité : Un profil marié requiert une intention polygame déclarée (« Oui ») pour garantir la loyauté de l'introduction.";
+          alertError.classList.remove('hidden');
+          window.scrollTo({ top: polygamyBlock.offsetTop - 120, behavior: 'smooth' });
+          return;
+        }
+
+        // Simulating Discrete Loading Spinner
+        saveButton.disabled = true;
+        saveSpinner.classList.remove('hidden');
+        saveText.textContent = "Examen de conformité...";
+
+        setTimeout(() => {
+          saveButton.disabled = false;
+          saveSpinner.classList.add('hidden');
+          saveText.textContent = "Enregistrer les modifications";
+          alertSuccess.classList.remove('hidden');
+          window.scrollTo({ top: 140, behavior: 'smooth' });
+        }, 850);
+      });
+    });
+  </script>
+</body></html>
