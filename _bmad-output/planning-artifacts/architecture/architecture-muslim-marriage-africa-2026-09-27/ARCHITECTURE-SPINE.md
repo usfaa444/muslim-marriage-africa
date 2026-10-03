@@ -1,10 +1,10 @@
 ---
-name: muslim-marriage-africa
+name: AnKanu
 type: architecture-spine
 purpose: build-substrate
 altitude: initiative
 paradigm: hexagonal-modular-monolith
-scope: Initiative-altitude consistency contract for the Burkina-first muslim-marriage-africa ta'aruf platform (working title; product name undecided). Governs all feature spines and the MVP+NEXT capability surface in the 2026-09-27 PRD.
+scope: Initiative-altitude consistency contract for the Burkina-first AnKanu ta'aruf platform (repo slug muslim-marriage-africa is not the product name). Governs all feature spines and the MVP+NEXT capability surface in the 2026-09-27 PRD.
 status: final
 created: 2026-09-27
 updated: 2026-10-03
@@ -22,9 +22,9 @@ companions:
   - SOLUTION-DESIGN.md
 ---
 
-# Architecture Spine — muslim-marriage-africa
+# Architecture Spine — AnKanu
 
-Working title **muslim-marriage-africa**. Product name undecided (shortlist Nisfuddin — also consider `nisfdin` — Nikahsira, Sakinaa; alternates Mithaqun, Nonglem). RDAP checks are point-in-time, not a purchase. Assumptions A1–A3 stay as written in the brief/PRD.
+Product name **AnKanu** (locked 2026-10-03, Maitchibi Fayçal via Harris). Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, and `nisfdin` are history of the search that was not chosen — those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed. Assumptions A1–A3 stay as written in the brief/PRD.
 
 ## Design Paradigm
 
@@ -228,9 +228,9 @@ stateDiagram-v2
 
 ### AD-22 — Open PRD questions stay open
 
-- **Binds:** PRD §16 questions 1 and 3–11 and the NFR-008 retention clocks (PRD §16 item 12)
+- **Binds:** PRD §16 questions 1, 3–8, and 10–11 and the NFR-008 retention clocks (PRD §16 item 12)
 - **Prevents:** silently closing product/legal questions in code defaults that cannot change
-- **Rule:** each **open** question is a config flag, policy-table row, or disabled port (see SOLUTION-DESIGN.md). Question 2 (fail-closed UX tolerance) is **resolved 2026-10-01** — Chat is send-first and passive (AD-10); do not keep a hold-timeout UX. Builders must not bake a closed answer into schema enums unless the PRD already locked the enum. Retention clocks stay `[ASSUMPTION]` until counsel replaces them (AD-19)
+- **Rule:** each **open** question is a config flag, policy-table row, or disabled port (see SOLUTION-DESIGN.md). Question 2 (fail-closed UX tolerance) is **resolved 2026-10-01** — Chat is send-first and passive (AD-10); do not keep a hold-timeout UX. Question 9 (native-speaker check of Nikahsira / Nonglem) is **resolved 2026-10-03** — product name is AnKanu; domain ankanu.com purchased on Hostinger; shortlist names are search history only and those domains were not purchased. Question 10 stays open for OAPI/WIPO and social handles of AnKanu (not recorded as completed); shortlist-domain purchase is closed. Builders must not bake a closed answer into schema enums unless the PRD already locked the enum. Retention clocks stay `[ASSUMPTION]` until counsel replaces them (AD-19)
 
 ### AD-23 — Cross-module commands
 
@@ -428,7 +428,7 @@ flowchart LR
 - Dual-control moderator unblur (D31 NEXT) — MVP is audited single-control
 - Watermark / no-download polish (FR-061 NEXT) — gateway revoke + blurred thumbs + FLAG_SECURE ship now
 - Multi-region active-active and in-country move — portable substrate ready; not launched
-- Product name, domains, trademarks — branding tokens, not schema
+- Trademarks (OAPI/WIPO) and social handles for AnKanu — branding tokens, not schema; OAPI/WIPO not recorded as completed. Product name AnKanu and domain ankanu.com are locked 2026-10-03 (not an AD)
 - Exact Premium XOF prices and free-review hours — `operator_config`
 - Live 1:1 A/V (LATER, khalwa)
 - Full English/Arabic UI (LATER)

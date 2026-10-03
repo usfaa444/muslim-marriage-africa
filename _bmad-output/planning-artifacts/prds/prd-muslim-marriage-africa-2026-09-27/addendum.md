@@ -2,10 +2,10 @@
 title: muslim-marriage-africa — PRD addendum
 status: final
 created: 2026-09-27
-updated: 2026-10-02
+updated: 2026-10-03
 ---
 
-# Addendum — overflow for the muslim-marriage-africa PRD
+# Addendum — overflow for the AnKanu PRD
 
 This file holds depth that belongs downstream or would bloat `prd.md`: technical-how options (not decisions), rejected-alternative rationale, and in-depth personas. It is not architecture and not a UX spec. Audit and override information lives in `.memlog.md`, not here.
 
@@ -102,7 +102,7 @@ Farata’s public DPA lists Vercel (USA) and Neon (USA) as processors — Offere
 
 ### 2.7 Name
 
-No decision. Shortlist, alternates, Dannaya note, and RDAP snapshot: §6.
+**Chosen 2026-10-03** (Maitchibi Fayçal via Harris): **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug muslim-marriage-africa is the repo working title only. Historical shortlist, alternates, Dannaya note, and RDAP snapshot: §6. Those shortlist names were not chosen and those domains were not purchased.
 
 ### 2.8 Homepage proof
 
@@ -210,20 +210,22 @@ Burkina first. French-first + Mooré/Dioula audio. Chat delivered immediately, t
 
 Visual hint only (UX owns the system): indigo / sand / gold, mihrab geometry, *sira* as a path metaphor — solemn marriage, not swipe culture.
 
-## 6. Name shortlist (not a decision)
+## 6. Name — chosen AnKanu; shortlist is history
 
-Working title: **muslim-marriage-africa**. Product name TBD.
+**Decision (2026-10-03, Maitchibi Fayçal via Harris):** product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug **muslim-marriage-africa** is the repo working title only, not the product name.
 
-| Candidate | Note |
+The table below is the 2026-09-27 search that was **not** chosen. Do not read it as current candidates. Those domains were **not** purchased.
+
+| Candidate (historical) | Note |
 | --- | --- |
-| Nisfuddin | “Half the deen”; consider `nisfdin` too |
-| Nikahsira | *nikah* + Jula *sira* — native-speaker check |
-| Sakinaa | *sakina*; `sakina.com` / `.net` taken |
+| Nisfuddin | “Half the deen”; `nisfdin` was also considered |
+| Nikahsira | *nikah* + Jula *sira* — native-speaker check was pending when this was a candidate |
+| Sakinaa | *sakina*; `sakina.com` / `.net` taken at the 2026-09-27 RDAP check |
 | Mithaqun | Alternate — solemn covenant |
-| Nonglem | Alternate — Mooré wildcard; native-speaker check |
+| Nonglem | Alternate — Mooré wildcard; native-speaker check was pending when this was a candidate |
 
-Dannaya (Jula “trust”) `.com` taken / `.net` free — not on the shortlist. Pending: native-speaker validation; OAPI + WIPO; social handles; user test in Ouaga/Bobo. Nothing registered or bought. RDAP 2026-09-27 ~21:10 ET is point-in-time only, not a purchase.
+Dannaya (Jula “trust”) `.com` taken / `.net` free — was not on the shortlist. RDAP 2026-09-27 ~21:10 ET is historical search evidence only, not a purchase. Only **ankanu.com** was later purchased (Hostinger, 2026-10-03). Native-speaker validation of Nikahsira/Nonglem and OAPI for those shortlist names are not the open naming decision. Trademark and social-handle work for **AnKanu** is not recorded as completed.
 
 ## 7. What this addendum is not
 
-Not the PRD. Not architecture. Not a name/domain decision. Not legal advice. Not the start of UX, epics, or other skills.
+Not the PRD. Not architecture. Not legal advice. Not the start of UX, epics, or other skills. Name and domain are decided (AnKanu / ankanu.com); this file does not claim AnKanu trademark or social-handle work is done.

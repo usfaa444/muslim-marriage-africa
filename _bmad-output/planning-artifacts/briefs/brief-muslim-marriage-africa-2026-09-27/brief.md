@@ -1,13 +1,13 @@
 ---
-title: muslim-marriage-africa — product brief
+title: AnKanu — product brief
 status: complete
 created: 2026-09-27
-updated: 2026-10-02
+updated: 2026-10-03
 ---
 
-# Product Brief: muslim-marriage-africa
+# Product Brief: AnKanu
 
-Working title only. Product name is TBD (see Naming). This brief is the planning spine for a marriage-focused Muslim matrimony product (honorable ta'aruf / nikah — not dating) that launches in Burkina Faso and must implement every Farata feature (P1–P59) plus the differentiators (D1–D40).
+Product name is **AnKanu**. Domain **ankanu.com** was purchased on Hostinger (2026-10-03). The repository slug `muslim-marriage-africa` is not the product name. This brief is the planning spine for a marriage-focused Muslim matrimony product (honorable ta'aruf / nikah — not dating) that launches in Burkina Faso and must implement every Farata feature (P1–P59) plus the differentiators (D1–D40).
 
 Read the narrative sections first (problem through pricing), then the two feature-scope lists. Overflow (full risk table, personas, options considered) lives in `addendum.md`.
 
@@ -21,24 +21,13 @@ MVP ships web + installable PWA + store-listed Android. Native iOS is parity —
 
 ## Naming
 
-Product name is **not decided**. No domain has been registered or bought. RDAP checks against Verisign on **2026-09-27 ~21:10 ET** are point-in-time only (HTTP 404 = free at check time; not a purchase, reservation, or hold). Premium/reserved pricing and trademark conflicts were not checked.
+Product name is **AnKanu**. Domain **ankanu.com** was purchased on Hostinger on **2026-10-03** (locked decision, Maitchibi Fayçal via Harris). The repository slug `muslim-marriage-africa` is not the product name.
 
-**Shortlist** (all `.com` + `.net` free at that RDAP check):
+**2026-09-27 search history only** — not the current or pending name, and those domains were not bought. RDAP checks against Verisign on **2026-09-27 ~21:10 ET** were point-in-time lookups (not a purchase, reservation, or hold). They are not the current domain status for this product. Premium/reserved pricing and trademark conflicts were not checked in that pass.
 
-| Candidate | Meaning / note | .com | .net |
-| --- | --- | --- | --- |
-| **Nisfuddin** | “Half the deen” (hadith). Also consider buying `nisfdin` (also free). | free | free |
-| **Nikahsira** | *nikah* + Jula *sira* (“path to nikah”). Confirm Dioula with native speakers. | free | free |
-| **Sakinaa** | *sakina* (tranquillity, Ar-Rum 30:21). `sakina.com` / `.net` are taken. | free | free |
+**Shortlist then:** Nisfuddin (“half the deen”); Nikahsira (*nikah* + Jula *sira*); Sakinaa (*sakina*, Ar-Rum 30:21). **Alternates then:** Mithaqun (Qur’an 4:21 *mīthāqan ghalīẓā*); Nonglem (Mooré wildcard). Native-speaker checks on those candidates are closed because the name is AnKanu.
 
-**Alternates** (also `.com` + `.net` free at the same check):
-
-| Candidate | Meaning / note | .com | .net |
-| --- | --- | --- | --- |
-| **Mithaqun** | Solemn covenant (Qur’an 4:21 *mīthāqan ghalīẓā*). | free | free |
-| **Nonglem** | Mooré wildcard (“love / affection”). Native-speaker check required. | free | free |
-
-Pending before any name decision: native-speaker validation of Mooré/Dioula meanings (slang/taboo risk in Ouaga/Bobo); OAPI and WIPO trademark searches; social-handle check; user test with sisters, brothers, and walis in Ouagadougou and Bobo-Dioulasso.
+Still open: OAPI and WIPO trademark searches for AnKanu; social-handle check for AnKanu. Do not treat those as done.
 
 ## The problem
 
@@ -337,7 +326,7 @@ Full table is in `addendum.md`. The launch-killing eight:
 ## Out of scope / not-now
 
 - **Architecture / hosting vendor pick** — deferred to architecture. CIL compliance and public hosting disclosure are product requirements (see Assumptions).
-- **Name purchase / trademark filing** — shortlist only this run.
+- **Trademark filing (OAPI/WIPO) and social-handle registration for AnKanu** — not done. Name and domain are decided (AnKanu / ankanu.com).
 - **Native iOS** — parity — deferred to NEXT, not dropped.
 - **Live 1:1 video / live voice** — LATER, including with wali (khalwa-sensitive).
 - **Full English / Arabic UI** — LATER (audio in Mooré/Dioula is MUST).
@@ -374,7 +363,7 @@ Rationale: kinship documents are uneven in BF and would block the must-have; pho
 
 ## Open questions
 
-Items from the brainstorm. One was closed by the 2026-10-01 locked decision; the rest stay open. The 2026-10-02 locked decisions (D20 sister-access modes; one-card people lists; message quotas; mahram thread grant) are not open-question closes.
+Items from the brainstorm. Name and domain were closed by the 2026-10-03 locked decision (AnKanu / ankanu.com). Fail-closed UX was closed 2026-10-01. The 2026-10-02 locked decisions (D20 sister-access modes; one-card people lists; message quotas; mahram thread grant) are not open-question closes. The rest stay open.
 
 - **Polygamy disclosure UX:** how to disclose existing wives without doxxing them? First-wife awareness remains out of scope unless she consents — confirm with sisters and counsel.
 - **Fail-closed UX tolerance:** **Resolved 2026-10-01** (locked decision, Maitchibi Fayçal). AI moderation is passive. Messages send immediately; AI outage does not hold or delay chat. Scan-deferred events are recorded for the admin. The former “how long will members tolerate held voice notes” question no longer applies.
@@ -384,8 +373,8 @@ Items from the brainstorm. One was closed by the 2026-10-01 locked decision; the
 - **Anonymous-mode rules:** confirm D36 (hide last-seen + hide from browse except people you requested) with sisters. Farata “mode anonyme” is Claimed; behaviour unknown.
 - **Brother clear photo before accept:** should sisters ever see a brother’s clear photo before accept if he chose unblurred? Default lean: yes if he opted out of blur — confirm.
 - **GIFs/stickers:** is a zero-GIF launch acceptable until a curated pack exists (P33 NEXT)?
-- **Native-speaker validation:** do Nikahsira (Jula *sira*) and Nonglem (Mooré) read as intended in Ouaga/Bobo, or is there slang/taboo?
-- **OAPI trademark + social handles** for Nisfuddin / Nikahsira / Sakinaa — not done.
+- **Native-speaker validation (Nikahsira / Nonglem):** **Resolved 2026-10-03** (locked naming, Maitchibi Fayçal via Harris). Product name is AnKanu; those shortlist names were not chosen. The former “pick a name after native-speaker check” question no longer applies.
+- **OAPI trademark + social handles** for **AnKanu** — not done. (The 2026-09-27 shortlist names were not chosen; do not run leftover handle work as if they were the product.)
 - **Free Money / MTN MoMo (P58):** keep as later-country parity rails? This brief assumes yes (see P58 split).
 
 ## What the PRD must preserve
@@ -399,7 +388,7 @@ Items from the brainstorm. One was closed by the 2026-10-01 locked decision; the
 7. Age 19+, wali-invite-by-phone (no kinship papers in MVP), CIL + public hosting disclosure — all tagged **[ASSUMPTION]** and queued for legal review.
 8. North star = chaperoned meetings + dual-confirmed nikah. Proof-backed counters only. No dating language.
 9. Passive deliver-then-scan moderation. Profile photos and bio stay publish-gated. Contact-share still blocks phone/WhatsApp/links until both opt in (not the AI). Khalwa-safe (no live A/V until wali or chaperoned meeting). Woman’s consent first-class.
-10. Name remains TBD until native-speaker + trademark work. Do not start architecture from this brief.
+10. Product name is AnKanu; domain is ankanu.com (Hostinger). OAPI/WIPO trademark and social handles for AnKanu remain open. Do not start architecture from this brief.
 11. People lists default to one focused card with shared traits and pass / invite / quick-message; optional grid on every such screen; many-filter search may open on the grid. Reject dishonest chrome (fake presence, invented scale), not the one-at-a-time card.
 12. Mahram sees only sister-granted, delivered threads; she can revoke one thread or his entire permission; read-only; he cannot send as her.
 
@@ -409,8 +398,8 @@ If this works, Ouagadougou and Bobo families will treat the product as a known h
 
 ## Document control
 
-- **Intent:** update (headless). Correction of record 2026-10-02: one-card people lists by default; messages quotaed (Premium unlimited invites and messages); mahram grant-scoped (D1 reframed). D20 sister-access modes and passive AI stay except where message quotas change chat volume.
-- **Sources:** `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`; `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (intent, html, memlog). Passive-AI locked decision of 2026-10-01 stays. D20 locked decision of 2026-10-02 stays. This run does not edit the PRD, architecture, UX, or epics.
+- **Intent:** update (headless). Locked naming 2026-10-03 (Maitchibi Fayçal via Harris): product name is AnKanu; ankanu.com purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. 2026-09-27 shortlist (Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem) is search history only; those domains were not bought. Behavior locks unchanged (passive moderation, `sister_reach_mode`, one-card default with optional grid, `daily_message_cap`, mahram per-thread grants, entity catalog).
+- **Sources:** `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`; `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-27/` (intent, html, memlog). Name locked 2026-10-03. Passive-AI locked decision of 2026-10-01 stays. D20 and 2026-10-02 locks stay. This run does not edit the PRD, architecture, UX, or epics.
 - **Overflow:** `addendum.md` (full risk table, personas/job maps, options considered).
 - **Audit:** `.memlog.md` (via `memlog.py` only).
-- **This run:** does not edit the PRD, architecture, UX, or epics; does not start implementation.
+- **This run:** naming only. Does not edit the PRD, architecture, UX, or epics; does not start implementation.

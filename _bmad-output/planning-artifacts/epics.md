@@ -23,20 +23,22 @@ lockedDecisions:
   - Blur/reveal is server-side (AD-9).
   - Mahram is read-only on granted threads only (AD-12).
   - Contact-share still blocks phone numbers, WhatsApp, and links until both opt in (FR-068); that is not an AI hold.
-  - Name stays TBD. A1–A3 and the other open questions stay open.
+  - Product name is AnKanu. Domain ankanu.com was purchased on Hostinger (2026-10-03). Repo slug muslim-marriage-africa is not the product name. Shortlist names were not chosen and those domains were not bought. A1–A3 and the other open questions stay open.
   - Sister reach is operator-configurable on day one (`operator_config.sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Both values ship. Safety (verification, blur/reveal, mahram attach, report, block) stays free in both modes and must not call BillingPort. Chat send may call `BillingPort.isEntitled` only to decide FR-146. Brothers stay on the paid Invite quota (Free 3 `[ASSUMPTION]`). No brother-free mode. Locked Maitchibi Fayçal, 2026-10-02 (FR-044, FR-045, FR-105, FR-145, FR-146, AD-21, AD-27, AD-29). Historical note: “Chat after accept stay free … must not call BillingPort” is superseded 2026-10-02 for message volume. Safety still must not call BillingPort.
   - Discover and every people list default to one focused card. Grid is optional via a toggle on Discover and Search. Pass is dismiss, not a like. Dishonest chrome stays rejected (online now, +247.8k). A one-at-a-time card is not a rejected dating pattern. Locked Maitchibi Fayçal, 2026-10-02 (FR-024, FR-025, AD-28).
   - Free-tier messages are daily-capped by `operator_config.daily_message_cap` (seed 10 is `[ASSUMPTION — admin-configurable, not a product lock]`). Premium = unlimited Invites AND unlimited messages. There is no Premium Invite cap of 15. Sisters in `free_unlimited` still have message caps unless Premium. Sister checkout exists in BOTH `sister_reach_mode` values. Over-cap send is rejected (`MESSAGE_CAP_EXCEEDED`), not stored, not held. Allowed sends still deliver immediately (AD-10). Locked Maitchibi Fayçal, 2026-10-02 (FR-044, FR-050, FR-051, FR-105, FR-110, FR-146, AD-14, AD-21, AD-23, AD-29).
   - After Mahram confirm the grant list is empty. Sister grants individual Brother threads. Revoke one. Remove/report revokes every grant. He cannot send as her. Read-only on granted delivered messages. New chats are not auto-granted. Flash before accept is not grantable (grant needs a conversation). Locked Maitchibi Fayçal, 2026-10-02 (FR-074, FR-076, FR-077, AD-12).
 ---
 
-# muslim-marriage-africa - Epic Breakdown
+# AnKanu — Epic Breakdown
+
+Repo slug: muslim-marriage-africa. Product name: AnKanu.
 
 ## Overview
 
 This document provides the complete epic and story breakdown for muslim-marriage-africa, decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
 
-Working title only. Product name is TBD. This file is the build index. Sprint planning is a later skill.
+Product name **AnKanu**. Domain **ankanu.com** purchased on Hostinger (2026-10-03). Repo slug muslim-marriage-africa is not the product name. This file is the build index. Sprint planning is a later skill.
 
 Entity fields, nullability, and relationships: [SOLUTION-DESIGN.md §6 Entity catalog](architecture/architecture-muslim-marriage-africa-2026-09-27/SOLUTION-DESIGN.md). Spine AD-3 is ownership only.
 
@@ -299,7 +301,7 @@ From [ARCHITECTURE-SPINE.md](architecture/architecture-muslim-marriage-africa-20
 
 ### UX Design Requirements
 
-From [DESIGN.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/DESIGN.md) and [EXPERIENCE.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md). Both status final, updated 2026-10-01. Product name stays TBD in UI.
+From [DESIGN.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/DESIGN.md) and [EXPERIENCE.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md). Both status final. Product name is **AnKanu** (ankanu.com on Hostinger, 2026-10-03). Do not print the historical shortlist as the product name.
 
 - UX-DR1: Implement DESIGN.md tokens in Tailwind 4 — colors (sand, raised, indigo, gold, mihrab, blur-wash, danger, success, staff, disabled), typography (Source Serif 4 display/title/heading; Source Sans 3 body/meta/caption), spacing 4/8/12/16/24/32/48, rounded sm/md/lg/full.
 - UX-DR2: `button-primary` (indigo, 48px, one commit per screen; never a send that waits on AI), `button-secondary`, `button-quiet` (quiet decline / Revoke / remove Mahram).
@@ -664,7 +666,7 @@ So that the product looks like honorable ta'aruf and later screens have a home.
 
 **Given** I open the site on a 360px viewport
 **When** the landing renders
-**Then** UI is French, name is TBD (no shortlist name), *dating* / *rencontre romantique* are absent, mihrab wash is on splash/landing only
+**Then** UI is French, the product name is **AnKanu**, *dating* / *rencontre romantique* are absent, mihrab wash is on splash/landing only
 
 **Given** I inspect tokens
 **When** I compare to DESIGN.md
@@ -2675,13 +2677,13 @@ Visitors see an honest counter, five scholar-reviewed articles, named Board memb
 
 As a visitor,
 I want a solemn landing that shows Verified marriages (from Epic 9) and no invented DAU,
-So that the first impression is marriage, not dishonest dating chrome. Name stays TBD.
+So that the first impression is marriage, not dishonest dating chrome. The product name is **AnKanu**.
 
 **Acceptance Criteria:**
 
 **Given** I open the cold URL
 **When** landing renders
-**Then** counter is proof-backed; no “+247.8k actifs”; no shortlist product name as if decided
+**Then** counter is proof-backed; no “+247.8k actifs”; the product name shown is **AnKanu**, not a historical shortlist name
 
 **Given** copy scan
 **When** strings
@@ -3199,7 +3201,7 @@ Every PRD FR and NFR maps to a story id or an explicit not-MVP mark. NEXT/LATER 
 - **Starter template:** Architecture is greenfield. No clone-from-starter story. Story 1.1 is the shared kernel, not a vanilla CLI dump.
 - **Entities:** Tables are created on the first story that needs them. Story 1.5 seeds `operator_config` only.
 - **Locked moderation:** No story implements a pre-delivery hold, pending-moderation/held Chat state, unsend, or AI auto-suspend. Profile Photo/bio stay publish-gated (3.2). Blur is server-side (6.1). Mahram is read-only on granted threads only (7.4, 7.8). Contact-share is a local matcher (5.5). Over-cap send is rejected, not held (5.11).
-- **Open questions:** A1–A3 and PRD §16 questions 1 and 3–12 stay open. Name stays TBD.
+- **Open questions:** A1–A3 and PRD §16 questions that are not the product name stay open. The product name is **AnKanu** (ankanu.com purchased on Hostinger, 2026-10-03). Historical shortlist domains were not bought.
 - **File churn:** Media is touched in Epics 3, 5, and 6 on purpose — publish-gate, Chat delivery, and Reveal gateway are separate locked risk boundaries (AD-10 vs AD-9). Not consolidated.
 - **Epic independence:** Each epic delivers its domain. Epic 1 is the runnable substrate required by AD-6/AD-20. Later epics build on earlier ones only.
 - **Forward dependencies fixed:** FR-048 lives on Story 7.4. Story 4.6 only stores Flash. Story 2.9 degrades to pictograms if audio files are missing. Story 7.5 inserts the priority case when the Mahram flags.

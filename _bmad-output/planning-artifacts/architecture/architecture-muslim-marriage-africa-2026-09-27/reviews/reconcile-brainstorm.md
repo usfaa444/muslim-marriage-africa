@@ -4,6 +4,8 @@
 
 > **Superseded 2026-10-02.** Sister Invite reach is operator-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`; AD-27). Claims that Sisters are always free/unlimited, that D20 forbids any Sister entitlement check, or that sister-invite send must never call `BillingPort.isEntitled`, are historical. Safety paths and Chat after accept still must not call `BillingPort`.
 
+> **Name lock 2026-10-03 (Maitchibi Fayçal via Harris).** Product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Sentences below that treat the name as TBD, undecided, or a live shortlist (Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, `nisfdin`) are historical of this review date. Those names were not chosen and those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed.
+
 **Input:** Brainstorm session `brainstorm-muslim-marriage-africa-2026-09-27`  
 **Source read:** `brainstorm-intent.md` only (this review does not start other BMAD skills)  
 **Compared to:** `ARCHITECTURE-SPINE.md` (initiative-altitude consistency contract). Companion `SOLUTION-DESIGN.md` is cited only to show what the spine itself does *not* lock.  

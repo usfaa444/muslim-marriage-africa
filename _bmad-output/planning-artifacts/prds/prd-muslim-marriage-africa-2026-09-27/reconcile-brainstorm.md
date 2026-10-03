@@ -6,6 +6,8 @@
 
 **Superseded in part on 2026-10-02 (later lock).** People lists default to one focused card; optional grid toggle on every people list. A one-at-a-time card is not rejected dating chrome. Sentences below that treat browse as only a grid, or that treat swipe/card as a banned anti-pattern (rather than dishonest chrome only), are historical. Chat after accept is not unconditionally unlimited (FR-146). Mahram reads only granted threads.
 
+**Current as of 2026-10-03.** Locked naming (Maitchibi Fayçal via Harris): product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Sentences below that treat the product name as TBD, undecided, or still a shortlist decision, or that treat native-speaker/OAPI work on Nikahsira/Nonglem/Nisfuddin/Sakinaa as the open naming decision, are **historical**. Shortlist name-vibe notes are history of the search that was not chosen. Those domains were **not** purchased.
+
 **Input:** Brainstorm session `brainstorm-muslim-marriage-africa-2026-09-27`  
 **Sources read:** `brainstorm-intent.md`, `brainstorm.html`, `.memlog.md`  
 **Compared to:** `prd.md` + `addendum.md` (same PRD workspace)  
@@ -198,7 +200,7 @@ Intent + memlog required **every D24–D40 listed** in brief and PRD. Appendix A
 
 ## 6. Open questions — carry-through
 
-All 13 brainstorm open questions appear in PRD §16 (age gate closed as A1 = 19+ with legal flag). None silently closed against the session. Native-speaker name checks and OAPI/handles remain open — consistent with “name TBD, not a purchase.”
+All 13 brainstorm open questions appear in PRD §16 (age gate closed as A1 = 19+ with legal flag). None silently closed against the session. **Current as of 2026-10-03:** the product name is AnKanu (ankanu.com on Hostinger). Native-speaker checks and OAPI/handles for the 2026-09-27 shortlist are historical; they are not the open naming decision. Trademark/social-handle work for AnKanu is not recorded as completed.
 
 ---
 
@@ -214,7 +216,7 @@ Ranked for Finalize input-reconciliation. These are qualitative losses, not miss
 
 4. **Guardian dignity vs sister haya is incomplete.** No AC that the wali is **identified to the Brother** while she stays **pseudonymous**; no **wali-only exportable chat attestation**. Time-limited Reveal / re-Blur on Report also absent. **Fix:** fold into D1/D8/D15 notes before UX.
 
-5. **Name meanings never became voice.** Nisfuddin = half the deen; Nikahsira = path to nikah (same *sira* as the hero); Sakinaa = sakīna (tranquility, not excitement). PRD lists candidates. It does not tell copy which vibe to write. User-test-the-*feel* in Ouaga/Bobo is weaker than the trademark Open Question. **Fix:** addendum name-vibe paragraph + research note.
+5. **Name meanings never became voice.** **Current as of 2026-10-03:** name chosen — AnKanu; ankanu.com on Hostinger. The Nisfuddin / Nikahsira / Sakinaa vibe notes below are historical search residue, not current candidates. Those domains were not purchased. Nisfuddin = half the deen; Nikahsira = path to nikah (same *sira* as the hero); Sakinaa = sakīna (tranquility, not excitement).
 
 Plus (do not lead with these): pickup-line ban on Ice Breakers; voice-as-ta'aruf-intro not flirt; reviewed Ouaga-French sanction corpus as an FR; P8 AC naming hijab-styles / family-in-frame; kill-switch / mass Revoke as Operator capability; optional auto-Block after decline; Lite “one compressed photo, text-first card.”
 

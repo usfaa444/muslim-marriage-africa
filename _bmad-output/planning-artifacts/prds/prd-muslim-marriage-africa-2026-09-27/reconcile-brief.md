@@ -13,6 +13,8 @@ against: prds/prd-muslim-marriage-africa-2026-09-27 (prd.md + addendum.md)
 
 **Superseded in part on 2026-10-02 (later lock).** §2.2 “grid-only implication” and the finding that FR-025 specifies a grid as the browse UI are historical: default is one focused card; grid is optional (FR-024 / FR-025). Sentences that say Chat after accept stays free of any cap, or that Flash is always wali-visible from minute one without a thread grant, are historical (FR-146, FR-048, FR-074). Premium Invite cap of 15 is deleted.
 
+**Current as of 2026-10-03.** Locked naming (Maitchibi Fayçal via Harris): product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Rows and sentences below that treat the product name as TBD, undecided, or still a shortlist decision, or that treat native-speaker/OAPI work on the 2026-09-27 shortlist as the open naming decision, are **historical**. The shortlist (Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / Nonglem; nisfdin) is the search that was not chosen. Those domains were **not** purchased.
+
 # Reconcile: product brief → PRD
 
 PRIMARY input: `brief-muslim-marriage-africa-2026-09-27` (`brief.md`, `addendum.md`, `.memlog.md`).
@@ -28,7 +30,7 @@ The brief’s “What the PRD must preserve” (brief.md §What the PRD must pre
 
 | Brief spine | Where it lives in the PRD |
 | --- | --- |
-| Working title + name TBD; shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / Nonglem | `prd.md` title blurb; Document control **Name**; PRD addendum §2.7 + §6 |
+| Working title + name TBD; shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / Nonglem *(historical 2026-09-27 transfer; **current 2026-10-03:** AnKanu, ankanu.com on Hostinger)* | `prd.md` title blurb; Document control **Name**; PRD addendum §2.7 + §6 |
 | Vision: Ouaga/Bobo honorable path; face not sold; father reads Chat; Orange Money; verified marriages from 0 | `prd.md` §1 Vision (near-verbatim of brief.md §Vision) |
 | Wedge vs Farata; three evidence labels only | `prd.md` §0; §9 Why now; Appendix A preamble |
 | Six owner must-haves as MVP | `prd.md` §6 Must-have coverage + Appendix A |
@@ -219,6 +221,8 @@ Brief.md §Success metrics classes vs `prd.md` §15:
 
 ### 5.3 Name — shortlist transferred; decision-gate detail thinned
 
+**Current as of 2026-10-03:** the name was chosen (AnKanu, ankanu.com on Hostinger). The table is the 2026-09-27 extract. Shortlist text is historical.
+
 | Brief.md §Naming | PRD |
 | --- | --- |
 | Product name not decided; no domain bought | Transferred (title, Non-Goals, Document control) |
@@ -252,6 +256,6 @@ Brief.md §Success metrics classes vs `prd.md` §15:
 2. **A3 leftover “in a product brief”** — verbatim paste is stale in the PRD (see §3).
 3. **P16 hijra/confrérie and D27 USSD** — brief MUST-if-cheap / MUST-if-feasible flattened to NEXT; Appendix A overclaims horizon match (see §4).
 4. **Safety metrics** — **Superseded 2026-10-01.** Pre-delivery block/hold rates are no longer required. SM-4 now tracks flags, admin actions, and scan-deferred events (see §5.2).
-5. **Name decision-gate** — RDAP/404 caveats, `.com/.net` table, `nisfdin`, three-actor user test thinned out of the PRD spine (see §5.3).
+5. **Name decision-gate** — **Current as of 2026-10-03:** name chosen (AnKanu, ankanu.com on Hostinger); shortlist / RDAP-thinning notes in §5.3 are historical search residue, not an open name decision.
 
 Related: kill-switch + mass revoke has no FR; FR-028 has no AC for marking the MUST meeting stage.

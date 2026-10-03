@@ -1,7 +1,7 @@
 ---
-name: TBD
+name: AnKanu
 status: final
-updated: 2026-10-02
+updated: 2026-10-03
 sources:
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/addendum.md
@@ -10,9 +10,9 @@ sources:
   - ../../briefs/brief-muslim-marriage-africa-2026-09-27/brief.md
 ---
 
-# TBD — Experience spine
+# AnKanu — Experience spine
 
-Working title muslim-marriage-africa. Product name is TBD. A1–A3 and PRD §16 questions 1 and 3–12 stay open.
+The product name is **AnKanu**. Domain **ankanu.com** was purchased on Hostinger (Maitchibi Fayçal via Harris, 2026-10-03). The repo slug `muslim-marriage-africa` is the repo name, not the product name. A1–A3 and PRD §16 questions 1, 3–8, and 11–12 stay open. Questions 9 and 10 are closed for naming: AnKanu is locked.
 
 Visual tokens live in `DESIGN.md`. Component pairing uses those names. Spines win on conflict with `mockups/`.
 
@@ -59,7 +59,7 @@ Spines win on conflict with every mock. Per-file captions sit on the matching IA
 
 | Surface | Reached from | Purpose | Implements |
 |---|---|---|---|
-| Splash | App open | Brand field + continue. Name stays TBD | FR-132, FR-133, FR-134, AD-4. See [prd.md §4.12](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-4](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Splash | App open | Brand field + continue. Product name is AnKanu (ankanu.com) | FR-132, FR-133, FR-134, AD-4. See [prd.md §4.12](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-4](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Auth (signup / login) | Splash | Email, password, unique pseudonym, gender; Google additional; captcha; pledge. Mock: `mockups/auth.html` (pledge + 19+ note) | FR-001, FR-003, FR-005, FR-007, AD-8. See [prd.md §4.1](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-8](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Age gate | Auth | DOB; under 19 blocked. A1 stays open | FR-011, FR-091, AD-8. See [prd.md §4.1](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-8](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Email verification | Auth | Expiring link + resend | FR-006. See [prd.md §4.1](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) |
@@ -330,8 +330,8 @@ Keep PRD §16 and A1–A3 open. UX must not bake a closed answer.
 6. Anonymous-mode rules — surface absent.
 7. Brother clear Photo before accept if he opted out of Blur — `[ASSUMPTION]` lean yes if owner un-blurred; confirm. Config `default_preaccept_clear_if_owner_unblurred`.
 8. GIF pack — picker absent.
-9. Native-speaker check of shortlist names — name stays TBD.
-10. OAPI / WIPO / handles — name stays TBD.
+9. *(Resolved 2026-10-03 — not open.)* Product name is AnKanu. Historical shortlist (Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem) was not chosen; those domains were not bought.
+10. *(Resolved 2026-10-03 for product name — not open as TBD.)* Product name is AnKanu; domain ankanu.com purchased on Hostinger. OAPI / WIPO / handle checks for AnKanu are not recorded in this spine.
 11. Free Money / MTN MoMo — not on checkout.
 12. Retention clocks — status page shows working NFR-008 numbers as `[ASSUMPTION]`.
 - **A1** 19+ gate ships as designed; legal review open.

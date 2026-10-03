@@ -2,28 +2,31 @@
 title: Input reconciliation — docs/name-options.md
 status: extract
 created: 2026-09-27
+updated: 2026-10-03
 input: docs/name-options.md
 compared: prd.md, addendum.md
 ---
 
+**Current as of 2026-10-03.** Locked naming (Maitchibi Fayçal via Harris): product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug muslim-marriage-africa is the repo working title only. Sentences below that treat the product name as TBD, undecided, or still a shortlist decision, or that treat native-speaker/OAPI work on Nikahsira/Nonglem/Nisfuddin/Sakinaa as the open naming decision, are **historical**. The shortlist text in this extract is the 2026-09-27 search that was not chosen. Those shortlist domains were **not** purchased. Trademark or social-handle work for AnKanu is not recorded as completed.
+
 # Reconcile: name-options.md vs PRD name stance
 
-Extract-only. Does not choose a product name. Does not start UX, architecture, or epics.
+Extract-only (2026-09-27). Does not start UX, architecture, or epics. Name decision later locked 2026-10-03 (see banner).
 
 **Input:** `/workspace/projects/muslim-marriage-africa/docs/name-options.md`  
-**PRD:** `prd.md` (subtitle L9; Non-Goals L1458; Open Questions 9–10; Document control)  
+**PRD:** `prd.md` (subtitle; Non-Goals; Open Questions 9–10; Document control)  
 **Addendum:** `addendum.md` §2.7, §6  
-**Memlog:** working title muslim-marriage-africa; product name TBD; shortlist + alternates; native-speaker + OAPI/WIPO pending; no name decision.
+**Memlog (historical at extract time):** working title muslim-marriage-africa; product name TBD; shortlist + alternates; native-speaker + OAPI/WIPO pending; no name decision. **Current:** AnKanu / ankanu.com (Hostinger, 2026-10-03).
 
 ## 1. Required stance checks
 
 | Check | Input (`docs/name-options.md`) | PRD | Addendum | Verdict |
 | --- | --- | --- | --- | --- |
-| Working title **muslim-marriage-africa** | Not present. Input is a candidate brainstorm; it never proposes this string. | Subtitle + document control use it as working title only. | §6: “Working title: **muslim-marriage-africa**. Product name TBD.” | **Aligned.** Title is PRD-owned scaffolding, not an input claim. Input does not contradict. |
+| Working title **muslim-marriage-africa** | Not present. Input is a candidate brainstorm; it never proposes this string. | Historical extract: subtitle + document control used it as working title only. **Current 2026-10-03:** product name AnKanu; slug remains repo working title only. | Historical extract quoted §6 “Product name TBD.” **Current:** §6 records AnKanu / ankanu.com. | **Aligned at extract time.** Title was PRD-owned scaffolding. |
 | Shortlist **Nisfuddin / Nikahsira / Sakinaa** | “Recommended shortlist (3)” in that exact order. | Subtitle, Open Q9–Q10, document control. | §2.7 and §6 table, same three. | **Aligned.** Order and membership match. |
 | Alternates **Mithaqun / Nonglem** | Mithaqun offered as Sakinaa alternate; Nonglem as Mooré wildcard “to test with Burkina users.” Dannaya also listed as wildcard (`.net` only). | Alternates pair only; Dannaya not named on the shortlist. | Same pair. Dannaya explicitly “not on the shortlist” (`.com` taken / `.net` free). | **Aligned.** Conscious demotion of Dannaya, not a silent drop of a shortlisted name. |
 | Pending **native-speaker + trademark** | “Next steps (not done): trademark search (OAPI … plus WIPO), native-speaker validation for Mooré/Dioula, social-handle check, user test…” | Q9 native-speaker (Nikahsira Jula *sira*, Nonglem Mooré). Q10 OAPI + social handles for the three shortlist names. | §6: native-speaker; OAPI + WIPO; social handles; user test Ouaga/Bobo. | **Aligned** on pending status. Scope is thinner in the PRD than in the input (see Gaps). |
-| **No purchase claimed** | Status TBD. RDAP is “not a purchase, reservation or hold.” “Nothing was registered or bought.” Closing line repeats: no domain registered or bought. | Non-Goal: “Final product name / domain purchase.” | §2.7 and §6: point-in-time RDAP, not a purchase; nothing registered or bought. | **Aligned.** No document claims a buy. |
+| **No purchase claimed** | Historical input: status TBD; RDAP not a purchase; “Nothing was registered or bought.” | Historical extract: Non-Goal “Final product name / domain purchase.” **Current 2026-10-03:** AnKanu / ankanu.com purchased on Hostinger; other shortlist domains were not bought. | Historical extract: point-in-time RDAP, not a purchase. **Current:** only ankanu.com is recorded as purchased. | **Aligned at extract time.** Do not read this row as “no domain was later bought.” |
 
 **Conflicts:** none. The PRD did not promote a candidate to a decision, did not invent a fourth shortlist name, and did not treat RDAP “free” as owned inventory.
 
@@ -68,7 +71,7 @@ Strongest-28 table plus 65-name RDAP appendix. Notable rejected-with-rationale r
 
 | Input claim | Where it landed | Fidelity |
 | --- | --- | --- |
-| Name TBD; brainstorm not a decision | PRD subtitle; Non-Goal “Final product name / domain purchase”; addendum §2.7 “No decision”; §6 “not a decision”; §7 “Not a name/domain decision” | Full |
+| Name TBD; brainstorm not a decision *(historical 2026-09-27; **current 2026-10-03:** AnKanu / ankanu.com on Hostinger)* | Then: PRD subtitle; Non-Goal “Final product name / domain purchase”; addendum §2.7 “No decision”; §6 “not a decision”; §7 “Not a name/domain decision” | Full at extract time |
 | Working title muslim-marriage-africa | PRD-authored; not in input | Correct (not an ingest error) |
 | Shortlist of three | PRD + addendum, same names and order | Full |
 | Mithaqun, Nonglem as alternates | PRD subtitle + addendum §6 | Full |
@@ -132,9 +135,11 @@ Pending status is correctly “not done.” The **who / how many / which office*
 
 ## 6. Parent surface (for Finalize, before polish)
 
-Stance holds: working title muslim-marriage-africa; product name TBD; shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / Nonglem; native-speaker + trademark pending; no purchase claimed.
+**Historical extract stance (2026-09-27):** working title muslim-marriage-africa; product name TBD; shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / Nonglem; native-speaker + trademark pending; no purchase claimed.
 
-Surface G1–G5. Highest-leverage absorbs if the parent wants the name stance to stay honest without making a decision:
+**Current as of 2026-10-03:** name chosen — **AnKanu**, **ankanu.com** on Hostinger. Shortlist text above is historical. Those shortlist domains were not bought. Trademark/social-handle work for AnKanu is not recorded as completed.
+
+Surface G1–G5 as historical naming-search gaps. They are not an open product-name decision:
 
 1. One sentence in addendum §6 (or a PRD name note) locking the **evaluation criteria** and the three **brand-feel** lines.
 2. One sentence locking the two **rejected-name guardrails** (no God’s name in the brand; no Farata “Ta moitié” echo).

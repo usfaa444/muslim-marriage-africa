@@ -8,6 +8,8 @@
 - **Reviewer:** rubric-walker (independent; spine only; lint already 0 findings)
 - **Verdict:** **pass-with-findings**
 
+> **Name lock 2026-10-03 (Maitchibi Fayçal via Harris).** Product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Sentences below that treat the name as TBD, undecided, or a live shortlist (Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, `nisfdin`) are historical of this review date. Those names were not chosen and those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed.
+
 This run judges the 2026-10-02 amendment: AD-2 and AD-21 no longer absolutely ban `BillingPort` on Sister invite send; Sister invite may call `BillingPort.isEntitled` **only** when `sister_reach_mode` is `same_quota_as_brothers`; safety paths stay banned; new AD-27. Locked items are **not** holes: AD-10/AD-11 passive Chat, AD-5 hosting, A1–A3, stack pins, Capacitor, AD-9 blur product, AD-12 mahram product, AD IDs stable.
 
 The send-path contract landed. A builder who obeys AD-2 / AD-21 / AD-27 will not hardcode unlimited Sister invites, will not give Brothers a free-reach mode, will not compile out either mode, and will not put `BillingPort` on verification, blur/reveal, mahram, report, block, or Chat after accept. Residual: AD-27 binds FR-145 but does not lock Sister checkout/pricing visibility; AD-21’s no-throw clause still names only safety handlers after Sister invite became an entitlement caller.

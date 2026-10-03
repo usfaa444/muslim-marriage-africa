@@ -13,6 +13,8 @@ against: architecture/architecture-muslim-marriage-africa-2026-09-27 (ARCHITECTU
 
 > **Superseded 2026-10-01.** Chat moderation is passive after delivery (AD-10 amendment; PRD FR-062–068, FR-144, NFR-003). Claims in this review of pre-delivery Chat scan, hold-on-timeout, or fail-closed Chat delivery are historical. Profile Photo/bio publish-gate (FR-065), AD-9 blur, and AD-12 mahram read-delivered-only are unchanged.
 
+> **Name lock 2026-10-03 (Maitchibi Fayçal via Harris).** Product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Sentences below that treat the name as TBD, undecided, or a live shortlist (Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, `nisfdin`) are historical of this review date. Those names were not chosen and those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed.
+
 > **Superseded 2026-10-02.** Sister Invite reach is operator-configurable (AD-27 / FR-145). The transferred-item row “Billing isolation from safety / Sister invites → AD-21” is historical as an absolute. Isolation still holds for safety and for Sister send in `free_unlimited`; `same_quota_as_brothers` Sister send uses the same `BillingPort.isEntitled` result as Brothers.
 
 PRIMARY input: `prds/prd-muslim-marriage-africa-2026-09-27` (`prd.md`, `addendum.md`).

@@ -1,5 +1,5 @@
 ---
-title: muslim-marriage-africa — solution design
+title: AnKanu — solution design
 status: final
 created: 2026-09-27
 updated: 2026-10-03
@@ -13,17 +13,16 @@ open_questions:
   - anonymous-mode-d36
   - brother-clear-photo-preaccept
   - gif-sticker-pack
-  - native-speaker-nikahsira-nonglem
   - oapi-wipo-handles
   - later-country-payment-rails
   - nfr-008-retention-clocks
 ---
 
-# Solution design — muslim-marriage-africa
+# Solution design — AnKanu
 
 Companion to `ARCHITECTURE-SPINE.md`. The spine is the consistency contract (invariants only). This document is the human-facing solution design: purpose, hosting justification, data and API shape, honest moderation limits, and full FR/NFR traceability.
 
-Working title **muslim-marriage-africa**. Product name undecided (shortlist Nisfuddin — also consider `nisfdin` — Nikahsira, Sakinaa; alternates Mithaqun, Nonglem). RDAP checks are point-in-time, not a purchase. Native-speaker and OAPI/WIPO checks remain open.
+Product name **AnKanu** (locked 2026-10-03, Maitchibi Fayçal via Harris). Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, and `nisfdin` are history of the search that was not chosen — those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed.
 
 ## 1. Purpose and audience
 
@@ -124,7 +123,7 @@ Do not invent further articles. Do not claim GDPR = art. 42 adequacy.
 
 | Fact for the filing | Why it is in scope |
 | --- | --- |
-| Controller | The Burkina operating company (name still branding-open) |
+| Controller | The Burkina operating company (product AnKanu; legal entity name still counsel) |
 | Hosting processor | Scaleway `fr-par` (France) — AD-5 |
 | Other destinataires / sous-traitants | SMS gateway, KYC/liveness vendor, moderation/ASR vendor, mobile-money aggregator, FCM, Web Push relay, Google OIDC, captcha vendor — each may be outside BF. Adapter SKUs stay unbound (AD-5 not reopened) |
 | Categories | Account/contact; profile (including `madhhab`/`practice` — religious, art. 12 express consent); photos; chat; liveness + ID images (biometric-class + foreign transfer, art. 31); model scores on every outbound Chat item (art. 31 AI/profiling bullet — counsel decides); payments |
@@ -1108,7 +1107,7 @@ RBAC AD-8 (staff MFA; no operator-as-member). Encryption, CSRF/SameSite, captcha
 
 ## 15. Open questions (stay OPEN)
 
-PRD §16 questions 1 and 3–11 stay **open**. Question 2 (fail-closed UX) is **resolved 2026-10-01**. Flexibility:
+PRD §16 questions 1, 3–8, and 10–11 stay **open**. Question 2 (fail-closed UX) is **resolved 2026-10-01**. Question 9 (native-speaker check of Nikahsira / Nonglem) is **resolved 2026-10-03** — product name AnKanu; domain ankanu.com purchased on Hostinger; shortlist is search history only. Flexibility:
 
 | # | Question | Architecture flexibility |
 | --- | --- | --- |
@@ -1120,8 +1119,8 @@ PRD §16 questions 1 and 3–11 stay **open**. Question 2 (fail-closed UX) is **
 | 6 | Anonymous-mode rules (D36) | Feature flag + visibility policy table (NEXT) |
 | 7 | Brother clear photo before accept if he opted out of blur | Per-owner reveal policy already. Config `default_preaccept_clear_if_owner_unblurred` (working yes) |
 | 8 | GIF/sticker pack | Feature flag `gif_picker=off` |
-| 9 | Native-speaker check of Nikahsira / Nonglem | Branding strings are config, not schema |
-| 10 | OAPI / WIPO / handles | Legal/ops. Brand tokens replaceable |
+| 9 | Native-speaker check of Nikahsira / Nonglem | **Resolved 2026-10-03.** Product name is AnKanu. Domain ankanu.com purchased on Hostinger. Shortlist names are search history only — those domains were not purchased. Branding strings remain config, not schema |
+| 10 | OAPI / WIPO / handles | Still open for AnKanu (not recorded as completed). Shortlist-domain purchase is closed. Legal/ops. Brand tokens replaceable |
 | 11 | Free Money / MTN MoMo later-country rails | Payment method catalog + new adapters; billing module unchanged |
 | 12 | Retention schedule (PRD §16 / NFR-008) | Clocks stay `[ASSUMPTION]` in AD-19 until counsel replaces them; not a silent Farata copy |
 
@@ -1190,4 +1189,4 @@ Ranges are used only when the same AD **and** module govern the slice. Coverage:
 
 ## 17. What this is not
 
-Not legal advice. Not a CIL filing. Not a name or domain purchase. Not the start of UX, spec, or epics. Competitor numbers stay labeled; Farata “+247.8k actifs” remains Claimed (marketing) versus Play 10k+ Offered (seen).
+Not legal advice. Not a CIL filing. Not an OAPI/WIPO filing. Product name AnKanu and domain ankanu.com are locked 2026-10-03; this document is not a trademark registration. Not the start of UX, spec, or epics. Competitor numbers stay labeled; Farata “+247.8k actifs” remains Claimed (marketing) versus Play 10k+ Offered (seen).

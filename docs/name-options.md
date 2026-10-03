@@ -1,11 +1,11 @@
 # Name options + domain availability
 
-**Status:** product name TBD. This is a brainstorm input, not a decision.
-**Domain check:** registry RDAP lookups against Verisign (`https://rdap.verisign.com/com/v1/domain/<name>.com`, `https://rdap.verisign.com/net/v1/domain/<name>.net`) on **2026-09-27 at ~21:10 ET**. HTTP **404 = not registered at check time ("free")**; HTTP **200 = registered ("taken")**.
-> ⚠️ This is a point-in-time registry lookup, **not a purchase, reservation or hold**. A "free" domain can be registered by anyone at any moment. Premium/reserved-name pricing and trademark conflicts were **not** checked. Nothing was registered or bought.
+**Status:** product name **chosen — AnKanu** (Maitchibi Fayçal via Harris, 2026-10-03). Domain **ankanu.com purchased on Hostinger**. This file remains the history of the 2026-09-27 name search. It is not a list of domains that were bought.
+**Domain check (history):** registry RDAP lookups against Verisign (`https://rdap.verisign.com/com/v1/domain/<name>.com`, `https://rdap.verisign.com/net/v1/domain/<name>.net`) on **2026-09-27 at ~21:10 ET**. HTTP **404 = not registered at check time ("free")**; HTTP **200 = registered ("taken")**.
+> ⚠️ The tables below are a point-in-time registry lookup, **not purchases**. Only **ankanu.com** was later purchased (Hostinger, 2026-10-03). Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, and the other shortlist or appendix names were **not** bought. Premium/reserved-name pricing and trademark conflicts were **not** checked in the 2026-09-27 RDAP pass.
 
 **Themes:** marriage / union / nikah / covenant / tranquillity / trust / path. Criteria: short, pronounceable for francophone West Africans, respectful (no casual-dating tone), works as a brand in French.
-**Language caveat:** the Arabic meanings are standard Qur'anic/hadith vocabulary. **The Dioula (Jula) and Mooré meanings are best-effort and must be validated by native speakers** (Burkina Faso) before any decision.
+**Language caveat (historical, before the name was chosen):** the Arabic meanings are standard Qur'anic/hadith vocabulary. The Dioula (Jula) and Mooré meanings were best-effort. They were not validated, and these names were not chosen.
 
 ## Candidate table (strongest 28)
 
@@ -40,7 +40,7 @@
 | 27 | Halfdeen | English + Arabic | "Half the deen" | taken | **free** |
 | 28 | Sakinaunion | Arabic + English | "Tranquil union" | **free** | **free** |
 
-## Recommended shortlist (3)
+## Historical shortlist (not chosen — search notes from 2026-09-27)
 
 1. **Nisfuddin** (nisfuddin.com + nisfuddin.net both free at check time). The strongest Islamic meaning (marriage completes half the deen), pan-Muslim and pan-African, clearly about marriage and not dating, and easy to say in French ("nisf-ou-dine"). Risk: spelling; buy the `nisfdin` variant too (also free).
 2. **Nikahsira** (.com + .net free). Arabic *nikah* + Jula *sira* = "the path to nikah". Rooted in the Burkina/Mali/Côte d'Ivoire Jula belt (our launch zone) while still readable for any Muslim. It reads as a journey (request → wali → nikah), which fits the product. Risk: the Jula meaning needs native-speaker confirmation.
@@ -48,7 +48,7 @@
 
 Local-language wildcard to test with Burkina users: **Nonglem** (Mooré, "love"; .com + .net free), and **Dannaya** (Jula, "trust"; .net only).
 
-**Next steps (not done):** trademark search (OAPI, which covers Burkina Faso and 16 other states; plus WIPO), native-speaker validation for Mooré/Dioula, social-handle check, user test with 10–20 sisters/brothers/walis in Ouagadougou and Bobo-Dioulasso. **No domain has been registered or bought.**
+**Decision (2026-10-03):** the product name is **AnKanu**. **ankanu.com** was purchased on Hostinger. The shortlist above (Nisfuddin, Nikahsira, Sakinaa; alternates Mithaqun, Nonglem) is search history only — those names were not chosen and those domains were not bought. Trademark search (OAPI / WIPO) and social-handle checks for AnKanu are not recorded in this file.
 
 ## Appendix: all RDAP results (65 names checked)
 

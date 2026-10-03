@@ -1,16 +1,16 @@
 ---
-title: muslim-marriage-africa
+title: AnKanu
 status: final
 created: 2026-09-27
-updated: 2026-10-02
+updated: 2026-10-03
 ---
 
-# PRD: muslim-marriage-africa
-*Working title — product name TBD. Shortlist: Nisfuddin, Nikahsira, Sakinaa (alternates Mithaqun, Nonglem). Native-speaker and trademark checks pending.*
+# PRD: AnKanu
+*Product name: **AnKanu**. Domain **ankanu.com** purchased on Hostinger (2026-10-03). Repository slug muslim-marriage-africa is the repo working title only. Historical name search (not chosen; those domains were not purchased): Nisfuddin, Nikahsira, Sakinaa (alternates Mithaqun, Nonglem). Trademark and social-handle work for AnKanu is not recorded as completed.*
 
 ## 0. Document Purpose
 
-This PRD is the decision record for a Burkina-first honorable ta'aruf product. It is written for the product owner, Trust & Safety, and the downstream owners of UX, architecture, and stories. Vocabulary is Glossary-anchored. Capabilities are grouped with globally numbered functional requirements (FR-001…) and cross-cutting non-functional requirements (NFR-001…). Inferences the product owner made on this Fast-path run are tagged `[ASSUMPTION]`. Technical-how, rejected-option matrices, and persona depth live in `addendum.md`. This PRD builds on `_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/` and `docs/system-idea.md`. It does not start UX, architecture, or epics.
+This PRD is the decision record for **AnKanu**, a Burkina-first honorable ta'aruf product. It is written for the product owner, Trust & Safety, and the downstream owners of UX, architecture, and stories. Vocabulary is Glossary-anchored. Capabilities are grouped with globally numbered functional requirements (FR-001…) and cross-cutting non-functional requirements (NFR-001…). Inferences the product owner made on this Fast-path run are tagged `[ASSUMPTION]`. Technical-how, rejected-option matrices, and persona depth live in `addendum.md`. This PRD builds on `_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/` and `docs/system-idea.md`. It does not start UX, architecture, or epics.
 
 Farata statements use **only** the evidence labels from `docs/competitor-farata.md`: **Offered (seen)** / **Claimed (marketing)** / **Not publicly evidenced**. No new unsourced competitor claims.
 
@@ -1555,7 +1555,7 @@ Farata is live at farata.net (Senegal-first, French-only UI Offered (seen); Burk
 - Silent auto-renew.
 - Uncurated GIFs; dual “Cheikh” coaches; AI that silently deletes Chat or applies a sanction without a human admin.
 - Architecture/hosting vendor selection in this document.
-- Final product name / domain purchase.
+- Completing AnKanu trademark clearance or social-handle registration in this document (not recorded as done).
 - Starting UX, architecture, or epics from this run.
 
 ## 14. MVP Scope
@@ -1608,8 +1608,8 @@ North star: chaperoned meetings + dual-confirmed nikah — not DAU, not inflated
 6. **Anonymous-mode rules:** confirm D36 with Sisters. Farata “mode anonyme” is Claimed (marketing); behaviour unknown.
 7. **Brother clear Photo before accept:** should Sisters ever see a Brother’s clear Photo before accept if he chose un-Blurred? Default lean: yes if he opted out of Blur — confirm.
 8. **GIFs/stickers:** is a zero-GIF launch acceptable until a curated pack exists (P33 NEXT)? This PRD assumes yes.
-9. **Native-speaker validation:** do Nikahsira (Jula *sira*) and Nonglem (Mooré) read as intended in Ouaga/Bobo, or is there slang/taboo?
-10. **OAPI trademark + social handles** for Nisfuddin / Nikahsira / Sakinaa — not done.
+9. **Native-speaker validation of Nikahsira / Nonglem:** **Resolved 2026-10-03** (locked naming, Maitchibi Fayçal via Harris). The product name is **AnKanu**. Nikahsira and Nonglem remain history of the search that was not chosen; slang/taboo checks on those names are not the open naming decision.
+10. **OAPI trademark + social handles for AnKanu** — not recorded as completed. Shortlist-name OAPI (Nisfuddin / Nikahsira / Sakinaa) is historical; those names were not chosen.
 11. **Free Money / MTN MoMo (P58):** keep as later-country parity rails? This PRD assumes yes (FR-114).
 12. **Retention schedule:** legal must replace NFR-008 working numbers before launch.
 
@@ -1801,15 +1801,18 @@ LATER rows: P51 full blog cadence, P53 high-production video, D18 full EN/AR UI,
 
 ## Document control
 
-- **Intent:** update (headless). Correction of record of the same product, 2026-10-02.
-- **Locked decision (Maitchibi Fayçal, 2026-10-02):** People lists default to one focused card; optional grid toggle on every people list including Discover and search. Free-tier messages are daily-capped (`daily_message_cap`, FR-146); Premium unlocks unlimited Invites and unlimited messages (Premium Invite cap of 15 deleted). Mahram reads only granted threads (FR-074 / FR-077); new Chats are not auto-granted. Passive moderation stays locked. `sister_reach_mode` stays (FR-145) and governs Invite reach only. Brothers are never made free. A1–A3 and other open questions stay open. Name TBD.
+- **Intent:** update (headless). Locked naming only, 2026-10-03. Product behavior unchanged.
+- **Locked decision (Maitchibi Fayçal via Harris, 2026-10-03):** Product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug muslim-marriage-africa is the repo working title only. Closes every earlier sentence that said the product name is TBD, undecided, or still a shortlist decision. Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, and nisfdin remain history of the search that was not chosen; those domains were not purchased. Native-speaker validation of Nikahsira/Nonglem and OAPI for those shortlist names are not the open naming decision. Trademark or social-handle work for AnKanu is not recorded as completed. Passive moderation, `sister_reach_mode`, one-card default with optional grid, `daily_message_cap` / FR-146, mahram per-thread grants, entity catalog, FR numbers, and story behavior stay locked as they were.
+- **Locked decision (Maitchibi Fayçal, 2026-10-02):** People lists default to one focused card; optional grid toggle on every people list including Discover and search. Free-tier messages are daily-capped (`daily_message_cap`, FR-146); Premium unlocks unlimited Invites and unlimited messages (Premium Invite cap of 15 deleted). Mahram reads only granted threads (FR-074 / FR-077); new Chats are not auto-granted. Passive moderation stays locked. `sister_reach_mode` stays (FR-145) and governs Invite reach only. Brothers are never made free. A1–A3 and other non-naming open questions stay open. Name later locked 2026-10-03 (AnKanu).
 - **Locked decision (Maitchibi Fayçal, 2026-10-02):** Sister access is admin-configurable on MVP day one (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Overrides every earlier sentence that said Sisters never pay for Invites or that Invites are always unlimited. Safety stays free in both modes. Chat after accept is **not** unconditionally unlimited (FR-146). Brothers stay on paid Invite quota.
 - **Locked decision (Maitchibi Fayçal, 2026-10-01):** AI moderation is passive, not a pre-delivery gate. Overrides every earlier sentence that said the AI gates Chat delivery.
 - **Workspace:** `_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`
 - **Sources:** brief + addendum + memlog (2026-09-27); brainstorm intent/html/memlog; `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`.
-- **Name:** TBD. Working title muslim-marriage-africa.
-- **Shortlist:** Nisfuddin (“nisf-ou-dine”; also consider `nisfdin`), Nikahsira (*nikah* + Jula *sira*), Sakinaa (*sakina*; `sakina.com`/`.net` taken). Alternates: Mithaqun, Nonglem.
-- **RDAP** 2026-09-27 ~21:10 ET is point-in-time: HTTP 404 = free at check; not a purchase or reservation; premium/reserved/trademark unchecked.
-- **Pending:** native-speaker Ouaga/Bobo (slang/taboo), OAPI + WIPO, social handles, user test with sisters/brothers/walis.
+- **Name:** **AnKanu**. Chosen 2026-10-03 (Maitchibi Fayçal via Harris).
+- **Domain:** **ankanu.com** purchased on Hostinger (2026-10-03). No other shortlist domain is claimed purchased.
+- **Repo working title:** muslim-marriage-africa (repository slug only; not the product name).
+- **Historical shortlist (not chosen):** Nisfuddin (“nisf-ou-dine”; also considered `nisfdin`), Nikahsira (*nikah* + Jula *sira*), Sakinaa (*sakina*; `sakina.com`/`.net` taken at the 2026-09-27 RDAP check). Alternates: Mithaqun, Nonglem. Those names and domains were not purchased.
+- **RDAP** 2026-09-27 ~21:10 ET is historical search evidence only: HTTP 404 = free at check; not a purchase or reservation except the later Hostinger purchase of ankanu.com; premium/reserved/trademark unchecked in that pass.
+- **Pending (AnKanu only):** OAPI + WIPO trademark and social-handle work — not recorded as completed. Not an open product-name decision.
 - **Naming constraints:** Do not put God’s name in the brand; do not echo Farata’s “Ta moitié” tagline. Rubric: short, francophone-pronounceable, no dating tone, works as a French brand.
 - **Downstream:** UX, architecture, and epics are **not** started by this document.

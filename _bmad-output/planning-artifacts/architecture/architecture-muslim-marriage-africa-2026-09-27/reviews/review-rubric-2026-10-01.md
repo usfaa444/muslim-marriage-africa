@@ -7,6 +7,8 @@
 - **Reviewed:** 2026-10-01
 
 > **Annotation 2026-10-01 (final spine).** AD-12 no longer names Chat `pending`/`held` or a staff hold queue. Findings in this file that say it does were written against a mid-edit spine and are stale. The final AD-10 rule forbids a pre-delivery Chat hold.
+
+> **Name lock 2026-10-03 (Maitchibi Fayçal via Harris).** Product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Sentences below that treat the name as TBD, undecided, or a live shortlist (Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, `nisfdin`) are historical of this review date. Those names were not chosen and those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed.
 - **Reviewer:** rubric-walker (independent; spine only; lint already 0 findings)
 - **Verdict:** **pass-with-findings**
 

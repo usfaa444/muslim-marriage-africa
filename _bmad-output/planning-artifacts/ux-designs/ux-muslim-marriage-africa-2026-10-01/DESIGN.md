@@ -1,8 +1,8 @@
 ---
-name: TBD
-description: Burkina-first honorable ta'aruf visual system. Solemn marriage path, not a dating app. Product name undecided.
+name: AnKanu
+description: Burkina-first honorable ta'aruf visual system. Solemn marriage path, not a dating app. Product name AnKanu (ankanu.com).
 status: final
-updated: 2026-10-02
+updated: 2026-10-03
 sources:
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/addendum.md
@@ -177,9 +177,9 @@ components:
     focus-ring: '{colors.focus-ring}'
 ---
 
-# TBD — Visual identity
+# AnKanu — Visual identity
 
-Working title muslim-marriage-africa. Product name is TBD. Do not substitute a shortlist name in UI, mocks, or tokens.
+The product name is **AnKanu**. Domain **ankanu.com** was purchased on Hostinger (Maitchibi Fayçal via Harris, 2026-10-03). The repo slug `muslim-marriage-africa` is the repo name, not the product name. UI, mocks, and tokens may use AnKanu. Nisfuddin, Nikahsira, Sakinaa, Mithaqun, and Nonglem are the historical shortlist that was not chosen; those domains were not bought.
 
 Spines win on conflict with any file in `mockups/`.
 
@@ -289,7 +289,7 @@ Keeper mocks (spines win): `mockups/auth.html` (auth), `mockups/discovery-lite.h
 
 | Do | Don't |
 |---|---|
-| Use TBD or the working title in internal docs | Print Nisfuddin / Nikahsira / Sakinaa as if decided |
+| Use AnKanu in UI, mocks, tokens, and docs | Print Nisfuddin / Nikahsira / Sakinaa / Mithaqun / Nonglem as the current name (historical shortlist only; those domains were not bought) |
 | Show Chat as already delivered | Show a scan wait, hold, or “en cours de vérification” on Chat |
 | Serve blur derivatives from the server | CSS-blur a clear original |
 | Mark staff queues with staff-only-badge | Let flag-queue chrome leak into member Chat |

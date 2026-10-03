@@ -272,13 +272,13 @@ Point-in-time RDAP 2026-09-27 ~21:10 ET. **Not a purchase.** No domain bought.
 ## Open questions
 
 - Age gate: keep Farata parity 19+ (P14) or 18+ (Burkina majority) with extra protections for 18–21? Legal + fiqh + store ratings (17+/18+) must be decided.
-- Native-speaker validation: do Nikahsira (Jula sira) and Nonglem (Mooré) read as intended in Ouaga/Bobo, or is there slang/taboo?
+- Native-speaker validation of Nikahsira / Nonglem: **closed 2026-10-03**. Product name is AnKanu; those names were not chosen.
 - Wali verification in practice: what documents prove father/brother/uncle without excluding orphans or converts? Who is an acceptable mahram if father is deceased?
 - Polygamy UX: how to disclose existing wives without doxxing them? First-wife awareness is out of scope unless she consents — confirm.
 - Data residency: can we keep BF-user data in a place CIL accepts while still using modern hosting (Farata: Vercel/Neon USA — Claimed processors)?
 - Fail-closed UX: **resolved 2026-10-01.** Messages are not held when the AI is down. No tolerance question remains.
 - USSD/SMS: which BF operators and what cost per wali alert is sustainable at launch?
-- OAPI trademark + social handles for Nisfuddin / Nikahsira / Sakinaa — not done.
+- OAPI trademark + social handles for Nisfuddin / Nikahsira / Sakinaa: **closed as a naming decision 2026-10-03** (those names were not chosen). Trademark and social handles for **AnKanu** are not recorded as done.
 - Imam advisory: which Ouaga/Bobo scholars will lend names, and what review SLA for Académie?
 - P8 SLA: what free review time is honest in BF (Farata claims 12–24h / 30min / 10min Premium — numbers disagree, Claimed)?
 - Anonymous mode exact rules (Farata Claimed, behaviour unknown) — confirm D36 definition with sisters.

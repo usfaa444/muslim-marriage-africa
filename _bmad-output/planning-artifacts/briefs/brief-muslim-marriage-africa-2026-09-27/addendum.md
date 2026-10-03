@@ -1,11 +1,11 @@
 ---
-title: muslim-marriage-africa — product brief addendum
+title: AnKanu — product brief addendum
 status: complete
 created: 2026-09-27
-updated: 2026-10-02
+updated: 2026-10-03
 ---
 
-# Addendum — overflow for the muslim-marriage-africa brief
+# Addendum — overflow for the AnKanu brief
 
 This file holds depth that the brief points at but does not need in the executive spine: the full risk table, persona / job maps, and options considered. It is not a PRD and not architecture.
 
@@ -171,7 +171,9 @@ Condensed from the brainstorm JTBD / role-playing pass. Functional / emotional /
 
 ### 3.7 Name
 
-No decision. Shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / Nonglem. Dannaya (Jula “trust”) is `.com` taken / `.net` free — not on the brief shortlist. RDAP 2026-09-27 ~21:10 ET, not a purchase. Native-speaker + OAPI/WIPO still open.
+**Chosen 2026-10-03** (Maitchibi Fayçal via Harris): product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. The repository slug `muslim-marriage-africa` is not the product name.
+
+2026-09-27 search history (not chosen; those domains were not bought): shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / Nonglem. Dannaya (Jula “trust”) was not on the brief shortlist. The 2026-09-27 RDAP pass was point-in-time history, not a purchase and not current domain status for the product. Native-speaker checks on the shortlist are closed because those names were not chosen. OAPI/WIPO trademark and social-handle checks for **AnKanu** are still open.
 
 ### 3.8 Success proof on the homepage
 
@@ -210,7 +212,7 @@ No decision. Shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / No
 
 ## 4. Binding stance carried from the brainstorm
 
-The AI-moderation line was overridden on 2026-10-01 (see 3.9). Sister reach (D20) was overridden on 2026-10-02 (see 3.6). People-list default, message quotas, and mahram thread grant were overridden on 2026-10-02 (see 3.6, 3.10, 3.11). Other items were not re-litigated.
+The AI-moderation line was overridden on 2026-10-01 (see 3.9). Sister reach (D20) was overridden on 2026-10-02 (see 3.6). People-list default, message quotas, and mahram thread grant were overridden on 2026-10-02 (see 3.6, 3.10, 3.11). Naming was locked on 2026-10-03 (see 3.7): AnKanu / ankanu.com. Other items were not re-litigated.
 
 - Burkina first (Ouagadougou → Bobo-Dioulasso); then CI / Mali / Senegal / wider.
 - French-first UI; Mooré/Dioula audio is a differentiator.
@@ -237,5 +239,5 @@ The AI-moderation line was overridden on 2026-10-01 (see 3.9). Sister reach (D20
 
 - Not a PRD (acceptance criteria, edge cases, API, copy deck).
 - Not architecture (stack, region, vendors).
-- Not a name decision or a domain purchase.
+- Not a trademark filing. Name (AnKanu) and domain (ankanu.com) are decided; OAPI/WIPO and social handles for AnKanu remain open.
 - Not legal advice — A1–A3 in the brief are flagged for counsel.

@@ -1,3 +1,5 @@
+> **Name lock 2026-10-03 (Maitchibi Fayçal via Harris).** Product name is **AnKanu**. Domain **ankanu.com** purchased on Hostinger. Sentences below that say the product name is TBD, undecided, or a live shortlist are historical for this review. Those shortlist domains were not bought.
+
 # Editorial review — DESIGN.md + EXPERIENCE.md
 
 **Content:** `DESIGN.md` (1,781 words), `EXPERIENCE.md` (6,505 words). Combined 8,286 words. Counts from `word_metrics.py`.
