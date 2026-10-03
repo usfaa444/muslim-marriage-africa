@@ -7,7 +7,7 @@ paradigm: hexagonal-modular-monolith
 scope: Initiative-altitude consistency contract for the Burkina-first muslim-marriage-africa ta'aruf platform (working title; product name undecided). Governs all feature spines and the MVP+NEXT capability surface in the 2026-09-27 PRD.
 status: final
 created: 2026-09-27
-updated: 2026-10-01
+updated: 2026-10-02
 binds: [identity, verification, profiles, discovery, invites, chat, media, moderation, mahram, trust, outcomes, billing, content, operator, notifications, audit]
 sources:
   - _bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/prd.md
@@ -48,8 +48,8 @@ Working title **muslim-marriage-africa**. Product name undecided (shortlist Nisf
 ### AD-2 — Dependency direction
 
 - **Binds:** all
-- **Prevents:** circular module imports, domain depending on Nest/Next, billing outage leaking into safety paths
-- **Rule:** `clients → inbound adapters → application → domain`; modules call other modules only through published application ports, never tables; domain never imports adapters or frameworks. Identity, verification, media, moderation, mahram, report, block, and sister-invite paths must not import or call `BillingPort` (including `isEntitled`). Brother Invite quota and paid-faster-review may call `BillingPort.isEntitled` only
+- **Prevents:** circular module imports, domain depending on Nest/Next, billing outage leaking into safety paths, or an absolute sister-invite `BillingPort` ban that blocks `same_quota_as_brothers`
+- **Rule:** `clients → inbound adapters → application → domain`; modules call other modules only through published application ports, never tables; domain never imports adapters or frameworks. Identity, verification, media, moderation, mahram, report, block, browse/discovery, and Chat-after-accept (including Invite accept / `ChatPort.openFromInvite`) must not import or call `BillingPort` (including `isEntitled`) in either `sister_reach_mode`. Sister invite send, Sister invite quota/compose, and Sister reach-pack catalog/checkout may call `BillingPort.isEntitled` **only** when `operator_config.sister_reach_mode` is `same_quota_as_brothers`. When the mode is `free_unlimited`, those Sister paths must not call `BillingPort`. Brother Invite quota and paid-faster-review may call `BillingPort.isEntitled` always — they never treat `sister_reach_mode` as a free pass
 
 ```mermaid
 flowchart TB
@@ -123,7 +123,7 @@ flowchart TB
 
 - **Binds:** NFR-001, FR-001–FR-008, FR-020, FR-071–FR-079, FR-139–FR-143
 - **Prevents:** role/gender confusion, shared staff logins, Mahram acting as a Member
-- **Rule:** roles are `member | mahram | moderator | operator | system`. Sister/Brother is a Member attribute, not a role. Google OIDC is an additional method, never the only path. Apple Sign-In ships with iOS. Staff accounts are individual (`session.kind=staff`); staff MFA is required; a staff account must not share a session with `member` (operator-as-member forbidden). `system` is worker/service accounts only and must not mint reveal URLs. PIN lock is enforced by identity for shared-device sessions. Ban, password change, and Mahram remove call `IdentityPort.revokeSessions`. Product age gate is **19+** (A1, unchanged). `operator_config.min_age` defaults to 19; do not ship 18 without counsel. If counsel requires 18+, add 18–21 protections — do not silently lower the gate
+- **Rule:** roles are `member | mahram | moderator | operator | system`. Sister/Brother is a Member attribute, not a role. Identity is the only writer of `account.gender`; profiles and invites read `IdentityPort.presentation(accountId)` only. `AuthContext.gender` is **required** on `member` sessions. Google OIDC is an additional method, never the only path. Apple Sign-In ships with iOS. Staff accounts are individual (`session.kind=staff`); staff MFA is required; a staff account must not share a session with `member` (operator-as-member forbidden). Only `operator` may write `operator_config.sister_reach_mode` (AD-27). `system` is worker/service accounts only and must not mint reveal URLs. PIN lock is enforced by identity for shared-device sessions. Ban, password change, and Mahram remove call `IdentityPort.revokeSessions`. Product age gate is **19+** (A1, unchanged). `operator_config.min_age` defaults to 19; do not ship 18 without counsel. If counsel requires 18+, add 18–21 protections — do not silently lower the gate
 
 ### AD-9 — Server-side Blur and Reveal
 
@@ -178,7 +178,7 @@ stateDiagram-v2
 
 - **Binds:** FR-104–FR-114, NFR-004
 - **Prevents:** stored recurring mandates, processor-driven silent renew, payment outage taking down safety
-- **Rule:** `MobileMoneyPort` methods for Orange Money BF, Moov Africa BF, Wave/Coris where available; cards secondary via **hosted checkout only** (PAN never touches `apps/api`); aggregator allowed. Packs are 1/3/6 months with an explicit end timestamp and **no** renewal job. Webhooks: verify signature, apply once via `Idempotency-Key`. Billing down → Free + safety stay up (AD-21)
+- **Rule:** `MobileMoneyPort` methods for Orange Money BF, Moov Africa BF, Wave/Coris where available; cards secondary via **hosted checkout only** (PAN never touches `apps/api`); aggregator allowed. Packs are 1/3/6 months with an explicit end timestamp and **no** renewal job. Webhooks: verify signature, apply once via `Idempotency-Key`. Sisters see and buy the same reach packs **only** when `sister_reach_mode` is `same_quota_as_brothers` (AD-27); `free_unlimited` must not offer or accept a Sister reach-pack purchase. Brothers always see packs. Billing down → Free + safety stay up (AD-21)
 
 ### AD-15 — Realtime chat channel
 
@@ -196,13 +196,13 @@ stateDiagram-v2
 
 - **Binds:** NFR-001, FR-007, FR-068, FR-088
 - **Prevents:** reversible passwords, staff bulk export, contact-share implemented twice
-- **Rule:** TLS 1.2+; AES-256-class at rest for photos, chat bodies, ID images, backups (same `kid` rotation as chat for ID-image keys). Chat ciphertext envelope `{v, alg, kid, iv, ct}` with `kid` in Scaleway Secret Manager (yearly rotation; session-signing, webhook HMAC, object-storage, and vendor API keys rotate on the same store, isolated per env). argon2id passwords. Web/PWA cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF on cookie POST/WS. Capacitor Bearer lives in platform secure storage, not WebView localStorage. Captcha (FR-007) on signup and login. Rate limits on auth, OTP, password-reset, Invite, Mahram-invite, Report, payment, media upload, reveal-request, browse, and `/v1/staff/*` (working numbers in `operator_config`). Contact-share is the **single** predicate: only chat writes `contact_share`; moderation/trust call `ChatPort.contactShareOpen`. The send-time matcher lives in `chat` (and `invites` for Flash) as a **local deterministic function** — it must not call `ModerationPort`. Flash is pre-conversation so Contact-share cannot be open: phone / WhatsApp / links in Flash are refused with `CONTACT_SHARE_REQUIRED`. A Contact-share reject returns `CONTACT_SHARE_REQUIRED` and shows the published education interstitial to **both** Members. Money-ask language is **delivered and flagged**, even after Contact-share; in-Chat education (“never send money to a suitor”) is shown after that delivery. Ban fingerprint is `sha256(phone_e164 | id_doc_hash | device_attestation)` owned by trust — a cookie-only id is not a Ban key. Staff list/browse/metrics endpoints never return phone or WhatsApp. The **only** staff path that emits another person’s contact is an `operator` `cil_ticket` for that subject (FR-019 / FR-143); every such export is an AD-18 event. Prod app SQL roles cannot `COPY`/`SELECT` contact columns in bulk
+- **Rule:** TLS 1.2+; AES-256-class at rest for photos, chat bodies, ID images, backups (same `kid` rotation as chat for ID-image keys). Chat ciphertext envelope `{v, alg, kid, iv, ct}` with `kid` in Scaleway Secret Manager (yearly rotation; session-signing, webhook HMAC, object-storage, and vendor API keys rotate on the same store, isolated per env). argon2id passwords. Web/PWA cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF on cookie POST/WS. Capacitor Bearer lives in platform secure storage, not WebView localStorage. Captcha (FR-007) on signup and login. Rate limits on auth, OTP, password-reset, Invite, Mahram-invite, Report, payment, media upload, reveal-request, browse, and `/v1/staff/*` (working numbers in `operator_config`). `rl_invite_per_day` is inbound abuse control, not the product Invite cap — it must not recreate a Sister product cap in `free_unlimited`. `QUOTA_EXCEEDED` is emitted only by invites from `invite_quota` + `operator_config` caps (AD-27). Contact-share is the **single** predicate: only chat writes `contact_share`; moderation/trust call `ChatPort.contactShareOpen`. The send-time matcher lives in `chat` (and `invites` for Flash) as a **local deterministic function** — it must not call `ModerationPort`. Flash is pre-conversation so Contact-share cannot be open: phone / WhatsApp / links in Flash are refused with `CONTACT_SHARE_REQUIRED`. A Contact-share reject returns `CONTACT_SHARE_REQUIRED` and shows the published education interstitial to **both** Members. Money-ask language is **delivered and flagged**, even after Contact-share; in-Chat education (“never send money to a suitor”) is shown after that delivery. Ban fingerprint is `sha256(phone_e164 | id_doc_hash | device_attestation)` owned by trust — a cookie-only id is not a Ban key. Staff list/browse/metrics endpoints never return phone or WhatsApp. The **only** staff path that emits another person’s contact is an `operator` `cil_ticket` for that subject (FR-019 / FR-143); every such export is an AD-18 event. Prod app SQL roles cannot `COPY`/`SELECT` contact columns in bulk
 
 ### AD-18 — Tamper-evident audit log
 
-- **Binds:** NFR-009, FR-093, FR-085, FR-090, FR-139–FR-143, FR-067
+- **Binds:** NFR-009, FR-093, FR-085, FR-090, FR-139–FR-143, FR-145, FR-067
 - **Prevents:** mutable “logs” that two teams format differently, or a WORM claim a DBA can undo
-- **Rule:** `audit` module owns append-only `audit_event` (application hash-chain). This is tamper-evident at the app layer, not object-lock WORM. The audit DB role is `INSERT` + `SELECT` only (`UPDATE`/`DELETE` revoked). Nightly chain-verify job; hash copies may go to versioned object storage. `payload` stores ids + action + reason — never phones or original photo bytes. Mandatory events: moderator unblur, sanctions, appeals, operator threshold/price changes, deletion/CIL completions, scan-deferred / scan-failed, admin flag actions, mahram attach/remove/pause/end, reveal grant/revoke, payment webhook apply, marriage dual-confirm, consent-story publish or refuse, subject-access export. Retain ≥12 months. Individual staff attribution
+- **Rule:** `audit` module owns append-only `audit_event` (application hash-chain). This is tamper-evident at the app layer, not object-lock WORM. The audit DB role is `INSERT` + `SELECT` only (`UPDATE`/`DELETE` revoked). Nightly chain-verify job; hash copies may go to versioned object storage. `payload` stores ids + action + reason — never phones or original photo bytes. Mandatory events: moderator unblur, sanctions, appeals, operator threshold/price/`sister_reach_mode` changes, deletion/CIL completions, scan-deferred / scan-failed, admin flag actions, mahram attach/remove/pause/end, reveal grant/revoke, payment webhook apply, marriage dual-confirm, consent-story publish or refuse, subject-access export. The `sister_reach_mode` change event is emitted only by the operator config-write command, in the same unit of work as the `operator_config` UPDATE; payload includes `from`, `to`, `staffId`. A config-row timestamp is not that event. Invites must not emit it. Retain ≥12 months. Individual staff attribution
 
 ### AD-19 — Privacy, CIL, retention
 
@@ -219,8 +219,8 @@ stateDiagram-v2
 ### AD-21 — Billing isolation from safety
 
 - **Binds:** FR-105, FR-110, NFR-004
-- **Prevents:** a payment-adapter outage disabling verification, blur, mahram, report, block, or sister invites
-- **Rule:** entitlements are read only through `BillingPort.isEntitled`, which returns `true | false | unavailable` and must not throw into a safety handler. Verification, Blur/Reveal, Mahram, Report, Block, and Sister-initiated Invites are **not** entitlement checks — they must succeed when billing is down, `unavailable`, **or** the caller has no pack. Brother daily Invite quota and paid-faster-review may read `isEntitled`. Stale-closed cache must not disable Free/safety. A paid perk must not skip moderation (AD-10)
+- **Prevents:** a payment-adapter outage disabling verification, blur, mahram, report, block, browse, or Chat after accept
+- **Rule:** entitlements are read only through `BillingPort.isEntitled(accountId)`, which returns `true | false | unavailable`, is pack presence only (must not read `sister_reach_mode` or gender), and must not throw. Quota callers (Brother always; Sister iff `same_quota_as_brothers`) map `unavailable` to the Free cap. Verification, Blur/Reveal, Mahram, Report, Block, browse/discovery, and Chat after accept (including Invite accept and `ChatPort.openFromInvite`) are **not** entitlement checks in either `sister_reach_mode` — they must succeed when billing is down, `unavailable`, or the caller has no pack, and they must not call `BillingPort`. Sister invite send, quota/compose, and reach-pack catalog/checkout may call `BillingPort.isEntitled` **only** when `sister_reach_mode` is `same_quota_as_brothers` (AD-27); when `free_unlimited` those Sister paths are not entitlement checks and must not call `BillingPort`. `AuthContext` must not carry `entitled` or packs; inbound adapters must not install a global paywall guard. Billing adapter init must not block process listen or safety routes. Brother daily Invite quota and paid-faster-review may read `isEntitled` (faster-review is moderation after persist, never folded into invite send). Stale-closed cache must not disable Free/safety. A paid perk must not skip moderation (AD-10)
 
 ### AD-22 — Open PRD questions stay open
 
@@ -232,7 +232,7 @@ stateDiagram-v2
 
 - **Binds:** invites, chat, mahram, profiles, discovery, media, notifications, moderation
 - **Prevents:** two modules inserting the same aggregate (conversation born twice; hide implemented twice)
-- **Rule:** only `ChatPort.openFromInvite(inviteId)` inserts `conversation`, and only when the Sister accepted or she sent the Invite. Decline creates no conversation and no resend. `chat` refuses messages without that conversation FK. Only `ChatPort.closeFromMarriage` or Mahram/Moderator `end` closes a conversation (outcomes never INSERT/DELETE conversation). Only chat inserts `contact_share` (`taaruf_stage` must not encode contact-share). Mahram emergency-hide calls `ProfilePort.emergencyHide(sisterId, 24h)` — discovery reads `profile.visibility` only. Notifications persist asset ids and call `MediaPort.sign` for thumbs. Daily Invite quotas: Brothers from `operator_config`; Sisters unlimited and never an entitlement check. Quotas reset on the `Africa/Ouagadougou` civil day, not UTC. Stage enum on `conversation` is `invite | chat | meeting | married` only
+- **Rule:** only `ChatPort.openFromInvite(inviteId)` inserts `conversation`, and only when the Sister accepted or she sent the Invite. Decline creates no conversation and no resend. `chat` refuses messages without that conversation FK. Only `ChatPort.closeFromMarriage` or Mahram/Moderator `end` closes a conversation (outcomes never INSERT/DELETE conversation). Only chat inserts `contact_share` (`taaruf_stage` must not encode contact-share). Mahram emergency-hide calls `ProfilePort.emergencyHide(sisterId, 24h)` — discovery reads `profile.visibility` only. Notifications persist asset ids and call `MediaPort.sign` for thumbs. Daily Invite quotas reset on the `Africa/Ouagadougou` civil day, not UTC. Brother caps come from `operator_config` always. Sister caps follow AD-27 (`sister_reach_mode`). Stage enum on `conversation` is `invite | chat | meeting | married` only
 
 ### AD-24 — Accessibility and low-literacy floor
 
@@ -252,6 +252,12 @@ stateDiagram-v2
 - **Prevents:** accept-without-disclosure, or treating an ID badge as proof of marital status
 - **Rule:** `marital_status` and (for Brothers who are `married`) `polygamy_intent` are required Profile fields and are readable on the Invite decision surface **before** Sister accept. Verification badges must not be copied as marital-status proof. First-wife notification stays unbuilt unless AD-22 / OQ-1 flips
 
+### AD-27 — Sister reach mode `[ADOPTED]`
+
+- **Binds:** FR-145, FR-045, FR-044, FR-105
+- **Prevents:** hardcoded unlimited Sister invites, a brother-free mode, compiling out either mode, treating `sister_reach_mode` as a Brother free pass, or calling `BillingPort` from safety paths
+- **Rule:** `operator_config.sister_reach_mode` is `free_unlimited` (DEFAULT) | `same_quota_as_brothers`. Both values exist in code and seed on day one — not a feature flag that can be compiled out. Only `operator` may write the key (not `moderator`, not `system`, not env/SQL). Brothers always use the paid quota (`brother_invite_quota_free` / `brother_invite_quota_premium`); they never read `sister_reach_mode` as a free pass. Invites reads Sister/Brother from `IdentityPort.presentation` / required `AuthContext.gender` on `member` — not a profile field. When `free_unlimited`, Sister invite send, quota GET, and compose must not call `BillingPort` and must not show remaining/cap or a reach-pack offer; do not read or enforce a Sister `invite_quota` row. When `same_quota_as_brothers`, Sister invite send and quota read use the same quota predicate and the same **live** `BillingPort.isEntitled(accountId)` result as Brothers — same packs, same daily caps, same `Africa/Ouagadougou` civil-day reset; missing pack or `unavailable` means the Free cap, not a safety block. Any live pack → Premium cap; do not invent an invite-specific SKU. Sisters see and buy the same 1/3/6-month reach packs **only** in `same_quota_as_brothers`; `GET /v1/packs` and `POST /v1/payments` must not offer or accept a Sister reach-pack in `free_unlimited`. Sister checkout stays in the `same_quota` path (not compiled out). `invite_quota` grain is `{ account_id, civil_day_ouaga, sent_count }` written only by invites on successful send persist (never on accept; no refund on decline). Billing never writes it and must not expose a remaining-int. Cap is computed at send/read from `operator_config` + live `isEntitled` when that call is legal — no civil-day snapshot of cap or entitled bit. `isEntitled` is pack presence only and must not read `sister_reach_mode` or gender. Invites reads mode via `OperatorPort.get` on every send and Sister quota read — no process-lifetime cache. Mode change binds the **next** Sister send; past `invite` rows stay; already-sent invites that day do **not** count toward a newly applied cap. Safety paths (verification, blur/reveal, mahram, report, block), browse, and Chat after accept (including accept / `openFromInvite`) must not call `BillingPort` in either mode; billing down must not block those. Mode change is an AD-18 event (AD-18 payload `from`/`to`/`staffId`)
+
 ## Consistency Conventions
 
 | Concern | Convention |
@@ -260,10 +266,10 @@ stateDiagram-v2
 | IDs | UUID v7 generated in `packages/kernel` (host managed PG 17 has no native `uuidv7`); prefix optional in APIs (`acc_`, `msg_`, `pay_`) |
 | Time | UTC ISO-8601 in APIs and DB; display in `Africa/Ouagadougou`; quota and quiet-hours windows use that civil day |
 | Locale | `fr` default UI; audio keys `mos`, `dyu`; rendered Member/SEO/store/audio strings use *mariage / ta'aruf / nikah / khitba* only (AD-24) |
-| Errors | AD-7 envelope only; `code` is machine (`CONTACT_SHARE_REQUIRED`, `PAY_UNAVAILABLE`) |
-| Auth context | `AuthContext { accountId, roles[], gender?, mahramWardId? }` set by identity; downstream trusts it, does not re-parse tokens |
+| Errors | AD-7 envelope only; `code` is machine (`CONTACT_SHARE_REQUIRED`, `QUOTA_EXCEEDED` = over-cap + reset time, `PAY_UNAVAILABLE` = processor down → Free cap on quota paths, never a safety block) |
+| Auth context | `AuthContext { accountId, roles[], gender, mahramWardId? }` set by identity; `gender` required on `member`; must not carry `entitled` or packs; downstream trusts it, does not re-parse tokens |
 | Mutation | Commands in the owning module via AD-23 ports; no cross-module SQL writes |
-| Config | Required `operator_config` keys: `flag_threshold`, `free_review_sla_hours`, `report_sla_hours`, `photo_strike_count`, `photo_strike_block_hours`, `brother_invite_quota_free`, `brother_invite_quota_premium`, `signed_url_ttl_seconds` (max 60), `pack_prices_xof`, `min_age`, `rl_auth_per_min`, `rl_otp_per_hour`, `rl_invite_per_day`, `rl_report_per_hour`, `rl_pay_per_min`, `rl_browse_per_min`. Types: number unless `_xof` is integer XOF. Audited on change |
+| Config | Required `operator_config` keys: `flag_threshold`, `free_review_sla_hours`, `report_sla_hours`, `photo_strike_count`, `photo_strike_block_hours`, `brother_invite_quota_free`, `brother_invite_quota_premium`, `sister_reach_mode` (`free_unlimited` DEFAULT \| `same_quota_as_brothers`; both seeded day one; not a compile-out flag), `signed_url_ttl_seconds` (max 60), `pack_prices_xof`, `min_age`, `rl_auth_per_min`, `rl_otp_per_hour`, `rl_invite_per_day`, `rl_report_per_hour`, `rl_pay_per_min`, `rl_browse_per_min`. Types: number unless `_xof` is integer XOF or `sister_reach_mode` is that enum. Audited on change |
 | Feature flags | `gif_picker`, `ussd`, `anonymous_mode`, `ios_apple_signin`, `who_favourited_me`, `visitors_list`, `online_now`, `boosts`, extra payment methods. Member-facing who-favourited / visitors / online-now / boosts stay **off** until their NEXT FR ships. `profile_visit` reads for T&S remain on |
 | Evidence | Farata statements keep labels Offered (seen) / Claimed (marketing) / Not publicly evidenced |
 
@@ -378,17 +384,17 @@ flowchart LR
 | Identity / account / PIN / Google / cookies | identity | AD-8, AD-17 |
 | Phone OTP, liveness, ID | verification | AD-13 |
 | Profiles, fields, completeness, emergency hide | profiles | AD-3, AD-23, AD-26 |
-| Browse, filters, favourites, visits | discovery | AD-16, AD-23 |
-| Invites, quotas, Message Flash | invites | AD-23, AD-21, AD-26, AD-10, AD-17 |
+| Browse, filters, favourites, visits | discovery | AD-16, AD-23, AD-21 |
+| Invites, quotas, Message Flash | invites | AD-23, AD-21, AD-26, AD-10, AD-17, AD-27 |
 | Chat, stages, reactions, contact-share | chat | AD-15, AD-10, AD-23 |
 | Media, derivatives, Reveal, signed URLs, likeness | media | AD-9 |
 | Passive after-delivery scan, flag queue | moderation | AD-10, AD-11, AD-17 |
 | Mahram invite / read / pause | mahram | AD-12, AD-23 |
 | Report, case, strike, ban, appeal, block | trust | AD-10, AD-18, AD-17 |
 | Marriage report, story, counter | outcomes | AD-25, AD-18 |
-| Packs, payments, entitlements | billing | AD-14, AD-21 |
+| Packs, payments, entitlements | billing | AD-14, AD-21, AD-27 |
 | Académie, board, FR copy, audio | content | AD-22, AD-24 |
-| Operator config, CIL tickets | operator | AD-19, AD-20 |
+| Operator config, CIL tickets | operator | AD-19, AD-20, AD-27, AD-18 |
 | Push + SMS | notifications | AD-16, AD-9 |
 | Audit log | audit | AD-18 |
 | A11y / low-literacy floor | apps/web | AD-24 |

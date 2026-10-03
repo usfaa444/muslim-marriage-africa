@@ -9,6 +9,8 @@ against: prds/prd-muslim-marriage-africa-2026-09-27 (prd.md + addendum.md)
 
 **Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows and gaps below that require fail-closed pre-delivery, hold-on-timeout, or pre-delivery block/hold rates as current PRD behavior are historical. Current `prd.md` delivers Chat immediately, then scans; SM-4 counts flags and scan-deferred events. Other gaps in this reconcile are not closed by that decision.
 
+**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Sentences below that treat sister reach as always free, unlimited, or “never pay” are historical. Safety and Chat after accept stay free. D20 stays, reframed.
+
 # Reconcile: product brief → PRD
 
 PRIMARY input: `brief-muslim-marriage-africa-2026-09-27` (`brief.md`, `addendum.md`, `.memlog.md`).
@@ -179,7 +181,7 @@ D-rank / P0–P3 tier numbers from brief.md §D1–D40 are not reproduced (PRD u
 
 Transferred from brief.md §Pricing stance + brief memlog:
 
-- Freemium XOF; dignity stack never paywalled
+- Freemium XOF; dignity stack never paywalled *(safety still true; “sisters never pay for reach” superseded 2026-10-02 — default `free_unlimited`, Operator can set `same_quota_as_brothers`)*
 - Brothers pay for reach/convenience
 - One transparent pricing page; launch vs normal disclosed (FR-108)
 - 1 / 3 / 6 months; no silent auto-renew even if processor wants it (FR-106)

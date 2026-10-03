@@ -24,6 +24,7 @@ lockedDecisions:
   - Mahram is read-only (AD-12).
   - Contact-share still blocks phone numbers, WhatsApp, and links until both opt in (FR-068); that is not an AI hold.
   - Name stays TBD. A1–A3 and the other open questions stay open.
+  - Sister reach is operator-configurable on day one (`operator_config.sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Both values ship. Safety (verification, blur/reveal, mahram, report, block) and Chat after accept stay free in both modes and must not call BillingPort. Brothers stay on the paid quota. No brother-free mode. Locked Maitchibi Fayçal, 2026-10-02 (FR-044, FR-045, FR-105, FR-145, AD-27).
 ---
 
 # muslim-marriage-africa - Epic Breakdown
@@ -91,8 +92,8 @@ Horizon is MVP unless marked **NEXT** or **LATER**. Full acceptance criteria liv
 - FR-041: Chat opens only after Sister consent. No thread on a pending Brother-sent Invite.
 - FR-042: Quiet decline — no “she saw this,” no guilt timer.
 - FR-043: No resend after refuse (unless she later initiates).
-- FR-044: Daily Invite quota for Brothers (working 3 Free / 15 Premium). Reset on `Africa/Ouagadougou` civil day (AD-23 supersedes PRD UTC wording).
-- FR-045: Sisters start Invites free and unlimited.
+- FR-044: Daily Invite quota for Brothers (working 3 Free / 15 Premium). Reset on `Africa/Ouagadougou` civil day (AD-23 supersedes PRD UTC wording). Sisters follow FR-045 / `sister_reach_mode`. No brother-free mode.
+- FR-045: Sister Invite reach follows `sister_reach_mode` (`free_unlimited` DEFAULT | `same_quota_as_brothers`). Default: no quota and no pack. `same_quota_as_brothers`: same Free/Premium daily caps, same 1/3/6 packs, same Orange/Moov/Wave checkout (no auto-renew), same Ouaga-day reset as Brothers. Safety and Chat after accept stay free in both modes.
 - FR-046: Message Flash visible before accept; delivered immediately; later flag does not unsend.
 - FR-047: Ice Breaker templates (deen/family); editable before send.
 - FR-048: Message Flash is Mahram-visible from minute one if attached.
@@ -174,12 +175,12 @@ Horizon is MVP unless marked **NEXT** or **LATER**. Full acceptance criteria liv
 **Monetisation (prd.md §4.10)**
 
 - FR-104: Freemium in XOF. Free browse + quota Invites + Chat after accept.
-- FR-105: Safety and Sister dignity never paywalled (Verification, Blur/Reveal, Mahram, Report, Block, Sister Invites). Billing down must not disable these.
-- FR-106: 1 / 3 / 6 month packs; explicit `ends_at`; no silent auto-renew; no renewal job.
+- FR-105: Safety and Sister dignity never paywalled (Verification, Blur/Reveal, Mahram, Report, Block). Chat after accept stays free. Sister Invite send is allowed or rejected solely by FR-045 / `sister_reach_mode`, never by a safety paywall. Billing down must not disable safety.
+- FR-106: 1 / 3 / 6 month packs; explicit `ends_at`; no silent auto-renew; no renewal job. Sisters see and buy these packs only when `sister_reach_mode` is `same_quota_as_brothers`.
 - FR-107: Burkina rails: Orange Money BF, Moov Africa BF, Wave/Coris; cards secondary via hosted checkout (PAN never touches api).
 - FR-108: One transparent pricing page; same numbers as checkout.
 - FR-109: Published CGV and refunds; Operator-approved refund returns Member to Free.
-- FR-110: MVP Premium delta only: Brother quota 15 vs 3 + faster human-review queue. Cannot skip scan, review, or admin flag queue.
+- FR-110: MVP Premium delta only: quota 15 vs 3 (Brothers always; Sisters when `same_quota_as_brothers`) + faster human-review queue. Cannot skip scan, review, or admin flag queue.
 - FR-111: Boosts — **NEXT**.
 - FR-112: Premium badge — **NEXT**.
 - FR-113: Remaining Premium perks — **NEXT**.
@@ -222,6 +223,7 @@ Horizon is MVP unless marked **NEXT** or **LATER**. Full acceptance criteria liv
 - FR-141: Advisory Board / Académie publish.
 - FR-142: Internal metrics (verified levels, dual-confirmed marriages, report SLA, scan-deferred never hidden, appeal overturns).
 - FR-143: Account deletion and CIL request handling with a Member-visible status page.
+- FR-145: Operator sets `sister_reach_mode` (`free_unlimited` DEFAULT | `same_quota_as_brothers`). Both ship day one. Audited. Subsequent Sister Invites use the new mode; past Invites stay. Sister UI shows unlimited Invites or the same quota and pack purchase as Brothers. Sister checkout exists only in `same_quota_as_brothers`. No brother-free mode.
 
 ### NonFunctional Requirements
 
@@ -246,7 +248,7 @@ From [ARCHITECTURE-SPINE.md](architecture/architecture-muslim-marriage-africa-20
 **Paradigm and process roles**
 
 - AD-1: One API product. Two process roles from the **same image**: `api` (HTTP/WS) and `worker` (BullMQ). Third in-region `web` role (AD-4). No per-module microservice.
-- AD-2: Dependency direction `clients → inbound adapters → application → domain`. Safety paths must not import `BillingPort`.
+- AD-2: Dependency direction `clients → inbound adapters → application → domain`. Safety paths must not import `BillingPort` in either `sister_reach_mode`.
 - AD-3: Single entity ownership (see spine ownership table). Cross-module reads go through ports.
 - AD-23: Only `ChatPort.openFromInvite` inserts `conversation`. Daily Invite quotas reset on `Africa/Ouagadougou`. Stage enum `invite | chat | meeting | married` only.
 
@@ -266,7 +268,8 @@ From [ARCHITECTURE-SPINE.md](architecture/architecture-muslim-marriage-africa-20
 - AD-17: TLS 1.2+; chat ciphertext `{v, alg, kid, iv, ct}`; argon2id; CSRF; Capacitor Bearer in platform secure storage; captcha; rate limits; Contact-share is the single off-platform predicate; staff list endpoints never return phone/WhatsApp.
 - AD-18: Append-only `audit_event` hash-chain; INSERT/SELECT-only DB role; retain ≥12 months.
 - AD-19: Loi n°001-2021/AN; CIL authorisation before public traffic; erase includes object-storage versions. Retention clocks stay `[ASSUMPTION]`.
-- AD-21: `BillingPort.isEntitled` returns `true | false | unavailable` and must not throw into safety handlers.
+- AD-21: `BillingPort.isEntitled` returns `true | false | unavailable` and must not throw into safety handlers. Sister invite send, quota/compose, and reach-pack catalog/checkout may call it only when `sister_reach_mode` is `same_quota_as_brothers` (AD-27).
+- AD-27: `operator_config.sister_reach_mode` is `free_unlimited` (DEFAULT) | `same_quota_as_brothers`. Both seeded day one. Only `operator` may write. Brothers never read it as a free pass. Sister checkout only in `same_quota_as_brothers`.
 - AD-22: Open PRD questions stay open as config/flags. Question 2 (fail-closed UX) is resolved. Do not bake closed answers into schema enums.
 
 **Media / moderation / mahram / outcomes**
@@ -282,7 +285,7 @@ From [ARCHITECTURE-SPINE.md](architecture/architecture-muslim-marriage-africa-20
 - AD-25: `marriage_counter` +1 only after both confirm. Public metrics proof-backed only.
 - AD-26: `marital_status` and (if married) `polygamy_intent` required and readable on the Invite decision surface before Sister accept.
 
-**Required `operator_config` keys:** `flag_threshold`, `free_review_sla_hours`, `report_sla_hours`, `photo_strike_count`, `photo_strike_block_hours`, `brother_invite_quota_free`, `brother_invite_quota_premium`, `signed_url_ttl_seconds` (max 60), `pack_prices_xof`, `min_age`, `rl_auth_per_min`, `rl_otp_per_hour`, `rl_invite_per_day`, `rl_report_per_hour`, `rl_pay_per_min`, `rl_browse_per_min`.
+**Required `operator_config` keys:** `flag_threshold`, `free_review_sla_hours`, `report_sla_hours`, `photo_strike_count`, `photo_strike_block_hours`, `brother_invite_quota_free`, `brother_invite_quota_premium`, `sister_reach_mode` (`free_unlimited` DEFAULT | `same_quota_as_brothers`; both seeded day one), `signed_url_ttl_seconds` (max 60), `pack_prices_xof`, `min_age`, `rl_auth_per_min`, `rl_otp_per_hour`, `rl_invite_per_day`, `rl_report_per_hour`, `rl_pay_per_min`, `rl_browse_per_min`.
 
 **Feature flags stay off until NEXT FR ships:** `gif_picker`, `ussd`, `anonymous_mode`, `ios_apple_signin`, `who_favourited_me`, `visitors_list`, `online_now`, `boosts`.
 
@@ -314,7 +317,7 @@ From [DESIGN.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/DESIGN.md) and 
 - UX-DR22: `audio-prompt` — speaker + `mos`/`dyu` toggles ≥44px on onboarding, photo rules, no-auto-renew, Mahram invite. Audio fail → pictograms remain.
 - UX-DR23: `pin-lock` — full-screen sand, four digits, no photo behind.
 - UX-DR24: `empty-state` — one sentence + one action. Zero results never invent Profiles.
-- UX-DR25: `error-banner` — AD-7 codes mapped to French. `PAY_UNAVAILABLE` does not disable Chat, Report, Blur, Mahram, Sister Invite.
+- UX-DR25: `error-banner` — AD-7 codes mapped to French. `PAY_UNAVAILABLE` does not disable Chat, Report, Blur, Mahram, Verification, or Block. Sister Invite send is allowed or rejected solely by FR-045 / `sister_reach_mode`, never by a safety paywall.
 - UX-DR26: `lite-placeholder` — criteria remain while images defer. Chat media waits for connection, not AI.
 - UX-DR27: Three role shells never mixed on one session: Member (bottom nav Découvrir · Invitations · Discussions · Profil), Mahram (no Découvrir, no Invitations), Staff (two-pane from 768px).
 - UX-DR28: Implement EXPERIENCE.md public, identity, member-core, Mahram, and staff surfaces with the documented empty/loading/error/success states. Banned Chat states: `pending`, `held`, `pending-moderation`, `scan-wait`, `fail-closed`.
@@ -376,7 +379,7 @@ Primary epic only. NEXT/LATER items are listed so none are dropped; they are not
 - FR-042: Epic 4 — quiet decline
 - FR-043: Epic 4 — no resend after refuse
 - FR-044: Epic 4 — Brother daily quota
-- FR-045: Epic 4 — Sister invites unlimited free
+- FR-045: Epic 4 — Sister invite reach follows `sister_reach_mode` (Stories 4.1, 4.7)
 - FR-046: Epic 4 — Message Flash
 - FR-047: Epic 4 — Ice Breaker templates
 - FR-048: Epic 7 — Flash Mahram-visible (Story 7.4)
@@ -496,6 +499,7 @@ Primary epic only. NEXT/LATER items are listed so none are dropped; they are not
 - FR-141: Epic 12 — Board / Académie publish
 - FR-142: Epic 12 — internal metrics
 - FR-143: Epic 12 — CIL / deletion tickets
+- FR-145: Epic 4 — Operator `sister_reach_mode` and Sister checkout (Story 4.7)
 
 **NFRs**
 - NFR-001: Epic 2 (auth/PIN) + Epic 6 (media at rest) + Epic 12 (no staff bulk export)
@@ -529,9 +533,9 @@ A reviewed Member publishes Islamic-criteria fields, stays unpublished until pho
 **ADs:** AD-9 (blur ingest), AD-10 (publish-gate only), AD-16, AD-26 (profile fields)
 
 ### Epic 4: Invite only with Sister consent
-Members send and decide Invites. Sisters start free and unlimited. Brothers have a daily quota. Marital status and polygamy intent are visible before accept. Decline is quiet. Chat is created only after Sister consent.
-**FRs covered:** FR-016, FR-037, FR-038, FR-039, FR-040, FR-041, FR-042, FR-043, FR-044, FR-045, FR-046, FR-047
-**ADs:** AD-21, AD-23, AD-26
+Members send and decide Invites. Sister invite reach follows `sister_reach_mode`: default `free_unlimited` (no quota, no pack); `same_quota_as_brothers` uses the same Free/Premium daily caps and the same packs as Brothers. Brothers stay on the paid quota. Marital status and polygamy intent are visible before accept. Decline is quiet. Chat is created only after Sister consent.
+**FRs covered:** FR-016, FR-037, FR-038, FR-039, FR-040, FR-041, FR-042, FR-043, FR-044, FR-045, FR-046, FR-047, FR-145
+**ADs:** AD-21, AD-23, AD-26, AD-27
 
 ### Epic 5: Talk immediately after accept
 After Sister consent, Members exchange text, Chat Photos, and Voice notes that appear as soon as they are stored. Contact-share still blocks phone/WhatsApp/links until both opt in. Push and SMS carry ids and blur thumbs only. Each persist enqueues a background scan — it does not hold the send.
@@ -562,10 +566,10 @@ A couple jointly reports nikah. The public counter stays 0 until both confirm. O
 **ADs:** AD-25
 
 ### Epic 10: Pay for reach in XOF, never for dignity
-A Brother buys a 1/3/6-month pack on Orange Money, Moov, or Wave. There is no silent auto-renew. Verification, Blur, Mahram, Report, Block, and Sister Invites stay free even if billing is down.
+A Brother buys a 1/3/6-month pack on Orange Money, Moov, or Wave. A Sister sees and buys the same packs only when `sister_reach_mode` is `same_quota_as_brothers`. There is no silent auto-renew. Verification, Blur, Mahram, Report, Block, and Chat after accept stay free even if billing is down.
 **FRs covered:** FR-104, FR-105, FR-106, FR-107, FR-108, FR-109, FR-110
 **NFRs:** NFR-004
-**ADs:** AD-14, AD-21
+**ADs:** AD-14, AD-21, AD-27
 
 ### Epic 11: Stand in public as honorable ta'aruf
 Visitors see an honest counter, five scholar-reviewed articles, named Board members, Ouaga/Bobo/BF pages, cookies that are not a likeness grant, hosting/CIL disclosure, FAQ, and can install the PWA or the Play-listed Android wrapper.
@@ -574,7 +578,7 @@ Visitors see an honest counter, five scholar-reviewed articles, named Board memb
 **ADs:** AD-4, AD-5, AD-19, AD-24
 
 ### Epic 12: Operate, measure, and honour a CIL request
-Operators change pack prices and moderation policy text, publish Board/Académie, see internal metrics including scan-deferred, and complete deletion/CIL tickets. Staff are individual, MFA, never operator-as-member. Audit is append-only.
+Operators change pack prices, `sister_reach_mode` (Story 4.7), and moderation policy text, publish Board/Académie, see internal metrics including scan-deferred, and complete deletion/CIL tickets. Staff are individual, MFA, never operator-as-member. Audit is append-only.
 **FRs covered:** FR-139, FR-140, FR-141, FR-142, FR-143
 **NFRs:** NFR-002, NFR-008, NFR-009
 **ADs:** AD-18, AD-19, AD-20
@@ -676,7 +680,7 @@ So that later stories alter only the tables they need and read working numbers f
 
 **Given** compose Postgres is empty
 **When** I run Drizzle migrate
-**Then** the `operator_config` table exists with the spine keys (`min_age=19`, quotas 3/15, SLA 24h, signed_url_ttl ≤60, strike 3/24h, rate-limit keys)
+**Then** the `operator_config` table exists with the spine keys (`min_age=19`, quotas 3/15, `sister_reach_mode=free_unlimited` DEFAULT, both enum values seeded, SLA 24h, signed_url_ttl ≤60, strike 3/24h, rate-limit keys)
 
 **Given** I change a config value in a later story
 **When** I look at this table
@@ -1282,9 +1286,9 @@ So that I can use the product on ~1GB/month.
 **Notes:** UX-DR26, UX-DR30.
 ## Epic 4: Invite only with Sister consent
 
-Members send and decide Invites. Sisters start free and unlimited. Brothers have a daily quota. Marital status and polygamy intent are visible before accept. Decline is quiet. Chat is created only after Sister consent.
+Members send and decide Invites. Sister invite reach follows `sister_reach_mode`: default `free_unlimited` (no quota, no pack); `same_quota_as_brothers` uses the same Free/Premium daily caps and the same packs as Brothers. Brothers stay on the paid quota. Marital status and polygamy intent are visible before accept. Decline is quiet. Chat is created only after Sister consent.
 
-**FRs covered:** FR-016, FR-037, FR-038, FR-039, FR-040, FR-041, FR-042, FR-043, FR-044, FR-045, FR-046, FR-047
+**FRs covered:** FR-016, FR-037, FR-038, FR-039, FR-040, FR-041, FR-042, FR-043, FR-044, FR-045, FR-046, FR-047, FR-145
 
 ### Story 4.1: Send an Invite
 
@@ -1306,11 +1310,16 @@ So that ta'aruf starts as a request, not a swipe.
 **When** I submit
 **Then** the Invite is rejected
 
-**Given** I am a Sister without Premium
+**Given** I am a Sister and `sister_reach_mode` is `free_unlimited`
 **When** I send my Nth Invite
-**Then** it is not blocked by a paid quota
+**Then** it is not blocked by a paid quota and I am not asked to buy a pack
+**And** the send path does not call `BillingPort`
 
-**Implements:** FR-038, FR-016, FR-045 · AD-23, AD-21 · [prd.md §4.3 FR-038](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Invite compose + Message Flash](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
+**Given** I am a Sister and `sister_reach_mode` is `same_quota_as_brothers` with no pack
+**When** I send a 4th Invite the same Ouaga day
+**Then** I get `QUOTA_EXCEEDED` with the reset time (same Free cap as Brothers)
+
+**Implements:** FR-038, FR-016, FR-045 · AD-23, AD-21, AD-27 · [prd.md §4.3 FR-038](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Invite compose + Message Flash](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
 **Start here:** `POST /v1/invites` · entity `invite` · container `api`
 ### Story 4.2: Brother daily Invite quota
 
@@ -1328,15 +1337,19 @@ So that spray-and-pray is expensive and Sisters are not paywalled.
 **When** it succeeds
 **Then** the 16th that civil day is rejected
 
-**Given** billing is `unavailable`
-**When** I am a Sister sending an Invite
-**Then** the send still succeeds — quota is not a Sister entitlement check
+**Given** billing is `unavailable` and I am a Sister and `sister_reach_mode` is `free_unlimited`
+**When** I send an Invite
+**Then** the send succeeds and the path does not call `BillingPort`
+
+**Given** billing is `unavailable` and I am a Sister and `sister_reach_mode` is `same_quota_as_brothers`
+**When** I send Invites
+**Then** the Free cap applies (same as Brothers); safety is not blocked
 
 **Given** browse ranking is inspected
 **When** MVP Premium
 **Then** no paid ranking boost (FR-111 stays off)
 
-**Implements:** FR-044, FR-110 (quota half) · AD-21, AD-23 · [prd.md §4.3 FR-044](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Invite compose + Message Flash](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
+**Implements:** FR-044, FR-110 (quota half) · AD-21, AD-23, AD-27 · [prd.md §4.3 FR-044](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Invite compose + Message Flash](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
 **Start here:** `POST /v1/invites (quota guard)` · entity `invite_quota` · container `api`
 **Notes:** AD-23 supersedes PRD UTC wording.
 ### Story 4.3: Message Flash and Ice Breaker templates
@@ -1435,6 +1448,44 @@ So that later Mahram read-all (Epic 7) can read the same delivered Flash without
 **Implements:** FR-046 (store invariant) · AD-10, AD-23 · [prd.md §4.3 FR-046](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Invite compose + Message Flash](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
 **Start here:** `GET /v1/invites/:id` (flash read-through) · entity `message_flash` · container `api`
 **Notes:** FR-048 Mahram visibility is Story 7.4, after `mahram_link` exists.
+### Story 4.7: Operator sister-reach mode and Sister checkout
+
+As an Operator,
+I want to set `sister_reach_mode` to `free_unlimited` or `same_quota_as_brothers`,
+So that Sisters stay unlimited by default, and I can apply the same paid daily caps and the same Orange/Moov/Wave packs as Brothers without a release — never a brother-free mode.
+
+**Acceptance Criteria:**
+
+**Given** I am an Operator
+**When** I PATCH `/v1/staff/config` with `sister_reach_mode` = `same_quota_as_brothers` or `free_unlimited`
+**Then** the value is stored, both values exist in seed and code on day one, and an AD-18 audit event is written in the same unit of work with `from`, `to`, `staffId`
+**And** a moderator, system, or env/SQL write is rejected
+**And** subsequent Sister Invites use the new mode; past Invites are not deleted; already-sent Invites that day do not count toward a newly applied cap
+
+**Given** `sister_reach_mode` is `free_unlimited` (DEFAULT)
+**When** a Sister opens Invite compose or pricing
+**Then** copy is « Invitations illimitées. »; no remaining/cap; no reach-pack offer; `GET /v1/packs` and `POST /v1/payments` do not offer or accept a Sister reach-pack
+**And** Sister invite send, quota GET, and compose do not call `BillingPort`
+**And** `QUOTA_EXCEEDED` is never returned for a Sister
+
+**Given** `sister_reach_mode` is `same_quota_as_brothers`
+**When** a Sister opens Invite compose or pricing
+**Then** she sees the same Free **3** / Premium **15** `[ASSUMPTION]` daily caps and Ouaga-day reset as Brothers
+**And** hitting the cap opens the Sister invite quota wall whose CTA opens the same Payment pack checkout (Orange/Moov/Wave, 1/3/6, no auto-renew)
+**And** a successful Sister pack purchase entitles her to the Premium cap until `ends_at`
+
+**Given** a Brother
+**When** he opens Invite or pricing in either mode
+**Then** he stays on the paid quota; there is no brother-free control
+
+**Given** Verification, Blur/Reveal, Mahram, Report, Block, or Chat after accept
+**When** either mode
+**Then** those paths succeed without calling `BillingPort`
+**And** passive moderation stays; no pre-delivery hold
+
+**Implements:** FR-145, FR-045, FR-105 · AD-27, AD-21, AD-14, AD-18 · [prd.md §4.13 FR-145](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screens [Operator sister-reach mode](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md), [Sister invite quota wall](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md), [Payment pack](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
+**Start here:** `PATCH /v1/staff/config (sister_reach_mode)` · entity `operator_config` · container `api`
+**Notes:** UX `operator-reach-mode`. Sister checkout stays on the `same_quota` path and is not compiled out. Safety modules must not import BillingPort.
 ## Epic 5: Talk immediately after accept
 
 After Sister consent, Members exchange text, Chat Photos, and Voice notes that appear as soon as they are stored. Contact-share still blocks phone/WhatsApp/links until both opt in. Each persist enqueues a background scan and does not hold the send. Banned Chat states: pending, held, pending-moderation, scan-wait, fail-closed.
@@ -2258,7 +2309,7 @@ So that faces stay optional, Chat excerpts are forbidden, empty showcase is vali
 **Start here:** `POST /v1/stories + GET /v1/stories` · entity `consent_story` · container `web`
 ## Epic 10: Pay for reach in XOF, never for dignity
 
-A Brother buys a 1/3/6-month pack on Orange Money, Moov, or Wave. There is no silent auto-renew. Verification, Blur, Mahram, Report, Block, and Sister Invites stay free even if billing is down.
+A Brother buys a 1/3/6-month pack on Orange Money, Moov, or Wave. A Sister sees and buys the same packs only when `sister_reach_mode` is `same_quota_as_brothers`. There is no silent auto-renew. Verification, Blur, Mahram, Report, Block, and Chat after accept stay free even if billing is down.
 
 **FRs covered:** FR-104, FR-105, FR-106, FR-107, FR-108, FR-109, FR-110
 
@@ -2332,22 +2383,31 @@ So that a processor preference for silent renew cannot bill again.
 ### Story 10.4: Safety stays up when billing is down
 
 As a Sister or Brother,
-I want Verification, Blur/Reveal, Mahram, Report, Block, and Sister Invites to succeed when billing is down or `isEntitled=unavailable`,
-So that dignity is not a rail. `BillingPort.isEntitled` must not throw into a safety handler.
+I want Verification, Blur/Reveal, Mahram, Report, Block, and Chat after accept to succeed when billing is down or `isEntitled=unavailable`,
+So that dignity is not a rail. Sister Invite send follows FR-045 / `sister_reach_mode`, never a safety paywall. `BillingPort.isEntitled` must not throw into a safety handler.
 
 **Acceptance Criteria:**
 
 **Given** the payment adapter is disabled (game day)
-**When** I complete OTP, Reveal, Mahram invite, Report, Block, or a Sister Invite
-**Then** all succeed
+**When** I complete OTP, Reveal, Mahram invite, Report, Block, or Chat after accept
+**Then** all succeed in both `sister_reach_mode` values and those handlers do not call `BillingPort`
+
+**Given** the payment adapter is disabled and `sister_reach_mode` is `free_unlimited`
+**When** I am a Sister sending an Invite
+**Then** the send succeeds and does not call `BillingPort`
+
+**Given** the payment adapter is disabled and `sister_reach_mode` is `same_quota_as_brothers`
+**When** I am a Sister sending Invites
+**Then** `unavailable` maps to the Free cap; Chat, Verification, Blur, Mahram, Report, Block stay usable
 
 **Given** error is `PAY_UNAVAILABLE`
 **When** the UI
-**Then** does not hide Chat, Report, Blur, Mahram, or Sister Invite
+**Then** does not hide Chat, Report, Blur, Mahram, Verification, or Block
+**And** Sister Invite compose is allowed or rejected solely by FR-045 / `sister_reach_mode`
 
-**Implements:** FR-105, NFR-004 · AD-21, AD-2 · [prd.md §4.10 FR-105](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Payment pack + error-banner](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
+**Implements:** FR-105, NFR-004 · AD-21, AD-2, AD-27 · [prd.md §4.10 FR-105](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Payment pack + error-banner](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
 **Start here:** `BillingPort.isEntitled returns true|false|unavailable` · entity `entitlement` · container `api`
-**Notes:** UX-DR25. Safety modules must not import BillingPort except Brother quota and paid-faster-review.
+**Notes:** UX-DR25. Safety modules must not import BillingPort. Sister invite send may call BillingPort only when `same_quota_as_brothers`.
 ### Story 10.5: CGV and refunds
 
 As a Member / Operator,
@@ -2382,7 +2442,11 @@ So that Premium cannot skip scan, human review, or the admin flag queue.
 **When** Premium
 **Then** those still apply
 
-**Implements:** FR-110, FR-013 · AD-21, AD-10 · [prd.md §4.10 FR-110](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Public pricing](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
+**Given** `sister_reach_mode` is `same_quota_as_brothers`
+**When** a Sister is Free vs Premium
+**Then** the same quota 15 vs 3 applies; she cannot skip scan or review
+
+**Implements:** FR-110, FR-013 · AD-21, AD-10, AD-27 · [prd.md §4.10 FR-110](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Public pricing](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
 **Start here:** `BillingPort.isEntitled on invite_quota + review queue order` · entity `entitlement, invite_quota` · container `api`
 ## Epic 11: Stand in public as honorable ta'aruf
 
@@ -2554,7 +2618,7 @@ So that D18 is a differentiator, not a nice-to-have. Do not claim ASR coverage.
 **Start here:** `content audio_asset keys mos/dyu` · entity `audio_asset` · container `web`
 ## Epic 12: Operate, measure, and honour a CIL request
 
-Operators change pack prices and moderation policy text, publish Board/Académie, see internal metrics including scan-deferred, and complete deletion/CIL tickets. Staff are individual, MFA, never operator-as-member. Audit is append-only.
+Operators change pack prices, `sister_reach_mode` (Story 4.7), and moderation policy text, publish Board/Académie, see internal metrics including scan-deferred, and complete deletion/CIL tickets. Staff are individual, MFA, never operator-as-member. Audit is append-only.
 
 **FRs covered:** FR-139, FR-140, FR-141, FR-142, FR-143
 
@@ -2603,6 +2667,7 @@ So that auto-renew stays off. The change is audited.
 
 **Implements:** FR-139, FR-106 · AD-14, AD-18 · [prd.md §4.13 FR-139](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Operator pricing](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
 **Start here:** `PUT /v1/staff/config (pack_prices_xof)` · entity `operator_config, pack` · container `api`
+**Notes:** `sister_reach_mode` PATCH, audit, Sister UI, and Sister checkout are Story 4.7 (FR-145). This story stays pack prices/durations only.
 ### Story 12.3: Edit moderation policy and thresholds
 
 As a Operator,
@@ -2860,6 +2925,7 @@ Every PRD FR and NFR maps to a story id or an explicit not-MVP mark. NEXT/LATER 
 | FR-142 | 12.5 | MVP |
 | FR-143 | 12.6 | MVP |
 | FR-144 | 8.3 | MVP |
+| FR-145 | 4.7 | MVP |
 | NFR-001 | 2.2 | MVP |
 | NFR-002 | 11.4 | MVP |
 | NFR-003 | 5.2 | MVP |
@@ -2909,7 +2975,8 @@ Every PRD FR and NFR maps to a story id or an explicit not-MVP mark. NEXT/LATER 
 
 ## Validation (step 4)
 
-- **FR/NFR coverage:** FR-001–FR-144 and NFR-001–NFR-009 each have a story id or an explicit not-MVP mark. MVP FRs uncovered: none.
+- **FR/NFR coverage:** FR-001–FR-145 and NFR-001–NFR-009 each have a story id or an explicit not-MVP mark. MVP FRs uncovered: none. FR-145 maps to Story 4.7 (MVP).
+- **Sister reach (2026-10-02):** Inventory, Epic 4 intro, Stories 4.1 / 4.2 / 4.7 / 10.4 no longer hardcode Sister Invites as always free. Both `sister_reach_mode` values are testable. Passive moderation and no pre-delivery hold unchanged.
 - **Starter template:** Architecture is greenfield. No clone-from-starter story. Story 1.1 is the shared kernel, not a vanilla CLI dump.
 - **Entities:** Tables are created on the first story that needs them. Story 1.5 seeds `operator_config` only.
 - **Locked moderation:** No story implements a pre-delivery hold, pending-moderation/held Chat state, unsend, or AI auto-suspend. Profile Photo/bio stay publish-gated (3.2). Blur is server-side (6.1). Mahram is read-only (7.4). Contact-share is a local matcher (5.5).

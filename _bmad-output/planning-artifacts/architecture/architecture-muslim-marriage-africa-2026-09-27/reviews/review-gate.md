@@ -1,32 +1,33 @@
-# Reviewer Gate — 2026-10-01 correction of record
+# Reviewer Gate — 2026-10-02 sister-reach mode
 
-**Verdict:** pass after autofix. Chat is send-first and passive. The spine does not instruct a pre-delivery Chat scan or a fail-closed hold.
+**Verdict:** pass after autofix. Sister Invite reach is operator-configurable (`sister_reach_mode`). Sister invite send may call `BillingPort.isEntitled` only when `same_quota_as_brothers`. Safety paths and Chat after accept still must not call `BillingPort`.
 
-**Intent:** update (correction of record). AD IDs stable. AD-10 Rule amended in place. No new AD. A1–A3, name, AD-5, stack, Capacitor, AD-9 blur product, AD-12 mahram product not reopened. OQ-2 resolved 2026-10-01.
+**Intent:** update. AD IDs stable. AD-2 / AD-21 amended in place. AD-27 added. AD-10 / AD-11 / AD-5 not reopened. A1–A3, name, stack, Capacitor, AD-9 blur product, AD-12 mahram product not reopened.
 
 Lint: `reviews/lint_spine.json` — 0 findings (re-run after autofix).
 
-## Lenses (2026-10-01)
+## Lenses (2026-10-02)
 
 | Lens | File | Verdict | Applied |
 | --- | --- | --- | --- |
-| Rubric walker | [review-rubric-2026-10-01.md](review-rubric-2026-10-01.md) | pass-with-findings | AD-12 leftover `pending`/`held` dropped; AD-10 case writer = trust on Report/admin action only; AD-7 realtime = Socket.IO. FR-048 Flash-to-Mahram before conversation **not** applied (would reopen AD-12). |
-| Version-check | [review-version-check-2026-10-01.md](review-version-check-2026-10-01.md) | pass-with-findings | Stack **locked** — Next 16.3.8 / Nest 12.1.2 / BullMQ 6.3.11 / TS 7 vs Nest CLI recorded only. AD-10/AD-11 Whisper `mos`/`dyu` absent confirmed live. |
-| Adversarial | [review-adversarial-2026-10-01.md](review-adversarial-2026-10-01.md) | revise → closed by tighten | Flash phones refused; `enqueueScan`; asset kinds `profile_photo\|chat_photo\|voice_note`; Flash not copied into `message`; flagged-person = `flag_queue.account_id`. |
-| Security/privacy | [review-security-privacy-2026-10-01.md](review-security-privacy-2026-10-01.md) | pass-with-findings | Local Contact-share matcher (never `ModerationPort`); Flash phones refused; events `media_id` only; push/SMS template+ids; §5.3 destinataires. Gateway caller-bind / Mahram-remove denylist **not** applied (would reopen AD-9/AD-12). |
-| PRD reconcile | [reconcile-prd-2026-10-01.md](reconcile-prd-2026-10-01.md) | pass-with-findings | D6 published honesty on AD-10; Flash `flash_id` scan key; education interstitial. FR-062–068 / FR-144 / NFR-003 retargeted. Coverage 143 prior FRs + FR-144. |
+| Rubric walker | [review-rubric-2026-10-02.md](review-rubric-2026-10-02.md) | pass-with-findings | H1 Sister checkout/pricing only in `same_quota`; M1 `isEntitled` never throws, unavailable → Free cap; L1 `QUOTA_EXCEEDED`; L2/P1 next-send bind, no retro-count. L3 stack drift recorded only. |
+| Version-check | [review-version-check-2026-10-02.md](review-version-check-2026-10-02.md) | pass-with-findings | Stack **locked** — Next 16.3.8 / Nest 12.1.2 / BullMQ 6.3.11 / TS vs Nest CLI recorded only. AD-27 added no new tech. Whisper `mos`/`dyu` absent confirmed. |
+| Adversarial | [review-adversarial-2026-10-02.md](review-adversarial-2026-10-02.md) | revise → closed by tighten | P1–P5, P6–P11: live `isEntitled`, no remaining-int from billing, Sister read/compose/packs follow mode, increment-on-send, `OperatorPort.get`, `AuthContext.gender` required, `isEntitled` pack-presence only. No AD-28. |
+| Security/privacy | [review-security-privacy-2026-10-02.md](review-security-privacy-2026-10-02.md) | pass-with-findings | SEC-1 accept/`openFromInvite` banned from `BillingPort`; SEC-2 billing init must not block safety; SEC-3 no `AuthContext.entitled`; SEC-4 operator-only mode write; SEC-5 browse on isolation list; SEC-6 audit `from`/`to`/`staffId` same unit of work. |
+| PRD reconcile | [reconcile-prd-2026-10-02.md](reconcile-prd-2026-10-02.md) | pass-with-findings | FR-145 traced (145/145). Packs/payments mode-guarded. FR-038–043 cite AD-27. UTC vs Ouaga: spine civil day wins (already AD-23). |
 
-Historical 2026-09-27 reviews that asserted pre-delivery scan, hold-on-timeout, or fail-closed Chat delivery are annotated **superseded 2026-10-01** (history kept).
+Historical reviews that asserted Sisters always free/unlimited, or that Sister invite send is never an entitlement check / must never call `BillingPort`, are annotated **superseded 2026-10-02** (history kept).
 
 ## Unapplied (locked or out of scope)
 
 - Stack pin bumps (Next 16.3.8, Nest 12.1.2, BullMQ 6.3.11, TS/Nest CLI).
 - AD-9 gateway caller-bind; Mahram-remove `MediaPort.revokeByViewer`.
 - FR-048 Flash read before conversation (AD-12 mahram read access).
+- `packages/ports` publisher (P13 residual; conventions already name the folder).
 
 ## Confirmations
 
-- No Chat `pending→delivered` machine. No `hold_queue` that stops delivery. Clocks `>10s / >30s → hold` deleted.
-- AI 5xx / timeout / empty / low confidence → `scan-deferred` / `scan-failed` on `flag_queue`.
-- Profile Photo/bio stay publish-gated (FR-065).
-- Questions 1 and 3–11 plus NFR-008 stay open. Question 2 resolved.
+- Both `sister_reach_mode` values seeded day one. No brother-free mode.
+- Brothers always paid quota. Safety + Chat after accept never call `BillingPort`.
+- Mode change audited; subsequent Sister sends only; past invites stay; no retro-count.
+- AD-10 passive Chat and AD-5 hosting unchanged.

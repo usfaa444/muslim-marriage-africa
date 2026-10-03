@@ -1,7 +1,7 @@
 ---
 name: TBD
 status: final
-updated: 2026-10-01
+updated: 2026-10-02
 sources:
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/addendum.md
@@ -30,6 +30,8 @@ Three role shells, never mixed on one session (AD-8):
 
 `DESIGN.md` is the visual identity. This spine is behavior. UI system: Tailwind 4 layout tokens; no second component library is named.
 
+`sister_reach_mode` is an Operator setting on day one: `free_unlimited` (DEFAULT) or `same_quota_as_brothers`. Brothers never see a free-unlimited mode. There is no brother-free control. Safety screens (verification, blur/reveal, mahram, report, block) stay free in both modes. Chat after accept stays free. Do not add a paywall to those. Passive chat delivery stays: no held-until-scanned state.
+
 ## Information Architecture
 
 Member bottom nav: **Découvrir · Invitations · Discussions · Profil**. `[ASSUMPTION]` labels. Modal stack is one level.
@@ -44,7 +46,7 @@ Spines win on conflict with every mock. Per-file captions sit on the matching IA
 |---|---|---|---|
 | Public landing | Cold URL / store | Honorable ta'aruf pitch; Verified-marriages counter at 0; no invented DAU | FR-101, FR-117, AD-25. See [prd.md §4.9](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-25](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Legal hub | Footer | Mentions, CGV, cookies, privacy + hosting/CIL line Operators cannot hide | FR-109, FR-119, FR-120, AD-5, AD-19. See [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-5](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
-| Public pricing | Landing / settings | Same XOF packs as checkout; no auto-renew; audio on that line | FR-106, FR-108, AD-14. See [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Public pricing | Landing / settings | Brothers always see the same XOF 1/3/6 packs as checkout (Orange/Moov/Wave, no auto-renew, audio on that line). Sisters in `free_unlimited` (DEFAULT) see unlimited Invite reach and no reach-pack offer. Sisters in `same_quota_as_brothers` see the same Free/Premium daily caps and the same checkout as Brothers. Safety stays free. No brother-free mode. | FR-044, FR-045, FR-105, FR-106, FR-108, FR-145, AD-14. See [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Académie list + article | Landing / help | Five scholar-reviewed articles; *mariage / ta'aruf / nikah / khitba* only | FR-115, AD-24. See [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-24](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Advisory Board | Landing / help | Named scholars; fiqh-edge is human, not a bot | FR-116, AD-22. See [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-22](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | FAQ + contact | Footer | Ticketed form + FAQ | FR-118. See [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) |
@@ -77,7 +79,8 @@ Spines win on conflict with every mock. Per-file captions sit on the matching IA
 | Profile detail | Grid / favourite / invite | Opposite-gender blur default; verification levels; Report/Block. Mock: `mockups/profile-blur.html` (server blur + marital fields before accept) | FR-015, FR-016, FR-056, AD-9. See [prd.md §4.5](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-9](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Blur / Reveal / Revoke | Profile detail / Chat | Per-viewer `on_accept` / `on_request` / `never`; Revoke ≤60s | FR-056, FR-057, FR-058, FR-059, AD-9. See [prd.md §4.5](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-9](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Favourites | Discovery / Profil | Private list only. No “who favourited me” | FR-026. See [prd.md §4.2](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) |
-| Invite compose + Message Flash | Profile detail | Sisters unlimited free; Brothers quota; Ice Breaker templates | FR-038, FR-044, FR-045, FR-046, FR-047, AD-23. See [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-23](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Invite compose + Message Flash | Profile detail | Brothers always quota-capped (FR-044). Sisters follow `sister_reach_mode`: `free_unlimited` (DEFAULT) shows unlimited Invites, no reach-pack offer, no quota wall; `same_quota_as_brothers` shows the same Free/Premium daily caps as Brothers. Ice Breaker templates. No brother-free mode. | FR-038, FR-044, FR-045, FR-046, FR-047, FR-105, FR-145, AD-23. See [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-23](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Sister invite quota wall | Invite compose when `same_quota_as_brothers` and the daily cap is hit | Same Free **3** / Premium **15** `[ASSUMPTION]` caps and Ouaga-day reset as Brothers. CTA opens the Brother payment-pack checkout. Not shown in `free_unlimited`. Safety/Chat stay free. | FR-044, FR-045, FR-105, FR-145, AD-14, AD-23. See [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Invite inbox | Invitations tab | Sent / received / accepted. Marital status + polygamy intent **before** accept. Quiet decline | FR-037, FR-039, FR-040, FR-042, AD-26. See [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-26](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Discussions list | Discussions tab | Open Chats after Sister consent. Not a hold inbox | FR-041, FR-050, AD-15. See [prd.md §4.4](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-15](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Chat thread | Accept / Discussions list | Text, Photo, Voice. Immediate delivery. Stage chip. No pending-moderation state. Mock: `mockups/chat-thread.html` (already-visible bubbles; time-only meta) | FR-041, FR-050, FR-051, FR-062, FR-063, FR-064, AD-10, AD-15. See [prd.md §4.6](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
@@ -85,7 +88,7 @@ Spines win on conflict with every mock. Per-file captions sit on the matching IA
 | Report / Block | Profile / Chat | Report starts SLA; Block hides; reasons include marital misrepresentation | FR-083, FR-084, FR-037. See [prd.md §4.8](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) |
 | Marriage dual-confirm | Chat / settings | Joint “nous nous sommes mariés”; one-sided does nothing. Mock: `mockups/marriage-confirm.html` (counter stays 0 until both confirm) | FR-095, FR-096, FR-097, FR-098, AD-25. See [prd.md §4.9](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-25](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Consent story | After dual-confirm | Optional; either spouse can refuse public; no Chat excerpts | FR-099, FR-100, AD-25. See [prd.md §4.9](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-25](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
-| Payment pack | Settings / quota wall | Orange Money / Moov / Wave; 1/3/6 months; no auto-renew. Mock: `mockups/payment-pack.html` (selected pack + audio on no-auto-renew) | FR-104, FR-106, FR-107, AD-14, AD-21. See [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Payment pack | Settings / quota wall | Brothers always. Sisters only when `same_quota_as_brothers`. Same Orange / Moov / Wave 1/3/6 checkout, no auto-renew. Mock: `mockups/payment-pack.html` (selected pack + audio on no-auto-renew). Spine wins: `free_unlimited` Sisters never see this offer. No brother-free pack. | FR-044, FR-045, FR-104, FR-105, FR-106, FR-107, FR-145, AD-14, AD-21. See [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Notifications | Bell / OS | Template + ids; blur thumbs; no Chat body, no phone | FR-052, FR-053, AD-16. See [prd.md §4.4](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-16](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Settings | Profil | Lite, audio language, PIN, delete/export, CIL/hosting disclosure | FR-019, FR-020, FR-120, FR-136, FR-138, AD-19. See [prd.md §4.12](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-19](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Delete / export status | Settings | Status URL + ticket; not Gmail-only | FR-019, FR-143, NFR-008, AD-19. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-19](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
@@ -113,7 +116,8 @@ Spines win on conflict with every mock. Per-file captions sit on the matching IA
 | Sanction | Case | Warning vs suspend vs other published action. AI never applies | FR-085, FR-144, AD-10. See [prd.md §4.8](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Appeal review | Appeal queue | Second human | FR-090, AD-18. See [prd.md §4.8](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-18](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator policy / thresholds | Operator | Policy text + flag confidence + photo-Strike; subsequent scans only | FR-140, AD-10. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
-| Operator pricing | Operator | Pack prices/durations; auto-renew stays off | FR-139, FR-106, AD-14. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Operator pricing | Operator | Pack prices/durations; auto-renew stays off; hosts the sister-reach mode control | FR-139, FR-106, FR-145, AD-14. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Operator sister-reach mode | Operator pricing / policy | `operator-reach-mode` control. Values `free_unlimited` (DEFAULT) \| `same_quota_as_brothers`. Both on day one. Audited. Subsequent Sister Invites only; past Invites stay. No brother-free option. Architecture bind is AD-27, AD-14, AD-21. | FR-145, FR-044, FR-045, FR-105, AD-27, AD-14, AD-21. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-27](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator metrics | Operator | Internal only; public counters stay proof-backed; scan-deferred never hidden | FR-092, FR-142, AD-20. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-20](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator CIL / deletion tickets | Operator | Status the Member can see | FR-143, AD-19. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-19](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator Board / Académie publish | Operator | Names + five articles | FR-141, FR-115. See [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) |
@@ -140,6 +144,8 @@ Microcopy. Brand posture lives in `DESIGN.md`.
 | « Photo en revue — pas encore publique. » | Treating unpublished Profile Photo as a Chat hold |
 | « Les numéros et WhatsApp attendent l’accord des deux. » | Calling Contact-share an AI hold |
 | « Pas de renouvellement automatique. » | « Essai gratuit puis on prélève » |
+| `free_unlimited` Sister: « Invitations illimitées. » (no pack CTA) | Offering a reach pack to a Sister in `free_unlimited` |
+| `same_quota_as_brothers` Sister: same Free **3** / Premium **15** copy as Brothers | A brother-free « invitations illimitées » mode |
 | « Mariages confirmés : 0 » | Invented member counts |
 | *mariage / ta'aruf / nikah / khitba* | *dating / rencontre romantique* |
 | Completeness: « Il manque : madhhab » | « Votre profil est faible » |
@@ -174,11 +180,12 @@ Behavioral. Visual specs live in `DESIGN.md.Components`.
 | admin-flag-row | Flag queue | Staff-only. Kinds: `flag-for-admin` \| `scan-deferred` \| `scan-failed`. Opening it never changes `message.state`. |
 | staff-only-badge | Every staff surface | Visible. Members never see this chrome. |
 | sanction-action | Case | Human chooses warning / suspend / other. Photo Strike 3→24h is a published floor. AI is not a control. Paid-faster-review must not skip scan or auto-clear a flag (AD-10, AD-21). |
-| pack-card | Pricing / checkout | Explicit `ends_at`. No renew toggle. Rail down: Free + safety stay (NFR-004). |
+| pack-card | Pricing / checkout | Explicit `ends_at`. No renew toggle. Shown to Brothers always. Shown to Sisters only when `sister_reach_mode` is `same_quota_as_brothers`. Never a brother-free pack. Rail down: Free + safety stay (NFR-004). |
+| operator-reach-mode | Operator pricing / policy | Two values only: `free_unlimited` (DEFAULT) \| `same_quota_as_brothers`. `{components.staff-only-badge}` required. Save writes audit. Change applies to subsequent Sister Invites; past Invites stay. No third brother-free value. Visual tokens in `DESIGN.md.Components`. |
 | audio-prompt | Hard steps | Play Mooré or Dioula. Failure → pictogram path remains. |
 | pin-lock | Shared device | After 60s background `[ASSUMPTION]`. 5 fails → re-auth. Idle 15 min on Sister/Mahram PIN sessions `[ASSUMPTION]`. |
 | empty-state | Lists | One sentence + one action. Zero results never invent Profiles. |
-| error-banner | Any | AD-7 `error.code` mapped to French. `PAY_UNAVAILABLE` does not disable Chat, Report, Blur, Mahram, Sister Invite. |
+| error-banner | Any | AD-7 `error.code` mapped to French. `PAY_UNAVAILABLE` does not disable Chat, Report, Blur, Mahram, Verification, or Block. Sister Invite send is allowed or rejected solely by FR-045 / `sister_reach_mode`, never by a safety paywall. |
 | lite-placeholder | Grid / chat media | Criteria or caption remain. Chat media waits for **connection**, not AI (AD-16). |
 
 ## State Patterns
@@ -200,7 +207,15 @@ Every primary surface. Chat success = immediate delivery. Chat must not have pen
 | Profile detail | Missing optional fields omitted | Blur thumb first | `REVEAL_DENIED` if clear requested without grant | Criteria + blur or granted clear |
 | Blur / Reveal / Revoke | Never-policy: still blur | Reveal request pending (1 max) | Revoke network fail: keep trying; gateway denylist is source of truth | Grant/revoke reflected ≤60s |
 | Favourites | « Aucun favori. » + Découvrir | List skeleton | Save fail, retry | Private row only |
-| Invite compose | Flash empty, Ice Breaker optional | Send in flight | `QUOTA_EXCEEDED` with Ouaga-day reset; `CONTACT_SHARE_REQUIRED` | Invite on recipient list; Flash already visible |
+| Invite compose (Brother) | Flash empty, Ice Breaker optional; remaining Free **3** / Premium **15** `[ASSUMPTION]` | Send in flight | `QUOTA_EXCEEDED` with Ouaga-day reset; `CONTACT_SHARE_REQUIRED` | Invite on recipient list; Flash already visible. Never a free-unlimited state. |
+| Invite compose (Sister, `free_unlimited`) | Flash empty, Ice Breaker optional; copy « Invitations illimitées. »; no remaining-count; no pack CTA | Send in flight | `CONTACT_SHARE_REQUIRED` only. Never `QUOTA_EXCEEDED`. Never a reach-pack offer. | Invite sent, no pack. Flash already visible. |
+| Invite compose (Sister, `same_quota_as_brothers`) | Flash empty, Ice Breaker optional; same remaining Free **3** / Premium **15** `[ASSUMPTION]` as Brothers | Send in flight | `QUOTA_EXCEEDED` → Sister invite quota wall; `CONTACT_SHARE_REQUIRED` | Invite on recipient list; remaining decrements. Same caps as Brothers. |
+| Sister invite quota wall (`same_quota_as_brothers`) | Remaining 0; Ouaga-day reset time; pack-card CTA matching Brother checkout. Not rendered in `free_unlimited`. | Entitlement fetch | `PAY_UNAVAILABLE`: cannot buy; send stays blocked until reset; Chat, Verification, Blur, Mahram, Report, Block stay usable | CTA opens Payment pack (same 1/3/6 Orange/Moov/Wave as Brothers). After purchase: Premium remaining. |
+| Payment pack (Brother) | Pack list from `/v1/packs` | Hosted/rail redirect | `PAY_UNAVAILABLE`: Free + safety stay | Entitlement until `ends_at`; no renew job |
+| Payment pack (Sister, `same_quota_as_brothers`) | Same pack list, prices, durations, and rails as Brothers | Hosted/rail redirect | `PAY_UNAVAILABLE`: Free + safety stay; Free Invite cap still applies | Same entitlement until `ends_at` as Brothers; no renew job |
+| Payment pack (Sister, `free_unlimited`) | No pack list. Pricing copy: unlimited Invites, no checkout required. | — | — | Invite sent, no pack. Checkout is not offered. |
+| Public pricing (Brother / Sister `same_quota_as_brothers`) | Same pack list as checkout | Page load | Copy/rail error does not hide Free or safety | Prices match checkout. Sister sees the same Free/Premium caps. |
+| Public pricing (Sister `free_unlimited`) | Unlimited Invite copy; no pack-card | Page load | — | No reach-pack offer. Checkout not required. |
 | Invite inbox | « Aucune invitation. » | List skeleton | Accept fail if other married/Banned | Accept → Chat; decline → declined without lecture |
 | Discussions list | « Aucune discussion. » | List skeleton | Fetch fail, retry | Row opens Chat; unread increment; no hold badge |
 | Chat thread | New Chat: stage **chat**, no scan banner | Thread open ≤4s; typing ≤2s | Send fail = connection. **Never** “held for scan” | Bubble `delivered` immediately. Offline: text outbox; media waits for connection |
@@ -211,14 +226,14 @@ Every primary surface. Chat success = immediate delivery. Chat must not have pen
 | Report / Block | Reason required | Submit in flight | Rate limit | Report: SLA started. Block: hidden |
 | Marriage dual-confirm | One spouse started | Waiting other | Expired 30d `[ASSUMPTION]` without confirm: no counter | Both confirm: joint **married**, counter +1 |
 | Consent story | Form after dual-confirm | Submit | One spouse refuses public: showcase empty of faces | Public only if both (and family-ok if set) consent |
-| Payment pack | Pack list from `/v1/packs` | Hosted/rail redirect | `PAY_UNAVAILABLE`: Free + safety stay | Entitlement until `ends_at`; no renew job |
 | Notifications | « Aucune alerte. » | — | Push denied: in-app unread still increments | Template + blur thumb only |
 | Settings | Current values | — | Delete/export ticket error → status URL still issued if scheduled | Lite/audio/PIN persist; hosting line always visible |
 | Admin flag queue | « File vide » (delivery still happened in the world) | Queue fetch | Staff auth fail | Row for flag or scan-deferred; badge staff-only |
 | Case file | Missing evidence named | Case fetch | Staff auth fail; unblur locked until typed reason | Reason-entered unblur writes audit; decision saved |
 | Sanction | Action unselected | Write + audit | Cannot apply as AI | Warning / suspend / other saved; Member notified |
 | Appeal | Form | Submit | Window closed | Second-human queue |
-| Operator policy / pricing | Current config | Save | Validation | Audited change; thresholds apply to **subsequent** scans |
+| Operator policy / pricing | Current pack prices and thresholds | Save | Validation | Audited change; thresholds apply to **subsequent** scans; auto-renew stays off |
+| Operator sister-reach mode | Current `sister_reach_mode` (`free_unlimited` DEFAULT selected if unset). Two options only. `{components.staff-only-badge}` | Save in flight | Validation / unauthorized. No brother-free value to pick. | Audited change. Subsequent Sister Invites use the new mode. Past Invites stay. Member Invite/pricing UI switches on next open. |
 | Operator CIL / deletion tickets | Empty queue | Ticket fetch | Clock breach flagged | Member status page shows completed |
 | Operator metrics | Zero-launch counters valid | Refresh | — | Scan-deferred counted, never hidden |
 | Operator Board / Académie publish | Fewer than five articles | Save | Missing scholar review | Five live articles; names published |
@@ -236,7 +251,8 @@ Public, legal, Académie, Board, FAQ, showcase, cookie, photo rules, PIN, filter
 - **Mahram remove.** Sister control. Read access gone ≤60s; SMS both sides; may `emergencyHide` 24h.
 - **Quiet decline.** button-quiet. No resend (FR-043).
 - **Contact-share.** Deterministic matcher in chat/invites. Not `ModerationPort`.
-- **Paid perk.** Faster human-review queue only. Must not skip background scan, must not auto-clear a flag, must not skip Verification, Blur, Mahram, Report, or Sister Invite (FR-105, AD-21).
+- **Paid perk.** Faster human-review queue only. Must not skip background scan, must not auto-clear a flag, must not skip Verification, Blur, Mahram, Report, Block, or Chat after accept (FR-105, AD-21). Sister Invite is reach (FR-045), not a safety skip.
+- **Sister reach mode.** Operator `operator-reach-mode` only. Member UI reads the current value. Brothers never gain a free-unlimited control.
 - **PIN.** Background 60s → lock. Long-press reserved for system text selection.
 - **Banned:** swipe-to-like, story rings, live 1:1 A/V, GIF picker (flag off), member visitors/online-now, operator-as-member session.
 
@@ -247,7 +263,7 @@ Behavioral. Contrast lives in `DESIGN.md`.
 - WCAG 2.1 AA on French UI (AD-24, NFR-006).
 - Touch targets ≥44px (48px on primary actions).
 - VoiceOver / TalkBack: role + state on every control. Chat send announces « Message envoyé » — never « en vérification » and never the word « scan ». Reveal announces « Visible pour [pseudonym] » / « Flou rétabli ».
-- Focus-visible: 2px `{colors.focus-ring}` on sand (≥3:1) or `{colors.gold-soft}` on indigo; required on Reveal, audio-prompt, nav, packs, fields.
+- Focus-visible: 2px `{colors.focus-ring}` on sand (≥3:1) or `{colors.gold-soft}` on indigo; required on Reveal, audio-prompt, nav, packs, fields, operator-reach-mode.
 - Photo rules and onboarding completable via pictogram + audio without a paragraph (FR-070, FR-010).
 - Dynamic type: primary actions do not truncate at largest setting.
 - Reduce Motion: skip mihrab wash fade; instant state text.
@@ -261,7 +277,7 @@ Behavioral. Contrast lives in `DESIGN.md`.
 - PWA install prompt is optional; Play listing is the Burkina find path (FR-134).
 - Android Capacitor: `FLAG_SECURE` as deterrence — do not advertise “cannot screenshot” (AD-9). Camera/mic for liveness and Voice.
 - Staff: two-pane from 768px (comfortable at 1024); below 768 the queue stacks above the case.
-- Time display `Africa/Ouagadougou`. Brother quotas reset on that civil day, not UTC (AD-23) — PRD FR-044 UTC wording is superseded by the spine for implementation.
+- Time display `Africa/Ouagadougou`. Invite quotas (Brothers always; Sisters when `same_quota_as_brothers`) reset on that civil day, not UTC (AD-23) — PRD FR-044 UTC wording is superseded by the spine for implementation.
 - iOS layout is not specified for MVP.
 
 ## Inspiration & Anti-patterns
@@ -269,7 +285,8 @@ Behavioral. Contrast lives in `DESIGN.md`.
 - **Lifted (product, not look):** Farata-class grid + invite + blur *existence* (Offered (seen) [bundle]) — raised to per-viewer Reveal/Revoke.
 - **Rejected — dating chrome:** swipe deck, heart stack, online-now, invented “+247.8k actifs”.
 - **Rejected — pre-delivery hold UX:** any “held until scanned” / fail-closed Chat. Correction of record 2026-10-01.
-- **Rejected — paywalled dignity:** Verification, Blur, Mahram, Report, Sister Invite behind Premium.
+- **Rejected — paywalled dignity:** Verification, Blur, Mahram, Report, Block, or Chat after accept behind Premium. Sister Invite is reach (FR-045 / FR-145), not a safety paywall.
+- **Rejected — brother-free mode:** Brothers never see `free_unlimited`. Do not design that surface.
 - **Rejected — CSS blur:** originals must not ship to unauthorized viewers.
 
 ## Open questions (do not close)
@@ -300,7 +317,7 @@ Protagonist names kept from the PRD. Each climax is the named beat.
 
 **Persona + context:** Fatim, 24, Ouagadougou, shared low-end Android, ~1GB/month, French plus Mooré at home.
 
-Implements FR-001, FR-002, FR-009–FR-012, FR-014, FR-016, FR-020, FR-021, FR-024–FR-026, FR-037–FR-042, FR-045, FR-046, FR-050, FR-056–FR-059, FR-062–FR-065, FR-071–FR-079, FR-083, FR-084, FR-105, FR-132–FR-134, FR-136–FR-138, FR-144, NFR-001, NFR-003, AD-4, AD-9, AD-10, AD-12. See [prd.md §2.3 UJ-1](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md).
+Implements FR-001, FR-002, FR-009–FR-012, FR-014, FR-016, FR-020, FR-021, FR-024–FR-026, FR-037–FR-042, FR-044, FR-045, FR-046, FR-050, FR-056–FR-059, FR-062–FR-065, FR-071–FR-079, FR-083, FR-084, FR-105, FR-132–FR-134, FR-136–FR-138, FR-144, FR-145, NFR-001, NFR-003, AD-4, AD-9, AD-10, AD-12. See [prd.md §2.3 UJ-1](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md).
 
 1. Opens web / PWA / Play app. Creates account (email, password, unique pseudonym, gender Sister). → FR-001, FR-132, FR-133, FR-134
 2. Completes phone OTP, then ID + liveness. Verification is free. → FR-002, FR-014, FR-015, FR-105
@@ -308,7 +325,7 @@ Implements FR-001, FR-002, FR-009–FR-012, FR-014, FR-016, FR-020, FR-021, FR-0
 4. Guided onboarding: **minimum-to-browse** vs **complete-to-send-Invite**. Mooré audio on hard steps. → FR-009, FR-010, FR-137, FR-138
 5. Sets Blur-by-default. Human review must pass before she is publicly visible. Profile Photo shows **not-yet-public**. → FR-012, FR-016, FR-056, FR-065
 6. Browses Lite grid, filters city / marital / practice, saves a private favourite. → FR-021, FR-022, FR-024, FR-025, FR-026, FR-136
-7. Sends an Invite with Message Flash (unlimited, free). → FR-038, FR-045, FR-046, FR-105
+7. Sends an Invite with Message Flash. Default `sister_reach_mode` is `free_unlimited`: unlimited, no pack, no quota wall (success: invite sent, no pack). If the Operator has set `same_quota_as_brothers`, FR-044 caps apply and a 4th Free Invite that Ouaga day opens the same payment-pack checkout as Brothers. Safety stays free. → FR-038, FR-044, FR-045, FR-046, FR-105, FR-145
 8. Incoming Brother Invite shows marital status and polygamy intent **before** accept. Decline is quiet. → FR-037, FR-039, FR-040, FR-042
 9. She accepts. Chat opens. She may Reveal to him only, or refuse, and may Revoke later. → FR-041, FR-050, FR-057, FR-058, FR-059
 10. Optional: invites her Mahram by phone (UJ-3). → FR-071–FR-079
@@ -323,13 +340,13 @@ Failure: review not yet passed → she can finish onboarding but does not appear
 
 **Persona + context:** Ibrahim, 29, Bobo-Dioulasso, already married, seeking a second wife with honesty.
 
-Implements FR-001–FR-005, FR-012–FR-015, FR-021–FR-025, FR-037, FR-041, FR-043, FR-044, FR-046–FR-048, FR-089, FR-104–FR-111, NFR-004, AD-14, AD-21, AD-26. See [prd.md §2.3 UJ-2](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md).
+Implements FR-001–FR-005, FR-012–FR-015, FR-021–FR-025, FR-037, FR-041, FR-043, FR-044, FR-046–FR-048, FR-089, FR-104–FR-111, FR-145, NFR-004, AD-14, AD-21, AD-26. See [prd.md §2.3 UJ-2](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md).
 
 1. Signs up as Brother, pledges sincerity naming honesty about existing marriage, accepts rules. → FR-001, FR-005, FR-089
 2. Phone OTP + liveness + ID, free. Google is additional, not the only path. → FR-002, FR-003, FR-014
 3. Declares marital status **married** and polygamy intent **yes**. Visible to Sisters before accept. → FR-021, FR-037
 4. Completeness meter names missing Islamic criteria without shaming. → FR-022, FR-023
-5. After human review he browses. Free daily Invite quota **3** `[ASSUMPTION]`. → FR-012, FR-024, FR-025, FR-044
+5. After human review he browses. Free daily Invite quota **3** `[ASSUMPTION]`. He never sees a free-unlimited reach mode, regardless of `sister_reach_mode`. → FR-012, FR-024, FR-025, FR-044, FR-145
 6. Attaches a Message Flash from a deen/family Ice Breaker. Cannot resend after refuse. → FR-043, FR-046, FR-047
 7. Buys a 1-month Premium pack in XOF via Orange Money BF. No silent auto-renew. Price matches the public page. → FR-104, FR-106, FR-107, FR-108
 8. Sister accepts. If a Mahram is attached, he sees the banner from the first message. → FR-041, FR-048, FR-079
@@ -394,9 +411,9 @@ Failure: one refuses the public story → counter may still increment; showcase 
 
 **Persona + context:** Operator, not a Moderator.
 
-Implements FR-019, FR-092, FR-101, FR-106, FR-108, FR-115, FR-116, FR-120, FR-139–FR-143, NFR-002, NFR-003, NFR-008, AD-5, AD-14, AD-19. See [prd.md §2.3 UJ-6](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-5](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md).
+Implements FR-019, FR-044, FR-045, FR-092, FR-101, FR-105, FR-106, FR-108, FR-115, FR-116, FR-120, FR-139–FR-143, FR-145, NFR-002, NFR-003, NFR-008, AD-5, AD-14, AD-19. See [prd.md §2.3 UJ-6](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) and [ARCHITECTURE-SPINE.md AD-5](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md).
 
-1. Edits Premium pack prices and 1/3/6 durations. Auto-renew stays off. → FR-106, FR-108, FR-139
+1. Edits Premium pack prices and 1/3/6 durations. Auto-renew stays off. Sets `sister_reach_mode` (`free_unlimited` default, or `same_quota_as_brothers`) on the same pricing/policy surface. The change is audited; subsequent Sister Invites use the new mode; past Invites stay. No brother-free control. → FR-106, FR-108, FR-139, FR-145
 2. Edits moderation policy text and numeric thresholds. New thresholds apply to subsequent messages only. Policy must say: delivered then scanned; AI flags a human; AI does not silently delete, block, or hold. → FR-140, NFR-003
 3. Publishes Advisory Board names and Académie articles (minimum five). → FR-115, FR-116, FR-141
 4. Views internal metrics (levels, dual-confirmed marriages, report SLA, scan-deferred). Public counters stay proof-backed. → FR-092, FR-101, FR-142
@@ -414,7 +431,7 @@ One row per MVP screen. Paths relative to this file.
 |---|---|---|---|
 | Public landing | FR-101, FR-117, AD-25 | [prd.md §4.9](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-25](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Legal hub | FR-109, FR-119, FR-120, AD-5, AD-19 | [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-5](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
-| Public pricing | FR-106, FR-108, AD-14 | [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Public pricing | FR-044, FR-045, FR-105, FR-106, FR-108, FR-145, AD-14 | [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Académie list + article | FR-115, AD-24 | [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-24](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Advisory Board | FR-116, AD-22 | [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-22](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | FAQ + contact | FR-118 | [prd.md §4.11](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | — |
@@ -437,7 +454,8 @@ One row per MVP screen. Paths relative to this file.
 | Profile detail | FR-015, FR-016, FR-056, AD-9 | [prd.md §4.5](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-9](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Blur / Reveal / Revoke | FR-056, FR-057, FR-058, FR-059, AD-9 | [prd.md §4.5](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-9](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Favourites | FR-026 | [prd.md §4.2](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | — |
-| Invite compose + Message Flash | FR-038, FR-044, FR-045, FR-046, FR-047, AD-23 | [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-23](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Invite compose + Message Flash | FR-038, FR-044, FR-045, FR-046, FR-047, FR-105, FR-145, AD-23 | [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-23](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Sister invite quota wall | FR-044, FR-045, FR-105, FR-145, AD-14, AD-23 | [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Invite inbox | FR-037, FR-039, FR-040, FR-042, AD-26 | [prd.md §4.3](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-26](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Discussions list | FR-041, FR-050, AD-15 | [prd.md §4.4](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-15](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Chat thread | FR-041, FR-050, FR-051, FR-062, FR-063, FR-064, AD-10, AD-15 | [prd.md §4.6](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
@@ -445,7 +463,7 @@ One row per MVP screen. Paths relative to this file.
 | Report / Block | FR-083, FR-084, FR-037 | [prd.md §4.8](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | — |
 | Marriage dual-confirm | FR-095, FR-096, FR-097, FR-098, AD-25 | [prd.md §4.9](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-25](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Consent story | FR-099, FR-100, AD-25 | [prd.md §4.9](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-25](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
-| Payment pack | FR-104, FR-106, FR-107, AD-14, AD-21 | [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Payment pack | FR-044, FR-045, FR-104, FR-105, FR-106, FR-107, FR-145, AD-14, AD-21 | [prd.md §4.10](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Notifications | FR-052, FR-053, AD-16 | [prd.md §4.4](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-16](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Settings | FR-019, FR-020, FR-120, FR-136, FR-138, AD-19 | [prd.md §4.12](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-19](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Delete / export status | FR-019, FR-143, NFR-008, AD-19 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-19](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
@@ -463,7 +481,8 @@ One row per MVP screen. Paths relative to this file.
 | Sanction | FR-085, FR-144, AD-10 | [prd.md §4.8](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Appeal review | FR-090, AD-18 | [prd.md §4.8](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-18](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator policy / thresholds | FR-140, AD-10 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-10](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
-| Operator pricing | FR-139, FR-106, AD-14 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Operator pricing | FR-139, FR-106, FR-145, AD-14 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-14](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
+| Operator sister-reach mode | FR-145, FR-044, FR-045, FR-105, AD-27, AD-14, AD-21 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-27](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator metrics | FR-092, FR-142, AD-20 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-20](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator CIL / deletion tickets | FR-143, AD-19 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | [AD-19](../../architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md) |
 | Operator Board / Académie publish | FR-141, FR-115 | [prd.md §4.13](../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md) | — |

@@ -311,7 +311,7 @@
 - D19. **Low-bandwidth "lite" mode** (data saver, deferred images, offline drafts) for 2G/3G and cheap Androids.
 
 **Fairness & dignity**
-- D20. **Sisters can start conversations for free** (and wali features are always free); monetise brothers' convenience features, not safety or dignity.
+- D20. **Sister invite reach defaults free and unlimited; the admin can switch sisters onto the same paid quota as brothers** (corrected 2026-10-02; was “sisters can start conversations for free” as a hardcoded rule). Wali/safety features stay free in both modes. Brothers stay on the paid quota. Do not monetise safety or dignity.
 - D21. **Grounded coach**: an AI marriage coach with **scholar-reviewed sources** that says clearly it is not a mufti; defer fatwa questions to real scholars; one consistent persona.
 - D22. **Working, verified Académie** (public, SEO-indexable, reviewed by local imams; Burkina/Sahel context, not only Senegal).
 - D23. **Trust by proof**: publish real metrics (verified members, verified marriages, moderation stats); an independent imam/advisory board shown on site.

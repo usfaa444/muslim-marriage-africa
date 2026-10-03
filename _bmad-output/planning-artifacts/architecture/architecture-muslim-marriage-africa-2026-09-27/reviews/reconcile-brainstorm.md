@@ -2,6 +2,8 @@
 
 > **Superseded 2026-10-01.** Chat moderation is passive after delivery (AD-10 amendment; PRD FR-062–068, FR-144, NFR-003). Claims in this review of pre-delivery Chat scan, hold-on-timeout, or fail-closed Chat delivery are historical. Profile Photo/bio publish-gate (FR-065), AD-9 blur, and AD-12 mahram read-delivered-only are unchanged.
 
+> **Superseded 2026-10-02.** Sister Invite reach is operator-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`; AD-27). Claims that Sisters are always free/unlimited, that D20 forbids any Sister entitlement check, or that sister-invite send must never call `BillingPort.isEntitled`, are historical. Safety paths and Chat after accept still must not call `BillingPort`.
+
 **Input:** Brainstorm session `brainstorm-muslim-marriage-africa-2026-09-27`  
 **Source read:** `brainstorm-intent.md` only (this review does not start other BMAD skills)  
 **Compared to:** `ARCHITECTURE-SPINE.md` (initiative-altitude consistency contract). Companion `SOLUTION-DESIGN.md` is cited only to show what the spine itself does *not* lock.  
@@ -96,6 +98,8 @@ Spine:
 AD-3 stops a second writer. It does not stop a single writer from incrementing on one-sided report, rounding the counter, or promoting DAU on the public surface. Brainstorm: *“Publish only proof-backed counters. Never invent scale.”*
 
 ### 3.4 Sisters start conversations free (D20) vs AD-2 `isEntitled`
+
+> **Superseded 2026-10-02.** AD-27: default `free_unlimited`; admin may set `same_quota_as_brothers`. Sister invite may call `BillingPort` only in that second mode. The paragraphs below that treat unlimited-free sisters as the only legal design are historical.
 
 Brainstorm: *“Monetise brothers' reach/convenience only.”* P30: tight brother quotas; **sisters unlimited free requests.**
 

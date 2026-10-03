@@ -2,7 +2,7 @@
 title: muslim-marriage-africa
 status: final
 created: 2026-09-27
-updated: 2026-10-01
+updated: 2026-10-02
 ---
 
 # PRD: muslim-marriage-africa
@@ -18,22 +18,22 @@ Farata statements use **only** the evidence labels from `docs/competitor-farata.
 
 If this works, families in Ouagadougou and Bobo-Dioulasso will treat the product as a known honorable path: a Sister can search without selling her face, a father can read the Chat, a Brother can pay in Orange Money, and the public number that matters is Verified marriages — starting at zero and growing only when both spouses confirm. Then Côte d’Ivoire, Mali, Senegal, and wider Africa — still marriage-shaped.
 
-This is Burkina-first honorable ta'aruf, not another dating app from Dakar. Sister dignity is never paywalled. Mahram-in-Chat is optional and Sister-initiated. Every Chat text, Chat Photo, Voice note, and Message Flash is **delivered immediately**, then a background AI scan checks published red flags and may flag the person for an admin. The AI does not block, hold, refuse, or delay delivery, and it does not apply a sanction. Profile Photo and bio still must not be publicly visible until reviewed (publish gating, not a Chat hold). Polygamy intent is disclosed before a Sister invests hope. Pricing is in XOF on mobile money. The interface is French-first; Mooré and Dioula audio carry low-literacy Members through the path that matters.
+This is Burkina-first honorable ta'aruf, not another dating app from Dakar. Sister dignity is never paywalled. Sister Invite reach defaults `free_unlimited`; the Operator can switch to `same_quota_as_brothers` (D20). Mahram-in-Chat is optional and Sister-initiated. Every Chat text, Chat Photo, Voice note, and Message Flash is **delivered immediately**, then a background AI scan checks published red flags and may flag the person for an admin. The AI does not block, hold, refuse, or delay delivery, and it does not apply a sanction. Profile Photo and bio still must not be publicly visible until reviewed (publish gating, not a Chat hold). Polygamy intent is disclosed before a Sister invests hope. Pricing is in XOF on mobile money. The interface is French-first; Mooré and Dioula audio carry low-literacy Members through the path that matters.
 
-The thesis the rest of this document bets on: **safety and dignity are a right; reach is a product.** Brothers pay for convenience. The north star is chaperoned meetings plus dual-confirmed nikah — not DAU, not invented member counts. Farata’s “+247.8k actifs” is Claimed (marketing); Google Play shows 10k+ downloads Offered (seen). This product will not copy that honesty failure.
+The thesis the rest of this document bets on: **safety and dignity are a right; reach is a product.** Brothers pay for convenience. Sisters do not pay for safety; Sister reach is free by default and quota-capped only when the Operator sets `same_quota_as_brothers`. The north star is chaperoned meetings plus dual-confirmed nikah — not DAU, not invented member counts. Farata’s “+247.8k actifs” is Claimed (marketing); Google Play shows 10k+ downloads Offered (seen). This product will not copy that honesty failure.
 
 ## 2. Target User
 
 ### 2.1 Jobs To Be Done
 
-- **Sisters (functional):** find a practicing Brother without exposing face or phone; decline quietly; attach a Mahram who reads the Chat; keep Photos under her control.
+- **Sisters (functional):** find a practicing Brother without exposing face or phone; decline quietly; attach a Mahram who reads the Chat; keep Photos under her control; never pay for safety; send Invites free by default (Operator can apply Brother Invite quotas).
 - **Sisters (emotional / social):** stay haya-safe and still hopeful; not be recognised and mocked in her quartier; let her family call the path honorable.
 - **Brothers (functional):** filter by Islamic criteria; send a sincere first message; pay in XOF on Orange Money / Moov; be seen as a suitor, not a player.
 - **Brothers (emotional / social):** disclose existing marriage or polygyny intent so they are not a liar before Allah; involve her family without overstepping.
 - **Mahrams (functional):** read all messages; flag, pause, or end; prove they are who they say; stop a Chat that becomes inappropriate.
 - **Moderators (functional):** decide from one case file (text / Photo / audio + scores + report + device); never peek unblurred Photos for curiosity.
 - **Married couples (outcome):** jointly close the search; optionally tell a consent-based story that helps others make du'a without becoming celebrities.
-- **Operators (functional):** set price and policy without shipping a release; honour deletion and CIL requests; publish only proof-backed metrics.
+- **Operators (functional):** set price, `sister_reach_mode`, and policy without shipping a release; honour deletion and CIL requests; publish only proof-backed metrics.
 
 ### 2.2 Non-Users (v1)
 
@@ -59,7 +59,7 @@ Named scenes. Each step lists the FR IDs it exercises. Protagonist names are `[A
 4. Guided onboarding offers **minimum-to-browse** vs **complete-to-send-Invite**. Mooré audio plays the hard steps. → FR-009, FR-010, FR-137, FR-138
 5. She sets Blur-by-default on Profile Photos. Human review must pass before she is publicly visible. → FR-012, FR-016, FR-056, FR-065
 6. She browses a Lite grid of cached Profiles, filters by city / marital status / practice, and saves a private favourite. → FR-021, FR-022, FR-024, FR-025, FR-026, FR-136
-7. She sends an Invite with a Message Flash (sisters’ Invites are free and unlimited). → FR-038, FR-045, FR-046, FR-105
+7. She sends an Invite with a Message Flash. Default `sister_reach_mode` is `free_unlimited` (no quota, no pack). If the Operator has set `same_quota_as_brothers`, FR-044 caps apply and she may need a pack for more Invites. Safety stays free. → FR-038, FR-045, FR-046, FR-145
 8. When a Brother’s Invite arrives she sees his marital-status and polygamy-intent fields **before** accept. Decline is quiet. → FR-037, FR-039, FR-040, FR-042
 9. She accepts. Chat opens. She may Reveal Photos to him only, or refuse. She can Revoke later. → FR-041, FR-050, FR-057, FR-058, FR-059
 10. Optional: she invites her Mahram by phone (UJ-3). → FR-071–FR-079
@@ -146,7 +146,7 @@ Named scenes. Each step lists the FR IDs it exercises. Protagonist names are `[A
 **Climax:** She lowers a flag-confidence threshold and publishes a 3-month XOF pack without a code release. She completes a deletion/CIL request with a status the Member can see.
 **Resolution:** Config is audited. Metrics on the public site remain proof-backed.
 
-1. She edits Premium pack prices and durations (1 / 3 / 6 months) on one pricing page. Auto-renew stays off. → FR-106, FR-108, FR-139
+1. She edits Premium pack prices and durations (1 / 3 / 6 months) on one pricing page. Auto-renew stays off. She can set `sister_reach_mode` (`free_unlimited` default, or `same_quota_as_brothers`). The change is audited; subsequent Sister Invites use the new mode; past Invites stay. → FR-106, FR-108, FR-139, FR-145
 2. She edits moderation policy text and numeric thresholds (flag confidence, photo-Strike count). New thresholds apply to subsequent messages; they do not silently rewrite old decisions. → FR-140, NFR-003
 3. She publishes or updates Advisory Board names and Académie articles (minimum five scholar-reviewed in MVP). → FR-115, FR-116, FR-141
 4. She views internal metrics (Verified Members by level, dual-confirmed marriages, report SLA, scan-deferred events). Public counters she can promote are proof-backed only. → FR-092, FR-101, FR-142
@@ -177,13 +177,14 @@ Downstream workflows must use these terms exactly. FRs, UJs, and SMs use them ve
 - **Member** — A registered person using the product as Sister or Brother after gender is set.
 - **Message Flash** — A personalised first message attached to an Invite.
 - **Moderator** — A Trust & Safety human who decides cases. Distinct from Operator and from Mahram.
-- **Operator** — An admin who configures pricing, moderation policy/thresholds, Advisory Board content, metrics, and deletion/CIL requests.
+- **Operator** — An admin who configures pricing, `sister_reach_mode`, moderation policy/thresholds, Advisory Board content, metrics, and deletion/CIL requests.
 - **Photo** — A still image on a Profile or in a Chat.
 - **Polygamy intent** — Brother-only enum: `no` / `yes`. Visible to Sisters before they accept an Invite.
-- **Premium** — Paid reach and convenience for Brothers. MVP delta: higher daily Invite quota (FR-044) and faster human-review queue (FR-013). Ranking and boosts are NEXT (FR-111). Never Verification, Blur, Mahram, Report, or Sister-initiated Chat.
+- **Premium** — Paid reach and convenience. Brothers always pay for higher daily Invite quota (FR-044) and faster human-review queue (FR-013). Sisters buy the same packs only when `sister_reach_mode` is `same_quota_as_brothers`. Ranking and boosts are NEXT (FR-111). Never Verification, Blur, Mahram, Report, or Chat after an accepted Invite.
 - **Profile** — A Member’s matrimony record (criteria, description, Photos).
 - **Report** — An in-app flag of a Profile or message that opens a Moderator case and starts the report SLA clock.
 - **Reveal** — Per-viewer un-Blurring of Photos, granted by the owner (on accepted Invite, on request, or never) and revocable.
+- **sister_reach_mode** — Operator setting. `free_unlimited` (DEFAULT): Sisters send Invites with no daily quota and no paid pack. `same_quota_as_brothers`: Sisters use the same 1/3/6-month packs (no silent auto-renew) and the same Free and Premium daily Invite caps as Brothers (FR-044). Both values exist on day one. A change applies to subsequent Invites; past Invites are not deleted. Brothers have no free-reach mode.
 - **Sister** — A Member whose gender is woman.
 - **Strike** — A recorded policy violation that feeds the sanctions ladder (including the photo-Strike rule).
 - **Ta'aruf stage** — Productized courtship stage: **invite** / **chat** / **meeting** / **married**. Always visible on the Chat.
@@ -515,7 +516,7 @@ Brothers declare Marital status (`single` / `married` / `divorced` / `widowed`) 
 
 ### 4.3 Invites and matching
 
-**Description:** Woman’s consent is first-class. Farata gates starting a conversation behind Premium Offered (seen) [bundle]. This product lets Sisters start Invites free (D20). Realizes UJ-1, UJ-2.
+**Description:** Woman’s consent is first-class. Farata gates starting a conversation behind Premium Offered (seen) [bundle]. This product lets Sisters start Invites; default reach is free and unlimited, and the Operator can apply the same invite quota as Brothers (D20). Realizes UJ-1, UJ-2.
 
 #### FR-038: Send an Invite
 
@@ -569,20 +570,23 @@ After a decline, the same sender cannot send a new Invite to that recipient.
 
 #### FR-044: Daily Invite quota for Brothers
 
-Free-tier Brothers have a tight daily quota. `[ASSUMPTION]` **3 Invites per UTC day** on Free; Premium raises the published quota. Sisters unlimited free (FR-045).
+Brothers are always quota-capped. Free-tier Brothers have a tight daily quota. `[ASSUMPTION]` **3 Invites per UTC day** on Free; Premium raises the published quota. Sisters follow FR-045, which depends on `sister_reach_mode`.
 
 **Acceptance criteria:**
 - Given a Free Brother who already sent 3 Invites today, When he sends a fourth, Then it is rejected with the reset time.
 - Given Premium, When he sends a 4th Invite the same day, Then it succeeds until **15** Invites that UTC day `[ASSUMPTION]`. The 16th is rejected with the reset time.
 - Given MVP Premium, When browse ranking is inspected, Then no paid ranking boost is applied (FR-111 is NEXT).
+- Given any `sister_reach_mode`, When a Brother opens Invite or pricing UI, Then he does not gain a free-unlimited reach mode.
 
-#### FR-045: Sisters start Invites free and unlimited
+#### FR-045: Sister Invite reach follows `sister_reach_mode`
 
-Sisters’ Invites are free and not quota-capped in MVP. Mahram, Blur, Report, and Verification stay free (D20, FR-105).
+Sister Invite reach is not hardcoded unlimited. Default `sister_reach_mode` is `free_unlimited`: a Sister sends Invites with no daily quota and no paid pack; she does not pay for the reach actions Brothers pay for. When the Operator sets `same_quota_as_brothers`, the FR-044 caps apply to Sisters (Free **3** and Premium **15** per UTC day, still `[ASSUMPTION]`) and a missing pack means the Free cap, not a block on safety. Mahram, Blur, Report, Block, and Verification stay free in both modes (D20, FR-105). Chat after an accepted Invite stays free.
 
 **Acceptance criteria:**
-- Given a Sister without Premium, When she sends her Nth Invite in a day, Then it is not blocked by a paid quota.
-- Given she has no payment method, When she uses Blur, Mahram, Report, or Verification, Then those actions succeed.
+- Given `sister_reach_mode` is `free_unlimited`, When a Sister sends her Nth Invite in a day, Then it is not blocked by a paid quota and she is not asked to buy a pack.
+- Given `sister_reach_mode` is `same_quota_as_brothers` and the Sister has no pack, When she sends a 4th Invite the same UTC day, Then it is rejected with the reset time (FR-044 Free cap).
+- Given `sister_reach_mode` is `same_quota_as_brothers` and the Sister has Premium, When she sends Invites, Then the FR-044 Premium cap (15 per UTC day) applies.
+- Given either mode and she has no payment method, When she uses Blur, Mahram, Report, Block, or Verification, Then those actions succeed.
 
 #### FR-046: Message Flash
 
@@ -1079,40 +1083,46 @@ Read-only advice, not matchmaking (D33).
 
 ### 4.10 Monetisation and payments
 
-**Description:** Freemium in XOF. Sisters’ safety and dignity are never paywalled. Brothers pay for reach/convenience. 1 / 3 / 6 month plans, no silent auto-renew. Mobile money first. Realizes UJ-2, UJ-6.
+**Description:** Freemium in XOF. Sisters’ safety and dignity are never paywalled. Brothers pay for reach/convenience. Sister Invite reach defaults `free_unlimited`; the Operator can apply the same quota and packs as Brothers. 1 / 3 / 6 month plans, no silent auto-renew. Mobile money first. Realizes UJ-2, UJ-6.
 
 #### FR-104: Freemium in XOF
 
 **Acceptance criteria:**
 - Given the pricing page, When rendered, Then prices are in XOF (FCFA symbol allowed) and a Free tier is described.
 - Given a Brother on Free, When he uses browse + quota Invites + Chat after accept, Then those capabilities work without payment.
+- Given a Sister, When she uses browse + Chat after accept, Then those capabilities work without payment in both `sister_reach_mode` values.
+- Given `sister_reach_mode` is `same_quota_as_brothers` and a Sister has no pack, When she sends Invites, Then the Free cap in FR-044 applies (FR-045).
 
 #### FR-105: Safety and Sister dignity never paywalled
 
-Verification, Blur/Reveal, Mahram, Report, Block, and Sister-initiated Invites/Chat stay free.
+Verification, Blur/Reveal, Mahram, Report, and Block stay free in both `sister_reach_mode` values. Chat after an accepted Invite stays free for both genders (Brothers do not pay for that). Sister-initiated Invites are not unconditionally free: Invite quota follows FR-045.
 
 **Acceptance criteria:**
-- Given no payment method on a Sister account, When she uses Verification, Blur, Reveal, Mahram, Report, Block, or sends an Invite, Then none of those actions require Premium.
-- Given a Brother, When he Reports or completes Verification, Then payment is not required.
+- Given no payment method on a Sister account, When she uses Verification, Blur, Reveal, Mahram, Report, or Block, Then none of those actions require Premium.
+- Given no payment method on a Sister account, When she sends an Invite, Then the send is allowed or rejected solely by FR-045 / `sister_reach_mode`, never by a safety paywall.
+- Given a Brother, When he Reports, completes Verification, or chats after an accepted Invite, Then payment is not required.
 
 #### FR-106: 1 / 3 / 6 month plans, no silent auto-renew
 
-If a processor wants auto-renew, the product still requires explicit repurchase.
+If a processor wants auto-renew, the product still requires explicit repurchase. Brothers always see these packs. Sisters see the same packs only when `sister_reach_mode` is `same_quota_as_brothers`.
 
 **Acceptance criteria:**
 - Given checkout, When a pack is purchased, Then the end date is shown and no renewal is scheduled.
 - Given the pack ends, When the Member opens the app, Then they are on Free until they explicitly buy again.
 - Given French or Mooré/Dioula audio on pricing, When played, Then no-auto-renew is stated (D16).
+- Given `sister_reach_mode` is `same_quota_as_brothers`, When a Sister buys a pack, Then the same 1 / 3 / 6 durations and no-silent-auto-renew rules apply as for Brothers.
+- Given `sister_reach_mode` is `free_unlimited`, When a Sister opens pricing, Then she is not required to buy a reach pack.
 
 #### FR-107: Burkina payment rails
 
-MVP rails: Orange Money BF, Moov Africa BF, Wave/Coris where available, cards secondary. Free Money / MTN MoMo are FR-114 (NEXT, later countries).
+MVP rails: Orange Money BF, Moov Africa BF, Wave/Coris where available, cards secondary. Free Money / MTN MoMo are FR-114 (NEXT, later countries). Sister checkout exists on day one only when `sister_reach_mode` is `same_quota_as_brothers` (FR-145).
 
 **Acceptance criteria:**
-- Given Orange Money BF available, When a Brother pays, Then a successful payment entitles him to the selected pack.
-- Given Moov Africa BF available, When a Brother pays, Then a successful payment entitles him to the selected pack.
-- Given Wave or Coris available in BF, When a Brother pays on that rail, Then a successful payment entitles him to the selected pack.
-- Given cards unavailable, When he pays with mobile money, Then purchase can complete.
+- Given Orange Money BF available, When a Brother — or a Sister when `sister_reach_mode` is `same_quota_as_brothers` — pays, Then a successful payment entitles them to the selected pack.
+- Given Moov Africa BF available, When a Brother — or a Sister when `sister_reach_mode` is `same_quota_as_brothers` — pays, Then a successful payment entitles them to the selected pack.
+- Given Wave or Coris available in BF, When a Brother — or a Sister when `sister_reach_mode` is `same_quota_as_brothers` — pays on that rail, Then a successful payment entitles them to the selected pack.
+- Given cards unavailable, When they pay with mobile money, Then purchase can complete.
+- Given `sister_reach_mode` is `free_unlimited`, When a Sister opens checkout, Then no reach-pack purchase is required.
 
 #### FR-108: One transparent pricing page
 
@@ -1121,6 +1131,7 @@ Launch vs normal price disclosed. No dark patterns. Same numbers as checkout (D1
 **Acceptance criteria:**
 - Given homepage and checkout, When prices are compared, Then they match.
 - Given a “launch” price, When it is shown, Then the normal price is also shown.
+- Given `sister_reach_mode` is `same_quota_as_brothers`, When a Sister sees checkout, Then the prices match the public pricing page and Brother checkout.
 
 #### FR-109: Published CGV and refunds
 
@@ -1132,10 +1143,10 @@ No homepage-vs-CGV contradiction (P59).
 
 #### FR-110: Premium structure without paywalled safety
 
-Pay for reach/convenience only. **MVP Premium delta (testable):** (1) Brother daily Invite quota 15 vs Free 3 (FR-044); (2) faster human-review queue, not a rubber stamp (FR-013). Ranking/boosts are NEXT (FR-111). Remaining convenience perks we may add later (HD photo cap, unlimited coach, priority support, sub-10-minute validation queue) are FR-113 (NEXT). Farata markets similar items: “up to 10 HD photos” Offered (seen) on the homepage; unlimited coach Claimed (marketing); priority support 7/7 Claimed (marketing); “validée en 10 min” Premium Claimed (marketing).
+Pay for reach/convenience only. **MVP Premium delta (testable):** (1) daily Invite quota 15 vs Free 3 (FR-044) for Brothers always, and for Sisters when `sister_reach_mode` is `same_quota_as_brothers`; (2) faster human-review queue, not a rubber stamp (FR-013). Ranking/boosts are NEXT (FR-111). Remaining convenience perks we may add later (HD photo cap, unlimited coach, priority support, sub-10-minute validation queue) are FR-113 (NEXT). Farata markets similar items: “up to 10 HD photos” Offered (seen) on the homepage; unlimited coach Claimed (marketing); priority support 7/7 Claimed (marketing); “validée en 10 min” Premium Claimed (marketing).
 
 **Acceptance criteria:**
-- Given Premium vs Free in MVP, When the published pricing page is compared to product behaviour, Then the only differences are quota 15 vs 3 and queue priority for FR-012.
+- Given Premium vs Free in MVP, When the published pricing page is compared to product behaviour, Then the only differences are quota 15 vs 3 and queue priority for FR-012. When `sister_reach_mode` is `same_quota_as_brothers`, those quota numbers apply to Sisters too.
 - Given Premium, When they try to use it to skip FR-012 human decision or FR-062 background scan, Then those still apply. Premium cannot skip the admin flag queue (FR-144).
 
 #### FR-111: Boosts — NEXT
@@ -1346,6 +1357,16 @@ Realizes UJ-6.
 - Given Operator role, When they change a pack price or duration, Then FR-108 and checkout show the new values without a store release.
 - Given a non-Operator, When they call the config API, Then it is rejected.
 
+#### FR-145: Operator `sister_reach_mode` and Sister checkout
+
+The Operator sets `sister_reach_mode` in operator settings. Values: `free_unlimited` (DEFAULT) | `same_quota_as_brothers`. Both modes exist on day one. The value is audited. A change applies to subsequent Invites; past Invites are not deleted. Brothers stay on the paid quota; there is no brother-free mode. Sister UI shows either unlimited Invites or the same quota and pack purchase as Brothers. Brothers’ UI does not gain a free mode.
+
+**Acceptance criteria:**
+- Given Operator role, When they change `sister_reach_mode`, Then the new value is stored, written to the audit log, and subsequent Sister Invites use the new mode. Past Invites are not deleted.
+- Given `sister_reach_mode` is `free_unlimited`, When a Sister opens Invite or pricing UI, Then it shows unlimited Invites and does not offer a reach pack.
+- Given `sister_reach_mode` is `same_quota_as_brothers`, When a Sister opens Invite or pricing UI, Then she sees the same Free and Premium daily caps and the same 1/3/6-month pack purchase as Brothers (FR-044, FR-106, FR-107, FR-108).
+- Given a Brother, When he opens Invite or pricing UI, Then he does not gain a free-unlimited reach mode.
+
 #### FR-140: Moderation policy and thresholds
 
 **Acceptance criteria:**
@@ -1418,7 +1439,7 @@ Each NFR has a measurable target and a verification method.
 
 #### NFR-009: Auditability
 
-**Target:** Immutable audit events for: Moderator unblur, sanctions, appeal outcomes, Operator threshold/price changes, deletion/CIL completions, scan-deferred / scan-failed events. Retention of audit logs ≥ 12 months. Staff access is individually attributed (no shared Moderator login).
+**Target:** Immutable audit events for: Moderator unblur, sanctions, appeal outcomes, Operator threshold/price/`sister_reach_mode` changes, deletion/CIL completions, scan-deferred / scan-failed events. Retention of audit logs ≥ 12 months. Staff access is individually attributed (no shared Moderator login).
 **Verification:** Audit-log replay test; RBAC test; quarterly access review.
 
 ## 6. Must-have coverage
@@ -1451,7 +1472,7 @@ Khalwa-safe: no 1:1 live video or live voice until a Mahram is present **or** a 
 
 ## 8. Monetization
 
-Rules are FR-104–FR-110 (XOF freemium; safety and Sister dignity never paywalled; 1 / 3 / 6 month packs; no silent auto-renew; Orange Money / Moov first). Lock-points and ops risk sit here.
+Rules are FR-104–FR-110 and FR-145 (XOF freemium; safety and Sister dignity never paywalled; sister reach default `free_unlimited`, Operator-switchable to `same_quota_as_brothers`; 1 / 3 / 6 month packs; no silent auto-renew; Orange Money / Moov first). Lock-points and ops risk sit here.
 
 **[ASSUMPTION]** Exact price points are not locked. Public reference: Farata homepage shows **5 900 FCFA/month** launch and **9 900** normal Offered (seen) (checkout amounts behind login are Claimed (marketing)). Working assumption for validation: brother Premium launch in a similar band (about 4 900–5 900 XOF/month) with cheaper 3- and 6-month packs; do not race to 0 FCFA. Validate against BF purchasing power before lock. Free-tier Brother daily Invite quota is **3/day**; Premium is **15/day** `[ASSUMPTION]`. MVP Premium does **not** include ranking (NEXT with FR-111).
 
@@ -1506,7 +1527,7 @@ Farata is live at farata.net (Senegal-first, French-only UI Offered (seen); Burk
 - All six owner must-haves as MVP FRs (coverage table).
 - Web + PWA + store-listed Android.
 - Every P/D slice whose Horizon is MVP in Appendix A.
-- Freemium XOF, mobile money first, no silent auto-renew.
+- Freemium XOF, mobile money first, no silent auto-renew. Both `sister_reach_mode` values (`free_unlimited` default, `same_quota_as_brothers`) on day one (FR-145).
 - French-first + Mooré/Dioula audio on the covered set.
 - Passive after-delivery scan; admin flag queue; Report → Strike → Ban; appeal. The trigger for an AI-originated case is the passive flag plus an admin action, not a pre-delivery hold.
 - Honest Verified-marriages counter at 0; dual-confirm close.
@@ -1629,7 +1650,7 @@ Required. One row per slice. No id dropped. Horizons match the brief. Farata evi
 | P27 | Anonymous mode + visibility controls | NEXT | FR-036 | Farata behaviour unknown (Claimed); ship D36 definition |
 | P28 | Contact request accept/decline + lists | MVP | FR-038, FR-039, FR-040, FR-041 | |
 | P29 | No resend after refuse | MVP | FR-043 | |
-| P30 | Daily request quota by tier | MVP | FR-044, FR-045 | |
+| P30 | Daily request quota by tier | MVP | FR-044, FR-045, FR-145 | |
 | P31 | Message Flash | MVP | FR-046, FR-048 | |
 | P32 | Ice Breakers — deen/family templates | MVP | FR-047 | |
 | P32 | AI-personalised Ice Breakers | NEXT | FR-049 | Wait for grounded coach (D21) |
@@ -1663,7 +1684,7 @@ Required. One row per slice. No id dropped. Horizons match the brief. Farata evi
 | P53 | High-production video | LATER | FR-123 | Content production, not strategic rejection |
 | P54 | Testimonials carousel | NEXT | FR-102 | Wait for real D11/D12 stories; no invented marriages |
 | P55 | Freemium in XOF / FCFA | MVP | FR-104 | |
-| P56 | Premium structure minus paywalled safety | MVP | FR-105, FR-110 | |
+| P56 | Premium structure minus paywalled safety | MVP | FR-105, FR-110, FR-145 | |
 | P56 | Remaining Premium perks | NEXT | FR-113 | After core Premium |
 | P57 | 1 / 3 / 6 month plans, no silent auto-renew | MVP | FR-106 | |
 | P58 | Payment rails — BF launch | MVP | FR-107 | Orange Money BF, Moov Africa BF, Wave/Coris, cards |
@@ -1690,7 +1711,7 @@ Required. One row per slice. No id dropped. Horizons match the brief. Farata evi
 | D18 | French first + Mooré/Dioula audio | MVP | FR-137, FR-138 | |
 | D18 | Full Arabic + English UI for diaspora | LATER | FR-128 | After BF audio wedge |
 | D19 | Low-bandwidth Lite mode | MVP | FR-136, NFR-005 | |
-| D20 | Sisters start conversations free; Mahram/safety always free | MVP | FR-045, FR-105 | |
+| D20 | Sister reach defaults free/unlimited; Operator can apply the same invite quota as Brothers; Mahram/safety always free | MVP | FR-045, FR-105, FR-145 | |
 | D21 | Grounded coach, scholar-reviewed, not a mufti, one persona | NEXT | FR-124 | Scholar-review capacity |
 | D22 | Seed articles MUST via P50 (5 scholar-reviewed) | MVP | FR-115 | |
 | D22 | Working public imam-reviewed Académie (Sahel context) | NEXT | FR-121 | After seed |
@@ -1742,7 +1763,8 @@ LATER rows: P51 full blog cadence, P53 high-production video, D18 full EN/AR UI,
 
 ## Document control
 
-- **Intent:** update (headless). Correction of record of the same product, 2026-10-01.
+- **Intent:** update (headless). Correction of record of the same product, 2026-10-02.
+- **Locked decision (Maitchibi Fayçal, 2026-10-02):** Sister access is admin-configurable on MVP day one (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Overrides every earlier sentence that said Sisters never pay for Invites or that Invites are always unlimited. Safety and Chat after accept stay free in both modes. Brothers stay on paid quota.
 - **Locked decision (Maitchibi Fayçal, 2026-10-01):** AI moderation is passive, not a pre-delivery gate. Overrides every earlier sentence that said the AI gates Chat delivery.
 - **Workspace:** `_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/`
 - **Sources:** brief + addendum + memlog (2026-09-27); brainstorm intent/html/memlog; `docs/system-idea.md`; `docs/competitor-farata.md`; `docs/name-options.md`.

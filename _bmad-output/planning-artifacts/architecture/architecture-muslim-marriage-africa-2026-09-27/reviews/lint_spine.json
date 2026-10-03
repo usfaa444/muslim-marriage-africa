@@ -3,5 +3,7 @@
   "spine": "ARCHITECTURE-SPINE.md",
   "total_findings": 0,
   "by_severity": {},
-  "findings": []
+  "findings": [],
+  "date": "2026-10-02",
+  "note": "re-run after gate autofix"
 }

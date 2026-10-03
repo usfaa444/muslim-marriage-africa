@@ -2,8 +2,8 @@
 title: Input reconciliation — prd-muslim-marriage-africa-2026-09-27
 status: complete
 created: 2026-09-27
-updated: 2026-10-01
-superseded: 2026-10-01
+updated: 2026-10-02
+superseded: 2026-10-02
 verdict: pass-with-findings
 input: prds/prd-muslim-marriage-africa-2026-09-27 (prd.md + addendum.md)
 against: architecture/architecture-muslim-marriage-africa-2026-09-27 (ARCHITECTURE-SPINE.md + SOLUTION-DESIGN.md)
@@ -12,6 +12,8 @@ against: architecture/architecture-muslim-marriage-africa-2026-09-27 (ARCHITECTU
 # Reconcile: PRD package → architecture spine
 
 > **Superseded 2026-10-01.** Chat moderation is passive after delivery (AD-10 amendment; PRD FR-062–068, FR-144, NFR-003). Claims in this review of pre-delivery Chat scan, hold-on-timeout, or fail-closed Chat delivery are historical. Profile Photo/bio publish-gate (FR-065), AD-9 blur, and AD-12 mahram read-delivered-only are unchanged.
+
+> **Superseded 2026-10-02.** Sister Invite reach is operator-configurable (AD-27 / FR-145). The transferred-item row “Billing isolation from safety / Sister invites → AD-21” is historical as an absolute. Isolation still holds for safety and for Sister send in `free_unlimited`; `same_quota_as_brothers` Sister send uses the same `BillingPort.isEntitled` result as Brothers.
 
 PRIMARY input: `prds/prd-muslim-marriage-africa-2026-09-27` (`prd.md`, `addendum.md`).
 Compared against: `ARCHITECTURE-SPINE.md` + `SOLUTION-DESIGN.md`.

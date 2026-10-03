@@ -11,7 +11,8 @@
 | 4 UX (`_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/`) | done (was skipped; run 2026-10-01 after architecture) | d0b46c2 |
 | 4 Architecture (`_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/`) | done | d01469e |
 | 6 Epics & stories (`_bmad-output/planning-artifacts/epics.md`) | done (12 epics, 98 stories; ready for development) | b67d789 |
-| 7 Sprint planning / implementation | **not started** | — |
+| 7 Sprint planning / implementation | **not started** (not started by the 2026-10-02 sister-reach amendment) | — |
+| Amendment 2026-10-02: sister reach mode (`sister_reach_mode`, FR-145, AD-27, story 4.7) | done | (this commit) |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
@@ -123,3 +124,11 @@ Epics file is the build index. Recommended next skill written in the file, not r
 ## Phase 7 hand-back
 
 Planning pack is complete: brainstorm, brief, PRD, architecture, UX, epics and stories. Implementation was not started. A later build may use a Cloud Agent only if the user asks. Do not auto-start.
+
+## Amendment 2026-10-02 — sister reach mode (ET)
+
+Locked decision from Maitchibi Fayçal. MVP day one. `sister_reach_mode`: `free_unlimited` (default) or `same_quota_as_brothers`. Admin switches it. Brothers stay on the paid quota. Safety and chat-after-accept stay free in both modes. Passive moderation unchanged.
+
+bmad-help: update in place, in order, brief → PRD → UX → architecture → epics. `bmad-correct-course` does not apply (no sprint).
+
+BMAD updated those five artifacts. Brainstorm, competitor D20, and one architecture review note were hand-corrected because those files have no update workflow. Sprint planning and implementation were not started.

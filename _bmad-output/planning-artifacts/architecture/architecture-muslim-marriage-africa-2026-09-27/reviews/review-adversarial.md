@@ -4,12 +4,14 @@ artifact: ARCHITECTURE-SPINE.md
 lens: adversarial
 date: 2026-09-27
 status: complete
-superseded: 2026-10-01
+superseded: 2026-10-02
 ---
 
 # Adversarial review — architecture spine
 
 > **Superseded 2026-10-01.** Chat moderation is passive after delivery (AD-10 amendment; PRD FR-062–068, FR-144, NFR-003). Claims in this review of pre-delivery Chat scan, hold-on-timeout, or fail-closed Chat delivery are historical. Profile Photo/bio publish-gate (FR-065), AD-9 blur, and AD-12 mahram read-delivered-only are unchanged.
+
+> **Superseded 2026-10-02.** Sister Invite reach is operator-configurable (AD-27). Claims that sister-invite paths must always succeed when billing is `unavailable`, or that Sister invite send is never an entitlement check, are historical. Safety paths and Chat after accept still must not call `BillingPort`.
 
 **Artifact:** `_bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/ARCHITECTURE-SPINE.md`  
 **Lens:** Attack the spine as an adversary. Construct two units one level down (two feature teams) that each obey every AD to the letter and still ship incompatibly — clashing shared-data shapes, two owners of one entity, conflicting state-mutation paths. Every pair is a hole to close with a new or tightened AD.  

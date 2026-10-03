@@ -2,7 +2,7 @@
 title: muslim-marriage-africa — product brief addendum
 status: complete
 created: 2026-09-27
-updated: 2026-10-01
+updated: 2026-10-02
 ---
 
 # Addendum — overflow for the muslim-marriage-africa brief
@@ -45,6 +45,7 @@ Sources: `_bmad-output/brainstorming/brainstorm-muslim-marriage-africa-2026-09-2
 | 28 | Insider bulk-export of contact lists | No staff bulk export; D15 export is owner-only; need-to-know access |
 | 29 | Screenshot of wali dashboard on a shared phone | Wali PIN + session timeout + D28-like lock on guardian accounts |
 | 30 | Social-engineer an unblur then screenshot | Time-limited reveal, revoke, watermark, re-blur on report (D8 + D9) |
+| 31 | Admin switches sisters onto brother quota after launch | Mode applies to subsequent invites only; safety stays free; do not delete sent invites (D20) |
 
 ## 2. Personas and job maps
 
@@ -56,6 +57,7 @@ Condensed from the brainstorm JTBD / role-playing pass. Functional / emotional /
 - **Functional:** let my father/brother read the conversation so I am not in khalwa → mahram-in-chat read-all (D1).
 - **Functional:** know before I invest hope whether he is already married or wants a second wife → D14 visible pre-accept.
 - **Functional:** decline without drama or follow-up → P29 no-resend + silent decline + one-tap block (P42).
+- **Functional:** start a conversation without buying Premium by default → D20 `free_unlimited`; if the admin has switched to `same_quota_as_brothers`, same invite caps as brothers.
 - **Functional:** guarantee my photo will not appear in Instagram ads → D10 per-use opt-in only.
 - **Functional:** use this on ~1GB/month → D19 lite + compressed images + no autoplay video.
 - **Emotional:** feel haya-safe and still hopeful → dignity-first free safety stack (D20).
@@ -151,10 +153,16 @@ Condensed from the brainstorm JTBD / role-playing pass. Functional / emotional /
 
 | Option | Why considered | Disposition |
 | --- | --- | --- |
-| Farata: free users can only reply; start-chat is Premium (Offered (seen) [bundle]) | Known pattern | Rejected for sisters (D20); brothers keep quotas (P30) |
+| Farata: free users can only reply; start-chat is Premium (Offered (seen) [bundle]) | Known pattern | Rejected as the only model. Brothers stay on paid quota. Sisters default free/unlimited; admin can switch to the same quota (D20). |
+| Hardcode sisters always free / never pay for reach | Original D20 | **Reversed 2026-10-02** (Maitchibi Fayçal). Replaced. |
+| Admin-configurable sister access: default `free_unlimited`; switchable to `same_quota_as_brothers`; both modes day one | Owner locked decision | **Chosen.** Mode change applies to subsequent invites only. |
+| A mode that makes brothers free | Symmetry | **Rejected** — brothers stay on paid quota |
+| Paywall safety (verification, blur, mahram, report, block) when sisters are on quota | Revenue | **Rejected** — do not paywall dignity |
+| Charge sisters for chat after an accepted invite | Revenue | **Rejected** — brothers do not pay for that |
+| Retroactive apply / delete sent invites on mode change | Clean slate | **Rejected** — subsequent invites only |
 | Paywall verification | Revenue | Rejected — D13; never sell a “looks verified” badge |
 | Race Farata to 0 FCFA | Acquisition | Rejected — compete on dignity and local fit |
-| Freemium XOF, brothers pay for reach, 1/3/6 mo, no silent auto-renew | Trust + BF rails | **Chosen**; exact prices [ASSUMPTION] |
+| Freemium XOF, brothers pay for reach, 1/3/6 mo, no silent auto-renew | Trust + BF rails | **Chosen**; sister reach is admin-configurable (D20); exact prices [ASSUMPTION] |
 
 ### 3.7 Name
 
@@ -180,7 +188,7 @@ No decision. Shortlist Nisfuddin / Nikahsira / Sakinaa; alternates Mithaqun / No
 
 ## 4. Binding stance carried from the brainstorm
 
-The AI-moderation line was overridden on 2026-10-01 (see 3.9). Other items were not re-litigated.
+The AI-moderation line was overridden on 2026-10-01 (see 3.9). Sister reach (D20) was overridden on 2026-10-02 (see 3.6). Other items were not re-litigated.
 
 - Burkina first (Ouagadougou → Bobo-Dioulasso); then CI / Mali / Senegal / wider.
 - French-first UI; Mooré/Dioula audio is a differentiator.
@@ -192,6 +200,7 @@ The AI-moderation line was overridden on 2026-10-01 (see 3.9). Other items were 
 - Khalwa-safe: no 1:1 live A/V until wali present or chaperoned meeting scheduled.
 - Woman’s consent first-class; quiet decline.
 - Haya-default media; curated GIFs only.
+- Sister access is admin-configurable on day one. Default `free_unlimited` (no invite quota, no paid pack for sisters). Admin can switch to `same_quota_as_brothers` (same 1/3/6 packs and Free/Premium daily caps). Brothers stay paid. Safety (verification, blur/reveal, mahram, report, block) stays free in both modes. Chat after an accepted invite stays free. Mode change applies to subsequent invites only.
 - Verification is a public good; never sell a “looks verified” Premium badge.
 - Never use member likeness in ads without per-use opt-in.
 - Publish only proof-backed counters.

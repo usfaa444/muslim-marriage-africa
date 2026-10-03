@@ -2,7 +2,7 @@
 name: TBD
 description: Burkina-first honorable ta'aruf visual system. Solemn marriage path, not a dating app. Product name undecided.
 status: final
-updated: 2026-10-01
+updated: 2026-10-02
 sources:
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/prd.md
   - ../../prds/prd-muslim-marriage-africa-2026-09-27/addendum.md
@@ -130,6 +130,15 @@ components:
     color: '{colors.surface-raised}'
     radius: '{rounded.sm}'
     font: '{typography.caption}'
+  operator-reach-mode:
+    background: '{colors.surface-raised}'
+    color: '{colors.ink-primary}'
+    border: '{colors.border-strong}'
+    radius: '{rounded.md}'
+    min-height: 48px
+    font: '{typography.body}'
+    focus-ring: '{colors.focus-ring}'
+    accent: '{colors.staff}'
 ---
 
 # TBD — Visual identity
@@ -151,7 +160,7 @@ Voice of the brand is quiet and specific. French-first. No *dating*, no *rencont
 - **Sand (`{colors.surface-sand}`)** is the member canvas. Warm, paper-like, low glare on cheap Androids in daylight.
 - **Raised (`{colors.surface-raised}`)** lifts cards and incoming chat bubbles without a drop shadow.
 - **Indigo (`{colors.indigo}` / `{colors.indigo-deep}`)** is the solemn field: headers, primary actions, outgoing bubbles, mahram-presence chrome. It is not a dating-app purple.
-- **Gold (`{colors.gold}` / `{colors.gold-soft}`)** marks confirmation and Reveal — dual-confirm marriage, pack purchase success, granted Reveal. Never used for “boost” or ranking (those are NEXT and must not sneak in as gold badges).
+- **Gold (`{colors.gold}` / `{colors.gold-soft}`)** marks confirmation and Reveal — dual-confirm marriage, pack purchase success (Brothers always; Sisters only when `sister_reach_mode` is `same_quota_as_brothers`), granted Reveal. Never used for “boost” or ranking (those are NEXT and must not sneak in as gold badges). Never used to imply a brother-free pack.
 - **Mihrab (`{colors.mihrab}`)** is the arched header wash on public and onboarding screens.
 - **Blur wash (`{colors.blur-wash}`)** is the only authorized appearance of an unauthorized Photo. It is a server derivative, not a CSS filter over a clear image.
 - **Danger (`{colors.danger}`)** is for Block, end Chat, delete, and suspend. Warning (the sanction) uses `{colors.staff}` so warning and suspend do not share one red.
@@ -225,13 +234,14 @@ Keeper mocks (spines win): `mockups/auth.html` (auth), `mockups/discovery-lite.h
 - **flash-composer** — 280-character field + Ice Breaker picker (deen/family only). Phone / WhatsApp / links refused here (`CONTACT_SHARE_REQUIRED`).
 - **stage-chip** — `invite` / `chat` / `meeting` / `married` in meta type. Always visible on Chat.
 - **admin-flag-row** — Staff only. Columns: already-delivered excerpt, person, reason (`flag-for-admin` | `scan-deferred` | `scan-failed`), age in queue, SLA. `{components.staff-only-badge}` leading the row.
-- **staff-only-badge** — Brown chip « Équipe seulement ». Required on flag queue, case, sanction, operator config. Never on member Chat.
+- **staff-only-badge** — Brown chip « Équipe seulement ». Required on flag queue, case, sanction, operator config, operator-reach-mode. Never on member Chat.
 - **sanction-action** — Three distinct controls: Avertissement (staff), Suspension (danger), Autre action publiée (secondary). AI is not a fourth button.
-- **pack-card** — 1 / 3 / 6 months, XOF, Orange / Moov / Wave. Selected state: gold-soft fill + visible word « Sélectionné » + indigo ring ≥3:1. Line « Pas de renouvellement automatique » always visible with audio-prompt.
+- **operator-reach-mode** — Staff control on Operator pricing/policy. Two values only: `free_unlimited` (DEFAULT) | `same_quota_as_brothers`. `{typography.body}` labels, `{colors.border-strong}` outline, `min-height` 48px, `{colors.focus-ring}`. `{components.staff-only-badge}` leads the group. Selected value uses staff accent, not gold “boost.” No third brother-free option.
+- **pack-card** — 1 / 3 / 6 months, XOF, Orange / Moov / Wave. Shown to Brothers always. Shown to Sisters only when `sister_reach_mode` is `same_quota_as_brothers`. Selected state: gold-soft fill + visible word « Sélectionné » + indigo ring ≥3:1. Line « Pas de renouvellement automatique » always visible with audio-prompt. `free_unlimited` Sister surfaces never render this card.
 - **audio-prompt** — Speaker pictogram + `mos` / `dyu` toggle, each ≥44px. Hard steps: onboarding, photo rules, no-auto-renew, Mahram invite. If audio fails, pictograms remain.
 - **pin-lock** — Full-screen sand, four digits, no photo behind.
 - **empty-state** — One sentence + one action. No illustrated couples.
-- **error-banner** — Danger-soft, retry verb. Payment errors never hide Free/safety.
+- **error-banner** — Danger-soft, retry verb. Payment errors never hide Free/safety. Safety screens (verification, blur/reveal, mahram, report, block) and Chat after accept stay free in both `sister_reach_mode` values.
 - **lite-placeholder** — Hairline rectangle the size of an xs thumb. Criteria text still shows.
 
 ## Do's and Don'ts
@@ -247,3 +257,5 @@ Keeper mocks (spines win): `mockups/auth.html` (auth), `mockups/discovery-lite.h
 | *mariage / ta'aruf / nikah / khitba* | *dating / rencontre romantique / swipe* |
 | Quiet decline | Guilt timer or “elle a vu” |
 | Disclose hosting on the privacy page | Hide Scaleway / Île-de-France |
+| Show Sister pack-card only in `same_quota_as_brothers` | Offer a reach pack in `free_unlimited`, or a brother-free mode |
+| Keep verification, blur, mahram, report, block, and Chat after accept free | Gold-badge a safety screen as Premium |

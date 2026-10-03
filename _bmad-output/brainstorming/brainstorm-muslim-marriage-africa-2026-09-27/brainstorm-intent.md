@@ -11,7 +11,7 @@ Bindings for the product brief (assumptions and decisions from the memlog only):
 - Burkina first (Ouagadougou → Bobo-Dioulasso); then CI/Mali/Senegal/wider.
 - French-first UI. Mooré and Dioula audio (D18) is a differentiator, not a nice-to-have. English/Arabic full UI is LATER.
 - XOF pricing. Mobile money first: Orange Money BF, Moov Africa BF, Wave/Coris where available. Cards secondary.
-- Sisters' safety and dignity are never paywalled: verification, blur, mahram, reporting always free. Monetise brothers' reach/convenience only.
+- Sisters' safety and dignity are never paywalled: verification, blur, mahram, reporting always free in both sister-access modes. Sister invite reach defaults free and unlimited; the admin can switch sisters onto the same paid quota as brothers (corrected 2026-10-02). Brothers stay on the paid quota. Do not monetise safety.
 - AI moderation covers text, images, and audio **after** delivery; the AI flags an admin, who decides the action. When the AI is down the message stays delivered and a scan-deferred event is recorded. **Corrected 2026-10-01** (was: before delivery, fail closed).
 - Mahram/wali is optional and sister-initiated. Wali is a process actor (flag, pause, end, propose meeting, later attest nikah).
 - Marriage success reporting requires both parties to confirm. North-star metric: chaperoned meetings + dual-confirmed nikah — not DAU or inflated members.
@@ -71,7 +71,7 @@ Carry-forward titles from the memlog. Split items appear in both buckets; deferr
 - **P23** visitors list — **internal T&S use of visit patterns MUST**; member-facing list is NEXT
 - **P28** contact request accept/decline + lists — first Message Flash wali-visible from minute one if sister already attached a mahram
 - **P29** no resend after refuse
-- **P30** daily request quota by tier — tight quotas on brothers; sisters unlimited free requests (D20)
+- **P30** daily request quota by tier — brothers always on a paid quota; sisters default unlimited free invites, and the admin can apply the same quota (corrected 2026-10-02, D20)
 - **P31** Message Flash — simple personalised first message
 - **P32** AI Ice Breakers — **deen/family templates MUST**; AI-personalised slice is NEXT
 - **P33** realtime chat typing/reactions/GIFs/stickers/photos — MUST: typing, reactions, photo share (gallery/camera); GIFs/stickers NEXT
@@ -155,7 +155,7 @@ All required in the brief and PRD. D1–D23 from competitor §7; D24–D40 from 
 | D17 | Burkina-first entity, CIL, Orange Money BF/Moov Africa BF/Coris/Wave, XOF | MUST |
 | D18 | French first + Mooré/Dioula audio + Arabic + English diaspora | MUST (FR + audio); Arabic/English UI LATER |
 | D19 | Low-bandwidth lite mode | MUST |
-| D20 | Sisters start conversations free; wali/safety always free | MUST |
+| D20 | Sister invite reach defaults free/unlimited; admin can apply the same quota as brothers; wali/safety always free. **Corrected 2026-10-02** (was: sisters always free) | MUST |
 | D21 | Grounded coach, scholar-reviewed, not a mufti, one persona | NEXT |
 | D22 | Working public imam-reviewed Académie (Sahel context) | NEXT (seed articles MUST via P50) |
 | D23 | Trust by proof + independent imam/advisory board | NEXT (board can start MUST as 2–3 names) |

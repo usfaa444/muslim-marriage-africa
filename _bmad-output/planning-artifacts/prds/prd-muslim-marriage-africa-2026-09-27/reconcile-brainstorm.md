@@ -2,6 +2,8 @@
 
 **Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows below that treat FR-051 as a pre-delivery scan or D32 as a fail-closed hold of Voice notes are historical. Current `prd.md` delivers then scans; D32 is scan-deferred visibility. Other qualitative gaps in this reconcile are not closed by that decision.
 
+**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Sentences below that treat Sisters’ Invites as always free/unlimited or “never pay” are historical. Safety stays free. D20 stays, reframed.
+
 **Input:** Brainstorm session `brainstorm-muslim-marriage-africa-2026-09-27`  
 **Sources read:** `brainstorm-intent.md`, `brainstorm.html`, `.memlog.md`  
 **Compared to:** `prd.md` + `addendum.md` (same PRD workspace)  
@@ -29,7 +31,7 @@ These qualitative bindings *did* survive into PRD capabilities or explicit non-g
 | Completeness meter names missing Islamic criteria **without shaming** | FR-023 |
 | Named life-pauses (Ramadan, exams, travel, grief) | FR-018 |
 | Woman’s consent first-class; Chat only after Sister accept | FR-039, FR-041 |
-| Sister dignity never paywalled | FR-105, Vision thesis |
+| Sister dignity never paywalled | FR-105, Vision thesis *(safety still true; Invite-always-free reading superseded 2026-10-02)* |
 | Haya-default Blur; per-viewer Reveal / Revoke | FR-056–FR-059 |
 | Khalwa-safe: no live A/V until Mahram or chaperoned meeting; live video LATER | §7 + Non-goals |
 | No “Cheikh” bot / dual coaches; not a mufti | FR-124, §10, Non-goals |
@@ -70,7 +72,7 @@ PRD §10 correctly refuses to become a UX spec, then **delegates the keepsake to
 | Niyyah stays marriage-shaped because **current stage is always visible** | FR-028 stage flags exist | No copy/UX rule that the stage *reads as a ritual path*, not a chat status |
 | Voice notes as **Mooré/Dioula ta'aruf introductions**, not a Premium flirt channel | FR-051: languages + deliver-then-scan *(was pre-delivery scan; superseded 2026-10-01)* | Cultural *use* (introduction, not flirt) is not an AC |
 | Ice Breakers: “sincere first message, **not a pickup line**” | FR-047: deen/family templates | No banned-pickup-line / scholar-reviewed template bar in AC |
-| Discovery: **sister-initiated or mutual-criteria-reveal default** so brothers do not only hunt a grid | Sisters may start Invites free (FR-045) | No default that de-centers the hunt-the-grid interaction |
+| Discovery: **sister-initiated or mutual-criteria-reveal default** so brothers do not only hunt a grid | Sisters may start Invites free (FR-045) *(superseded 2026-10-02: default `free_unlimited`; Operator can set `same_quota_as_brothers`)* | No default that de-centers the hunt-the-grid interaction |
 | Moderator macros: **respectful Ouaga French**, templated, reviewed | §10 one line; addendum persona | No FR that sanction copy is a reviewed corpus (tone can go bureaucratic or shaming) |
 | Couple stories help others **make du'a**, not become celebrities | UJ-5 + FR-099 (faces optional, no Chat excerpts) | Emotional purpose is journey prose, not an AC on showcase copy |
 

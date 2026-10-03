@@ -12,6 +12,8 @@ Extract-only. Does not add Farata facts. Does not start UX, architecture, or epi
 
 **Superseded in part on 2026-10-01.** Locked decision (Maitchibi Fayçal): AI moderation is passive. Rows below that treat D4 as pre-delivery block/hold are historical. Current `prd.md` delivers Chat then scans. `docs/competitor-farata.md` D4 was corrected the same day.
 
+**Superseded in part on 2026-10-02.** Locked decision (Maitchibi Fayçal): Sister access is admin-configurable (`sister_reach_mode`: `free_unlimited` DEFAULT | `same_quota_as_brothers`). Rows below that treat D20 as “Sisters unlimited / never pay / start Invites free” as a hardcoded rule are historical. Safety and Chat after accept stay free. D20 stays, reframed (FR-045, FR-105, FR-145).
+
 **Input:** `/workspace/projects/muslim-marriage-africa/docs/competitor-farata.md`  
 **PRD:** `prd.md` (evidence rule §0; Vision §1; Features §4; NFRs §5; Why now §9; Appendix A)  
 **Addendum:** `addendum.md` (§1 stack note; §2 options; §4 risks; §5 binding stance)  
@@ -101,7 +103,7 @@ Horizon and FR ids from Appendix A. “Fidelity” is whether the **input’s wo
 | P27 | Yes | NEXT | FR-036 | Deferred; Farata mode unknown (label abbreviated — §4) |
 | P28 | Yes | MVP | FR-038–FR-041 | Full; Sister-consent raise is ours |
 | P29 | Yes | MVP | FR-043 | Full |
-| P30 | Yes | MVP | FR-044, FR-045 | Full; Sisters unlimited (D20) |
+| P30 | Yes | MVP | FR-044, FR-045 | Full; Sisters unlimited (D20) *(superseded 2026-10-02: default `free_unlimited`; Operator can set `same_quota_as_brothers`; FR-145)* |
 | P31 | Yes | MVP | FR-046, FR-048 | Full |
 | P32 | Yes (2 rows) | MVP templates; NEXT AI | FR-047, FR-049 | Split with reason |
 | P33 | Yes (2 rows) | MVP chat; NEXT GIFs | FR-050, FR-054 | Split with reason |
@@ -157,7 +159,7 @@ Horizon and FR ids from Appendix A. “Fidelity” is whether the **input’s wo
 | D17 | Yes | MVP | FR-107, FR-120, NFR-002 | CIL + BF rails + XOF land. **JAABA LLC / Delaware vs Dakar EI** (input gap 10) is never named. |
 | D18 | Yes (2 rows) | MVP audio; LATER AR/EN UI | FR-137, FR-138, FR-128 | Full |
 | D19 | Yes | MVP | FR-136, NFR-005 | Full |
-| D20 | Yes | MVP | FR-045, FR-105 | Full |
+| D20 | Yes | MVP | FR-045, FR-105 | Full *(superseded 2026-10-02: D20 kept and reframed — default free reach plus admin switch, not “sisters never pay”; now FR-045, FR-105, FR-145)* |
 | D21 | Yes | NEXT | FR-124 | Deferred with reason; “not a Cheikh / one persona” kept |
 | D22 | Yes (2 rows) | MVP seed; NEXT full | FR-115, FR-121 | Full |
 | D23 | Yes (2 rows) | MVP 2–3 names; NEXT metrics | FR-116, FR-092 | Full MUST slice |
@@ -237,7 +239,7 @@ Third-party rows the PRD correctly **did not ingest** as product facts: Gridinso
 | “Pas une app de rencontre. Une app de mariage.” | Copy lock *mariage / ta'aruf*; ban *dating / rencontre romantique* | Spirit kept; Farata’s exact promise not quoted (correct — we do not copy their slogan) |
 | Qur’an/hadith on **every auth page** (Offered (seen)) | Sincerity pledge + Académie; **no** “scripture on every auth screen” requirement | Qualitative drop |
 | PWA shortcuts Profils / Messages / Demandes | FR-133 install + same path only | Qualitative / IA drop |
-| Free users can only reply (Premium to start chat) | Rejected for Sisters (D20); addendum §2.6 | Full (we do not copy) |
+| Free users can only reply (Premium to start chat) | Rejected for Sisters (D20); addendum §2.6 *(superseded 2026-10-02: rejected as the only model; Sister reach is admin-configurable, not hardcoded always-free)* | Full (we do not copy) |
 
 ## 6. Gaps (surface before polish)
 
@@ -280,11 +282,11 @@ These will not fail Appendix A. They will fail a reviewer who compares FR text t
 
 - Every P1–P59 and D1–D23 **id** is in Appendix A with a horizon and a reason when deferred. That satisfies the input’s “no silent drop” rule at id level.  
 - **D24–D40** are brainstorm. Do not score this file against them.  
-- Raising blur (D8), verification (D13), Sisters starting Invites (D20), and mahram (D1) above Farata’s floor is the point of §7.  
+- Raising blur (D8), verification (D13), Sisters starting Invites (D20), and mahram (D1) above Farata’s floor is the point of §7. *(D20 “Sisters starting Invites” as always-free/unlimited superseded 2026-10-02: default `free_unlimited`; Operator can set `same_quota_as_brothers`.)*  
 - A2 (no kinship papers) and A3 (hosting deferred, CIL + disclose) are documented assumptions, not Farata-doc losses.  
 - iOS, coach, blog, video, boosts, vanity lists, anonymous mode, GIFs: deferred **with reasons**.  
 - Third-party scare numbers (Gridinsoft, Instagram 100k+, Ouaga “1 000+”) correctly stayed out of the PRD.  
-- Not copying Farata’s stack, USA-hosting silence, paywalled start-chat, or invented member counts is aligned.  
+- Not copying Farata’s stack, USA-hosting silence, paywalled start-chat, or invented member counts is aligned. *(“paywalled start-chat” as “Sisters never pay” superseded 2026-10-02: Farata-only-Premium-to-start stays rejected; Sister reach is admin-configurable.)*  
 - Addendum options matrices (age, mahram proof, blur, monetisation, homepage proof) correctly treat Farata as labeled evidence, not a recommendation.
 
 ## 8. Parent surface (for Finalize, before polish)
