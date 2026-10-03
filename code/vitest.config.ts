@@ -5,9 +5,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@ankanu/kernel': fileURLToPath(new URL('./packages/kernel/src/index.ts', import.meta.url)),
+      '@ankanu/ports': fileURLToPath(new URL('./packages/ports/src/index.ts', import.meta.url)),
     },
   },
   test: {
-    include: ['packages/*/src/**/*.test.ts'],
+    include: ['packages/*/src/**/*.test.ts', 'apps/api/src/**/*.test.ts'],
   },
 })

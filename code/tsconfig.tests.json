@@ -2,7 +2,9 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
-    "rootDir": "."
+    "rootDir": ".",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["packages/*/src/**/*.test.ts", "vitest.config.ts"]
+  "include": ["packages/*/src/**/*.test.ts", "apps/api/src/**/*.test.ts", "vitest.config.ts"]
 }

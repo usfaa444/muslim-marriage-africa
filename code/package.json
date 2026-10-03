@@ -6,13 +6,14 @@
     "node": "24.21.0"
   },
   "workspaces": [
+    "apps/*",
     "packages/*"
   ],
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p tsconfig.tests.json",
-    "build": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json",
-    "lint": "oxlint packages"
+    "typecheck": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json && tsc -p tsconfig.tests.json",
+    "build": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json",
+    "lint": "oxlint packages apps"
   },
   "devDependencies": {
     "@types/node": "24.19.1",
