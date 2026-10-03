@@ -14,7 +14,7 @@
 | 7 Sprint planning / implementation | **not started** (not started by the 2026-10-02 card/cap/grant amendment) | — |
 | Amendment 2026-10-02: sister reach mode (`sister_reach_mode`, FR-145, AD-27, story 4.7) | done | c9cfdde |
 | Amendment 2026-10-02: one card, message cap, mahram grants (FR-146, AD-28, AD-29, stories 3.13 / 5.11 / 7.8) | done | 8c784b6 |
-| Amendment 2026-10-03: entity catalog (SOLUTION-DESIGN.md §6, 53 stored entities) | done | pending |
+| Amendment 2026-10-03: entity catalog (SOLUTION-DESIGN.md §6, 53 stored entities) | done | 92bfbc0 |
 | Amendment 2026-10-01: passive AI moderation (PRD + architecture + brief updated in place; brainstorm/competitor/system-idea corrected) | done | e310bf3 |
 
 ## bmad-help answer after Phase 1 (2026-09-27 ~21:22 ET, model cursor-grok-4.6-high-fast)
@@ -133,7 +133,7 @@ Locked decision from Maitchibi Fayçal. MVP day one. `sister_reach_mode`: `free_
 
 bmad-help: update in place, in order, brief → PRD → UX → architecture → epics. `bmad-correct-course` does not apply (no sprint).
 
-BMAD updated those five artifacts. Brainstorm, competitor D20, and one architecture review note were hand-corrected because those files have no update workflow. Sprint planning and implementation were not started.
+BMAD updated those five artifacts. Brainstorm, competitor D20, and one architecture review note were hand-corrected because those files have no update workflow. Sprint planning and implementation were not started. Commit `92bfbc0`.
 
 ## Amendment 2026-10-02 — one card, message cap, mahram grants (ET)
 
