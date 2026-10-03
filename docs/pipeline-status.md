@@ -133,7 +133,7 @@ Locked decision from Maitchibi Fayçal. MVP day one. `sister_reach_mode`: `free_
 
 bmad-help: update in place, in order, brief → PRD → UX → architecture → epics. `bmad-correct-course` does not apply (no sprint).
 
-BMAD updated those five artifacts. Brainstorm, competitor D20, and one architecture review note were hand-corrected because those files have no update workflow. Sprint planning and implementation were not started. Commit `92bfbc0`.
+BMAD updated those five artifacts. Brainstorm, competitor D20, and one architecture review note were hand-corrected because those files have no update workflow. Sprint planning and implementation were not started.
 
 ## Amendment 2026-10-02 — one card, message cap, mahram grants (ET)
 
@@ -153,4 +153,4 @@ The sister-reach note above that says “chat-after-accept stay free” is super
 
 bmad-help: `bmad-architecture` update on the existing folder. `bmad-correct-course` does not apply. No new architecture folder.
 
-SOLUTION-DESIGN.md `## 6. Entity catalog` lists every stored entity with field, type, nullability, meaning, and relationships. Spine AD-3 stays ownership-only and points at that section. No kids/children profile column. Epics got one link to the catalog; stories were not rewritten. Sprint planning and implementation were not started.
+SOLUTION-DESIGN.md `## 6. Entity catalog` lists every stored entity with field, type, nullability, meaning, and relationships. Spine AD-3 stays ownership-only and points at that section. No kids/children profile column. Epics got one link to the catalog; stories were not rewritten. Sprint planning and implementation were not started. Commit `92bfbc0`.
