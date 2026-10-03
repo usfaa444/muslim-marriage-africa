@@ -1,772 +1,726 @@
-# AnKanu screen inventory (no Stitch)
+# AnKanu — screen inventory (no Stitch)
 
-Ticket: [ANK-7](/ANK/issues/ANK-7). Inventory only. **Do not call Google Stitch. Do not download HTML/PNG.** `DESIGN.md` is tokens only and does not add screens.
+Status: **awaiting founder approval**. No Google Stitch call. No HTML/PNG download. No invented screens.
 
-Screen names are the EXPERIENCE.md Information Architecture / Traceability names. UI elements are only those the brief, PRD functional requirements, or EXPERIENCE.md already state. French labels below are copied from EXPERIENCE.md Voice and Tone / State Patterns. Member bottom-nav French labels are `[ASSUMPTION]` in EXPERIENCE.md.
+This file is the design-gate inventory (ticket ANK-7). Layout files are not in this folder yet.
 
-Sources:
+## Sources (only)
 
-- `_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/brief.md`
-- `_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/prd.md` (FRs, not `epics.md`)
-- `_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md`
-
-Not sources for screens: `DESIGN.md`, `epics.md`, architecture, `mockups/` (EXPERIENCE.md: spines win on conflict). Architecture AD codes are cited only where EXPERIENCE.md already binds them to a surface.
-
-Modal stack is one level (EXPERIENCE.md IA). Three role shells, never mixed (Member / Mahram / Staff). UI language is French (FR-137). Time display `Africa/Ouagadougou`.
-
----
-
-## Gaps — stop, do not invent
-
-These are named in the brief or PRD but **have no EXPERIENCE.md IA / Traceability row**. This inventory does not invent layout, extra controls, or copy for them. Founder / [Awa](/ANK/agents/awa) must decide before Stitch.
-
-| Named in sources | What the sources actually say | Missing |
+| Source | Path | Role |
 |---|---|---|
-| Suspended-account screen | Brief P43; PRD FR-085: warning → Member sees warning and can continue under published limits; suspension → after auth, a suspended screen, Chat/Invite/browse disabled; Ban → access denied | No IA row. EXPERIENCE.md Appeal is “Reached from: Sanction notice”, but **Sanction notice** is also not an IA row. |
-| Public stats page | PRD FR-092: public periodic stats (Reports handled, SLA met rate, Bans, scan-deferred) with definitions. EXPERIENCE.md Operator metrics is **internal only**; Public landing only has the Verified-marriages counter | No public stats IA row. |
-| Pledge reaffirmation | FR-005: entertainment-seeking may require re-accept before further Invites | No surface. |
-| Staff home | Admin flag queue is “Reached from: Staff home” | No Staff home IA row. |
-| Kids / partner-with-kids as a Profile **field** | FR-024 / EXPERIENCE.md shared-trait examples include “kids / accepts a partner with kids” and forbid inventing Profile fields. FR-021 field list is: age/DOB, city/country, origin, marital status, education, profession, practice, intentions, description, Photos | Shared-trait display is named; a Profile-edit control for kids is **not** named in FR-021. Do not invent the field. |
-| Chat reactions control chrome | FR-050: reactions exist and are visible to the other Member. EXPERIENCE.md `chat-bubble` does not name a reaction control | Element required by PRD on Chat thread; no EXPERIENCE.md control spec. Do not invent chrome. |
-| Meeting confirm control chrome | FR-028: either Member or attached Mahram proposes **meeting**, other Member confirms; stage-chip values `invite` / `chat` / `meeting` / `married`. EXPERIENCE.md: meeting is a confirm, not the NEXT planner; no time/place/attendee fields | No named confirm dialog. Do not invent a planner. |
-| Ice Breaker template texts | FR-047: scholar-sensible deen/family templates, editable before send. EXPERIENCE.md: Ice Breaker templates on Invite compose | Templates themselves are not named. Do not invent wording. |
-| Operator refund surface | FR-109: Operator approves a refund; Member returns to Free; ticket records it | No Operator refund IA row. |
-| PWA install prompt | EXPERIENCE.md: optional; Play listing is the Burkina find path (FR-134) | Not a required shipping screen. |
+| Product brief | `_bmad-output/planning-artifacts/briefs/brief-muslim-marriage-africa-2026-09-27/brief.md` | Scope and named surfaces |
+| PRD | `_bmad-output/planning-artifacts/prds/prd-muslim-marriage-africa-2026-09-27/prd.md` | Every MVP FR, not epics one-liners |
+| EXPERIENCE.md | `_bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md` | Named screens, elements, empty/loading/error/success |
 
-Open questions EXPERIENCE.md forbids closing in UI: A1–A3; no first-wife notification surface; no hardcoded scholar names; show `operator_config` review hours, do not invent a second number; anonymous-mode surface absent; GIF picker absent; Free Money / MTN MoMo not on checkout.
+`DESIGN.md` is tokens only. It does not add screens. Local UX mock HTML under `_bmad-output/.../mockups/` is not Stitch and is not copied here.
+
+Screen names below are the EXPERIENCE.md IA / traceability names unless marked **PRD-named, IA omitted**.
+
+## Rules applied
+
+- **Stitch is source** — not this heartbeat. HTML/PNG are out of scope until founder approval.
+- **No invented screens** — if brief / PRD / EXPERIENCE.md do not name it, it is not listed as shipping.
+- **Tokens only from DESIGN.md** — no restyle license; tokens unused here.
+- **Honorable ta'aruf** — no dating-app chrome the documents reject (`dating` / `rencontre romantique`, « en ligne », invented scale, public likes, heart stack).
+- **Accessibility as written** — EXPERIENCE.md Accessibility Floor only. Not a parallel spec.
+- **Ethics** — no roach motel, confirmshaming, sneak-into-basket, bait-and-switch. Quiet decline. No silent auto-renew. Safety never paywalled.
+
+## Shared chrome (named)
+
+| Shell | Who | Chrome the sources name |
+|---|---|---|
+| Public | Visitor | Footer to Legal hub / FAQ. Cookie consent on first hit. No member bottom nav. |
+| Member | Sister / Brother | Bottom nav: **Découvrir · Invitations · Discussions · Profil**. Phone-first. Modal stack: one level. |
+| Mahram | Read-only guardian | Phone-first. **No Découvrir. No Invitations. No Invite.** No compose. |
+| Staff | Moderator / Operator | `{components.staff-only-badge}` on every staff surface. Two-pane from 768px; stacked below. Members never see this chrome. |
+
+French-first on every primary screen (FR-137). Time: `Africa/Ouagadougou`. Invite quotas and Free message cap reset on that civil day.
+
+**Banned on every surface:** pending-moderation / held / scan-wait Chat states; GIF picker; Apple sign-in; brother-free mode; first-wife notification; who-favourited-me; member visitors; online-now; invented DAU; testimonials carousel (NEXT).
+
+**Audio (Mooré / Dioula) only where named:** onboarding, photo rules, no-auto-renew, Mahram invite explainers. 2G audio fail → pictograms remain.
 
 ---
 
-## Chrome shared by Member screens (not a screen)
+## Out of MVP — do not design as shipping
 
-- Bottom nav: **Découvrir · Invitations · Discussions · Profil** (`[ASSUMPTION]` labels). Mahram has no Découvrir and no Invitations. Staff has no member nav.
-- Bell / OS notifications entry (Notifications surface).
-- `{components.card-grid-toggle}` on every people-list (Discover, Search).
-- `{components.error-banner}` on any surface: AD-7 `error.code` mapped to French. `PAY_UNAVAILABLE` does not disable Chat, Report, Blur, Mahram, Verification, or Block.
-- `{components.empty-state}` on lists: one sentence + one action. Zero results never invent Profiles.
-- Banned on every Member surface: story rings, live 1:1 A/V, GIF picker, member visitors, « en ligne » / online-now, invented scale, public likes counter, heart stack, operator-as-member session, *dating* / *rencontre romantique*, pending-moderation / held / scan-wait Chat, brother-free mode, CSS blur of originals.
+From EXPERIENCE.md “NEXT — out of MVP” and PRD NEXT/LATER FRs. Named so they are not invented later as MVP:
+
+Mahram dashboard (multi-ward + digest); meeting planner (time/place/attendees — MVP has stage **meeting** only); native iOS + Apple sign-in; advanced paid filters; who favourited me; visitors list; online-now; anonymous mode; boosts; Premium badge as identity; GIF/sticker picker; USSD; anti-leak watermark/screenshot-notice; AI coach; blog; promo video; testimonials carousel; remaining SEO locales; language filters; quiet hours; Istikhara companion; Mahr conversation card; mosque attestation; alumni mentorship; English/Arabic UI; live 1:1 A/V.
 
 ---
 
-## Public
+## 1. Public
 
 ### Public landing
 
-Reached from: cold URL / store. FR-101, FR-117.
-
-- Honorable ta'aruf pitch. No dating lexicon.
-- Verified-marriages counter. Launch copy **« Mariages confirmés : 0 »**. Counter only increments on dual-confirm (FR-101).
-- No invented DAU / member counts.
-- Entry to Public pricing, Académie, Advisory Board, Showcase, Legal hub / FAQ via footer as IA “Reached from” states.
-- SEO URLs for Ouagadougou, Bobo-Dioulasso, Burkina Faso return local reviewed copy (FR-117). No Senegal clone. Testimonials carousel is NEXT (FR-102) — **absent**.
-
-States: inherit empty-state + error-banner. Counter 0 is valid success at launch.
+- **From:** cold URL / store
+- **Implements:** FR-101, FR-117, AD-25
+- **Elements:** honorable ta'aruf pitch (*mariage / ta'aruf / nikah / khitba* only); Verified-marriages counter copy **« Mariages confirmés : 0 »** until dual-confirm; entry to signup / pricing / Académie / Board / showcase as linked from this spine; no invented DAU
+- **Empty:** counter at 0 is valid
+- **Loading / Error:** inherit `empty-state` + `error-banner`
+- **Success:** visitor can continue to Auth or content
 
 ### Legal hub
 
-Reached from: footer. FR-109, FR-119, FR-120.
-
-- Mentions, CGV, cookies, privacy.
-- Hosting / CIL line Operators cannot hide (FR-120). Hosting location string always present.
-- CGV refund rules match the pricing-page summary (FR-109).
-- Cookie accept never implies likeness / Profile Photo campaign reuse (FR-119, FR-060).
-
-States: inherit empty-state + error-banner.
+- **From:** footer
+- **Implements:** FR-109, FR-119, FR-120, AD-5, AD-19
+- **Elements:** Mentions; CGV / refunds (must match pricing summary); cookies; privacy with hosting/CIL line Operators cannot hide
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
+- **Note:** EXPERIENCE.md names one hub, not four separate layouts. Do not invent extra chrome per document.
 
 ### Public pricing
 
-Reached from: landing / settings. FR-044, FR-045, FR-105, FR-106, FR-108, FR-145, FR-146.
-
-- Packs **1 / 3 / 6** months, XOF (FCFA symbol allowed). Launch vs normal price both shown when a launch price exists.
-- Rails named: Orange / Moov / Wave (FR-107; cards secondary). Free Money / MTN MoMo **absent**.
-- Audio on the no-auto-renew line. Copy **« Pas de renouvellement automatique. »** No renew toggle.
-- Free + safety stay described. Safety never paywalled.
-- Brother / Sister in `same_quota_as_brothers`: same pack list and same Free Invite cap as checkout. Premium = unlimited Invites and unlimited messages.
-- Sister in `free_unlimited`: **« Invitations illimitées. »** No reach-pack required. Pack still listed for unlimited messages (FR-146).
-- No brother-free mode. No locked `daily_message_cap` number in copy.
-
-States: pack list loading; copy/rail error does not hide Free or safety; prices match checkout on success.
+- **From:** landing / settings
+- **Implements:** FR-044, FR-045, FR-105, FR-106, FR-108, FR-145, FR-146, AD-14
+- **Elements:** `{components.pack-card}` 1 / 3 / 6 month in XOF; Free tier described; launch price and normal price both shown when a launch price exists (FR-108); **« Pas de renouvellement automatique. »** + `{components.audio-prompt}` on that line; safety stays free; rails Orange Money BF / Moov Africa BF / Wave/Coris (cards secondary). **Brother / Sister `same_quota_as_brothers`:** same pack list and Free Invite cap as checkout. **Sister `free_unlimited`:** « Invitations illimitées. »; pack listed for unlimited messages, not required for Invite reach. No brother-free pack.
+- **Empty:** pack list from `/v1/packs` (Brother and Sister `same_quota_as_brothers`); unlimited Invite copy + message pack (Sister `free_unlimited`)
+- **Loading:** page load
+- **Error:** copy/rail error does not hide Free or safety (`PAY_UNAVAILABLE` does not disable Chat, Report, Blur, Mahram, Verification, Block)
+- **Success:** prices match checkout
 
 ### Académie list + article
 
-Reached from: landing / help. FR-115.
-
-- Five scholar-reviewed articles. Topics named in PRD: Mahram, mahr, rights, haya, honesty.
-- Reviewer name from Advisory Board or recorded delegate.
-- Lexicon: *mariage / ta'aruf / nikah / khitba* only.
-- Full library NEXT (FR-121) — do not design extra catalog chrome as shipping.
-
-States: inherit empty-state + error-banner. Operator publish error: missing scholar review.
+- **From:** landing / help
+- **Implements:** FR-115, AD-24
+- **Elements:** five scholar-reviewed articles named and marked reviewed; reviewer name; article body; *mariage / ta'aruf / nikah / khitba* only. Unpublished draft → 404 (FR-141).
+- **Empty:** fewer than five articles is unmet (Operator publish). Inherit `empty-state` + `error-banner` on the public list.
+- **Loading / Error:** inherit `empty-state` + `error-banner`
+- **Note:** EXPERIENCE.md names list + article as one surface. Do not invent a third Académie chrome.
 
 ### Advisory Board
 
-Reached from: landing / help. FR-116.
-
-- Named scholars. Fiqh-edge is human, not a bot.
-- At least two named people with roles at launch (PRD). Do not ship a fictional board. Do not hardcode names in chrome (EXPERIENCE.md open question 4).
-
-States: inherit empty-state + error-banner.
+- **From:** landing / help
+- **Implements:** FR-116, AD-22
+- **Elements:** named scholars with roles (at least two at launch); fiqh-edge is human, not a bot. **Do not hardcode scholar names** (open question 4).
+- **Empty:** no names → FR unmet; do not ship a fictional board
+- **Loading / Error:** inherit `empty-state` + `error-banner`
 
 ### FAQ + contact
 
-Reached from: footer. FR-118.
-
-- FAQ.
-- Ticketed contact form. Subject triage including misuse (routes to Moderators). Ticket id returned. Not Gmail-only.
-
-States: inherit empty-state + error-banner.
+- **From:** footer
+- **Implements:** FR-118
+- **Elements:** FAQ; ticketed contact form (not Gmail-only); subject triage including misuse; ticket id returned on submit
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
 ### Showcase
 
-Reached from: landing. FR-099, FR-100.
-
-- Consent stories only. Empty is valid. Faces optional / may be blurred. No Chat excerpts.
-- Either spouse can refuse public; then this page stays empty of their faces even if the marriage counter incremented.
-
-States: empty valid; inherit error-banner.
+- **From:** landing
+- **Implements:** FR-099, FR-100, AD-25
+- **Elements:** consent stories only; faces optional; no Chat excerpts; empty is valid and points at the counter at 0, not invented quotes
+- **Empty:** no stories — counter at 0, no fake quotes
+- **Loading / Error:** inherit `empty-state` + `error-banner`
 
 ### Cookie consent
 
-Reached from: first public hit. FR-119. Dialog / banner. Modal stack one level.
+- **From:** first public hit
+- **Implements:** FR-119, AD-9
+- **Elements:** accept; manage; cookies ≠ likeness grant (accept never implies Profile Photo campaign rights)
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
-- Accept control.
-- Manage control.
-- Cookies ≠ likeness grant.
+### SEO pages — Ouagadougou, Bobo-Dioulasso, Burkina Faso *(PRD-named, IA omitted)*
 
-States: inherit empty-state + error-banner.
+- **From:** URLs (FR-117)
+- **Implements:** FR-117
+- **Elements the PRD states:** HTTP 200; local imam-reviewed copy; no dating / *rencontre romantique* lexicon
+- **Unspecified — do not invent:** layout, nav, hero, CTAs beyond what Public landing already names. See Gaps.
 
 ---
 
-## Identity and onboarding
+## 2. Identity and onboarding
 
 ### Splash
 
-Reached from: app open. FR-132–FR-134.
-
-- Brand field. Product name **AnKanu** (ankanu.com).
-- Continue.
-
-States: loading skeleton on splash ≤2s; error `UNAUTHENTICATED` / captcha fail named; success → age gate or home.
+- **From:** app open
+- **Implements:** FR-132, FR-133, FR-134, AD-4
+- **Elements:** brand field; continue; product name **AnKanu** (ankanu.com)
+- **Empty:** —
+- **Loading:** skeleton on splash ≤2s
+- **Error:** `UNAUTHENTICATED` / captcha fail named
+- **Success:** session cookie or Bearer; next is age gate or home
 
 ### Auth (signup / login)
 
-Reached from: Splash. FR-001, FR-003, FR-005, FR-007.
-
-- Email, password, unique pseudonym, gender (Sister / Brother). Gender immutable after first set without operator+audit (`{components.field}`).
-- Google sign-in **additional**, not the only path. Apple sign-in NEXT — **absent**.
-- Captcha / bot check. Non-color fail state (Accessibility Floor).
-- Sincerity pledge: commit before Allah to seek marriage; accepts Code of conduct and privacy; copy names honesty about existing marriage (FR-005, FR-089). EXPERIENCE.md mock note: pledge + 19+ note.
-- Taken email / pseudonym: conflicting field named (FR-001). Primary disabled until required fields valid.
-- Remember-me (FR-008) is a control on this flow; it is not a separate screen.
-
-States: skeleton on splash path; captcha fail named; session cookie or Bearer on success.
+- **From:** Splash
+- **Implements:** FR-001, FR-003, FR-005, FR-007, AD-8
+- **Elements:** `{components.field}` email; password; unique pseudonym; gender Sister / Brother (immutable after first set without operator+audit); Google additional (not the only path); captcha; sincerity pledge naming honesty about existing marriage + Code of conduct + privacy; 19+ note; remember-me (FR-008); `{components.button-primary}` disabled until required fields valid. No Apple control on MVP.
+- **Empty:** —
+- **Loading:** skeleton on splash path ≤2s
+- **Error:** taken email/pseudonym names the field; captcha fail named; `UNAUTHENTICATED`
+- **Success:** account exists, **not** publicly visible until FR-012 and FR-014
 
 ### Age gate
 
-Reached from: Auth. FR-011, FR-091.
-
-- DOB field. Primary disabled while DOB blank.
-- Under 19: account rejected/held, never listed. Copy does **not** claim statute (A1 open).
-- Suspected-minor hold is FR-091, not a Chat state.
-
-States: empty = DOB blank, primary disabled; under 19 error; adult continues to OTP.
+- **From:** Auth
+- **Implements:** FR-011, FR-091, AD-8
+- **Elements:** `{components.age-gate}` DOB; primary disabled while blank; copy does not claim statute (A1 legal review open)
+- **Empty:** DOB blank, primary disabled
+- **Loading:** —
+- **Error:** under 19 — account rejected/held, never listed
+- **Success:** adult continues to OTP
 
 ### Email verification
 
-Reached from: Auth. FR-006.
-
-- Expiring link.
-- Resend.
-
-States: waiting for link; resend in flight; expired link → request new; success = email marked verified.
+- **From:** Auth
+- **Implements:** FR-006
+- **Elements:** waiting-for-link state; resend
+- **Empty:** waiting for link
+- **Loading:** resend in flight
+- **Error:** expired link — request new
+- **Success:** email marked verified
 
 ### Password reset
 
-Reached from: Auth. FR-008.
-
-- Request form.
-- Single-use expiring link.
-- New password; old sessions dead except the new one.
-
-States: request form; link sending; expired / unknown email per published rule; success = new password.
+- **From:** Auth
+- **Implements:** FR-008
+- **Elements:** request form; single-use expiring link; new password
+- **Empty:** request form
+- **Loading:** link sending
+- **Error:** expired / unknown email per published rule
+- **Success:** new password; old sessions dead
 
 ### OTP
 
-Reached from: after account. FR-002.
-
-- `{components.otp-input}` boxes.
-- Resend with published cooldown.
-- Wrong code does not leak whether the number exists beyond the published rule.
-
-States: boxes empty; « Code envoyé »; wrong/expired: retry + cooldown; success = phone level granted. Public visibility still blocked until OTP (FR-002).
+- **From:** after account
+- **Implements:** FR-002, AD-13
+- **Elements:** `{components.otp-input}`; resend cooldown published; phone OTP before public visibility
+- **Empty:** boxes empty
+- **Loading:** « Code envoyé »
+- **Error:** wrong/expired — retry + cooldown; does not leak whether the number exists beyond the published rule
+- **Success:** phone level granted
 
 ### ID + liveness
 
-Reached from: after OTP. FR-014, FR-015, FR-105.
-
-- Free. Not Premium. Failure = retake, not paywall.
-- ID document + liveness selfie. Liveness must match Profile Photos.
-- `{components.liveness-capture}`. Pictogram. Non-color fail state.
-- Paid-faster-review does not skip Verification.
-
-States: camera idle + pictogram; capture upload; mismatch / fail: retake, not pay; success = ID level pending human review.
+- **From:** after OTP
+- **Implements:** FR-014, FR-015, FR-105, AD-13
+- **Elements:** `{components.liveness-capture}` free (not Premium); ID document; must match Profile Photos; retake on fail, not paywall
+- **Empty:** camera idle + pictogram
+- **Loading:** capture upload
+- **Error:** mismatch / fail — retake, not pay
+- **Success:** ID level pending human review
 
 ### Onboarding
 
-Reached from: after verification. FR-009, FR-010, FR-137, FR-138.
-
-- Split **minimum-to-browse** vs **complete-to-send-Invite**.
-- `{components.completeness-meter}` names missing Islamic criteria. Completeness copy **« Il manque : madhhab »** pattern — no « Votre profil est faible ».
-- `{components.audio-prompt}` Mooré or Dioula on hard steps. 2G audio fail → pictograms remain.
-- Browse-only CTA when minimum path. Invite send blocked until complete (FR-009).
-- Completable via pictogram + audio without a paragraph (FR-070, FR-010).
-
-States: minimum path browse-only CTA; audio buffering (step still usable); 2G audio fail: pictograms; browse unlocked after visibility gates; Invite only if complete.
+- **From:** after verification
+- **Implements:** FR-009, FR-010, FR-137, FR-138, AD-24
+- **Elements:** split **minimum-to-browse** vs **complete-to-send-Invite**; `{components.completeness-meter}`; `{components.audio-prompt}` on hard steps; pictogram path if audio fails
+- **Empty:** minimum path — browse-only CTA
+- **Loading:** audio buffering (step still usable)
+- **Error:** 2G audio fail — pictograms
+- **Success:** browse unlocked after visibility gates; Invite only if complete
 
 ### Photo rules
 
-Reached from: onboarding / upload. FR-070, FR-010.
-
-- Pictogram + Mooré/Dioula audio. No paragraph required.
-- Rejection reasons later map to these published rules (FR-012).
-
-States: inherit empty-state + error-banner.
+- **From:** onboarding / upload
+- **Implements:** FR-070, FR-010, AD-24
+- **Elements:** pictograms + French text + Mooré/Dioula audio; completable without a paragraph; modest / recent / real / no third parties
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
 ### PIN lock
 
-Reached from: background >60s `[ASSUMPTION]`. FR-020, NFR-001. Overlay, not a Member tab.
-
-- PIN entry. Shared-phone lock. Member and Mahram.
-- 5 fails → re-auth with password or OTP.
-- Idle 15 min on Sister/Mahram PIN sessions `[ASSUMPTION]`.
-- Long-press reserved for system text selection.
-
-States: inherit empty-state + error-banner. 5-fail deactivates live on Profile edit / PIN lock (EXPERIENCE.md State Patterns closer).
+- **From:** background >60s `[ASSUMPTION]`
+- **Implements:** FR-020, NFR-001, AD-8
+- **Elements:** `{components.pin-lock}`; 5 fails → re-auth; idle 15 min on Sister/Mahram PIN sessions `[ASSUMPTION]`
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`. PIN 5-fail lives here and on Profile edit.
 
 ---
 
-## Member core
+## 3. Member core
 
 ### Profile edit
 
-Reached from: Profil tab. FR-017, FR-018, FR-021–FR-023.
-
-- Fields named in FR-021: age/DOB, city/country, origin, marital status, education, profession, practice, intentions, description, Photos.
-- Islamic criteria (FR-022): madhhab, practice level, intentions. Confrérie / hijra NEXT — **absent**.
-- `{components.completeness-meter}` names missing fields. No shaming copy.
-- Life-pauses deactivate / reactivate (FR-018): Ramadan, exams, travel, grief, plus free text. One-tap reactivate. Existing Chats show a pause state when deactivated.
-- New Photo/bio unpublished until review (hands off to Profile not-yet-public).
-- Gender not editable here without operator+audit.
-
-States: completeness lists missing fields; save spinner on primary; validation names field; saved. New Photo/bio → not-yet-public.
+- **From:** Profil tab
+- **Implements:** FR-017, FR-018, FR-021, FR-022, FR-023, AD-26
+- **Elements:** fields age/DOB, city/country, origin, marital status (`single` / `married` / `divorced` / `widowed`), education, profession, practice, intentions, description, Photos; Islamic criteria madhhab / practice / intentions (confrérie + hijra absent — NEXT); `{components.completeness-meter}` names missing criteria (« Il manque : madhhab » — never « Votre profil est faible »); Brother `married` must set polygamy intent `no` / `yes`; life-pauses deactivate: Ramadan, exams, travel, grief + free text; one-tap reactivate; Photo changes re-moderated. Shared-trait example “kids / accepts a partner with kids” is display-only if already on both Profiles — FR-021 does not name a kids field. Do not invent it (G16).
+- **Empty:** completeness lists missing fields
+- **Loading:** save spinner on primary
+- **Error:** validation names the field
+- **Success:** saved. New Photo/bio → **not-yet-public**
 
 ### Profile not-yet-public
 
-Reached from: Profile edit / upload. FR-012, FR-065. **Not a Chat state.**
-
-- Copy **« Photo en revue — pas encore publique. »** / « En revue ».
-- Not a hold inbox. Not “en vérification” as Chat.
-
-States: no pending asset; « En revue »; rejected with published photo-rule reason; approved asset replaces live; old stays until then.
+- **From:** Profile edit / upload
+- **Implements:** FR-012, FR-065, AD-10
+- **Elements:** « Photo en revue — pas encore publique. » Not a Chat state.
+- **Empty:** no pending asset
+- **Loading:** « En revue »
+- **Error:** rejected with published photo-rule reason
+- **Success:** approved asset replaces live; old stays until then
 
 ### Discover
 
-Reached from: Découvrir. FR-024, FR-025, FR-136, FR-146.
-
-- Default: `{components.focused-card}` — one Profile.
-- Under the photo: `{components.shared-trait}` only (open to polygamy, same town, kids / accepts a partner with kids, other shared Profile fields already in the PRD). Omit when none. Do not invent fields.
-- Tap → Profile detail.
-- **Passer** = dismiss this card (not a like). No public likes counter. No heart stack.
-- Swipe or button to Invite. Quick message. Those obey Invite quota (FR-044 / FR-045) and FR-146.
-- `{components.card-grid-toggle}` on this screen. Optional `{components.discovery-card}` grid. Lite: small image, text first. EXPERIENCE.md: default is the single card (spine wins over grid-only mock).
-- Favourite is private (FR-026).
-- Empty: **« Aucun profil pour ces filtres. »**
-
-States: empty copy above; loading text + lite-placeholder first (≤8s NFR-005), small image deferred; browse error, retry, no invented cards; success = one focused card + toggle.
+- **From:** Découvrir
+- **Implements:** FR-024, FR-025, FR-136, FR-146, AD-16
+- **Elements:** `{components.focused-card}` default (one Profile); `{components.blur-photo}`; `{components.shared-trait}` under photo only if in common (open to polygamy, same town, kids / accepts a partner with kids, other shared Profile fields already in the PRD — omit when none); tap → Profile detail; **Passer** = dismiss (not a like); swipe or `{components.button-primary}` Invite; quick message; quotas FR-044/FR-045 and FR-146; `{components.card-grid-toggle}`; optional `{components.discovery-card}` grid; Lite: small image, text first; private favourite control. No public likes. No heart stack. No « en ligne ».
+- **Empty:** « Aucun profil pour ces filtres. »
+- **Loading:** text + `{components.lite-placeholder}` first (≤8s); small image deferred
+- **Error:** browse error, retry; no invented cards
+- **Success:** one focused card; toggle present
 
 ### Search
 
-Reached from: Discover / filters. Same FRs as Discover.
-
-- Same card/grid toggle. A many-filter search may open on the grid; the single-card toggle remains.
-- Basic filters only. FR-030 advanced filters **absent**.
-- Lite: small image, text first.
-
-States: same empty / loading / error / success as Discover. FR-030 controls absent.
+- **From:** Discover / filters
+- **Implements:** FR-024, FR-025, FR-136, FR-146, AD-16
+- **Elements:** same card/grid toggle as Discover; many-filter search may open on the grid; single-card toggle remains; FR-030 controls **absent**
+- **Empty / Loading / Error / Success:** same as Discover
 
 ### Filters
 
-Reached from: Discover / Search. FR-024.
-
-- City, marital, practice, life plans, distance **10 / 25 / 50 / city** `[ASSUMPTION]`.
-- Life plans example in PRD: `ready_now`.
-- FR-030 stays NEXT — those controls absent.
-- Zero results → empty state, no invented Profiles.
-
-States: inherit empty-state + error-banner.
+- **From:** Discover / Search
+- **Implements:** FR-024
+- **Elements:** city; marital; practice; life plans (`ready_now` / `within_year` / `exploring`); distance 10 / 25 / 50 / city `[ASSUMPTION]`. No advanced paid filters.
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
 ### Profile detail
 
-Reached from: focused card / grid / favourite / invite. FR-015, FR-016, FR-056.
-
-- Opposite-gender blur default (`{components.blur-photo}`). Server `blur` derivative. Never CSS-blur `original`.
-- Verification levels: phone / ID / Verified-Mahram. No Premium “looks verified” badge (FR-015). Premium badge NEXT (FR-112) — **absent**.
-- Marital status + polygamy intent visible before accept when reached from Invite (FR-037) — also required on Invite inbox.
-- Report / Block.
-- Reveal / Revoke controls as the Blur / Reveal / Revoke surface.
-- Missing optional fields omitted (not placeholder fiction).
-
-States: missing optional omitted; blur thumb first; `REVEAL_DENIED` if clear requested without grant; success = criteria + blur or granted clear.
+- **From:** focused card / grid / favourite / invite
+- **Implements:** FR-015, FR-016, FR-056, AD-9
+- **Elements:** `{components.blur-photo}` opposite-gender default; verification levels phone / ID / Verified-Mahram (Premium must not look like identity Verification); marital status + polygamy intent; Report / Block; Reveal/Revoke controls when owner or granted
+- **Empty:** missing optional fields omitted
+- **Loading:** blur thumb first
+- **Error:** `REVEAL_DENIED` if clear requested without grant
+- **Success:** criteria + blur or granted clear
 
 ### Blur / Reveal / Revoke
 
-Reached from: Profile detail / Chat. FR-056–FR-059.
-
-- Per-viewer policies: `on_accept` / `on_request` / `never`.
-- `{components.reveal-control}`: 44px, role+pressed/disabled. Caption + pictogram required. Color is not the only Reveal signal.
-- Request cap 1 pending per pair `[ASSUMPTION]`.
-- Revoke ≤60s. Paid perk cannot grant Reveal.
-- Owner (Sister or Brother) can choose the same three policies (FR-057).
-- A11y: « Visible pour [pseudonym] » / « Flou rétabli ».
-
-States: never-policy still blur; Reveal request pending (1 max); Revoke network fail: keep trying; grant/revoke reflected ≤60s.
+- **From:** Profile detail / Chat
+- **Implements:** FR-056, FR-057, FR-058, FR-059, AD-9
+- **Elements:** `{components.reveal-control}` 44px, role+pressed/disabled; per-viewer `on_accept` / `on_request` / `never`; request cap 1 pending per pair `[ASSUMPTION]`; Revoke ≤60s; caption + pictogram (color is not the only signal); paid perk cannot grant Reveal. Brother can choose the same three policies.
+- **Empty:** never-policy: still blur
+- **Loading:** Reveal request pending (1 max)
+- **Error:** Revoke network fail — keep trying; gateway denylist is source of truth
+- **Success:** grant/revoke reflected ≤60s
+- **Announce:** « Visible pour [pseudonym] » / « Flou rétabli »
 
 ### Favourites
 
-Reached from: Discovery / Profil. FR-026.
-
-- Private list only. No “who favourited me”.
-
-States: **« Aucun favori. »** + Découvrir; list skeleton; save fail, retry; private row only.
+- **From:** Discovery / Profil
+- **Implements:** FR-026
+- **Elements:** private list only. No “who favourited me”.
+- **Empty:** « Aucun favori. » + Découvrir
+- **Loading:** list skeleton
+- **Error:** save fail, retry
+- **Success:** private row only
 
 ### Invite compose + Message Flash
 
-Reached from: Profile detail / focused-card Invite or quick message. FR-038, FR-044–FR-047, FR-105, FR-145, FR-146.
-
-- `{components.flash-composer}` visible before accept. Phone / WhatsApp / links refused (contact-share rule).
-- Ice Breaker templates (deen/family). Editable before send. No AI-personalised Ice Breakers (FR-049 NEXT).
-- Photo required to contact; block with prompt to add a Photo if none (FR-016).
-- Brother: remaining Free Invites **3** `[ASSUMPTION]`; Premium = unlimited Invites. Never a free-unlimited Invite state.
-- Sister `free_unlimited`: **« Invitations illimitées. »** No Invite remaining-count. No reach-pack CTA.
-- Sister `same_quota_as_brothers`: same remaining Free Invites **3** as Brothers.
-- Free message remaining shows the **current admin** `daily_message_cap` (no locked number).
-- Mahram banner to Brother from first Flash **only if this thread is granted** (FR-079): **« Un wali lit cette discussion. »**
-
-States: Flash empty, Ice Breaker optional; send in flight; `QUOTA_EXCEEDED` with Ouaga-day reset; `MESSAGE_CAP_EXCEEDED` → Message quota wall (refused, not held); `CONTACT_SHARE_REQUIRED`; success = Invite on recipient list; Flash already visible if under FR-146. Quiet decline: no resend (FR-043).
+- **From:** Profile detail / focused-card Invite or quick message
+- **Implements:** FR-038, FR-044, FR-045, FR-046, FR-047, FR-105, FR-145, FR-146, AD-23
+- **Elements:** `{components.flash-composer}` (visible before accept); Ice Breaker deen/family templates (not AI-personalised); phone/WhatsApp/links refused; `{components.mahram-banner}` to Brother from first Flash **only if this thread is granted**. Photo required to send Invite — block with prompt to add a Photo (FR-016). **Brother:** remaining Free Invites **3** `[ASSUMPTION]`; Premium = unlimited Invites; never a free-unlimited Invite state. **Sister `free_unlimited`:** « Invitations illimitées. »; no Invite remaining-count; no reach-pack CTA. **Sister `same_quota_as_brothers`:** same remaining **3** as Brothers. Free message remaining shows current admin `daily_message_cap` (no locked number).
+- **Empty:** Flash empty; Ice Breaker optional; remaining copy as above
+- **Loading:** send in flight
+- **Error:** `QUOTA_EXCEEDED` with Ouaga-day reset (Brother and Sister `same_quota_as_brothers` only); `MESSAGE_CAP_EXCEEDED` → Message quota wall (refused, not held); `CONTACT_SHARE_REQUIRED`. Sister `free_unlimited` never Invite `QUOTA_EXCEEDED` and never a reach-pack offer.
+- **Success:** Invite on recipient list; Flash already visible if under FR-146
 
 ### Sister invite quota wall
 
-Reached from: Invite compose when `same_quota_as_brothers` and Free Invite cap is hit. FR-044, FR-045, FR-105, FR-145.
-
-- Remaining Invites 0. Ouaga-day reset time.
-- `{components.pack-card}` CTA matching Brother checkout. Not rendered in `free_unlimited` for Invite reach.
-- Safety stays free.
-
-States: entitlement fetch; `PAY_UNAVAILABLE`: cannot buy; Invite send stays blocked until reset; Chat, Verification, Blur, Mahram, Report, Block stay usable; CTA opens Payment pack.
+- **From:** Invite compose when `same_quota_as_brothers` and Free Invite cap is hit
+- **Implements:** FR-044, FR-045, FR-105, FR-145, AD-14, AD-23
+- **Elements:** remaining Invites 0; Ouaga-day reset time; `{components.pack-card}` CTA matching Brother checkout. **Not shown** in `free_unlimited` for Invite reach. Safety stays free.
+- **Empty:** remaining 0 + reset + pack CTA
+- **Loading:** entitlement fetch
+- **Error:** `PAY_UNAVAILABLE` — cannot buy; Invite send stays blocked until reset; Chat, Verification, Blur, Mahram, Report, Block stay usable
+- **Success:** CTA opens Payment pack; after purchase: unlimited Invites and unlimited messages
 
 ### Message quota wall
 
-Reached from: Chat / Flash / card quick message when Free Member hits `daily_message_cap`. FR-146, FR-105, FR-044.
-
-- Both genders, including a Free Sister in `free_unlimited`.
-- Remaining messages 0. Current admin cap shown (no locked number). Ouaga-day reset.
-- Copy **« Envoi refusé. Quota du jour atteint. »** + pack. Over-cap is refused, not held for scan.
-- Premium never sees this wall.
-
-States: entitlement fetch; `PAY_UNAVAILABLE`: cannot buy; over-cap stays refused; safety stays usable; CTA opens Payment pack.
+- **From:** Chat / Flash / card quick message when a Free Member hits `daily_message_cap`
+- **Implements:** FR-146, FR-105, FR-044
+- **Elements:** remaining messages 0; current admin `daily_message_cap` shown (no locked number); Ouaga-day reset; `{components.pack-card}` CTA; copy **« Envoi refusé. Quota du jour atteint. »** + pack. Both genders, including Free Sister in `free_unlimited`. Premium never sees this wall.
+- **Empty:** remaining 0 + cap + reset + pack
+- **Loading:** entitlement fetch
+- **Error:** `PAY_UNAVAILABLE` — cannot buy; over-cap send stays refused, not held; safety stays usable
+- **Success:** CTA opens Payment pack; after purchase: unlimited messages and unlimited Invites
 
 ### Invite inbox
 
-Reached from: Invitations tab. FR-037, FR-039, FR-040, FR-042.
-
-- Sent / received / accepted.
-- `{components.invite-row}`: marital status + polygamy intent **required visible before accept**.
-- Accept opens Chat.
-- Quiet decline: `{components.button-quiet}` **« Refuser discrètement »**. No read receipt to the Brother. No resend.
-- Stage **invite** on pending Invite (FR-028).
-
-States: **« Aucune invitation. »**; list skeleton; accept fail if other married/Banned; accept → Chat; decline → declined without lecture.
+- **From:** Invitations tab
+- **Implements:** FR-037, FR-039, FR-040, FR-042, AD-26
+- **Elements:** lists Sent / Received / Accepted; `{components.invite-row}` with marital status + polygamy intent **before** accept; accept; `{components.button-quiet}` **« Refuser discrètement »** (no guilt timer, no « Elle a vu », no lecture); no resend after refuse; declined does not name guilt copy
+- **Empty:** « Aucune invitation. »
+- **Loading:** list skeleton
+- **Error:** accept fail if other married/Banned
+- **Success:** accept → Chat; decline → declined without lecture
 
 ### Discussions list
 
-Reached from: Discussions tab. FR-041, FR-050.
-
-- Open Chats after Sister consent. Not a hold inbox. No hold badge.
-
-States: **« Aucune discussion. »**; list skeleton; fetch fail, retry; row opens Chat; unread increment.
+- **From:** Discussions tab
+- **Implements:** FR-041, FR-050, AD-15
+- **Elements:** open Chats after Sister consent; unread increment; **no hold badge**
+- **Empty:** « Aucune discussion. »
+- **Loading:** list skeleton
+- **Error:** fetch fail, retry
+- **Success:** row opens Chat
 
 ### Chat thread
 
-Reached from: Accept / Discussions list. FR-041, FR-050, FR-051, FR-062–FR-064, FR-146.
-
-- Text, Photo (gallery/camera), Voice. Immediate delivery when send is allowed.
-- `{components.stage-chip}`: `invite` / `chat` / `meeting` / `married`. Meeting is a confirm, not the NEXT planner.
-- `{components.chat-bubble}`: persist `delivered` immediately. Time-only meta. **Banned states:** pending-moderation, held, scan-wait. Copy **« Votre message est arrivé. »** Send announces « Message envoyé » — never « en vérification » and never the word « scan ».
-- `{components.voice-note}`: play as soon as stored. No member-facing transcript.
-- `{components.mahram-banner}` if this thread is granted.
-- Typing indicator (FR-050, ≤2s). Reactions exist per FR-050 (control chrome **gap** — do not invent).
-- Lite: chat media waits for **connection**, not AI. Text outbox offline.
-- Contact-share blocks phone, WhatsApp, links until both opt in.
-- Report / Block. Marriage dual-confirm entry. Reveal / Revoke.
-- Free-tier sends obey FR-146; over-cap → Message quota wall.
-- GIF picker **absent**.
-
-States: new Chat stage **chat**, no scan banner; thread open ≤4s; typing ≤2s; send fail = connection; over-cap = quota wall; **never** “held for scan”; allowed bubble `delivered` immediately.
+- **From:** Accept / Discussions list
+- **Implements:** FR-041, FR-050, FR-051, FR-062, FR-063, FR-064, FR-146, AD-10, AD-15
+- **Elements:** `{components.chat-bubble}` persist `delivered` immediately; `{components.voice-note}` play as soon as stored (no member-facing transcript); text; Photo gallery/camera; typing indicator ≤2s; `{components.stage-chip}` `invite` / `chat` / `meeting` / `married` (meeting is a confirm, not the NEXT planner); `{components.mahram-banner}` if granted; `{components.reveal-control}`; Report / Block; send announces « Message envoyé » never « en vérification » / « scan ». Ack copy: « Votre message est arrivé. » Compose off when Mahram-paused. Ended Chat is terminal. Free-tier sends obey FR-146. No GIF picker. **Banned states:** pending-moderation, held, scan-wait. Reactions exist (FR-050) but EXPERIENCE.md does not name a reaction control — see G13. Meeting confirm exists (FR-028) but has no named dialog — see G14.
+- **Empty:** new Chat — stage **chat**, no scan banner
+- **Loading:** thread open ≤4s; typing ≤2s
+- **Error:** send fail = connection. Over-cap = Message quota wall. **Never** “held for scan”
+- **Success:** allowed bubble `delivered` immediately. Offline: text outbox; media waits for **connection**, not AI
 
 ### Contact-share interstitial
 
-Reached from: send blocked. FR-068. Dialog. Modal stack one level.
-
-- Shown to **both** Members on `CONTACT_SHARE_REQUIRED`.
-- Copy **« Les numéros et WhatsApp attendent l’accord des deux. »**
-- Not an AI hold. Do not reuse this interstitial for money-ask (money-ask is delivered and flagged).
-
-States: both not opted in; opt-in in flight; one-sided yes: still blocked; both yes: numbers/links may send; scan still runs after.
+- **From:** send blocked (`CONTACT_SHARE_REQUIRED`)
+- **Implements:** FR-068, AD-17
+- **Elements:** `{components.contact-share-interstitial}` shown to **both** Members; blocks phone, WhatsApp, links until both opt in; « Les numéros et WhatsApp attendent l’accord des deux. » Not an AI hold. **Do not reuse for money-ask.**
+- **Empty:** both not opted in
+- **Loading:** opt-in in flight
+- **Error:** one-sided yes — still blocked
+- **Success:** both yes — numbers/links may send; scan still runs after
 
 ### Report / Block
 
-Reached from: Profile / Chat. FR-083, FR-084, FR-037.
-
-- Report: reason required (includes marital misrepresentation). Starts SLA.
-- Block: hides; they can no longer see or contact you.
-- Rate limit on error.
-
-States: reason required; submit in flight; rate limit; Report: SLA started; Block: hidden.
+- **From:** Profile / Chat
+- **Implements:** FR-083, FR-084, FR-037
+- **Elements:** Report with reason (includes marital misrepresentation); starts 24h SLA; Block hides — they can no longer see or contact you
+- **Empty:** reason required
+- **Loading:** submit in flight
+- **Error:** rate limit
+- **Success:** Report: SLA started. Block: hidden
 
 ### Marriage dual-confirm
 
-Reached from: Chat / settings. FR-095–FR-098.
-
-- Joint **« nous nous sommes mariés »** naming the other. One-sided does nothing (no counter, no availability change).
-- Optional private nikah proof (certificate or imam/Mahram attestation) stored privately, never published.
-- Counter stays 0 until both confirm.
-
-States: one spouse started / waiting other; expired 30d `[ASSUMPTION]` without confirm: no counter; both confirm: joint **married**, counter +1.
+- **From:** Chat / settings
+- **Implements:** FR-095, FR-096, FR-097, FR-098, AD-25
+- **Elements:** joint « nous nous sommes mariés » naming the other; one-sided does nothing; optional private nikah proof (never published); counter stays 0 until both confirm
+- **Empty:** one spouse started
+- **Loading:** waiting other
+- **Error:** expired 30d `[ASSUMPTION]` without confirm — no counter
+- **Success:** both confirm — joint **married**, counter +1; both leave browse; no new Invites
 
 ### Consent story
 
-Reached from: after dual-confirm. FR-099, FR-100.
-
-- Optional. City, date, faces optional/blurred, no Chat excerpts.
-- Either spouse can refuse public.
-- Extra family-ok checkbox `[ASSUMPTION]`.
-
-States: form after dual-confirm; submit; one spouse refuses public: showcase empty of faces; public only if both (and family-ok if set) consent.
+- **From:** after dual-confirm
+- **Implements:** FR-099, FR-100, AD-25
+- **Elements:** optional; city; date; faces optional/blurred; no Chat excerpts; either spouse can refuse public; extra family-ok checkbox `[ASSUMPTION]`
+- **Empty:** form after dual-confirm
+- **Loading:** submit
+- **Error:** one spouse refuses public — showcase empty of faces (counter may still increment)
+- **Success:** public only if both (and family-ok if set) consent
 
 ### Payment pack
 
-Reached from: Settings / Invite quota wall / Message quota wall. FR-044, FR-045, FR-104–FR-107, FR-145, FR-146.
-
-- `{components.pack-card}`: 1 / 3 / 6, explicit `ends_at`, no renew toggle.
-- Rails: Orange Money BF, Moov Africa BF, Wave/Coris where available, cards secondary.
-- Audio on no-auto-renew. Selected pack.
-- Brothers always. Sisters in both `sister_reach_mode` values (messages capped). In `free_unlimited` pack is for unlimited messages, not Invite reach.
-- Never a brother-free pack. Rail down: Free + safety stay.
-
-States: pack list from `/v1/packs`; hosted/rail redirect; `PAY_UNAVAILABLE`: Free + safety stay; entitlement until `ends_at`; unlimited Invites and unlimited messages; no renew job.
+- **From:** Settings / Invite quota wall / Message quota wall
+- **Implements:** FR-044, FR-045, FR-104, FR-105, FR-106, FR-107, FR-145, FR-146, AD-14, AD-21
+- **Elements:** `{components.pack-card}` 1 / 3 / 6; explicit `ends_at`; **no renew toggle**; Orange / Moov / Wave checkout; audio on no-auto-renew. Brothers always. Sisters see the same checkout in both `sister_reach_mode` values because Free-tier messages are capped. In `free_unlimited` she is not required to buy for Invite reach. Paid-faster-review is queue only — must not skip Verification, Blur, Mahram, Report, Block, or Chat after accept. No brother-free pack.
+- **Empty:** pack list (Brother / Sister `same_quota_as_brothers`); message pack not required for reach (Sister `free_unlimited`)
+- **Loading:** hosted/rail redirect
+- **Error:** `PAY_UNAVAILABLE` — Free + safety stay
+- **Success:** entitlement until `ends_at`; unlimited Invites and unlimited messages; no renew job
 
 ### Notifications
 
-Reached from: Bell / OS. FR-052, FR-053.
-
-- Template + ids. Blur thumbs. No Chat body, no phone, no clear Sister Photo thumbnail.
-- In-app unread still increments if push denied.
-- SMS (not a screen): Invite received (Sister), Mahram flag/pause/end, admin sanctions that suspend or Ban, OTP. No Photo payloads.
-
-States: **« Aucune alerte. »**; push denied: in-app unread still increments; success = template + blur thumb only.
+- **From:** bell / OS
+- **Implements:** FR-052, FR-053, AD-16
+- **Elements:** template + ids; `{components.blur-photo}` thumbs; no Chat body; no phone; in-app unread still increments if push denied. Triggers the sources name: messages, Invites, Reveal requests, moderation outcomes, Mahram pause/end/flag (plus SMS on essential path)
+- **Empty:** « Aucune alerte. »
+- **Loading:** —
+- **Error:** push denied — in-app unread still increments
+- **Success:** template + blur thumb only
 
 ### Settings
 
-Reached from: Profil. FR-019, FR-020, FR-120, FR-136, FR-138.
-
-- Lite mode.
-- Audio language (Mooré / Dioula).
-- PIN.
-- Delete / export.
-- CIL / hosting disclosure — hosting line **always visible**. Operator cannot hide it.
-- No “who viewed me” list (FR-027).
-- Public pricing / Payment pack reachable from settings (IA).
-- Marriage dual-confirm reachable from settings (IA).
-
-States: current values; delete/export ticket error → status URL still issued if scheduled; Lite/audio/PIN persist; hosting line always visible.
+- **From:** Profil
+- **Implements:** FR-019, FR-020, FR-120, FR-136, FR-138, AD-19
+- **Elements:** Lite; audio language Mooré / Dioula; PIN; delete/export; CIL/hosting disclosure always visible; path to public pricing / Payment pack
+- **Empty:** current values
+- **Loading:** —
+- **Error:** delete/export ticket error → status URL still issued if scheduled
+- **Success:** Lite/audio/PIN persist; hosting line always visible
 
 ### Delete / export status
 
-Reached from: Settings. FR-019, FR-143, NFR-008.
-
-- Status URL + ticket. Not Gmail-only.
-- Download export from the status page (no personal inbox).
-- Ticket from the status page when stuck.
-
-States: inherit empty-state + error-banner. Retention clocks show working NFR-008 numbers as `[ASSUMPTION]` (EXPERIENCE.md open question 12).
+- **From:** Settings
+- **Implements:** FR-019, FR-143, NFR-008, AD-19
+- **Elements:** status URL; ticket (not Gmail-only); export download when ready; NFR-008 clocks as `[ASSUMPTION]` working numbers
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
 ### Appeal
 
-Reached from: Sanction notice (unnamed — see Gaps). FR-090.
-
-- Member Review. Second human.
-- For suspension or Ban.
-
-States: form; submit; window closed; second-human queue.
+- **From:** Sanction notice
+- **Implements:** FR-090, AD-18
+- **Elements:** Member Review form; second human (not original decider)
+- **Empty:** form
+- **Loading:** submit
+- **Error:** window closed
+- **Success:** second-human queue
 
 ### Family guidance
 
-Reached from: onboarding / help. FR-080.
+- **From:** onboarding / help
+- **Implements:** FR-080
+- **Elements:** Mahram optional, Sister-initiated
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
-- Mahram optional, Sister-initiated.
+### Suspended-account screen *(PRD-named, IA omitted)*
 
-States: inherit empty-state + error-banner.
+- **From:** authenticate while suspended (FR-085, brief P43)
+- **Implements:** FR-085
+- **Elements the PRD states:** suspended screen; Chat / Invite / browse disabled; published-status outcome in respectful Ouaga French (not meme macros); path to Appeal (FR-090)
+- **Warning (not a named IA screen):** Member who is warned “sees the warning and can continue under the published limits” — overlay vs dedicated screen is unspecified. See Gaps.
+- **Ban:** authenticate with same phone/ID → access denied (FR-085). Dedicated Ban chrome is unspecified. See Gaps.
 
 ---
 
-## Mahram
+## 4. Mahram
 
 ### Mahram invite (Sister)
 
-Reached from: Chat / onboarding. FR-071.
-
-- Invite by phone. Not forced.
-- `{components.audio-prompt}` explainer (FR-010, FR-138).
-- Unmatched friend rejected at relationship step (next surface).
-
-States (attach group): phone blank; friend class rejected; OTP sending; wrong relationship / expired 7d `[ASSUMPTION]`; confirmed + **empty grant list**.
+- **From:** Chat / onboarding
+- **Implements:** FR-071, AD-12
+- **Elements:** invite by phone; not forced; `{components.audio-prompt}` explainer; Brother cannot attach a Mahram to her Chat
+- **Empty:** phone blank
+- **Loading:** OTP sending (attach flow)
+- **Error:** friend class rejected
+- **Success:** invite sent; no Chat message sent as her
 
 ### Mahram OTP + relationship
 
-Reached from: SMS deep link. FR-072, A2.
-
-- OTP.
-- Relationship: `father` / `brother` / `uncle` / `other_mahram`. Unmatched friend rejected.
-- No Member browse / Invite identity. Mahram accounts cannot send Invites or appear in people lists `[ASSUMPTION]`.
+- **From:** SMS deep link
+- **Implements:** FR-072, A2, AD-12
+- **Elements:** `{components.otp-input}`; relationship `father` / `brother` / `uncle` / `other_mahram`; unmatched friend rejected
+- **Empty:** phone/relationship unset
+- **Loading:** OTP sending
+- **Error:** wrong relationship / expired 7d `[ASSUMPTION]`
+- **Success:** Sister is asked to confirm. Cooling-off 1h `[ASSUMPTION]` before Mahram actions.
 
 ### Sister confirm Mahram
 
-Reached from: Notification. FR-073.
-
-- Confirm or let 7-day expire `[ASSUMPTION]`.
-- After confirm he is **not** attached to every conversation.
+- **From:** notification
+- **Implements:** FR-073, AD-12
+- **Elements:** confirm or let 7-day expire `[ASSUMPTION]`. After confirm he is **not** attached to every conversation.
+- **Empty / Loading / Error / Success:** part of Mahram attach states — Confirmed + **empty grant list**
 
 ### Mahram grant list
 
-Reached from: after Sister confirm. FR-074.
-
-- Empty grant list after confirm: **« Aucune discussion accordée. »** + pick threads.
-- `{components.mahram-grant-row}`: Sister picks which Brother threads to grant. New Chats are not auto-granted. Revoke one thread.
-- Remove drops every grant (FR-077).
-
-States: empty after confirm; list of her Brother threads; grant fail, retry; one or more grants; new Chats stay ungranted until she picks them.
+- **From:** after Sister confirm
+- **Implements:** FR-074
+- **Elements:** `{components.mahram-grant-row}`; empty after confirm; she picks Brother threads; new Chats not auto-granted; revoke one thread
+- **Empty:** « Aucune discussion accordée. » + pick threads
+- **Loading:** list of her Brother threads
+- **Error:** grant fail, retry
+- **Success:** one or more grants; new Chats stay ungranted until she picks them
 
 ### Mahram revoke one thread
 
-Reached from: Grant list / Chat. FR-074. Action / dialog, one level.
-
-- Drops that grant only. Other grants stay.
-
-States: revoke in flight; network fail: keep trying; that thread gone from his list; other grants stay.
+- **From:** grant list / Chat
+- **Implements:** FR-074
+- **Elements:** drops that grant only; other grants stay
+- **Empty:** —
+- **Loading:** revoke in flight
+- **Error:** network fail — keep trying; denylist is source of truth
+- **Success:** that thread gone from his list; other grants stay
 
 ### Mahram thread list
 
-Reached from: Mahram home. FR-074, FR-076.
-
-- **Only granted** threads. No compose. Read delivered messages only. No Découvrir. No Invitations.
-
-States: **« Aucune discussion accordée. »**; list skeleton; fetch fail, retry.
+- **From:** Mahram home
+- **Implements:** FR-074, FR-076
+- **Elements:** **only granted** threads; no compose; read delivered messages only
+- **Empty:** « Aucune discussion accordée. »
+- **Loading:** list skeleton
+- **Error:** fetch fail, retry
+- **Success:** only granted threads
 
 ### Mahram read-only thread
 
-Reached from: granted thread only. FR-074, FR-076.
-
-- Read delivered messages. Compose **absent**. Banner + pause/end/flag.
-- Not granted / revoke already applied: **« Accès retiré »**.
-
-States: granted thread, no messages yet; same as Chat load; not granted: « Accès retiré »; delivered messages visible; compose absent.
+- **From:** granted thread only
+- **Implements:** FR-074, FR-076, AD-12
+- **Elements:** delivered messages; **no compose / no send-as-Sister**; `{components.mahram-banner}` context; pause / end / flag
+- **Empty:** granted thread, no messages yet
+- **Loading:** same as Chat load
+- **Error:** not granted / revoke already applied — « Accès retiré »
+- **Success:** delivered messages visible; compose absent
 
 ### Mahram pause / end / flag
 
-Reached from: granted read-only thread. FR-075, FR-087.
-
-- Pause: both compose off. End: terminal. Flag: priority case.
-- Rejected on a thread that is not granted. Brother resume of a Mahram pause rejected.
-- SMS both Members on pause/end/flag (FR-053).
-
-States: action in flight; Brother resume rejected; pause/end/flag on ungranted thread rejected.
+- **From:** granted read-only thread
+- **Implements:** FR-075, FR-087, AD-12
+- **Elements:** pause (both compose off; Brother cannot resume); end (terminal); flag (priority case). Rejected on a thread that is not granted.
+- **Empty:** —
+- **Loading:** action in flight
+- **Error:** Brother resume rejected; pause/end/flag on ungranted thread rejected
+- **Success:** pause: compose off. End: terminal. Flag: priority queue.
 
 ### Verified-Mahram ID (optional)
 
-Reached from: Mahram settings. FR-078.
-
-- Optional ID + liveness. No kinship document. Still grant-scoped.
-- Badge if ID done. Member-facing French may say *wali vérifié* (PRD glossary).
+- **From:** Mahram settings
+- **Implements:** FR-078, AD-13
+- **Elements:** optional ID + liveness; **no kinship document**; still grant-scoped; badge only if ID done
+- **Empty / Loading / Error / Success:** same pattern as member ID + liveness; badge only if done. Not read-all.
 
 ### Remove / Report Mahram
 
-Reached from: Sister Chat / settings / grant list. FR-077, FR-074.
-
-- `{components.button-quiet}`. No confirm-shaming.
-- Revoke entire permission: every thread grant gone. Read access gone ≤60s.
-- Optional 24h emergency hide `[ASSUMPTION]`. SMS both sides.
+- **From:** Sister Chat / settings / grant list
+- **Implements:** FR-077, FR-074
+- **Elements:** `{components.button-quiet}` remove; Report; revoke entire permission — every thread grant gone ≤60s; optional 24h emergency hide `[ASSUMPTION]`; SMS both sides. No confirmshaming.
+- **Empty:** —
+- **Loading:** action in flight
+- **Error:** network fail — keep trying
+- **Success:** every grant gone ≤60s; read access gone
 
 ---
 
-## Staff
-
-Every staff surface: `{components.staff-only-badge}` visible. Members never see this chrome. Two-pane from 768px; below 768 the queue stacks above the case. Staff unblur is not in the member tab order.
+## 5. Staff (admin)
 
 ### Admin flag queue
 
-Reached from: Staff home (unnamed — see Gaps). FR-067, FR-144.
-
-- Already-delivered items + scan-deferred / scan-failed. Staff-only. Not a hold queue.
-- `{components.admin-flag-row}` kinds: `flag-for-admin` | `scan-deferred` | `scan-failed`. Opening a row never changes `message.state`.
-- Staff-only badge on every row.
-
-States: **« File vide »** (delivery still happened in the world); queue fetch; staff auth fail; row for flag or scan-deferred.
+- **From:** Staff home
+- **Implements:** FR-067, FR-144, AD-10
+- **Elements:** `{components.admin-flag-row}` kinds `flag-for-admin` | `scan-deferred` | `scan-failed`; `{components.staff-only-badge}` on every row; already-delivered items — not a hold queue; opening a row never changes `message.state`
+- **Empty:** « File vide » (delivery still happened in the world)
+- **Loading:** queue fetch
+- **Error:** staff auth fail
+- **Success:** row for flag or scan-deferred; badge staff-only
+- **Note:** EXPERIENCE.md reaches this from “Staff home” but does not name a separate Staff home layout. Treat this as staff landing unless founder names another.
 
 ### Case file
 
-Reached from: Flag row / Report. FR-087, FR-088, FR-093.
-
-- Text / Photo / Voice + scores + report + fingerprint hints (device/phone/ID).
-- Thumbs stay blurred. Unblur requires a **typed case reason** and writes audit. Control stays disabled without reason.
-- Evidence snapshot immutable on Strike save.
-
-States: missing evidence named; case fetch; staff auth fail; unblur locked until typed reason; reason-entered unblur writes audit; decision saved.
+- **From:** flag row / Report
+- **Implements:** FR-087, FR-088, FR-093, AD-18
+- **Elements:** text / Photo / Voice + scores + report + fingerprint hints; thumbs stay `{components.blur-photo}`; unblur requires typed case reason + audit; unblur control not in member tab order
+- **Empty:** missing evidence named
+- **Loading:** case fetch
+- **Error:** staff auth fail; unblur locked until typed reason
+- **Success:** reason-entered unblur writes audit; decision saved
 
 ### Sanction
 
-Reached from: Case. FR-085, FR-144.
-
-- `{components.sanction-action}`: warning / suspend / other published action. Photo Strike 3→24h is a published floor.
-- AI is not a control. Paid-faster-review must not skip scan or auto-clear a flag.
-- False-report pattern can itself be sanctioned (FR-086) via this ladder.
-- Member receives published-status outcome. Sanction copy: published status in respectful Ouaga French. No meme macros.
-
-States: action unselected; write + audit; cannot apply as AI; warning / suspend / other saved; Member notified.
+- **From:** Case
+- **Implements:** FR-085, FR-144, AD-10
+- **Elements:** `{components.sanction-action}` human chooses warning / suspend / other published action; photo Strike 3→24h is a published floor; AI is not a control; paid-faster-review must not skip scan or auto-clear a flag
+- **Empty:** action unselected
+- **Loading:** write + audit
+- **Error:** cannot apply as AI
+- **Success:** warning / suspend / other saved; Member notified
 
 ### Appeal review
 
-Reached from: Appeal queue. FR-090.
-
-- Second human (not the original decider).
-
-States: inherit empty-state + error-banner.
+- **From:** Appeal queue
+- **Implements:** FR-090, AD-18
+- **Elements:** second human; not the original decider
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
 ### Operator policy / thresholds
 
-Reached from: Operator. FR-140.
-
-- Policy text + flag confidence + photo-Strike.
-- Policy must say: delivered then scanned; AI flags a human; AI does not silently delete, block, or hold.
-- New thresholds apply to **subsequent** scans only. UI states subsequent-only. Do not silently rewrite old decisions.
-- `{components.staff-only-badge}`.
-
-States: current pack prices and thresholds (grouped with pricing in State Patterns); save; validation; audited change.
+- **From:** Operator
+- **Implements:** FR-140, AD-10
+- **Elements:** policy text (must say: delivered then scanned; AI flags a human; AI does not silently delete, block, or hold); flag confidence; photo-Strike; subsequent scans only
+- **Empty:** current pack prices and thresholds (shared operator empty with pricing)
+- **Loading:** save
+- **Error:** validation
+- **Success:** audited change; thresholds apply to **subsequent** scans; auto-renew stays off
 
 ### Operator pricing
 
-Reached from: Operator. FR-139, FR-106, FR-145.
-
-- Pack prices / durations 1 / 3 / 6. Auto-renew stays **off** (no control to turn it on).
-- Hosts `{components.operator-reach-mode}` and `{components.operator-message-cap}` (next two surfaces, same page cluster).
+- **From:** Operator
+- **Implements:** FR-139, FR-106, FR-145, AD-14
+- **Elements:** pack prices/durations 1/3/6; auto-renew stays **off**; hosts sister-reach mode + message cap
+- **Empty / Loading / Error / Success:** see Operator policy / pricing states
 
 ### Operator sister-reach mode
 
-Reached from: Operator pricing / policy. FR-145.
-
-- `{components.operator-reach-mode}`: `free_unlimited` (DEFAULT) | `same_quota_as_brothers`. Two values only. No brother-free option.
-- `{components.staff-only-badge}`. Save writes audit. Subsequent Sister Invites only; past Invites stay.
-- Message-cap control sits next to this.
-
-States: current mode (`free_unlimited` selected if unset); save in flight; validation / unauthorized; audited change; member Invite/pricing UI switches on next open.
+- **From:** Operator pricing / policy
+- **Implements:** FR-145, FR-044, FR-045, FR-105, AD-27, AD-14, AD-21
+- **Elements:** `{components.operator-reach-mode}` values `free_unlimited` (DEFAULT) | `same_quota_as_brothers` only; `{components.staff-only-badge}`; `{components.operator-message-cap}` sits next to this. No brother-free value.
+- **Empty:** current `sister_reach_mode` (`free_unlimited` DEFAULT selected if unset)
+- **Loading:** save in flight
+- **Error:** validation / unauthorized. No brother-free value to pick.
+- **Success:** audited change. Subsequent Sister Invites use the new mode. Past Invites stay.
 
 ### Operator daily message cap
 
-Reached from: Operator pricing / policy, next to `sister_reach_mode`. FR-146.
-
-- `{components.operator-message-cap}`: shows the **current admin** `daily_message_cap`. No locked number in UI copy.
-- `{components.staff-only-badge}`. Save writes audit. Subsequent Free-tier sends only. Premium unlimited.
-
-States: current admin value; save in flight; validation / unauthorized; audited change.
+- **From:** Operator pricing / policy, next to `sister_reach_mode`
+- **Implements:** FR-146
+- **Elements:** `{components.operator-message-cap}` shows **current admin** `daily_message_cap`; no locked number in UI copy; `{components.staff-only-badge}`; Premium unlimited
+- **Empty:** current admin value shown
+- **Loading:** save in flight
+- **Error:** validation / unauthorized
+- **Success:** audited. Subsequent Free-tier sends use the new cap. Already-delivered messages stay.
 
 ### Operator metrics
 
-Reached from: Operator. FR-092, FR-142.
-
-- Internal only. Public counters stay proof-backed.
-- Verified Members by level, dual-confirmed marriages, report SLA, scan-deferred events.
-- Scan-deferred counted, never hidden. Zero-launch counters valid.
-- Free-queue SLA-breach flagged when a Free Profile waits longer than the published SLA (FR-013). Show `operator_config` value; do not invent a second number.
-
-States: zero-launch counters valid; refresh.
+- **From:** Operator
+- **Implements:** FR-092, FR-142, AD-20
+- **Elements:** internal only — Verified Members by level, dual-confirmed marriages, report SLA, scan-deferred, appeal overturns; public counters stay proof-backed; scan-deferred never hidden; SLA-breach flags for free review (FR-013) and reports (FR-083)
+- **Empty:** zero-launch counters valid
+- **Loading:** refresh
+- **Error:** —
+- **Success:** scan-deferred counted, never hidden
 
 ### Operator CIL / deletion tickets
 
-Reached from: Operator. FR-143.
-
-- Status the Member can see. Clock breach flagged.
-
-States: empty queue; ticket fetch; clock breach flagged; Member status page shows completed.
+- **From:** Operator
+- **Implements:** FR-143, AD-19
+- **Elements:** tickets Member can see on status page
+- **Empty:** empty queue
+- **Loading:** ticket fetch
+- **Error:** clock breach flagged
+- **Success:** Member status page shows completed
 
 ### Operator Board / Académie publish
 
-Reached from: Operator. FR-141, FR-115.
-
-- Names + five articles.
-
-States: fewer than five articles; save; missing scholar review; five live articles; names published.
+- **From:** Operator
+- **Implements:** FR-141, FR-115
+- **Elements:** names + five articles; scholar review record
+- **Empty:** fewer than five articles
+- **Loading:** save
+- **Error:** missing scholar review
+- **Success:** five live articles; names published
 
 ### T&S visit signals
 
-Reached from: Moderator. FR-027.
-
-- Mass-view-then-never-Invite. `[ASSUMPTION: 50]` Profiles in 24h without Invite.
-- No member visitors list.
-
-States: inherit empty-state + error-banner.
+- **From:** Moderator
+- **Implements:** FR-027
+- **Elements:** mass-view-then-never-Invite. **No member visitors list.**
+- **Empty / Loading / Error:** inherit `empty-state` + `error-banner`
 
 ---
 
-## NEXT — named, not designed as shipping
+## 6. Gaps — stop; do not invent
 
-Do not mock these as live. EXPERIENCE.md NEXT table + PRD NEXT FRs:
+These are required by the brief or a PRD FR, but EXPERIENCE.md does not name a screen (or enough chrome) to inventory. **Do not invent layout.** Founder / Awa must say whether they are existing screens with extra elements, or named new screens.
 
-- Mahram dashboard (multi-ward + digest) — FR-081
-- Meeting planner (time/place/attendees) — FR-082
-- Native iOS + Apple sign-in — FR-135, FR-004
-- Advanced paid filters — FR-030
-- Who favourited me / visitors / online-now / anonymous / boosts / GIF picker / USSD — FR-033–FR-036, FR-054, FR-055, FR-111
-- Testimonials carousel — FR-102
-- Premium badge — FR-112
-- Blog, video, coach, full Académie, remaining SEO — FR-121–FR-125
-- Anti-leak polish (watermark, screenshot notice, no downloads) — FR-061
-- Confrérie / hijra fields — FR-029
+| Gap | What the sources require | What is missing |
+|---|---|---|
+| G1 Public stats page | FR-092 “public stats page”: Reports handled, SLA met rate, Bans, scan-deferred; each number has a definition; sourced from FR-142; Verified marriages 0 | EXPERIENCE.md IA has landing counter + Advisory Board names + internal Operator metrics. No public stats layout. |
+| G2 SEO chrome | FR-117 three URLs return 200 with local copy | EXPERIENCE.md does not name page chrome, nav, or whether they reuse Public landing. |
+| G3 D6 policy surface | FR-066 / FR-140: “When the Member opens D6 policy” they see delivered-then-scanned explanation | No member screen named. Legal hub documents are Mentions, CGV, cookies, privacy only. |
+| G4 Marketing opt-in | FR-060 / D10 per-use campaign opt-in | Settings elements in EXPERIENCE.md are Lite, audio, PIN, delete/export, CIL/hosting. No opt-in control named. |
+| G5 Sincerity reaffirmation | FR-005: re-accept before further Invites if entertainment browsing | No dialog/screen named. |
+| G6 Never-send-money education | FR-068 / brief: in-Chat “never send money to a suitor” | EXPERIENCE.md forbids reusing Contact-share for money-ask. No named education surface. |
+| G7 Warning vs suspended vs Ban chrome | FR-085 warning (continue under limits); suspended screen (named above from PRD); Ban access denied | EXPERIENCE.md Appeal is reached from “Sanction notice” but does not inventory warning or Ban screens. Suspended is PRD-named only. |
+| G8 Suspected-minor hold UI | FR-091 Profile held, never listed | Age gate covers <19 at signup. Member-facing hold chrome after ID/liveness is unnamed. |
+| G9 Photo Strike upload block | FR-069 3 rejections → 24h upload block | No named wall. Do not invent one. |
+| G10 Staff home | Admin flag queue “Reached from: Staff home” | Staff home itself has no IA row. |
+| G11 Code of conduct as a page | FR-089 accepted at signup; brief P44 | Auth pledge stores the version. A standalone published CoC page is not in EXPERIENCE.md IA (may live inside Legal hub — unspecified). |
+| G12 Published free review SLA | FR-013 single SLA on public help/pricing | Not a dedicated screen. Which help/pricing line is unspecified. |
+| G13 Chat reactions chrome | FR-050: reactions exist and are visible to the other Member | EXPERIENCE.md `chat-bubble` does not name a reaction control. Do not invent one. |
+| G14 Meeting confirm | FR-028: Member or attached Mahram proposes **meeting**, other Member confirms; Mahram may reject (pauses compose). No certificate in MVP | Stage-chip values are named. No confirm dialog. Do not invent the NEXT planner. |
+| G15 Ice Breaker template texts | FR-047 scholar-sensible deen/family templates, editable before send | Templates themselves are not named. Do not invent wording. |
+| G16 Kids Profile field | FR-024 / shared-trait examples include “kids / accepts a partner with kids” and forbid inventing Profile fields | FR-021 field list has no kids control. Shared-trait display only if the field already exists. Do not invent the field. |
+| G17 Operator refund | FR-109: Operator approves a refund; Member returns to Free; ticket records it | No Operator refund IA row. CGV text is on Legal hub. |
+| G18 PWA install prompt | EXPERIENCE.md: optional; Play listing is the Burkina find path | Not a required shipping screen. |
 
----
-
-## Dialogs and overlays already named above
-
-These are not extra screens. They are the IA surfaces that EXPERIENCE.md already treats as interstitial / overlay. Modal stack is one level.
-
-| Surface | Kind |
-|---|---|
-| Cookie consent | Banner / dialog |
-| PIN lock | Overlay |
-| Filters | Overlay or sheet (not specified beyond surface name) |
-| Contact-share interstitial | Interstitial |
-| Sister invite quota wall | Wall / overlay |
-| Message quota wall | Wall / overlay |
-| Report / Block | Dialog |
-| Blur / Reveal / Revoke | Controls on Profile detail / Chat |
-| Mahram revoke one thread | Action / dialog |
-| Age gate | Screen in the identity path |
-
-Do not add a second modal layer. Do not invent additional dialogs (first-wife notice, confirmshaming decline, auto-renew toggle, scan-hold, brother-free pack).
+**Not gaps (explicitly absent):** first-wife notification; GIF picker; brother-free mode; Apple sign-in; who-favourited-me; visitors; online-now; held-for-scan Chat; invented scale.
 
 ---
 
-## Ethics (do not ship)
+## 7. Coverage check
 
-- No roach motel, confirmshaming, sneak-into-basket, bait-and-switch.
-- No « Essai gratuit puis on prélève ».
-- Quiet decline is quiet. Pass is dismiss, not a like.
-- Safety is not a paywall. Over-cap send is refused, not held for scan.
+EXPERIENCE.md traceability MVP screens are all listed in §1–§5.
+
+PRD MVP FRs mapped to those screens or to Gaps (not dropped): FR-001–FR-003, FR-005–FR-028, FR-037–FR-048, FR-050–FR-053, FR-056–FR-060, FR-062–FR-080, FR-083–FR-093, FR-095–FR-101, FR-104–FR-110, FR-115–FR-120, FR-132–FR-134, FR-136–FR-146.
+
+NEXT/LATER FRs are in “Out of MVP” and are not shipping screens.
+
+---
+
+## 8. What this folder does not contain
+
+No Stitch HTML. No Stitch PNG. That is required for later design gates, not this ticket.
+
+After founder approval, Stitch downloads belong here as exact filenames bound to the screen names above — still no invented screens.
