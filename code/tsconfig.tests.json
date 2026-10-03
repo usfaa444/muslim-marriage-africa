@@ -17,6 +17,7 @@
     "apps/web/src/**/*.test.tsx",
     "apps/web/src/**/*.ts",
     "apps/web/src/**/*.tsx",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "apps/api/drizzle.config.ts"
   ]
 }
