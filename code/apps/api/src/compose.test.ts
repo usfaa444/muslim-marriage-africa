@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -13,6 +13,23 @@ const emptyEnvFile = join(emptyEnvDir, 'empty.env')
 writeFileSync(emptyEnvFile, '')
 const projectArgs = ['compose', '-p', 'ankanu', '--env-file', emptyEnvFile, '-f', composeFile] as const
 const ignoredEnv = join(codeRoot, 'apps/web/app/.env.local')
+
+type EnvSnapshot = { existed: false } | { existed: true; bytes: Buffer }
+
+function snapshotEnvFile(path: string): EnvSnapshot {
+  if (!existsSync(path)) {
+    return { existed: false }
+  }
+  return { existed: true, bytes: readFileSync(path) }
+}
+
+function restoreEnvFile(path: string, snapshot: EnvSnapshot): void {
+  if (snapshot.existed) {
+    writeFileSync(path, snapshot.bytes)
+    return
+  }
+  rmSync(path, { force: true })
+}
 
 const services = ['web', 'api', 'worker', 'postgres', 'redis', 'bucket'] as const
 
@@ -173,13 +190,34 @@ describe('bucket credentials missing', () => {
   }, 90_000)
 })
 
+describe('web env file fixture', () => {
+  it('deletes the web env file only when this test created it', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'ankanu-env-'))
+    const path = join(dir, '.env.local')
+    const created = snapshotEnvFile(path)
+    writeFileSync(path, 'IGNORED=1\n')
+    restoreEnvFile(path, created)
+    expect(existsSync(path)).toBe(false)
+
+    const canary = 'QA_CANARY=ankanu-34\n'
+    writeFileSync(path, canary)
+    const existing = snapshotEnvFile(path)
+    writeFileSync(path, 'IGNORED=1\n')
+    restoreEnvFile(path, existing)
+    expect(readFileSync(path, 'utf8')).toBe(canary)
+    rmSync(dir, { recursive: true, force: true })
+  })
+})
+
 describe('docker compose up', () => {
   const env = composeEnv({
     S3_ACCESS_KEY_ID: randomBytes(8).toString('hex'),
     S3_SECRET_ACCESS_KEY: randomBytes(18).toString('hex'),
   })
+  let webEnvSnapshot: EnvSnapshot | undefined
 
   beforeAll(async () => {
+    webEnvSnapshot = snapshotEnvFile(ignoredEnv)
     writeFileSync(ignoredEnv, 'IGNORED=1\n')
     await composeDown()
     await run(
@@ -189,7 +227,9 @@ describe('docker compose up', () => {
   }, 1_200_000)
 
   afterAll(async () => {
-    rmSync(ignoredEnv, { force: true })
+    if (webEnvSnapshot !== undefined) {
+      restoreEnvFile(ignoredEnv, webEnvSnapshot)
+    }
     await composeDown()
     rmSync(emptyEnvDir, { recursive: true, force: true })
   }, 180_000)

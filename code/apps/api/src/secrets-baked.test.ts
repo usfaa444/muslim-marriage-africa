@@ -28,9 +28,18 @@ const secretPatterns = [
   /(?:REDIS_PASSWORD|S3_SECRET_ACCESS_KEY|AWS_SECRET_ACCESS_KEY|MINIO_ROOT_PASSWORD)\s*[:=]\s*['"](?!\$\{)[^'"]+['"]/,
 ]
 
+const imageSecretKeys =
+  'POSTGRES_PASSWORD|REDIS_PASSWORD|S3_ACCESS_KEY_ID|S3_SECRET_ACCESS_KEY|AWS_SECRET_ACCESS_KEY|MINIO_ROOT_USER|MINIO_ROOT_PASSWORD'
+
 const imageLiteralPatterns = [
-  /(?:POSTGRES_PASSWORD|REDIS_PASSWORD|S3_ACCESS_KEY_ID|S3_SECRET_ACCESS_KEY|AWS_SECRET_ACCESS_KEY|MINIO_ROOT_USER|MINIO_ROOT_PASSWORD)\s*[:=]\s*(?:(['"])(?!\$\{)[^'"]+\1|(?!['"$\s])\S+)/,
-  /\$\{(?:S3_ACCESS_KEY_ID|S3_SECRET_ACCESS_KEY|POSTGRES_PASSWORD|REDIS_PASSWORD)[:-]/,
+  new RegExp(
+    `(?:${imageSecretKeys})\\s*[:=]\\s*(?:(['"])(?!\\$\\{)[^'"]+\\1|(?!['"$\\s])\\S+)`,
+  ),
+  new RegExp(
+    `(?:^|\\n)\\s*(?:ENV|ARG)\\s+(?:${imageSecretKeys})\\s+(?:(['"])(?!\\$\\{)[^'"]+\\1|(?!['"$\\s])\\S+)`,
+  ),
+  new RegExp(`\\$\\{(?:${imageSecretKeys})[:-]`),
+  /postgres:\/\/[^:\s@]+:[^:\s@]+@/,
 ]
 
 const allowedImageFiles = [
@@ -83,10 +92,23 @@ describe('secrets are not baked in', () => {
     const quotedLiteral = ['MINIO', '_ROOT_PASSWORD: "', 'hunter', '2"'].join('')
     const quotedRef = ['MINIO', '_ROOT_PASSWORD: "', '${', 'S3_SECRET_ACCESS_KEY}"'].join('')
     const interpolation = ['S3', '_SECRET_ACCESS_KEY: ${', 'S3_SECRET_ACCESS_KEY}'].join('')
+    const databaseUrlLiteral = ['DATABASE_URL: postgres://ankanu:', 'hunter', '2@postgres:5432/ankanu'].join('')
+    const databaseUrlOpen = 'postgres://ankanu@postgres:5432/ankanu'
+    const dockerfileSpace = ['ENV S3', '_SECRET_ACCESS_KEY ', 'hunter', '2'].join('')
+    const minioDefault = ['MINIO', '_ROOT_PASSWORD: ${', 'MINIO_ROOT_PASSWORD-', 'hunter', '2}'].join('')
+    const awsDefault = ['AWS', '_SECRET_ACCESS_KEY: ${', 'AWS_SECRET_ACCESS_KEY-', 'secret}'].join('')
+    const quotedInterpolation = ['"', '${', 'S3_SECRET_ACCESS_KEY}"'].join('')
     expect(imageLiteralPatterns.some((pattern) => pattern.test(literal))).toBe(true)
     expect(imageLiteralPatterns.some((pattern) => pattern.test(interpolation))).toBe(false)
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(databaseUrlLiteral))).toBe(true)
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(databaseUrlOpen))).toBe(false)
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(dockerfileSpace))).toBe(true)
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(minioDefault))).toBe(true)
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(awsDefault))).toBe(true)
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(quotedInterpolation))).toBe(false)
     expect(secretPatterns.some((pattern) => pattern.test(quotedLiteral))).toBe(true)
     expect(secretPatterns.some((pattern) => pattern.test(quotedRef))).toBe(false)
+    expect(secretPatterns.some((pattern) => pattern.test(quotedInterpolation))).toBe(false)
 
     const tracked = execFileSync('git', ['ls-files', '-z'], { cwd: repoRoot, encoding: 'utf8' })
       .split('\0')
