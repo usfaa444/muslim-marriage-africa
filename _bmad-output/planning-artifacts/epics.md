@@ -200,7 +200,7 @@ Horizon is MVP unless marked **NEXT** or **LATER**. Full acceptance criteria liv
 - FR-117: Programmatic SEO for Ouagadougou, Bobo-Dioulasso, Burkina Faso. No dating lexicon.
 - FR-118: Ticketed contact form plus FAQ; misuse routes to Moderators.
 - FR-119: Cookie consent; accept never grants likeness reuse.
-- FR-120: Public hosting disclosure and CIL stance. Ship AD-5 French sentence. A3 text is not rewritten.
+- FR-120: Public hosting disclosure and CIL stance. Do not ship the Scaleway / Île-de-France sentence. Do not invent a replacement string. A3 text is not rewritten.
 - FR-121: Full Académie library — **NEXT**.
 - FR-122: Blog — **NEXT**.
 - FR-123: Promo / explainer video — **NEXT**.
@@ -262,10 +262,10 @@ From [ARCHITECTURE-SPINE.md](architecture/architecture-muslim-marriage-africa-20
 
 **Substrate (must be stories)**
 
-- AD-6: OCI containers on Kubernetes; PostgreSQL; S3-compatible object storage; Redis/Valkey; secrets never in images.
-- AD-20: Isolated `dev | staging | prod`. OpenTofu in `infra/` targeting Scaleway `fr-par`. CI GitHub Actions. Staging auto; prod manual approve. OTel in-region. PG PITR + object versioning. Launch: 2 `api` + 1 `worker` + 1 `web`, PG primary + replica. Drizzle Kit is the only migration runner.
-- AD-5: Primary hosting Scaleway Paris `[ASSUMPTION — legal review]`. Public French disclosure: « Données hébergées en région Île-de-France (France), prestataire Scaleway ».
-- Structural seed: `apps/web`, `apps/android`, `apps/api`, `modules/*`, `packages/kernel`, `packages/ports`, `infra/`.
+- AD-6: OCI containers; Docker Compose from Story 1.7 (not Kubernetes); PostgreSQL; S3-compatible object storage; Redis/Valkey; secrets never in images.
+- AD-20: One self-managed environment (Story 1.7 compose). No OpenTofu. No isolated `dev | staging | prod`. CI GitHub Actions. OTel contract. PG PITR + object versioning. Launch: 2 `api` + 1 `worker` + 1 `web`, PG primary + replica. Drizzle Kit is the only migration runner.
+- AD-5: Self-managed hosting `[ASSUMPTION — legal review]`. Do not print « Données hébergées en région Île-de-France (France), prestataire Scaleway ». Do not invent a replacement location string.
+- Structural seed: `apps/web`, `apps/android`, `apps/api`, `modules/*`, `packages/kernel`, `packages/ports`. Compose is Story 1.7 — no `infra/` OpenTofu for MVP.
 - Stack pins: Node 24.21.0, TypeScript 7.0.2, Next.js 16.3.6, React 19.3.0, NestJS 12.1.0, Capacitor 8.5.2, Drizzle 0.45.3, PostgreSQL 17.11, Redis 8.6.3, BullMQ 6.3.9, Socket.IO 4.8.4, Tailwind CSS 4.3.3.
 
 **API / auth / security**
@@ -526,7 +526,7 @@ Primary epic only. NEXT/LATER items are listed so none are dropped; they are not
 ## Epic List
 
 ### Epic 1: A running Burkina-first product
-Operators and developers can run `web` + `api` + `worker` against Postgres, Redis, and object storage in Docker and the same images on Kapsule (`dev`/`staging`/`prod`). A visitor opens a French public shell with design tokens and three role shells. This is the substrate required to run every later epic.
+Operators and developers can run `web` + `api` + `worker` against Postgres, Redis, and object storage in one self-managed Docker Compose environment (Story 1.7 stack). A visitor opens a French public shell with design tokens and three role shells. This is the substrate required to run every later epic.
 **FRs covered:** FR-132, FR-137
 **NFRs:** NFR-004 (substrate), NFR-006 (token/a11y floor)
 **ADs:** AD-1, AD-2, AD-3, AD-5, AD-6, AD-7, AD-20, AD-22
@@ -596,7 +596,7 @@ Operators change pack prices, `sister_reach_mode` (Story 4.7), `daily_message_ca
 
 ## Epic 1: A running Burkina-first product
 
-Operators and developers can run `web` + `api` + `worker` against Postgres, Redis, and object storage in Docker and the same images on Kapsule. A visitor opens a French public shell with design tokens and three role shells. No Chat hold state exists anywhere in this substrate.
+Operators and developers can run `web` + `api` + `worker` against Postgres, Redis, and object storage in one self-managed Docker Compose environment (Story 1.7 stack). A visitor opens a French public shell with design tokens and three role shells. No Chat hold state exists anywhere in this substrate.
 
 **FRs covered:** FR-132, FR-137
 
@@ -624,7 +624,7 @@ So that every later module shares one contract and cannot invent a second error 
 
 As a operator,
 I want an `apps/api` NestJS process that serves `/v1` and a health check,
-So that Kapsule and compose can prove the API is alive before features land.
+So that compose can prove the API is alive before features land.
 
 **Acceptance Criteria:**
 
@@ -735,28 +735,28 @@ So that a new clone can run the product locally without Scaleway.
 
 **Implements:** AD-6, AD-20 · AD-1, AD-6 · [prd.md §7 Platform](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Foundation](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
 **Start here:** `Dockerfile + compose.yaml` · entity `n/a` · container `infra`
-### Story 1.8: Kapsule, OpenTofu, and isolated environments
+### Story 1.8: One self-managed compose environment
 
 As a operator,
-I want OpenTofu in `infra/` that can stand up Kapsule, managed PG, Redis, Object Storage, and Secret Manager for `dev | staging | prod`,
-So that the same containers can move, and prod does not share a database with staging.
+I want the Story 1.7 compose stack (`web` + `api` + `worker` + Postgres + Redis + object storage) as the one self-managed environment,
+So that we run an open-source stack ourselves, without Kapsule, OpenTofu, or isolated `dev | staging | prod`.
 
 **Acceptance Criteria:**
 
-**Given** I read the tf modules
-**When** I compare envs
-**Then** dev, staging, and prod have isolated PG/Redis/buckets/secrets
+**Given** I inspect hosting for MVP
+**When** I look for Kapsule, OpenTofu, or `infra/` env modules
+**Then** they are not part of this story
 
-**Given** I inspect a proposed prod apply
-**When** I look at CD
-**Then** staging auto-deploys; prod requires a human approve
+**Given** I inspect environments
+**When** I compare
+**Then** there is one self-managed environment — not isolated `dev | staging | prod`
 
 **Given** I open the public privacy stub
 **When** I read hosting
-**Then** the AD-5 sentence is already the intended string: « Données hébergées en région Île-de-France (France), prestataire Scaleway » — A3 is not rewritten
+**Then** « Données hébergées en région Île-de-France (France), prestataire Scaleway » is absent, and no invented replacement location string is present — A3 is not rewritten
 
-**Implements:** FR-120 (string available), NFR-004 · AD-5, AD-6, AD-20 · [prd.md §4.11 FR-120](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Legal hub](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
-**Start here:** `infra/ OpenTofu + Kapsule manifests` · entity `n/a` · container `infra`
+**Implements:** FR-120 (no invented string), NFR-004 · AD-5, AD-6, AD-20 · [prd.md §4.11 FR-120](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Legal hub](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
+**Start here:** `compose.yaml (one self-managed environment)` · entity `n/a` · container `infra`
 ### Story 1.9: CI, observability, and restore drills
 
 As a operator,
@@ -774,7 +774,7 @@ So that scan-deferred gaps and unrestorable backups cannot hide.
 **Then** the OTel contract already has a `scan_deferred_count` instrument — never hidden
 
 **Given** I follow the restore runbook
-**When** I restore a staging backup
+**When** I restore a backup of the one self-managed environment
 **Then** PG PITR + object versions come back
 
 **Implements:** NFR-004, NFR-009 (obs) · AD-18, AD-20 · [prd.md §5 NFR-004](prds/prd-muslim-marriage-africa-2026-09-27/prd.md) · screen [Operator metrics](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md)
@@ -2735,14 +2735,14 @@ So that we are not a Senegal clone and we do not use dating lexicon.
 ### Story 11.4: Legal hub, cookies, and hosting disclosure
 
 As a visitor,
-I want Mentions, CGV, cookies, and a privacy page that discloses Scaleway Île-de-France and cannot hide it,
+I want Mentions, CGV, cookies, and a privacy page that discloses hosting (FR-120) and cannot hide it,
 So that cookie accept is not a likeness grant. A3 text is not rewritten.
 
 **Acceptance Criteria:**
 
 **Given** I open privacy
 **When** I read hosting
-**Then** « Données hébergées en région Île-de-France (France), prestataire Scaleway » is present
+**Then** « Données hébergées en région Île-de-France (France), prestataire Scaleway » is absent, and no invented replacement location string is present
 
 **Given** first visit
 **When** cookie banner

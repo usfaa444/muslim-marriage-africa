@@ -103,19 +103,19 @@ Field-level columns live in SOLUTION-DESIGN.md `## 6. Entity catalog`. This tabl
 
 - **Binds:** FR-132, FR-133, FR-134, FR-135, FR-020, FR-061, NFR-005
 - **Prevents:** a second UI (RN/Expo or Flutter) or a TWA-only shell that cannot set `FLAG_SECURE` or reliable FCM/camera
-- **Rule:** all member/mahram/moderator/operator screens ship from `apps/web`. That `web` process role runs **in `fr-par` on Kapsule** (Next.js Node). It must not import `modules/*/domain`. Vercel, Netlify, and any USA edge host are rejected for Member traffic (same reason as AD-5). Play listing is `apps/android` Capacitor wrapping the same origin; iOS is the same Capacitor project later. Installable PWA is that same origin
+- **Rule:** all member/mahram/moderator/operator screens ship from `apps/web`. That `web` process role runs as the `web` service in the Story 1.7 compose stack (Next.js Node). It must not import `modules/*/domain`. Vercel, Netlify, and any USA edge host are rejected for Member traffic (same reason as AD-5). Play listing is `apps/android` Capacitor wrapping the same origin; iOS is the same Capacitor project later. Installable PWA is that same origin
 
-### AD-5 — Primary hosting Scaleway Paris `[ASSUMPTION — legal review]`
+### AD-5 — Self-managed hosting `[ASSUMPTION — legal review]`
 
 - **Binds:** A3, FR-120, NFR-002
 - **Prevents:** silent USA-default hosting (Farata DPA lists Vercel/Neon USA as processors — Offered (seen) (legal text)) and an un-disclosed region
-- **Rule:** primary region is Scaleway `fr-par` (Paris, France). Public privacy page discloses in French: « Données hébergées en région Île-de-France (France), prestataire Scaleway ». CIL filing for this cross-border transfer is a launch gate. A3 text is not rewritten. Stack stays portable (AD-6) so the same containers can move in-country if CIL requires. Compared and rejected as primary: Virtix Ouaga colo (no managed PG/Redis/S3; gov cloud is admin-only); Lagos colo (still a transfer; no hyperscaler); AWS `af-south-1` / Azure-GCP Johannesburg (higher Ouaga latency, weaker FR legal fit). Hyperscaler alt if Scaleway is blocked: AWS `eu-west-3` Paris, same disclosure pattern
+- **Rule:** MVP hosting is **one self-managed environment** running the Story 1.7 compose stack (AD-6). France hosting is not a requirement. Kapsule is not used. Public privacy page must **not** print « Données hébergées en région Île-de-France (France), prestataire Scaleway ». Do **not** invent a replacement location string. FR-120 still requires disclosing the real hosting location before public launch; until a host is named, do not publish a location sentence. If the named host is outside BF, CIL transfer authorisation is a launch gate (AD-19). A3 text is not rewritten. Stack stays portable (AD-6)
 
 ### AD-6 — Portable substrate
 
 - **Binds:** AD-5, NFR-004, NFR-008
 - **Prevents:** lock-in to a vendor-only datastore that cannot move to Burkina colo
-- **Rule:** OCI containers on Kubernetes; standard PostgreSQL; S3-compatible object storage; Redis (or Valkey-compatible) for queue/cache/pubsub; secrets in a secrets manager, never in images
+- **Rule:** OCI containers; MVP runtime is Docker Compose from Story 1.7 (not Kubernetes). Standard PostgreSQL; S3-compatible object storage; Redis (or Valkey-compatible) for queue/cache/pubsub; secrets in a secrets manager, never in images
 
 ### AD-7 — API style, versioning, errors, idempotency
 
@@ -200,7 +200,7 @@ stateDiagram-v2
 
 - **Binds:** NFR-001, FR-007, FR-068, FR-088
 - **Prevents:** reversible passwords, staff bulk export, contact-share implemented twice
-- **Rule:** TLS 1.2+; AES-256-class at rest for photos, chat bodies, ID images, backups (same `kid` rotation as chat for ID-image keys). Chat ciphertext envelope `{v, alg, kid, iv, ct}` with `kid` in Scaleway Secret Manager (yearly rotation; session-signing, webhook HMAC, object-storage, and vendor API keys rotate on the same store, isolated per env). argon2id passwords. Web/PWA cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF on cookie POST/WS. Capacitor Bearer lives in platform secure storage, not WebView localStorage. Captcha (FR-007) on signup and login. Rate limits on auth, OTP, password-reset, Invite, Mahram-invite, Report, payment, media upload, reveal-request, browse, and `/v1/staff/*` (working numbers in `operator_config`). `rl_invite_per_day` is inbound abuse control, not the product Invite cap — it must not recreate a Sister product cap in `free_unlimited`. A message rate-limit must not be the product message cap (AD-29). `QUOTA_EXCEEDED` is emitted only by invites from `invite_quota` + `operator_config` caps (AD-27). `MESSAGE_CAP_EXCEEDED` is the message-cap code, emitted only by chat (or by invites Flash / card quick-message after `ChatPort` refuses the cap) — never as a stand-in for Invite quota. On a persist that is both an Invite send and a Flash / card quick-message: apply the Invite-quota predicate first; if exceeded, emit `QUOTA_EXCEEDED` and do **not** consume `message_quota`. Else call `ChatPort.consumeMessageQuota`; if refused, emit `MESSAGE_CAP_EXCEEDED` and persist neither Invite nor Flash. Sister in `free_unlimited`: skip the Invite-quota check (no `QUOTA_EXCEEDED`); still consume `message_quota`. Never emit `PAY_UNAVAILABLE` instead of applying the Free cap Contact-share is the **single** predicate: only chat writes `contact_share`; moderation/trust call `ChatPort.contactShareOpen`. The send-time matcher lives in `chat` (and `invites` for Flash) as a **local deterministic function** — it must not call `ModerationPort`. Flash is pre-conversation so Contact-share cannot be open: phone / WhatsApp / links in Flash are refused with `CONTACT_SHARE_REQUIRED`. A Contact-share reject returns `CONTACT_SHARE_REQUIRED` and shows the published education interstitial to **both** Members. Money-ask language is **delivered and flagged**, even after Contact-share; in-Chat education (“never send money to a suitor”) is shown after that delivery. Ban fingerprint is `sha256(phone_e164 | id_doc_hash | device_attestation)` owned by trust — a cookie-only id is not a Ban key. Staff list/browse/metrics endpoints never return phone or WhatsApp. The **only** staff path that emits another person’s contact is an `operator` `cil_ticket` for that subject (FR-019 / FR-143); every such export is an AD-18 event. Prod app SQL roles cannot `COPY`/`SELECT` contact columns in bulk
+- **Rule:** TLS 1.2+; AES-256-class at rest for photos, chat bodies, ID images, backups (same `kid` rotation as chat for ID-image keys). Chat ciphertext envelope `{v, alg, kid, iv, ct}` with `kid` in a secrets manager, never in images/git (yearly rotation; session-signing, webhook HMAC, object-storage, and vendor API keys rotate on the same store). argon2id passwords. Web/PWA cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF on cookie POST/WS. Capacitor Bearer lives in platform secure storage, not WebView localStorage. Captcha (FR-007) on signup and login. Rate limits on auth, OTP, password-reset, Invite, Mahram-invite, Report, payment, media upload, reveal-request, browse, and `/v1/staff/*` (working numbers in `operator_config`). `rl_invite_per_day` is inbound abuse control, not the product Invite cap — it must not recreate a Sister product cap in `free_unlimited`. A message rate-limit must not be the product message cap (AD-29). `QUOTA_EXCEEDED` is emitted only by invites from `invite_quota` + `operator_config` caps (AD-27). `MESSAGE_CAP_EXCEEDED` is the message-cap code, emitted only by chat (or by invites Flash / card quick-message after `ChatPort` refuses the cap) — never as a stand-in for Invite quota. On a persist that is both an Invite send and a Flash / card quick-message: apply the Invite-quota predicate first; if exceeded, emit `QUOTA_EXCEEDED` and do **not** consume `message_quota`. Else call `ChatPort.consumeMessageQuota`; if refused, emit `MESSAGE_CAP_EXCEEDED` and persist neither Invite nor Flash. Sister in `free_unlimited`: skip the Invite-quota check (no `QUOTA_EXCEEDED`); still consume `message_quota`. Never emit `PAY_UNAVAILABLE` instead of applying the Free cap Contact-share is the **single** predicate: only chat writes `contact_share`; moderation/trust call `ChatPort.contactShareOpen`. The send-time matcher lives in `chat` (and `invites` for Flash) as a **local deterministic function** — it must not call `ModerationPort`. Flash is pre-conversation so Contact-share cannot be open: phone / WhatsApp / links in Flash are refused with `CONTACT_SHARE_REQUIRED`. A Contact-share reject returns `CONTACT_SHARE_REQUIRED` and shows the published education interstitial to **both** Members. Money-ask language is **delivered and flagged**, even after Contact-share; in-Chat education (“never send money to a suitor”) is shown after that delivery. Ban fingerprint is `sha256(phone_e164 | id_doc_hash | device_attestation)` owned by trust — a cookie-only id is not a Ban key. Staff list/browse/metrics endpoints never return phone or WhatsApp. The **only** staff path that emits another person’s contact is an `operator` `cil_ticket` for that subject (FR-019 / FR-143); every such export is an AD-18 event. Prod app SQL roles cannot `COPY`/`SELECT` contact columns in bulk
 
 ### AD-18 — Tamper-evident audit log
 
@@ -212,13 +212,13 @@ stateDiagram-v2
 
 - **Binds:** A3, FR-019, FR-060, FR-119, FR-120, FR-143, NFR-002, NFR-008
 - **Prevents:** invented statute details and copied Farata retention
-- **Rule:** statute is Loi n°001-2021/AN (verified). Foreign hosting is a transfer under arts 42–44: CIL authorisation + confidentiality/reversibility + encryption before launch. Hosting location is public (AD-5). GDPR-grade contracts are a counsel fact pattern — they do **not** satisfy art. 42 by themselves. Filing inputs (not extra invented articles): religious fields `madhhab`/`practice` need express consent (art. 12); liveness + ID images are biometric-class treatments listed with foreign transfers under art. 31; every outbound Chat item is model-scored after delivery (counsel maps the art. 31 AI/profiling bullet); destinataires include SMS, KYC, moderation/ASR, and mobile-money vendors, not only Scaleway. Cookie consent never grants photo reuse (likeness reuse is AD-9 `likeness_grant`). Coarse geo (city; quartier hidden until accepted Invite). Delete/export is owner-only via `IdentityPort.deleteAccount` / `exportAccount` plus an `operator` `cil_ticket` status page — staff must not run a bulk contact export (AD-17). Erase includes object-storage versions. NFR-002 breach notice to Members and CIL is a product SLA of 72h (not pinned to a fabricated article). NFR-008 working clocks stay `[ASSUMPTION]` (erase ≤30d, export ≤72h, chat ≤18 months after close unless hold; payments per OHADA/tax counsel)
+- **Rule:** statute is Loi n°001-2021/AN (verified). Foreign hosting is a transfer under arts 42–44: CIL authorisation + confidentiality/reversibility + encryption before launch. Hosting location is public (AD-5). GDPR-grade contracts are a counsel fact pattern — they do **not** satisfy art. 42 by themselves. Filing inputs (not extra invented articles): religious fields `madhhab`/`practice` need express consent (art. 12); liveness + ID images are biometric-class treatments listed with foreign transfers under art. 31; every outbound Chat item is model-scored after delivery (counsel maps the art. 31 AI/profiling bullet); destinataires include SMS, KYC, moderation/ASR, and mobile-money vendors, not only the host. Cookie consent never grants photo reuse (likeness reuse is AD-9 `likeness_grant`). Coarse geo (city; quartier hidden until accepted Invite). Delete/export is owner-only via `IdentityPort.deleteAccount` / `exportAccount` plus an `operator` `cil_ticket` status page — staff must not run a bulk contact export (AD-17). Erase includes object-storage versions. NFR-002 breach notice to Members and CIL is a product SLA of 72h (not pinned to a fabricated article). NFR-008 working clocks stay `[ASSUMPTION]` (erase ≤30d, export ≤72h, chat ≤18 months after close unless hold; payments per OHADA/tax counsel)
 
 ### AD-20 — Environments, CI/CD, observability, DR
 
 - **Binds:** NFR-004, launch ops
-- **Prevents:** one shared prod/staging database, unobserved scan-deferred gaps, unrestorable backups
-- **Rule:** isolated `dev | staging | prod`. IaC is OpenTofu in `infra/` targeting Scaleway `fr-par`. CI host is GitHub Actions (lint, types, unit, integration, migration check). CD: staging auto; prod manual approve. Secrets live in Scaleway Secret Manager (or any in-region secrets manager — never images/git). Observability is OpenTelemetry into an in-region stack (logs/traces/metrics); vendor SKU may change, the OTel contract must not. Metrics include moderation latency, scan-deferred / scan-failed count (never hidden), flag-queue age, report SLA, webhook lag, dual-confirmed marriages (internal; public counter is AD-25). PG PITR (daily + WAL); object-storage versioning; quarterly restore drill. Launch assumption: 10k MAU BF, single-region, 2 `api` + 1 `worker` + 1 `web` replica, PG primary + 1 replica. Drizzle Kit is the only migration runner
+- **Prevents:** unobserved scan-deferred gaps, unrestorable backups
+- **Rule:** MVP is **one self-managed environment** (the Story 1.7 compose stack). No isolated `dev | staging | prod`. No OpenTofu. No `infra/` modules. CI host is GitHub Actions (lint, types, unit, integration, migration check). Secrets live in a secrets manager — never images/git. Observability is OpenTelemetry (logs/traces/metrics); vendor SKU may change, the OTel contract must not. Metrics include moderation latency, scan-deferred / scan-failed count (never hidden), flag-queue age, report SLA, webhook lag, dual-confirmed marriages (internal; public counter is AD-25). PG PITR (daily + WAL); object-storage versioning; quarterly restore drill. Launch assumption: 10k MAU BF, single-region, 2 `api` + 1 `worker` + 1 `web` replica, PG primary + 1 replica. Drizzle Kit is the only migration runner
 
 ### AD-21 — Billing isolation from safety
 
@@ -302,12 +302,12 @@ Verified 2026-09-27 against npm registry, endoflife.date APIs, vendor docs, and 
 | NestJS (@nestjs/core) | 12.1.0 |
 | Capacitor (@capacitor/core) | 8.5.2 |
 | Drizzle ORM | 0.45.3 |
-| PostgreSQL (Scaleway managed) | 17.11 |
-| Redis (Scaleway managed) | 8.6.3 |
+| PostgreSQL | 17.11 |
+| Redis | 8.6.3 |
 | BullMQ | 6.3.9 |
 | Socket.IO | 4.8.4 |
 | Tailwind CSS | 4.3.3 |
-| Hosting (primary) | Scaleway fr-par (Kapsule + managed PG + Redis + Object Storage) |
+| Hosting (primary) | One self-managed compose environment (Story 1.7 stack) |
 
 Greenfield contract (do not inherit vanilla CLI defaults): monorepo template owns lint/test/module system. `apps/api` is ESM. One linter for the repo (oxlint). Nest tests are Vitest. Next may use Turbopack. TypeScript pin is 7.0.2 (ignore Nest schematic “TypeScript 6”). Next.js 16.3.6 is current as of 2026-09-27; do not scaffold below 16.3.7 after 2026-09-30. Node 24.21.0 Active LTS (revisit 24-maintenance vs 26-LTS if first prod cut is after 2026-10-28).
 
@@ -324,7 +324,7 @@ repo/
     billing/ content/ operator/ notifications/ audit/
   packages/kernel/          # IDs, envelope, AuthContext, clocks
   packages/ports/           # shared port types
-  infra/                    # Terraform/OpenTofu: k8s, PG, Redis, bucket, secrets
+  # compose.yaml is Story 1.7 — no infra/ OpenTofu for MVP
 ```
 
 ```mermaid
@@ -363,7 +363,7 @@ flowchart LR
     W[Web_PWA]
     A[Android_Capacitor]
   end
-  subgraph fr_par[Scaleway_fr-par]
+  subgraph compose[self_managed_compose]
     LB[Load_balancer]
     WEB[web_replicas]
     API[API_replicas]
@@ -424,7 +424,7 @@ flowchart LR
 - USSD adapter enabled (FR-055) — port exists, flag off until operator cost is known
 - Specific KYC / SMS / moderation / aggregator SKUs — ports only; **one live adapter per port** chosen at implementation (identity OTP and notifications SMS share `SmsPort`; they must not pick two vendors)
 - Redis vs Valkey if counsel rejects Redis 8 tri-license (managed engine today is 8.6.3, not upstream 8.10)
-- Scaleway managed PostgreSQL 18 (planned Q4 2026) — stay on 17.11 until the host lists 18
+- PostgreSQL 18 — stay on 17.11 until the self-managed pin moves
 - Dual-control moderator unblur (D31 NEXT) — MVP is audited single-control
 - Watermark / no-download polish (FR-061 NEXT) — gateway revoke + blurred thumbs + FLAG_SECURE ship now
 - Multi-region active-active and in-country move — portable substrate ready; not launched

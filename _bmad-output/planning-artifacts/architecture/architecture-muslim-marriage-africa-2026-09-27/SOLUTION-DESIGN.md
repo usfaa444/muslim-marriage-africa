@@ -109,13 +109,13 @@ Farata’s public DPA lists Vercel (USA) and Neon (USA) as processors — Offere
 
 ### 5.2 Pick
 
-**Primary: Scaleway Paris (`fr-par`), France.**
+**Primary: one self-managed environment (Story 1.7 compose stack).**
 
-Justify: managed services the launch team can actually run; French contracts (a counsel fact pattern, not “CIL-compliant because GDPR”); Object Storage is S3-compatible (AD-6); cost below a three-AZ AWS start; latency acceptable for REST/chat vs Cape Town. Containers + standard Postgres + S3-compatible storage remain movable to Virtix (or a future BF commercial cloud) if CIL requires in-country residency. Host engines today: managed PG **17.11**, managed Redis **8.6.3**.
+France hosting is not a requirement. Kapsule and OpenTofu are not used. Isolated `dev | staging | prod` is out of MVP. AD-6 components (PostgreSQL, Redis/Valkey, S3-compatible object storage) run in that compose stack. Do not name a host or region here.
 
-**Public disclosure (FR, required):** « Données hébergées en région Île-de-France (France), prestataire Scaleway ». Operators cannot hide this (FR-120).
+**Public disclosure (FR-120):** do **not** print « Données hébergées en région Île-de-France (France), prestataire Scaleway ». Do **not** invent a replacement location string. Operators cannot hide the real hosting line once a host is named.
 
-**Launch gate:** CIL transfer authorisation + DPA + encryption evidence **before** public traffic. Tagged `[ASSUMPTION — legal review]`.
+**Launch gate:** if the named host is a foreign transfer, CIL authorisation + DPA + encryption evidence **before** public traffic. Tagged `[ASSUMPTION — legal review]`.
 
 ### 5.3 Filing inventory (inputs for counsel — not a CIL filing)
 
@@ -124,10 +124,10 @@ Do not invent further articles. Do not claim GDPR = art. 42 adequacy.
 | Fact for the filing | Why it is in scope |
 | --- | --- |
 | Controller | The Burkina operating company (product AnKanu; legal entity name still counsel) |
-| Hosting processor | Scaleway `fr-par` (France) — AD-5 |
+| Hosting processor | Self-managed; host unnamed until named — AD-5 |
 | Other destinataires / sous-traitants | SMS gateway, KYC/liveness vendor, moderation/ASR vendor, mobile-money aggregator, FCM, Web Push relay, Google OIDC, captcha vendor — each may be outside BF. Adapter SKUs stay unbound (AD-5 not reopened) |
 | Categories | Account/contact; profile (including `madhhab`/`practice` — religious, art. 12 express consent); photos; chat; liveness + ID images (biometric-class + foreign transfer, art. 31); model scores on every outbound Chat item (art. 31 AI/profiling bullet — counsel decides); payments |
-| Transfers | France (host) plus each vendor’s country; list them on the privacy page, not only Scaleway |
+| Transfers | Host country (once named) plus each vendor’s country; list them on the privacy page. Do not invent the host country |
 
 ## 6. Entity catalog
 

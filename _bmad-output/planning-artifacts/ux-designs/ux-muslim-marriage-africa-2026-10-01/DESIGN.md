@@ -297,6 +297,6 @@ Keeper mocks (spines win): `mockups/auth.html` (auth), `mockups/discovery-lite.h
 | Gold for Reveal and dual-confirm | Gold “Premium verified” identity badge |
 | *mariage / ta'aruf / nikah / khitba*; pass / invite swipe | *dating / rencontre romantique*; « en ligne »; « +247.8k actifs »; heart stack |
 | Quiet decline | Guilt timer or “elle a vu” |
-| Disclose hosting on the privacy page | Hide Scaleway / Île-de-France |
+| Disclose hosting on the privacy page | Hide the real hosting location; print Scaleway / Île-de-France |
 | Show Sister pack-card on the message quota wall in both modes | Require a reach pack in `free_unlimited`, or invent a brother-free mode |
 | Keep verification, blur, mahram, report, block, and Chat after accept free | Gold-badge a safety screen as Premium |

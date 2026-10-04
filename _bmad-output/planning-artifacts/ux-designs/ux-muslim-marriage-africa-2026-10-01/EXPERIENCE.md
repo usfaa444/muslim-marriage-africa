@@ -336,7 +336,7 @@ Keep PRD §16 and A1–A3 open. UX must not bake a closed answer.
 12. Retention clocks — status page shows working NFR-008 numbers as `[ASSUMPTION]`.
 - **A1** 19+ gate ships as designed; legal review open.
 - **A2** Mahram path ships as designed; legal review open.
-- **A3** Hosting disclosure ships AD-5 French sentence; A3 text is not rewritten.
+- **A3** Hosting disclosure stays FR-120; do not ship the Scaleway / Île-de-France sentence; do not invent a replacement; A3 text is not rewritten.
 
 ## Key Flows
 
