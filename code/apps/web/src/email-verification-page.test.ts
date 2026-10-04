@@ -42,7 +42,7 @@ describe('email verification screen', () => {
     expect(markup).toContain('a&lt;/script&gt;@example.com')
   })
 
-  it('consumes a token and issues only when the screen has none', async () => {
+  it('consumes a token and leaves a token-less load idle until resend', async () => {
     const withToken = await runScreen('?token=abc', async (url) => ({
       status: url.endsWith('/consume') ? 200 : 201,
       headers: { get: () => encodeURIComponent('fatim@example.bf') },
@@ -55,6 +55,10 @@ describe('email verification screen', () => {
       status: 201,
       headers: { get: () => null },
     }))
+    expect(withoutToken.calls).toEqual([])
+    expect(withoutToken.states).toEqual([])
+    withoutToken.resend()
+    await new Promise((resolve) => setTimeout(resolve, 0))
     expect(withoutToken.calls.map((call) => call.url)).toEqual(['/v1/accounts/email-verifications'])
     expect(withoutToken.states).toEqual(['waiting'])
 
@@ -69,7 +73,7 @@ describe('email verification screen', () => {
 async function runScreen(
   search: string,
   respond: (url: string) => Promise<{ status: number; headers: { get: (name: string) => string | null } }>,
-): Promise<{ calls: Array<{ url: string }>; states: string[]; path: string }> {
+): Promise<{ calls: Array<{ url: string }>; states: string[]; path: string; resend: () => void }> {
   const html = emailVerificationPageHtml(stitch, null)
   const start = html.lastIndexOf('<script>')
   const source = html.slice(start + '<script>'.length, html.lastIndexOf('</script>'))
@@ -112,5 +116,16 @@ async function runScreen(
   sandbox.window = sandbox as unknown as { triggerResend?: () => void }
   runInNewContext(source, sandbox)
   await new Promise((resolve) => setTimeout(resolve, 0))
-  return { calls, states, path }
+  return {
+    calls,
+    states,
+    path,
+    resend() {
+      const trigger = sandbox.window.triggerResend
+      if (!trigger) {
+        throw new Error('triggerResend missing')
+      }
+      trigger()
+    },
+  }
 }

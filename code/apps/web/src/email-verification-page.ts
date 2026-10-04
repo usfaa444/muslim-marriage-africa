@@ -113,8 +113,6 @@ const BEHAVIOR = `
   const token = new URLSearchParams(window.location.search).get('token')
   if (token) {
     void consumeToken(token)
-  } else {
-    void issueLink()
   }
 </script>
 `

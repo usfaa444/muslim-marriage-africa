@@ -135,15 +135,20 @@ export async function issueEmailVerification(input: {
   }
   const createdAt = input.now()
   const expiresAt = new Date(createdAt.getTime() + EMAIL_LINK_TTL_MS)
-  const stored = await input.store.supersedeAndInsert(input.accountId, {
-    id: newId(createdAt),
-    account_id: input.accountId,
-    token_hash: hashEmailToken(token),
-    expires_at: expiresAt,
-    consumed_at: null,
-    superseded_at: null,
-    created_at: createdAt,
-  })
+  let stored: 'inserted' | 'already_verified'
+  try {
+    stored = await input.store.supersedeAndInsert(input.accountId, {
+      id: newId(createdAt),
+      account_id: input.accountId,
+      token_hash: hashEmailToken(token),
+      expires_at: expiresAt,
+      consumed_at: null,
+      superseded_at: null,
+      created_at: createdAt,
+    })
+  } catch {
+    return deliveryFailed(email)
+  }
   if (stored === 'already_verified') {
     return { ok: true, status: 200, email }
   }

@@ -8,7 +8,7 @@
 
 `POST /v1/accounts/email-verifications/consume` takes `{ token }` and does not need a session. A valid link returns 200 `{ email_verified_at }`, sets `consumed_at`, and stamps the password credential. Invalid, expired, consumed, and superseded tokens return 400 `EMAIL_LINK_INVALID`. Expiry is `expires_at <= now`. The 60-second grace and the two-minute spam hint are not server rules.
 
-`EmailPort` sends one SMTP message to `account.email`. The live adapter reads `SMTP_URL` (`smtp://` or `smtps://`). Tests pass a fake that records the link. This is not `SmsPort`, not notification, and not `sms_dispatch`. The link is `{Origin}/email-verification?token=`. That screen calls consume. Opening the screen with no token calls the issue POST.
+`EmailPort` sends one SMTP message to `account.email`. The live adapter reads `SMTP_URL` (`smtp://` or `smtps://`). Tests pass a fake that records the link. This is not `SmsPort`, not notification, and not `sms_dispatch`. The link is `{Origin}/email-verification?token=`. That screen calls consume. A load with no token does not POST. `window.triggerResend` is the only caller of the issue POST. If the row cannot be saved after SMTP accepts the message, the issue route returns 503 `EMAIL_DELIVERY_FAILED` and the transaction leaves no new live row.
 
 `EMAIL_LINK_INVALID` and `EMAIL_DELIVERY_FAILED` are on the AD-7 code list.
 
@@ -57,6 +57,7 @@ The migrate test starts a throwaway Postgres 17 container and removes it. The sc
 | Expire | Consume at exactly `expires_at` | 400 `EMAIL_LINK_INVALID`. `consumed_at` stays null. `email_verified_at` stays null. A direct consume write on that row also returns false. |
 | Resend | Issue again while unverified | 201. Older unconsumed rows get `superseded_at`. The old token is 400 even if its expiry is moved forward. The new token is 200. |
 | Send fails | The port throws | 503 `EMAIL_DELIVERY_FAILED`, `retryable` true. The previous live row is not superseded. |
+| Save fails after send | SMTP accepts, then the insert throws | 503 `EMAIL_DELIVERY_FAILED`, `retryable` true. The mailed token has no row. The previous live row is not superseded. |
 | No session | Issue with no cookie | 401 `UNAUTHENTICATED`, `retryable` false. No new row. |
 | No origin | Issue with a cookie and no `Origin` | 503 `EMAIL_DELIVERY_FAILED`. No new row. |
 | Unknown token | `{ "token": "not-the-live-token" }` | 400 `EMAIL_LINK_INVALID`. The live row stays unused. |
@@ -67,7 +68,7 @@ The migrate test starts a throwaway Postgres 17 container and removes it. The sc
 | Refused recipient | SMTP `550` on `RCPT TO` | The send throws `SMTP 550`. |
 | Screen with an inbox | Pass `fatim@example.bf` into the page helper | The specimen `tahir.sawadogo@courrier.bf` is gone from the markup. The Stitch sentences stay, including "sous deux minutes". |
 | Hostile inbox | Pass `a</script>@example.com` | The markup contains the escaped address and not the raw close-script string. |
-| Screen script | Run the injected script | A `?token=` load posts only consume. 200 sets `success` and replaces the URL with `/email-verification`. No token posts only the issue route and sets `waiting` on 201. 400 sets `expired`. |
+| Screen script | Run the injected script | A `?token=` load posts only consume. 200 sets `success` and replaces the URL with `/email-verification`. A load with no token posts nothing. `triggerResend` posts the issue route and sets `waiting` on 201. 400 sets `expired`. |
 | Waiting screen | Pass null | The specimen address remains until a response header replaces it. |
 | Postgres | Migrated Postgres 17 | Columns are `account_id`, `consumed_at`, `created_at`, `expires_at`, `id`, `superseded_at`, `token_hash`. Issue then consume writes the hash, then `consumed_at` and `credential.email_verified_at`. |
 
@@ -82,7 +83,7 @@ The migrate test starts a throwaway Postgres 17 container and removes it. The sc
 
 ## My results
 
-- `email-verification.test.ts`, `email-port.test.ts`, `email-verification-page.test.ts`, and `create-account.test.ts`: 20 passed
+- QA fail fix: `email-verification.test.ts` and `email-verification-page.test.ts`: 10 passed. A load with no token posts nothing. `triggerResend` posts the issue route. An insert that throws after send returns 503 `EMAIL_DELIVERY_FAILED` and leaves the previous live row unsuperseded.
 - `operator-config.migrate.test.ts`: 6 passed, including the email link written and consumed on Postgres 17
 - `npm run typecheck` passed
 - `npm run lint` passed
@@ -91,7 +92,7 @@ The migrate test starts a throwaway Postgres 17 container and removes it. The sc
 
 ## Three validation passes
 
-1. HTTP: issue, open, second open, already verified, exact expiry, resend, send failure, missing session, missing origin, unknown token, and the auth rate limit not applying to this route.
+1. HTTP: issue, open, second open, already verified, exact expiry, resend, send failure, insert failure after send, missing session, missing origin, unknown token, and the auth rate limit not applying to this route. A screen load with no token does not post.
 2. Migration: `0003_email_verification.sql` creates the seven columns. Empty Postgres 17 applies four migrations. Issue and consume are read back from `email_verification` and `credential`.
 3. Static: `npm run typecheck`, `npm run lint`, and `npm run migration-check`. The page test runs the injected script. The SMTP test talks to a local server.
 
@@ -109,7 +110,7 @@ The HTML file was not edited. The page injects a script before `</body>`. The vi
 ## Known gaps
 
 - First paint still shows `tahir.sawadogo@courrier.bf` until the issue or consume response returns `x-account-email`. The web process has no database, so the route cannot fill the inbox before that response.
-- Opening `/email-verification` with no token calls the issue POST. That supersedes any older unconsumed link. A refresh of the waiting screen does that too.
+- A load of `/email-verification` with no token does not send mail and does not supersede a live link. Resend is the control that calls the issue POST.
 - `MAIL FROM` and the `From` header are `account.email`. A relay that checks SPF may refuse it. No other from-address was named.
 - Compose does not set `SMTP_URL`. Without it, issue returns 503 and writes no row.
 - `smtp://` is cleartext. A username on that scheme is refused. TLS is `smtps://`.

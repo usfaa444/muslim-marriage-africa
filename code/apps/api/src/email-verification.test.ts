@@ -374,4 +374,28 @@ describe('email link expiry and resend', () => {
     })
     expect(opened.status).toBe(200)
   })
+
+  it('returns delivery failed when the row cannot be saved after the mail is accepted', async () => {
+    memory.credentials[0]!.email_verified_at = null
+    links.rows.length = 0
+    messages.length = 0
+    const live = await issue()
+    expect(live.status).toBe(201)
+    const saved = links.supersedeAndInsert.bind(links)
+    links.supersedeAndInsert = async () => {
+      throw new Error('insert failed')
+    }
+    try {
+      const failed = await issue()
+      const failedBody = (await failed.json()) as { error: { code: string; retryable: boolean } }
+      expect(failed.status).toBe(503)
+      expect(failedBody.error.code).toBe('EMAIL_DELIVERY_FAILED')
+      expect(failedBody.error.retryable).toBe(true)
+      expect(messages).toHaveLength(2)
+      expect(links.rows).toHaveLength(1)
+      expect(links.rows[0]?.superseded_at).toBeNull()
+    } finally {
+      links.supersedeAndInsert = saved
+    }
+  })
 })
