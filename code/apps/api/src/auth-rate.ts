@@ -1,7 +1,13 @@
 const WINDOW_MS = 60_000
 const MAX_BUCKETS = 4096
 
-const buckets = new Map<string, number[]>()
+type AuthBucket = {
+  stamps: number[]
+  lastPost: number
+  saturated: boolean
+}
+
+const buckets = new Map<string, AuthBucket>()
 
 export function resetAuthRateWindow(): void {
   buckets.clear()
@@ -12,31 +18,36 @@ function pruneExpired(nowMs: number): void {
     return
   }
   const cutoff = nowMs - WINDOW_MS
-  for (const [ip, stamps] of buckets) {
-    if (!stamps.some((stamp) => stamp > cutoff)) {
+  for (const [ip, bucket] of buckets) {
+    if (bucket.lastPost <= cutoff) {
       buckets.delete(ip)
     }
   }
 }
 
 /**
- * Counts this call. Allows it only while the IP's hits in the last 60 seconds stay within `limit`.
- * Stamps are kept up to `limit`, so a flood still fails and does not grow the list.
+ * Counts this call, including a denied one.
+ * Allows it only while this IP's posts in the last 60 seconds stay within `limit`.
+ * A denied post keeps the window open until 60 seconds after the last post.
+ * The stamp list stays capped at `limit`.
  */
 export function takeAuthSlot(ip: string, limit: number, now: Date): boolean {
   const nowMs = now.getTime()
   pruneExpired(nowMs)
   const cutoff = nowMs - WINDOW_MS
-  const recent = (buckets.get(ip) ?? []).filter((stamp) => stamp > cutoff)
-  if (recent.length >= limit) {
-    if (recent.length === 0) {
-      buckets.delete(ip)
-    } else {
-      buckets.set(ip, recent)
-    }
+  const existing = buckets.get(ip)
+  const windowOpen = existing !== undefined && existing.lastPost > cutoff
+  if (!windowOpen) {
+    buckets.set(ip, { stamps: [nowMs], lastPost: nowMs, saturated: 1 >= limit })
+    return true
+  }
+  const recent = existing.stamps.filter((stamp) => stamp > cutoff)
+  const lastPost = Math.max(existing.lastPost, nowMs)
+  if (existing.saturated || recent.length >= limit) {
+    buckets.set(ip, { stamps: recent, lastPost, saturated: true })
     return false
   }
   recent.push(nowMs)
-  buckets.set(ip, recent)
+  buckets.set(ip, { stamps: recent, lastPost, saturated: recent.length >= limit })
   return true
 }

@@ -287,15 +287,29 @@ describe('POST /v1/sessions', () => {
 })
 
 describe('auth rate window', () => {
-  it('drops a hit once it is 60 seconds old and keeps other addresses apart', () => {
+  it('holds a denied post until 60 seconds after the last post', () => {
     resetAuthRateWindow()
     const start = new Date('2026-01-01T00:00:00.000Z')
     expect(takeAuthSlot('9.9.9.9', 1, start)).toBe(true)
     expect(takeAuthSlot('9.9.9.9', 1, new Date(start.getTime() + 59_999))).toBe(false)
+    resetAuthRateWindow()
+    expect(takeAuthSlot('9.9.9.9', 1, start)).toBe(true)
     for (let extra = 0; extra < 50; extra += 1) {
       expect(takeAuthSlot('9.9.9.9', 1, new Date(start.getTime() + 1))).toBe(false)
     }
-    expect(takeAuthSlot('9.9.9.9', 1, new Date(start.getTime() + 60_000))).toBe(true)
+    expect(takeAuthSlot('9.9.9.9', 1, new Date(start.getTime() + 60_000))).toBe(false)
+    resetAuthRateWindow()
+    expect(takeAuthSlot('9.9.9.9', 1, start)).toBe(true)
+    expect(takeAuthSlot('9.9.9.9', 1, new Date(start.getTime() + 1))).toBe(false)
+    expect(takeAuthSlot('9.9.9.9', 1, new Date(start.getTime() + 1 + 60_000))).toBe(true)
+    let cursor = start.getTime()
+    resetAuthRateWindow()
+    expect(takeAuthSlot('9.9.9.9', 1, new Date(cursor))).toBe(true)
+    for (let step = 0; step < 5; step += 1) {
+      cursor += 59_000
+      expect(takeAuthSlot('9.9.9.9', 1, new Date(cursor))).toBe(false)
+    }
+    expect(takeAuthSlot('9.9.9.9', 1, new Date(cursor + 60_000))).toBe(true)
     resetAuthRateWindow()
     expect(takeAuthSlot('9.9.9.9', 1, start)).toBe(true)
     expect(takeAuthSlot('9.9.9.9', 1, new Date(start.getTime() + 60_000))).toBe(true)

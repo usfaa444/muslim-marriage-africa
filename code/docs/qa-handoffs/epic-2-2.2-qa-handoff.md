@@ -73,7 +73,7 @@ The migrate test starts a throwaway Postgres 17 container and removes it. Auth H
 | Missing session field | `{}` | 400 `UNHANDLED`. `details.field` is `identifier`. No session. |
 | Captcha fail | `POST /v1/accounts` with `human_verified` false, the string `"true"`, or omitted | 400 `CAPTCHA_FAILED`. `details.field` is `human_verified`. No account. |
 | Captcha pass | `human_verified` true plus a valid Story 2.1 body | 201 account, as in Story 2.1. |
-| Rate limit | More than `rl_auth_per_min` posts to the two auth routes from one IP inside 60 seconds | 429 `RATE_LIMITED`. No account and no session from the refused post. The other address is not in that bucket. `::ffff:203.0.113.5` and `203.0.113.5` share a bucket. |
+| Rate limit | More than `rl_auth_per_min` posts to the two auth routes from one IP inside 60 seconds | 429 `RATE_LIMITED`. No account and no session from the refused post. A refused post still occupies the window until 60 seconds after the last post. A flood that never pauses for a full window stays refused. The other address is not in that bucket. `::ffff:203.0.113.5` and `203.0.113.5` share a bucket. |
 | Unreadable limit | `rl_auth_per_min` is not a positive safe integer | 500 `UNHANDLED`. Nothing is created. |
 | Seeded limit | `DATABASE_URL` unset | The reader returns 10. With a database, the seeded row `10` is the number the routes enforce. |
 | Junk cookie | `GET /v1/health` with `ankanu_session=nope` | 200. The request is not a database error. |
@@ -90,7 +90,8 @@ The migrate test starts a throwaway Postgres 17 container and removes it. Auth H
 
 ## My results
 
-- `create-session.test.ts`, `create-account.test.ts`, and `auth-page.test.ts`: 16 passed
+- QA fail on the rate window, then: a denied post at `t+1ms` still refuses a post at `t+60000ms`. A pause of 60 seconds after the last denied post allows the next one. A flood every 59 seconds stays refused until a full quiet window.
+- `create-session.test.ts`, `create-account.test.ts`, and `auth-page.test.ts`: 16 passed after that fix
 - `operator-config.migrate.test.ts`: 5 passed, including the session insert, the remember-me slide read back from Postgres, the live limit `2` returning 429, a non-numeric limit returning 500, and a junk cookie still returning health 200
 - `npm run typecheck` passed
 - `npm run lint` passed
@@ -121,7 +122,7 @@ The HTML file was not edited. The page injects a script before `</body>`.
 ## Known gaps
 
 - Client IP is `socket.remoteAddress` only. No `X-Forwarded-For` was named. Through the web rewrite, browsers share the web container address, so one flood locks both auth routes for everyone on that path.
-- The counter is in-process. It is not shared across API replicas and it resets on restart. Stamps are kept up to the limit so a flood does not grow the list.
+- The counter is in-process. It is not shared across API replicas and it resets on restart. A denied post still occupies the window until 60 seconds after the last post. The stamp list does not grow with the flood. A continuous flood stays denied until it pauses for a full window.
 - This story does not issue CSRF. `POST /v1/sessions` does not require a token.
 - Login has no captcha control. Signup `#remember-device` is not wired. Creating an account does not set `ankanu_session`.
 - A 201 leaves the member on the auth screen. No next screen was named. Google, password reset, age, and PIN are not this story.
