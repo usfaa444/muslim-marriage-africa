@@ -40,6 +40,19 @@ function connect(port: number): Promise<void> {
 
 function childEnv(port: number, role: string | undefined): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = { ...process.env, PORT: String(port) }
+  for (const key of [
+    'REDIS_HOST',
+    'REDIS_PORT',
+    'REDIS_PASSWORD',
+    'REDIS_URL',
+    'S3_ENDPOINT',
+    'S3_BUCKET',
+    'S3_REGION',
+    'S3_ACCESS_KEY_ID',
+    'S3_SECRET_ACCESS_KEY',
+  ]) {
+    delete env[key]
+  }
   if (role === undefined) {
     delete env.PROCESS_ROLE
   } else {
