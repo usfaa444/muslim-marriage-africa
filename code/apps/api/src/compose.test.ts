@@ -145,15 +145,20 @@ describe('compose file', () => {
     expect(text).toContain('POSTGRES_USER: ankanu')
     expect(text).toContain('POSTGRES_DB: ankanu')
     expect(text).toContain('DATABASE_URL: postgres://ankanu@postgres:5432/ankanu')
+    expect(text).toContain('*[![:space:]]*')
+    expect(text).not.toContain('[ -z "$$MINIO_ROOT_USER" ]')
   })
 })
 
 describe('bucket credentials missing', () => {
+  const blankSpaces = ' '.repeat(3)
+  const blankMixed = `${' '}${'\t'}${' '}`
+
   afterAll(async () => {
     await composeDown()
   }, 120_000)
 
-  async function expectBucketUnhealthy(overrides: Record<string, string | undefined>): Promise<void> {
+  async function expectBucketUnhealthy(overrides: Record<string, string | undefined>): Promise<Inspect> {
     await composeDown()
     const env = composeEnv(overrides)
     const up = await run(
@@ -166,6 +171,9 @@ describe('bucket credentials missing', () => {
     expect(info.State.ExitCode).not.toBe(0)
     expect(info.State.Health?.Status).not.toBe('healthy')
     expect(hostPorts(info)).toEqual([])
+    const logs = await run([...projectArgs, 'logs', '--no-color', 'bucket'], { allowFailure: true })
+    expect(`${logs.stdout}\n${logs.stderr}`).not.toContain(['minio', 'admin'].join(''))
+    return info
   }
 
   it('does not become healthy when S3_ACCESS_KEY_ID is unset', async () => {
@@ -186,6 +194,29 @@ describe('bucket credentials missing', () => {
     await expectBucketUnhealthy({
       S3_ACCESS_KEY_ID: undefined,
       S3_SECRET_ACCESS_KEY: undefined,
+    })
+  }, 90_000)
+
+  it('does not become healthy when both bucket credentials are whitespace', async () => {
+    const info = await expectBucketUnhealthy({
+      S3_ACCESS_KEY_ID: blankSpaces,
+      S3_SECRET_ACCESS_KEY: blankMixed,
+    })
+    expect(info.Config.Env ?? []).toContain(`MINIO_ROOT_USER=${blankSpaces}`)
+    expect(info.Config.Env ?? []).toContain(`MINIO_ROOT_PASSWORD=${blankMixed}`)
+  }, 90_000)
+
+  it('does not become healthy when only the bucket user is whitespace', async () => {
+    await expectBucketUnhealthy({
+      S3_ACCESS_KEY_ID: blankSpaces,
+      S3_SECRET_ACCESS_KEY: randomBytes(18).toString('hex'),
+    })
+  }, 90_000)
+
+  it('does not become healthy when only the bucket password is whitespace', async () => {
+    await expectBucketUnhealthy({
+      S3_ACCESS_KEY_ID: randomBytes(8).toString('hex'),
+      S3_SECRET_ACCESS_KEY: blankSpaces,
     })
   }, 90_000)
 })

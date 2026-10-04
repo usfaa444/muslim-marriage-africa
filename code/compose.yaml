@@ -97,7 +97,7 @@ services:
     image: minio/minio:RELEASE.2025-07-23T15-54-02Z
     entrypoint: ["/bin/sh", "-c"]
     command:
-      - 'if [ -z "$$MINIO_ROOT_USER" ] || [ -z "$$MINIO_ROOT_PASSWORD" ]; then exit 1; fi; exec minio server /data'
+      - 'case "$$MINIO_ROOT_USER" in *[![:space:]]*) ;; *) exit 1 ;; esac; case "$$MINIO_ROOT_PASSWORD" in *[![:space:]]*) ;; *) exit 1 ;; esac; exec minio server /data'
     environment:
       MINIO_ROOT_USER: "${S3_ACCESS_KEY_ID}"
       MINIO_ROOT_PASSWORD: "${S3_SECRET_ACCESS_KEY}"
