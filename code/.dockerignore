@@ -18,8 +18,11 @@
 **/.next
 **/build
 
-# Design captures are not part of the runtime image.
-design-stitch
+# Design captures stay out of the image, except the Auth HTML the web server reads.
+design-stitch/*
+!design-stitch/11-auth/
+design-stitch/11-auth/*
+!design-stitch/11-auth/screen.html
 
 # Restore-drill data must not enter the image build context.
 pg-data

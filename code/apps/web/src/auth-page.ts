@@ -3,6 +3,7 @@ export const COC_VERSION_ON_SCREEN = 'FR-089'
 
 const SUBMIT = `
 <script>
+  let submitting = false
   function passwordMeetsPublishedRules(value) {
     const length = Array.from(value).length
     return length >= 12 && length <= 128 && value.trim().length > 0
@@ -13,7 +14,7 @@ const SUBMIT = `
     const pseudonym = document.getElementById('pseudonym').value.trim()
     const password = document.getElementById('password').value
     const button = document.getElementById('btn-submit-signup')
-    const ready = pledge && email && pseudonym && passwordMeetsPublishedRules(password)
+    const ready = !submitting && pledge && email && pseudonym && passwordMeetsPublishedRules(password)
     if (ready) {
       button.disabled = false
       button.className = "w-full h-12 px-6 rounded-xl font-body-strong text-body transition-colors duration-200 flex items-center justify-center space-x-2 bg-indigo hover:bg-indigo-deep text-ink-on-indigo cursor-pointer"
@@ -22,30 +23,7 @@ const SUBMIT = `
       button.className = "w-full h-12 px-6 rounded-xl font-body-strong text-body transition-colors duration-200 flex items-center justify-center space-x-2 bg-disabled text-ink-primary/60 cursor-not-allowed"
     }
   }
-  document.getElementById('email').addEventListener('input', validateSubmissionState)
-  document.getElementById('pseudonym').addEventListener('input', validateSubmissionState)
-  document.getElementById('signup-form').addEventListener('submit', async function (event) {
-    event.preventDefault()
-    const selected = document.querySelector('input[name="gender_role"]:checked')
-    const gender = selected && selected.value === 'frere' ? 'brother' : 'sister'
-    const response = await fetch('/v1/accounts', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        email: document.getElementById('email').value,
-        password: document.getElementById('password').value,
-        pseudonym: document.getElementById('pseudonym').value,
-        gender: gender,
-        pledge_accepted: document.getElementById('pledge-check').checked === true,
-        coc_version: ${JSON.stringify(COC_VERSION_ON_SCREEN)}
-      })
-    })
-    const payload = await response.json().catch(function () { return null })
-    let line = 'Compte créé. Il n\\'est pas listé publiquement.'
-    if (!response.ok) {
-      const field = payload && payload.error && payload.error.details && (payload.error.details.field || (payload.error.details.fields || []).join(', '))
-      line = (payload && payload.error && payload.error.message) || (field ? String(field) : 'La création a échoué.')
-    }
+  function showSignupLine(line) {
     let slot = document.getElementById('signup-result')
     if (!slot) {
       slot = document.createElement('p')
@@ -54,6 +32,44 @@ const SUBMIT = `
       document.getElementById('signup-form').appendChild(slot)
     }
     slot.textContent = line
+  }
+  document.getElementById('email').addEventListener('input', validateSubmissionState)
+  document.getElementById('pseudonym').addEventListener('input', validateSubmissionState)
+  document.getElementById('signup-form').addEventListener('submit', async function (event) {
+    event.preventDefault()
+    if (submitting) {
+      return
+    }
+    submitting = true
+    const button = document.getElementById('btn-submit-signup')
+    button.disabled = true
+    const selected = document.querySelector('input[name="gender_role"]:checked')
+    const gender = selected && selected.value === 'frere' ? 'brother' : 'sister'
+    let line = 'Compte créé. Il n\\'est pas listé publiquement.'
+    try {
+      const response = await fetch('/v1/accounts', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: document.getElementById('email').value,
+          password: document.getElementById('password').value,
+          pseudonym: document.getElementById('pseudonym').value,
+          gender: gender,
+          pledge_accepted: document.getElementById('pledge-check').checked === true,
+          coc_version: ${JSON.stringify(COC_VERSION_ON_SCREEN)}
+        })
+      })
+      const payload = await response.json().catch(function () { return null })
+      if (!response.ok) {
+        const field = payload && payload.error && payload.error.details && (payload.error.details.field || (payload.error.details.fields || []).join(', '))
+        line = (payload && payload.error && payload.error.message) || (field ? String(field) : 'La création a échoué.')
+      }
+    } catch (error) {
+      line = 'La création a échoué.'
+    }
+    showSignupLine(line)
+    submitting = false
+    validateSubmissionState()
   })
   const google = Array.from(document.querySelectorAll('button')).find(function (button) {
     return button.textContent && button.textContent.indexOf('Continuer via Google') !== -1

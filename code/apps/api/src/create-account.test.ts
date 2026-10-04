@@ -128,4 +128,51 @@ describe('POST /v1/accounts', () => {
     expect(passwordIsPublishable('a'.repeat(129))).toBe(false)
     expect(passwordIsPublishable(' '.repeat(12))).toBe(false)
   })
+
+  it('rejects an 11-character password, a 129-character password, and 12 spaces with no row', async () => {
+    const before = memory.accounts.length
+    const passwords = ['a'.repeat(11), 'a'.repeat(129), ' '.repeat(12)]
+    for (const [index, password] of passwords.entries()) {
+      const response = await fetch(`${base}/v1/accounts`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(
+          body({
+            password,
+            email: `court-${index}@example.bf`,
+            pseudonym: `Court_${index}`,
+          }),
+        ),
+      })
+      const payload = (await response.json()) as { error: { details: { field: string } } }
+      expect(response.status).toBe(400)
+      expect(payload.error.details.field).toBe('password')
+    }
+    expect(memory.accounts).toHaveLength(before)
+    expect(memory.credentials).toHaveLength(before)
+  })
+
+  it('stores brother and rejects any other gender without a row', async () => {
+    const before = memory.accounts.length
+    const created = await fetch(`${base}/v1/accounts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body({ email: 'amadou@example.bf', pseudonym: 'Amadou_Bobo', gender: 'brother' })),
+    })
+    const createdBody = (await created.json()) as { gender: string }
+    expect(created.status).toBe(201)
+    expect(createdBody.gender).toBe('brother')
+    expect(memory.accounts.at(-1)?.gender).toBe('brother')
+
+    const rejected = await fetch(`${base}/v1/accounts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body({ email: 'autre-genre@example.bf', pseudonym: 'Autre_Genre', gender: 'member' })),
+    })
+    const rejectedBody = (await rejected.json()) as { error: { details: { field: string } } }
+    expect(rejected.status).toBe(400)
+    expect(rejectedBody.error.details.field).toBe('gender')
+    expect(memory.accounts).toHaveLength(before + 1)
+    expect(memory.credentials).toHaveLength(before + 1)
+  })
 })

@@ -26,6 +26,15 @@ export function getAccountStore(): AccountStore {
   return postgresStore()
 }
 
+export async function closeAccountStore(): Promise<void> {
+  const current = pool
+  pool = undefined
+  database = undefined
+  if (current) {
+    await current.end()
+  }
+}
+
 function postgresStore(): AccountStore {
   return {
     emailTaken: (email) => exists(account.email, email),
@@ -41,6 +50,9 @@ function db(): NodePgDatabase {
       throw new Error('DATABASE_URL is required')
     }
     pool = new Pool({ connectionString: url })
+    pool.on('error', () => {
+      // An idle client error must not crash the API process.
+    })
     database = drizzle(pool)
   }
   return database

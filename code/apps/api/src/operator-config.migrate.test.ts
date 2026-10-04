@@ -1,3 +1,4 @@
+import type { AddressInfo } from 'node:net'
 import { execFile } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import { readdirSync, readFileSync } from 'node:fs'
@@ -5,6 +6,8 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { Client } from 'pg'
+import { closeAccountStore, setAccountStore } from './account-store.js'
+import { createApp } from './create-app.js'
 import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
 
 const apiRoot = fileURLToPath(new URL('..', import.meta.url))
@@ -245,6 +248,61 @@ describe('operator_config migration', () => {
 
     const seeded = await db().query<{ key: string }>(`select "key" from "operator_config" order by "key"`)
     expect(seeded.rows.map((row) => row.key)).toEqual(Object.keys(founderValues).sort())
+  }, 60_000)
+
+  it('inserts through getAccountStore on migrated Postgres 17 and returns 409 for a duplicate email', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    const app = await createApp()
+    await app.listen(0, '127.0.0.1')
+    try {
+      const address = app.getHttpServer().address() as AddressInfo | string | null
+      if (address === null || typeof address === 'string') {
+        throw new Error('expected the api test server to bind a TCP port')
+      }
+      const payload = {
+        email: 'fatim@example.bf',
+        password: 'phrase avec espaces',
+        pseudonym: 'Fatim_Ouaga',
+        gender: 'brother',
+        pledge_accepted: true,
+        coc_version: 'FR-089',
+      }
+      const created = await fetch(`http://127.0.0.1:${address.port}/v1/accounts`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const createdBody = (await created.json()) as { gender: string }
+      expect(created.status).toBe(201)
+      expect(createdBody.gender).toBe('brother')
+
+      const stored = await db().query<{ gender: string; count: string }>(
+        `select "gender", count(*)::text as count from "account" group by "gender"`,
+      )
+      expect(stored.rows).toEqual([{ gender: 'brother', count: '1' }])
+
+      const duplicate = await fetch(`http://127.0.0.1:${address.port}/v1/accounts`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ ...payload, pseudonym: 'Autre_Nom' }),
+      })
+      const duplicateBody = (await duplicate.json()) as { error: { details: { field: string } } }
+      expect(duplicate.status).toBe(409)
+      expect(duplicateBody.error.details.field).toBe('email')
+      const after = await db().query<{ count: string }>(`select count(*)::text as count from "account"`)
+      expect(after.rows[0]?.count).toBe('1')
+    } finally {
+      await app.close()
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
   }, 60_000)
 
   it('reads every founder value by key, with both reach-mode strings in the migration and in api code', async () => {

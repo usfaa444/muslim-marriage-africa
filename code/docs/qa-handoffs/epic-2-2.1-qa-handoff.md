@@ -18,6 +18,9 @@
 - `code/apps/web/src/auth-page.ts`
 - `code/apps/web/app/auth/route.ts`
 - `code/apps/web/src/auth-page.test.ts`
+- `code/apps/api/src/operator-config.migrate.test.ts`
+- `code/apps/api/src/compose.test.ts`
+- `code/.dockerignore`
 
 ## How to run
 
@@ -25,9 +28,11 @@ From `code/`:
 
 ```bash
 npx vitest run --config vitest.unit.config.ts apps/api/src/create-account.test.ts apps/web/src/auth-page.test.ts apps/api/src/api.test.ts
-npx vitest run --config vitest.integration.config.ts apps/api/src/operator-config.migrate.test.ts
+npx vitest run --config vitest.integration.config.ts --fileParallelism false apps/api/src/operator-config.migrate.test.ts
+npx next build
 npm run typecheck
 npm run lint
+npx vitest run --config vitest.integration.config.ts --fileParallelism false apps/api/src/compose.test.ts -t "makes web, api"
 ```
 
 The migrate test starts a throwaway Postgres 17 container and removes it. Auth HTML is `GET /auth` on the web app. Signup posts `/v1/accounts` on the API.
@@ -41,8 +46,13 @@ The migrate test starts a throwaway Postgres 17 container and removes it. Auth H
 | Missing version | blank `coc_version` | 400. `details.field` is `coc_version`. No account. |
 | Taken email | same email, other casing counts as the same email | 409. Message and `details.field` name `email`. No second account. |
 | Taken pseudonym | same pseudonym | 409. Message and `details.field` name `pseudonym`. No second account. |
-| Password | shorter than 12, longer than 128, or only spaces | 400. `details.field` is `password`. A 12-character Unicode password with spaces inside is accepted. No required digit, symbol, or mixed case. |
-| Screen | `GET /auth` | Stitch signup markup, including captcha, “Continuer via Google”, and the 19+ notice. The post body sends `coc_version` `FR-089` and does not send the captcha checkbox. No Google URL. No date of birth. |
+| Password | 11 characters, 129 characters, or 12 spaces | 400. `details.field` is `password`. No account row and no credential row. |
+| Gender | `brother` | 201. Stored gender is `brother`. |
+| Gender | any value other than `sister` or `brother` | 400. `details.field` is `gender`. No new row. |
+| Screen | `GET /auth` | Stitch signup markup, including captcha, “Continuer via Google”, and the 19+ notice. The added script defines `validateSubmissionState`, checks `length >= 12`, and maps `frere` to `brother`. The post body sends `coc_version` `FR-089`. No Google URL. No date of birth. |
+| Double submit | click submit while the request is in flight | The submit button stays disabled until the request settles. A rejected `fetch` writes a failure line in `#signup-result`. |
+| Postgres insert | `POST /v1/accounts` through `getAccountStore()` on migrated Postgres 17, then the same email again | First response 201 and one `account` row. Second response 409 with `details.field` `email` and still one row. |
+| Compose | from the api container, `GET http://web:3000/auth` and `GET http://web:3000/v1/health` | Auth returns the stitch HTML plus `function validateSubmissionState`. Health is ok with role `api`. |
 
 ## Test data
 
@@ -52,17 +62,20 @@ The migrate test starts a throwaway Postgres 17 container and removes it. Auth H
 
 ## My results
 
-- `create-account.test.ts`, `auth-page.test.ts`, and `api.test.ts`: passed
-- `operator-config.migrate.test.ts`: 4 passed. Empty Postgres 17 ends with `account`, `credential`, and `operator_config`
+QA fail on this ticket, then:
+
+- `create-account.test.ts`, `auth-page.test.ts`, and `api.test.ts`: 11 passed
+- `operator-config.migrate.test.ts`: 5 passed. The fifth inserts through the Postgres store and the duplicate email is 409
+- `npx next build` in `code/apps/web` succeeded. `GET /auth` on that build returned the stitch HTML and the signup script
+- `compose.test.ts -t "makes web, api"`: 1 passed, 9 skipped. `http://web:3000/auth` and `http://web:3000/v1/health` both succeeded inside the stack
 - `npm run typecheck` passed
 - `npm run lint` passed
-- `drizzle-kit check` passed
 
 ## Three validation passes
 
-1. HTTP: create, skipped pledge, missing `coc_version`, email conflict, pseudonym conflict, and the published password bounds.
-2. Migration: `coc_version` text not null and `age_attested` boolean not null are in `0001_account_credential.sql`. The SQL does not create `profile`. Migrate on empty Postgres 17 applies two migrations.
-3. Static: `npm run typecheck` and `npm run lint`. The auth page test checks the stitch strings and that the added script does not post the captcha checkbox.
+1. HTTP: create, skipped pledge, missing `coc_version`, email conflict, pseudonym conflict, the three rejected passwords, `brother`, and a rejected gender. `GET /auth` on the production build returns the stitch page.
+2. Migration: `coc_version` text not null and `age_attested` boolean not null are in `0001_account_credential.sql`. The SQL does not create `profile`. Migrate on empty Postgres 17 applies two migrations, then one insert and one duplicate email.
+3. Static and image: `npm run typecheck`, `npm run lint`, and `npx next build`. The web image includes `design-stitch/11-auth/screen.html`. Compose fetches auth and health through `web:3000`.
 
 ## Solution-design sections
 

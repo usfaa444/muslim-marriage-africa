@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { authPageHtml } from '../../src/auth-page.js'
+import { authPageHtml } from '../../src/auth-page'
 
 function stitchPath(): string {
   const candidates = [

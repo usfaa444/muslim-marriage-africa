@@ -298,6 +298,24 @@ describe('docker compose up', () => {
       'api',
       'node',
       '-e',
+      "fetch('http://web:3000/auth').then(async (response) => { const html = await response.text(); if (!response.ok || !html.includes('function validateSubmissionState') || !html.includes('Démarche')) process.exit(1); }).catch(() => process.exit(1))",
+    ])
+    await run([
+      ...projectArgs,
+      'exec',
+      '-T',
+      'api',
+      'node',
+      '-e',
+      "fetch('http://web:3000/v1/health').then(async (response) => { const body = await response.json(); if (!response.ok || body.status !== 'ok' || body.role !== 'api') process.exit(1); }).catch(() => process.exit(1))",
+    ])
+    await run([
+      ...projectArgs,
+      'exec',
+      '-T',
+      'api',
+      'node',
+      '-e',
       "const { Client } = require('pg'); const client = new Client({ host: 'postgres', user: 'ankanu', database: 'ankanu', port: 5432 }); client.connect().then(() => client.query('select current_user as user')).then((result) => { if (result.rows[0].user !== 'ankanu') process.exit(1); return client.end(); }).catch(() => process.exit(1))",
     ])
     await run([...projectArgs, 'exec', '-T', 'postgres', 'pg_isready', '-U', 'ankanu', '-d', 'ankanu'])
