@@ -22,22 +22,25 @@ psql_at() {
 }
 wal_file=$(psql_at "select pg_walfile_name(pg_current_wal_lsn())")
 wal_file=$(printf '%s' "$wal_file" | tr -d '[:space:]')
-if ! printf '%s' "$wal_file" | grep -Eq '^[0-9A-F]{24}$'; then
+switched=$(psql_at "select pg_walfile_name(pg_switch_wal())")
+switched=$(printf '%s' "$switched" | tr -d '[:space:]')
+if ! printf '%s' "$wal_file" | grep -Eq '^[0-9A-F]{24}$' || ! printf '%s' "$switched" | grep -Eq '^[0-9A-F]{24}$'; then
   echo "WAL segment name missing" >&2
   exit 1
 fi
-psql_at "select pg_switch_wal()" >/dev/null
-i=0
-while [ "$i" -lt 60 ]; do
-  if [ -f "$root/pg-wal/$wal_file" ]; then
-    break
+if [ "$switched" != "$wal_file" ]; then
+  i=0
+  while [ "$i" -lt 60 ]; do
+    if [ -f "$root/pg-wal/$wal_file" ]; then
+      break
+    fi
+    i=$((i + 1))
+    sleep 1
+  done
+  if [ ! -f "$root/pg-wal/$wal_file" ]; then
+    echo "WAL segment was not archived" >&2
+    exit 1
   fi
-  i=$((i + 1))
-  sleep 1
-done
-if [ ! -f "$root/pg-wal/$wal_file" ]; then
-  echo "WAL segment was not archived" >&2
-  exit 1
 fi
 compose stop postgres
 compose run --rm --no-deps --user root --entrypoint /bin/sh postgres -c "set -eu
@@ -62,5 +65,10 @@ while [ "$i" -lt 60 ]; do
   i=$((i + 1))
   sleep 1
 done
+recovery=$(psql_at "select pg_is_in_recovery()" 2>/dev/null || true)
+recovery=$(printf '%s' "$recovery" | tr -d '[:space:]')
+if [ "$recovery" = "f" ]; then
+  exit 0
+fi
 echo "postgres did not leave recovery after restore" >&2
 exit 1

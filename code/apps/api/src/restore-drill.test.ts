@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { rmSync } from 'node:fs'
+import { existsSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -67,6 +67,18 @@ async function psql(sql: string): Promise<string> {
   return result.stdout.trim()
 }
 
+async function waitForWalFile(name: string): Promise<void> {
+  const path = join(codeRoot, 'pg-wal', name)
+  const deadline = Date.now() + 20_000
+  while (Date.now() < deadline) {
+    if (existsSync(path)) {
+      return
+    }
+    await delay(300)
+  }
+  throw new Error(`WAL segment ${name} was not archived`)
+}
+
 async function clearBindMounts(): Promise<void> {
   await run([
     'run',
@@ -107,6 +119,7 @@ describe('quarterly restore drill', () => {
   it('restores a row from WAL that the base backup did not contain', async () => {
     expect(await psql('show wal_level')).toBe('replica')
     expect(await psql('show archive_mode')).toBe('on')
+    await psql('drop table if exists probe')
     await psql('create table probe (id int primary key)')
     await shell([join(codeRoot, 'scripts/postgres-base-backup.sh')])
     await psql('insert into probe (id) values (1)')
@@ -115,6 +128,25 @@ describe('quarterly restore drill', () => {
     await delay(1100)
     await psql('delete from probe')
     expect(await psql('select count(*) from probe')).toBe('0')
+    await shell([join(codeRoot, 'scripts/postgres-pitr-restore.sh'), target])
+    expect(await psql('select pg_is_in_recovery()')).toBe('f')
+    expect(await psql('select count(*) from probe')).toBe('1')
+  }, 180_000)
+
+  it('restores when the open WAL segment is already archived', async () => {
+    await psql('drop table if exists probe')
+    await psql('create table probe (id int primary key)')
+    await shell([join(codeRoot, 'scripts/postgres-base-backup.sh')])
+    await psql('insert into probe (id) values (1)')
+    const stamp = await psql("select to_char(clock_timestamp() at time zone 'UTC', 'YYYY-MM-DD HH24:MI:SS.US')")
+    const target = `${stamp}+00`
+    await delay(1100)
+    await psql('delete from probe')
+    expect(await psql('select count(*) from probe')).toBe('0')
+    const segment = await psql('select pg_walfile_name(pg_current_wal_lsn())')
+    expect(segment).toMatch(/^[0-9A-F]{24}$/)
+    await psql('select pg_switch_wal()')
+    await waitForWalFile(segment)
     await shell([join(codeRoot, 'scripts/postgres-pitr-restore.sh'), target])
     expect(await psql('select pg_is_in_recovery()')).toBe('f')
     expect(await psql('select count(*) from probe')).toBe('1')

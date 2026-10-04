@@ -56,6 +56,7 @@ The unit command does not need Docker. The integration command starts MinIO and 
 | One stack | Read `code/compose.yaml` | Services stay `web`, `api`, `worker`, `postgres`, `redis`, `bucket`. Postgres sets `wal_level=replica`, `archive_mode=on`, `archive_timeout=60`, and archives WAL under `/var/lib/postgresql/wal-archive`. Bind mounts are `./pg-data`, `./pg-wal`, and `./pg-base`. No `ports` key. No `dev`, `staging`, or `prod` word. |
 | Object version | Create a private bucket, write bytes, overwrite them, restore the first version id | Versioning status is `Enabled`. A second create still leaves it enabled. The current object reads back as the first bytes. |
 | PITR drill | Follow the runbook scripts only: base backup, insert a row, delete it, then `postgres-pitr-restore.sh` to the timestamp after the insert. The test does not call `pg_switch_wal()` and does not retry the count. | Before restore the count is `0`. The script archives the open WAL segment, then restores. When the script exits 0, `pg_is_in_recovery()` is `f` and the count is `1`. `wal_level` is `replica` and `archive_mode` is `on`. |
+| Empty WAL segment | Base backup, insert, delete, `pg_switch_wal()`, wait until that segment is in `pg-wal`, then call only `postgres-pitr-restore.sh`. | The open segment has no new records. The script exits 0 without waiting for a file that will not be archived. `pg_is_in_recovery()` is `f` and the count is `1`. |
 | Bad restore target | `sh scripts/postgres-pitr-restore.sh not-a-time` | Exit 1. Stderr names `YYYY-MM-DD HH:MM:SS+00`. Docker is not started. |
 | Migration check | `npm run migration-check` from `code/` | `drizzle-kit check` prints that everything is fine. |
 
@@ -69,11 +70,13 @@ No accounts. Object-storage credentials in the MinIO test are random bytes, not 
 
 After the [ANK-41](/ANK/issues/ANK-41) restore fail: `npx vitest run --config vitest.unit.config.ts apps/api/src/ci-contract.test.ts` — 4 tests passed. `npx vitest run --config vitest.integration.config.ts --fileParallelism false apps/api/src/restore-drill.test.ts` — 1 test passed in 15.93s. The drill calls only the runbook scripts. When the restore script exits 0, `pg_is_in_recovery()` is `f` and the probe count is `1`.
 
+After the [ANK-42](/ANK/issues/ANK-42) empty-segment fail: the same two commands passed again. The contract file was 4 tests. The drill file was 2 tests in 24.51s. One case still deletes immediately. The other switches WAL, waits for that segment, then calls only the restore script. Both end with `pg_is_in_recovery()` `f` and probe count `1`.
+
 ## Three validation passes
 
 1. CI contract: the workflow GitHub loads names the five checks, runs them under `code/` on Node 24.21.0, and does not embed a secret. `drizzle-kit check` passes. The unit suite passes without Docker.
 2. Scan metrics: both instruments are present at zero, stay present after a record, and a missing name throws. An empty endpoint does not select a host.
-3. Restore: the object-version test brings the first bytes back on the MinIO image used by compose. The PITR drill brings row `1` back from WAL that the base backup did not contain. The restore script itself archives the open WAL segment before it replaces the data directory, and it exits 0 only after `pg_is_in_recovery()` is false. The compose service list is unchanged. `pg-data`, `pg-wal`, and `pg-base` are listed in `code/.dockerignore`.
+3. Restore: the object-version test brings the first bytes back on the MinIO image used by compose. The PITR drill brings row `1` back from WAL that the base backup did not contain. When `pg_walfile_name(pg_switch_wal())` matches the open file, the script restores without waiting. When the names differ, it waits for the recorded segment. It exits 0 only after `pg_is_in_recovery()` is false, including one check after the 60 second loop. The compose service list is unchanged. `pg-data`, `pg-wal`, and `pg-base` are listed in `code/.dockerignore`.
 
 ## Solution-design sections
 
