@@ -19,7 +19,7 @@ export type PasswordCredential = {
   kind: 'password'
   secret_hash: string
   provider_subject: null
-  email_verified_at: null
+  email_verified_at: string | null
 }
 
 export type AccountStore = {

@@ -1,6 +1,6 @@
 import type { AddressInfo } from 'node:net'
 import { execFile } from 'node:child_process'
-import { randomBytes } from 'node:crypto'
+import { createHash, randomBytes } from 'node:crypto'
 import { readdirSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -11,6 +11,8 @@ import { setAuthClock } from './auth-clock.js'
 import { readRlAuthPerMin } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
 import { createApp } from './create-app.js'
+import { setEmailPort } from './email-port.js'
+import { setEmailVerificationStore } from './email-verification-store.js'
 import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
 
 const apiRoot = fileURLToPath(new URL('..', import.meta.url))
@@ -144,7 +146,12 @@ function typescriptSources(dir: string): string[] {
 function migrationSql(): string {
   const drizzleDir = join(apiRoot, 'drizzle')
   const sqlFiles = readdirSync(drizzleDir).filter((name) => name.endsWith('.sql')).sort()
-  expect(sqlFiles).toEqual(['0000_operator_config.sql', '0001_account_credential.sql', '0002_session.sql'])
+  expect(sqlFiles).toEqual([
+    '0000_operator_config.sql',
+    '0001_account_credential.sql',
+    '0002_session.sql',
+    '0003_email_verification.sql',
+  ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
   expect(accountSql).toContain('"age_attested" boolean NOT NULL')
@@ -228,11 +235,18 @@ describe('operator_config migration', () => {
     })
     migrated = true
 
-    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config', 'session'])
+    expect(await publicTables(db())).toEqual([
+      'account',
+      'credential',
+      'email_verification',
+      'operator_config',
+      'session',
+    ])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
       'public.account',
       'public.credential',
+      'public.email_verification',
       'public.operator_config',
       'public.session',
     ])
@@ -240,7 +254,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('3')
+    expect(applied.rows[0]?.count).toBe('4')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -421,6 +435,114 @@ describe('operator_config migration', () => {
     }
   }, 60_000)
 
+  it('issues and consumes an email link on migrated Postgres', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setEmailVerificationStore(undefined)
+    const sent: Array<{ to: string; link: string }> = []
+    setEmailPort({
+      async send(message) {
+        sent.push(message)
+      },
+    })
+    const stamped = new Date('2026-10-04T18:00:00.000Z')
+    setAuthClock(() => stamped)
+    resetAuthRateWindow()
+    const app = await createApp()
+    await app.listen(0, '127.0.0.1')
+    try {
+      const address = app.getHttpServer().address() as AddressInfo | string | null
+      if (address === null || typeof address === 'string') {
+        throw new Error('expected the api test server to bind a TCP port')
+      }
+      const base = `http://127.0.0.1:${address.port}`
+      const columns = await db().query<{ column_name: string }>(
+        `select column_name from information_schema.columns
+         where table_schema = 'public' and table_name = 'email_verification'
+         order by column_name`,
+      )
+      expect(columns.rows.map((row) => row.column_name)).toEqual([
+        'account_id',
+        'consumed_at',
+        'created_at',
+        'expires_at',
+        'id',
+        'superseded_at',
+        'token_hash',
+      ])
+      const created = await fetch(`${base}/v1/accounts`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: 'aminata@example.bf',
+          password: 'phrase avec espaces',
+          pseudonym: 'Aminata_Bobo',
+          gender: 'sister',
+          pledge_accepted: true,
+          human_verified: true,
+          coc_version: 'FR-089',
+        }),
+      })
+      expect(created.status).toBe(201)
+      const signed = await fetch(`${base}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          identifier: 'Aminata_Bobo',
+          password: 'phrase avec espaces',
+          remember_me: false,
+        }),
+      })
+      expect(signed.status).toBe(201)
+      const sessionId = ((await signed.json()) as { id: string }).id
+      const issued = await fetch(`${base}/v1/accounts/email-verifications`, {
+        method: 'POST',
+        headers: { cookie: `ankanu_session=${sessionId}`, origin: 'http://ankanu.test' },
+      })
+      expect(issued.status).toBe(201)
+      const token = new URL(sent[0]?.link ?? '').searchParams.get('token') ?? ''
+      const stored = await db().query<{ token_hash: string; consumed_at: Date | null }>(
+        `select "token_hash", "consumed_at" from "email_verification"`,
+      )
+      expect(stored.rows).toHaveLength(1)
+      expect(stored.rows[0]?.token_hash).toBe(createHash('sha256').update(token).digest('hex'))
+      expect(stored.rows[0]?.token_hash).not.toBe(token)
+      expect(stored.rows[0]?.consumed_at).toBeNull()
+      const consumed = await fetch(`${base}/v1/accounts/email-verifications/consume`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token }),
+      })
+      const consumedBody = (await consumed.json()) as { email_verified_at: string }
+      expect(consumed.status).toBe(200)
+      expect(consumedBody.email_verified_at).toBe(stamped.toISOString())
+      const after = await db().query<{ consumed_at: Date; email_verified_at: Date }>(
+        `select v."consumed_at", c."email_verified_at"
+         from "email_verification" v
+         join "credential" c on c."account_id" = v."account_id" and c."kind" = 'password'
+         join "account" a on a."id" = v."account_id"
+         where a."email" = $1`,
+        ['aminata@example.bf'],
+      )
+      expect(new Date(after.rows[0]?.consumed_at ?? 0).toISOString()).toBe(stamped.toISOString())
+      expect(new Date(after.rows[0]?.email_verified_at ?? 0).toISOString()).toBe(stamped.toISOString())
+    } finally {
+      setAuthClock(undefined)
+      setEmailPort(undefined)
+      setEmailVerificationStore(undefined)
+      resetAuthRateWindow()
+      await app.close()
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
   it('reads every founder value by key, with both reach-mode strings in the migration and in api code', async () => {
     expect(migrated).toBe(true)
     expect(free_unlimited).toBe('free_unlimited')
@@ -462,11 +584,18 @@ describe('operator_config migration', () => {
       `select "value" from "operator_config" where "key" = 'flag_threshold'`,
     )
     expect(read.rows).toEqual([{ value: '4' }])
-    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config', 'session'])
+    expect(await publicTables(db())).toEqual([
+      'account',
+      'credential',
+      'email_verification',
+      'operator_config',
+      'session',
+    ])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
       'public.account',
       'public.credential',
+      'public.email_verification',
       'public.operator_config',
       'public.session',
     ])

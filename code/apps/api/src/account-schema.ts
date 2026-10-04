@@ -36,6 +36,19 @@ export const credential = pgTable(
   (table) => [check('credential_kind_check', sql`${table.kind} in ('password', 'google_oidc', 'apple')`)],
 )
 
+/** FR-006 link. Raw token is never stored. `credential.email_verified_at` stays the verified marker. */
+export const emailVerification = pgTable('email_verification', {
+  id: uuid('id').primaryKey(),
+  account_id: uuid('account_id')
+    .notNull()
+    .references(() => account.id),
+  token_hash: text('token_hash').notNull().unique(),
+  expires_at: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+  consumed_at: timestamp('consumed_at', { withTimezone: true, mode: 'date' }),
+  superseded_at: timestamp('superseded_at', { withTimezone: true, mode: 'date' }),
+  created_at: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+})
+
 /** Web session. No remember-me column and no gender column. */
 export const session = pgTable(
   'session',
