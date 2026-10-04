@@ -9,6 +9,7 @@ import { createApp } from './create-app.js'
 import { setEmailPort, type EmailMessage, type EmailPort } from './email-port.js'
 import { memoryEmailVerificationStore, setEmailVerificationStore } from './email-verification-store.js'
 import {
+  consumePasswordReset,
   hashResetToken,
   PASSWORD_RESET_NOTICE,
   PASSWORD_RESET_SESSION_MS,
@@ -194,6 +195,31 @@ describe('POST /v1/password-resets', () => {
     expect(resets.rows).toHaveLength(before)
   })
 
+  it('returns delivery failed when the row is not stored after the mail is accepted', async () => {
+    const before = resets.rows.length
+    const beforeMessages = messages.length
+    const saved = resets.supersedeAndInsert.bind(resets)
+    resets.supersedeAndInsert = async () => {
+      throw new Error('insert failed')
+    }
+    try {
+      const response = await fetch(`${base}/v1/password-resets`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin },
+        body: JSON.stringify({ email: 'fatim@example.bf' }),
+      })
+      const body = (await response.json()) as { error: { code: string; retryable: boolean } }
+      expect(response.status).toBe(503)
+      expect(body.error.code).toBe('EMAIL_DELIVERY_FAILED')
+      expect(body.error.retryable).toBe(true)
+      expect(resets.rows).toHaveLength(before)
+      expect(resets.rows.at(-1)?.superseded_at).toBeNull()
+    } finally {
+      resets.supersedeAndInsert = saved
+      messages.length = beforeMessages
+    }
+  })
+
   it('does not consume a token when the new password fails the signup rule', async () => {
     const row = resets.rows.at(-1)
     const token = tokenFrom(messages.at(-1)?.link ?? '')
@@ -338,5 +364,44 @@ describe('POST /v1/password-resets', () => {
     expect(consume.status).toBe(400)
     resetLimit = 100
     resetPasswordResetRateWindow()
+  })
+
+  it('does not hash a password when the token cannot be used', async () => {
+    let hashed = 0
+    const hashPassword = async () => {
+      hashed += 1
+      return 'hashed'
+    }
+    const unknown = await consumePasswordReset({
+      body: { token: 'not-a-row', password: 'une phrase plus longue' },
+      now: () => now,
+      store: resets,
+      hashPassword,
+    })
+    expect(unknown.ok).toBe(false)
+    if (!unknown.ok) {
+      expect(unknown.code).toBe('PASSWORD_RESET_INVALID')
+    }
+    const owner = memory.accounts.find((row) => row.email === 'fatim@example.bf')
+    resets.rows.push({
+      id: '018f0000-0000-7000-8000-000000000099',
+      account_id: owner?.id ?? '',
+      token_hash: hashResetToken('already-expired'),
+      expires_at: now,
+      consumed_at: null,
+      superseded_at: null,
+      created_at: new Date(now.getTime() - PASSWORD_RESET_TTL_MS),
+    })
+    const expired = await consumePasswordReset({
+      body: { token: 'already-expired', password: 'une phrase plus longue' },
+      now: () => now,
+      store: resets,
+      hashPassword,
+    })
+    expect(expired.ok).toBe(false)
+    if (!expired.ok) {
+      expect(expired.code).toBe('PASSWORD_RESET_INVALID')
+    }
+    expect(hashed).toBe(0)
   })
 })

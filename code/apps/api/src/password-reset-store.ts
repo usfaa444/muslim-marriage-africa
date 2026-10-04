@@ -22,6 +22,8 @@ export type PasswordResetAccount = {
 
 export type PasswordResetStore = {
   findAccount(email: string): Promise<PasswordResetAccount | null>
+  /** True only for a hash that is unconsumed, unsuperseded, and still after `at`. */
+  findUsable(tokenHash: string, at: Date): Promise<boolean>
   supersedeAndInsert(accountId: string, row: PasswordResetRow): Promise<'inserted' | 'not_verified'>
   consume(input: {
     tokenHash: string
@@ -82,6 +84,15 @@ export function memoryPasswordResetStore(source: {
       }
       rows.push(row)
       return 'inserted'
+    },
+    async findUsable(tokenHash, at) {
+      return rows.some(
+        (item) =>
+          item.token_hash === tokenHash &&
+          item.consumed_at === null &&
+          item.superseded_at === null &&
+          item.expires_at.getTime() > at.getTime(),
+      )
     },
     async consume(input) {
       const row = rows.find(
@@ -165,6 +176,21 @@ function postgresPasswordResetStore(): PasswordResetStore {
         await tx.insert(passwordReset).values(row)
         return 'inserted' as const
       })
+    },
+    async findUsable(tokenHash, at) {
+      const found = await getIdentityDatabase()
+        .select({ id: passwordReset.id })
+        .from(passwordReset)
+        .where(
+          and(
+            eq(passwordReset.token_hash, tokenHash),
+            isNull(passwordReset.consumed_at),
+            isNull(passwordReset.superseded_at),
+            gt(passwordReset.expires_at, at),
+          ),
+        )
+        .limit(1)
+      return found.length > 0
     },
     async consume(input) {
       const database = getIdentityDatabase()

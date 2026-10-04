@@ -104,21 +104,21 @@ export async function requestPasswordReset(input: {
   const link = passwordResetLink(origin, token)
   try {
     await input.send({ to: account.email, link, notice: PASSWORD_RESET_NOTICE })
+    const createdAt = input.now()
+    const stored = await input.store.supersedeAndInsert(account.account_id, {
+      id: newId(createdAt),
+      account_id: account.account_id,
+      token_hash: hashResetToken(token),
+      expires_at: new Date(createdAt.getTime() + PASSWORD_RESET_TTL_MS),
+      consumed_at: null,
+      superseded_at: null,
+      created_at: createdAt,
+    })
+    if (stored !== 'inserted') {
+      return deliveryFailed()
+    }
   } catch {
     return deliveryFailed()
-  }
-  const createdAt = input.now()
-  const stored = await input.store.supersedeAndInsert(account.account_id, {
-    id: newId(createdAt),
-    account_id: account.account_id,
-    token_hash: hashResetToken(token),
-    expires_at: new Date(createdAt.getTime() + PASSWORD_RESET_TTL_MS),
-    consumed_at: null,
-    superseded_at: null,
-    created_at: createdAt,
-  })
-  if (stored === 'not_verified') {
-    return { ok: true, status: 201 }
   }
   return { ok: true, status: 201 }
 }
@@ -151,6 +151,15 @@ export async function consumePasswordReset(input: {
   store: PasswordResetStore
   hashPassword?: (password: string) => Promise<string>
 }): Promise<ResetConsumeSuccess | ResetConsumeFailure> {
+  const token = isRecord(input.body) ? input.body.token : undefined
+  if (typeof token !== 'string' || token.length === 0 || token.length > MAX_TOKEN_LENGTH) {
+    return invalidToken()
+  }
+  const at = input.now()
+  const usable = await input.store.findUsable(hashResetToken(token), at)
+  if (!usable) {
+    return invalidToken()
+  }
   const password = isRecord(input.body) ? input.body.password : undefined
   if (typeof password !== 'string' || !passwordIsPublishable(password)) {
     return {
@@ -162,11 +171,6 @@ export async function consumePasswordReset(input: {
       retryable: false,
     }
   }
-  const token = isRecord(input.body) ? input.body.token : undefined
-  if (typeof token !== 'string' || token.length === 0 || token.length > MAX_TOKEN_LENGTH) {
-    return invalidToken()
-  }
-  const at = input.now()
   const secretHash = await (input.hashPassword ?? hashPassword)(password)
   const session: SessionRow = {
     id: newId(at),

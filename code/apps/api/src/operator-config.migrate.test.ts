@@ -14,6 +14,9 @@ import { createApp } from './create-app.js'
 import { setEmailPort } from './email-port.js'
 import { setEmailVerificationStore } from './email-verification-store.js'
 import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
+import { PASSWORD_RESET_SESSION_MS, PASSWORD_RESET_TTL_MS } from './password-reset.js'
+import { resetPasswordResetRateWindow } from './password-reset-rate.js'
+import { setPasswordResetStore } from './password-reset-store.js'
 
 const apiRoot = fileURLToPath(new URL('..', import.meta.url))
 const kitBin = join(dirname(fileURLToPath(import.meta.resolve('drizzle-kit'))), 'bin.cjs')
@@ -537,6 +540,162 @@ describe('operator_config migration', () => {
       setEmailPort(undefined)
       setEmailVerificationStore(undefined)
       resetAuthRateWindow()
+      await app.close()
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('issues and consumes a password reset on migrated Postgres, including a link at 15 minutes', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setEmailVerificationStore(undefined)
+    setPasswordResetStore(undefined)
+    const sent: Array<{ to: string; link: string }> = []
+    setEmailPort({
+      async send(message) {
+        sent.push(message)
+      },
+    })
+    let stamped = new Date('2026-10-04T19:00:00.000Z')
+    setAuthClock(() => stamped)
+    resetAuthRateWindow()
+    resetPasswordResetRateWindow()
+    const app = await createApp()
+    await app.listen(0, '127.0.0.1')
+    try {
+      const address = app.getHttpServer().address() as AddressInfo | string | null
+      if (address === null || typeof address === 'string') {
+        throw new Error('expected the api test server to bind a TCP port')
+      }
+      const base = `http://127.0.0.1:${address.port}`
+      const created = await fetch(`${base}/v1/accounts`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email: 'salimata@example.bf',
+          password: 'phrase avec espaces',
+          pseudonym: 'Salimata_Ouaga',
+          gender: 'sister',
+          pledge_accepted: true,
+          human_verified: true,
+          coc_version: 'FR-089',
+        }),
+      })
+      expect(created.status).toBe(201)
+      const signed = await fetch(`${base}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          identifier: 'salimata@example.bf',
+          password: 'phrase avec espaces',
+          remember_me: false,
+        }),
+      })
+      expect(signed.status).toBe(201)
+      const sessionId = ((await signed.json()) as { id: string }).id
+      const issuedMail = await fetch(`${base}/v1/accounts/email-verifications`, {
+        method: 'POST',
+        headers: { cookie: `ankanu_session=${sessionId}`, origin: 'http://ankanu.test' },
+      })
+      expect(issuedMail.status).toBe(201)
+      const verifyToken = new URL(sent[0]?.link ?? '').searchParams.get('token') ?? ''
+      const verified = await fetch(`${base}/v1/accounts/email-verifications/consume`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: verifyToken }),
+      })
+      expect(verified.status).toBe(200)
+      const requested = await fetch(`${base}/v1/password-resets`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: 'http://ankanu.test' },
+        body: JSON.stringify({ email: 'salimata@example.bf' }),
+      })
+      expect(requested.status).toBe(201)
+      const resetToken = new URL(sent[1]?.link ?? '').searchParams.get('token') ?? ''
+      const stored = await db().query<{ token_hash: string; created_at: Date; expires_at: Date; consumed_at: Date | null }>(
+        `select r."token_hash", r."created_at", r."expires_at", r."consumed_at"
+         from "password_reset" r
+         join "account" a on a."id" = r."account_id"
+         where a."email" = $1`,
+        ['salimata@example.bf'],
+      )
+      expect(stored.rows).toHaveLength(1)
+      expect(stored.rows[0]?.token_hash).toBe(createHash('sha256').update(resetToken).digest('hex'))
+      expect(stored.rows[0]?.token_hash).not.toBe(resetToken)
+      expect(new Date(stored.rows[0]?.expires_at ?? 0).getTime()).toBe(
+        new Date(stored.rows[0]?.created_at ?? 0).getTime() + PASSWORD_RESET_TTL_MS,
+      )
+      const consumed = await fetch(`${base}/v1/password-resets/consume`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: resetToken, password: 'une phrase plus longue' }),
+      })
+      const consumedBody = (await consumed.json()) as { id: string; kind: string; expires_at: string }
+      expect(consumed.status).toBe(200)
+      expect(consumedBody.kind).toBe('web')
+      expect(consumedBody.expires_at).toBe(new Date(stamped.getTime() + PASSWORD_RESET_SESSION_MS).toISOString())
+      const oldPassword = await fetch(`${base}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          identifier: 'salimata@example.bf',
+          password: 'phrase avec espaces',
+          remember_me: false,
+        }),
+      })
+      expect(oldPassword.status).toBe(401)
+      const nextPassword = await fetch(`${base}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          identifier: 'salimata@example.bf',
+          password: 'une phrase plus longue',
+          remember_me: false,
+        }),
+      })
+      expect(nextPassword.status).toBe(201)
+      const again = await fetch(`${base}/v1/password-resets`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', origin: 'http://ankanu.test' },
+        body: JSON.stringify({ email: 'salimata@example.bf' }),
+      })
+      expect(again.status).toBe(201)
+      const expiringToken = new URL(sent[2]?.link ?? '').searchParams.get('token') ?? ''
+      stamped = new Date(stamped.getTime() + PASSWORD_RESET_TTL_MS)
+      const late = await fetch(`${base}/v1/password-resets/consume`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: expiringToken, password: 'encore une phrase longue' }),
+      })
+      const lateBody = (await late.json()) as { error: { code: string } }
+      expect(late.status).toBe(400)
+      expect(lateBody.error.code).toBe('PASSWORD_RESET_INVALID')
+      const after = await db().query<{ token_hash: string; consumed_at: Date | null }>(
+        `select r."token_hash", r."consumed_at"
+         from "password_reset" r
+         join "account" a on a."id" = r."account_id"
+         where a."email" = $1
+         order by r."created_at"`,
+        ['salimata@example.bf'],
+      )
+      expect(after.rows).toHaveLength(2)
+      expect(after.rows[0]?.consumed_at).not.toBeNull()
+      expect(after.rows[1]?.token_hash).toBe(createHash('sha256').update(expiringToken).digest('hex'))
+      expect(after.rows[1]?.consumed_at).toBeNull()
+    } finally {
+      setAuthClock(undefined)
+      setEmailPort(undefined)
+      setEmailVerificationStore(undefined)
+      setPasswordResetStore(undefined)
+      resetAuthRateWindow()
+      resetPasswordResetRateWindow()
       await app.close()
       await closeAccountStore()
       if (previousDatabaseUrl === undefined) {

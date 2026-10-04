@@ -1,4 +1,6 @@
-const HOSTING_CARD = 'et hébergement souverain en France (Scaleway)'
+const HOSTING_CARD = ' et hébergement souverain en France (Scaleway)'
+const SPECIMEN_EMAIL = ' value="mariam.sawadogo@famille.bf"'
+const SPECIMEN_PASSWORD = ' value="Barakah2025!Honor"'
 const OLD_COPYRIGHT =
   "© 2025 AnKanu. Plateforme d'engagement matrimonial honorable et conforme aux traditions burkinabè."
 const NEW_COPYRIGHT = '© 2026 AnKanu. Tous droits réservés.'
@@ -81,6 +83,8 @@ export function passwordResetPageHtml(stitchHtml: string): string {
     .replaceAll(HOSTING_CARD, '')
     .replaceAll(OLD_COPYRIGHT, NEW_COPYRIGHT)
     .replace(FOOTER_HOST, '')
+    .replaceAll(SPECIMEN_EMAIL, '')
+    .replaceAll(SPECIMEN_PASSWORD, '')
     .replace('onsubmit="event.preventDefault(); switchState(\'state-2\');"', '')
     .replace('onsubmit="event.preventDefault(); switchState(\'state-5\');"', '')
   const close = stripped.lastIndexOf('</body>')
