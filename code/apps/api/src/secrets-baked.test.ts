@@ -25,7 +25,18 @@ const secretPatterns = [
   new RegExp(defaultBucketUser),
   /redis:\/\/:[^@\s]+@/,
   /BEGIN (?:RSA |OPENSSH )?PRIVATE KEY/,
-  /(?:REDIS_PASSWORD|S3_SECRET_ACCESS_KEY|AWS_SECRET_ACCESS_KEY|MINIO_ROOT_PASSWORD)\s*[:=]\s*['"][^'"]+['"]/,
+  /(?:REDIS_PASSWORD|S3_SECRET_ACCESS_KEY|AWS_SECRET_ACCESS_KEY|MINIO_ROOT_PASSWORD)\s*[:=]\s*['"](?!\$\{)[^'"]+['"]/,
+]
+
+const imageLiteralPatterns = [
+  /(?:POSTGRES_PASSWORD|REDIS_PASSWORD|S3_ACCESS_KEY_ID|S3_SECRET_ACCESS_KEY|AWS_SECRET_ACCESS_KEY|MINIO_ROOT_USER|MINIO_ROOT_PASSWORD)\s*[:=]\s*(?:(['"])(?!\$\{)[^'"]+\1|(?!['"$\s])\S+)/,
+  /\$\{(?:S3_ACCESS_KEY_ID|S3_SECRET_ACCESS_KEY|POSTGRES_PASSWORD|REDIS_PASSWORD)[:-]/,
+]
+
+const allowedImageFiles = [
+  'code/apps/api/Dockerfile',
+  'code/apps/web/Dockerfile',
+  'code/compose.yaml',
 ]
 
 function walk(dir: string, found: string[]): void {
@@ -43,11 +54,11 @@ function walk(dir: string, found: string[]): void {
 }
 
 describe('secrets are not baked in', () => {
-  it('finds no image definition and no bucket key or Redis password in the tree', () => {
+  it('allows code image files and still rejects baked secrets', () => {
     const files: string[] = []
     walk(repoRoot, files)
     const images = files.filter((path) => imageNames.has(path.split('/').at(-1) ?? ''))
-    expect(images).toEqual([])
+    expect(images.map((path) => relative(repoRoot, path)).sort()).toEqual([...allowedImageFiles].sort())
 
     const codePrefix = `${codeRoot}/`
     const offenders: string[] = []
@@ -56,20 +67,32 @@ describe('secrets are not baked in', () => {
         continue
       }
       const name = path.split('/').at(-1) ?? ''
-      if (!/\.(?:ts|tsx|js|mjs|json|md|ya?ml|env|example)$/.test(name)) {
+      const isImage = imageNames.has(name)
+      const isText = /\.(?:ts|tsx|js|mjs|json|md|ya?ml|env|example)$/.test(name) || name === '.dockerignore'
+      if (!isImage && !isText) {
         continue
       }
       const text = readFileSync(path, 'utf8')
-      if (secretPatterns.some((pattern) => pattern.test(text))) {
+      const patterns = isImage ? [...secretPatterns, ...imageLiteralPatterns] : secretPatterns
+      if (patterns.some((pattern) => pattern.test(text))) {
         offenders.push(relative(repoRoot, path))
       }
     }
     expect(offenders).toEqual([])
+    const literal = ['S3', '_SECRET_ACCESS_KEY: ', 'hunter', '2'].join('')
+    const quotedLiteral = ['MINIO', '_ROOT_PASSWORD: "', 'hunter', '2"'].join('')
+    const quotedRef = ['MINIO', '_ROOT_PASSWORD: "', '${', 'S3_SECRET_ACCESS_KEY}"'].join('')
+    const interpolation = ['S3', '_SECRET_ACCESS_KEY: ${', 'S3_SECRET_ACCESS_KEY}'].join('')
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(literal))).toBe(true)
+    expect(imageLiteralPatterns.some((pattern) => pattern.test(interpolation))).toBe(false)
+    expect(secretPatterns.some((pattern) => pattern.test(quotedLiteral))).toBe(true)
+    expect(secretPatterns.some((pattern) => pattern.test(quotedRef))).toBe(false)
 
     const tracked = execFileSync('git', ['ls-files', '-z'], { cwd: repoRoot, encoding: 'utf8' })
       .split('\0')
       .filter((path) => path !== '')
-    expect(tracked.some((path) => imageNames.has(path.split('/').at(-1) ?? ''))).toBe(false)
+    const trackedImages = tracked.filter((path) => imageNames.has(path.split('/').at(-1) ?? ''))
+    expect(trackedImages.filter((path) => !path.startsWith('code/'))).toEqual([])
     expect(statSync(join(codeRoot, 'apps/api/src/object-storage-adapter.ts')).isFile()).toBe(true)
     const adapter = readFileSync(join(codeRoot, 'apps/api/src/object-storage-adapter.ts'), 'utf8')
     expect(adapter).not.toMatch(/getSignedUrl|public-read|ACL/)

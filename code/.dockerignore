@@ -1,0 +1,22 @@
+# Secrets stay out of the build context.
+.env
+.env.*
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/credentials.json
+**/.npmrc
+**/id_rsa
+**/id_rsa.pub
+
+# Dependencies and build output are produced inside the image.
+**/node_modules
+**/dist
+**/.next
+**/build
+
+# Design captures are not part of the runtime image.
+design-stitch
