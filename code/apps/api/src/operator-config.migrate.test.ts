@@ -137,9 +137,13 @@ function typescriptSources(dir: string): string[] {
 
 function migrationSql(): string {
   const drizzleDir = join(apiRoot, 'drizzle')
-  const sqlFiles = readdirSync(drizzleDir).filter((name) => name.endsWith('.sql'))
-  expect(sqlFiles).toEqual(['0000_operator_config.sql'])
-  return readFileSync(join(drizzleDir, sqlFiles[0] ?? ''), 'utf8')
+  const sqlFiles = readdirSync(drizzleDir).filter((name) => name.endsWith('.sql')).sort()
+  expect(sqlFiles).toEqual(['0000_operator_config.sql', '0001_account_credential.sql'])
+  const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
+  expect(accountSql).toContain('"coc_version" text NOT NULL')
+  expect(accountSql).toContain('"age_attested" boolean NOT NULL')
+  expect(accountSql).not.toContain('profile')
+  return readFileSync(join(drizzleDir, '0000_operator_config.sql'), 'utf8')
 }
 
 describe('operator_config migration', () => {
@@ -218,16 +222,18 @@ describe('operator_config migration', () => {
     })
     migrated = true
 
-    expect(await publicTables(db())).toEqual(['operator_config'])
+    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config'])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
+      'public.account',
+      'public.credential',
       'public.operator_config',
     ])
 
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('1')
+    expect(applied.rows[0]?.count).toBe('2')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -282,9 +288,11 @@ describe('operator_config migration', () => {
       `select "value" from "operator_config" where "key" = 'flag_threshold'`,
     )
     expect(read.rows).toEqual([{ value: '4' }])
-    expect(await publicTables(db())).toEqual(['operator_config'])
+    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config'])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
+      'public.account',
+      'public.credential',
       'public.operator_config',
     ])
 

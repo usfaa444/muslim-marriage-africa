@@ -21,6 +21,7 @@ COPY --from=build /app/packages/kernel/dist packages/kernel/dist
 COPY --from=build /app/apps/web/.next apps/web/.next
 COPY --from=build /app/apps/web/app apps/web/app
 COPY --from=build /app/apps/web/next.config.ts apps/web/next.config.ts
+COPY --from=build /app/design-stitch/11-auth/screen.html design-stitch/11-auth/screen.html
 ENV NODE_ENV=production
 WORKDIR /app/apps/web
 CMD ["node", "/app/node_modules/next/dist/bin/next", "start", "--hostname", "0.0.0.0", "--port", "3000"]

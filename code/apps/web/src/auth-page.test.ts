@@ -1,0 +1,30 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { describe, expect, it } from 'vitest'
+import { authPageHtml, COC_VERSION_ON_SCREEN } from './auth-page.js'
+
+const stitch = readFileSync(
+  fileURLToPath(new URL('../../../design-stitch/11-auth/screen.html', import.meta.url)),
+  'utf8',
+)
+const page = authPageHtml(stitch)
+
+describe('auth screen', () => {
+  it('keeps the downloaded signup layout, including captcha, Google, and the 19+ notice', () => {
+    expect(page).toContain("Démarche d'Alliance Sacrée")
+    expect(page).toContain('Chemin réservé aux adultes de 19 ans et plus.')
+    expect(page).toContain('id="human-verify"')
+    expect(page).toContain('Continuer via Google')
+    expect(page).toContain('Engagement de Sincérité')
+    expect(page).toContain('union matrimoniale')
+    expect(page).toContain('id="pledge-check"')
+    expect(page).not.toContain('accounts.google.com')
+    const added = page.slice(page.lastIndexOf('<script>'))
+    expect(added).not.toContain('human-verify')
+    expect(COC_VERSION_ON_SCREEN).toBe('FR-089')
+    expect(page).toContain('coc_version: "FR-089"')
+    expect(page).toContain("fetch('/v1/accounts'")
+    expect(page).not.toContain('date of birth')
+    expect(page).not.toContain('date_of_birth')
+  })
+})
