@@ -4,6 +4,8 @@ import argon2 from 'argon2'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { isUuidV7 } from '@ankanu/kernel'
 import { memoryAccountStore, setAccountStore } from './account-store.js'
+import { setAuthLimitReader } from './auth-limit.js'
+import { resetAuthRateWindow } from './auth-rate.js'
 import { createApp } from './create-app.js'
 import { passwordIsPublishable } from './create-account.js'
 
@@ -16,6 +18,7 @@ function body(overrides: Record<string, unknown> = {}): Record<string, unknown> 
     pseudonym: 'Fatim_Ouaga',
     gender: 'sister',
     pledge_accepted: true,
+    human_verified: true,
     coc_version: 'FR-089',
     ...overrides,
   }
@@ -26,6 +29,8 @@ describe('POST /v1/accounts', () => {
   let base: string
 
   beforeAll(async () => {
+    setAuthLimitReader(async () => 1000)
+    resetAuthRateWindow()
     setAccountStore(memory)
     app = await createApp()
     await app.listen(0, '127.0.0.1')
@@ -37,6 +42,8 @@ describe('POST /v1/accounts', () => {
   })
 
   afterAll(async () => {
+    setAuthLimitReader(undefined)
+    resetAuthRateWindow()
     setAccountStore(undefined)
     if (app) {
       await app.close()
@@ -174,5 +181,31 @@ describe('POST /v1/accounts', () => {
     expect(rejectedBody.error.details.field).toBe('gender')
     expect(memory.accounts).toHaveLength(before + 1)
     expect(memory.credentials).toHaveLength(before + 1)
+  })
+
+  it('rejects a missing or untrue human_verified and stores nothing', async () => {
+    const before = memory.accounts.length
+    const cases = [
+      body({ human_verified: false, email: 'bot@example.bf', pseudonym: 'Bot_Un' }),
+      body({ human_verified: 'true', email: 'bot2@example.bf', pseudonym: 'Bot_Deux' }),
+      (() => {
+        const fields = body({ email: 'bot3@example.bf', pseudonym: 'Bot_Trois' })
+        delete fields.human_verified
+        return fields
+      })(),
+    ]
+    for (const payload of cases) {
+      const response = await fetch(`${base}/v1/accounts`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const result = (await response.json()) as { error: { code: string; details: { field: string } } }
+      expect(response.status).toBe(400)
+      expect(result.error.code).toBe('CAPTCHA_FAILED')
+      expect(result.error.details.field).toBe('human_verified')
+    }
+    expect(memory.accounts).toHaveLength(before)
+    expect(memory.credentials).toHaveLength(before)
   })
 })

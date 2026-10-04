@@ -31,6 +31,7 @@ export type AccountStore = {
 export type AccountFailure = {
   ok: false
   status: 400 | 409
+  code: 'CAPTCHA_FAILED' | 'UNHANDLED'
   message: string
   details: { field: string } | { fields: string[] }
 }
@@ -48,7 +49,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function fail(status: 400 | 409, field: string, message: string): AccountFailure {
-  return { ok: false, status, message, details: { field } }
+  return { ok: false, status, code: 'UNHANDLED', message, details: { field } }
 }
 
 /** 12 to 128 Unicode characters. Spaces are allowed. A password of only spaces is rejected. */
@@ -72,8 +73,14 @@ export async function createMemberAccount(
     hashPassword: (password: string) => Promise<string>
   },
 ): Promise<AccountSuccess | AccountFailure> {
-  if (!isRecord(body)) {
-    return fail(400, 'body', 'body : un objet est requis.')
+  if (!isRecord(body) || body.human_verified !== true) {
+    return {
+      ok: false,
+      status: 400,
+      code: 'CAPTCHA_FAILED',
+      message: 'Échec de validation de la vérification humaine.',
+      details: { field: 'human_verified' },
+    }
   }
 
   if (body.pledge_accepted !== true) {
@@ -119,12 +126,13 @@ export async function createMemberAccount(
     return fail(409, field, `${field} : ce champ est déjà utilisé.`)
   }
   if (taken.length > 1) {
-    return {
-      ok: false,
-      status: 409,
-      message: 'email, pseudonym : ces champs sont déjà utilisés.',
-      details: { fields: taken },
-    }
+      return {
+        ok: false,
+        status: 409,
+        code: 'UNHANDLED',
+        message: 'email, pseudonym : ces champs sont déjà utilisés.',
+        details: { fields: taken },
+      }
   }
 
   const account: CreatedAccount = {
@@ -157,6 +165,7 @@ export async function createMemberAccount(
       return {
         ok: false,
         status: 409,
+        code: 'UNHANDLED',
         message: 'email, pseudonym : ces champs sont déjà utilisés.',
         details: { fields: [...error.fields] },
       }

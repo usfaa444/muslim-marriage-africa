@@ -43,6 +43,10 @@ function postgresStore(): AccountStore {
   }
 }
 
+export function getIdentityDatabase(): NodePgDatabase {
+  return db()
+}
+
 function db(): NodePgDatabase {
   if (!database) {
     const url = process.env['DATABASE_URL']

@@ -7,6 +7,9 @@ import { fileURLToPath } from 'node:url'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { Client } from 'pg'
 import { closeAccountStore, setAccountStore } from './account-store.js'
+import { setAuthClock } from './auth-clock.js'
+import { readRlAuthPerMin } from './auth-limit.js'
+import { resetAuthRateWindow } from './auth-rate.js'
 import { createApp } from './create-app.js'
 import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
 
@@ -141,7 +144,7 @@ function typescriptSources(dir: string): string[] {
 function migrationSql(): string {
   const drizzleDir = join(apiRoot, 'drizzle')
   const sqlFiles = readdirSync(drizzleDir).filter((name) => name.endsWith('.sql')).sort()
-  expect(sqlFiles).toEqual(['0000_operator_config.sql', '0001_account_credential.sql'])
+  expect(sqlFiles).toEqual(['0000_operator_config.sql', '0001_account_credential.sql', '0002_session.sql'])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
   expect(accountSql).toContain('"age_attested" boolean NOT NULL')
@@ -225,18 +228,19 @@ describe('operator_config migration', () => {
     })
     migrated = true
 
-    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config'])
+    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config', 'session'])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
       'public.account',
       'public.credential',
       'public.operator_config',
+      'public.session',
     ])
 
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('2')
+    expect(applied.rows[0]?.count).toBe('3')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -262,12 +266,14 @@ describe('operator_config migration', () => {
       if (address === null || typeof address === 'string') {
         throw new Error('expected the api test server to bind a TCP port')
       }
+      expect(await readRlAuthPerMin()).toBe(10)
       const payload = {
         email: 'fatim@example.bf',
         password: 'phrase avec espaces',
         pseudonym: 'Fatim_Ouaga',
         gender: 'brother',
         pledge_accepted: true,
+        human_verified: true,
         coc_version: 'FR-089',
       }
       const created = await fetch(`http://127.0.0.1:${address.port}/v1/accounts`, {
@@ -294,7 +300,117 @@ describe('operator_config migration', () => {
       expect(duplicateBody.error.details.field).toBe('email')
       const after = await db().query<{ count: string }>(`select count(*)::text as count from "account"`)
       expect(after.rows[0]?.count).toBe('1')
+
+      const signedIn = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          identifier: 'Fatim@example.bf',
+          password: 'phrase avec espaces',
+          remember_me: false,
+        }),
+      })
+      const signedBody = (await signedIn.json()) as { id: string; kind: string }
+      expect(signedIn.status).toBe(201)
+      expect(signedBody.kind).toBe('web')
+      const cookie = signedIn.headers.get('set-cookie') ?? ''
+      expect(cookie).toContain(`ankanu_session=${signedBody.id}`)
+      expect(cookie).not.toMatch(/Max-Age/i)
+      const storedSession = await db().query<{ kind: string; column_name: string }>(
+        `select "kind", '' as column_name from "session"`,
+      )
+      expect(storedSession.rows).toEqual([{ kind: 'web', column_name: '' }])
+      const sessionColumns = await db().query<{ column_name: string }>(
+        `select column_name from information_schema.columns
+         where table_schema = 'public' and table_name = 'session'
+         order by column_name`,
+      )
+      expect(sessionColumns.rows.map((row) => row.column_name)).toEqual([
+        'account_id',
+        'expires_at',
+        'id',
+        'kind',
+        'last_seen_at',
+      ])
+
+      const junkCookie = await fetch(`http://127.0.0.1:${address.port}/v1/health`, {
+        headers: { cookie: 'ankanu_session=nope' },
+      })
+      expect(junkCookie.status).toBe(200)
+
+      const rememberedAt = new Date('2026-10-04T12:00:00.000Z')
+      setAuthClock(() => rememberedAt)
+      resetAuthRateWindow()
+      const remembered = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          identifier: 'Fatim_Ouaga',
+          password: 'phrase avec espaces',
+          remember_me: true,
+        }),
+      })
+      const rememberedBody = (await remembered.json()) as { id: string }
+      expect(remembered.status).toBe(201)
+      expect(remembered.headers.get('set-cookie') ?? '').toContain('Max-Age=1209600')
+      const later = new Date(rememberedAt.getTime() + 24 * 60 * 60 * 1000)
+      setAuthClock(() => later)
+      const slid = await fetch(`http://127.0.0.1:${address.port}/v1/health`, {
+        headers: { cookie: `ankanu_session=${rememberedBody.id}` },
+      })
+      expect(slid.status).toBe(200)
+      expect(slid.headers.get('set-cookie') ?? '').toContain('Max-Age=1209600')
+      const slidRow = await db().query<{ expires_at: Date; last_seen_at: Date }>(
+        `select "expires_at", "last_seen_at" from "session" where "id" = $1`,
+        [rememberedBody.id],
+      )
+      expect(new Date(slidRow.rows[0]?.last_seen_at ?? 0).toISOString()).toBe(later.toISOString())
+      expect(new Date(slidRow.rows[0]?.expires_at ?? 0).toISOString()).toBe(
+        new Date(later.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+      )
+
+      await db().query(`update "operator_config" set "value" = '2' where "key" = 'rl_auth_per_min'`)
+      resetAuthRateWindow()
+      const limitA = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ identifier: 'nobody@example.bf', password: 'phrase avec espaces', remember_me: false }),
+      })
+      const limitB = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ identifier: 'nobody@example.bf', password: 'phrase avec espaces', remember_me: false }),
+      })
+      const sessionsBeforeLimit = await db().query<{ count: string }>(`select count(*)::text as count from "session"`)
+      const limitC = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ identifier: 'Fatim_Ouaga', password: 'phrase avec espaces', remember_me: false }),
+      })
+      const limitBody = (await limitC.json()) as { error: { code: string } }
+      const sessionsAfterLimit = await db().query<{ count: string }>(`select count(*)::text as count from "session"`)
+      expect(limitA.status).toBe(401)
+      expect(limitB.status).toBe(401)
+      expect(limitC.status).toBe(429)
+      expect(limitBody.error.code).toBe('RATE_LIMITED')
+      expect(sessionsAfterLimit.rows[0]?.count).toBe(sessionsBeforeLimit.rows[0]?.count)
+
+      await db().query(`update "operator_config" set "value" = 'nope' where "key" = 'rl_auth_per_min'`)
+      resetAuthRateWindow()
+      const badLimit = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ identifier: 'Fatim_Ouaga', password: 'phrase avec espaces', remember_me: false }),
+      })
+      const badLimitBody = (await badLimit.json()) as { error: { code: string } }
+      const sessionsAfterBad = await db().query<{ count: string }>(`select count(*)::text as count from "session"`)
+      expect(badLimit.status).toBe(500)
+      expect(badLimitBody.error.code).toBe('UNHANDLED')
+      expect(sessionsAfterBad.rows[0]?.count).toBe(sessionsBeforeLimit.rows[0]?.count)
     } finally {
+      setAuthClock(undefined)
+      resetAuthRateWindow()
+      await db().query(`update "operator_config" set "value" = '10' where "key" = 'rl_auth_per_min'`)
       await app.close()
       await closeAccountStore()
       if (previousDatabaseUrl === undefined) {
@@ -346,12 +462,13 @@ describe('operator_config migration', () => {
       `select "value" from "operator_config" where "key" = 'flag_threshold'`,
     )
     expect(read.rows).toEqual([{ value: '4' }])
-    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config'])
+    expect(await publicTables(db())).toEqual(['account', 'credential', 'operator_config', 'session'])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
       'public.account',
       'public.credential',
       'public.operator_config',
+      'public.session',
     ])
 
     const keyColumns = await db().query<{ table_schema: string; table_name: string }>(

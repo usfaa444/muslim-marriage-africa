@@ -35,3 +35,20 @@ export const credential = pgTable(
   },
   (table) => [check('credential_kind_check', sql`${table.kind} in ('password', 'google_oidc', 'apple')`)],
 )
+
+/** Web session. No remember-me column and no gender column. */
+export const session = pgTable(
+  'session',
+  {
+    id: uuid('id').primaryKey(),
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => account.id),
+    kind: text('kind').notNull(),
+    expires_at: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+    last_seen_at: timestamp('last_seen_at', { withTimezone: true, mode: 'date' }).notNull(),
+  },
+  (table) => [
+    check('session_kind_check', sql`${table.kind} in ('web', 'capacitor', 'mahram', 'staff')`),
+  ],
+)

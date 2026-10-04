@@ -10,11 +10,12 @@ const SUBMIT = `
   }
   function validateSubmissionState() {
     const pledge = document.getElementById('pledge-check').checked
+    const human = document.getElementById('human-verify').checked
     const email = document.getElementById('email').value.trim()
     const pseudonym = document.getElementById('pseudonym').value.trim()
     const password = document.getElementById('password').value
     const button = document.getElementById('btn-submit-signup')
-    const ready = !submitting && pledge && email && pseudonym && passwordMeetsPublishedRules(password)
+    const ready = !submitting && pledge && human && email && pseudonym && passwordMeetsPublishedRules(password)
     if (ready) {
       button.disabled = false
       button.className = "w-full h-12 px-6 rounded-xl font-body-strong text-body transition-colors duration-200 flex items-center justify-center space-x-2 bg-indigo hover:bg-indigo-deep text-ink-on-indigo cursor-pointer"
@@ -56,6 +57,7 @@ const SUBMIT = `
           pseudonym: document.getElementById('pseudonym').value,
           gender: gender,
           pledge_accepted: document.getElementById('pledge-check').checked === true,
+          human_verified: document.getElementById('human-verify').checked === true,
           coc_version: ${JSON.stringify(COC_VERSION_ON_SCREEN)}
         })
       })
@@ -71,6 +73,73 @@ const SUBMIT = `
     submitting = false
     validateSubmissionState()
   })
+  let loginSubmitting = false
+  function showLoginLine(line) {
+    let slot = document.getElementById('login-result')
+    if (!slot) {
+      slot = document.createElement('p')
+      slot.id = 'login-result'
+      slot.className = 'text-caption font-caption text-ink-primary'
+      document.getElementById('login-form').appendChild(slot)
+    }
+    slot.textContent = line
+  }
+  const loginButton = document.querySelector('#login-form button')
+  const loginForm = document.getElementById('login-form')
+  async function submitLogin() {
+    if (loginSubmitting || !loginButton) {
+      return
+    }
+    loginSubmitting = true
+    loginButton.disabled = true
+    const remember = document.querySelector('#login-form input[type="checkbox"]')
+    let line = 'Session ouverte.'
+    try {
+      const response = await fetch('/v1/sessions', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          identifier: document.getElementById('login-ident').value,
+          password: document.getElementById('login-pass').value,
+          remember_me: remember ? remember.checked === true : false
+        })
+      })
+      const payload = await response.json().catch(function () { return null })
+      if (!response.ok) {
+        line = (payload && payload.error && payload.error.message) || 'La connexion a échoué.'
+      }
+    } catch (error) {
+      line = 'La connexion a échoué.'
+    }
+    showLoginLine(line)
+    loginSubmitting = false
+    loginButton.disabled = false
+  }
+  if (loginButton) {
+    loginButton.addEventListener('click', function () {
+      void submitLogin()
+    })
+  }
+  if (loginForm) {
+    loginForm.addEventListener('submit', function (event) {
+      event.preventDefault()
+      void submitLogin()
+    })
+  }
+  function loginOnEnter(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      void submitLogin()
+    }
+  }
+  const loginIdent = document.getElementById('login-ident')
+  const loginPass = document.getElementById('login-pass')
+  if (loginIdent) {
+    loginIdent.addEventListener('keydown', loginOnEnter)
+  }
+  if (loginPass) {
+    loginPass.addEventListener('keydown', loginOnEnter)
+  }
   const google = Array.from(document.querySelectorAll('button')).find(function (button) {
     return button.textContent && button.textContent.indexOf('Continuer via Google') !== -1
   })
@@ -82,7 +151,7 @@ const SUBMIT = `
 </script>
 `
 
-/** Serves the downloaded Auth screen and posts signup only. Captcha, Google, and the 19+ note stay visual. */
+/** Serves the downloaded Auth screen. Signup posts human_verified from the existing checkbox. Login posts the session. Google stays visual. */
 export function authPageHtml(stitchHtml: string): string {
   const close = stitchHtml.lastIndexOf('</body>')
   if (close < 0) {
