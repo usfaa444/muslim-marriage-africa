@@ -456,7 +456,7 @@ export function LandingPage() {
       </div>
       <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-ink-secondary">
         <div>
-          © 2026 AnKanu. Tous droits réservés. Hébergé en infrastructure souveraine en France (Scaleway / Île-de-France).
+          © 2026 AnKanu. Tous droits réservés.
         </div>
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-success"></span>

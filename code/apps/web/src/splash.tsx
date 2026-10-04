@@ -229,10 +229,6 @@ export function SplashPage() {
               © 2025 AnKanu. Tous droits réservés. L&apos;alliance noble et sincère, sous le regard des tuteurs et dans
               le respect des valeurs de foi.
             </p>
-            <div className="shrink-0 flex items-center gap-1.5 font-meta text-caption text-secondary">
-              <span className="inline-block w-2 h-2 rounded-full bg-success" />
-              <span>Serveurs Régionaux Chiffrés</span>
-            </div>
           </div>
         </div>
       </footer>
