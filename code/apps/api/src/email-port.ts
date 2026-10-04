@@ -4,6 +4,8 @@ import { connect as tlsConnect } from 'node:tls'
 export type EmailMessage = {
   to: string
   link: string
+  /** When set, the body is this sentence and then the link. Story 2.3 omits it, so the body stays the link alone. */
+  notice?: string
 }
 
 /** Sends one message. The live adapter reads `SMTP_URL`. Tests pass a fake. */
@@ -62,6 +64,9 @@ export async function sendSmtpEmail(smtpUrl: string, message: EmailMessage): Pro
   if (refusedSmtpText(message.to) || refusedSmtpText(message.link)) {
     throw new Error('SMTP message refused')
   }
+  if (message.notice !== undefined && refusedSmtpText(message.notice)) {
+    throw new Error('SMTP message refused')
+  }
   const url = new URL(smtpUrl)
   if (url.protocol !== 'smtp:' && url.protocol !== 'smtps:') {
     throw new Error('SMTP_URL must be smtp or smtps')
@@ -114,6 +119,7 @@ function smtpData(message: EmailMessage): string {
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=utf-8',
     '',
+    ...(message.notice === undefined ? [] : [message.notice]),
     message.link,
   ]
   return lines.map((line) => (line.startsWith('.') ? `.${line}` : line)).join('\r\n')

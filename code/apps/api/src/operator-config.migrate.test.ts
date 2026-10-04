@@ -37,6 +37,7 @@ const founderValues = {
   photo_strike_block_hours: '24',
   signed_url_ttl_seconds: '60',
   sister_reach_mode: free_unlimited,
+  rl_password_reset_per_min: '5',
 } as const
 
 function delay(ms: number): Promise<void> {
@@ -151,6 +152,7 @@ function migrationSql(): string {
     '0001_account_credential.sql',
     '0002_session.sql',
     '0003_email_verification.sql',
+    '0004_password_reset.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -240,6 +242,7 @@ describe('operator_config migration', () => {
       'credential',
       'email_verification',
       'operator_config',
+      'password_reset',
       'session',
     ])
     expect(await userTables(db())).toEqual([
@@ -248,13 +251,14 @@ describe('operator_config migration', () => {
       'public.credential',
       'public.email_verification',
       'public.operator_config',
+      'public.password_reset',
       'public.session',
     ])
 
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('4')
+    expect(applied.rows[0]?.count).toBe('5')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -552,8 +556,13 @@ describe('operator_config migration', () => {
     expect(sql).toContain(free_unlimited)
     expect(sql).toContain(same_quota_as_brothers)
     expect(sql).not.toContain(`('brother_invite_quota_premium', '15')`)
+    const everySql = readdirSync(join(apiRoot, 'drizzle'))
+      .filter((name) => name.endsWith('.sql'))
+      .sort()
+      .map((name) => readFileSync(join(apiRoot, 'drizzle', name), 'utf8'))
+      .join('\n')
     for (const [key, value] of Object.entries(founderValues)) {
-      expect(sql).toContain(`('${key}', '${value}')`)
+      expect(everySql).toContain(`('${key}', '${value}')`)
     }
 
     const result = await db().query<{ key: string; value: string }>(
@@ -589,6 +598,7 @@ describe('operator_config migration', () => {
       'credential',
       'email_verification',
       'operator_config',
+      'password_reset',
       'session',
     ])
     expect(await userTables(db())).toEqual([
@@ -597,6 +607,7 @@ describe('operator_config migration', () => {
       'public.credential',
       'public.email_verification',
       'public.operator_config',
+      'public.password_reset',
       'public.session',
     ])
 
