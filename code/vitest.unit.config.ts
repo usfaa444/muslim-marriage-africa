@@ -10,6 +10,15 @@ export default defineConfig({
   },
   test: {
     include: ['packages/*/src/**/*.test.ts', 'apps/api/src/**/*.test.ts', 'apps/web/src/**/*.test.ts', 'apps/web/src/**/*.test.tsx'],
-    fileParallelism: false,
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.next/**',
+      'apps/api/src/compose.test.ts',
+      'apps/api/src/substrate.test.ts',
+      'apps/api/src/operator-config.migrate.test.ts',
+      'apps/api/src/restore-drill.test.ts',
+      'apps/api/src/object-version.test.ts',
+    ],
   },
 })

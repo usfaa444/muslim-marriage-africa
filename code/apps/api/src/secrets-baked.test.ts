@@ -16,7 +16,7 @@ const imageNames = new Set([
   'docker-compose.yml',
 ])
 
-const skipDirs = new Set(['node_modules', 'dist', '.git', '.next'])
+const skipDirs = new Set(['node_modules', 'dist', '.git', '.next', 'pg-data', 'pg-wal', 'pg-base'])
 
 const defaultBucketUser = ['minio', 'admin'].join('')
 

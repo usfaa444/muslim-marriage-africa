@@ -18,6 +18,8 @@
     "apps/web/src/**/*.ts",
     "apps/web/src/**/*.tsx",
     "vitest.config.ts",
+    "vitest.unit.config.ts",
+    "vitest.integration.config.ts",
     "apps/api/drizzle.config.ts"
   ]
 }

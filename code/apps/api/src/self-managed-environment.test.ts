@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest'
 
 const repoRoot = fileURLToPath(new URL('../../../../', import.meta.url))
 const codeRoot = join(repoRoot, 'code')
-const skipDirs = new Set(['node_modules', 'dist', '.next', 'design-stitch', '.git', '_bmad', '_bmad-output'])
+const skipDirs = new Set(['node_modules', 'dist', '.next', 'design-stitch', '.git', '_bmad', '_bmad-output', 'pg-data', 'pg-wal', 'pg-base'])
 
 const locationNeedles = [
   'Données hébergées en région Île-de-France (France), prestataire Scaleway',

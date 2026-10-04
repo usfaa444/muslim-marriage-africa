@@ -13,3 +13,9 @@
 - source_spec: `/root/.paperclip/instances/default/projects/d6b20faa-c189-4b92-9379-82950394e45d/dc174d97-ed7b-40c5-89c8-f65605d33c3a/muslim-marriage-africa/_bmad-output/implementation-artifacts/spec-1-8-one-self-managed-compose-environment.md`
   summary: The landing footer still shows Mentions Légales & Registre CIL and Politique de Pudeur & RGPD.
   evidence: Those links are Story 1.4 and point at #legal. Story 1.8 does not add a CIL-compliant sentence and does not rewrite that footer. Story 11.4 owns the legal hub.
+- source_spec: `/root/.paperclip/instances/default/projects/d6b20faa-c189-4b92-9379-82950394e45d/dc174d97-ed7b-40c5-89c8-f65605d33c3a/muslim-marriage-africa/_bmad-output/implementation-artifacts/spec-1-9-ci-observability-and-restore-drills.md`
+  summary: Postgres data, WAL archive, and base backups are bind mounts on the same disk.
+  evidence: `code/pg-data`, `code/pg-wal`, and `code/pg-base` live under the repo directory. A disk failure removes the cluster and both restore sources. This story does not name a second disk.
+- source_spec: `/root/.paperclip/instances/default/projects/d6b20faa-c189-4b92-9379-82950394e45d/dc174d97-ed7b-40c5-89c8-f65605d33c3a/muslim-marriage-africa/_bmad-output/implementation-artifacts/spec-1-9-ci-observability-and-restore-drills.md`
+  summary: WAL segments and old base backups are not pruned.
+  evidence: The daily script keeps one `latest` backup and does not delete archived WAL. Disk use grows for the life of the environment. No retention window was named, and deleting WAL can make that backup unrestorable.

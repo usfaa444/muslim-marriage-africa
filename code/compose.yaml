@@ -77,6 +77,17 @@ services:
       POSTGRES_USER: ankanu
       POSTGRES_DB: ankanu
       POSTGRES_HOST_AUTH_METHOD: trust
+      TZ: UTC
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        mkdir -p /var/lib/postgresql/wal-archive /var/lib/postgresql/basebackups
+        chown postgres:postgres /var/lib/postgresql/wal-archive /var/lib/postgresql/basebackups
+        exec docker-entrypoint.sh postgres -c wal_level=replica -c archive_mode=on -c archive_timeout=60 -c archive_command='if [ -f /var/lib/postgresql/wal-archive/%f ]; then exit 0; fi; cp %p /var/lib/postgresql/wal-archive/%f.tmp && mv /var/lib/postgresql/wal-archive/%f.tmp /var/lib/postgresql/wal-archive/%f'
+    volumes:
+      - ./pg-data:/var/lib/postgresql/data
+      - ./pg-wal:/var/lib/postgresql/wal-archive
+      - ./pg-base:/var/lib/postgresql/basebackups
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "ankanu", "-d", "ankanu"]
       interval: 5s

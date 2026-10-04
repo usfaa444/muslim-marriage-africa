@@ -1,4 +1,7 @@
+import { installScanMetrics } from './otel-contract.js'
 import { processRole, runWorkerProcess } from './worker-shell.js'
+
+installScanMetrics(process.env)
 
 if (processRole() === 'worker') {
   const outcome = await runWorkerProcess()

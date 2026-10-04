@@ -11,7 +11,10 @@
   ],
   "scripts": {
     "test": "vitest run",
+    "test:unit": "vitest run --config vitest.unit.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts --fileParallelism false",
     "typecheck": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.tests.json",
+    "migration-check": "npm run migration-check -w @ankanu/api",
     "build": "tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json",
     "lint": "oxlint packages apps"
   },

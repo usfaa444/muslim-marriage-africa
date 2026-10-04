@@ -17,3 +17,6 @@ build/
 *.log
 .cursor/
 !.agents/
+code/pg-data/
+code/pg-wal/
+code/pg-base/
