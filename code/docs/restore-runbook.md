@@ -20,9 +20,9 @@ Pick the UTC time you want back. Whole seconds (`YYYY-MM-DD HH:MM:SS+00`) or mic
 sh scripts/postgres-pitr-restore.sh 'YYYY-MM-DD HH:MM:SS+00'
 ```
 
-The script stops the `postgres` service in project `ankanu`, replaces the data directory with the latest base backup, writes `restore_command` and `recovery_target_time` into `postgresql.auto.conf`, replays archived WAL until that timestamp, then starts `postgres` again. It does not stop any other compose project.
+`postgres` must already be up. The script runs `pg_switch_wal()` and waits until that WAL segment is in `pg-wal`. It then stops the `postgres` service in project `ankanu`, replaces the data directory with the latest base backup, writes `restore_command` and `recovery_target_time` into `postgresql.auto.conf`, and starts `postgres` again. It does not stop any other compose project.
 
-When `postgres` is accepting connections, rows committed at or before that timestamp are back. Later commits are not.
+Accepting connections is not enough, because replay can still be running. The script waits until `pg_is_in_recovery()` is false, for up to 60 seconds. When it exits 0, rows committed at or before that timestamp are back. Later commits are not. If recovery does not finish in that wait, the script exits 1.
 
 ## Object versions
 

@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { existsSync, readdirSync, rmSync } from 'node:fs'
+import { rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -67,24 +67,6 @@ async function psql(sql: string): Promise<string> {
   return result.stdout.trim()
 }
 
-function walNames(): string[] {
-  const dir = join(codeRoot, 'pg-wal')
-  return existsSync(dir) ? readdirSync(dir) : []
-}
-
-async function waitForNewWal(previous: readonly string[]): Promise<string[]> {
-  const seen = new Set(previous)
-  const deadline = Date.now() + 20_000
-  while (Date.now() < deadline) {
-    const names = walNames()
-    if (names.some((name) => !seen.has(name))) {
-      return names
-    }
-    await delay(300)
-  }
-  throw new Error('WAL archive did not gain a file')
-}
-
 async function clearBindMounts(): Promise<void> {
   await run([
     'run',
@@ -130,35 +112,11 @@ describe('quarterly restore drill', () => {
     await psql('insert into probe (id) values (1)')
     const stamp = await psql("select to_char(clock_timestamp() at time zone 'UTC', 'YYYY-MM-DD HH24:MI:SS.US')")
     const target = `${stamp}+00`
-    const beforeInsertWal = walNames()
-    await psql('select pg_switch_wal()')
-    const afterInsert = await waitForNewWal(beforeInsertWal)
     await delay(1100)
     await psql('delete from probe')
     expect(await psql('select count(*) from probe')).toBe('0')
-    await psql('select pg_switch_wal()')
-    await waitForNewWal(afterInsert)
     await shell([join(codeRoot, 'scripts/postgres-pitr-restore.sh'), target])
-
-    const deadline = Date.now() + 60_000
-    let count = ''
-    let lastError = 'restore did not become readable'
-    while (Date.now() < deadline) {
-      try {
-        count = await psql('select count(*) from probe')
-        break
-      } catch (error) {
-        lastError = error instanceof Error ? error.message : 'query failed'
-        await delay(500)
-      }
-    }
-    if (count !== '1') {
-      const logs = await run([...projectArgs, 'logs', '--tail', '80', 'postgres']).catch((error: unknown) => ({
-        stdout: error instanceof Error ? error.message : 'no logs',
-        stderr: '',
-        code: 1,
-      }))
-      throw new Error(`probe count ${count || 'unread'} (${lastError})\n${logs.stdout}\n${logs.stderr}`)
-    }
+    expect(await psql('select pg_is_in_recovery()')).toBe('f')
+    expect(await psql('select count(*) from probe')).toBe('1')
   }, 180_000)
 })

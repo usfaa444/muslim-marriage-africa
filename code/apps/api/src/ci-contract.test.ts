@@ -55,13 +55,23 @@ describe('CI and restore contract', () => {
     expect(runbook).toContain('sh scripts/postgres-base-backup.sh')
     expect(runbook).toContain('sh scripts/postgres-pitr-restore.sh')
     expect(runbook).toContain('recovery_target_time')
+    expect(runbook).toContain('pg_switch_wal()')
+    expect(runbook).toContain('pg_is_in_recovery()')
     expect(runbook).toContain('restoreObjectVersion')
     expect(runbook).toContain('code/compose.yaml')
     expect(runbook).not.toMatch(/\b(?:Paris|Scaleway|Île-de-France|fr-par)\b/)
+    const ignore = read(join(codeRoot, '.dockerignore'))
+    expect(ignore).toContain('pg-data')
+    expect(ignore).toContain('pg-wal')
+    expect(ignore).toContain('pg-base')
   })
 
   it('rejects a recovery target that is not UTC to the second', async () => {
     const script = join(codeRoot, 'scripts/postgres-pitr-restore.sh')
+    const scriptText = read(script)
+    expect(scriptText).toContain('pg_switch_wal()')
+    expect(scriptText).toContain('pg_is_in_recovery()')
+    expect(scriptText).not.toContain('pg_isready')
     const result = await new Promise<{ code: number; stderr: string }>((resolve) => {
       execFile('sh', [script, 'not-a-time'], { encoding: 'utf8' }, (error, _stdout, stderr) => {
         if (error === null) {

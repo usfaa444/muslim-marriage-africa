@@ -23,6 +23,7 @@ The one compose stack keeps PostgreSQL PITR (daily base backup plus WAL, `archiv
 - `code/scripts/postgres-base-backup.sh`
 - `code/scripts/postgres-pitr-restore.sh`
 - `code/docs/restore-runbook.md`
+- `code/.dockerignore`
 - `code/apps/api/src/otel-contract.test.ts`
 - `code/apps/api/src/ci-contract.test.ts`
 - `code/apps/api/src/object-version.test.ts`
@@ -54,7 +55,7 @@ The unit command does not need Docker. The integration command starts MinIO and 
 | No exporter host | `otlpMetricsUrl({})` and a whitespace endpoint | `null`. A caller-supplied endpoint is used, with `/v1/metrics` appended when missing. |
 | One stack | Read `code/compose.yaml` | Services stay `web`, `api`, `worker`, `postgres`, `redis`, `bucket`. Postgres sets `wal_level=replica`, `archive_mode=on`, `archive_timeout=60`, and archives WAL under `/var/lib/postgresql/wal-archive`. Bind mounts are `./pg-data`, `./pg-wal`, and `./pg-base`. No `ports` key. No `dev`, `staging`, or `prod` word. |
 | Object version | Create a private bucket, write bytes, overwrite them, restore the first version id | Versioning status is `Enabled`. A second create still leaves it enabled. The current object reads back as the first bytes. |
-| PITR drill | Follow `code/scripts/postgres-base-backup.sh`, insert a row, delete it, then `postgres-pitr-restore.sh` to the timestamp after the insert | Before restore the count is `0`. After restore the count is `1`. `wal_level` is `replica` and `archive_mode` is `on`. |
+| PITR drill | Follow the runbook scripts only: base backup, insert a row, delete it, then `postgres-pitr-restore.sh` to the timestamp after the insert. The test does not call `pg_switch_wal()` and does not retry the count. | Before restore the count is `0`. The script archives the open WAL segment, then restores. When the script exits 0, `pg_is_in_recovery()` is `f` and the count is `1`. `wal_level` is `replica` and `archive_mode` is `on`. |
 | Bad restore target | `sh scripts/postgres-pitr-restore.sh not-a-time` | Exit 1. Stderr names `YYYY-MM-DD HH:MM:SS+00`. Docker is not started. |
 | Migration check | `npm run migration-check` from `code/` | `drizzle-kit check` prints that everything is fine. |
 
@@ -66,11 +67,13 @@ No accounts. Object-storage credentials in the MinIO test are random bytes, not 
 
 `npx vitest run --config vitest.unit.config.ts` — 10 files, 54 tests passed. `npx vitest run --config vitest.integration.config.ts --fileParallelism false apps/api/src/object-version.test.ts apps/api/src/restore-drill.test.ts` — 2 files, 2 tests passed. `npx tsc -p apps/api/tsconfig.json` and `npx tsc -p tsconfig.tests.json` passed. `npx oxlint` on the touched TypeScript files passed. `npm run migration-check` passed (`drizzle-kit check`). The compose file assertion in `apps/api/src/compose.test.ts` (`names the project`) passed. `apps/api/src/self-managed-environment.test.ts` and `apps/api/src/secrets-baked.test.ts` passed.
 
+After the [ANK-41](/ANK/issues/ANK-41) restore fail: `npx vitest run --config vitest.unit.config.ts apps/api/src/ci-contract.test.ts` — 4 tests passed. `npx vitest run --config vitest.integration.config.ts --fileParallelism false apps/api/src/restore-drill.test.ts` — 1 test passed in 15.93s. The drill calls only the runbook scripts. When the restore script exits 0, `pg_is_in_recovery()` is `f` and the probe count is `1`.
+
 ## Three validation passes
 
 1. CI contract: the workflow GitHub loads names the five checks, runs them under `code/` on Node 24.21.0, and does not embed a secret. `drizzle-kit check` passes. The unit suite passes without Docker.
 2. Scan metrics: both instruments are present at zero, stay present after a record, and a missing name throws. An empty endpoint does not select a host.
-3. Restore: the object-version test brings the first bytes back on the MinIO image used by compose. The PITR drill brings row `1` back from WAL that the base backup did not contain. The compose service list is unchanged.
+3. Restore: the object-version test brings the first bytes back on the MinIO image used by compose. The PITR drill brings row `1` back from WAL that the base backup did not contain. The restore script itself archives the open WAL segment before it replaces the data directory, and it exits 0 only after `pg_is_in_recovery()` is false. The compose service list is unchanged. `pg-data`, `pg-wal`, and `pg-base` are listed in `code/.dockerignore`.
 
 ## Solution-design sections
 
@@ -97,6 +100,6 @@ These files are on disk and were not used as layout:
 ## Known gaps
 
 - OTLP export happens only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. No collector image and no region were added.
-- `code/pg-data`, `code/pg-wal`, and `code/pg-base` are on the same disk. WAL is not pruned.
+- `code/pg-data`, `code/pg-wal`, and `code/pg-base` are on the same disk. WAL is not pruned. Those three directories are excluded from the Docker build context.
 - The API process does not create the bucket at boot. Versioning turns on when `createPrivateBucket` runs.
 - This story was not deployed. Epic 1 stays on this compose stack until the full epic check passes.

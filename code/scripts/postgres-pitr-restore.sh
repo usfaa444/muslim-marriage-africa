@@ -17,6 +17,28 @@ fi
 compose() {
   docker compose -p ankanu -f "$root/compose.yaml" "$@"
 }
+psql_at() {
+  compose exec -T -u postgres postgres psql -U ankanu -d ankanu -h 127.0.0.1 -v ON_ERROR_STOP=1 -tAc "$1"
+}
+wal_file=$(psql_at "select pg_walfile_name(pg_current_wal_lsn())")
+wal_file=$(printf '%s' "$wal_file" | tr -d '[:space:]')
+if ! printf '%s' "$wal_file" | grep -Eq '^[0-9A-F]{24}$'; then
+  echo "WAL segment name missing" >&2
+  exit 1
+fi
+psql_at "select pg_switch_wal()" >/dev/null
+i=0
+while [ "$i" -lt 60 ]; do
+  if [ -f "$root/pg-wal/$wal_file" ]; then
+    break
+  fi
+  i=$((i + 1))
+  sleep 1
+done
+if [ ! -f "$root/pg-wal/$wal_file" ]; then
+  echo "WAL segment was not archived" >&2
+  exit 1
+fi
 compose stop postgres
 compose run --rm --no-deps --user root --entrypoint /bin/sh postgres -c "set -eu
 if [ ! -f /var/lib/postgresql/basebackups/latest/PG_VERSION ]; then
@@ -32,11 +54,13 @@ chown -R postgres:postgres /var/lib/postgresql/data
 compose start postgres
 i=0
 while [ "$i" -lt 60 ]; do
-  if compose exec -T postgres pg_isready -U ankanu -d ankanu >/dev/null 2>&1; then
+  recovery=$(psql_at "select pg_is_in_recovery()" 2>/dev/null || true)
+  recovery=$(printf '%s' "$recovery" | tr -d '[:space:]')
+  if [ "$recovery" = "f" ]; then
     exit 0
   fi
   i=$((i + 1))
   sleep 1
 done
-echo "postgres did not become ready after restore" >&2
+echo "postgres did not leave recovery after restore" >&2
 exit 1
