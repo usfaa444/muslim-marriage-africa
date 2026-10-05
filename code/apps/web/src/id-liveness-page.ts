@@ -1,3 +1,5 @@
+import { pinGuardScript } from './pin-guard'
+
 const SPECIMEN = 'CNIB_Sawadogo_Recto.jpg'
 const LOADING_LINE =
   /<p class="font-body-sm text-body-sm text-on-surface-variant">Serveur certifié Scaleway[^<]*<\/p>\s*/
@@ -154,5 +156,5 @@ export function idLivenessPageHtml(stitchHtml: string): string {
   if (close < 0) {
     throw new Error('id liveness stitch is missing </body>')
   }
-  return `${stripped.slice(0, close)}${BEHAVIOR}${stripped.slice(close)}`
+  return `${stripped.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${stripped.slice(close)}`
 }

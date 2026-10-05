@@ -10,11 +10,14 @@ import { createApp } from './create-app.js'
 import { setOtpLimitReader } from './otp-limit.js'
 import { hashOtpCode, OTP_TTL_MS } from './phone-otp.js'
 import { memoryPhoneOtpStore, setPhoneOtpStore } from './phone-otp-store.js'
+import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
+import { resetPinEntries } from './pin-lock-state.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 import { setSmsPort, type OtpLog, type SmsPort } from './sms-port.js'
 
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
+const pins = memoryPinLockStore()
 const otp = memoryPhoneOtpStore()
 const logged: OtpLog[] = []
 let failSend = false
@@ -56,6 +59,9 @@ describe('POST /v1/verifications/otp', () => {
     resetAuthRateWindow()
     setAccountStore(memory)
     setSessionStore(sessions)
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
     setPhoneOtpStore(otp)
     setSmsPort(port)
     app = await createApp()
@@ -91,6 +97,8 @@ describe('POST /v1/verifications/otp', () => {
     resetAuthRateWindow()
     setAccountStore(undefined)
     setSessionStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
     setPhoneOtpStore(undefined)
     setSmsPort(undefined)
     failSend = false

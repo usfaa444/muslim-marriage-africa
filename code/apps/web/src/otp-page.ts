@@ -1,3 +1,5 @@
+import { pinGuardScript } from './pin-guard'
+
 const SPECIMEN = '+226 70 •• •• 84'
 const PROMPT = "Entrez le numéro de téléphone rectifié pour le Burkina Faso ou l'international :"
 const PROMPT_VALUE = '+226 70 00 00 00'
@@ -139,5 +141,5 @@ export function otpPageHtml(stitchHtml: string): string {
   if (close < 0) {
     throw new Error('otp stitch is missing </body>')
   }
-  return `${stitchHtml.slice(0, close)}${BEHAVIOR}${stitchHtml.slice(close)}`
+  return `${stitchHtml.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${stitchHtml.slice(close)}`
 }

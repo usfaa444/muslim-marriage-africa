@@ -1,3 +1,5 @@
+import { pinGuardScript } from './pin-guard'
+
 const SPECIMEN = 'tahir.sawadogo@courrier.bf'
 
 function escapeHtml(value: string): string {
@@ -124,5 +126,5 @@ export function emailVerificationPageHtml(stitchHtml: string, email: string | nu
   if (close < 0) {
     throw new Error('email verification stitch is missing </body>')
   }
-  return `${replaced.slice(0, close)}${BEHAVIOR}${replaced.slice(close)}`
+  return `${replaced.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${replaced.slice(close)}`
 }

@@ -18,11 +18,14 @@ import {
 import { setPasswordResetLimitReader } from './password-reset-limit.js'
 import { resetPasswordResetRateWindow } from './password-reset-rate.js'
 import { memoryPasswordResetStore, setPasswordResetStore } from './password-reset-store.js'
+import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
+import { resetPinEntries } from './pin-lock-state.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
+const pins = memoryPinLockStore()
 const resets = memoryPasswordResetStore({
   accounts: memory.accounts,
   credentials: memory.credentials,
@@ -82,6 +85,9 @@ describe('POST /v1/password-resets', () => {
     resetPasswordResetRateWindow()
     setAccountStore(memory)
     setSessionStore(sessions)
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
     setEmailVerificationStore(links)
     setPasswordResetStore(resets)
     setEmailPort(port)
@@ -102,6 +108,8 @@ describe('POST /v1/password-resets', () => {
     resetPasswordResetRateWindow()
     setAccountStore(undefined)
     setSessionStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
     setEmailVerificationStore(undefined)
     setPasswordResetStore(undefined)
     setEmailPort(undefined)

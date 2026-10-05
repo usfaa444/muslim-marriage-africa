@@ -135,6 +135,16 @@ export const smsDispatch = pgTable('sms_dispatch', {
   created_at: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
 })
 
+/** Shared-device PIN. Hash only. No fail-count column. */
+export const pinLock = pgTable('pin_lock', {
+  id: uuid('id').primaryKey(),
+  account_id: uuid('account_id')
+    .notNull()
+    .unique()
+    .references(() => account.id),
+  pin_hash: text('pin_hash').notNull(),
+})
+
 /** Web session. No remember-me column and no gender column. */
 export const session = pgTable(
   'session',

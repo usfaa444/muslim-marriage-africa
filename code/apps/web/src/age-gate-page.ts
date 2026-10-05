@@ -1,4 +1,5 @@
 import { SIGNUP_DRAFT_KEY } from './auth-page'
+import { pinGuardScript } from './pin-guard'
 
 const HOSTING_LINE =
   /<div class="flex items-center space-x-1\.5 justify-center md:justify-end">[\s\S]*?Loi 010-2004\/AN<\/span>\s*<\/div>\s*/
@@ -152,5 +153,5 @@ export function ageGatePageHtml(stitchHtml: string): string {
   if (close < 0) {
     throw new Error('age gate stitch is missing </body>')
   }
-  return `${stripped.slice(0, close)}${BEHAVIOR}${stripped.slice(close)}`
+  return `${stripped.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${stripped.slice(close)}`
 }

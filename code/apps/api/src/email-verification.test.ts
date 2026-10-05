@@ -11,11 +11,14 @@ import { createApp } from './create-app.js'
 import { EMAIL_LINK_TTL_MS, hashEmailToken } from './email-verification.js'
 import { memoryEmailVerificationStore, setEmailVerificationStore } from './email-verification-store.js'
 import { setEmailPort, type EmailMessage, type EmailPort } from './email-port.js'
+import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
+import { resetPinEntries } from './pin-lock-state.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
+const pins = memoryPinLockStore()
 const links = memoryEmailVerificationStore(memory)
 const messages: EmailMessage[] = []
 let failSend = false
@@ -60,6 +63,9 @@ describe('POST /v1/accounts/email-verifications', () => {
     resetAuthRateWindow()
     setAccountStore(memory)
     setSessionStore(sessions)
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
     setEmailVerificationStore(links)
     setEmailPort(port)
     app = await createApp()
@@ -94,6 +100,8 @@ describe('POST /v1/accounts/email-verifications', () => {
     resetAuthRateWindow()
     setAccountStore(undefined)
     setSessionStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
     setEmailVerificationStore(undefined)
     setEmailPort(undefined)
     failSend = false
@@ -221,6 +229,9 @@ describe('email link expiry and resend', () => {
     resetAuthRateWindow()
     setAccountStore(memory)
     setSessionStore(sessions)
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
     setEmailVerificationStore(links)
     setEmailPort(port)
     app = await createApp()
@@ -256,6 +267,8 @@ describe('email link expiry and resend', () => {
     resetAuthRateWindow()
     setAccountStore(undefined)
     setSessionStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
     setEmailVerificationStore(undefined)
     setEmailPort(undefined)
     failSend = false

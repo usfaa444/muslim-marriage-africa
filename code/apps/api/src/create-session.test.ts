@@ -10,10 +10,13 @@ import { resetAuthRateWindow, takeAuthSlot } from './auth-rate.js'
 import { createApp } from './create-app.js'
 import { resolveWebSession } from './create-session.js'
 import { FOURTEEN_DAYS_MS, SESSION_COOKIE, TWELVE_HOURS_MS } from './session-cookie.js'
+import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
+import { resetPinEntries } from './pin-lock-state.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
+const pins = memoryPinLockStore()
 let now = new Date('2026-10-04T12:00:00.000Z')
 
 function accountBody(overrides: Record<string, unknown> = {}): Record<string, unknown> {
@@ -40,6 +43,9 @@ describe('POST /v1/sessions', () => {
     resetAuthRateWindow()
     setAccountStore(memory)
     setSessionStore(sessions)
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
     app = await createApp()
     await app.listen(0, '127.0.0.1')
     const address = app.getHttpServer().address() as AddressInfo | string | null
@@ -55,6 +61,8 @@ describe('POST /v1/sessions', () => {
     resetAuthRateWindow()
     setAccountStore(undefined)
     setSessionStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
     if (app) {
       await app.close()
     }

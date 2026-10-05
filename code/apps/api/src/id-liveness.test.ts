@@ -20,12 +20,15 @@ import {
 import { memoryCaptureStore, setCaptureStore, type CaptureRow } from './id-liveness-store.js'
 import { setOtpLimitReader } from './otp-limit.js'
 import { memoryPhoneOtpStore, setPhoneOtpStore } from './phone-otp-store.js'
+import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
+import { resetPinEntries } from './pin-lock-state.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 import { setSmsPort, type OtpLog, type SmsPort } from './sms-port.js'
 import { readRlVerificationUploadPerHour, setVerificationLimitReader } from './verification-limit.js'
 
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
+const pins = memoryPinLockStore()
 const otp = memoryPhoneOtpStore()
 const captures = memoryCaptureStore({
   accounts: memory.accounts,
@@ -100,6 +103,9 @@ describe('POST /v1/verifications/id and /liveness', () => {
     resetRecordClock()
     setAccountStore(memory)
     setSessionStore(sessions)
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
     setPhoneOtpStore(otp)
     setCaptureStore(captures)
     setSmsPort(port)
@@ -124,6 +130,8 @@ describe('POST /v1/verifications/id and /liveness', () => {
     resetRecordClock()
     setAccountStore(undefined)
     setSessionStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
     setPhoneOtpStore(undefined)
     setCaptureStore(undefined)
     setSmsPort(undefined)

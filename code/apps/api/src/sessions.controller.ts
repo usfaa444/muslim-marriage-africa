@@ -1,8 +1,15 @@
-import { Body, Controller, HttpCode, HttpException, Post, Req, Res } from '@nestjs/common'
+import { Body, Controller, Delete, HttpCode, HttpException, Post, Req, Res } from '@nestjs/common'
 import { authNow } from './auth-clock.js'
 import { clientIp, rejectIfAuthRateLimited, type IpRequest } from './auth-guard.js'
 import { createWebSession } from './create-session.js'
+import { notePinUnlocked } from './pin-lock-state.js'
+import { endWebSession } from './pin-session.js'
+import { clearSessionCookieHeader, readCookie, SESSION_COOKIE } from './session-cookie.js'
 import { getSessionStore } from './session-store.js'
+
+type CookieRequest = IpRequest & {
+  headers?: { cookie?: string | string[] }
+}
 
 type CookieResponse = {
   appendHeader?: (name: string, value: string) => void
@@ -42,7 +49,23 @@ export class SessionsController {
         result.status,
       )
     }
+    notePinUnlocked(result.session.id, authNow())
     appendSetCookie(response, result.cookie)
     return result.body
+  }
+
+  @Delete('current')
+  @HttpCode(204)
+  async destroy(
+    @Req() request: CookieRequest,
+    @Res({ passthrough: true }) response: CookieResponse,
+  ): Promise<void> {
+    const header = request.headers?.cookie
+    const sessionId = Array.isArray(header) ? header.join('; ') : header
+    const id = readCookie(sessionId, SESSION_COOKIE)
+    if (id) {
+      await endWebSession(id)
+    }
+    appendSetCookie(response, clearSessionCookieHeader())
   }
 }

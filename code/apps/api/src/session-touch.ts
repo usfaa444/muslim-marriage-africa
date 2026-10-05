@@ -1,12 +1,18 @@
-import { refreshRememberMeCookie } from './create-session.js'
+import { errorEnvelope } from '@ankanu/kernel'
+import { clientIp, type IpRequest } from './auth-guard.js'
+import { applySessionGate, PIN_REQUIRED_MESSAGE } from './pin-session.js'
 
-type TouchRequest = {
+type TouchRequest = IpRequest & {
+  method?: string
+  url?: string
+  originalUrl?: string
   headers?: { cookie?: string | string[] }
 }
 
 type TouchResponse = {
   appendHeader?: (name: string, value: string) => void
   setHeader: (name: string, value: string) => void
+  status: (code: number) => { json: (body: unknown) => void }
 }
 
 function cookieHeader(request: TouchRequest): string | undefined {
@@ -28,15 +34,27 @@ function appendSetCookie(response: TouchResponse, value: string): void {
   response.setHeader('Set-Cookie', value)
 }
 
-/** Slides a remember-me web session when its cookie is presented. Remember-me off is left unchanged. */
+/** Slides a live session, or stops it when the shared-device PIN is required. */
 export function sessionTouch(
   request: TouchRequest,
   response: TouchResponse,
   next: (error?: unknown) => void,
 ): void {
-  void refreshRememberMeCookie(cookieHeader(request)).then((header) => {
-    if (header) {
-      appendSetCookie(response, header)
+  const path = request.originalUrl ?? request.url ?? ''
+  void applySessionGate(request.method ?? 'GET', path, cookieHeader(request), clientIp(request)).then((result) => {
+    if (result.stop) {
+      response.status(401).json(
+        errorEnvelope({
+          code: 'PIN_REQUIRED',
+          message: PIN_REQUIRED_MESSAGE,
+          details: null,
+          retryable: false,
+        }),
+      )
+      return
+    }
+    if (result.cookie) {
+      appendSetCookie(response, result.cookie)
     }
     next()
   }, next)

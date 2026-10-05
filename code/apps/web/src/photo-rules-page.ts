@@ -1,4 +1,5 @@
 import { audioPromptScript, insertBeforeBody, type AudioPromptFiles } from './audio-prompt'
+import { pinGuardScript } from './pin-guard'
 
 const HOSTING_BLOCK =
   /<div class="w-full border-t border-border-hairline\/60 py-2 bg-surface-sand\/80 text-center font-caption text-caption text-ink-secondary">\s*Infrastructure de confiance hébergée souverainement · Scaleway Paris &amp; Relais Ouagadougou · Conformité CIL Burkina Faso\s*<\/div>\s*/
@@ -9,5 +10,5 @@ export function photoRulesPageHtml(stitchHtml: string, files: AudioPromptFiles =
   if (stripped === stitchHtml) {
     throw new Error('photo rules hosting line was not removed')
   }
-  return insertBeforeBody(stripped, audioPromptScript(files))
+  return insertBeforeBody(stripped, `${pinGuardScript()}${audioPromptScript(files)}`)
 }
