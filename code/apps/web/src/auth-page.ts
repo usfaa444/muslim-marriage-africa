@@ -203,6 +203,24 @@ const SUBMIT = `
       event.preventDefault()
     })
   }
+  function applyAuthModeFromQuery() {
+    let mode = ''
+    try {
+      mode = new URL(location.href).searchParams.get('mode') || ''
+    } catch (error) {
+      mode = ''
+    }
+    if (mode !== 'login' && mode !== 'signup') {
+      mode = 'signup'
+    }
+    if (typeof switchAuthMode === 'function') {
+      switchAuthMode(mode)
+      if (document.documentElement) {
+        document.documentElement.setAttribute('data-auth-mode', mode)
+      }
+    }
+  }
+  applyAuthModeFromQuery()
 </script>
 `
 

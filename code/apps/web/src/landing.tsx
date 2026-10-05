@@ -7,7 +7,7 @@ export function LandingPage() {
   return (
     <div className="bg-sand text-ink-primary font-sans antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-indigo-deep">
 <header className="w-full bg-sand/95 border-b border-border-hairline sticky top-0 z-40 backdrop-blur-sm">
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 min-h-20 py-2 flex items-center justify-between gap-3">
       
       <a href="#hero" className="flex items-center gap-3.5 group focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-md p-1">
         <div className="w-10 h-10 rounded-full border border-indigo flex items-center justify-center bg-raised text-indigo shadow-xs">
@@ -32,7 +32,12 @@ export function LandingPage() {
       </nav>
 
       
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col items-end justify-center gap-1 shrink-0">
+        <nav aria-label="Compte">
+          <a href="/auth?mode=login" className="block max-w-[11rem] text-right text-[13px] leading-tight font-medium text-ink-secondary hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1 py-0.5">
+            Déjà inscrit·e ? Se connecter
+          </a>
+        </nav>
         <a href="#auth-inscription" className="inline-flex items-center justify-center min-h-[48px] px-5 rounded-md bg-indigo text-ink-on-indigo font-sans font-semibold text-[15px] hover:bg-indigo-deep focus:outline-none focus:ring-2 focus:ring-gold-soft transition-colors shadow-xs">
           Commencer l'inscription
         </a>
@@ -392,7 +397,7 @@ export function LandingPage() {
     </section>
 
     
-    <section id="auth-inscription" className="py-16 md:py-20 bg-indigo-deep text-sand">
+    <section id="auth-inscription" className="pt-16 pb-36 md:py-20 bg-indigo-deep text-sand">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <h2 className="font-serif text-2xl sm:text-3xl font-semibold mb-4 text-sand">
           Initier votre démarche de nikah avec convenance
@@ -400,11 +405,16 @@ export function LandingPage() {
         <p className="text-base text-sand/80 max-w-xl mx-auto mb-8 leading-relaxed">
           Rejoignez un cadre où votre pudeur et l'honneur de votre famille sont sanctuarisés. La première étape consiste à soumettre votre folio biographique d'admissibilité.
         </p>
-        <div className="inline-flex flex-col sm:flex-row items-center gap-4">
-          <a href="#" className="inline-flex items-center justify-center min-h-[48px] px-8 rounded-md bg-gold-soft text-indigo-deep font-sans font-semibold text-base hover:bg-gold focus:outline-none focus:ring-2 focus:ring-focus-ring transition-colors shadow-sm">
-            Déposer mon dossier de ta'aruf
+        <div className="flex flex-col items-center gap-4">
+          <div className="inline-flex flex-col sm:flex-row items-center gap-4">
+            <a href="/auth?mode=signup" className="inline-flex items-center justify-center min-h-[48px] px-8 rounded-md bg-gold-soft text-indigo-deep font-sans font-semibold text-base hover:bg-gold focus:outline-none focus:ring-2 focus:ring-focus-ring transition-colors shadow-sm">
+              Déposer mon dossier de ta'aruf
+            </a>
+            <span className="text-xs text-sand/60">Réservé aux personnes majeures de 19 ans et plus.</span>
+          </div>
+          <a href="/auth?mode=login" className="text-sm font-medium text-sand underline underline-offset-4 hover:text-gold-soft focus:outline-none focus:ring-2 focus:ring-gold-soft rounded px-1.5 py-1">
+            Déjà inscrit·e ? Se connecter
           </a>
-          <span className="text-xs text-sand/60">Réservé aux personnes majeures de 19 ans et plus.</span>
         </div>
       </div>
     </section>

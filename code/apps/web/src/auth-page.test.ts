@@ -47,6 +47,53 @@ describe('auth screen', () => {
     expect(added).toContain('event.persisted')
     expect(added).toContain("type === 'back_forward'")
     expect(added).toContain("getElementById('password')")
+    expect(added).toContain('function applyAuthModeFromQuery')
+    expect(added).toContain("searchParams.get('mode')")
+    expect(added).toContain("mode !== 'login' && mode !== 'signup'")
+    expect(added).toContain('switchAuthMode(mode)')
+    expect(added).toContain("setAttribute('data-auth-mode', mode)")
+  })
+
+  it('opens login or signup from the mode query and leaves any other value on signup', () => {
+    const start = page.lastIndexOf('<script>')
+    const source = page.slice(start + '<script>'.length, page.lastIndexOf('</script>'))
+    function modesFor(href: string): { modes: string[]; applied: string | null } {
+      const modes: string[] = []
+      const attrs = new Map<string, string>()
+      const field = () => ({
+        value: '',
+        checked: false,
+        className: '',
+        disabled: false,
+        addEventListener() {},
+      })
+      runInNewContext(source, {
+        switchAuthMode(mode: string) {
+          modes.push(mode)
+        },
+        location: { href, assign() {} },
+        URL,
+        Array,
+        document: {
+          documentElement: {
+            setAttribute(name: string, value: string) {
+              attrs.set(name, value)
+            },
+          },
+          getElementById: () => field(),
+          querySelector: () => null,
+          querySelectorAll: () => [],
+        },
+        sessionStorage: { setItem() {}, getItem: () => null },
+        performance: { getEntriesByType: () => [{ type: 'navigate' }] },
+        window: { addEventListener() {} },
+      })
+      return { modes, applied: attrs.get('data-auth-mode') ?? null }
+    }
+    expect(modesFor('http://127.0.0.1/auth?mode=login')).toEqual({ modes: ['login'], applied: 'login' })
+    expect(modesFor('http://127.0.0.1/auth?mode=signup')).toEqual({ modes: ['signup'], applied: 'signup' })
+    expect(modesFor('http://127.0.0.1/auth')).toEqual({ modes: ['signup'], applied: 'signup' })
+    expect(modesFor('http://127.0.0.1/auth?mode=other')).toEqual({ modes: ['signup'], applied: 'signup' })
   })
 
   it('enables signup again when the browser restores the page', () => {
