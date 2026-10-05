@@ -18,11 +18,17 @@
 **/.next
 **/build
 
-# Design captures stay out of the image, except the Auth HTML the web server reads.
+# Design captures stay out of the image, except the HTML the web server reads.
 design-stitch/*
 !design-stitch/11-auth/
 design-stitch/11-auth/*
 !design-stitch/11-auth/screen.html
+!design-stitch/12-age-gate/
+design-stitch/12-age-gate/*
+!design-stitch/12-age-gate/screen.html
+!design-stitch/13-email-verification/
+design-stitch/13-email-verification/*
+!design-stitch/13-email-verification/screen.html
 !design-stitch/14-otp/
 design-stitch/14-otp/*
 !design-stitch/14-otp/screen.html
