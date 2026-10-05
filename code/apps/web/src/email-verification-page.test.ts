@@ -33,6 +33,9 @@ describe('email verification screen', () => {
     expect(added).not.toContain('sms')
     expect(added).not.toContain('60s')
     expect(page).toContain('sous deux minutes')
+    expect(page).toContain('ankanu_pin_hidden_at')
+    expect(page).toContain("fetch('/v1/pin'")
+    expect(page.lastIndexOf('ankanu_pin_hidden_at')).toBeLessThan(page.lastIndexOf('<script>'))
   })
 
   it('escapes an address that would close the stitch script', () => {

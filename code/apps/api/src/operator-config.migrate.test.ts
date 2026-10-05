@@ -160,6 +160,7 @@ function migrationSql(): string {
     '0005_profile.sql',
     '0006_verification_otp.sql',
     '0007_rl_verification_upload.sql',
+    '0008_pin_lock.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -250,6 +251,7 @@ describe('operator_config migration', () => {
       'email_verification',
       'operator_config',
       'password_reset',
+      'pin_lock',
       'profile',
       'session',
       'sms_dispatch',
@@ -262,6 +264,7 @@ describe('operator_config migration', () => {
       'public.email_verification',
       'public.operator_config',
       'public.password_reset',
+      'public.pin_lock',
       'public.profile',
       'public.session',
       'public.sms_dispatch',
@@ -271,7 +274,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('8')
+    expect(applied.rows[0]?.count).toBe('9')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -778,6 +781,7 @@ describe('operator_config migration', () => {
       'email_verification',
       'operator_config',
       'password_reset',
+      'pin_lock',
       'profile',
       'session',
       'sms_dispatch',
@@ -790,6 +794,7 @@ describe('operator_config migration', () => {
       'public.email_verification',
       'public.operator_config',
       'public.password_reset',
+      'public.pin_lock',
       'public.profile',
       'public.session',
       'public.sms_dispatch',

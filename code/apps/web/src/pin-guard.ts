@@ -11,6 +11,7 @@ export function pinGuardScript(): string {
   }
   var KEY = 'ankanu_pin_hidden_at'
   var locking = false
+  var lockWait = Promise.resolve()
   function goPin() {
     var next = window.location.pathname + window.location.search
     window.location.assign('/pin?next=' + encodeURIComponent(next))
@@ -30,25 +31,36 @@ export function pinGuardScript(): string {
       })
     }
   }
+  function finishLock(started) {
+    if (localStorage.getItem(KEY) === started) {
+      localStorage.removeItem(KEY)
+    }
+    locking = false
+  }
   function lockIfStale() {
+    if (locking) {
+      return lockWait
+    }
     var raw = localStorage.getItem(KEY)
-    if (!raw || locking) {
-      return
+    if (!raw) {
+      return lockWait
     }
     var then = Number(raw)
     if (!Number.isFinite(then) || Date.now() - then <= 60000) {
-      return
+      return lockWait
     }
     locking = true
-    var done = function () {
-      localStorage.removeItem(KEY)
-      locking = false
-    }
+    var started = raw
     if (typeof window.fetch !== 'function') {
-      done()
-      return
+      finishLock(started)
+      return lockWait
     }
-    window.fetch('/v1/pin/lock', { method: 'POST', credentials: 'same-origin' }).then(done, done)
+    lockWait = window.fetch('/v1/pin/lock', { method: 'POST', credentials: 'same-origin' }).then(function () {
+      finishLock(started)
+    }, function () {
+      finishLock(started)
+    })
+    return lockWait
   }
   document.addEventListener('visibilitychange', function () {
     if (document.visibilityState === 'hidden') {
@@ -61,17 +73,18 @@ export function pinGuardScript(): string {
   })
   window.addEventListener('pageshow', lockIfStale)
   window.addEventListener('load', function () {
-    lockIfStale()
-    if (typeof window.fetch !== 'function') {
-      return
-    }
-    window.fetch('/v1/pin', { credentials: 'same-origin' }).then(function (response) {
-      return response.json()
-    }).then(function (body) {
-      if (body && body.locked === true) {
-        goPin()
+    lockIfStale().then(function () {
+      if (typeof window.fetch !== 'function') {
+        return
       }
-    }, function () {})
+      window.fetch('/v1/pin', { credentials: 'same-origin' }).then(function (response) {
+        return response.json()
+      }).then(function (body) {
+        if (body && body.locked === true) {
+          goPin()
+        }
+      }, function () {})
+    })
   })
 })()
 </script>

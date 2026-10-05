@@ -59,23 +59,17 @@ function postgresPinLockStore(): PinLockStore {
       return rows[0] ?? null
     },
     async save(accountId, pinHash, id) {
-      const existing = await getIdentityDatabase()
-        .select({ id: pinLock.id })
-        .from(pinLock)
-        .where(eq(pinLock.account_id, accountId))
-        .limit(1)
-      if (existing[0]) {
-        await getIdentityDatabase()
-          .update(pinLock)
-          .set({ pin_hash: pinHash })
-          .where(eq(pinLock.account_id, accountId))
-        return
-      }
-      await getIdentityDatabase().insert(pinLock).values({
-        id,
-        account_id: accountId,
-        pin_hash: pinHash,
-      })
+      await getIdentityDatabase()
+        .insert(pinLock)
+        .values({
+          id,
+          account_id: accountId,
+          pin_hash: pinHash,
+        })
+        .onConflictDoUpdate({
+          target: pinLock.account_id,
+          set: { pin_hash: pinHash },
+        })
     },
   }
 }

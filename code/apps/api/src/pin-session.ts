@@ -124,12 +124,16 @@ export function sessionIsPinLocked(row: ResolvedSession, now = authNow()): boole
 }
 
 export async function stampSeen(row: ResolvedSession, now = authNow()): Promise<string | null> {
-  if (isSlidingRememberMe(row.expires_at, row.last_seen_at)) {
-    const expiresAt = new Date(now.getTime() + FOURTEEN_DAYS_MS)
-    await getSessionStore().saveTimes(row.id, expiresAt, now)
-    return sessionCookieHeader(row.id, rememberMeMaxAge(expiresAt, now))
+  const fresh = await getSessionStore().get(row.id)
+  if (!fresh || fresh.expires_at.getTime() <= now.getTime()) {
+    return null
   }
-  await getSessionStore().saveTimes(row.id, row.expires_at, now)
+  if (isSlidingRememberMe(fresh.expires_at, fresh.last_seen_at)) {
+    const expiresAt = new Date(now.getTime() + FOURTEEN_DAYS_MS)
+    await getSessionStore().saveTimes(fresh.id, expiresAt, now)
+    return sessionCookieHeader(fresh.id, rememberMeMaxAge(expiresAt, now))
+  }
+  await getSessionStore().saveTimes(fresh.id, fresh.expires_at, now)
   return null
 }
 

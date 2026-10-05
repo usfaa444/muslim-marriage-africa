@@ -1,6 +1,7 @@
-import { and, eq, or } from 'drizzle-orm'
+import { and, eq, gt, or } from 'drizzle-orm'
 import { isUuidV7, type Gender } from '@ankanu/kernel'
 import { account, credential, session } from './account-schema.js'
+import { authNow } from './auth-clock.js'
 import { getIdentityDatabase } from './account-store.js'
 import type { CreatedAccount, PasswordCredential } from './create-account.js'
 
@@ -92,7 +93,7 @@ export function memorySessionStore(source: {
     },
     async saveTimes(id, expiresAt, lastSeenAt) {
       const row = sessions.find((item) => item.id === id)
-      if (!row) {
+      if (!row || row.expires_at.getTime() <= authNow().getTime()) {
         return
       }
       row.expires_at = expiresAt
@@ -201,5 +202,5 @@ async function saveTimes(id: string, expiresAt: Date, lastSeenAt: Date): Promise
   await getIdentityDatabase()
     .update(session)
     .set({ expires_at: expiresAt, last_seen_at: lastSeenAt })
-    .where(eq(session.id, id))
+    .where(and(eq(session.id, id), gt(session.expires_at, authNow())))
 }

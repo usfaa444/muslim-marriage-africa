@@ -11,8 +11,11 @@ const BEHAVIOR = `
   var next = '/'
   try {
     var raw = new URLSearchParams(window.location.search).get('next') || ''
-    if (raw.charAt(0) === '/' && raw.charAt(1) !== '/') {
-      next = raw
+    if (raw.charAt(0) === '/' && raw.charAt(1) !== '/' && raw.indexOf('\\\\') === -1) {
+      var parsed = new URL(raw, window.location.origin)
+      if (parsed.origin === window.location.origin) {
+        next = raw
+      }
     }
   } catch (error) {
     next = '/'
@@ -37,8 +40,12 @@ const BEHAVIOR = `
     }
   }
   function showLockout() {
+    var warning = document.getElementById('attempt-warning')
     var banner = document.getElementById('lockout-banner')
     var keypad = document.getElementById('keypad-container')
+    if (warning) {
+      warning.classList.add('hidden')
+    }
     if (banner) {
       banner.classList.remove('hidden')
     }

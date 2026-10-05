@@ -6,7 +6,11 @@ Shared-device PIN for the signed-in web session. The hash lives in `pin_lock`. T
 
 `GET /pin` serves `code/design-stitch/19-pin-lock/screen.html`. The response uses `content-type: text/html; charset=utf-8`, `cache-control: no-store`, and `referrer-policy: no-referrer`. The Stitch file on disk is not edited. The served page removes the simulator toolbar (`Simuler états`), starts the four wells empty, removes the Scaleway hosting line and puts nothing in its place, and does not ship the demo script (`1234`, `alert(`, prefilled wells). Touch ID stays visible and does nothing. The SMS OTP button stays visible and does nothing. « Mot de passe maître » goes to `/auth` and does not call `DELETE`. « Code PIN oublié ? » and « Se déconnecter du sanctuaire » call `DELETE /v1/sessions/current`, then go to `/auth`.
 
-The attempt banner stays the Stitch sentence, including « 3 tentatives restantes ». `attempts_left` is only on the API error. The client does not compare digits and does not store a PIN literal.
+The attempt banner stays the Stitch sentence, including « 3 tentatives restantes ». `attempts_left` is only on the API error. The client does not compare digits and does not store a PIN literal. Lockout hides that warning, shows `#lockout-banner`, and dims the keypad.
+
+`next` is used only when it starts with one `/`, does not start with `//`, contains no `\`, and parses to this page's origin. Otherwise the unlock goes to `/`.
+
+On load, a signed-in page waits for a stale-hide `POST /v1/pin/lock` before `GET /v1/pin`. If that GET says `locked: true`, it goes to `/pin?next=`. The hidden timestamp is removed only when it is still the value that started that lock. A newer hide during the POST stays.
 
 `next` is used only when it starts with one `/` and not `//`. Otherwise the unlock goes to `/`. On load, `/pin` calls `GET /v1/pin`. If `locked` is false, it goes to `next`.
 
@@ -89,10 +93,23 @@ Expected PUT result: `200` and `{"enabled":true}`. The response has no hash, no 
 
 Sister `fatim@example.bf` / `Fatim_Ouaga`, brother `moussa@example.bf` / `Moussa_Ouaga`, password `phrase avec espaces`, PIN `1357`, wrong PIN `1358`. Mahram is the brother account with roles `member` and `mahram`. No Redis. The fail map is process memory.
 
+## QA fail fixes
+
+[ANK-65](/ANK/issues/ANK-65) failed the first build. These eight items are in this commit:
+
+1. Page load awaits the lock POST, then reads `GET /v1/pin`, and redirects when that read says locked.
+2. The hide timestamp is deleted only if it is still the value that started the lock.
+3. Lockout hides `#attempt-warning`.
+4. `next` with a backslash, or a parse onto another host, stays on `/`.
+5. The Postgres migration test expects `0008_pin_lock.sql`, nine applied migrations, and `pin_lock` on both table lists.
+6. `saveTimes` writes only while `expires_at` is still in the future. `stampSeen` re-reads and skips a session that has already ended.
+7. The Postgres PIN save upserts on `account_id` and replaces only `pin_hash`.
+8. Age gate, email verification, OTP, and ID/liveness tests assert the guard. After a sister idle `PIN_REQUIRED`, a correct unlock moves `last_seen_at` and the next `GET /v1/health` is `200`.
+
 ## My results
 
-- `apps/api/src/pin.test.ts` and `apps/web/src/pin-page.test.ts`: 11 passed.
-- `apps/web/src/guided-onboarding-page.test.ts`, `apps/api/src/create-session.test.ts`, `apps/web/src/age-gate-page.test.ts`, `apps/web/src/email-verification-page.test.ts`, `apps/web/src/otp-page.test.ts`, `apps/web/src/id-liveness-page.test.ts`: passed in the same run.
+- Fail-fix re-run: `apps/api/src/pin.test.ts`, `apps/web/src/pin-page.test.ts`, `apps/web/src/age-gate-page.test.ts`, `apps/web/src/email-verification-page.test.ts`, `apps/web/src/otp-page.test.ts`, `apps/web/src/id-liveness-page.test.ts`: 31 passed.
+- Same heartbeat, with the live-session `saveTimes` change: `apps/web/src/guided-onboarding-page.test.ts` and `apps/api/src/create-session.test.ts` passed.
 - `apps/api/src/phone-otp.test.ts`, `password-reset.test.ts`, `email-verification.test.ts`, `id-liveness.test.ts`, `create-account.test.ts`, `api.test.ts`: 52 passed.
 - `npx tsc -p apps/api/tsconfig.json --noEmit`, `npx tsc -p apps/web/tsconfig.json --noEmit`, and `npx tsc -p packages/kernel/tsconfig.json --noEmit` passed.
 - `npx oxlint` on the new PIN files passed.
@@ -122,4 +139,4 @@ Founder sentences on this ticket. Resource map entry for `/v1/pin`. AD-7 error e
 - OTP re-auth and biometric unlock are not in the catalog; password re-auth satisfies FR-020 for this story.
 - Story 2.9's handoff said onboarding and photo rules do not call `fetch`. This story adds the PIN guard to those two pages. That is the guard, not a profile save.
 - Google sign-in stays deferred. This screen has no Google button.
-- This commit stays local until QA passes. Do not treat it as pushed.
+- This commit stays local until QA passes. Do not treat it as pushed. The first QA pass failed. This file is the re-test list.

@@ -70,6 +70,43 @@ describe('shared-device PIN screen', () => {
     expect(stayed.assigned).toEqual([])
     expect(stayed.calls.some((call) => call.url === '/v1/pin/unlock' && call.body === '{"pin":"1357"}')).toBe(true)
     expect(stayed.warningHidden).toBe(false)
+
+    const slipped = await runPin(`?next=${encodeURIComponent('/\\evil.example')}`, async () => ({
+      ok: true,
+      json: async () => ({ enabled: true, locked: false }),
+    }))
+    expect(slipped.assigned).toEqual(['/'])
+
+    const local = await runPin(`?next=${encodeURIComponent('/age-gate')}`, async () => ({
+      ok: true,
+      json: async () => ({ enabled: true, locked: false }),
+    }))
+    expect(local.assigned).toEqual(['/age-gate'])
+  })
+
+  it('hides the wrong-PIN warning when the session locks', async () => {
+    let unlocks = 0
+    const screen = await runPin('?next=/age-gate', async (url) => {
+      if (url !== '/v1/pin/unlock') {
+        return { ok: true, json: async () => ({ enabled: true, locked: true }) }
+      }
+      unlocks += 1
+      return {
+        ok: false,
+        json: async () => ({ error: { code: unlocks === 1 ? 'PIN_INVALID' : 'PIN_LOCKED' } }),
+      }
+    })
+    for (const digit of ['1', '3', '5', '7']) {
+      screen.enter(digit)
+    }
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.warningHidden).toBe(false)
+    for (const digit of ['1', '3', '5', '7']) {
+      screen.enter(digit)
+    }
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.warningHidden).toBe(true)
+    expect(screen.assigned).toEqual([])
   })
 })
 
@@ -100,6 +137,26 @@ describe('PIN guard', () => {
     await guard.fetchWrapped('/v1/health', { error: { code: 'PIN_REQUIRED' } })
     expect(guard.assigned.length).toBe(before + 1)
   })
+
+  it('reads the PIN only after the lock POST, and keeps a newer hide timestamp', async () => {
+    const guard = await runGuard()
+    guard.holdLock()
+    guard.storage.set('ankanu_pin_hidden_at', String(Date.now() - 60_001))
+    guard.visibility('visible')
+    guard.visibility('hidden')
+    const kept = guard.storage.get('ankanu_pin_hidden_at')
+    guard.load()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(guard.calls.some((call) => call.url === '/v1/pin' && call.method === 'GET')).toBe(false)
+    guard.respond = async () => ({ ok: true, json: async () => ({ locked: true }) })
+    guard.release()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(guard.storage.get('ankanu_pin_hidden_at')).toBe(kept)
+    expect(guard.calls.findIndex((call) => call.url === '/v1/pin/lock')).toBeLessThan(
+      guard.calls.findIndex((call) => call.url === '/v1/pin' && call.method === 'GET'),
+    )
+    expect(guard.assigned.some((path) => path.startsWith('/pin?next='))).toBe(true)
+  })
 })
 
 type PinCall = { url: string; body: string }
@@ -118,14 +175,35 @@ function runPin(
   const source = html.slice(start + '<script>'.length, html.lastIndexOf('</script>'))
   const assigned: string[] = []
   const calls: PinCall[] = []
-  const warning = { className: 'hidden', classList: { remove(name: string) { warning.className = warning.className.replace(name, '') } } }
+  const warning = {
+    className: 'hidden',
+    classList: {
+      remove(name: string) {
+        warning.className = warning.className.replace(name, '').trim()
+      },
+      add(name: string) {
+        if (!warning.className.split(/\s+/).includes(name)) {
+          warning.className = `${warning.className} ${name}`.trim()
+        }
+      },
+    },
+  }
+  function well() {
+    return {
+      className: '',
+      classList: {
+        add() {},
+        remove() {},
+      },
+    }
+  }
   const sandbox = {
     document: {
       getElementById(id: string) {
         if (id === 'attempt-warning') {
           return warning
         }
-        return { className: '' }
+        return well()
       },
       querySelectorAll(selector: string) {
         if (selector === 'button') {
@@ -134,6 +212,7 @@ function runPin(
         return [{ textContent: 'Code PIN oublié ?', addEventListener() {} }]
       },
     },
+    URL,
     URLSearchParams,
     fetch(url: string, init?: { body?: string }) {
       calls.push({ url, body: init?.body ?? '' })
@@ -141,6 +220,7 @@ function runPin(
     },
     location: {
       search,
+      origin: 'http://ankanu.test',
       assign(path: string) {
         assigned.push(path)
       },
@@ -173,6 +253,8 @@ function runGuard(): Promise<{
   assigned: string[]
   visibility: (state: string) => void
   load: () => void
+  holdLock: () => void
+  release: () => void
   respond: (url: string) => Promise<{ ok: boolean; json: () => Promise<unknown> }>
   fetchWrapped: (url: string, body: unknown) => Promise<void>
 }> {
@@ -183,6 +265,8 @@ function runGuard(): Promise<{
   const listeners: Record<string, Array<() => void>> = {}
   let visibilityState = 'visible'
   let bodyFor = (_url: string): unknown => ({ locked: false })
+  let held: Promise<void> | undefined
+  let releaseHeld: (() => void) | undefined
   function responseFor(body: unknown): Promise<{ clone: () => { json: () => Promise<unknown> }; json: () => Promise<unknown> }> {
     const response = {
       clone() {
@@ -223,7 +307,13 @@ function runGuard(): Promise<{
     },
     fetch(url: string, init?: { method?: string }) {
       calls.push({ url, method: init?.method ?? 'GET' })
-      return responseFor(bodyFor(url))
+      const pending = responseFor(bodyFor(url))
+      if (held && url === '/v1/pin/lock') {
+        const gate = held
+        held = undefined
+        return gate.then(() => pending)
+      }
+      return pending
     },
     window: {} as {
       location?: { pathname: string; search: string; assign: (path: string) => void }
@@ -255,6 +345,14 @@ function runGuard(): Promise<{
       for (const fn of listeners.load ?? []) {
         fn()
       }
+    },
+    holdLock() {
+      held = new Promise((resolve) => {
+        releaseHeld = resolve
+      })
+    },
+    release() {
+      releaseHeld?.()
     },
     set respond(next: (url: string) => Promise<{ ok: boolean; json: () => Promise<unknown> }>) {
       bodyFor = (url) => {

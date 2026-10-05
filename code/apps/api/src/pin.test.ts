@@ -282,6 +282,16 @@ describe('shared-device PIN', () => {
     expect(idle.status).toBe(401)
     expect(idleBody.error.code).toBe('PIN_REQUIRED')
     expect(sessionRow(fresh)?.last_seen_at.toISOString()).toBe(idleSeen)
+    const unlocked = await fetch(`${base}/v1/pin/unlock`, {
+      method: 'POST',
+      headers: { cookie: fresh, 'content-type': 'application/json' },
+      body: JSON.stringify({ pin: PIN }),
+    })
+    expect(unlocked.status).toBe(200)
+    expect(sessionRow(fresh)?.last_seen_at.toISOString()).toBe(now.toISOString())
+    expect(sessionRow(fresh)?.last_seen_at.toISOString()).not.toBe(idleSeen)
+    const afterIdle = await fetch(`${base}/v1/health`, { headers: { cookie: fresh } })
+    expect(afterIdle.status).toBe(200)
     now = started
 
     await createAccount({ email: 'moussa@example.bf', pseudonym: 'Moussa_Ouaga', gender: 'brother' })
@@ -342,6 +352,13 @@ describe('shared-device PIN', () => {
     const afterBody = (await after.json()) as { error: { code: string } }
     expect(after.status).toBe(401)
     expect(afterBody.error.code).toBe('UNAUTHENTICATED')
+    const ended = sessionRow(cookie)
+    if (!ended) {
+      throw new Error('expected the ended session row')
+    }
+    const endedAt = ended.expires_at.toISOString()
+    await sessions.saveTimes(ended.id, new Date(now.getTime() + TWELVE_HOURS_MS), now)
+    expect(ended.expires_at.toISOString()).toBe(endedAt)
 
     const absent = await fetch(`${base}/v1/sessions/current`, { method: 'DELETE' })
     expect(absent.status).toBe(204)
