@@ -58,7 +58,7 @@ No account, password, or fixture. The links do not submit a form.
 - `npx oxlint` on the four touched TypeScript files: clean.
 - `npx tsc -p apps/web/tsconfig.json --noEmit`: passed.
 - Live `next dev` at `http://127.0.0.1:3456` (the server already running for this app): at 390px and 1280px the document does not scroll sideways, the header login link is visible, and the section login link is visible. Clicking « Déposer mon dossier de ta'aruf » opened `/auth?mode=signup` with the signup panel. Opening `/auth?mode=login` showed the login panel and `data-auth-mode=login`.
-- I did not redeploy port 4012. Push waits until QA passes.
+- Staging `http://72.61.0.79:4012/` returns the new hrefs: three `#auth-inscription`, one `/auth?mode=signup`, two `/auth?mode=login`. `GET /auth?mode=login` includes `applyAuthModeFromQuery`. Only `ankanu-web-1` was recreated. Other compose projects were still up with their previous start times. Push to GitHub waits until QA passes. The running image matches local commit `1f89689`.
 
 ## Three validation passes
 
@@ -82,4 +82,4 @@ This ticket did not paste a SOLUTION-DESIGN section. No new table, field, relati
 - The automated click test serves the landing markup without Tailwind. A separate headless pass on the running `next dev` server checked 390px and 1280px with styles loaded. It did not click through the open cookie bar.
 - CI skips the Chrome describe block when no browser binary is installed. The href assertions still run.
 - Clicking the login or signup tab does not change `?mode`.
-- Staging on port 4012 is unchanged until QA passes and this commit is pushed. Epic 3 stays closed.
+- GitHub does not have this commit yet. Push waits until QA passes. Epic 3 stays closed.
