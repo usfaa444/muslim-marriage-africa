@@ -30,6 +30,8 @@ const BEHAVIOR = `
     document.getElementById('stateUnderage').classList.remove('hidden')
     const submitBtn = document.getElementById('submitBtn')
     submitBtn.disabled = true
+    submitBtn.className = 'w-full min-h-[48px] rounded-xl flex items-center justify-center space-x-2 transition-all duration-200 bg-disabled text-ink-secondary cursor-not-allowed font-body-strong text-body px-6 select-none'
+    submitBtn.innerHTML = '<span class="material-symbols-outlined text-current" data-icon="sms" style="font-size: 20px;">sms</span><span id="btnLabelText">Continuer vers la vérification (SMS / OTP)</span>'
   }
   window.handleContinue = async function () {
     const submitBtn = document.getElementById('submitBtn')

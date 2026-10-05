@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { runInNewContext } from 'node:vm'
 import { describe, expect, it } from 'vitest'
 import { authPageHtml, COC_VERSION_ON_SCREEN } from './auth-page.js'
 
@@ -42,5 +43,81 @@ describe('auth screen', () => {
     expect(added).toContain("selected.value === 'frere' ? 'brother'")
     expect(added).toContain('button.disabled = true')
     expect(added).toContain('catch (error)')
+    expect(added).toContain("addEventListener('pageshow'")
+    expect(added).toContain('event.persisted')
+  })
+
+  it('enables signup again when the browser restores the page', () => {
+    const start = page.lastIndexOf('<script>')
+    const source = page.slice(start + '<script>'.length, page.lastIndexOf('</script>'))
+    const values = new Map<string, string>([
+      ['email', 'fatim@example.bf'],
+      ['pseudonym', 'Fatim_Ouaga'],
+      ['password', 'phrase avec espaces'],
+    ])
+    const checked = new Map<string, boolean>([
+      ['pledge-check', true],
+      ['human-verify', true],
+    ])
+    const button = { disabled: false, className: '' }
+    const listeners = new Map<string, Array<(event: { preventDefault: () => void; persisted?: boolean }) => void>>()
+    function listen(id: string, type: string, listener: (event: { preventDefault: () => void; persisted?: boolean }) => void) {
+      const key = `${id}:${type}`
+      const current = listeners.get(key) ?? []
+      current.push(listener)
+      listeners.set(key, current)
+    }
+    const sandbox = {
+      document: {
+        getElementById(id: string) {
+          if (id === 'btn-submit-signup') {
+            return button
+          }
+          return {
+            get value() {
+              return values.get(id) ?? ''
+            },
+            set value(next: string) {
+              values.set(id, next)
+            },
+            get checked() {
+              return checked.get(id) === true
+            },
+            addEventListener(type: string, listener: (event: { preventDefault: () => void }) => void) {
+              listen(id, type, listener)
+            },
+          }
+        },
+        querySelector() {
+          return null
+        },
+        querySelectorAll() {
+          return []
+        },
+      },
+      sessionStorage: { setItem() {} },
+      location: { assign() {} },
+      window: {
+        addEventListener(type: string, listener: (event: { persisted: boolean }) => void) {
+          listen('window', type, listener)
+        },
+      },
+    }
+    runInNewContext(source, sandbox)
+    const submit = listeners.get('signup-form:submit')?.[0]
+    if (!submit) {
+      throw new Error('signup submit missing')
+    }
+    submit({ preventDefault() {} })
+    expect(button.disabled).toBe(true)
+    const pageshow = listeners.get('window:pageshow')?.[0]
+    if (!pageshow) {
+      throw new Error('pageshow missing')
+    }
+    pageshow({ preventDefault() {}, persisted: false })
+    expect(button.disabled).toBe(true)
+    pageshow({ preventDefault() {}, persisted: true })
+    expect(button.disabled).toBe(false)
+    expect(button.className).toContain('bg-indigo')
   })
 })

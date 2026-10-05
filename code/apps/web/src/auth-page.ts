@@ -66,6 +66,12 @@ const SUBMIT = `
       validateSubmissionState()
     }
   })
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      submitting = false
+      validateSubmissionState()
+    }
+  })
   let loginSubmitting = false
   function showLoginLine(line) {
     let slot = document.getElementById('login-result')

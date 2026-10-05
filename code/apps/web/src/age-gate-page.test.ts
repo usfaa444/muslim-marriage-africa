@@ -57,6 +57,11 @@ describe('age gate screen', () => {
     expect(held.alerts).toEqual([])
     expect(held.visible).toBe('stateUnderage')
     expect(held.stored).toBeNull()
+    expect(held.buttonDisabled).toBe(true)
+    expect(held.buttonClass).toContain('bg-disabled')
+    expect(held.buttonClass).not.toContain('bg-indigo')
+    expect(held.buttonHtml).toContain('Continuer vers la vérification (SMS / OTP)')
+    expect(held.buttonHtml).not.toContain('Génération du jeton SMS sécurisé')
 
     const adult = await runGate(draft, async () => ({ status: 201, json: async () => ({ status: 'Active' }) }))
     await adult.submit('15', '01', '1990', false)
@@ -85,6 +90,8 @@ async function runGate(
   visible: string
   stored: string | null
   buttonDisabled: boolean
+  buttonClass: string
+  buttonHtml: string
   submit: (day: string, month: string, year: string, disabled: boolean) => Promise<void>
 }> {
   const start = page.lastIndexOf('<script>')
@@ -96,9 +103,15 @@ async function runGate(
     ['stateEligible', new Set(['hidden'])],
     ['stateUnderage', new Set(['hidden'])],
   ])
-  const nodes = new Map<string, { value: string; textContent: string; disabled: boolean; innerHTML: string }>()
+  const nodes = new Map<string, { value: string; textContent: string; disabled: boolean; innerHTML: string; className: string }>()
   function node(id: string) {
-    const current = nodes.get(id) ?? { value: '', textContent: '', disabled: false, innerHTML: 'label' }
+    const current = nodes.get(id) ?? {
+      value: '',
+      textContent: '',
+      disabled: false,
+      innerHTML: 'label',
+      className: '',
+    }
     nodes.set(id, current)
     return {
       get value() {
@@ -124,6 +137,12 @@ async function runGate(
       },
       set innerHTML(next: string) {
         current.innerHTML = next
+      },
+      get className() {
+        return current.className
+      },
+      set className(next: string) {
+        current.className = next
       },
       classList: {
         add(name: string) {
@@ -193,6 +212,12 @@ async function runGate(
     },
     get buttonDisabled() {
       return nodes.get('submitBtn')?.disabled ?? true
+    },
+    get buttonClass() {
+      return nodes.get('submitBtn')?.className ?? ''
+    },
+    get buttonHtml() {
+      return nodes.get('submitBtn')?.innerHTML ?? ''
     },
     async submit(day, month, year, disabled) {
       node('dobDay').value = day

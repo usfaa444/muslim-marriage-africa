@@ -63,7 +63,8 @@ The migrate test starts a throwaway Postgres 17 container and removes it. The sc
 | Auth screen | Filled signup, pledge and human checkboxes on | No `POST /v1/accounts`. `sessionStorage` key `ankanu.signup` holds the fields, including the password. Location becomes `/age-gate` with an empty query. Google click stays on `/auth`. |
 | Young date on the screen | Day 01, month 01, year 15 years before today | Button stays disabled. Label stays `Continuer vers la vérification (SMS / OTP)`. `#stateUnderage` is shown. No post. |
 | Adult date on the screen | `15` / `01` / `1990` | Button enables. Label becomes `Poursuivre vers l'envoi du code OTP`. Click posts `/v1/accounts` with the draft plus `dob` `1990-01-15`. The page stays on `/age-gate`. |
-| Held response | The post returns 201 `{ "status": "held" }` | `#stateUnderage` is shown. The OTP alert does not run. The draft is removed. |
+| Held response | The post returns 201 `{ "status": "held" }` | `#stateUnderage` is shown. The OTP alert does not run. The draft is removed. The button is disabled, uses the grey `bg-disabled` classes, and the label is `Continuer vers la vérification (SMS / OTP)`. |
+| Back from the age gate | A valid signup assigns `/age-gate`, then the browser restores `/auth` (`pageshow` with `persisted`) | `submitting` is cleared and `validateSubmissionState()` runs. The filled form can submit again. A `pageshow` that is not a restore leaves the button disabled. |
 | Adult response | The post returns 201 `{ "status": "Active" }` | Alert text is `Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.` No navigation. The draft is removed. |
 | Served HTML | `GET /age-gate` | 200, `cache-control: no-store`, `referrer-policy: no-referrer`. Supervision line and marriage counter `0` stay. Body does not contain `Scaleway` or `Loi 010-2004/AN`. |
 
@@ -78,6 +79,8 @@ The migrate test starts a throwaway Postgres 17 container and removes it. The sc
 
 ## My results
 
+- QA fail fix: a held 201 restores the grey disabled button and the label `Continuer vers la vérification (SMS / OTP)`. Going back from the age gate fires `pageshow` with `persisted` and enables the filled signup again. `age-gate-page.test.ts` and `auth-page.test.ts`: 4 passed.
+- Headless Chrome on `http://127.0.0.1:3456`: a stubbed 201 `{ "status": "held" }` left `#stateUnderage` visible, removed the draft, and set the button to disabled with `bg-disabled` and the label `Continuer vers la vérification (SMS / OTP)`. After signup, going back left the email filled and the signup button enabled.
 - Unit files named above: 37 passed on the first full run of those files after the age assertions. The age-gate script test then passed on its own (2 tests) after the quote fix, and again after the fetch `ok` flag.
 - `operator-config.migrate.test.ts`: 7 passed on Postgres 17. Six migrations apply. The adult create stores `profile.dob` `1990-01-15` with `city`, `country`, and `visibility` null, `age_attested` true, `status` `Active`, and no `dob` on the response.
 - `npm run typecheck`, `npm run lint`, and `npm run migration-check` passed.
@@ -110,4 +113,6 @@ The HTML file was not edited. The page removes the hosting statute line and inje
 - Google stays visible and does not sign in. Story 2.5 stays deferred.
 - The password sits in `sessionStorage` until the age-gate post succeeds or the member leaves the tab.
 - Chrome posted to the dev server, and the rewrite to `api:3000` failed, so that click did not create a row. The HTTP cases are locked by `create-account.test.ts` and the Postgres migrate test.
+- A held 201 used to leave the SMS spinner on the button. The button now returns to the Stitch disabled control.
+- A history restore of `/auth` used to keep signup disabled. `pageshow` with `persisted` clears that and validates the form again.
 - This commit stays local until QA passes. Do not treat it as pushed.
