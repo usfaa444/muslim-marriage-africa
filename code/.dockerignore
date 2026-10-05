@@ -23,6 +23,9 @@ design-stitch/*
 !design-stitch/11-auth/
 design-stitch/11-auth/*
 !design-stitch/11-auth/screen.html
+!design-stitch/14-otp/
+design-stitch/14-otp/*
+!design-stitch/14-otp/screen.html
 
 # Restore-drill data must not enter the image build context.
 pg-data

@@ -157,6 +157,7 @@ function migrationSql(): string {
     '0003_email_verification.sql',
     '0004_password_reset.sql',
     '0005_profile.sql',
+    '0006_verification_otp.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -249,6 +250,8 @@ describe('operator_config migration', () => {
       'password_reset',
       'profile',
       'session',
+      'sms_dispatch',
+      'verification_record',
     ])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
@@ -259,12 +262,14 @@ describe('operator_config migration', () => {
       'public.password_reset',
       'public.profile',
       'public.session',
+      'public.sms_dispatch',
+      'public.verification_record',
     ])
 
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('6')
+    expect(applied.rows[0]?.count).toBe('7')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -773,6 +778,8 @@ describe('operator_config migration', () => {
       'password_reset',
       'profile',
       'session',
+      'sms_dispatch',
+      'verification_record',
     ])
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
@@ -783,6 +790,8 @@ describe('operator_config migration', () => {
       'public.password_reset',
       'public.profile',
       'public.session',
+      'public.sms_dispatch',
+      'public.verification_record',
     ])
 
     const keyColumns = await db().query<{ table_schema: string; table_name: string }>(

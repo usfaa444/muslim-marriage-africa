@@ -96,6 +96,45 @@ export const profile = pgTable(
   ],
 )
 
+/**
+ * Phone OTP, liveness, and ID. This story writes `kind` `phone_otp` only.
+ * `hash` is the code hash. The raw code is never stored. `evidence_uri` stays empty here.
+ */
+export const verificationRecord = pgTable(
+  'verification_record',
+  {
+    id: uuid('id').primaryKey(),
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => account.id),
+    kind: text('kind').notNull(),
+    status: text('status').notNull(),
+    vendor: text('vendor'),
+    evidence_uri: text('evidence_uri'),
+    phone_e164: text('phone_e164'),
+    hash: text('hash'),
+    expires_at: timestamp('expires_at', { withTimezone: true, mode: 'date' }),
+  },
+  (table) => [
+    check(
+      'verification_record_kind_check',
+      sql`${table.kind} in ('phone_otp', 'liveness', 'id_document')`,
+    ),
+    check(
+      'verification_record_status_check',
+      sql`${table.status} in ('pending', 'granted', 'rejected', 'held')`,
+    ),
+  ],
+)
+
+/** SMS row. Template and ids only. No phone and no code. */
+export const smsDispatch = pgTable('sms_dispatch', {
+  id: uuid('id').primaryKey(),
+  account_id: uuid('account_id').references(() => account.id),
+  template: text('template').notNull(),
+  created_at: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+})
+
 /** Web session. No remember-me column and no gender column. */
 export const session = pgTable(
   'session',

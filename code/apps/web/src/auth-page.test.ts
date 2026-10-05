@@ -117,7 +117,7 @@ describe('auth screen', () => {
       },
       location: { assign() {} },
       window: {
-        addEventListener(type: string, listener: (event: { persisted: boolean }) => void) {
+        addEventListener(type: string, listener: (event: { preventDefault: () => void; persisted?: boolean }) => void) {
           listen('window', type, listener)
         },
       },

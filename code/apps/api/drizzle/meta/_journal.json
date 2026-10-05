@@ -43,6 +43,13 @@
       "when": 1791162944291,
       "tag": "0005_profile",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1791171565480,
+      "tag": "0006_verification_otp",
+      "breakpoints": true
     }
   ]
 }
