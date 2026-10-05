@@ -29,12 +29,15 @@ describe('age gate screen', () => {
     expect(added).toContain("fetch('/v1/accounts'")
     expect(added).toContain("payload.status === 'held'")
     expect(added).toContain('stateUnderage')
-    expect(added).toContain("alert(\"Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.\")")
-    expect(added).not.toContain('location.assign')
-    expect(added).not.toContain('/otp')
+    expect(added).toContain("fetch('/v1/sessions'")
+    expect(added).toContain('remember_me: false')
+    expect(added).toContain("location.assign('/otp')")
+    expect(page).not.toContain('alert(')
+    expect(page).not.toContain('confirm(')
+    expect(page).not.toContain('prompt(')
   })
 
-  it('posts the draft with dob, holds a young account, and alerts only an adult create', async () => {
+  it('posts the draft with dob, holds a young account, and opens OTP for an adult', async () => {
     const draft = {
       email: 'fatim@example.bf',
       password: 'phrase avec espaces',
@@ -48,6 +51,7 @@ describe('age gate screen', () => {
     await missing.submit('15', '01', '1990', false)
     expect(missing.calls).toEqual([])
     expect(missing.hint).toBe('La création a échoué.')
+    expect(missing.assigned).toEqual([])
 
     const held = await runGate(draft, async () => ({ status: 201, json: async () => ({ status: 'held' }) }))
     await held.submit('05', '10', '2007', false)
@@ -58,6 +62,7 @@ describe('age gate screen', () => {
       },
     ])
     expect(held.alerts).toEqual([])
+    expect(held.assigned).toEqual([])
     expect(held.visible).toBe('stateUnderage')
     expect(held.stored).toBeNull()
     expect(held.buttonDisabled).toBe(true)
@@ -74,10 +79,25 @@ describe('age gate screen', () => {
 
     const adult = await runGate(draft, async () => ({ status: 201, json: async () => ({ status: 'Active' }) }))
     await adult.submit('15', '01', '1990', false)
+    expect(adult.calls.map((call) => call.url)).toEqual(['/v1/accounts', '/v1/sessions'])
     expect(adult.calls[0]?.body).toEqual({ ...draft, dob: '1990-01-15' })
-    expect(adult.alerts).toEqual(["Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso."])
+    expect(adult.calls[1]?.body).toEqual({
+      identifier: draft.email,
+      password: draft.password,
+      remember_me: false,
+    })
+    expect(adult.alerts).toEqual([])
+    expect(adult.assigned).toEqual(['/otp'])
     expect(adult.stored).toBeNull()
     expect(adult.visible).toBe('stateEmpty')
+    await adult.submit('15', '01', '1990', true)
+    expect(adult.calls).toHaveLength(2)
+    adult.unlock()
+    adult.fireChange('dobYear')
+    expect(adult.buttonDisabled).toBe(true)
+    await adult.submit('15', '01', '1990', false)
+    expect(adult.calls).toHaveLength(2)
+    expect(adult.assigned).toEqual(['/otp'])
 
     const refused = await runGate(draft, async () => ({
       status: 400,
@@ -86,6 +106,56 @@ describe('age gate screen', () => {
     await refused.submit('31', '02', '2010', false)
     expect(refused.hint).toBe('dob : une date de naissance est requise.')
     expect(refused.buttonDisabled).toBe(false)
+    expect(refused.assigned).toEqual([])
+    expect(refused.calls.map((call) => call.url)).toEqual(['/v1/accounts'])
+
+    const sessionFailed = await runGate(draft, async (url) => {
+      if (url === '/v1/sessions') {
+        return {
+          status: 401,
+          json: async () => ({ error: { message: 'Identifiant ou mot de passe incorrect.' } }),
+        }
+      }
+      return { status: 201, json: async () => ({ status: 'Active' }) }
+    })
+    await sessionFailed.submit('15', '01', '1990', false)
+    expect(sessionFailed.assigned).toEqual([])
+    expect(sessionFailed.stored).toContain('fatim@example.bf')
+    expect(sessionFailed.buttonDisabled).toBe(false)
+    expect(sessionFailed.hint).toBe('Identifiant ou mot de passe incorrect.')
+    expect(sessionFailed.alerts).toEqual([])
+
+    const conflict = await runGate(draft, async (url) => {
+      if (url === '/v1/sessions') {
+        return { status: 201, json: async () => ({ id: 'session-1', kind: 'web' }) }
+      }
+      return {
+        status: 409,
+        json: async () => ({ error: { message: 'email : ce champ est déjà utilisé.' } }),
+      }
+    })
+    await conflict.submit('15', '01', '1990', false)
+    expect(conflict.calls.map((call) => call.url)).toEqual(['/v1/accounts', '/v1/sessions'])
+    expect(conflict.assigned).toEqual(['/otp'])
+    expect(conflict.stored).toBeNull()
+
+    const blocked = await runGate(draft, async (url) => {
+      if (url === '/v1/sessions') {
+        return {
+          status: 401,
+          json: async () => ({ error: { message: 'Identifiant ou mot de passe incorrect.' } }),
+        }
+      }
+      return {
+        status: 409,
+        json: async () => ({ error: { message: 'email : ce champ est déjà utilisé.' } }),
+      }
+    })
+    await blocked.submit('15', '01', '1990', false)
+    expect(blocked.assigned).toEqual([])
+    expect(blocked.stored).toContain('fatim@example.bf')
+    expect(blocked.buttonDisabled).toBe(false)
+    expect(blocked.hint).toBe('email : ce champ est déjà utilisé.')
   })
 
   it('keeps one post in flight and leaves the hold in place', async () => {
@@ -130,10 +200,11 @@ describe('age gate screen', () => {
 
 async function runGate(
   draft: Record<string, unknown> | null,
-  respond: () => Promise<{ status: number; json: () => Promise<unknown> }>,
+  respond: (url: string) => Promise<{ status: number; json: () => Promise<unknown> }>,
 ): Promise<{
   calls: Array<{ url: string; body: unknown }>
   alerts: string[]
+  assigned: string[]
   hint: string
   visible: string
   stored: string | null
@@ -149,6 +220,7 @@ async function runGate(
   const source = page.slice(start + '<script>'.length, page.lastIndexOf('</script>'))
   const calls: Array<{ url: string; body: unknown }> = []
   const alerts: string[] = []
+  const assigned: string[] = []
   const classes = new Map<string, Set<string>>([
     ['stateEmpty', new Set()],
     ['stateEligible', new Set(['hidden'])],
@@ -239,8 +311,13 @@ async function runGate(
     },
     fetch: async (url: string, init?: { body?: string }) => {
       calls.push({ url, body: init?.body ? JSON.parse(init.body) : null })
-      const response = await respond()
+      const response = await respond(url)
       return { ...response, ok: response.status >= 200 && response.status < 300 }
+    },
+    location: {
+      assign(path: string) {
+        assigned.push(path)
+      },
     },
     alert(message: string) {
       alerts.push(message)
@@ -251,6 +328,7 @@ async function runGate(
   return {
     calls,
     alerts,
+    assigned,
     get hint() {
       return nodes.get('stateEmpty')?.textContent ?? ''
     },

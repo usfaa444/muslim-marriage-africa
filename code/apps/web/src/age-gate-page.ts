@@ -4,6 +4,8 @@ import { pinGuardScript } from './pin-guard'
 const HOSTING_LINE =
   /<div class="flex items-center space-x-1\.5 justify-center md:justify-end">[\s\S]*?Loi 010-2004\/AN<\/span>\s*<\/div>\s*/
 
+const DEMO_DIALOG = `alert("Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.");`
+
 const BEHAVIOR = `
 <script>
   const hint = document.querySelector('#stateEmpty span:last-of-type')
@@ -15,6 +17,7 @@ const BEHAVIOR = `
   }
   let accountHeld = false
   let requestOpen = false
+  let navigating = false
   function applyHeldControl() {
     document.getElementById('stateEmpty').classList.add('hidden')
     document.getElementById('stateEligible').classList.add('hidden')
@@ -44,7 +47,7 @@ const BEHAVIOR = `
       applyHeldControl()
       return
     }
-    if (requestOpen) {
+    if (requestOpen || navigating) {
       lockPendingControl()
     }
   }
@@ -76,8 +79,28 @@ const BEHAVIOR = `
     submitBtn.className = previousClass
     submitBtn.disabled = false
   }
+  async function openSession(draft) {
+    const sessionResponse = await fetch('/v1/sessions', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        identifier: draft.email,
+        password: draft.password,
+        remember_me: false
+      })
+    })
+    const sessionPayload = await sessionResponse.json().catch(function () { return null })
+    const sessionMessage = sessionPayload && sessionPayload.error && sessionPayload.error.message
+    return { ok: sessionResponse.ok, message: sessionMessage || '' }
+  }
+  function leaveForOtp() {
+    navigating = true
+    sessionStorage.removeItem(${JSON.stringify(SIGNUP_DRAFT_KEY)})
+    location.assign('/otp')
+  }
   window.handleContinue = async function () {
-    if (requestOpen || accountHeld) {
+    if (requestOpen || accountHeld || navigating) {
       if (accountHeld) {
         applyHeldControl()
       } else {
@@ -129,16 +152,37 @@ const BEHAVIOR = `
         return
       }
       if (response.ok) {
-        sessionStorage.removeItem(${JSON.stringify(SIGNUP_DRAFT_KEY)})
-        alert("Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.")
+        let opened
+        try {
+          opened = await openSession(draft)
+        } catch (error) {
+          restoreFailedSubmit('La connexion a échoué.', label, previousText, submitBtn, previousClass)
+          return
+        }
+        if (!opened.ok) {
+          restoreFailedSubmit(opened.message || 'La connexion a échoué.', label, previousText, submitBtn, previousClass)
+          return
+        }
+        leaveForOtp()
         return
+      }
+      if (response.status === 409) {
+        try {
+          const opened = await openSession(draft)
+          if (opened.ok) {
+            leaveForOtp()
+            return
+          }
+        } catch (error) {
+          /* The account error below is the one the member can act on. */
+        }
       }
       const message = payload && payload.error && payload.error.message
       restoreFailedSubmit(message || 'La création a échoué.', label, previousText, submitBtn, previousClass)
     } catch (error) {
       restoreFailedSubmit('La création a échoué.', label, previousText, submitBtn, previousClass)
     } finally {
-      if (!accountHeld) {
+      if (!accountHeld && !navigating) {
         requestOpen = false
       }
     }
@@ -148,7 +192,10 @@ const BEHAVIOR = `
 
 /** Serves the age-gate screen. The hosting statute line is removed. Signup is posted from this screen. */
 export function ageGatePageHtml(stitchHtml: string): string {
-  const stripped = stitchHtml.replace(HOSTING_LINE, '')
+  const stripped = stitchHtml.replace(HOSTING_LINE, '').replace(DEMO_DIALOG, '')
+  if (/\balert\s*\(|\bconfirm\s*\(|\bprompt\s*\(/.test(stripped)) {
+    throw new Error('age gate still contains a native dialog')
+  }
   const close = stripped.lastIndexOf('</body>')
   if (close < 0) {
     throw new Error('age gate stitch is missing </body>')

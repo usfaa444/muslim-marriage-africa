@@ -19,6 +19,9 @@ describe('otp screen', () => {
     expect(page).toContain('Renvoyer le code par SMS')
     expect(page).toContain('>58<')
     expect(page).toContain('+226 70 •• •• 84')
+    expect(page).toContain('id="otp-phone-mask"')
+    expect(page).toContain('id="otp-phone-input"')
+    expect(page).toContain('aria-label="Numéro de téléphone"')
     expect(page).toContain('Code invalide ou expiré')
     expect(page).toContain('Niveau téléphonique accordé (Phone level granted)')
     expect(page).toContain('Hébergement souverain certifié Scaleway')
@@ -31,6 +34,11 @@ describe('otp screen', () => {
     expect(added).toContain("action: 'verify'")
     expect(added).toContain('startCooldown(60)')
     expect(added).not.toContain("code === '123456'")
+    expect(added).not.toContain('alert(')
+    expect(added).not.toContain('prompt(')
+    expect(page).not.toContain('alert(')
+    expect(page).not.toContain('confirm(')
+    expect(page).not.toContain('prompt(')
     expect(maskE164('+22670123484')).toBe('+226 70 •• •• 84')
   })
 
@@ -46,10 +54,9 @@ describe('otp screen', () => {
     ])
     expect(screen.states).toEqual(['sent'])
     expect(screen.cooldowns).toEqual([60])
-    expect(screen.alerts).toEqual([
-      'Numéro enregistré avec succès. Un nouveau code à 6 chiffres a été ordonnancé.',
-    ])
+    expect(screen.alerts).toEqual([])
     expect(screen.mask).toBe('+226 70 •• •• 84')
+    expect(screen.phoneHidden).toBe(true)
 
     screen.fill('840192')
     screen.submit()
@@ -65,6 +72,11 @@ describe('otp screen', () => {
     await new Promise((resolve) => setTimeout(resolve, 0))
     expect(screen.states).toEqual(['error'])
     expect(screen.cooldowns).toEqual([60])
+    expect(screen.submitDisabled).toBe(false)
+    screen.fill('222222')
+    screen.submit()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls).toHaveLength(2)
   })
 
   it('keeps the mask and the resend number when a send is inside the wait', async () => {
@@ -80,7 +92,7 @@ describe('otp screen', () => {
       { action: 'send', phone_e164: '+22670123484' },
       { action: 'send', phone_e164: '+22670999999' },
     ])
-    expect(screen.alerts).toHaveLength(1)
+    expect(screen.alerts).toHaveLength(0)
     expect(screen.mask).toBe('+226 70 •• •• 84')
     expect(screen.states).toEqual(['sent'])
     screen.resend()
@@ -102,10 +114,62 @@ describe('otp screen', () => {
     expect(screen.calls).toHaveLength(2)
     expect(screen.states).toEqual(['sent', 'success'])
   })
+
+  it('shows a rejected send on the page and accepts another number', async () => {
+    let attempt = 0
+    const screen = await runScreen(async () => {
+      attempt += 1
+      if (attempt === 1) {
+        return {
+          status: 400,
+          json: async () => ({ error: { message: 'phone_e164 : un numéro E.164 est requis.' } }),
+        }
+      }
+      return { status: 201 }
+    }, ['+226 70 12 34 84', '+226 70 12 34 84'])
+    screen.modify()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.states).toEqual([])
+    expect(screen.errorText).toBe('phone_e164 : un numéro E.164 est requis.')
+    expect(screen.phoneHidden).toBe(false)
+    screen.modify()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls[1]).toEqual({ action: 'send', phone_e164: '+22670123484' })
+    expect(screen.states).toEqual(['sent'])
+    expect(screen.phoneHidden).toBe(true)
+  })
+
+  it('closes an empty number field without posting', async () => {
+    const screen = await runScreen(async () => ({ status: 201 }), [''])
+    screen.modify()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls).toEqual([])
+    expect(screen.phoneHidden).toBe(true)
+    expect(screen.mask).toBe('+226 70 •• •• 84')
+    expect(screen.errorText).toBe('Code invalide ou expiré')
+  })
 })
 
+function classNames(initial: string) {
+  const names = new Set(initial.split(/\s+/).filter(Boolean))
+  return {
+    contains(name: string) {
+      return names.has(name)
+    },
+    add(name: string) {
+      names.add(name)
+    },
+    remove(name: string) {
+      names.delete(name)
+    },
+  }
+}
+
 async function runScreen(
-  respond: (url: string, body: { action?: string; phone_e164?: string; code?: string }) => Promise<{ status: number }>,
+  respond: (
+    url: string,
+    body: { action?: string; phone_e164?: string; code?: string },
+  ) => Promise<{ status: number; json?: () => Promise<unknown> }>,
   prompts: string[] = ['+226 70 12 34 84'],
 ): Promise<{
   calls: Array<{ action?: string; phone_e164?: string; code?: string }>
@@ -113,6 +177,9 @@ async function runScreen(
   cooldowns: number[]
   alerts: string[]
   mask: string
+  errorText: string
+  phoneHidden: boolean
+  submitDisabled: boolean
   modify: () => void
   resend: () => void
   submit: () => void
@@ -126,15 +193,40 @@ async function runScreen(
   const cooldowns: number[] = []
   const alerts: string[] = []
   const inputs = Array.from({ length: 6 }, () => ({ value: '' }))
-  const phoneNode = { textContent: '+226 70 •• •• 84' }
+  const phoneInput = {
+    value: '',
+    classList: classNames('hidden'),
+    focus() {},
+    addEventListener() {},
+  }
+  const phoneMask = {
+    textContent: '+226 70 •• •• 84',
+    classList: classNames(''),
+  }
+  const errorTitle = { textContent: 'Code invalide ou expiré' }
+  const errorBanner = {
+    classList: classNames('hidden'),
+    querySelector() {
+      return errorTitle
+    },
+  }
+  const successBanner = { classList: classNames('hidden') }
+  const submitBtn = { disabled: true, className: '' }
+  const nodes = new Map<string, unknown>([
+    ['otp-phone-input', phoneInput],
+    ['otp-phone-mask', phoneMask],
+    ['error-banner', errorBanner],
+    ['success-banner', successBanner],
+    ['submit-btn', submitBtn],
+  ])
   const sandbox = {
     document: {
+      getElementById(id: string) {
+        return nodes.get(id) ?? null
+      },
       querySelectorAll(selector: string) {
         if (selector === '#otp-inputs-wrapper input') {
           return inputs
-        }
-        if (selector === 'span') {
-          return [phoneNode]
         }
         return []
       },
@@ -146,10 +238,6 @@ async function runScreen(
     },
     alert(message: string) {
       alerts.push(message)
-    },
-    prompt() {
-      const next = prompts.shift()
-      return next ?? '+226 70 12 34 84'
     },
     setScreenState(state: string) {
       states.push(state)
@@ -183,13 +271,26 @@ async function runScreen(
     cooldowns,
     alerts,
     get mask() {
-      return phoneNode.textContent
+      return phoneMask.textContent
+    },
+    get errorText() {
+      return errorTitle.textContent
+    },
+    get phoneHidden() {
+      return phoneInput.classList.contains('hidden')
+    },
+    get submitDisabled() {
+      return submitBtn.disabled
     },
     modify() {
       const open = sandbox.window.openModifyNumberModal
       if (!open) {
         throw new Error('openModifyNumberModal missing')
       }
+      if (phoneInput.classList.contains('hidden')) {
+        open()
+      }
+      phoneInput.value = prompts.shift() ?? ''
       open()
     },
     resend() {

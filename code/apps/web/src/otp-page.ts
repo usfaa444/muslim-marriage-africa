@@ -1,9 +1,22 @@
 import { pinGuardScript } from './pin-guard'
 
 const SPECIMEN = '+226 70 •• •• 84'
-const PROMPT = "Entrez le numéro de téléphone rectifié pour le Burkina Faso ou l'international :"
-const PROMPT_VALUE = '+226 70 00 00 00'
-const SAVED = 'Numéro enregistré avec succès. Un nouveau code à 6 chiffres a été ordonnancé.'
+const SPECIMEN_MARKUP =
+  '<span class="font-mono text-ink-primary font-semibold text-[13px] bg-surface-raised px-2 py-0.5 rounded border border-border-hairline">+226 70 •• •• 84</span>'
+const PHONE_MARKUP =
+  '<span id="otp-phone-mask" class="font-mono text-ink-primary font-semibold text-[13px] bg-surface-raised px-2 py-0.5 rounded border border-border-hairline">+226 70 •• •• 84</span><input id="otp-phone-input" hidden class="hidden font-mono text-ink-primary font-semibold text-[13px] bg-surface-raised px-2 py-0.5 rounded border border-border-strong w-40" type="tel" inputmode="tel" autocomplete="tel" aria-label="Numéro de téléphone" placeholder="+22670000000"/>'
+const DEMO_MODIFY = `function openModifyNumberModal() {
+      const newNum = prompt("Entrez le numéro de téléphone rectifié pour le Burkina Faso ou l'international :", "+226 70 00 00 00");
+      if (newNum) {
+        alert("Numéro enregistré avec succès. Un nouveau code à 6 chiffres a été ordonnancé.");
+        setScreenState('sent');
+      }
+    }`
+const ACTIVE_SUBMIT =
+  'w-full h-12 rounded-full bg-indigo text-ink-on-indigo hover:bg-surface-indigo font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-none'
+const SEND_FAILED = "L'envoi du code a échoué."
+const VERIFY_FAILED = 'Code invalide ou expiré'
+const PHONE_FAILED = 'phone_e164 : un numéro E.164 est requis.'
 
 export function maskE164(phone: string): string {
   const digits = phone.startsWith('+') ? phone.slice(1) : phone
@@ -19,8 +32,12 @@ export function maskE164(phone: string): string {
 const BEHAVIOR = `
 <script>
   const SPECIMEN = ${JSON.stringify(SPECIMEN)}
+  const SEND_FAILED = ${JSON.stringify(SEND_FAILED)}
+  const VERIFY_FAILED = ${JSON.stringify(VERIFY_FAILED)}
+  const PHONE_FAILED = ${JSON.stringify(PHONE_FAILED)}
+  const ACTIVE_SUBMIT = ${JSON.stringify(ACTIVE_SUBMIT)}
   let phone = ''
-  let phoneNode = null
+  let busy = false
   let verified = false
   function normalizePhone(value) {
     return String(value || '').replace(/[\\s.\\-()]/g, '')
@@ -35,24 +52,75 @@ const BEHAVIOR = `
     const headLength = Math.min(3, Math.max(0, digits.length - 2))
     return '+' + digits.slice(0, headLength) + ' •• •• ' + last
   }
-  function applyMask(value) {
-    if (!phoneNode) {
-      const nodes = document.querySelectorAll('span')
-      for (let index = 0; index < nodes.length; index += 1) {
-        if (nodes[index].textContent && nodes[index].textContent.indexOf(SPECIMEN) !== -1) {
-          phoneNode = nodes[index]
-          break
-        }
-      }
+  function phoneInput() {
+    return document.getElementById('otp-phone-input')
+  }
+  function phoneMask() {
+    return document.getElementById('otp-phone-mask')
+  }
+  function setFieldHidden(node, hidden) {
+    if (!node) {
+      return
     }
-    if (phoneNode) {
-      phoneNode.textContent = maskPhone(value)
+    if (hidden) {
+      node.classList.add('hidden')
+      if (typeof node.setAttribute === 'function') {
+        node.setAttribute('hidden', '')
+      }
+      return
+    }
+    node.classList.remove('hidden')
+    if (typeof node.removeAttribute === 'function') {
+      node.removeAttribute('hidden')
+    }
+  }
+  function showMask(value) {
+    const mask = phoneMask()
+    const input = phoneInput()
+    if (mask) {
+      mask.textContent = maskPhone(value)
+    }
+    setFieldHidden(mask, false)
+    setFieldHidden(input, true)
+  }
+  function showBannerError(message) {
+    const banner = document.getElementById('error-banner')
+    const success = document.getElementById('success-banner')
+    if (success) {
+      success.classList.add('hidden')
+    }
+    if (!banner) {
+      return
+    }
+    banner.classList.remove('hidden')
+    const title = banner.querySelector('p')
+    if (title) {
+      title.textContent = message
     }
   }
   function readCode() {
     return Array.from(document.querySelectorAll('#otp-inputs-wrapper input')).map(function (input) {
       return input.value || ''
     }).join('')
+  }
+  function enableVerify() {
+    const submit = document.getElementById('submit-btn')
+    if (!submit || readCode().length !== 6) {
+      return
+    }
+    submit.disabled = false
+    submit.className = ACTIVE_SUBMIT
+  }
+  async function errorMessage(response, fallback) {
+    try {
+      const payload = await response.json()
+      if (payload && payload.error && payload.error.message) {
+        return payload.error.message
+      }
+    } catch (error) {
+      return fallback
+    }
+    return fallback
   }
   async function postOtp(body) {
     return fetch('/v1/verifications/otp', {
@@ -62,60 +130,83 @@ const BEHAVIOR = `
       body: JSON.stringify(body)
     })
   }
-  async function sendPhone(nextPhone, announce) {
+  async function sendPhone(nextPhone) {
     const normalized = normalizePhone(nextPhone)
-    let response
+    if (!normalized) {
+      showBannerError(PHONE_FAILED)
+      return
+    }
+    if (busy) {
+      return
+    }
+    busy = true
     try {
-      response = await postOtp({ action: 'send', phone_e164: normalized })
-    } catch (error) {
-      return
-    }
-    if (response.status === 200) {
-      return
-    }
-    if (response.status !== 201) {
-      if (typeof startCooldown === 'function' && response.status === 429) {
+      let response
+      try {
+        response = await postOtp({ action: 'send', phone_e164: normalized })
+      } catch (error) {
+        showBannerError(SEND_FAILED)
+        return
+      }
+      if (response.status === 200) {
+        if (phone) {
+          showMask(phone)
+        }
+        return
+      }
+      if (response.status !== 201) {
+        showBannerError(await errorMessage(response, SEND_FAILED))
+        if (typeof startCooldown === 'function' && response.status === 429) {
+          startCooldown(60)
+        }
+        return
+      }
+      phone = normalized
+      showMask(normalized)
+      if (typeof setScreenState === 'function') {
+        setScreenState('sent')
+      }
+      if (typeof startCooldown === 'function') {
         startCooldown(60)
       }
-      return
-    }
-    phone = normalized
-    applyMask(normalized)
-    if (announce) {
-      alert(${JSON.stringify(SAVED)})
-    }
-    if (typeof setScreenState === 'function') {
-      setScreenState('sent')
-    }
-    if (typeof startCooldown === 'function') {
-      startCooldown(60)
+    } finally {
+      busy = false
     }
   }
   window.handleFormSubmit = async function (event) {
     event.preventDefault()
-    if (verified) {
+    if (verified || busy) {
       return
     }
     const code = readCode()
     if (code.length !== 6) {
       return
     }
-    let response
+    busy = true
     try {
-      response = await postOtp({ action: 'verify', code: code })
-    } catch (error) {
-      return
-    }
-    if (response.status === 200 && typeof setScreenState === 'function') {
-      verified = true
-      setScreenState('success')
-      return
-    }
-    if (typeof setScreenState === 'function') {
-      setScreenState('error')
-    }
-    if (typeof startCooldown === 'function') {
-      startCooldown(60)
+      let response
+      try {
+        response = await postOtp({ action: 'verify', code: code })
+      } catch (error) {
+        showBannerError(VERIFY_FAILED)
+        enableVerify()
+        return
+      }
+      if (response.status === 200 && typeof setScreenState === 'function') {
+        verified = true
+        setScreenState('success')
+        return
+      }
+      showBannerError(await errorMessage(response, VERIFY_FAILED))
+      if (typeof setScreenState === 'function') {
+        setScreenState('error')
+      }
+      if (typeof startCooldown === 'function') {
+        startCooldown(60)
+      }
+      enableVerify()
+    } finally {
+      busy = false
     }
   }
   window.triggerResend = function () {
@@ -123,23 +214,59 @@ const BEHAVIOR = `
       window.openModifyNumberModal()
       return
     }
-    void sendPhone(phone, false)
+    void sendPhone(phone)
   }
   window.openModifyNumberModal = function () {
-    const next = prompt(${JSON.stringify(PROMPT)}, ${JSON.stringify(PROMPT_VALUE)})
-    if (!next) {
+    const input = phoneInput()
+    const mask = phoneMask()
+    if (!input || !mask) {
       return
     }
-    void sendPhone(next, true)
+    if (input.classList.contains('hidden')) {
+      input.value = phone
+      setFieldHidden(input, false)
+      setFieldHidden(mask, true)
+      if (typeof input.focus === 'function') {
+        input.focus()
+      }
+      return
+    }
+    const next = input.value
+    if (!normalizePhone(next)) {
+      setFieldHidden(input, true)
+      setFieldHidden(mask, false)
+      return
+    }
+    void sendPhone(next)
+  }
+  const phoneField = phoneInput()
+  if (phoneField) {
+    phoneField.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault()
+        window.openModifyNumberModal()
+      }
+    })
   }
 </script>
 `
 
 /** Serves the downloaded OTP screen. The Stitch file stays unchanged. Behavior is injected. */
 export function otpPageHtml(stitchHtml: string): string {
-  const close = stitchHtml.lastIndexOf('</body>')
+  if (!stitchHtml.includes(SPECIMEN_MARKUP) || !stitchHtml.includes(DEMO_MODIFY)) {
+    throw new Error('otp stitch is missing the phone chip or the demo number dialog')
+  }
+  const prepared = stitchHtml.replace(SPECIMEN_MARKUP, PHONE_MARKUP).replace(DEMO_MODIFY, 'function openModifyNumberModal() {}')
+  if (/\balert\s*\(|\bconfirm\s*\(|\bprompt\s*\(/.test(prepared)) {
+    throw new Error('otp stitch still contains a native dialog')
+  }
+  const close = prepared.lastIndexOf('</body>')
   if (close < 0) {
     throw new Error('otp stitch is missing </body>')
   }
-  return `${stitchHtml.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${stitchHtml.slice(close)}`
+  const html = `${prepared.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${prepared.slice(close)}`
+  if (/\balert\s*\(|\bconfirm\s*\(|\bprompt\s*\(/.test(html)) {
+    throw new Error('otp page still contains a native dialog')
+  }
+  return html
 }
