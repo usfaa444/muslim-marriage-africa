@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { INestApplication } from '@nestjs/common'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { previousAuditHash } from './audit-port.js'
 import { chainHash, memoryRightsStore, setRightsStore, THIRTY_DAYS_MS, SEVENTY_TWO_HOURS_MS, AUDIT_ZERO_HASH } from './cil-rights.js'
 import { memoryAccountStore, setAccountStore } from './account-store.js'
 import { setAuthClock } from './auth-clock.js'
@@ -140,6 +141,17 @@ describe('self-serve delete and export', () => {
     expect(sql).toContain('pending_deletion')
     expect(sql).toContain('audit_event_append_only')
     expect(sql).toContain("BEFORE UPDATE OR DELETE")
+    const earlier = { hash: 'a'.repeat(64), prev_hash: AUDIT_ZERO_HASH }
+    const later = { hash: 'b'.repeat(64), prev_hash: earlier.hash }
+    expect(previousAuditHash([later, earlier])).toBe(later.hash)
+    const identity = readFileSync(fileURLToPath(new URL('./cil-rights.ts', import.meta.url)), 'utf8')
+    expect(identity).not.toContain('insert(cilTicket)')
+    expect(identity).not.toContain('update(cilTicket)')
+    expect(identity).not.toContain('insert(auditEvent)')
+    expect(identity).toContain('openCilTicket')
+    expect(identity).toContain('listCilTickets')
+    expect(identity).toContain('markCilTicketStalled')
+    expect(identity).toContain('.append(')
   })
 
   it('schedules erasure, returns the same ticket again, and still allows sign-in', async () => {
@@ -248,5 +260,25 @@ describe('self-serve delete and export', () => {
     expect(failedBody.error.retryable).toBe(false)
     const stalled = rights.tickets.find((row) => row.id === first.ticket.id)
     expect(stalled?.status).toBe('stalled')
+  })
+
+  it('does not stall a ready export when the audit append fails after the file is built', async () => {
+    const created = await createAccount()
+    const cookie = await signIn(created.email)
+    const opened = await post('/v1/me/export', cookie, {})
+    const body = (await opened.json()) as { ticket: { id: string } }
+    rights.flags.failAudit = true
+    const failed = await fetch(`${base}/v1/me/export`, { headers: { cookie } })
+    rights.flags.failAudit = false
+    expect(failed.status).not.toBe(409)
+    expect(failed.status).not.toBe(503)
+    expect(rights.tickets.find((row) => row.id === body.ticket.id)?.status).toBe('ready')
+    rights.flags.failExport = true
+    rights.flags.failStall = true
+    const stalled = await fetch(`${base}/v1/me/export`, { headers: { cookie } })
+    rights.flags.failExport = false
+    rights.flags.failStall = false
+    expect(stalled.status).toBe(503)
+    expect(rights.tickets.find((row) => row.id === body.ticket.id)?.status).toBe('ready')
   })
 })

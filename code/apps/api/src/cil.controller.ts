@@ -6,6 +6,7 @@ import {
   EXPORT_BODY_MESSAGE,
   EXPORT_FAILED_MESSAGE,
   EXPORT_NOT_READY_MESSAGE,
+  ExportBuildError,
   ExportNotReadyError,
   getRightsStore,
   type ExportFile,
@@ -87,8 +88,15 @@ export class CilController {
       if (error instanceof ExportNotReadyError) {
         httpError(409, 'EXPORT_NOT_READY', EXPORT_NOT_READY_MESSAGE, null, false)
       }
-      await getRightsStore().stallReadyExport(accountId)
-      httpError(503, 'EXPORT_FAILED', EXPORT_FAILED_MESSAGE, null, false)
+      if (error instanceof ExportBuildError) {
+        try {
+          await getRightsStore().stallReadyExport(accountId)
+        } catch {
+          // A failed stall still reports that the file was not built.
+        }
+        httpError(503, 'EXPORT_FAILED', EXPORT_FAILED_MESSAGE, null, false)
+      }
+      throw error
     }
   }
 

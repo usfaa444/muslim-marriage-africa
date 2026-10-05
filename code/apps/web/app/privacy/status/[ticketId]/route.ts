@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+import { isUuidV7 } from '@ankanu/kernel'
 import { statusPageHtml } from '../../../../src/status-page'
 
 function stitchPath(): string {
@@ -24,6 +25,9 @@ export async function GET(
   context: { params: Promise<{ ticketId: string }> },
 ): Promise<Response> {
   const params = await context.params
+  if (!isUuidV7(params.ticketId)) {
+    return new Response('This page could not be found.', { status: 404 })
+  }
   const html = statusPageHtml(readFileSync(stitchPath(), 'utf8'), params.ticketId)
   return new Response(html, {
     headers: {

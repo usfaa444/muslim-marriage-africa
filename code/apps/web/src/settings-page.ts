@@ -7,7 +7,7 @@ const EXPORT_BLURB =
   /<span class="font-meta text-meta text-ink-secondary">Génère une archive scellée contenant vos échanges, attestations et notes de bienséance\.<\/span>\s*/
 
 const RADIATION =
-  /<p class="font-meta text-meta text-ink-secondary mt-1">[\s\S]*?Oumar O\.<\/strong>\)\.\s*<\/p>\s*/
+  /<p class="font-meta text-meta text-ink-secondary mt-1">\s*La radiation de votre dossier[\s\S]*?<\/p>\s*/
 
 const HOSTING_PARAGRAPH =
   /<p class="font-meta text-meta text-ink-on-indigo\/80 leading-relaxed">[\s\S]*?Scaleway \(Paris \/ Île-de-France\)[\s\S]*?<\/p>\s*/

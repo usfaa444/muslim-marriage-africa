@@ -33,15 +33,30 @@ describe('delete and export status', () => {
     expect(page).toContain('Africa/Ouagadougou')
     expect(page).toContain(ticketId)
     expect(page).toContain("fetch('/v1/me/export-status'")
+    expect(page).not.toContain('Archive ZIP')
+    expect(page).not.toContain("Télécharger l'archive")
+    expect(page).not.toContain('regard du tuteur')
+    expect(page).not.toContain('24 octobre 2025')
+    const escaped = statusPageHtml(stitch, `${ticketId}</script>`)
+    expect(escaped).toContain('\\u003c/script>')
+    expect(escaped).not.toContain(`${ticketId}</script>`)
   })
 
-  it('serves the ticket path with a private response', async () => {
-    const response = await GET(new Request('http://localhost/privacy/status/abc'), {
-      params: Promise.resolve({ ticketId: 'abc' }),
+  it('serves a uuid ticket and rejects any other id before render', async () => {
+    const rejected = await GET(new Request('http://localhost/privacy/status/abc'), {
+      params: Promise.resolve({ ticketId: 'abc</script>' }),
     })
+    expect(rejected.status).toBe(404)
+    const rejectedHtml = await rejected.text()
+    expect(rejectedHtml).not.toContain('content-ready')
+    expect(rejectedHtml).not.toContain('<script>')
+    const response = await GET(new Request(`http://localhost/privacy/status/${ticketId}`), {
+      params: Promise.resolve({ ticketId }),
+    })
+    expect(response.status).toBe(200)
     expect(response.headers.get('cache-control')).toBe('no-store')
     const html = await response.text()
-    expect(html).toContain('abc')
+    expect(html).toContain(ticketId)
     expect(html).not.toContain('Scaleway')
   })
 })

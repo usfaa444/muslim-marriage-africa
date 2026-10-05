@@ -29,11 +29,26 @@ const SIZE_LINE =
 const PIN_LINE =
   /<div class="flex items-center gap-2 text-ink-secondary font-meta text-meta">[\s\S]*?code PIN sanctuaire[\s\S]*?<\/div>\s*/
 
+const ZIP_BLURB =
+  /<p class="font-body text-body text-ink-secondary">\s*Archive ZIP scellée cryptographiquement \(AES-256\)[\s\S]*?<\/p>\s*/
+
+const ZIP_LABEL = `<span>Télécharger l'archive d'exportation (ZIP)</span>`
+
+const GENERATED_LINE =
+  /<p class="font-meta text-meta text-ink-secondary">\s*L'archive a été générée avec succès le 24 octobre 2025\.[\s\S]*?<\/p>\s*/
+
+const TUTEUR_TITLE =
+  /<h2 class="font-title text-title text-primary">\s*Demande de dissolution de compte actée sous le regard du tuteur\s*<\/h2>\s*/
+
+function scriptTicketId(ticketId: string): string {
+  return JSON.stringify(ticketId).replaceAll('<', '\\u003c')
+}
+
 function behavior(ticketId: string): string {
   return `
 <script>
 (function () {
-  var ticketId = ${JSON.stringify(ticketId)}
+  var ticketId = ${scriptTicketId(ticketId)}
   function byId(id) {
     return document.getElementById(id)
   }
@@ -228,6 +243,10 @@ export function statusPageHtml(stitchHtml: string, ticketId: string): string {
   html = html.replace(CNIB, '')
   html = html.replace(SIZE_LINE, '')
   html = html.replace(PIN_LINE, '')
+  html = html.replace(ZIP_BLURB, '')
+  html = html.replace(ZIP_LABEL, '')
+  html = html.replace(GENERATED_LINE, '')
+  html = html.replace(TUTEUR_TITLE, '')
   html = html.replace(' (accès réservé au titulaire &amp; wali)', ' (accès réservé au titulaire)')
   html = html.replace(' Hébergement souverain chiffré Scaleway Paris / Ouagadougou.', '')
   html = html.replace(
@@ -263,7 +282,7 @@ export function statusPageHtml(stitchHtml: string, ticketId: string): string {
   }
   html = `${html.slice(0, clocks)}${CLOCK_ROWS}${html.slice(clocksClose)}`
   const forbidden = html.match(
-    /Scaleway|Oumar|Île-de-France|fr-par|hébergée souverainement|btn-state-|content-processing|SLA 48h|168 heures|31h 14m|moins de 4 minutes|24h ouvrées|Simulateur d'états|#INC-4492|ankanu\.com/,
+    /Scaleway|Oumar|Île-de-France|fr-par|hébergée souverainement|btn-state-|content-processing|SLA 48h|168 heures|31h 14m|moins de 4 minutes|24h ouvrées|Simulateur d'états|#INC-4492|ankanu\.com|Archive ZIP|Télécharger l'archive|regard du tuteur|24 octobre 2025/,
   )
   if (forbidden) {
     throw new Error(`status page still prints ${forbidden[0]}`)

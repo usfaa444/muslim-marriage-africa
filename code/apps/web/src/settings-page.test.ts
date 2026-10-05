@@ -25,6 +25,13 @@ describe('settings delete and export', () => {
     expect(page).toContain("fetch('/v1/me/delete'")
     expect(page).toContain("fetch('/v1/me/export'")
     expect(page).toContain('ankanu_pin_hidden_at')
+    const markup = page.slice(0, page.indexOf('<script>'))
+    expect(markup).toContain('<button')
+    expect(markup).toContain('Exporter mon dossier civil')
+    expect(markup).toContain('Mode Allégé')
+    expect(markup).toContain('Langue des Directives Vocales')
+    expect(markup).toContain('Sécurité du Sanctuaire')
+    expect(markup).toContain('Formule d’Engagement')
   })
 
   it('serves the screen with a private response', async () => {
