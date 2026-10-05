@@ -2,6 +2,7 @@ import { newId, type Gender } from '@ankanu/kernel'
 import { authNow } from './auth-clock.js'
 
 export const ACTIVE_STATUS = 'Active'
+export const DEACTIVATED_STATUS = 'deactivated'
 export const HELD_STATUS = 'held'
 
 export type CreatedAccount = {
@@ -10,7 +11,7 @@ export type CreatedAccount = {
   pseudonym: string
   gender: Gender
   roles: ['member']
-  status: typeof ACTIVE_STATUS | typeof HELD_STATUS
+  status: typeof ACTIVE_STATUS | typeof DEACTIVATED_STATUS | typeof HELD_STATUS
   age_attested: boolean
   coc_version: string
 }
