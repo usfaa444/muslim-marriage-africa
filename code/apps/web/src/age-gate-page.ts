@@ -13,6 +13,7 @@ const BEHAVIOR = `
     }
   }
   let accountHeld = false
+  let requestOpen = false
   function applyHeldControl() {
     document.getElementById('stateEmpty').classList.add('hidden')
     document.getElementById('stateEligible').classList.add('hidden')
@@ -25,10 +26,25 @@ const BEHAVIOR = `
       label.textContent = 'Continuer vers la vérification (SMS / OTP)'
     }
   }
+  function lockPendingControl() {
+    const submitBtn = document.getElementById('submitBtn')
+    if (!submitBtn) {
+      return
+    }
+    submitBtn.disabled = true
+    const label = document.getElementById('btnLabelText')
+    if (label) {
+      label.textContent = 'Génération du jeton SMS sécurisé...'
+    }
+  }
   function onDateChange() {
     restoreHint()
     if (accountHeld) {
       applyHeldControl()
+      return
+    }
+    if (requestOpen) {
+      lockPendingControl()
     }
   }
   document.getElementById('dobDay').addEventListener('change', onDateChange)
@@ -47,11 +63,32 @@ const BEHAVIOR = `
     accountHeld = true
     applyHeldControl()
   }
+  function restoreFailedSubmit(message, label, previousText, submitBtn, previousClass) {
+    if (accountHeld) {
+      applyHeldControl()
+      return
+    }
+    showGateMessage(message)
+    if (label) {
+      label.textContent = previousText
+    }
+    submitBtn.className = previousClass
+    submitBtn.disabled = false
+  }
   window.handleContinue = async function () {
+    if (requestOpen || accountHeld) {
+      if (accountHeld) {
+        applyHeldControl()
+      } else {
+        lockPendingControl()
+      }
+      return
+    }
     const submitBtn = document.getElementById('submitBtn')
     if (!submitBtn || submitBtn.disabled) {
       return
     }
+    requestOpen = true
     const draftRaw = sessionStorage.getItem(${JSON.stringify(SIGNUP_DRAFT_KEY)})
     let draft = null
     try {
@@ -61,6 +98,7 @@ const BEHAVIOR = `
     }
     if (!draft) {
       showGateMessage('La création a échoué.')
+      requestOpen = false
       return
     }
     const day = document.getElementById('dobDay').value
@@ -85,25 +123,23 @@ const BEHAVIOR = `
         showHeld()
         return
       }
+      if (accountHeld) {
+        applyHeldControl()
+        return
+      }
       if (response.ok) {
         sessionStorage.removeItem(${JSON.stringify(SIGNUP_DRAFT_KEY)})
         alert("Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.")
         return
       }
       const message = payload && payload.error && payload.error.message
-      showGateMessage(message || 'La création a échoué.')
-      if (label) {
-        label.textContent = previousText
-      }
-      submitBtn.className = previousClass
-      submitBtn.disabled = false
+      restoreFailedSubmit(message || 'La création a échoué.', label, previousText, submitBtn, previousClass)
     } catch (error) {
-      showGateMessage('La création a échoué.')
-      if (label) {
-        label.textContent = previousText
+      restoreFailedSubmit('La création a échoué.', label, previousText, submitBtn, previousClass)
+    } finally {
+      if (!accountHeld) {
+        requestOpen = false
       }
-      submitBtn.className = previousClass
-      submitBtn.disabled = false
     }
   }
 </script>

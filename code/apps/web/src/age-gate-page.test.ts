@@ -84,6 +84,45 @@ describe('age gate screen', () => {
     expect(refused.hint).toBe('dob : une date de naissance est requise.')
     expect(refused.buttonDisabled).toBe(false)
   })
+
+  it('keeps one post in flight and leaves the hold in place', async () => {
+    const signup = {
+      email: 'fatim@example.bf',
+      password: 'phrase avec espaces',
+      pseudonym: 'Fatim_Ouaga',
+      gender: 'sister',
+      pledge_accepted: true,
+      human_verified: true,
+      coc_version: 'FR-089',
+    }
+    let release: (value: { status: number; json: () => Promise<unknown> }) => void = () => {}
+    const gate = await runGate(signup, () => new Promise((resolve) => {
+      release = resolve
+    }))
+    const first = gate.submit('15', '01', '1990', false)
+    expect(gate.calls).toHaveLength(1)
+    expect(gate.calls[0]?.body).toMatchObject({ dob: '1990-01-15' })
+    gate.unlock()
+    gate.fireChange('dobYear')
+    expect(gate.buttonDisabled).toBe(true)
+    expect(gate.labelText).toBe('Génération du jeton SMS sécurisé...')
+    await gate.submit('15', '01', '1991', false)
+    expect(gate.calls).toHaveLength(1)
+    expect(gate.buttonDisabled).toBe(true)
+    release({ status: 201, json: async () => ({ status: 'held' }) })
+    await first
+    expect(gate.visible).toBe('stateUnderage')
+    expect(gate.buttonDisabled).toBe(true)
+    expect(gate.buttonClass).toContain('bg-disabled')
+    expect(gate.labelText).toBe('Continuer vers la vérification (SMS / OTP)')
+    gate.unlock()
+    await gate.failAfterHold()
+    expect(gate.calls).toHaveLength(1)
+    expect(gate.visible).toBe('stateUnderage')
+    expect(gate.buttonDisabled).toBe(true)
+    expect(gate.buttonClass).toContain('bg-disabled')
+    expect(gate.labelText).toBe('Continuer vers la vérification (SMS / OTP)')
+  })
 })
 
 async function runGate(
@@ -100,6 +139,7 @@ async function runGate(
   labelText: string
   unlock: () => void
   fireChange: (id: string) => void
+  failAfterHold: () => void
   submit: (day: string, month: string, year: string, disabled: boolean) => Promise<void>
 }> {
   const start = page.lastIndexOf('<script>')
@@ -249,6 +289,25 @@ async function runGate(
       for (const listener of nodes.get(id)?.changes ?? []) {
         listener()
       }
+    },
+    failAfterHold() {
+      const restore = (sandbox as { restoreFailedSubmit?: (
+        message: string,
+        label: unknown,
+        previousText: string,
+        submitBtn: unknown,
+        previousClass: string,
+      ) => void }).restoreFailedSubmit
+      if (!restore) {
+        throw new Error('restoreFailedSubmit missing')
+      }
+      restore(
+        'La création a échoué.',
+        node('btnLabelText'),
+        "Poursuivre vers l'envoi du code OTP",
+        node('submitBtn'),
+        'bg-indigo',
+      )
     },
     async submit(day, month, year, disabled) {
       node('dobDay').value = day
