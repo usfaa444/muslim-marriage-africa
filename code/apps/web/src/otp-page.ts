@@ -19,6 +19,7 @@ const BEHAVIOR = `
   const SPECIMEN = ${JSON.stringify(SPECIMEN)}
   let phone = ''
   let phoneNode = null
+  let verified = false
   function normalizePhone(value) {
     return String(value || '').replace(/[\\s.\\-()]/g, '')
   }
@@ -67,7 +68,10 @@ const BEHAVIOR = `
     } catch (error) {
       return
     }
-    if (response.status !== 201 && response.status !== 200) {
+    if (response.status === 200) {
+      return
+    }
+    if (response.status !== 201) {
       if (typeof startCooldown === 'function' && response.status === 429) {
         startCooldown(60)
       }
@@ -75,20 +79,21 @@ const BEHAVIOR = `
     }
     phone = normalized
     applyMask(normalized)
-    if (response.status === 201) {
-      if (announce) {
-        alert(${JSON.stringify(SAVED)})
-      }
-      if (typeof setScreenState === 'function') {
-        setScreenState('sent')
-      }
-      if (typeof startCooldown === 'function') {
-        startCooldown(60)
-      }
+    if (announce) {
+      alert(${JSON.stringify(SAVED)})
+    }
+    if (typeof setScreenState === 'function') {
+      setScreenState('sent')
+    }
+    if (typeof startCooldown === 'function') {
+      startCooldown(60)
     }
   }
   window.handleFormSubmit = async function (event) {
     event.preventDefault()
+    if (verified) {
+      return
+    }
     const code = readCode()
     if (code.length !== 6) {
       return
@@ -100,6 +105,7 @@ const BEHAVIOR = `
       return
     }
     if (response.status === 200 && typeof setScreenState === 'function') {
+      verified = true
       setScreenState('success')
       return
     }

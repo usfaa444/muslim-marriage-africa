@@ -43,6 +43,13 @@ export type PhoneOtpStore = {
   grant(input: { accountId: string; hash: string; now: Date }): Promise<'granted' | 'invalid'>
 }
 
+class OtpDeliveryFailed extends Error {
+  constructor() {
+    super('otp delivery failed')
+    this.name = 'OtpDeliveryFailed'
+  }
+}
+
 let override: PhoneOtpStore | undefined
 
 export function setPhoneOtpStore(store: PhoneOtpStore | undefined): void {
@@ -101,7 +108,6 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
           if (gate.result !== 'ready') {
             return gate
           }
-          await input.log()
           if (row) {
             await tx
               .update(verificationRecord)
@@ -133,10 +139,18 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
             template: OTP_TEMPLATE,
             created_at: input.now,
           })
+          try {
+            await input.log()
+          } catch {
+            throw new OtpDeliveryFailed()
+          }
           return { result: 'sent' as const, expires_at: input.expiresAt }
         })
-      } catch {
-        return { result: 'delivery_failed' }
+      } catch (error) {
+        if (error instanceof OtpDeliveryFailed) {
+          return { result: 'delivery_failed' }
+        }
+        throw error
       }
     },
     async grant(input) {
@@ -226,26 +240,17 @@ export function memoryPhoneOtpStore(): PhoneOtpStore & { rows: PhoneOtpRow[]; di
       if (gate.result !== 'ready') {
         return gate
       }
-      try {
-        await input.log()
-      } catch {
-        return { result: 'delivery_failed' }
-      }
-      const again = gateOtpSend({
-        dispatches: dispatches.filter(
-          (item) =>
-            item.account_id === input.accountId &&
-            item.template === OTP_TEMPLATE &&
-            item.created_at.getTime() >= input.now.getTime() - OTP_HOUR_MS,
-        ),
-        expiresAt: row?.expires_at ?? null,
-        now: input.now,
-        limit: input.limit,
-        waitMs: input.waitMs,
-      })
-      if (again.result !== 'ready') {
-        return again
-      }
+      const prior = row
+        ? {
+            status: row.status,
+            phone_e164: row.phone_e164,
+            hash: row.hash,
+            expires_at: row.expires_at,
+            vendor: row.vendor,
+            evidence_uri: row.evidence_uri,
+          }
+        : null
+      let created: PhoneOtpRow | null = null
       if (row) {
         row.status = 'pending'
         row.phone_e164 = input.phone
@@ -254,7 +259,7 @@ export function memoryPhoneOtpStore(): PhoneOtpStore & { rows: PhoneOtpRow[]; di
         row.vendor = null
         row.evidence_uri = null
       } else {
-        rows.push({
+        created = {
           id: newId(input.now),
           account_id: input.accountId,
           kind: 'phone_otp',
@@ -264,14 +269,38 @@ export function memoryPhoneOtpStore(): PhoneOtpStore & { rows: PhoneOtpRow[]; di
           phone_e164: input.phone,
           hash: input.hash,
           expires_at: input.expiresAt,
-        })
+        }
+        rows.push(created)
       }
-      dispatches.push({
+      const dispatch: SmsDispatchRow = {
         id: newId(input.now),
         account_id: input.accountId,
         template: OTP_TEMPLATE,
         created_at: input.now,
-      })
+      }
+      dispatches.push(dispatch)
+      try {
+        await input.log()
+      } catch {
+        if (prior && row) {
+          row.status = prior.status
+          row.phone_e164 = prior.phone_e164
+          row.hash = prior.hash
+          row.expires_at = prior.expires_at
+          row.vendor = prior.vendor
+          row.evidence_uri = prior.evidence_uri
+        } else if (created) {
+          const index = rows.lastIndexOf(created)
+          if (index >= 0) {
+            rows.splice(index, 1)
+          }
+        }
+        const dispatchIndex = dispatches.lastIndexOf(dispatch)
+        if (dispatchIndex >= 0) {
+          dispatches.splice(dispatchIndex, 1)
+        }
+        return { result: 'delivery_failed' }
+      }
       return { result: 'sent', expires_at: input.expiresAt }
     },
     async grant(input) {

@@ -63,10 +63,47 @@ describe('otp screen', () => {
     expect(screen.states).toEqual(['error'])
     expect(screen.cooldowns).toEqual([60])
   })
+
+  it('keeps the mask and the resend number when a send is inside the wait', async () => {
+    const screen = await runScreen(
+      async (_url, body) => ({ status: body.phone_e164 === '+22670999999' ? 200 : 201 }),
+      ['+226 70 12 34 84', '+226 70 99 99 99'],
+    )
+    screen.modify()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    screen.modify()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls.slice(0, 2)).toEqual([
+      { action: 'send', phone_e164: '+22670123484' },
+      { action: 'send', phone_e164: '+22670999999' },
+    ])
+    expect(screen.alerts).toHaveLength(1)
+    expect(screen.mask).toBe('+226 70 •• •• 84')
+    expect(screen.states).toEqual(['sent'])
+    screen.resend()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls[2]).toEqual({ action: 'send', phone_e164: '+22670123484' })
+  })
+
+  it('does not verify the specimen after the code is granted', async () => {
+    const screen = await runScreen(async (_url, body) => ({ status: body.action === 'verify' ? 200 : 201 }))
+    screen.modify()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    screen.fill('111111')
+    screen.submit()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls[1]).toEqual({ action: 'verify', code: '111111' })
+    expect(screen.states).toEqual(['sent', 'success'])
+    screen.submit()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls).toHaveLength(2)
+    expect(screen.states).toEqual(['sent', 'success'])
+  })
 })
 
 async function runScreen(
   respond: (url: string, body: { action?: string; phone_e164?: string; code?: string }) => Promise<{ status: number }>,
+  prompts: string[] = ['+226 70 12 34 84'],
 ): Promise<{
   calls: Array<{ action?: string; phone_e164?: string; code?: string }>
   states: string[]
@@ -74,6 +111,7 @@ async function runScreen(
   alerts: string[]
   mask: string
   modify: () => void
+  resend: () => void
   submit: () => void
   fill: (code: string) => void
 }> {
@@ -107,10 +145,19 @@ async function runScreen(
       alerts.push(message)
     },
     prompt() {
-      return '+226 70 12 34 84'
+      const next = prompts.shift()
+      return next ?? '+226 70 12 34 84'
     },
     setScreenState(state: string) {
       states.push(state)
+      if (state === 'success') {
+        '840192'.split('').forEach((digit, index) => {
+          const input = inputs[index]
+          if (input) {
+            input.value = digit
+          }
+        })
+      }
     },
     startCooldown(seconds: number) {
       cooldowns.push(seconds)
@@ -141,6 +188,13 @@ async function runScreen(
         throw new Error('openModifyNumberModal missing')
       }
       open()
+    },
+    resend() {
+      const sendAgain = sandbox.window.triggerResend
+      if (!sendAgain) {
+        throw new Error('triggerResend missing')
+      }
+      sendAgain()
     },
     submit() {
       const handle = sandbox.window.handleFormSubmit

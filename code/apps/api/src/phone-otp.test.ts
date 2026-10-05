@@ -230,4 +230,23 @@ describe('POST /v1/verifications/otp', () => {
     failSend = false
     expect(createHash('sha256').update('000000', 'utf8').digest('hex')).not.toBe(hashBefore)
   })
+
+  it('does not describe a store failure as a failed SMS send', async () => {
+    setPhoneOtpStore({
+      async issue() {
+        throw new Error('insert failed')
+      },
+      async grant() {
+        return 'invalid'
+      },
+    })
+    try {
+      const failed = await post({ action: 'send', phone_e164: '+22670111222' })
+      expect(failed.status).toBe(500)
+      expect(failed.json).toMatchObject({ error: { code: 'UNHANDLED', message: 'Request failed' } })
+      expect(JSON.stringify(failed.json)).not.toContain("L'envoi du code a échoué.")
+    } finally {
+      setPhoneOtpStore(otp)
+    }
+  })
 })
