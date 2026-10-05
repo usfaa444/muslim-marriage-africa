@@ -4,6 +4,7 @@ import {
   acceptDeactivateBody,
   HELD_PAUSE_MESSAGE,
   NON_MEMBER_PAUSE_MESSAGE,
+  PENDING_DELETION_PAUSE_MESSAGE,
   type AccountStatus,
 } from './life-pause.js'
 import { getLifePauseStore, readAccountStatus } from './life-pause-store.js'
@@ -13,7 +14,7 @@ type CookieRequest = {
   headers?: { cookie?: string | string[] }
 }
 
-function forbid(message: string, details: { status: 'held' } | null): never {
+function forbid(message: string, details: { status: 'held' | 'pending_deletion' } | null): never {
   throw new HttpException(
     {
       code: 'FORBIDDEN',
@@ -70,6 +71,9 @@ export class MeController {
       rejectField(rejected.field, rejected.message)
     }
     const written = await getLifePauseStore().setDeactivated(accountId)
+    if (written === 'pending_deletion') {
+      forbid(PENDING_DELETION_PAUSE_MESSAGE, { status: 'pending_deletion' })
+    }
     if (written === 'held') {
       forbid(HELD_PAUSE_MESSAGE, { status: 'held' })
     }
@@ -84,6 +88,9 @@ export class MeController {
   async reactivate(@Req() request: CookieRequest): Promise<{ status: typeof ACTIVE_STATUS }> {
     const accountId = await memberAccount(request)
     const written = await getLifePauseStore().setActive(accountId)
+    if (written === 'pending_deletion') {
+      forbid(PENDING_DELETION_PAUSE_MESSAGE, { status: 'pending_deletion' })
+    }
     if (written === 'held') {
       forbid(HELD_PAUSE_MESSAGE, { status: 'held' })
     }

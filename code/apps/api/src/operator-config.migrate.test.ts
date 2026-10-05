@@ -247,6 +247,8 @@ describe('operator_config migration', () => {
 
     expect(await publicTables(db())).toEqual([
       'account',
+      'audit_event',
+      'cil_ticket',
       'credential',
       'email_verification',
       'operator_config',
@@ -260,6 +262,8 @@ describe('operator_config migration', () => {
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
       'public.account',
+      'public.audit_event',
+      'public.cil_ticket',
       'public.credential',
       'public.email_verification',
       'public.operator_config',
@@ -274,7 +278,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('9')
+    expect(applied.rows[0]?.count).toBe('10')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -777,6 +781,8 @@ describe('operator_config migration', () => {
     expect(read.rows).toEqual([{ value: '4' }])
     expect(await publicTables(db())).toEqual([
       'account',
+      'audit_event',
+      'cil_ticket',
       'credential',
       'email_verification',
       'operator_config',
@@ -790,6 +796,8 @@ describe('operator_config migration', () => {
     expect(await userTables(db())).toEqual([
       'drizzle.__drizzle_migrations',
       'public.account',
+      'public.audit_event',
+      'public.cil_ticket',
       'public.credential',
       'public.email_verification',
       'public.operator_config',

@@ -1,6 +1,6 @@
-import { ACTIVE_STATUS, DEACTIVATED_STATUS, HELD_STATUS } from './create-account.js'
+import { ACTIVE_STATUS, DEACTIVATED_STATUS, HELD_STATUS, PENDING_DELETION_STATUS } from './create-account.js'
 
-export const ACCOUNT_STATUSES = [ACTIVE_STATUS, DEACTIVATED_STATUS, HELD_STATUS] as const
+export const ACCOUNT_STATUSES = [ACTIVE_STATUS, DEACTIVATED_STATUS, HELD_STATUS, PENDING_DELETION_STATUS] as const
 
 export type AccountStatus = (typeof ACCOUNT_STATUSES)[number]
 
@@ -11,6 +11,7 @@ export const NOTE_TYPE_MESSAGE = 'note : le texte est illisible.'
 export const NOTE_CONTROL_MESSAGE = 'note : caractères de contrôle refusés.'
 export const NOTE_LENGTH_MESSAGE = 'note : 200 caractères au maximum.'
 export const HELD_PAUSE_MESSAGE = "La pause ne modifie pas un compte en attente."
+export const PENDING_DELETION_PAUSE_MESSAGE = 'Un compte en suppression ne se met pas en pause.'
 export const NON_MEMBER_PAUSE_MESSAGE = 'Cette session ne peut pas modifier ce compte.'
 
 const NOTE_MAX = 200

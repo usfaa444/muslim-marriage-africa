@@ -4,6 +4,7 @@ import { authNow } from './auth-clock.js'
 export const ACTIVE_STATUS = 'Active'
 export const DEACTIVATED_STATUS = 'deactivated'
 export const HELD_STATUS = 'held'
+export const PENDING_DELETION_STATUS = 'pending_deletion'
 
 export type CreatedAccount = {
   id: string
@@ -11,7 +12,11 @@ export type CreatedAccount = {
   pseudonym: string
   gender: Gender
   roles: ['member']
-  status: typeof ACTIVE_STATUS | typeof DEACTIVATED_STATUS | typeof HELD_STATUS
+  status:
+    | typeof ACTIVE_STATUS
+    | typeof DEACTIVATED_STATUS
+    | typeof HELD_STATUS
+    | typeof PENDING_DELETION_STATUS
   age_attested: boolean
   coc_version: string
 }

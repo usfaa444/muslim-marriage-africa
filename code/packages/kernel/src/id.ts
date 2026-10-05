@@ -33,3 +33,12 @@ export function newId(now: Date = new Date()): string {
 export function isUuidV7(value: string): boolean {
   return UUID_V7.test(value)
 }
+
+/** Unix time stored in a UUID v7 minted by `newId`. */
+export function uuidV7Instant(id: string): Date {
+  if (!isUuidV7(id)) {
+    throw new TypeError('uuidV7Instant requires a UUID v7')
+  }
+  const timestamp = Number(BigInt(`0x${id.replaceAll('-', '').slice(0, 12)}`))
+  return new Date(timestamp)
+}

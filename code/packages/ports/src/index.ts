@@ -11,6 +11,7 @@ export {
   isErrorEnvelope,
   isUuidV7,
   newId,
+  uuidV7Instant,
   OUAGADOUGOU_TIME_ZONE,
   ROLES,
   toOuagadougouDisplay,

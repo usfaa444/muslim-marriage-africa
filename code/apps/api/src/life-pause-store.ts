@@ -1,10 +1,10 @@
 import { and, eq, inArray } from 'drizzle-orm'
 import { account } from './account-schema.js'
 import { getIdentityDatabase } from './account-store.js'
-import { ACTIVE_STATUS, DEACTIVATED_STATUS, HELD_STATUS } from './create-account.js'
+import { ACTIVE_STATUS, DEACTIVATED_STATUS, HELD_STATUS, PENDING_DELETION_STATUS } from './create-account.js'
 import { isAccountStatus, type AccountStatus } from './life-pause.js'
 
-export type LifePauseWrite = 'updated' | 'held' | 'missing'
+export type LifePauseWrite = 'updated' | 'held' | 'missing' | 'pending_deletion'
 
 export type LifePauseStore = {
   read(accountId: string): Promise<AccountStatus | null>
@@ -56,6 +56,9 @@ async function writeStatus(
   if (!row) {
     return 'missing'
   }
+  if (row.status === PENDING_DELETION_STATUS) {
+    return 'pending_deletion'
+  }
   if (row.status === HELD_STATUS) {
     return 'held'
   }
@@ -102,6 +105,9 @@ async function writeConditional(
     return 'updated'
   }
   const current = await readStatus(accountId)
+  if (current === PENDING_DELETION_STATUS) {
+    return 'pending_deletion'
+  }
   if (current === HELD_STATUS) {
     return 'held'
   }

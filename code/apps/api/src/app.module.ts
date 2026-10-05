@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common'
 import { AccountsController } from './accounts.controller.js'
+import { CilController } from './cil.controller.js'
 import { HealthController } from './health.controller.js'
 import { MeController } from './me.controller.js'
 import { PasswordResetsController } from './password-resets.controller.js'
@@ -16,6 +17,7 @@ import { VerificationsController } from './verifications.controller.js'
     VerificationsController,
     PinController,
     MeController,
+    CilController,
   ],
 })
 export class AppModule {}

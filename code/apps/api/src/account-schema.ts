@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { boolean, check, date, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, check, date, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core'
 
 /** Identity-owned account. `coc_version` is the Code of conduct version accepted at signup. */
 export const account = pgTable(
@@ -16,7 +16,10 @@ export const account = pgTable(
   },
   (table) => [
     check('account_gender_check', sql`${table.gender} in ('sister', 'brother')`),
-    check('account_status_check', sql`${table.status} in ('Active', 'deactivated', 'held')`),
+    check(
+      'account_status_check',
+      sql`${table.status} in ('Active', 'deactivated', 'held', 'pending_deletion')`,
+    ),
   ],
 )
 
@@ -161,3 +164,36 @@ export const session = pgTable(
     check('session_kind_check', sql`${table.kind} in ('web', 'capacitor', 'mahram', 'staff')`),
   ],
 )
+
+/** Operator-owned CIL ticket. Identity calls OperatorPort; it does not insert this row. */
+export const cilTicket = pgTable(
+  'cil_ticket',
+  {
+    id: uuid('id').primaryKey(),
+    subject_account_id: uuid('subject_account_id')
+      .notNull()
+      .references(() => account.id),
+    kind: text('kind').notNull(),
+    status: text('status').notNull(),
+  },
+  (table) => [
+    check('cil_ticket_kind_check', sql`${table.kind} in ('export', 'erase', 'access')`),
+    check(
+      'cil_ticket_status_check',
+      sql`${table.status} in ('ready', 'scheduled', 'stalled', 'completed')`,
+    ),
+    uniqueIndex('cil_ticket_open_subject_kind')
+      .on(table.subject_account_id, table.kind)
+      .where(sql`${table.status} in ('ready', 'scheduled')`),
+  ],
+)
+
+/** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */
+export const auditEvent = pgTable('audit_event', {
+  id: uuid('id').primaryKey(),
+  actor_id: uuid('actor_id').references(() => account.id),
+  action: text('action').notNull(),
+  payload: jsonb('payload').notNull(),
+  prev_hash: text('prev_hash').notNull(),
+  hash: text('hash').notNull(),
+})
