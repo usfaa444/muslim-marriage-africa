@@ -22,6 +22,7 @@ COPY --from=build /app/apps/web/.next apps/web/.next
 COPY --from=build /app/apps/web/app apps/web/app
 COPY --from=build /app/apps/web/next.config.ts apps/web/next.config.ts
 COPY --from=build /app/design-stitch/11-auth/screen.html design-stitch/11-auth/screen.html
+COPY --from=build /app/design-stitch/12-age-gate/screen.html design-stitch/12-age-gate/screen.html
 COPY --from=build /app/design-stitch/13-email-verification/screen.html design-stitch/13-email-verification/screen.html
 ENV NODE_ENV=production
 WORKDIR /app/apps/web

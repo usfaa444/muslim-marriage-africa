@@ -25,6 +25,7 @@ function accountBody(overrides: Record<string, unknown> = {}): Record<string, un
     pledge_accepted: true,
     human_verified: true,
     coc_version: 'FR-089',
+    dob: '1990-01-15',
     ...overrides,
   }
 }

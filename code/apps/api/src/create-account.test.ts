@@ -4,6 +4,7 @@ import argon2 from 'argon2'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { isUuidV7 } from '@ankanu/kernel'
 import { memoryAccountStore, setAccountStore } from './account-store.js'
+import { setAuthClock } from './auth-clock.js'
 import { setAuthLimitReader } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
 import { createApp } from './create-app.js'
@@ -20,6 +21,7 @@ function body(overrides: Record<string, unknown> = {}): Record<string, unknown> 
     pledge_accepted: true,
     human_verified: true,
     coc_version: 'FR-089',
+    dob: '1990-01-15',
     ...overrides,
   }
 }
@@ -42,6 +44,7 @@ describe('POST /v1/accounts', () => {
   })
 
   afterAll(async () => {
+    setAuthClock(undefined)
     setAuthLimitReader(undefined)
     resetAuthRateWindow()
     setAccountStore(undefined)
@@ -50,7 +53,7 @@ describe('POST /v1/accounts', () => {
     }
   })
 
-  it('stores a member with the pledge version, age not attested, and an argon2id password', async () => {
+  it('stores a member with the pledge version, age attested, and an argon2id password', async () => {
     const response = await fetch(`${base}/v1/accounts`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -61,7 +64,8 @@ describe('POST /v1/accounts', () => {
     expect(response.status).toBe(201)
     expect(created.gender).toBe('sister')
     expect(created.status).toBe('Active')
-    expect(created.age_attested).toBe(false)
+    expect(created.age_attested).toBe(true)
+    expect(created).not.toHaveProperty('dob')
     expect(created.coc_version).toBe('FR-089')
     expect(created.roles).toEqual(['member'])
     expect(created.email).toBe('fatim@example.bf')
@@ -72,6 +76,9 @@ describe('POST /v1/accounts', () => {
 
     expect(memory.accounts).toHaveLength(1)
     expect(memory.credentials).toHaveLength(1)
+    expect(memory.profiles).toEqual([
+      { account_id: created.id, dob: '1990-01-15', visibility: null },
+    ])
     const hash = memory.credentials[0]?.secret_hash ?? ''
     expect(hash.startsWith('$argon2id$')).toBe(true)
     expect(hash).not.toContain('phrase avec espaces')
@@ -125,6 +132,7 @@ describe('POST /v1/accounts', () => {
     expect(pseudonymBody.error.details.field).toBe('pseudonym')
     expect(pseudonymBody.error.message).toContain('pseudonym')
     expect(memory.accounts).toHaveLength(before)
+    expect(memory.profiles).toHaveLength(before)
   })
 
   it('rejects passwords outside the published rules', () => {
@@ -207,5 +215,101 @@ describe('POST /v1/accounts', () => {
     }
     expect(memory.accounts).toHaveLength(before)
     expect(memory.credentials).toHaveLength(before)
+    expect(memory.profiles).toHaveLength(before)
+  })
+
+  it('rejects a missing or impossible dob and stores nothing', async () => {
+    const before = memory.accounts.length
+    const missing = body({ email: 'sans-date@example.bf', pseudonym: 'Sans_Date' })
+    delete missing.dob
+    const cases = [
+      missing,
+      body({ dob: '   ', email: 'vide@example.bf', pseudonym: 'Date_Vide' }),
+      body({ dob: '2010-02-31', email: 'impossible@example.bf', pseudonym: 'Date_Impossible' }),
+      body({ dob: '15/01/1990', email: 'format@example.bf', pseudonym: 'Date_Format' }),
+    ]
+    for (const payload of cases) {
+      const response = await fetch(`${base}/v1/accounts`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const result = (await response.json()) as { error: { code: string; message: string; details: { field: string } } }
+      expect(response.status).toBe(400)
+      expect(result.error.code).toBe('UNHANDLED')
+      expect(result.error.details.field).toBe('dob')
+      expect(result.error.message).toBe('dob : une date de naissance est requise.')
+    }
+    expect(memory.accounts).toHaveLength(before)
+    expect(memory.profiles).toHaveLength(before)
+  })
+
+  it('holds an account younger than min_age and attests one that has reached it', async () => {
+    setAuthClock(() => new Date('2026-10-04T12:00:00.000Z'))
+    const young = await fetch(`${base}/v1/accounts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body({ dob: '2007-10-05', email: 'jeune@example.bf', pseudonym: 'Jeune_Ouaga' })),
+    })
+    const youngBody = (await young.json()) as { id: string; status: string; age_attested: boolean }
+    expect(young.status).toBe(201)
+    expect(youngBody.status).toBe('held')
+    expect(youngBody.age_attested).toBe(false)
+    expect(youngBody).not.toHaveProperty('dob')
+    expect(memory.profiles.at(-1)).toEqual({
+      account_id: youngBody.id,
+      dob: '2007-10-05',
+      visibility: 'held',
+    })
+
+    const adult = await fetch(`${base}/v1/accounts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body({ dob: '2007-10-04', email: 'majeur@example.bf', pseudonym: 'Majeur_Ouaga' })),
+    })
+    const adultBody = (await adult.json()) as { id: string; status: string; age_attested: boolean }
+    expect(adult.status).toBe(201)
+    expect(adultBody.status).toBe('Active')
+    expect(adultBody.age_attested).toBe(true)
+    expect(memory.profiles.at(-1)).toEqual({
+      account_id: adultBody.id,
+      dob: '2007-10-04',
+      visibility: null,
+    })
+    setAuthClock(undefined)
+  })
+
+  it('uses the configured min_age and stores nothing when that value is unreadable', async () => {
+    setAuthClock(() => new Date('2026-10-04T12:00:00.000Z'))
+    memory.minAgeValue = 21
+    const twenty = await fetch(`${base}/v1/accounts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body({ dob: '2006-10-04', email: 'vingt@example.bf', pseudonym: 'Vingt_Ans' })),
+    })
+    const twentyBody = (await twenty.json()) as { status: string; age_attested: boolean }
+    expect(twenty.status).toBe(201)
+    expect(twentyBody.status).toBe('held')
+    expect(twentyBody.age_attested).toBe(false)
+
+    const before = memory.accounts.length
+    memory.minAgeValue = null
+    const blocked = await fetch(`${base}/v1/accounts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body({ email: 'config@example.bf', pseudonym: 'Config_Age' })),
+    })
+    const blockedBody = (await blocked.json()) as {
+      error: { code: string; message: string; details: { field: string }; retryable: boolean }
+    }
+    expect(blocked.status).toBe(503)
+    expect(blockedBody.error.code).toBe('UNHANDLED')
+    expect(blockedBody.error.details.field).toBe('min_age')
+    expect(blockedBody.error.message).toBe('min_age : la configuration est illisible.')
+    expect(blockedBody.error.retryable).toBe(true)
+    expect(memory.accounts).toHaveLength(before)
+    expect(memory.profiles).toHaveLength(before)
+    memory.minAgeValue = 19
+    setAuthClock(undefined)
   })
 })

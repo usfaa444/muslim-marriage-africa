@@ -1,11 +1,14 @@
 import { eq } from 'drizzle-orm'
 import { drizzle, type NodePgDatabase } from 'drizzle-orm/node-postgres'
 import pg from 'pg'
-import { account, credential } from './account-schema.js'
+import { account, credential, profile } from './account-schema.js'
+import { operatorConfig } from './operator-config.js'
 import {
   AccountUniqueError,
+  HELD_STATUS,
   type AccountStore,
   type CreatedAccount,
+  type CreatedProfile,
   type PasswordCredential,
 } from './create-account.js'
 
@@ -39,6 +42,7 @@ function postgresStore(): AccountStore {
   return {
     emailTaken: (email) => exists(account.email, email),
     pseudonymTaken: (pseudonym) => exists(account.pseudonym, pseudonym),
+    minAge: readMinAge,
     insert: insertAccount,
   }
 }
@@ -92,7 +96,24 @@ function readPg(error: unknown): { code?: string; constraint?: string } | undefi
   return undefined
 }
 
-async function insertAccount(row: CreatedAccount, secret: PasswordCredential): Promise<void> {
+async function readMinAge(): Promise<number | null> {
+  const rows = await db()
+    .select({ value: operatorConfig.value })
+    .from(operatorConfig)
+    .where(eq(operatorConfig.key, 'min_age'))
+    .limit(1)
+  const raw = rows[0]?.value
+  if (raw === undefined || !/^[1-9]\d*$/.test(raw)) {
+    return null
+  }
+  const parsed = Number(raw)
+  if (!Number.isSafeInteger(parsed)) {
+    return null
+  }
+  return parsed
+}
+
+async function insertAccount(row: CreatedAccount, secret: PasswordCredential, created: CreatedProfile): Promise<void> {
   try {
     await db().transaction(async (tx) => {
       await tx.insert(account).values({
@@ -113,6 +134,13 @@ async function insertAccount(row: CreatedAccount, secret: PasswordCredential): P
         provider_subject: secret.provider_subject,
         email_verified_at: secret.email_verified_at,
       })
+      await tx.insert(profile).values({
+        account_id: created.account_id,
+        dob: created.dob,
+      })
+      if (created.visibility === HELD_STATUS) {
+        await tx.update(profile).set({ visibility: HELD_STATUS }).where(eq(profile.account_id, created.account_id))
+      }
     })
   } catch (error) {
     const pgError = readPg(error)
@@ -130,19 +158,33 @@ async function insertAccount(row: CreatedAccount, secret: PasswordCredential): P
 export function memoryAccountStore(): AccountStore & {
   accounts: CreatedAccount[]
   credentials: PasswordCredential[]
+  profiles: CreatedProfile[]
+  minAgeValue: number | null
 } {
   const accounts: CreatedAccount[] = []
   const credentials: PasswordCredential[] = []
+  const profiles: CreatedProfile[] = []
+  const state = { minAgeValue: 19 as number | null }
   return {
     accounts,
     credentials,
+    profiles,
+    get minAgeValue() {
+      return state.minAgeValue
+    },
+    set minAgeValue(value: number | null) {
+      state.minAgeValue = value
+    },
     async emailTaken(email) {
       return accounts.some((row) => row.email === email)
     },
     async pseudonymTaken(pseudonym) {
       return accounts.some((row) => row.pseudonym === pseudonym)
     },
-    async insert(row, secret) {
+    async minAge() {
+      return state.minAgeValue
+    },
+    async insert(row, secret, created) {
       const fields: Array<'email' | 'pseudonym'> = []
       if (accounts.some((item) => item.email === row.email)) {
         fields.push('email')
@@ -155,6 +197,17 @@ export function memoryAccountStore(): AccountStore & {
       }
       accounts.push(row)
       credentials.push(secret)
+      profiles.push({
+        account_id: created.account_id,
+        dob: created.dob,
+        visibility: null,
+      })
+      if (created.visibility === HELD_STATUS) {
+        const stored = profiles[profiles.length - 1]
+        if (stored) {
+          stored.visibility = HELD_STATUS
+        }
+      }
     },
   }
 }

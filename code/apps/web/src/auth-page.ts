@@ -1,6 +1,9 @@
 /** Token already printed on the pledge checkbox the member accepts. */
 export const COC_VERSION_ON_SCREEN = 'FR-089'
 
+/** Holds the Auth fields until the age-gate submit posts them with dob. */
+export const SIGNUP_DRAFT_KEY = 'ankanu.signup'
+
 const SUBMIT = `
 <script>
   let submitting = false
@@ -46,32 +49,22 @@ const SUBMIT = `
     button.disabled = true
     const selected = document.querySelector('input[name="gender_role"]:checked')
     const gender = selected && selected.value === 'frere' ? 'brother' : 'sister'
-    let line = 'Compte créé. Il n\\'est pas listé publiquement.'
     try {
-      const response = await fetch('/v1/accounts', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({
-          email: document.getElementById('email').value,
-          password: document.getElementById('password').value,
-          pseudonym: document.getElementById('pseudonym').value,
-          gender: gender,
-          pledge_accepted: document.getElementById('pledge-check').checked === true,
-          human_verified: document.getElementById('human-verify').checked === true,
-          coc_version: ${JSON.stringify(COC_VERSION_ON_SCREEN)}
-        })
-      })
-      const payload = await response.json().catch(function () { return null })
-      if (!response.ok) {
-        const field = payload && payload.error && payload.error.details && (payload.error.details.field || (payload.error.details.fields || []).join(', '))
-        line = (payload && payload.error && payload.error.message) || (field ? String(field) : 'La création a échoué.')
-      }
+      sessionStorage.setItem(${JSON.stringify(SIGNUP_DRAFT_KEY)}, JSON.stringify({
+        email: document.getElementById('email').value,
+        password: document.getElementById('password').value,
+        pseudonym: document.getElementById('pseudonym').value,
+        gender: gender,
+        pledge_accepted: document.getElementById('pledge-check').checked === true,
+        human_verified: document.getElementById('human-verify').checked === true,
+        coc_version: ${JSON.stringify(COC_VERSION_ON_SCREEN)}
+      }))
+      location.assign('/age-gate')
     } catch (error) {
-      line = 'La création a échoué.'
+      showSignupLine('La création a échoué.')
+      submitting = false
+      validateSubmissionState()
     }
-    showSignupLine(line)
-    submitting = false
-    validateSubmissionState()
   })
   let loginSubmitting = false
   function showLoginLine(line) {
@@ -151,7 +144,7 @@ const SUBMIT = `
 </script>
 `
 
-/** Serves the downloaded Auth screen. Signup posts human_verified from the existing checkbox. Login posts the session. Google stays visual. */
+/** Serves the downloaded Auth screen. Signup stores the fields and opens the age gate. Login posts the session. Google stays visual. */
 export function authPageHtml(stitchHtml: string): string {
   const close = stitchHtml.lastIndexOf('</body>')
   if (close < 0) {

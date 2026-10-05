@@ -53,6 +53,7 @@ function accountBody(email: string, pseudonym: string): Record<string, unknown> 
     pledge_accepted: true,
     human_verified: true,
     coc_version: 'FR-089',
+    dob: '1990-01-15',
   }
 }
 

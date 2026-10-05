@@ -156,6 +156,7 @@ function migrationSql(): string {
     '0002_session.sql',
     '0003_email_verification.sql',
     '0004_password_reset.sql',
+    '0005_profile.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -246,6 +247,7 @@ describe('operator_config migration', () => {
       'email_verification',
       'operator_config',
       'password_reset',
+      'profile',
       'session',
     ])
     expect(await userTables(db())).toEqual([
@@ -255,13 +257,14 @@ describe('operator_config migration', () => {
       'public.email_verification',
       'public.operator_config',
       'public.password_reset',
+      'public.profile',
       'public.session',
     ])
 
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('5')
+    expect(applied.rows[0]?.count).toBe('6')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -296,15 +299,23 @@ describe('operator_config migration', () => {
         pledge_accepted: true,
         human_verified: true,
         coc_version: 'FR-089',
+        dob: '1990-01-15',
       }
       const created = await fetch(`http://127.0.0.1:${address.port}/v1/accounts`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(payload),
       })
-      const createdBody = (await created.json()) as { gender: string }
+      const createdBody = (await created.json()) as { gender: string; status: string; age_attested: boolean }
       expect(created.status).toBe(201)
       expect(createdBody.gender).toBe('brother')
+      expect(createdBody.status).toBe('Active')
+      expect(createdBody.age_attested).toBe(true)
+      expect(createdBody).not.toHaveProperty('dob')
+      const storedProfile = await db().query<{ dob: string; city: string | null; country: string | null; visibility: string | null }>(
+        `select "dob"::text as dob, "city", "country", "visibility" from "profile"`,
+      )
+      expect(storedProfile.rows).toEqual([{ dob: '1990-01-15', city: null, country: null, visibility: null }])
 
       const stored = await db().query<{ gender: string; count: string }>(
         `select "gender", count(*)::text as count from "account" group by "gender"`,
@@ -490,6 +501,7 @@ describe('operator_config migration', () => {
           pledge_accepted: true,
           human_verified: true,
           coc_version: 'FR-089',
+          dob: '1990-01-15',
         }),
       })
       expect(created.status).toBe(201)
@@ -586,6 +598,7 @@ describe('operator_config migration', () => {
           pledge_accepted: true,
           human_verified: true,
           coc_version: 'FR-089',
+          dob: '1990-01-15',
         }),
       })
       expect(created.status).toBe(201)
@@ -758,6 +771,7 @@ describe('operator_config migration', () => {
       'email_verification',
       'operator_config',
       'password_reset',
+      'profile',
       'session',
     ])
     expect(await userTables(db())).toEqual([
@@ -767,6 +781,7 @@ describe('operator_config migration', () => {
       'public.email_verification',
       'public.operator_config',
       'public.password_reset',
+      'public.profile',
       'public.session',
     ])
 

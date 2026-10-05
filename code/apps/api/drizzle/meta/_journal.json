@@ -36,6 +36,13 @@
       "when": 1791151744919,
       "tag": "0004_password_reset",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791162944291,
+      "tag": "0005_profile",
+      "breakpoints": true
     }
   ]
 }

@@ -31,7 +31,7 @@ export class AccountsController {
           code: result.code,
           message: result.message,
           details: result.details,
-          retryable: false,
+          retryable: result.retryable,
         },
         result.status,
       )

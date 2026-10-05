@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { boolean, check, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
+import { boolean, check, date, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core'
 
 /** Identity-owned account. `coc_version` is the Code of conduct version accepted at signup. */
 export const account = pgTable(
@@ -61,6 +61,40 @@ export const passwordReset = pgTable('password_reset', {
   superseded_at: timestamp('superseded_at', { withTimezone: true, mode: 'date' }),
   created_at: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
 })
+
+/**
+ * Profile is 1:1 with account via `account_id`.
+ * This insert writes `account_id` and `dob` only.
+ * `city`, `country`, and `visibility` may be null. A held account then sets `visibility` to `held`.
+ */
+export const profile = pgTable(
+  'profile',
+  {
+    account_id: uuid('account_id')
+      .primaryKey()
+      .references(() => account.id),
+    dob: date('dob', { mode: 'string' }).notNull(),
+    city: text('city'),
+    country: text('country'),
+    origin: text('origin'),
+    marital_status: text('marital_status'),
+    polygamy_intent: text('polygamy_intent'),
+    education: text('education'),
+    profession: text('profession'),
+    madhhab: text('madhhab'),
+    practice: text('practice'),
+    life_plans: text('life_plans'),
+    bio_live: text('bio_live'),
+    bio_pending: text('bio_pending'),
+    visibility: text('visibility'),
+  },
+  (table) => [
+    check(
+      'profile_visibility_check',
+      sql`${table.visibility} is null or ${table.visibility} in ('unpublished', 'public', 'held', 'emergency_hidden')`,
+    ),
+  ],
+)
 
 /** Web session. No remember-me column and no gender column. */
 export const session = pgTable(
