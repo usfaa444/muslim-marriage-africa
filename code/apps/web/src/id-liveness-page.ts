@@ -1,3 +1,4 @@
+import { dropUntil } from './design-artifact'
 import { pinGuardScript } from './pin-guard'
 
 const SPECIMEN = 'CNIB_Sawadogo_Recto.jpg'
@@ -144,9 +145,24 @@ const BEHAVIOR = `
 </script>
 `
 
-/** Serves the ID and liveness screen. Hosting lines are removed. The Stitch file stays unchanged. */
+/** Serves the ID and liveness screen. Hosting lines and the review switcher are removed. The Stitch file stays unchanged. */
 export function idLivenessPageHtml(stitchHtml: string): string {
-  const stripped = stitchHtml
+  const withoutSwitcher = dropUntil(
+    stitchHtml,
+    '<!-- State Simulation Control Ledger',
+    '<!-- Solemn Ledger Card (Raised Deckle Parchment Container) -->',
+    'id liveness state switcher',
+  )
+  const withoutTabStyles = dropUntil(
+    withoutSwitcher,
+    '// Update simulation toggle buttons style',
+    '// Disable submit button during minor hold or loading',
+    'id liveness tab styles',
+  )
+  if (withoutTabStyles.includes('btn-state-') || withoutTabStyles.includes("Simulateur d'Audit")) {
+    throw new Error('id liveness stitch state switcher was not removed')
+  }
+  const stripped = withoutTabStyles
     .replace(' (Scaleway Paris DC)', '')
     .replace(LOADING_LINE, '')
     .replace(FOOTER_CLAUSE, '')

@@ -172,23 +172,6 @@ describe('POST /v1/verifications/otp', () => {
     expect(otp.rows[0]?.status).toBe('pending')
   })
 
-  it('refuses a wrong code and grants a correct unexpired code without listing the profile', async () => {
-    const wrong = await post({ action: 'verify', code: '000000' })
-    expect(wrong.status).toBe(400)
-    expect(wrong.json).toMatchObject({ error: { code: 'OTP_INVALID', retryable: false } })
-    expect(otp.rows[0]?.status).toBe('pending')
-
-    const granted = await post({ action: 'verify', code: logged[0]?.code })
-    expect(granted.status).toBe(200)
-    expect(granted.json).toEqual({ status: 'granted' })
-    expect(otp.rows[0]?.status).toBe('granted')
-    expect(memory.profiles[0]?.visibility).toBeNull()
-
-    const replay = await post({ action: 'verify', code: logged[0]?.code })
-    expect(replay.status).toBe(200)
-    expect(replay.json).toEqual({ status: 'granted' })
-  })
-
   it('replaces the pending hash on resend so the older code fails', async () => {
     now = new Date('2026-10-05T12:02:00.000Z')
     const sent = await post({ action: 'send', phone_e164: phone })
@@ -199,9 +182,39 @@ describe('POST /v1/verifications/otp', () => {
     const old = await post({ action: 'verify', code: logged[0]?.code })
     expect(old.status).toBe(400)
     expect(old.json).toMatchObject({ error: { code: 'OTP_INVALID' } })
-    const next = await post({ action: 'verify', code: logged[1]?.code })
-    expect(next.status).toBe(200)
+    expect(otp.rows[0]?.status).toBe('pending')
+  })
+
+  it('refuses a wrong code and grants a correct unexpired code without listing the profile', async () => {
+    const wrong = await post({ action: 'verify', code: '000000' })
+    expect(wrong.status).toBe(400)
+    expect(wrong.json).toMatchObject({ error: { code: 'OTP_INVALID', retryable: false } })
+    expect(otp.rows[0]?.status).toBe('pending')
+
+    const granted = await post({ action: 'verify', code: logged[1]?.code })
+    expect(granted.status).toBe(200)
+    expect(granted.json).toEqual({ status: 'granted' })
     expect(otp.rows[0]?.status).toBe('granted')
+    expect(memory.profiles[0]?.visibility).toBeNull()
+
+    const replay = await post({ action: 'verify', code: logged[1]?.code })
+    expect(replay.status).toBe(200)
+    expect(replay.json).toEqual({ status: 'granted' })
+  })
+
+  it('does not clear a granted phone when send is posted again', async () => {
+    const beforeHash = otp.rows[0]?.hash
+    const beforeLogs = logged.length
+    const beforeDispatches = otp.dispatches.length
+    now = new Date('2026-10-05T12:04:00.000Z')
+    const again = await post({ action: 'send', phone_e164: '+22670999999' })
+    expect(again.status).toBe(200)
+    expect(again.json).toEqual({ expires_at: '2026-10-05T12:12:00.000Z' })
+    expect(otp.rows[0]?.status).toBe('granted')
+    expect(otp.rows[0]?.hash).toBe(beforeHash)
+    expect(otp.rows[0]?.phone_e164).toBe(phone)
+    expect(logged).toHaveLength(beforeLogs)
+    expect(otp.dispatches).toHaveLength(beforeDispatches)
   })
 
   it('does not grant an expired code', async () => {
@@ -228,6 +241,9 @@ describe('POST /v1/verifications/otp', () => {
 
   it('leaves no live code when the log write fails', async () => {
     failSend = true
+    if (otp.rows[0]) {
+      otp.rows[0].status = 'pending'
+    }
     const hashBefore = otp.rows[0]?.hash
     const failed = await post({ action: 'send', phone_e164: '+33612345678' })
     expect(failed.status).toBe(503)

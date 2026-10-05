@@ -29,6 +29,14 @@ describe('password reset screen', () => {
     expect(page).toContain("fetch('/v1/password-resets'")
     expect(page).toContain("fetch('/v1/password-resets/consume'")
     expect(page).toContain('password !== confirmation')
+    expect(page).not.toContain('tab-state-')
+    expect(page).not.toContain('Simuler')
+    expect(page).not.toContain("switchState('state-5')")
+    expect(page).not.toContain("switchState('state-3')")
+    expect(page).toContain('id="state-1"')
+    expect(page).toContain('id="state-5"')
+    expect(page).toContain('Reprendre la demande')
+    expect(stitch).toContain("Simuler l'ouverture du lien reçu")
   })
 
   it('asks for the link, then posts one password after the local confirmation matches', async () => {

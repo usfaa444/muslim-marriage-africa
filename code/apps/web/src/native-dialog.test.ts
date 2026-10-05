@@ -1,4 +1,7 @@
-import { readFileSync } from 'node:fs'
+import { spawnSync } from 'node:child_process'
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { ageGatePageHtml } from './age-gate-page.js'
@@ -35,10 +38,29 @@ const pages: Record<string, string> = {
   status: statusPageHtml(stitch('41-delete-export-status'), 'req-894-bf'),
 }
 
+const ARTIFACT = /btn-state-|btn-tab-|tab-state-|onclick="setScreenState|onclick="setState\(|Simuler|Indicateurs de conformité|Contrôleur d'états|AUDIT & DISCLOSURE|Exemples directeurs/
+
 describe('served pages', () => {
   it('does not call a native dialog', () => {
     for (const [name, html] of Object.entries(pages)) {
       expect(html, name).not.toMatch(DIALOG)
+    }
+  })
+
+  it('does not ship a Stitch state switcher or specimen gallery', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'ankanu-served-'))
+    for (const [name, html] of Object.entries(pages)) {
+      expect(html, name).not.toMatch(ARTIFACT)
+      const opens = html.match(/<div\b/g)?.length ?? 0
+      const closes = html.match(/<\/div>/g)?.length ?? 0
+      expect(opens, name).toBe(closes)
+      const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1] ?? '')
+      scripts.forEach((source, index) => {
+        const file = join(dir, `${name}-${index}.js`)
+        writeFileSync(file, source)
+        const checked = spawnSync(process.execPath, ['--check', file], { encoding: 'utf8' })
+        expect(checked.status, checked.stderr || name).toBe(0)
+      })
     }
   })
 })

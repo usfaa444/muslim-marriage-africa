@@ -1,4 +1,4 @@
-import { and, eq, gt, gte, sql } from 'drizzle-orm'
+import { and, eq, gt, gte, ne, sql } from 'drizzle-orm'
 import { newId } from '@ankanu/kernel'
 import { account, smsDispatch, verificationRecord } from './account-schema.js'
 import { getIdentityDatabase } from './account-store.js'
@@ -26,6 +26,7 @@ export type SmsDispatchRow = {
 export type OtpIssueResult =
   | { result: 'sent'; expires_at: Date }
   | { result: 'cooldown'; expires_at: Date }
+  | { result: 'unchanged'; expires_at: Date }
   | { result: 'rate_limited' }
   | { result: 'delivery_failed' }
 
@@ -108,8 +109,11 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
           if (gate.result !== 'ready') {
             return gate
           }
+          if (row && row.status === 'granted') {
+            return { result: 'unchanged' as const, expires_at: row.expires_at ?? input.now }
+          }
           if (row) {
-            await tx
+            const updated = await tx
               .update(verificationRecord)
               .set({
                 status: 'pending',
@@ -119,7 +123,11 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
                 vendor: null,
                 evidence_uri: null,
               })
-              .where(eq(verificationRecord.id, row.id))
+              .where(and(eq(verificationRecord.id, row.id), ne(verificationRecord.status, 'granted')))
+              .returning({ id: verificationRecord.id })
+            if (updated.length === 0) {
+              return { result: 'unchanged' as const, expires_at: row.expires_at ?? input.now }
+            }
           } else {
             await tx.insert(verificationRecord).values({
               id: newId(input.now),
@@ -239,6 +247,9 @@ export function memoryPhoneOtpStore(): PhoneOtpStore & { rows: PhoneOtpRow[]; di
       })
       if (gate.result !== 'ready') {
         return gate
+      }
+      if (row && row.status === 'granted') {
+        return { result: 'unchanged' as const, expires_at: row.expires_at ?? input.now }
       }
       const prior = row
         ? {

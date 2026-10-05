@@ -1,3 +1,4 @@
+import { dropUntil, replaceUntil } from './design-artifact'
 import { pinGuardScript } from './pin-guard'
 
 const SPECIMEN = '+226 70 •• •• 84'
@@ -103,6 +104,19 @@ const BEHAVIOR = `
       return input.value || ''
     }).join('')
   }
+  function hideModifyNumber() {
+    const buttons = document.querySelectorAll('button')
+    for (let index = 0; index < buttons.length; index += 1) {
+      const button = buttons[index]
+      if (button.textContent && button.textContent.indexOf('Modifier le numéro') !== -1) {
+        button.disabled = true
+        button.setAttribute('hidden', '')
+        if (button.classList && typeof button.classList.add === 'function') {
+          button.classList.add('hidden')
+        }
+      }
+    }
+  }
   function enableVerify() {
     const submit = document.getElementById('submit-btn')
     if (!submit || readCode().length !== 6) {
@@ -131,6 +145,9 @@ const BEHAVIOR = `
     })
   }
   async function sendPhone(nextPhone) {
+    if (verified) {
+      return
+    }
     const normalized = normalizePhone(nextPhone)
     if (!normalized) {
       showBannerError(PHONE_FAILED)
@@ -195,6 +212,7 @@ const BEHAVIOR = `
       if (response.status === 200 && typeof setScreenState === 'function') {
         verified = true
         setScreenState('success')
+        hideModifyNumber()
         return
       }
       showBannerError(await errorMessage(response, VERIFY_FAILED))
@@ -210,6 +228,9 @@ const BEHAVIOR = `
     }
   }
   window.triggerResend = function () {
+    if (verified) {
+      return
+    }
     if (!phone) {
       window.openModifyNumberModal()
       return
@@ -217,6 +238,9 @@ const BEHAVIOR = `
     void sendPhone(phone)
   }
   window.openModifyNumberModal = function () {
+    if (verified) {
+      return
+    }
     const input = phoneInput()
     const mask = phoneMask()
     if (!input || !mask) {
@@ -251,12 +275,41 @@ const BEHAVIOR = `
 </script>
 `
 
-/** Serves the downloaded OTP screen. The Stitch file stays unchanged. Behavior is injected. */
+/** Serves the downloaded OTP screen. The Stitch file stays unchanged. The review switcher stays off the response. */
 export function otpPageHtml(stitchHtml: string): string {
   if (!stitchHtml.includes(SPECIMEN_MARKUP) || !stitchHtml.includes(DEMO_MODIFY)) {
     throw new Error('otp stitch is missing the phone chip or the demo number dialog')
   }
-  const prepared = stitchHtml.replace(SPECIMEN_MARKUP, PHONE_MARKUP).replace(DEMO_MODIFY, 'function openModifyNumberModal() {}')
+  const withoutSwitcher = dropUntil(
+    stitchHtml,
+    '<!-- AUDIT INTERACTIVE STATE DEMONSTRATOR BAR (Reviewer Tooling) -->',
+    '<!-- CENTRAL SOLEMN VERIFICATION CARD -->',
+    'otp state switcher',
+  )
+  const withoutDemo = replaceUntil(
+    withoutSwitcher,
+    'function handleFormSubmit(e)',
+    'function triggerResend()',
+    'function handleFormSubmit(event) { event.preventDefault(); }\n\n    ',
+    'otp demo submit',
+  )
+  const withoutResend = replaceUntil(
+    withoutDemo,
+    'function triggerResend()',
+    'function openModifyNumberModal()',
+    'function triggerResend() {}\n\n    ',
+    'otp demo resend',
+  )
+  const withoutTabs = dropUntil(
+    withoutResend,
+    '// Reset tab button styles',
+    'errorBanner.classList.add',
+    'otp state tab styles',
+  )
+  const prepared = withoutTabs.replace(SPECIMEN_MARKUP, PHONE_MARKUP).replace(DEMO_MODIFY, 'function openModifyNumberModal() {}')
+  if (prepared.includes('btn-state-') || prepared.includes("code === '123456'")) {
+    throw new Error('otp stitch state switcher was not removed')
+  }
   if (/\balert\s*\(|\bconfirm\s*\(|\bprompt\s*\(/.test(prepared)) {
     throw new Error('otp stitch still contains a native dialog')
   }

@@ -1,3 +1,5 @@
+import { dropUntil } from './design-artifact'
+
 const HOSTING_CARD = ' et hébergement souverain en France (Scaleway)'
 const SPECIMEN_EMAIL = ' value="mariam.sawadogo@famille.bf"'
 const SPECIMEN_PASSWORD = ' value="Barakah2025!Honor"'
@@ -77,9 +79,26 @@ const BEHAVIOR = `
 </script>
 `
 
-/** Serves the password-reset screen with the hosting lines removed and the forms posted. */
+function dropSimulatedLink(html: string): string {
+  const label = "Simuler l'ouverture du lien reçu"
+  const labelAt = html.indexOf(label)
+  const buttonAt = labelAt < 0 ? -1 : html.lastIndexOf('<button', labelAt)
+  const buttonEnd = labelAt < 0 ? -1 : html.indexOf('</button>', labelAt)
+  if (buttonAt < 0 || buttonEnd < 0) {
+    throw new Error('password reset stitch is missing the simulated link button')
+  }
+  return html.slice(0, buttonAt) + html.slice(buttonEnd + '</button>'.length)
+}
+
+/** Serves the password-reset screen with the hosting lines and the review switcher removed. */
 export function passwordResetPageHtml(stitchHtml: string): string {
-  const stripped = stitchHtml
+  const withoutTabs = dropUntil(
+    stitchHtml,
+    '<!-- Interactive State Selector Bar (Specification Walkthrough FR-008) -->',
+    '<!-- Main Canvas -->',
+    'password reset state switcher',
+  )
+  const stripped = dropSimulatedLink(withoutTabs)
     .replaceAll(HOSTING_CARD, '')
     .replaceAll(OLD_COPYRIGHT, NEW_COPYRIGHT)
     .replace(FOOTER_HOST, '')
@@ -87,6 +106,15 @@ export function passwordResetPageHtml(stitchHtml: string): string {
     .replaceAll(SPECIMEN_PASSWORD, '')
     .replace('onsubmit="event.preventDefault(); switchState(\'state-2\');"', '')
     .replace('onsubmit="event.preventDefault(); switchState(\'state-5\');"', '')
+  if (
+    stripped.includes('tab-state-') ||
+    stripped.includes('Simuler') ||
+    stripped.includes("switchState('state-2')") ||
+    stripped.includes("switchState('state-3')") ||
+    stripped.includes("switchState('state-5')")
+  ) {
+    throw new Error('password reset stitch state switcher was not removed')
+  }
   const close = stripped.lastIndexOf('</body>')
   if (close < 0) {
     throw new Error('password reset stitch is missing </body>')

@@ -1,3 +1,5 @@
+import { dropUntil } from './design-artifact'
+
 /** Token already printed on the pledge checkbox the member accepts. */
 export const COC_VERSION_ON_SCREEN = 'FR-089'
 
@@ -226,9 +228,22 @@ const SUBMIT = `
 
 /** Serves the downloaded Auth screen. Signup stores the fields and opens the age gate. Login posts the session. Google stays visual. */
 export function authPageHtml(stitchHtml: string): string {
-  const close = stitchHtml.lastIndexOf('</body>')
+  const withoutSpecimens = dropUntil(
+    stitchHtml,
+    '<!-- AUDIT & DISCLOSURE SPECIMENS (Simulated System States) -->',
+    '\n</div>\n</main>',
+    'auth specimen gallery',
+  )
+  if (
+    withoutSpecimens.includes('Indicateurs de conformité') ||
+    withoutSpecimens.includes('Exemples directeurs') ||
+    withoutSpecimens.includes('AUDIT & DISCLOSURE')
+  ) {
+    throw new Error('auth stitch specimen gallery was not removed')
+  }
+  const close = withoutSpecimens.lastIndexOf('</body>')
   if (close < 0) {
     throw new Error('auth stitch is missing </body>')
   }
-  return `${stitchHtml.slice(0, close)}${SUBMIT}${stitchHtml.slice(close)}`
+  return `${withoutSpecimens.slice(0, close)}${SUBMIT}${withoutSpecimens.slice(close)}`
 }

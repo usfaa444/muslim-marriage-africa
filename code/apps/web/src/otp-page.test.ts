@@ -39,6 +39,11 @@ describe('otp screen', () => {
     expect(page).not.toContain('alert(')
     expect(page).not.toContain('confirm(')
     expect(page).not.toContain('prompt(')
+    expect(page).not.toContain('btn-state-')
+    expect(page).not.toContain("Contrôleur d'états")
+    expect(page).not.toContain('onclick="setScreenState')
+    expect(page).not.toContain("code === '123456'")
+    expect(stitch).toContain('btn-state-default')
     expect(maskE164('+22670123484')).toBe('+226 70 •• •• 84')
   })
 
@@ -113,6 +118,12 @@ describe('otp screen', () => {
     await new Promise((resolve) => setTimeout(resolve, 0))
     expect(screen.calls).toHaveLength(2)
     expect(screen.states).toEqual(['sent', 'success'])
+    expect(screen.modifyHidden).toBe(true)
+    screen.modify()
+    screen.resend()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(screen.calls).toHaveLength(2)
+    expect(screen.states).toEqual(['sent', 'success'])
   })
 
   it('shows a rejected send on the page and accepts another number', async () => {
@@ -180,6 +191,7 @@ async function runScreen(
   errorText: string
   phoneHidden: boolean
   submitDisabled: boolean
+  modifyHidden: boolean
   modify: () => void
   resend: () => void
   submit: () => void
@@ -212,6 +224,17 @@ async function runScreen(
   }
   const successBanner = { classList: classNames('hidden') }
   const submitBtn = { disabled: true, className: '' }
+  const modifyButton = {
+    textContent: 'Modifier le numéro',
+    disabled: false,
+    hidden: false,
+    classList: classNames(''),
+    setAttribute(name: string) {
+      if (name === 'hidden') {
+        this.hidden = true
+      }
+    },
+  }
   const nodes = new Map<string, unknown>([
     ['otp-phone-input', phoneInput],
     ['otp-phone-mask', phoneMask],
@@ -227,6 +250,9 @@ async function runScreen(
       querySelectorAll(selector: string) {
         if (selector === '#otp-inputs-wrapper input') {
           return inputs
+        }
+        if (selector === 'button') {
+          return [modifyButton]
         }
         return []
       },
@@ -278,6 +304,9 @@ async function runScreen(
     },
     get phoneHidden() {
       return phoneInput.classList.contains('hidden')
+    },
+    get modifyHidden() {
+      return modifyButton.hidden === true && modifyButton.disabled === true
     },
     get submitDisabled() {
       return submitBtn.disabled

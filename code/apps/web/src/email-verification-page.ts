@@ -1,3 +1,4 @@
+import { dropUntil, replaceUntil } from './design-artifact'
 import { pinGuardScript } from './pin-guard'
 
 const SPECIMEN = 'tahir.sawadogo@courrier.bf'
@@ -119,9 +120,48 @@ const BEHAVIOR = `
 </script>
 `
 
+const PANEL_STATE = `function setState(stateName) {
+      ['waiting', 'expired', 'success'].forEach(function (name) {
+        const el = document.getElementById('state-' + name);
+        if (!el) {
+          return;
+        }
+        if (name === stateName) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    }
+
+    `
+
 /** Serves the downloaded email screen. Pass account.email to replace the specimen before first paint. */
 export function emailVerificationPageHtml(stitchHtml: string, email: string | null): string {
-  const replaced = email === null ? stitchHtml : stitchHtml.split(SPECIMEN).join(escapeHtml(email))
+  const withoutTabs = dropUntil(
+    stitchHtml,
+    '<!-- Simulation State Selector (Interactive test bench for review of states) -->',
+    '<!-- Dynamic State Containers -->',
+    'email state switcher',
+  )
+  const withoutDemoState = replaceUntil(
+    withoutTabs,
+    'function setState(stateName)',
+    'function triggerResend',
+    PANEL_STATE,
+    'email state function',
+  )
+  const stripped = replaceUntil(
+    withoutDemoState,
+    'function triggerResend',
+    '</script>',
+    'function triggerResend() {}\n\n  ',
+    'email demo resend',
+  )
+  if (stripped.includes('btn-tab-') || stripped.includes('Simuler')) {
+    throw new Error('email stitch state switcher was not removed')
+  }
+  const replaced = email === null ? stripped : stripped.split(SPECIMEN).join(escapeHtml(email))
   const close = replaced.lastIndexOf('</body>')
   if (close < 0) {
     throw new Error('email verification stitch is missing </body>')
