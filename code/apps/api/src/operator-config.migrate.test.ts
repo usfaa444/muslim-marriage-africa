@@ -26,6 +26,7 @@ const founderValues = {
   pack_prices_xof: '1=4900,3=14700,6=29400',
   rl_auth_per_min: '10',
   rl_otp_per_hour: '5',
+  rl_verification_upload_per_hour: '10',
   rl_invite_per_day: '30',
   rl_report_per_hour: '10',
   rl_pay_per_min: '5',
@@ -158,6 +159,7 @@ function migrationSql(): string {
     '0004_password_reset.sql',
     '0005_profile.sql',
     '0006_verification_otp.sql',
+    '0007_rl_verification_upload.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -269,7 +271,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('7')
+    expect(applied.rows[0]?.count).toBe('8')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name

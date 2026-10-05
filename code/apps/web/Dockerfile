@@ -25,6 +25,7 @@ COPY --from=build /app/design-stitch/11-auth/screen.html design-stitch/11-auth/s
 COPY --from=build /app/design-stitch/12-age-gate/screen.html design-stitch/12-age-gate/screen.html
 COPY --from=build /app/design-stitch/13-email-verification/screen.html design-stitch/13-email-verification/screen.html
 COPY --from=build /app/design-stitch/14-otp/screen.html design-stitch/14-otp/screen.html
+COPY --from=build /app/design-stitch/17-id-liveness/screen.html design-stitch/17-id-liveness/screen.html
 ENV NODE_ENV=production
 WORKDIR /app/apps/web
 CMD ["node", "/app/node_modules/next/dist/bin/next", "start", "--hostname", "0.0.0.0", "--port", "3000"]
