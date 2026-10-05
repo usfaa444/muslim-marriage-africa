@@ -60,8 +60,14 @@ describe('age gate screen', () => {
     expect(held.buttonDisabled).toBe(true)
     expect(held.buttonClass).toContain('bg-disabled')
     expect(held.buttonClass).not.toContain('bg-indigo')
-    expect(held.buttonHtml).toContain('Continuer vers la vérification (SMS / OTP)')
-    expect(held.buttonHtml).not.toContain('Génération du jeton SMS sécurisé')
+    expect(held.labelText).toBe('Continuer vers la vérification (SMS / OTP)')
+    held.unlock()
+    held.fireChange('dobYear')
+    expect(held.buttonDisabled).toBe(true)
+    expect(held.buttonClass).toContain('bg-disabled')
+    expect(held.buttonClass).not.toContain('bg-indigo')
+    expect(held.labelText).toBe('Continuer vers la vérification (SMS / OTP)')
+    expect(held.visible).toBe('stateUnderage')
 
     const adult = await runGate(draft, async () => ({ status: 201, json: async () => ({ status: 'Active' }) }))
     await adult.submit('15', '01', '1990', false)
@@ -91,7 +97,9 @@ async function runGate(
   stored: string | null
   buttonDisabled: boolean
   buttonClass: string
-  buttonHtml: string
+  labelText: string
+  unlock: () => void
+  fireChange: (id: string) => void
   submit: (day: string, month: string, year: string, disabled: boolean) => Promise<void>
 }> {
   const start = page.lastIndexOf('<script>')
@@ -103,14 +111,15 @@ async function runGate(
     ['stateEligible', new Set(['hidden'])],
     ['stateUnderage', new Set(['hidden'])],
   ])
-  const nodes = new Map<string, { value: string; textContent: string; disabled: boolean; innerHTML: string; className: string }>()
+  const nodes = new Map<string, { value: string; textContent: string; disabled: boolean; innerHTML: string; className: string; changes: Array<() => void> }>()
   function node(id: string) {
     const current = nodes.get(id) ?? {
       value: '',
-      textContent: '',
+      textContent: id === 'btnLabelText' ? 'Poursuivre vers l\'envoi du code OTP' : '',
       disabled: false,
       innerHTML: 'label',
       className: '',
+      changes: [],
     }
     nodes.set(id, current)
     return {
@@ -152,7 +161,11 @@ async function runGate(
           classes.get(id)?.delete(name)
         },
       },
-      addEventListener() {},
+      addEventListener(type: string, listener: () => void) {
+        if (type === 'change') {
+          current.changes.push(listener)
+        }
+      },
     }
   }
   const store = new Map<string, string>()
@@ -216,8 +229,26 @@ async function runGate(
     get buttonClass() {
       return nodes.get('submitBtn')?.className ?? ''
     },
-    get buttonHtml() {
-      return nodes.get('submitBtn')?.innerHTML ?? ''
+    get labelText() {
+      return nodes.get('btnLabelText')?.textContent ?? ''
+    },
+    unlock() {
+      const button = nodes.get('submitBtn')
+      if (button) {
+        button.disabled = false
+        button.className = 'bg-indigo'
+      }
+      const label = nodes.get('btnLabelText')
+      if (label) {
+        label.textContent = 'Poursuivre vers l\'envoi du code OTP'
+      }
+      classes.get('stateUnderage')?.add('hidden')
+      classes.get('stateEligible')?.delete('hidden')
+    },
+    fireChange(id: string) {
+      for (const listener of nodes.get(id)?.changes ?? []) {
+        listener()
+      }
     },
     async submit(day, month, year, disabled) {
       node('dobDay').value = day

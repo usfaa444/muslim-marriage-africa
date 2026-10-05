@@ -66,11 +66,67 @@ const SUBMIT = `
       validateSubmissionState()
     }
   })
-  window.addEventListener('pageshow', function (event) {
+  function backForwardLoad(event) {
     if (event.persisted) {
-      submitting = false
-      validateSubmissionState()
+      return true
     }
+    try {
+      const entries = performance.getEntriesByType('navigation')
+      return !!(entries[0] && entries[0].type === 'back_forward')
+    } catch (error) {
+      return false
+    }
+  }
+  function restoreSignupDraft() {
+    const raw = sessionStorage.getItem(${JSON.stringify(SIGNUP_DRAFT_KEY)})
+    if (!raw) {
+      return
+    }
+    let draft = null
+    try {
+      draft = JSON.parse(raw)
+    } catch (error) {
+      draft = null
+    }
+    if (!draft) {
+      return
+    }
+    const email = document.getElementById('email')
+    const password = document.getElementById('password')
+    const pseudonym = document.getElementById('pseudonym')
+    const pledge = document.getElementById('pledge-check')
+    const human = document.getElementById('human-verify')
+    if (email && typeof draft.email === 'string') {
+      email.value = draft.email
+    }
+    if (password && typeof draft.password === 'string') {
+      password.value = draft.password
+    }
+    if (pseudonym && typeof draft.pseudonym === 'string') {
+      pseudonym.value = draft.pseudonym
+    }
+    if (pledge) {
+      pledge.checked = draft.pledge_accepted === true
+    }
+    if (human) {
+      human.checked = draft.human_verified === true
+    }
+    const sister = document.querySelector('input[name="gender_role"][value="soeur"]')
+    const brother = document.querySelector('input[name="gender_role"][value="frere"]')
+    if (draft.gender === 'brother' && brother) {
+      brother.checked = true
+    }
+    if (draft.gender === 'sister' && sister) {
+      sister.checked = true
+    }
+  }
+  window.addEventListener('pageshow', function (event) {
+    if (!backForwardLoad(event)) {
+      return
+    }
+    submitting = false
+    restoreSignupDraft()
+    validateSubmissionState()
   })
   let loginSubmitting = false
   function showLoginLine(line) {

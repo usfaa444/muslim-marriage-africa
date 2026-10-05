@@ -45,6 +45,8 @@ describe('auth screen', () => {
     expect(added).toContain('catch (error)')
     expect(added).toContain("addEventListener('pageshow'")
     expect(added).toContain('event.persisted')
+    expect(added).toContain("type === 'back_forward'")
+    expect(added).toContain("getElementById('password')")
   })
 
   it('enables signup again when the browser restores the page', () => {
@@ -60,6 +62,8 @@ describe('auth screen', () => {
       ['human-verify', true],
     ])
     const button = { disabled: false, className: '' }
+    const store = new Map<string, string>()
+    const navigation = { type: 'navigate' }
     const listeners = new Map<string, Array<(event: { preventDefault: () => void; persisted?: boolean }) => void>>()
     function listen(id: string, type: string, listener: (event: { preventDefault: () => void; persisted?: boolean }) => void) {
       const key = `${id}:${type}`
@@ -83,6 +87,9 @@ describe('auth screen', () => {
             get checked() {
               return checked.get(id) === true
             },
+            set checked(next: boolean) {
+              checked.set(id, next)
+            },
             addEventListener(type: string, listener: (event: { preventDefault: () => void }) => void) {
               listen(id, type, listener)
             },
@@ -95,7 +102,19 @@ describe('auth screen', () => {
           return []
         },
       },
-      sessionStorage: { setItem() {} },
+      sessionStorage: {
+        setItem(key: string, value: string) {
+          store.set(key, value)
+        },
+        getItem(key: string) {
+          return store.get(key) ?? null
+        },
+      },
+      performance: {
+        getEntriesByType(kind: string) {
+          return kind === 'navigation' ? [navigation] : []
+        },
+      },
       location: { assign() {} },
       window: {
         addEventListener(type: string, listener: (event: { persisted: boolean }) => void) {
@@ -114,10 +133,20 @@ describe('auth screen', () => {
     if (!pageshow) {
       throw new Error('pageshow missing')
     }
+    values.set('password', '')
     pageshow({ preventDefault() {}, persisted: false })
     expect(button.disabled).toBe(true)
-    pageshow({ preventDefault() {}, persisted: true })
+    expect(values.get('password')).toBe('')
+    navigation.type = 'back_forward'
+    pageshow({ preventDefault() {}, persisted: false })
+    expect(values.get('password')).toBe('phrase avec espaces')
     expect(button.disabled).toBe(false)
     expect(button.className).toContain('bg-indigo')
+    navigation.type = 'navigate'
+    values.set('password', '')
+    button.disabled = true
+    pageshow({ preventDefault() {}, persisted: true })
+    expect(values.get('password')).toBe('phrase avec espaces')
+    expect(button.disabled).toBe(false)
   })
 })

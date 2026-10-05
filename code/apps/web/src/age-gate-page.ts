@@ -12,9 +12,28 @@ const BEHAVIOR = `
       hint.textContent = hintText
     }
   }
-  document.getElementById('dobDay').addEventListener('change', restoreHint)
-  document.getElementById('dobMonth').addEventListener('change', restoreHint)
-  document.getElementById('dobYear').addEventListener('change', restoreHint)
+  let accountHeld = false
+  function applyHeldControl() {
+    document.getElementById('stateEmpty').classList.add('hidden')
+    document.getElementById('stateEligible').classList.add('hidden')
+    document.getElementById('stateUnderage').classList.remove('hidden')
+    const submitBtn = document.getElementById('submitBtn')
+    submitBtn.disabled = true
+    submitBtn.className = 'w-full min-h-[48px] rounded-xl flex items-center justify-center space-x-2 transition-all duration-200 bg-disabled text-ink-secondary cursor-not-allowed font-body-strong text-body px-6 select-none'
+    const label = document.getElementById('btnLabelText')
+    if (label) {
+      label.textContent = 'Continuer vers la vérification (SMS / OTP)'
+    }
+  }
+  function onDateChange() {
+    restoreHint()
+    if (accountHeld) {
+      applyHeldControl()
+    }
+  }
+  document.getElementById('dobDay').addEventListener('change', onDateChange)
+  document.getElementById('dobMonth').addEventListener('change', onDateChange)
+  document.getElementById('dobYear').addEventListener('change', onDateChange)
   function showGateMessage(line) {
     restoreHint()
     if (hint) {
@@ -25,13 +44,8 @@ const BEHAVIOR = `
     document.getElementById('stateEmpty').classList.remove('hidden')
   }
   function showHeld() {
-    document.getElementById('stateEmpty').classList.add('hidden')
-    document.getElementById('stateEligible').classList.add('hidden')
-    document.getElementById('stateUnderage').classList.remove('hidden')
-    const submitBtn = document.getElementById('submitBtn')
-    submitBtn.disabled = true
-    submitBtn.className = 'w-full min-h-[48px] rounded-xl flex items-center justify-center space-x-2 transition-all duration-200 bg-disabled text-ink-secondary cursor-not-allowed font-body-strong text-body px-6 select-none'
-    submitBtn.innerHTML = '<span class="material-symbols-outlined text-current" data-icon="sms" style="font-size: 20px;">sms</span><span id="btnLabelText">Continuer vers la vérification (SMS / OTP)</span>'
+    accountHeld = true
+    applyHeldControl()
   }
   window.handleContinue = async function () {
     const submitBtn = document.getElementById('submitBtn')
@@ -52,9 +66,13 @@ const BEHAVIOR = `
     const day = document.getElementById('dobDay').value
     const month = document.getElementById('dobMonth').value
     const year = document.getElementById('dobYear').value
-    const readyLabel = submitBtn.innerHTML
+    const label = document.getElementById('btnLabelText')
+    const previousText = label ? label.textContent : ''
+    const previousClass = submitBtn.className
     submitBtn.disabled = true
-    submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-current" data-icon="progress_activity" style="font-size: 20px;">progress_activity</span><span>Génération du jeton SMS sécurisé...</span>'
+    if (label) {
+      label.textContent = 'Génération du jeton SMS sécurisé...'
+    }
     try {
       const response = await fetch('/v1/accounts', {
         method: 'POST',
@@ -74,11 +92,17 @@ const BEHAVIOR = `
       }
       const message = payload && payload.error && payload.error.message
       showGateMessage(message || 'La création a échoué.')
-      submitBtn.innerHTML = readyLabel
+      if (label) {
+        label.textContent = previousText
+      }
+      submitBtn.className = previousClass
       submitBtn.disabled = false
     } catch (error) {
       showGateMessage('La création a échoué.')
-      submitBtn.innerHTML = readyLabel
+      if (label) {
+        label.textContent = previousText
+      }
+      submitBtn.className = previousClass
       submitBtn.disabled = false
     }
   }
