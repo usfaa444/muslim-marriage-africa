@@ -99,6 +99,7 @@ Sister accounts `cilN@example.bf` / `Cil_N`, password `phrase avec espaces`, dat
 ## My results
 
 - `npx vitest run --config vitest.unit.config.ts apps/api/src/cil-rights.test.ts apps/web/src/settings-page.test.ts apps/web/src/status-page.test.ts apps/api/src/life-pause.test.ts`: 4 files, 12 tests passed after QA fail `479031ae`.
+- `npx vitest run --config vitest.integration.config.ts --fileParallelism false apps/api/src/operator-config.migrate.test.ts`: 7 passed. `migrationSql()` now expects `0009_cil_ticket.sql` after `0008_pin_lock.sql`.
 - `npx tsc -p apps/api/tsconfig.json --noEmit` and `npx tsc -p apps/web/tsconfig.json --noEmit` passed after `tsc -p packages/kernel/tsconfig.json` (the API package reads kernel `dist`).
 - I did not open a graphical browser. Settings and status HTML ran through the route functions.
 

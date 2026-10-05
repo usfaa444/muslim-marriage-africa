@@ -161,6 +161,7 @@ function migrationSql(): string {
     '0006_verification_otp.sql',
     '0007_rl_verification_upload.sql',
     '0008_pin_lock.sql',
+    '0009_cil_ticket.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
