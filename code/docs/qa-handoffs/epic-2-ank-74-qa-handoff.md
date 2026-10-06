@@ -76,7 +76,7 @@ Phone OTP tests use `aminata@example.bf`, password `phrase avec espaces`, pseudo
 - `tsc` for `apps/web` and `apps/api`: passed.
 - Headless Chromium served `/otp` on localhost, sent `+22670123484`, and verified `222222`. The boxes stayed `222222`, the success banner showed, the submit label stayed "Confirmer le code scellé", the submit button stayed disabled, "Modifier le numéro" was hidden, and "Renvoyer maintenant" stayed disabled after the clock was cleared. The page did not show "Accéder à l'étape Wali".
 - Headless Chromium at 1280×900 rendered the served HTML for OTP, email, auth, password reset, and ID. OTP had no switcher; error and success were hidden. Email showed waiting only. Auth showed signup, hid login, and kept both tabs, with no specimen text. Reset showed the request form only. ID showed ready only. The OTP card matches `14-otp/screen.png` except the "Audit de conformité" tab bar, which is the artifact this ticket removes. The auth card matches `11-auth/screen.png` except the three example banners at the bottom.
-- Push and the `ankanu` web/api redeploy wait until QA passes. Staging `http://72.61.0.79:4012` is still the previous build.
+- ANK-77 passed `a91fddedd304d562aff34df8e64cc52fd3adc5e2`. Staging `http://72.61.0.79:4012` is serving that build. Only the `ankanu` web and api containers were recreated.
 
 ## Three validation passes
 
@@ -110,4 +110,4 @@ The served page keeps that screen's real panel and omits the review chrome.
 - Signup conflicts are still reported on the age gate. `/auth` does not post the account.
 - "Réessayer" after a reset send, and "Reprendre la demande" after a reset error, return to the request form. They do not open success.
 - Devtools can still call the state function. The served success branch no longer writes `840192` or "Accéder à l'étape Wali". No tab, demo button, or query on these pages opens success or error by itself.
-- GitHub push and the staging redeploy of `ankanu` web and api are waiting on QA.
+- Staging `http://72.61.0.79:4012` is serving the pushed `main` build. Only the `ankanu` web and api containers were recreated.
