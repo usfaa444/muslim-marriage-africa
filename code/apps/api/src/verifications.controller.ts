@@ -11,7 +11,7 @@ import {
   type CaptureFailure,
 } from './id-liveness.js'
 import { readRlOtpPerHour } from './otp-limit.js'
-import { submitPhoneOtp, unauthenticatedOtp, type OtpFailure } from './phone-otp.js'
+import { readPhoneOtp, submitPhoneOtp, unauthenticatedOtp, type OtpFailure } from './phone-otp.js'
 import { getPhoneOtpStore } from './phone-otp-store.js'
 import { readCookie, SESSION_COOKIE } from './session-cookie.js'
 import { getSmsPort } from './sms-port.js'
@@ -41,6 +41,22 @@ export class VerificationsController {
     if (!result.ok) {
       throw otpError(result)
     }
+    response.status(result.status)
+    return result.body
+  }
+
+  @Get('otp')
+  async readOtp(
+    @Req() request: { headers?: { cookie?: string | string[] } },
+    @Res({ passthrough: true }) response: { status: (code: number) => void; setHeader: (name: string, value: string) => void },
+  ): Promise<unknown> {
+    response.setHeader('cache-control', 'no-store')
+    const sessionId = readCookie(headerText(request.headers?.cookie), SESSION_COOKIE)
+    const session = sessionId ? await resolveWebSession(sessionId, authNow()) : null
+    if (!session) {
+      throw otpError(unauthenticatedOtp())
+    }
+    const result = await readPhoneOtp({ accountId: session.accountId, store: getPhoneOtpStore() })
     response.status(result.status)
     return result.body
   }

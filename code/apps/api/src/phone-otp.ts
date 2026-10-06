@@ -45,6 +45,42 @@ export function isE164(value: string): boolean {
   return E164.test(value)
 }
 
+/** Same grouping as the web mask. The read route returns this, never the stored E.164. */
+export function maskE164(phone: string): string {
+  const digits = phone.startsWith('+') ? phone.slice(1) : phone
+  if (digits.startsWith('226') && digits.length === 11) {
+    const national = digits.slice(3)
+    return `+226 ${national.slice(0, 2)} •• •• ${national.slice(-2)}`
+  }
+  const last = digits.slice(-2)
+  const head = digits.slice(0, Math.min(3, Math.max(0, digits.length - 2)))
+  return `+${head} •• •• ${last}`
+}
+
+export type OtpRead = {
+  ok: true
+  status: 200
+  body:
+    | { status: 'none' }
+    | { status: 'pending' | 'granted'; expires_at: string; phone_masked: string }
+}
+
+export async function readPhoneOtp(input: { accountId: string; store: PhoneOtpStore }): Promise<OtpRead> {
+  const row = await input.store.current(input.accountId)
+  if (!row || (row.status !== 'pending' && row.status !== 'granted') || !row.phone_e164 || !row.expires_at) {
+    return { ok: true, status: 200, body: { status: 'none' } }
+  }
+  return {
+    ok: true,
+    status: 200,
+    body: {
+      status: row.status,
+      expires_at: row.expires_at.toISOString(),
+      phone_masked: maskE164(row.phone_e164),
+    },
+  }
+}
+
 export function gateOtpSend(input: {
   dispatches: Array<{ created_at: Date }>
   expiresAt: Date | null

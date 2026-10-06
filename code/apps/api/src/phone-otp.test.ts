@@ -120,6 +120,14 @@ describe('POST /v1/verifications/otp', () => {
     return { status: response.status, json }
   }
 
+  async function get(withCookie = true): Promise<{ status: number; json: Record<string, unknown>; cacheControl: string | null }> {
+    const response = await fetch(`${base}/v1/verifications/otp`, {
+      headers: withCookie ? { cookie } : {},
+    })
+    const json = (await response.json()) as Record<string, unknown>
+    return { status: response.status, json, cacheControl: response.headers.get('cache-control') }
+  }
+
   it('requires a session and refuses an unknown action or a phone that is not E.164', async () => {
     const anonymous = await post({ action: 'send', phone_e164: phone }, false)
     expect(anonymous.status).toBe(401)
@@ -135,6 +143,15 @@ describe('POST /v1/verifications/otp', () => {
     expect(otp.rows).toHaveLength(0)
     expect(otp.dispatches).toHaveLength(0)
     expect(logged).toHaveLength(0)
+
+    const anonymousRead = await get(false)
+    expect(anonymousRead.status).toBe(401)
+    expect(anonymousRead.json).toMatchObject({ error: { code: 'UNAUTHENTICATED', retryable: false } })
+    const none = await get()
+    expect(none.status).toBe(200)
+    expect(none.json).toEqual({ status: 'none' })
+    expect(none.cacheControl).toBe('no-store')
+    expect(anonymousRead.cacheControl).toBe('no-store')
   })
 
   it('sends a hashed code, stores template and ids, and leaves visibility unset', async () => {
@@ -159,6 +176,17 @@ describe('POST /v1/verifications/otp', () => {
     ])
     expect(Object.keys(otp.dispatches[0] ?? {}).sort()).toEqual(['account_id', 'created_at', 'id', 'template'])
     expect(memory.profiles[0]?.visibility).toBeNull()
+
+    const pending = await get()
+    expect(pending.status).toBe(200)
+    expect(pending.json).toEqual({
+      status: 'pending',
+      expires_at: expires,
+      phone_masked: '+226 70 •• •• 84',
+    })
+    expect(JSON.stringify(pending.json)).not.toContain(phone)
+    expect(Object.values(pending.json)).not.toContain(logged[0]?.code)
+    expect(JSON.stringify(pending.json)).not.toContain(otp.rows[0]?.hash)
   })
 
   it('sends nothing inside 60 seconds and keeps the same expiry', async () => {
@@ -196,6 +224,17 @@ describe('POST /v1/verifications/otp', () => {
     expect(granted.json).toEqual({ status: 'granted' })
     expect(otp.rows[0]?.status).toBe('granted')
     expect(memory.profiles[0]?.visibility).toBeNull()
+
+    const readGranted = await get()
+    expect(readGranted.status).toBe(200)
+    expect(readGranted.json).toEqual({
+      status: 'granted',
+      expires_at: otp.rows[0]?.expires_at?.toISOString(),
+      phone_masked: '+226 70 •• •• 84',
+    })
+    expect(JSON.stringify(readGranted.json)).not.toContain(phone)
+    expect(Object.values(readGranted.json)).not.toContain(logged[1]?.code)
+    expect(JSON.stringify(readGranted.json)).not.toContain(otp.rows[0]?.hash)
 
     const replay = await post({ action: 'verify', code: logged[1]?.code })
     expect(replay.status).toBe(200)
@@ -283,6 +322,9 @@ describe('POST /v1/verifications/otp', () => {
       },
       async grant() {
         return 'invalid'
+      },
+      async current() {
+        return null
       },
     })
     try {

@@ -42,6 +42,7 @@ export type PhoneOtpStore = {
     log: () => Promise<void>
   }): Promise<OtpIssueResult>
   grant(input: { accountId: string; hash: string; now: Date }): Promise<'granted' | 'invalid'>
+  current(accountId: string): Promise<PhoneOtpRow | null>
 }
 
 class OtpDeliveryFailed extends Error {
@@ -195,6 +196,14 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
         return 'granted' as const
       })
     },
+    async current(accountId) {
+      const database = getIdentityDatabase()
+      const stored = await database
+        .select()
+        .from(verificationRecord)
+        .where(and(eq(verificationRecord.account_id, accountId), eq(verificationRecord.kind, 'phone_otp')))
+      return currentRow(stored.map(toRow)) ?? null
+    },
   }
 }
 
@@ -325,6 +334,10 @@ export function memoryPhoneOtpStore(): PhoneOtpStore & { rows: PhoneOtpRow[]; di
       }
       row.status = 'granted'
       return 'granted'
+    },
+    async current(accountId) {
+      const mine = rows.filter((row) => row.account_id === accountId && row.kind === 'phone_otp')
+      return currentRow(mine) ?? null
     },
   }
 }
