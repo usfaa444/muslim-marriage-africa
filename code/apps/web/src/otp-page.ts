@@ -15,6 +15,8 @@ const DEMO_MODIFY = `function openModifyNumberModal() {
     }`
 const ACTIVE_SUBMIT =
   'w-full h-12 rounded-full bg-indigo text-ink-on-indigo hover:bg-surface-indigo font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shadow-none'
+const DISABLED_SUBMIT =
+  'w-full h-12 rounded-full bg-disabled text-ink-primary/60 font-body-strong text-body-strong transition-all duration-200 flex items-center justify-center gap-2 cursor-not-allowed'
 const SEND_FAILED = "L'envoi du code a échoué."
 const VERIFY_FAILED = 'Code invalide ou expiré'
 const PHONE_FAILED = 'phone_e164 : un numéro E.164 est requis.'
@@ -37,6 +39,7 @@ const BEHAVIOR = `
   const VERIFY_FAILED = ${JSON.stringify(VERIFY_FAILED)}
   const PHONE_FAILED = ${JSON.stringify(PHONE_FAILED)}
   const ACTIVE_SUBMIT = ${JSON.stringify(ACTIVE_SUBMIT)}
+  const DISABLED_SUBMIT = ${JSON.stringify(DISABLED_SUBMIT)}
   let phone = ''
   let busy = false
   let verified = false
@@ -103,6 +106,46 @@ const BEHAVIOR = `
     return Array.from(document.querySelectorAll('#otp-inputs-wrapper input')).map(function (input) {
       return input.value || ''
     }).join('')
+  }
+  function lockGranted() {
+    verified = true
+    window.otpGranted = true
+    const success = document.getElementById('success-banner')
+    const error = document.getElementById('error-banner')
+    if (error && error.classList) {
+      error.classList.add('hidden')
+    }
+    if (success && success.classList) {
+      success.classList.remove('hidden')
+    }
+    const label = document.getElementById('submit-btn-text')
+    if (label) {
+      label.textContent = 'Confirmer le code scellé'
+    }
+    const submit = document.getElementById('submit-btn')
+    if (submit) {
+      submit.disabled = true
+      submit.className = DISABLED_SUBMIT
+    }
+    const resend = document.getElementById('resend-action')
+    if (resend) {
+      resend.disabled = true
+      if (resend.classList && typeof resend.className === 'string') {
+        resend.className = 'text-disabled font-body-strong cursor-not-allowed transition-colors'
+      }
+    }
+    const boxes = document.querySelectorAll('#otp-inputs-wrapper input')
+    for (let index = 0; index < boxes.length; index += 1) {
+      const box = boxes[index]
+      box.readOnly = true
+      if (box.classList && typeof box.classList.remove === 'function') {
+        box.classList.remove('border-danger')
+      }
+    }
+    hideModifyNumber()
+    if (typeof stopOtpCooldown === 'function') {
+      stopOtpCooldown()
+    }
   }
   function hideModifyNumber() {
     const buttons = document.querySelectorAll('button')
@@ -209,11 +252,17 @@ const BEHAVIOR = `
         enableVerify()
         return
       }
-      if (response.status === 200 && typeof setScreenState === 'function') {
-        verified = true
-        setScreenState('success')
-        hideModifyNumber()
-        return
+      if (response.status === 200) {
+        let payload = null
+        try {
+          payload = typeof response.json === 'function' ? await response.json() : null
+        } catch (error) {
+          payload = null
+        }
+        if (payload && payload.status === 'granted') {
+          lockGranted()
+          return
+        }
       }
       showBannerError(await errorMessage(response, VERIFY_FAILED))
       if (typeof setScreenState === 'function') {
@@ -306,18 +355,95 @@ export function otpPageHtml(stitchHtml: string): string {
     'errorBanner.classList.add',
     'otp state tab styles',
   )
-  const prepared = withoutTabs.replace(SPECIMEN_MARKUP, PHONE_MARKUP).replace(DEMO_MODIFY, 'function openModifyNumberModal() {}')
-  if (prepared.includes('btn-state-') || prepared.includes("code === '123456'")) {
+  const withoutSpecimen = withoutTabs.replace(SPECIMEN_MARKUP, PHONE_MARKUP).replace(DEMO_MODIFY, 'function openModifyNumberModal() {}')
+  const withoutDemoSuccess = replaceUntil(
+    withoutSpecimen,
+    "} else if (state === 'success') {",
+    '  </script>',
+    `} else if (state === 'success') {
+        successBanner.classList.remove('hidden');
+        submitBtn.disabled = true;
+        submitBtn.className = ${JSON.stringify(DISABLED_SUBMIT)};
+      }
+    }
+`,
+    'otp demo success',
+  )
+  const prepared = replaceUntil(
+    withoutDemoSuccess,
+    'function startCooldown(seconds) {',
+    'startCooldown(58);',
+    `function stopOtpCooldown() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      if (resendAction) {
+        resendAction.disabled = true;
+        resendAction.className = "text-disabled font-body-strong cursor-not-allowed transition-colors";
+      }
+      if (cooldownLabel) {
+        cooldownLabel.textContent = "Délai de réexpédition écoulé";
+      }
+    }
+    window.stopOtpCooldown = stopOtpCooldown;
+
+    function startCooldown(seconds) {
+      clearInterval(timerInterval);
+      cooldownSeconds = seconds;
+      resendAction.disabled = true;
+      resendAction.className = "text-disabled font-body-strong cursor-not-allowed transition-colors";
+
+      timerInterval = setInterval(() => {
+        cooldownSeconds--;
+        if (cooldownSeconds > 0) {
+          timerCounter.textContent = cooldownSeconds;
+          cooldownLabel.innerHTML = \`Renvoyer le code par SMS (<span id="timer-counter">\${cooldownSeconds}</span>s)\`;
+        } else {
+          clearInterval(timerInterval);
+          cooldownLabel.textContent = "Délai de réexpédition écoulé";
+          if (window.otpGranted) {
+            resendAction.disabled = true;
+            resendAction.className = "text-disabled font-body-strong cursor-not-allowed transition-colors";
+          } else {
+            resendAction.disabled = false;
+            resendAction.className = "text-primary hover:text-secondary underline font-body-strong cursor-pointer transition-colors";
+          }
+        }
+      }, 1000);
+    }
+
+    `,
+    'otp cooldown stop',
+  )
+  const completionLine = "const code = otpInputs.map(input => input.value).join('');"
+  if (!prepared.includes(completionLine)) {
+    throw new Error('otp completion check is missing')
+  }
+  const locked = prepared.replace(
+    completionLine,
+    `if (window.otpGranted) {
+        submitBtn.disabled = true;
+        submitBtn.className = ${JSON.stringify(DISABLED_SUBMIT)};
+        return;
+      }
+      ${completionLine}`,
+  )
+  if (locked.includes('btn-state-') || locked.includes("code === '123456'")) {
     throw new Error('otp stitch state switcher was not removed')
   }
-  if (/\balert\s*\(|\bconfirm\s*\(|\bprompt\s*\(/.test(prepared)) {
+  if (locked.includes("Accéder à l'étape Wali") || locked.includes("['8', '4', '0', '1', '9', '2']")) {
+    throw new Error('otp stitch success demo was not removed')
+  }
+  if (!locked.includes('window.stopOtpCooldown') || !locked.includes('window.otpGranted')) {
+    throw new Error('otp grant lock was not added')
+  }
+  if (/\balert\s*\(|\bconfirm\s*\(|\bprompt\s*\(/.test(locked)) {
     throw new Error('otp stitch still contains a native dialog')
   }
-  const close = prepared.lastIndexOf('</body>')
+  const close = locked.lastIndexOf('</body>')
   if (close < 0) {
     throw new Error('otp stitch is missing </body>')
   }
-  const html = `${prepared.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${prepared.slice(close)}`
+  const html = `${locked.slice(0, close)}${pinGuardScript()}${BEHAVIOR}${locked.slice(close)}`
   if (/\balert\s*\(|\bconfirm\s*\(|\bprompt\s*\(/.test(html)) {
     throw new Error('otp page still contains a native dialog')
   }

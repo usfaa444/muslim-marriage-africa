@@ -226,17 +226,38 @@ describe('POST /v1/verifications/otp', () => {
     expect(memory.profiles[0]?.visibility).toBeNull()
   })
 
-  it('returns RATE_LIMITED at the hourly cap and writes nothing', async () => {
+  it('returns the existing expiry when a granted phone is at the hourly cap', async () => {
     const beforeLogs = logged.length
     const beforeRows = otp.dispatches.length
+    const beforeHash = otp.rows[0]?.hash
+    const beforePhone = otp.rows[0]?.phone_e164
+    const beforeExpires = otp.rows[0]?.expires_at
     setOtpLimitReader(async () => beforeRows)
-    now = new Date(now.getTime() + 61_000)
-    const limited = await post({ action: 'send', phone_e164: phone })
-    expect(limited.status).toBe(429)
-    expect(limited.json).toMatchObject({ error: { code: 'RATE_LIMITED', retryable: false } })
-    expect(logged).toHaveLength(beforeLogs)
-    expect(otp.dispatches).toHaveLength(beforeRows)
-    setOtpLimitReader(async () => 100)
+    try {
+      now = new Date(now.getTime() + 61_000)
+      const capped = await post({ action: 'send', phone_e164: phone })
+      expect(capped.status).toBe(200)
+      expect(capped.json).toEqual({ expires_at: '2026-10-05T12:12:00.000Z' })
+      expect(otp.rows[0]?.status).toBe('granted')
+      expect(otp.rows[0]?.hash).toBe(beforeHash)
+      expect(otp.rows[0]?.phone_e164).toBe(phone)
+      expect(logged).toHaveLength(beforeLogs)
+      expect(otp.dispatches).toHaveLength(beforeRows)
+      if (otp.rows[0]) {
+        otp.rows[0].status = 'pending'
+      }
+      const limited = await post({ action: 'send', phone_e164: phone })
+      expect(limited.status).toBe(429)
+      expect(limited.json).toMatchObject({ error: { code: 'RATE_LIMITED', retryable: false } })
+      expect(logged).toHaveLength(beforeLogs)
+      expect(otp.dispatches).toHaveLength(beforeRows)
+      expect(otp.rows[0]?.status).toBe('pending')
+      expect(otp.rows[0]?.hash).toBe(beforeHash)
+      expect(otp.rows[0]?.phone_e164).toBe(beforePhone)
+      expect(otp.rows[0]?.expires_at).toBe(beforeExpires)
+    } finally {
+      setOtpLimitReader(async () => 100)
+    }
   })
 
   it('leaves no live code when the log write fails', async () => {

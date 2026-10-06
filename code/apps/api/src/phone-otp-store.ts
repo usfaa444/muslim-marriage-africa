@@ -82,6 +82,15 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
       try {
         return await database.transaction(async (tx) => {
           await tx.execute(sql`select ${account.id} from ${account} where ${account.id} = ${input.accountId} for update`)
+          const stored = await tx
+            .select()
+            .from(verificationRecord)
+            .where(and(eq(verificationRecord.account_id, input.accountId), eq(verificationRecord.kind, 'phone_otp')))
+          const rows = stored.map(toRow)
+          const row = currentRow(rows)
+          if (row && row.status === 'granted') {
+            return { result: 'unchanged' as const, expires_at: row.expires_at ?? input.now }
+          }
           const hourStart = new Date(input.now.getTime() - OTP_HOUR_MS)
           const dispatches = await tx
             .select({ created_at: smsDispatch.created_at })
@@ -93,12 +102,6 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
                 gte(smsDispatch.created_at, hourStart),
               ),
             )
-          const stored = await tx
-            .select()
-            .from(verificationRecord)
-            .where(and(eq(verificationRecord.account_id, input.accountId), eq(verificationRecord.kind, 'phone_otp')))
-          const rows = stored.map(toRow)
-          const row = currentRow(rows)
           const gate = gateOtpSend({
             dispatches: dispatches.map((item) => ({ created_at: asDate(item.created_at) ?? new Date(0) })),
             expiresAt: row?.expires_at ?? null,
@@ -108,9 +111,6 @@ function postgresPhoneOtpStore(): PhoneOtpStore {
           })
           if (gate.result !== 'ready') {
             return gate
-          }
-          if (row && row.status === 'granted') {
-            return { result: 'unchanged' as const, expires_at: row.expires_at ?? input.now }
           }
           if (row) {
             const updated = await tx
@@ -232,6 +232,9 @@ export function memoryPhoneOtpStore(): PhoneOtpStore & { rows: PhoneOtpRow[]; di
     async issue(input) {
       const mine = rows.filter((row) => row.account_id === input.accountId && row.kind === 'phone_otp')
       const row = currentRow(mine)
+      if (row && row.status === 'granted') {
+        return { result: 'unchanged' as const, expires_at: row.expires_at ?? input.now }
+      }
       const recent = dispatches.filter(
         (item) =>
           item.account_id === input.accountId &&
@@ -247,9 +250,6 @@ export function memoryPhoneOtpStore(): PhoneOtpStore & { rows: PhoneOtpRow[]; di
       })
       if (gate.result !== 'ready') {
         return gate
-      }
-      if (row && row.status === 'granted') {
-        return { result: 'unchanged' as const, expires_at: row.expires_at ?? input.now }
       }
       const prior = row
         ? {

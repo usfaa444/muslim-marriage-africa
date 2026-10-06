@@ -43,14 +43,23 @@ describe('otp screen', () => {
     expect(page).not.toContain("Contrôleur d'états")
     expect(page).not.toContain('onclick="setScreenState')
     expect(page).not.toContain("code === '123456'")
+    expect(page).not.toContain("Accéder à l'étape Wali")
+    expect(page).not.toContain("['8', '4', '0', '1', '9', '2']")
+    expect(page).toContain('window.stopOtpCooldown')
+    expect(page).toContain('window.otpGranted')
+    expect(added).not.toContain("setScreenState('success')")
     expect(stitch).toContain('btn-state-default')
+    expect(stitch).toContain("Accéder à l'étape Wali")
     expect(maskE164('+22670123484')).toBe('+226 70 •• •• 84')
   })
 
   it('sends the normalized number and verifies the six digits', async () => {
     const screen = await runScreen(async (_url, body) => {
       const action = body.action
-      return { status: action === 'verify' ? 200 : 201 }
+      return {
+        status: action === 'verify' ? 200 : 201,
+        json: async () => (action === 'verify' ? { status: 'granted' } : {}),
+      }
     })
     screen.modify()
     await new Promise((resolve) => setTimeout(resolve, 0))
@@ -63,11 +72,19 @@ describe('otp screen', () => {
     expect(screen.mask).toBe('+226 70 •• •• 84')
     expect(screen.phoneHidden).toBe(true)
 
-    screen.fill('840192')
+    screen.fill('222222')
     screen.submit()
     await new Promise((resolve) => setTimeout(resolve, 0))
-    expect(screen.calls[1]).toEqual({ action: 'verify', code: '840192' })
-    expect(screen.states).toEqual(['sent', 'success'])
+    expect(screen.calls[1]).toEqual({ action: 'verify', code: '222222' })
+    expect(screen.states).toEqual(['sent'])
+    expect(screen.digits).toBe('222222')
+    expect(screen.digitsLocked).toBe(true)
+    expect(screen.successHidden).toBe(false)
+    expect(screen.submitDisabled).toBe(true)
+    expect(screen.submitLabel).toBe('Confirmer le code scellé')
+    expect(screen.modifyHidden).toBe(true)
+    expect(screen.resendDisabled).toBe(true)
+    expect(screen.cooldownStopped).toBe(true)
   })
 
   it('shows the error state for a rejected code and waits 60 seconds', async () => {
@@ -106,24 +123,35 @@ describe('otp screen', () => {
   })
 
   it('does not verify the specimen after the code is granted', async () => {
-    const screen = await runScreen(async (_url, body) => ({ status: body.action === 'verify' ? 200 : 201 }))
+    const screen = await runScreen(async (_url, body) => ({
+      status: body.action === 'verify' ? 200 : 201,
+      json: async () => (body.action === 'verify' ? { status: 'granted' } : {}),
+    }))
     screen.modify()
     await new Promise((resolve) => setTimeout(resolve, 0))
     screen.fill('111111')
     screen.submit()
     await new Promise((resolve) => setTimeout(resolve, 0))
     expect(screen.calls[1]).toEqual({ action: 'verify', code: '111111' })
-    expect(screen.states).toEqual(['sent', 'success'])
+    expect(screen.states).toEqual(['sent'])
+    expect(screen.digits).toBe('111111')
+    expect(screen.digitsLocked).toBe(true)
+    expect(screen.successHidden).toBe(false)
+    expect(screen.submitDisabled).toBe(true)
+    expect(screen.submitLabel).toBe('Confirmer le code scellé')
     screen.submit()
     await new Promise((resolve) => setTimeout(resolve, 0))
     expect(screen.calls).toHaveLength(2)
-    expect(screen.states).toEqual(['sent', 'success'])
+    expect(screen.states).toEqual(['sent'])
+    expect(screen.digits).toBe('111111')
     expect(screen.modifyHidden).toBe(true)
     screen.modify()
     screen.resend()
     await new Promise((resolve) => setTimeout(resolve, 0))
     expect(screen.calls).toHaveLength(2)
-    expect(screen.states).toEqual(['sent', 'success'])
+    expect(screen.states).toEqual(['sent'])
+    expect(screen.digits).toBe('111111')
+    expect(screen.resendDisabled).toBe(true)
   })
 
   it('shows a rejected send on the page and accepts another number', async () => {
@@ -191,6 +219,12 @@ async function runScreen(
   errorText: string
   phoneHidden: boolean
   submitDisabled: boolean
+  submitLabel: string
+  successHidden: boolean
+  digits: string
+  digitsLocked: boolean
+  resendDisabled: boolean
+  cooldownStopped: boolean
   modifyHidden: boolean
   modify: () => void
   resend: () => void
@@ -204,7 +238,7 @@ async function runScreen(
   const states: string[] = []
   const cooldowns: number[] = []
   const alerts: string[] = []
-  const inputs = Array.from({ length: 6 }, () => ({ value: '' }))
+  const inputs = Array.from({ length: 6 }, () => ({ value: '', readOnly: false, classList: classNames('border-danger') }))
   const phoneInput = {
     value: '',
     classList: classNames('hidden'),
@@ -224,6 +258,9 @@ async function runScreen(
   }
   const successBanner = { classList: classNames('hidden') }
   const submitBtn = { disabled: true, className: '' }
+  const submitLabel = { textContent: 'Confirmer le code scellé' }
+  const resendAction = { disabled: true, className: 'text-disabled font-body-strong cursor-not-allowed transition-colors' }
+  let cooldownStopped = false
   const modifyButton = {
     textContent: 'Modifier le numéro',
     disabled: false,
@@ -241,6 +278,8 @@ async function runScreen(
     ['error-banner', errorBanner],
     ['success-banner', successBanner],
     ['submit-btn', submitBtn],
+    ['submit-btn-text', submitLabel],
+    ['resend-action', resendAction],
   ])
   const sandbox = {
     document: {
@@ -279,6 +318,10 @@ async function runScreen(
     startCooldown(seconds: number) {
       cooldowns.push(seconds)
     },
+    stopOtpCooldown() {
+      cooldownStopped = true
+      resendAction.disabled = true
+    },
     Array,
     String,
     Math,
@@ -310,6 +353,24 @@ async function runScreen(
     },
     get submitDisabled() {
       return submitBtn.disabled
+    },
+    get submitLabel() {
+      return submitLabel.textContent
+    },
+    get successHidden() {
+      return successBanner.classList.contains('hidden')
+    },
+    get digits() {
+      return inputs.map((input) => input.value).join('')
+    },
+    get digitsLocked() {
+      return inputs.every((input) => input.readOnly === true && input.classList.contains('border-danger') === false)
+    },
+    get resendDisabled() {
+      return resendAction.disabled
+    },
+    get cooldownStopped() {
+      return cooldownStopped
     },
     modify() {
       const open = sandbox.window.openModifyNumberModal
