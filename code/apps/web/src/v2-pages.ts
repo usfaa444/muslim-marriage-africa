@@ -161,11 +161,19 @@ export function pinHtml(stitch: string): string {
 }
 
 export function onboardingHtml(stitch: string): string {
-  return mount(stitch, '', audioPromptScript() + pinGuardScript())
+  const html = stitch.replace(
+    'class="text-xs font-semibold uppercase tracking-wider text-deep-navy flex items-center gap-1.5"',
+    'id="audio-guide-heading" class="text-xs font-semibold uppercase tracking-wider text-deep-navy flex items-center gap-1.5"',
+  )
+  return mount(html, '', audioPromptScript() + pinGuardScript())
 }
 
 export function photoHtml(stitch: string): string {
-  return mount(stitch, '', audioPromptScript() + pinGuardScript())
+  const html = stitch.replace(
+    '<section aria-labelledby="audio-guidance-title"',
+    '<section id="audio-guide-heading" aria-labelledby="audio-guidance-title"',
+  )
+  return mount(html, '', audioPromptScript() + pinGuardScript())
 }
 
 export function profileHtml(stitch: string): string {
