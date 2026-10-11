@@ -134,16 +134,65 @@ export async function fetchGateStep(cookieHeader: string): Promise<GateStep | 'e
   }
 }
 
-/** Keep the browser on the Host it used. `request.url` is the bind address when Next listens on 0.0.0.0. */
-export function redirectTo(request: Request, path: string): Response {
-  const forwardedHost = request.headers.get('x-forwarded-host')
-  const host = (forwardedHost || request.headers.get('host') || '').split(',')[0]?.trim() ?? ''
-  const forwardedProto = request.headers.get('x-forwarded-proto')
-  const proto = (forwardedProto || new URL(request.url).protocol.replace(':', '') || 'http').split(',')[0]?.trim()
-  if (/^[A-Za-z0-9.-]+(?::\d+)?$/.test(host) && (proto === 'http' || proto === 'https')) {
-    return Response.redirect(new URL(path, `${proto}://${host}`), 303)
+function lastHop(value: string | null): string {
+  if (!value) {
+    return ''
   }
-  return Response.redirect(new URL(path, request.url), 303)
+  const parts = value.split(',').map((part) => part.trim()).filter((part) => part.length > 0)
+  return parts.length > 0 ? (parts[parts.length - 1] ?? '') : ''
+}
+
+function strictOrigin(value: string): string | null {
+  try {
+    const url = new URL(value)
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return null
+    }
+    if (url.username !== '' || url.password !== '') {
+      return null
+    }
+    if (url.pathname !== '/' || url.search !== '' || url.hash !== '') {
+      return null
+    }
+    return url.origin
+  } catch {
+    return null
+  }
+}
+
+function allowedOrigins(env: NodeJS.ProcessEnv): string[] {
+  const raw = env.ANKANU_ALLOWED_ORIGINS
+  if (raw === undefined || raw.trim() === '') {
+    return []
+  }
+  const items: string[] = []
+  for (const part of raw.split(',')) {
+    const origin = strictOrigin(part)
+    if (origin) {
+      items.push(origin)
+    }
+  }
+  return items
+}
+
+/** Keep the browser on an allowed origin. `request.url` is the bind address when Next listens on 0.0.0.0. */
+export function redirectTo(request: Request, path: string, env: NodeJS.ProcessEnv = process.env): Response {
+  const forwardedHost = lastHop(request.headers.get('x-ankanu-edge-host')) || lastHop(request.headers.get('x-forwarded-host'))
+  const host = forwardedHost || lastHop(request.headers.get('host'))
+  const forwardedProto =
+    lastHop(request.headers.get('x-ankanu-edge-proto')) || lastHop(request.headers.get('x-forwarded-proto'))
+  const proto = forwardedProto || new URL(request.url).protocol.replace(':', '') || 'http'
+  const candidate =
+    /^[A-Za-z0-9.-]+(?::\d+)?$/.test(host) && (proto === 'http' || proto === 'https')
+      ? strictOrigin(`${proto}://${host}`)
+      : null
+  const allowed = allowedOrigins(env)
+  const configured = strictOrigin((env.ANKANU_PUBLIC_ORIGIN ?? '').trim())
+  const base =
+    candidate && (allowed.length === 0 || allowed.includes(candidate))
+      ? candidate
+      : configured ?? new URL(request.url).origin
+  return Response.redirect(new URL(path, `${base}/`), 303)
 }
 
 export async function entryRedirect(

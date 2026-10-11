@@ -145,7 +145,9 @@ describe('compose file', () => {
     expect(text).toContain('POSTGRES_USER: ankanu')
     expect(text).toContain('POSTGRES_DB: ankanu')
     expect(text).toContain('DATABASE_URL: postgres://ankanu@postgres:5432/ankanu')
-    expect(text).toContain('ANKANU_COOKIE_SECURE: "false"')
+    expect(text).toContain('ANKANU_PUBLIC_ORIGIN: https://staging.ankanu.com')
+    expect(text).toContain('ANKANU_ALLOWED_ORIGINS: https://staging.ankanu.com,http://72.61.0.79:4012')
+    expect(text).not.toContain('ANKANU_COOKIE_SECURE: "false"')
     expect(text).toContain('*[![:space:]]*')
     expect(text).not.toContain('[ -z "$$MINIO_ROOT_USER" ]')
   })
@@ -398,7 +400,8 @@ describe('docker compose up', () => {
         'S3_BUCKET=ankanu',
         `S3_ACCESS_KEY_ID=${env.S3_ACCESS_KEY_ID}`,
         `S3_SECRET_ACCESS_KEY=${env.S3_SECRET_ACCESS_KEY}`,
-        'ANKANU_COOKIE_SECURE=false',
+        'ANKANU_PUBLIC_ORIGIN=https://staging.ankanu.com',
+        'ANKANU_ALLOWED_ORIGINS=https://staging.ankanu.com,http://72.61.0.79:4012',
       ]),
     )
     expect(bucket.Config.Env ?? []).toEqual(

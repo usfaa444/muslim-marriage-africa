@@ -30,6 +30,7 @@ const port: EmailPort = {
 
 let now = new Date('2026-10-11T08:00:00.000Z')
 const origin = 'http://ankanu.test'
+process.env.ANKANU_PUBLIC_ORIGIN = origin
 
 function accountBody(email: string, pseudonym: string): Record<string, unknown> {
   return {
@@ -159,7 +160,7 @@ describe('POST /v1/accounts/email', () => {
 
   it('sends to the new address first, then stores that address and a new link', async () => {
     const sent = messages.length
-    const response = await postEmail('  Nouvelle@Example.bf ')
+    const response = await postEmail('  Nouvelle@Example.bf ', { cookie, origin: 'https://evil.example' })
     const body = (await response.json()) as { email: string; expires_at: string }
     const link = messages.at(-1)
 

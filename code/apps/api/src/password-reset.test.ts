@@ -45,6 +45,7 @@ const port: EmailPort = {
 
 let now = new Date('2026-10-04T12:00:00.000Z')
 const origin = 'http://ankanu.test'
+process.env.ANKANU_PUBLIC_ORIGIN = origin
 let resetLimit = 100
 
 function accountBody(email: string, pseudonym: string): Record<string, unknown> {
@@ -170,7 +171,7 @@ describe('POST /v1/password-resets', () => {
     const before = messages.length
     const response = await fetch(`${base}/v1/password-resets`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json', origin },
+      headers: { 'content-type': 'application/json', origin: 'https://evil.example' },
       body: JSON.stringify({ email: 'Fatim@Example.bf' }),
     })
     const body = (await response.json()) as Record<string, unknown>

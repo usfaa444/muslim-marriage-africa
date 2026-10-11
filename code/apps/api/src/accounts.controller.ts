@@ -14,9 +14,9 @@ import { getEmailPort } from './email-port.js'
 import {
   consumeEmailVerification,
   issueEmailVerification,
-  publicOrigin,
   unauthenticatedIssue,
 } from './email-verification.js'
+import { configuredPublicOrigin } from './public-origin.js'
 import { getEmailVerificationStore } from './email-verification-store.js'
 import { hashPassword } from './password-hash.js'
 import { readCookie, SESSION_COOKIE } from './session-cookie.js'
@@ -122,7 +122,7 @@ export class AccountsController {
     const result = await changeAccountEmail({
       accountId: session.accountId,
       body,
-      origin: publicOrigin(headerText(request.headers?.origin)),
+      origin: configuredPublicOrigin(),
       now: authNow,
       store: getEmailVerificationStore(),
       emailTaken: (email) => getAccountStore().emailTaken(email),
@@ -155,7 +155,7 @@ export class AccountsController {
     }
     const result = await issueEmailVerification({
       accountId: session.accountId,
-      origin: publicOrigin(headerText(request.headers?.origin)),
+      origin: configuredPublicOrigin(),
       now: authNow,
       store: getEmailVerificationStore(),
       send: (message) => getEmailPort().send(message),

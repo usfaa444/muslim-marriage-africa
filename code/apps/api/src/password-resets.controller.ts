@@ -21,16 +21,6 @@ function appendSetCookie(response: CookieResponse, value: string): void {
   response.setHeader('Set-Cookie', value)
 }
 
-function headerText(value: string | string[] | undefined): string | undefined {
-  if (typeof value === 'string') {
-    return value
-  }
-  if (Array.isArray(value)) {
-    return value[0]
-  }
-  return undefined
-}
-
 /** Counts this post in the password-reset window, then refuses it past `rl_password_reset_per_min`. */
 export async function rejectIfPasswordResetRateLimited(ip: string): Promise<void> {
   const limit = await readRlPasswordResetPerMin()
@@ -63,13 +53,12 @@ export class PasswordResetsController {
   @Post()
   @HttpCode(201)
   async request(
-    @Req() request: IpRequest & { headers?: { origin?: string | string[] } },
+    @Req() request: IpRequest,
     @Body() body: unknown,
   ): Promise<unknown> {
     await rejectIfPasswordResetRateLimited(clientIp(request))
     const result = await requestPasswordReset({
       body,
-      originHeader: headerText(request.headers?.origin),
       now: authNow,
       store: getPasswordResetStore(),
       send: (message) => getEmailPort().send(message),

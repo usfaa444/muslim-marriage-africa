@@ -3,7 +3,7 @@ import { newId } from '@ankanu/kernel'
 import type { EmailMessage } from './email-port.js'
 import { passwordIsPublishable } from './create-account.js'
 import { hashPassword } from './password-hash.js'
-import { publicOrigin } from './email-verification.js'
+import { configuredPublicOrigin } from './public-origin.js'
 import type { PasswordResetStore } from './password-reset-store.js'
 import { rememberMeMaxAge, sessionCookieHeader } from './session-cookie.js'
 import type { SessionRow } from './session-store.js'
@@ -76,7 +76,6 @@ function requestEmail(body: unknown): string | null {
 
 export async function requestPasswordReset(input: {
   body: unknown
-  originHeader: string | undefined
   now: () => Date
   store: PasswordResetStore
   send: (message: EmailMessage) => Promise<void>
@@ -96,7 +95,7 @@ export async function requestPasswordReset(input: {
   if (!account?.verified) {
     return { ok: true, status: 201 }
   }
-  const origin = publicOrigin(input.originHeader)
+  const origin = configuredPublicOrigin()
   if (!origin) {
     return deliveryFailed()
   }

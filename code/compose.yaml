@@ -9,6 +9,8 @@ services:
     environment:
       RECAPTCHA_SITE_KEY: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
       ANKANU_API_ORIGIN: http://api:3000
+      ANKANU_PUBLIC_ORIGIN: https://staging.ankanu.com
+      ANKANU_ALLOWED_ORIGINS: https://staging.ankanu.com,http://72.61.0.79:4012
     healthcheck:
       test:
         - CMD
@@ -36,7 +38,8 @@ services:
       RECAPTCHA_SITE_KEY: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
       RECAPTCHA_SECRET_KEY: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
       RECAPTCHA_ALLOW_TEST_KEYS: "1"
-      ANKANU_COOKIE_SECURE: "false"
+      ANKANU_PUBLIC_ORIGIN: https://staging.ankanu.com
+      ANKANU_ALLOWED_ORIGINS: https://staging.ankanu.com,http://72.61.0.79:4012
       S3_ENDPOINT: http://bucket:9000
       S3_BUCKET: ankanu
       S3_ACCESS_KEY_ID: "${S3_ACCESS_KEY_ID}"
@@ -70,6 +73,8 @@ services:
       RECAPTCHA_SITE_KEY: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
       RECAPTCHA_SECRET_KEY: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
       RECAPTCHA_ALLOW_TEST_KEYS: "1"
+      ANKANU_PUBLIC_ORIGIN: https://staging.ankanu.com
+      ANKANU_ALLOWED_ORIGINS: https://staging.ankanu.com,http://72.61.0.79:4012
     depends_on:
       redis:
         condition: service_healthy

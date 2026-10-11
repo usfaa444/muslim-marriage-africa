@@ -245,6 +245,40 @@ describe('server entry guard', () => {
       async () => 'anon',
     )
     expect(publicHost?.headers.get('location')).toBe('http://72.61.0.79:4012/auth')
+    const previousOrigin = process.env.ANKANU_PUBLIC_ORIGIN
+    const previousAllowed = process.env.ANKANU_ALLOWED_ORIGINS
+    process.env.ANKANU_PUBLIC_ORIGIN = 'https://staging.ankanu.com'
+    process.env.ANKANU_ALLOWED_ORIGINS = 'https://staging.ankanu.com,http://72.61.0.79:4012'
+    const edge = await entryRedirect(
+      new Request('http://0.0.0.0:3000/onboarding', {
+        headers: {
+          host: '172.24.0.1:4012',
+          'x-forwarded-proto': 'http, https',
+          'x-forwarded-host': 'evil.example, staging.ankanu.com',
+        },
+      }),
+      '/onboarding',
+      async () => 'anon',
+    )
+    expect(edge?.headers.get('location')).toBe('https://staging.ankanu.com/auth')
+    const spoofed = await entryRedirect(
+      new Request('http://0.0.0.0:3000/onboarding', {
+        headers: { 'x-forwarded-proto': 'https', 'x-forwarded-host': 'evil.example' },
+      }),
+      '/onboarding',
+      async () => 'anon',
+    )
+    expect(spoofed?.headers.get('location')).toBe('https://staging.ankanu.com/auth')
+    if (previousOrigin === undefined) {
+      delete process.env.ANKANU_PUBLIC_ORIGIN
+    } else {
+      process.env.ANKANU_PUBLIC_ORIGIN = previousOrigin
+    }
+    if (previousAllowed === undefined) {
+      delete process.env.ANKANU_ALLOWED_ORIGINS
+    } else {
+      process.env.ANKANU_ALLOWED_ORIGINS = previousAllowed
+    }
   })
 })
 

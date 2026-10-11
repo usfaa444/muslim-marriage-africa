@@ -1,11 +1,13 @@
 import { assertEmailBoot } from './email-port.js'
 import { installScanMetrics } from './otel-contract.js'
 import { assertRecaptchaBoot } from './recaptcha.js'
+import { assertPublicOriginBoot } from './public-origin.js'
 import { assertCookieSecureBoot } from './session-cookie.js'
 import { processRole, runWorkerProcess } from './worker-shell.js'
 
 assertRecaptchaBoot(process.env)
 assertEmailBoot(process.env)
+assertPublicOriginBoot(process.env)
 assertCookieSecureBoot(process.env)
 installScanMetrics(process.env)
 

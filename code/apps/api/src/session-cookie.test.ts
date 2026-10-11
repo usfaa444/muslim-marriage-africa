@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest'
 import {
   assertCookieSecureBoot,
   clearSessionCookieHeader,
+  cookieIsSecure,
   cookieSecure,
   sessionCookieHeader,
 } from './session-cookie.js'
@@ -60,8 +61,22 @@ describe('session cookie secure flag', () => {
     )
   })
 
-  it('sets the staging compose api flag to false', () => {
+  it('keeps Secure on https and omits it only for an allowed http origin', () => {
+    const https = { trustedHttps: true, httpOriginAllowed: false }
+    const httpIp = { trustedHttps: false, httpOriginAllowed: true }
+    const other = { trustedHttps: false, httpOriginAllowed: false }
+    expect(cookieIsSecure({ ANKANU_COOKIE_SECURE: 'false' }, https)).toBe(true)
+    expect(sessionCookieHeader('abc', null, {}, https)).toContain('Secure')
+    expect(clearSessionCookieHeader({}, https)).toContain('Secure')
+    expect(sessionCookieHeader('abc', null, {}, httpIp).includes('Secure')).toBe(false)
+    expect(clearSessionCookieHeader({}, httpIp).includes('Secure')).toBe(false)
+    expect(sessionCookieHeader('abc', null, {}, other)).toContain('Secure')
+  })
+
+  it('sets the staging public origin and does not force the cookie flag off', () => {
     const compose = readFileSync(fileURLToPath(new URL('../../../compose.yaml', import.meta.url)), 'utf8')
-    expect(compose).toContain('ANKANU_COOKIE_SECURE: "false"')
+    expect(compose).toContain('ANKANU_PUBLIC_ORIGIN: https://staging.ankanu.com')
+    expect(compose).toContain('ANKANU_ALLOWED_ORIGINS: https://staging.ankanu.com,http://72.61.0.79:4012')
+    expect(compose).not.toContain('ANKANU_COOKIE_SECURE: "false"')
   })
 })

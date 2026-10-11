@@ -33,6 +33,7 @@ const port: EmailPort = {
 
 let now = new Date('2026-10-04T12:00:00.000Z')
 const origin = 'http://ankanu.test'
+process.env.ANKANU_PUBLIC_ORIGIN = origin
 
 function accountBody(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
@@ -117,7 +118,7 @@ describe('POST /v1/accounts/email-verifications', () => {
     const before = messages.length
     const response = await fetch(`${base}/v1/accounts/email-verifications`, {
       method: 'POST',
-      headers: { cookie, origin },
+      headers: { cookie, origin: 'https://evil.example' },
     })
     const body = (await response.json()) as Record<string, unknown>
     const link = messages.at(-1)
@@ -379,10 +380,13 @@ describe('email link expiry and resend', () => {
     expect(anonymousBody.error.retryable).toBe(false)
     expect(links.rows).toHaveLength(1)
 
+    const previousPublic = process.env.ANKANU_PUBLIC_ORIGIN
+    delete process.env.ANKANU_PUBLIC_ORIGIN
     const missingOrigin = await fetch(`${base}/v1/accounts/email-verifications`, {
       method: 'POST',
       headers: { cookie },
     })
+    process.env.ANKANU_PUBLIC_ORIGIN = previousPublic
     expect(missingOrigin.status).toBe(503)
     expect(links.rows).toHaveLength(1)
     expect(links.rows[0]?.superseded_at).toBeNull()

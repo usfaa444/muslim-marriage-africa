@@ -1,3 +1,5 @@
+import { currentEdge, type EdgeView } from './edge-request.js'
+
 export const SESSION_COOKIE = 'ankanu_session'
 
 export const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000
@@ -30,6 +32,21 @@ function originIsHttps(origin: string): boolean {
   }
 }
 
+/** Https stays Secure. Secure is omitted only for plain http on an allowed http origin. */
+export function cookieIsSecure(env: NodeJS.ProcessEnv = process.env, view?: EdgeView): boolean {
+  const edge = view ?? currentEdge()
+  if (!edge) {
+    return cookieSecure(env)
+  }
+  if (edge.trustedHttps) {
+    return true
+  }
+  if (edge.httpOriginAllowed) {
+    return false
+  }
+  return true
+}
+
 /** Refuse an insecure cookie when the configured public origin is https. Unset is not https. */
 export function assertCookieSecureBoot(env: NodeJS.ProcessEnv = process.env): void {
   if (cookieSecure(env)) {
@@ -45,8 +62,8 @@ export function assertCookieSecureBoot(env: NodeJS.ProcessEnv = process.env): vo
 }
 
 /** Clears the browser session. Empty value, same attributes, Max-Age=0. */
-export function clearSessionCookieHeader(env: NodeJS.ProcessEnv = process.env): string {
-  const secure = cookieSecure(env) ? '; Secure' : ''
+export function clearSessionCookieHeader(env: NodeJS.ProcessEnv = process.env, view?: EdgeView): string {
+  const secure = cookieIsSecure(env, view) ? '; Secure' : ''
   return `${SESSION_COOKIE}=; Path=/; HttpOnly${secure}; SameSite=Lax; Max-Age=0`
 }
 
@@ -54,9 +71,10 @@ export function sessionCookieHeader(
   sessionId: string,
   maxAgeSeconds: number | null,
   env: NodeJS.ProcessEnv = process.env,
+  view?: EdgeView,
 ): string {
   const parts = [`${SESSION_COOKIE}=${sessionId}`, 'Path=/', 'HttpOnly']
-  if (cookieSecure(env)) {
+  if (cookieIsSecure(env, view)) {
     parts.push('Secure')
   }
   parts.push('SameSite=Lax')

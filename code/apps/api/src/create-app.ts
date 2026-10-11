@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core'
 import type { INestApplication } from '@nestjs/common'
 import { AppModule } from './app.module.js'
 import { InboundExceptionFilter, toPublicEnvelope } from './inbound-exception.filter.js'
+import { edgeContext } from './edge-request.js'
 import { sessionTouch } from './session-touch.js'
 
 type BodyMiddleware = (request: unknown, response: unknown, next: (error?: unknown) => void) => void
@@ -27,6 +28,7 @@ type ExpressLike = {
 
 export async function createApp(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, { bodyParser: false })
+  app.use(edgeContext)
   app.use('/v1/verifications/id', express.json({ limit: VERIFICATION_JSON_LIMIT }))
   app.use('/v1/verifications/liveness', express.json({ limit: VERIFICATION_JSON_LIMIT }))
   app.use(express.json())
