@@ -172,7 +172,7 @@ The same refusal rules as SMTP still apply (empty text, angle brackets, control 
 
 Read links with `docker logs ankanu-api-1`. A verification send contains `/email-verification?token=`. A reset send contains `/password-reset?token=`. Phone OTP is still the existing line `otp <six digits>`. Do not paste those lines into tickets.
 
-`ankanu-api-1` was recreated at `2026-10-11T07:18:09Z` and is healthy. Web, worker, postgres, redis, bucket, and every other project were left running. Inside the process: `SMTP_URL` scheme `log` length 6, evidence key 32 bytes, kid length 25, `RECAPTCHA_ALLOW_TEST_KEYS=1`. S3 credentials still match the bucket process (lengths 16 and 36). The `ankanu` bucket was missing (`NoSuchBucket`), so it was created with the existing private-bucket call and versioning enabled. That is why an earlier upload returned 503 `Request failed` even with the key present.
+`ankanu-api-1` was recreated at `2026-10-11T07:18:20Z` and is healthy. The smoke below was repeated on that container, so its logs hold the links. Web, worker, postgres, redis, bucket, and every other project were left running. Inside the process: `SMTP_URL` scheme `log` length 6, evidence key 32 bytes, kid length 25, `RECAPTCHA_ALLOW_TEST_KEYS=1`. S3 credentials still match the bucket process (lengths 16 and 36). The `ankanu` bucket was missing (`NoSuchBucket`), so it was created with the existing private-bucket call and versioning enabled. That is why an earlier upload returned 503 `Request failed` even with the key present.
 
 Smoke on `http://127.0.0.1:4012`, no secret values printed:
 
