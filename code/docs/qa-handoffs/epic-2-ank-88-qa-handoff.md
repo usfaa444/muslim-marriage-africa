@@ -90,7 +90,8 @@ Do not reuse a member password from a real person. This check created one dispos
 - A signed-in verification and, after consume, a password reset wrote `https://staging.ankanu.com/email-verification` and `https://staging.ankanu.com/password-reset`. The same reset with `Origin: https://evil.example` returned 403.
 - `https://sarati.net`, `https://choupi.sarati.net`, and `https://paperclip.sotigi.com` stayed 200 after the restart that loaded the site. `https://staging.sotigi.com` stayed 502. The edge note is `code/docs/staging-edge.md`.
 - The auth error markup was not changed. The earlier six-width pass of `04b-sign-in-error` still applies.
-- `v2-login.test.ts`, `edge-headers.test.ts`, and `v2-flow.test.ts`: 19 passed. `tsc` for `apps/web` exited 0. A failed gate now records `DELETE /v1/sessions/current`. The raw-IP header decision stays `http` when the client sends `X-Forwarded-Proto: https`.
+- `v2-login.test.ts`, `edge-headers.test.ts`, and `v2-flow.test.ts`: the login and edge-header files passed again after the QA fixes (`edge-headers` 4, `v2-login` 4). `tsc` for `apps/web` exited 0. A failed gate now records `DELETE /v1/sessions/current`. The raw-IP header decision stays `http` when the client sends `X-Forwarded-Proto: https`.
+- Live retest after the web-only recreate, port `4012` still bound. `POST /v1/accounts` on `http://72.61.0.79:4012` with `X-Forwarded-Proto: https` and `X-Forwarded-Host: staging.ankanu.com` returned 201 and `Set-Cookie` flags `Path=/; HttpOnly; SameSite=Lax` with no `Secure`. The same POST without those headers omitted `Secure`. `POST /v1/accounts` on `https://staging.ankanu.com` returned 201 with `Secure`. Cookie values were not recorded.
 
 ## Three validation passes
 
