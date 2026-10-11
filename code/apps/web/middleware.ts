@@ -59,8 +59,9 @@ export function edgeHeaderDecision(input: {
   const requestProto = input.protocol.replace(':', '') || 'http'
   const rawListener =
     httpListenerHosts(input.allowedOrigins).has(requestHost.toLowerCase()) || isIpv4Host(requestHost)
+  // Next sets nextUrl.protocol from X-Forwarded-Proto. The published listener is plain http.
   if (rawListener) {
-    return { proto: requestProto, host: requestHost, rawListener: true }
+    return { proto: 'http', host: requestHost, rawListener: true }
   }
   return {
     proto: lastHop(input.forwardedProto) || requestProto,
@@ -85,7 +86,9 @@ export function middleware(request: NextRequest) {
     headers.set('x-forwarded-proto', decision.proto)
     headers.set('x-forwarded-host', decision.host)
   }
-  return NextResponse.next({ request: { headers } })
+  const response = NextResponse.next({ request: { headers } })
+  response.headers.set('x-ankanu-edge-seen', `${decision.rawListener ? 'raw' : 'fwd'}:${decision.proto}`)
+  return response
 }
 
 export const config = {

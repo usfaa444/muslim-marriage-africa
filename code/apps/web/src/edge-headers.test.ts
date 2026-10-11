@@ -15,6 +15,17 @@ describe('edge headers on the published listener', () => {
     expect(decision).toEqual({ proto: 'http', host: '72.61.0.79:4012', rawListener: true })
   })
 
+  it('stays http when Next already rewrote the protocol from the forged header', () => {
+    const decision = edgeHeaderDecision({
+      host: '72.61.0.79:4012',
+      protocol: 'https:',
+      forwardedProto: 'https',
+      forwardedHost: 'staging.ankanu.com',
+      allowedOrigins: allowed,
+    })
+    expect(decision).toEqual({ proto: 'http', host: '72.61.0.79:4012', rawListener: true })
+  })
+
   it('ignores a client X-Forwarded-Proto on an IPv4 host when the allow list was not inlined', () => {
     const decision = edgeHeaderDecision({
       host: '72.61.0.79:4012',
