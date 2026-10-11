@@ -92,6 +92,7 @@ Do not reuse a member password from a real person. This check created one dispos
 - The auth error markup was not changed. The earlier six-width pass of `04b-sign-in-error` still applies.
 - `v2-login.test.ts`, `edge-headers.test.ts`, and `v2-flow.test.ts`: the login and edge-header files passed again after the QA fixes (`edge-headers` 4, `v2-login` 4). `tsc` for `apps/web` exited 0. A failed gate now records `DELETE /v1/sessions/current`. The raw-IP header decision stays `http` when the client sends `X-Forwarded-Proto: https`.
 - Live retest after the web-only recreate, port `4012` still bound. `POST /v1/accounts` on `http://72.61.0.79:4012` with `X-Forwarded-Proto: https` and `X-Forwarded-Host: staging.ankanu.com` returned 201 and `Set-Cookie` flags `Path=/; HttpOnly; SameSite=Lax` with no `Secure`. The same POST without those headers omitted `Secure`. `POST /v1/accounts` on `https://staging.ankanu.com` returned 201 with `Secure`. Cookie values were not recorded.
+- `POST /v1/sessions` on the raw IP with `X-Forwarded-Proto: https` returned 201 and omitted `Secure`. The following `GET /v1/accounts/gate`, still sending that header, returned 200 `{"step":"email"}`. The same sign-in on `https://staging.ankanu.com` returned 201 with `Secure`.
 
 ## Three validation passes
 

@@ -86,9 +86,7 @@ export function middleware(request: NextRequest) {
     headers.set('x-forwarded-proto', decision.proto)
     headers.set('x-forwarded-host', decision.host)
   }
-  const response = NextResponse.next({ request: { headers } })
-  response.headers.set('x-ankanu-edge-seen', `${decision.rawListener ? 'raw' : 'fwd'}:${decision.proto}`)
-  return response
+  return NextResponse.next({ request: { headers } })
 }
 
 export const config = {
