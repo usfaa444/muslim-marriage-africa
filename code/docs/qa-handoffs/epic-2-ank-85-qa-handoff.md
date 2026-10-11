@@ -129,15 +129,15 @@ Unit tests accept captcha token `test-ok`. Staging uses the public Google test k
 
 ## Known gaps
 
-- `SMTP_URL` is empty on the API. Compose does not set it. A live change-email or password-reset mail returns `503 EMAIL_DELIVERY_FAILED` and writes nothing, so QA cannot receive a real inbox link from this process until that env value is restored. Memory tests cover the send-then-write path.
-- `EVIDENCE_KEY` and `EVIDENCE_KID` are empty. ID and liveness upload returns 503. No recoverable key was on disk. A new key was not invented, because existing ciphertext would not decrypt.
+- `SMTP_URL` is still absent. It was not in the previous host env file, and it was not invented. A live change-email or password-reset mail returns `503 EMAIL_DELIVERY_FAILED` and writes nothing. Memory tests cover the send-then-write path.
+- `EVIDENCE_KEY` and `EVIDENCE_KID` were restored onto the api from the previous host env file. Lengths only: key 44, kid 5. No new key was generated. S3 access values were left as they were (same hashes as that file).
 - S3 access values were copied back from the still-running bucket container after the API recreate. Lengths only: access key 16, secret 36. Do not print them.
 - The local mismatch sentence `password : la confirmation ne correspond pas.` was not in the board text.
 - Push is not done. It waits for this QA pass.
 
 ## Second QA return (2026-10-11, retest fail)
 
-Two web-only fixes. API was not recreated. `SMTP_URL`, `EVIDENCE_KEY`, and `EVIDENCE_KID` are still empty and were not invented.
+Two web-only fixes, already on `ankanu-web-1`. After that, only `ankanu-api-1` was recreated so the recovered evidence env is in the process. Worker, postgres, redis, bucket, and every other project were left running. `SMTP_URL` is still absent and was not invented. Evidence lengths: key 44, kid 5.
 
 1. `applyResetView` renew now removes the request sentence `Renseignez l'adresse email…`. The request screen still has it. `GET /password-reset?token=` has the password fields and does not have that sentence or `#email`.
 2. Landing header at 768: the section links sit on their own wrapped row; the mark and `Commencer l'inscription` stay on the first row. At 1024 and above the single row returns. Nothing was removed.
@@ -153,3 +153,5 @@ Checked on `http://127.0.0.1:4012`. Cells are `document.documentElement.scrollWi
 | `/password-reset?token=sample-token` | 360 | 390 | 753 | 1009 | 1265 | 1425 |
 
 `npx vitest run --fileParallelism false apps/web/src/v2-flow.test.ts apps/web/src/landing-auth-links.test.ts`: 2 files, 14 tests passed.
+
+A later check on the same web, after `document.fonts.ready`, measured `scrollWidth` equal to `innerWidth` at 768 and 1024 on `/`. Before the webfonts load, the 1024 header can report a wider fallback and is not the pass measurement.
