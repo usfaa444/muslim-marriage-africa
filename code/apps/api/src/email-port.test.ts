@@ -1,6 +1,6 @@
 import { createServer, type Server } from 'node:net'
 import { afterEach, describe, expect, it } from 'vitest'
-import { sendSmtpEmail } from './email-port.js'
+import { assertEmailBoot, logEmailPort, sendSmtpEmail } from './email-port.js'
 
 describe('SMTP email adapter', () => {
   let server: Server | undefined
@@ -121,6 +121,71 @@ describe('SMTP email adapter', () => {
       to: 'fatim@example.bf',
       link: 'http://ankanu.test/email-verification?token=abc',
     })
+  })
+
+  it('writes one log line with the recipient, subject, and full link', async () => {
+    const lines: string[] = []
+    const link = 'http://ankanu.test/email-verification?token=abc'
+    await logEmailPort((line) => {
+      lines.push(line)
+    }).send({
+      to: 'fatim@example.bf',
+      link,
+      notice: 'Une réinitialisation du mot de passe a été demandée et ce lien dure 15 minutes.',
+    })
+    expect(lines).toEqual([`email fatim@example.bf AnKanu ${link}\n`])
+    expect(lines[0]).toContain(link)
+    expect(lines[0]).not.toContain('réinitialisation')
+  })
+
+  it('log scheme writes that line to stdout and does not open a socket', async () => {
+    const lines: string[] = []
+    const original = process.stdout.write
+    process.stdout.write = ((chunk: string | Uint8Array) => {
+      lines.push(String(chunk))
+      return true
+    }) as typeof process.stdout.write
+    try {
+      const link = 'http://ankanu.test/password-reset?token=abc'
+      await sendSmtpEmail('log://', { to: 'fatim@example.bf', link })
+      expect(lines).toEqual([`email fatim@example.bf AnKanu ${link}\n`])
+    } finally {
+      process.stdout.write = original
+    }
+  })
+
+  it('refuses bad log input and writes nothing', async () => {
+    const lines: string[] = []
+    const port = logEmailPort((line) => {
+      lines.push(line)
+    })
+    await expect(port.send({ to: '', link: 'http://ankanu.test/email-verification?token=abc' })).rejects.toThrow(
+      /refused/,
+    )
+    await expect(
+      port.send({ to: 'fatim@example.bf', link: 'http://ankanu.test/email-verification?token=abc\nextra' }),
+    ).rejects.toThrow(/refused/)
+    await expect(port.send({ to: '<fatim@example.bf>', link: 'http://ankanu.test/x' })).rejects.toThrow(/refused/)
+    await expect(
+      sendSmtpEmail('log://', {
+        to: 'fatim@example.bf',
+        link: 'http://ankanu.test/x',
+        notice: 'bad\nnotice',
+      }),
+    ).rejects.toThrow(/refused/)
+    expect(lines).toEqual([])
+  })
+
+  it('refuses log mail at startup unless the test-key opt-in is set', () => {
+    expect(() => assertEmailBoot({ NODE_ENV: 'production', SMTP_URL: 'log://' })).toThrow(
+      /log mail is refused in production/,
+    )
+    expect(() => assertEmailBoot({ SMTP_URL: 'log://' })).toThrow(/log mail is refused in production/)
+    expect(() =>
+      assertEmailBoot({ NODE_ENV: 'production', RECAPTCHA_ALLOW_TEST_KEYS: '1', SMTP_URL: 'log://' }),
+    ).not.toThrow()
+    expect(() => assertEmailBoot({ NODE_ENV: 'production', SMTP_URL: 'smtp://127.0.0.1:25' })).not.toThrow()
+    expect(() => assertEmailBoot({})).not.toThrow()
   })
 
   it('refuses cleartext AUTH and control characters before opening a socket', async () => {

@@ -20,3 +20,4 @@ build/
 code/pg-data/
 code/pg-wal/
 code/pg-base/
+api.env

@@ -1,6 +1,7 @@
 # Secrets stay out of the build context.
 .env
 .env.*
+api.env
 **/.env
 **/.env.*
 **/*.pem

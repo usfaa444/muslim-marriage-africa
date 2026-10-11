@@ -23,6 +23,9 @@ export function getEmailPort(): EmailPort {
   if (override) {
     return override
   }
+  if (smtpProtocol(process.env['SMTP_URL'] ?? '') === 'log:') {
+    return logEmailPort()
+  }
   return smtpEmailPort()
 }
 
@@ -36,6 +39,54 @@ export function smtpEmailPort(): EmailPort {
       await sendSmtpEmail(url, message)
     },
   }
+}
+
+function smtpProtocol(url: string): string | null {
+  if (url.length === 0) {
+    return ''
+  }
+  try {
+    return new URL(url).protocol
+  } catch {
+    return null
+  }
+}
+
+/**
+ * The api image sets NODE_ENV=production on every boot, including this host.
+ * Log mail is allowed only with the same opt-in as the reCAPTCHA test keys.
+ * NODE_ENV=production without that opt-in, and any other boot without it, refuses `log:`.
+ */
+export function assertEmailBoot(env: NodeJS.ProcessEnv): void {
+  const raw = env['SMTP_URL'] ?? ''
+  if (raw === '') {
+    return
+  }
+  let protocol = ''
+  try {
+    protocol = new URL(raw).protocol
+  } catch {
+    return
+  }
+  if (protocol !== 'log:') {
+    return
+  }
+  if (env['RECAPTCHA_ALLOW_TEST_KEYS'] !== '1') {
+    throw new Error('log mail is refused in production')
+  }
+}
+
+export function logEmailPort(write: (line: string) => void = defaultWrite): EmailPort {
+  return {
+    async send(message) {
+      assertSmtpText(message)
+      write(`email ${message.to} AnKanu ${message.link}\n`)
+    },
+  }
+}
+
+function defaultWrite(line: string): void {
+  process.stdout.write(line)
 }
 
 type Reader = {
@@ -60,14 +111,22 @@ function refusedSmtpText(value: string): boolean {
   return false
 }
 
-export async function sendSmtpEmail(smtpUrl: string, message: EmailMessage): Promise<void> {
+function assertSmtpText(message: EmailMessage): void {
   if (refusedSmtpText(message.to) || refusedSmtpText(message.link)) {
     throw new Error('SMTP message refused')
   }
   if (message.notice !== undefined && refusedSmtpText(message.notice)) {
     throw new Error('SMTP message refused')
   }
+}
+
+export async function sendSmtpEmail(smtpUrl: string, message: EmailMessage): Promise<void> {
+  assertSmtpText(message)
   const url = new URL(smtpUrl)
+  if (url.protocol === 'log:') {
+    await logEmailPort().send(message)
+    return
+  }
   if (url.protocol !== 'smtp:' && url.protocol !== 'smtps:') {
     throw new Error('SMTP_URL must be smtp or smtps')
   }
