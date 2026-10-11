@@ -89,7 +89,8 @@ export function audioPromptScript(files: AudioPromptFiles = {}): string {
     handleLocale(locale, lang)
   }
   function localeFrom(button) {
-    const text = button.textContent || ''
+    const label = button.getAttribute ? button.getAttribute('aria-label') || '' : ''
+    const text = (button.textContent || '') + ' ' + label
     if (text.indexOf('(mos)') !== -1 || text.indexOf('Mooré') !== -1) {
       return 'mos'
     }
@@ -123,7 +124,7 @@ export function audioPromptScript(files: AudioPromptFiles = {}): string {
     const found = []
     const guidance = document.getElementById('audio-guidance-title')
     if (guidance && guidance.closest) {
-      const aside = guidance.closest('aside')
+      const aside = guidance.closest('aside') || guidance.closest('section')
       if (aside) {
         found.push(aside)
       }

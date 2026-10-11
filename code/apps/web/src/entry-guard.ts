@@ -134,6 +134,18 @@ export async function fetchGateStep(cookieHeader: string): Promise<GateStep | 'e
   }
 }
 
+/** Keep the browser on the Host it used. `request.url` is the bind address when Next listens on 0.0.0.0. */
+export function redirectTo(request: Request, path: string): Response {
+  const forwardedHost = request.headers.get('x-forwarded-host')
+  const host = (forwardedHost || request.headers.get('host') || '').split(',')[0]?.trim() ?? ''
+  const forwardedProto = request.headers.get('x-forwarded-proto')
+  const proto = (forwardedProto || new URL(request.url).protocol.replace(':', '') || 'http').split(',')[0]?.trim()
+  if (/^[A-Za-z0-9.-]+(?::\d+)?$/.test(host) && (proto === 'http' || proto === 'https')) {
+    return Response.redirect(new URL(path, `${proto}://${host}`), 303)
+  }
+  return Response.redirect(new URL(path, request.url), 303)
+}
+
 export async function entryRedirect(
   request: Request,
   path: string,
@@ -152,7 +164,7 @@ export async function entryRedirect(
       if (normalized === '/auth' || normalized === '/password-reset') {
         return null
       }
-      return Response.redirect(new URL('/auth', request.url), 303)
+      return redirectTo(request, '/auth')
     }
     step = loaded
   }
@@ -160,5 +172,5 @@ export async function entryRedirect(
   if (!target || target === pathnameOf(path)) {
     return null
   }
-  return Response.redirect(new URL(target, request.url), 303)
+  return redirectTo(request, target)
 }

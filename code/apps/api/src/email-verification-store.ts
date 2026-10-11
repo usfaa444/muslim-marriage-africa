@@ -1,4 +1,4 @@
-import { and, eq, gt, isNull, sql } from 'drizzle-orm'
+import { and, eq, gt, isNull, ne, sql } from 'drizzle-orm'
 import { account, credential, emailVerification } from './account-schema.js'
 import { getIdentityDatabase } from './account-store.js'
 import type { CreatedAccount, PasswordCredential } from './create-account.js'
@@ -19,6 +19,12 @@ export type EmailVerificationStore = {
   findByHash(tokenHash: string): Promise<EmailVerificationRow | null>
   supersedeAndInsert(accountId: string, row: EmailVerificationRow): Promise<'inserted' | 'already_verified'>
   markConsumed(id: string, accountId: string, at: Date): Promise<boolean>
+  /** Sets the address, supersedes unconsumed links, and inserts the new row. Does not touch sessions or `email_verified_at`. */
+  commitEmailChange(
+    accountId: string,
+    email: string,
+    row: EmailVerificationRow,
+  ): Promise<'replaced' | 'verified' | 'same' | 'taken' | 'missing'>
 }
 
 let override: EmailVerificationStore | undefined
@@ -135,7 +141,72 @@ function postgresEmailVerificationStore(): EmailVerificationStore {
         return true
       })
     },
+    async commitEmailChange(accountId, email, row) {
+      const database = getIdentityDatabase()
+      try {
+        return await database.transaction(async (tx) => {
+          await tx.execute(sql`select ${account.id} from ${account} where ${account.id} = ${accountId} for update`)
+          const current = await tx
+            .select({ email: account.email })
+            .from(account)
+            .where(eq(account.id, accountId))
+            .limit(1)
+          const owner = current[0]
+          if (!owner) {
+            return 'missing' as const
+          }
+          const passwords = await tx
+            .select({ email_verified_at: credential.email_verified_at })
+            .from(credential)
+            .where(and(eq(credential.account_id, accountId), eq(credential.kind, 'password')))
+          if (passwords.some((item) => item.email_verified_at !== null && item.email_verified_at !== undefined)) {
+            return 'verified' as const
+          }
+          if (owner.email === email) {
+            return 'same' as const
+          }
+          const others = await tx
+            .select({ id: account.id })
+            .from(account)
+            .where(and(eq(account.email, email), ne(account.id, accountId)))
+            .limit(1)
+          if (others.length > 0) {
+            return 'taken' as const
+          }
+          await tx.update(account).set({ email }).where(eq(account.id, accountId))
+          await tx
+            .update(emailVerification)
+            .set({ superseded_at: row.created_at })
+            .where(
+              and(
+                eq(emailVerification.account_id, accountId),
+                isNull(emailVerification.consumed_at),
+                isNull(emailVerification.superseded_at),
+              ),
+            )
+          await tx.insert(emailVerification).values(row)
+          return 'replaced' as const
+        })
+      } catch (error) {
+        if (isUniqueViolation(error)) {
+          return 'taken'
+        }
+        throw error
+      }
+    },
   }
+}
+
+function isUniqueViolation(error: unknown): boolean {
+  let current: unknown = error
+  for (let depth = 0; depth < 6 && typeof current === 'object' && current !== null; depth += 1) {
+    const record = current as { code?: unknown; cause?: unknown }
+    if (record.code === '23505') {
+      return true
+    }
+    current = record.cause
+  }
+  return false
 }
 
 /** In-memory rows for unit tests. Shares the account create arrays. */
@@ -193,6 +264,32 @@ export function memoryEmailVerificationStore(source: {
         password.email_verified_at = stamp
       }
       return true
+    },
+    async commitEmailChange(accountId, email, row) {
+      const owner = source.accounts.find((item) => item.id === accountId)
+      if (!owner) {
+        return 'missing'
+      }
+      const verified = source.credentials.some(
+        (item) => item.account_id === accountId && item.kind === 'password' && item.email_verified_at !== null,
+      )
+      if (verified) {
+        return 'verified'
+      }
+      if (owner.email === email) {
+        return 'same'
+      }
+      if (source.accounts.some((item) => item.id !== accountId && item.email === email)) {
+        return 'taken'
+      }
+      owner.email = email
+      for (const existing of rows) {
+        if (existing.account_id === accountId && existing.consumed_at === null && existing.superseded_at === null) {
+          existing.superseded_at = row.created_at
+        }
+      }
+      rows.push(row)
+      return 'replaced'
     },
   }
 }

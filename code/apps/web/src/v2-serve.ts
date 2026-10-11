@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { entryRedirect } from './entry-guard'
+import { entryRedirect, redirectTo } from './entry-guard'
 import { memberRouteResponse, type MemberPath } from './member-route'
 import {
   authHtml,
@@ -74,7 +74,7 @@ export function signupAccountResponse(request: Request): Promise<Response> {
 export async function authResponse(request: Request): Promise<Response> {
   const mode = new URL(request.url).searchParams.get('mode')
   if (mode === 'signup') {
-    return Response.redirect(new URL('/signup', request.url), 303)
+    return redirectTo(request, '/signup')
   }
   return send(request, '/auth', authHtml(stitchFile('02-auth'), 'login', siteKey()))
 }
@@ -84,7 +84,7 @@ export async function ageGateResponse(request: Request): Promise<Response> {
   if (redirect) {
     return redirect
   }
-  return Response.redirect(new URL('/signup/identity', request.url), 303)
+  return redirectTo(request, '/signup/identity')
 }
 
 export function emailResponse(request: Request): Promise<Response> {
@@ -104,7 +104,9 @@ export function idResponse(request: Request): Promise<Response> {
 }
 
 export function resetResponse(request: Request): Promise<Response> {
-  return send(request, '/password-reset', resetHtml(stitchFile('05-password-reset')))
+  const token = new URL(request.url).searchParams.get('token')
+  const view = token && token.length > 0 ? 'renew' : 'request'
+  return send(request, '/password-reset', resetHtml(stitchFile('05-password-reset'), view))
 }
 
 export function pinResponse(request: Request): Promise<Response> {

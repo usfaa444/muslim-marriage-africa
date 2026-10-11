@@ -162,7 +162,7 @@ Owner module: identity
 - profile 1:1 account via `profile.account_id`
 - verification_record N:1 account via `verification_record.account_id`
 
-Invariants: Identity is the only writer of `account.gender`. Ban, password change, and Mahram remove call `IdentityPort.revokeSessions`. Password hash lives on `credential`; PIN hash lives on `pin_lock`.
+Invariants: Identity is the only writer of `account.gender`. Ban, password change, and Mahram remove call `IdentityPort.revokeSessions`. Password hash lives on `credential`; PIN hash lives on `pin_lock`. `POST /v1/accounts/email` may replace `account.email` only while the password credential's `email_verified_at` is null. A verified address is not changed by that route. The write supersedes unconsumed `email_verification` rows for that account and does not revoke sessions.
 
 ### credential
 
@@ -1026,7 +1026,7 @@ Invariants: INSERT/SELECT-only DB role. Nightly chain-verify. Retain ≥12 month
 
 Style: JSON REST `/v1` + Socket.IO `/v1/realtime` (AD-7, AD-15).
 
-Auth: session cookie `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF (web/PWA); Bearer in platform secure storage (Capacitor). Socket.IO handshake carries the same `AuthContext`. Staff MFA. Captcha on signup/login (FR-007). `POST /v1/accounts` and `POST /v1/sessions` require `recaptcha_token`, verified with Google siteverify. Missing or failed token is `400 CAPTCHA_FAILED` and writes nothing. `POST /v1/accounts/precheck` `{ pseudonym, dob }` returns `{ pseudonym_available, age_eligible }` or `400` naming the field. It writes nothing. `GET /v1/accounts/gate` returns the first unfinished step (`email`, `phone`, `otp`, `identity`, `account`) for the session. RBAC per AD-8.
+Auth: session cookie `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF (web/PWA); Bearer in platform secure storage (Capacitor). Socket.IO handshake carries the same `AuthContext`. Staff MFA. Captcha on signup/login (FR-007). `POST /v1/accounts` and `POST /v1/sessions` require `recaptcha_token`, verified with Google siteverify. Missing or failed token is `400 CAPTCHA_FAILED` and writes nothing. `POST /v1/accounts/precheck` `{ pseudonym, dob }` returns `{ pseudonym_available, age_eligible }` or `400` naming the field. It writes nothing. `GET /v1/accounts/gate` returns the first unfinished step (`email`, `phone`, `otp`, `identity`, `account`) for the session. `POST /v1/accounts/email` `{ email }` requires the live web session and is counted by the auth IP limiter. It uses the same email normalization as `POST /v1/accounts`. It sends the Story 2.3 verification link to the new address first, then in one transaction sets `account.email`, supersedes unconsumed verification rows, and inserts the new row. Success is `200 { email, expires_at }`. `email_verified_at` stays null. The same address is `400`. Taken or already verified is `409`. A send or save failure is `503 EMAIL_DELIVERY_FAILED` and changes nothing. `POST /v1/password-resets/consume` `{ token, password }` remains the email-link step of reset. RBAC per AD-8.
 
 Idempotency: `Idempotency-Key` on `POST /v1/payments` and all `POST /v1/webhooks/*`.
 
@@ -1034,7 +1034,7 @@ Idempotency: `Idempotency-Key` on `POST /v1/payments` and all `POST /v1/webhooks
 
 | Module | HTTP | Events |
 | --- | --- | --- |
-| identity | `/v1/accounts`, `/v1/sessions`, `/v1/password-resets`, `/v1/pin` | — |
+| identity | `/v1/accounts`, `/v1/accounts/email`, `/v1/sessions`, `/v1/password-resets`, `/v1/pin` | — |
 | verification | `/v1/verifications/otp`, `/liveness`, `/id` | — |
 | profiles | `/v1/me/profile`, `/v1/profiles/:id` | — |
 | discovery | `/v1/browse` (`view=card\|grid`, default `card` unless client sent `grid`; card payload includes `sharedTraits` from existing Profile fields only), `/v1/browse/pass` (viewer-scoped exclusion; **not** a likes table), `/v1/favourites`, `/v1/filters` | — |

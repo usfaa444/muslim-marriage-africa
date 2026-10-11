@@ -113,6 +113,20 @@ function readString(body: Record<string, unknown>, key: string): string | undefi
   return typeof value === 'string' ? value : undefined
 }
 
+const EMAIL_SHAPE = /^[^@\s]+@[^@\s]+$/
+
+/** Trim, shape, and lowercase used by account create. Change-email uses this same check. */
+export function normalizeAccountEmail(value: unknown): string | null {
+  if (typeof value !== 'string') {
+    return null
+  }
+  const trimmed = value.trim()
+  if (trimmed.length === 0 || !EMAIL_SHAPE.test(trimmed)) {
+    return null
+  }
+  return trimmed.toLowerCase()
+}
+
 export async function createMemberAccount(
   body: unknown,
   deps: {
@@ -144,11 +158,10 @@ export async function createMemberAccount(
     return fail(400, 'coc_version', 'coc_version : la version de la charte est requise.')
   }
 
-  const emailRaw = readString(body, 'email')
-  if (emailRaw === undefined || emailRaw.trim().length === 0 || !/^[^@\s]+@[^@\s]+$/.test(emailRaw.trim())) {
+  const email = normalizeAccountEmail(body.email)
+  if (email === null) {
     return fail(400, 'email', 'email : une adresse inutilisée est requise.')
   }
-  const email = emailRaw.trim().toLowerCase()
 
   const pseudonymRaw = readString(body, 'pseudonym')
   if (pseudonymRaw === undefined || pseudonymRaw.trim().length === 0) {

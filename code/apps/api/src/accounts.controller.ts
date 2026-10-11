@@ -1,4 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpException, Post, Req, Res } from '@nestjs/common'
+import { changeAccountEmail } from './change-email.js'
 import { precheckAccount } from './account-precheck.js'
 import { authNow } from './auth-clock.js'
 import { getAccountStore } from './account-store.js'
@@ -103,6 +104,43 @@ export class AccountsController {
       // The account row is already stored. Sign-in can open the session.
     }
     return publicAccount(result.account)
+  }
+
+  @Post('email')
+  @HttpCode(200)
+  async changeEmail(
+    @Req() request: IpRequest & { headers?: { cookie?: string | string[]; origin?: string | string[] } },
+    @Res({ passthrough: true }) response: HeaderResponse,
+    @Body() body: unknown,
+  ): Promise<unknown> {
+    await rejectIfAuthRateLimited(clientIp(request))
+    const sessionId = readCookie(headerText(request.headers?.cookie), SESSION_COOKIE)
+    const session = sessionId ? await resolveWebSession(sessionId, authNow()) : null
+    if (!session) {
+      throw issueError(unauthenticatedIssue())
+    }
+    const result = await changeAccountEmail({
+      accountId: session.accountId,
+      body,
+      origin: publicOrigin(headerText(request.headers?.origin)),
+      now: authNow,
+      store: getEmailVerificationStore(),
+      emailTaken: (email) => getAccountStore().emailTaken(email),
+      send: (message) => getEmailPort().send(message),
+    })
+    applyEmailHeader(response, result.email)
+    if (!result.ok) {
+      throw new HttpException(
+        {
+          code: result.code,
+          message: result.message,
+          details: result.details,
+          retryable: result.retryable,
+        },
+        result.status,
+      )
+    }
+    return { email: result.email, expires_at: result.expires_at }
   }
 
   @Post('email-verifications')

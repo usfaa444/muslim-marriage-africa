@@ -285,7 +285,6 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
             window.location.assign('/email-verification')
             return
           }
-          resetCaptcha('signup')
           var payload = await readJson(response)
           var emailError = document.getElementById('email-error')
           if (emailError) {
@@ -294,6 +293,7 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
           }
         } finally {
           if (!moved) {
+            resetCaptcha('signup')
             button.disabled = false
             paintSignup()
           }
@@ -324,13 +324,13 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
             })
           })
           if (response.status === 201) {
-            moved = true
             await goToGate()
+            moved = true
             return
           }
-          resetCaptcha('login')
         } finally {
           if (!moved) {
+            resetCaptcha('login')
             button.disabled = false
             paintLogin()
           }
@@ -358,8 +358,50 @@ export function emailScript(): string {
         if (response.status === 200) window.location.assign('/phone')
       })
     }
-    var resend = document.getElementById('resendBtn')
+    var editBtn = document.getElementById('editEmailBtn')
+    var editForm = document.getElementById('editEmailForm')
+    var newEmail = document.getElementById('newEmailInput')
+    var changeError = document.getElementById('email-change-error')
     var banner = document.getElementById('resendSuccessBanner')
+    if (editBtn && editForm) {
+      editBtn.addEventListener('click', function () {
+        var opening = editForm.classList.contains('hidden')
+        editForm.classList.toggle('hidden', !opening)
+        if (opening && newEmail && shown) {
+          newEmail.value = (shown.textContent || '').trim()
+          newEmail.focus()
+        }
+      })
+    }
+    var save = editForm ? editForm.querySelector('button') : null
+    if (save) {
+      save.addEventListener('click', async function () {
+        if (!newEmail) return
+        var response = await fetch('/v1/accounts/email', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ email: newEmail.value.trim() })
+        })
+        var payload = await readJson(response)
+        if (response.status === 200 && payload && typeof payload.email === 'string') {
+          if (shown) shown.textContent = payload.email
+          try { sessionStorage.setItem(EMAIL_KEY, payload.email) } catch (error) {}
+          editForm.classList.add('hidden')
+          if (changeError) {
+            changeError.classList.add('hidden')
+            changeError.textContent = ''
+          }
+          if (banner) banner.classList.remove('hidden')
+          return
+        }
+        if (changeError) {
+          changeError.classList.remove('hidden')
+          changeError.textContent = errorMessage(payload) || 'email : une adresse inutilisée est requise.'
+        }
+      })
+    }
+    var resend = document.getElementById('resendBtn')
     if (resend) {
       resend.addEventListener('click', async function () {
         resend.disabled = true
@@ -558,27 +600,101 @@ export function idScript(): string {
   `
 }
 
-export function resetScript(): string {
+export function resetScript(copy: {
+  invalidTitle: string
+  invalidText: string
+  invalidForm: string
+  doneTitle: string
+  doneText: string
+  doneForm: string
+  mismatch: string
+}): string {
   return `${HELPERS}
+    var COPY = ${JSON.stringify(copy)}
     document.querySelectorAll('a').forEach(function (link) {
-      if ((link.textContent || '').indexOf('Retour à la connexion') !== -1) {
+      if ((link.textContent || '').indexOf('Retour à la connexion') !== -1 && link.getAttribute('href') === '#') {
         link.setAttribute('href', '/auth')
       }
     })
-    var form = document.querySelector('form')
-    if (form) {
-      form.addEventListener('submit', async function (event) {
+    document.querySelectorAll('button[aria-label="Afficher ou masquer le mot de passe"]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var input = button.parentElement && button.parentElement.querySelector('input')
+        if (!input) return
+        input.type = input.type === 'password' ? 'text' : 'password'
+      })
+    })
+    function showState(title, text, formHtml) {
+      var heading = document.querySelector('h1')
+      if (heading) heading.textContent = title
+      var intro = heading && heading.parentElement ? heading.parentElement.querySelector('p') : null
+      if (intro) intro.textContent = text
+      var form = document.querySelector('form')
+      if (form) form.innerHTML = formHtml
+    }
+    var enter = document.getElementById('reset-enter')
+    if (enter) {
+      enter.addEventListener('click', function (event) {
         event.preventDefault()
-        var email = document.getElementById('email')
-        if (!email || !email.value.trim()) return
+        goToGate()
+      })
+    }
+    var form = document.querySelector('form')
+    if (!form) return
+    form.addEventListener('submit', async function (event) {
+      event.preventDefault()
+      var email = document.getElementById('email')
+      if (email) {
+        if (!email.value.trim()) return
         await fetch('/v1/password-resets', {
           method: 'POST',
           credentials: 'same-origin',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ email: email.value.trim() })
         })
+        return
+      }
+      var password = document.getElementById('reset-password')
+      var confirm = document.getElementById('reset-confirm')
+      var error = document.getElementById('reset-error')
+      if (!password || !confirm) return
+      var token = new URLSearchParams(window.location.search).get('token') || ''
+      if (password.value !== confirm.value) {
+        if (error) {
+          error.classList.remove('hidden')
+          error.textContent = COPY.mismatch
+        }
+        return
+      }
+      if (!token) return
+      var response = await fetch('/v1/password-resets/consume', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: token, password: password.value })
       })
-    }
+      var payload = await readJson(response)
+      if (response.status === 200) {
+        window.history.replaceState(null, '', '/password-reset')
+        showState(COPY.doneTitle, COPY.doneText, COPY.doneForm)
+        var next = document.getElementById('reset-enter')
+        if (next) {
+          next.addEventListener('click', function (click) {
+            click.preventDefault()
+            goToGate()
+          })
+        }
+        return
+      }
+      var code = payload && payload.error && payload.error.code
+      if (code === 'PASSWORD_RESET_INVALID') {
+        showState(COPY.invalidTitle, COPY.invalidText, COPY.invalidForm)
+        return
+      }
+      if (error) {
+        error.classList.remove('hidden')
+        error.textContent = errorMessage(payload)
+      }
+    })
   `
 }
 
