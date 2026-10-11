@@ -37,7 +37,7 @@ Password reset has no API change. `POST /v1/password-resets/consume` `{ token, p
 - After `400 PASSWORD_RESET_INVALID` only: title `Lien expiré ou adresse inconnue`, text `Par mesure de discrétion et de protection de la pudeur, aucun indice public sur l'existence du compte n'est divulgué.`, button `Reprendre la demande` → `/password-reset`. The URL is not replaced, so a refresh with the token returns to the renew form.
 - After `200` only: `history.replaceState` to `/password-reset`, then title `Mot de passe renouvelé · Anciennes sessions révoquées`, text `Session locale active et reconnue pour 30 jours.`, button `#reset-enter` `Accéder à mon espace Ta'aruf` calls `goToGate()`.
 
-Copy is from the founder-reviewed earlier Stitch states in git `23a7151^:code/design-stitch/15-password-reset/screen.html`, without the Scaleway line. That old file is not served. Width-test URLs `?view=renew|invalid|done` exist only so the six widths can render those states without an API round-trip. A normal visit uses the token query and the live script.
+Copy is from the founder-reviewed earlier Stitch states in git `23a7151^:code/design-stitch/15-password-reset/screen.html`, without the Scaleway line. That old file is not served. There is no `?view=` switch and no way to open invalid or done from the URL. No token is the request screen. `?token=` is the renew form only. Invalid and done render in the browser only after `400 PASSWORD_RESET_INVALID` or `200`. The six-width shots `09b-reset-renew`, `09c-reset-invalid`, and `09d-reset-done` were produced by calling `resetHtml` inside `v2-responsive.test.ts`, not by a public route.
 
 ## Where
 
