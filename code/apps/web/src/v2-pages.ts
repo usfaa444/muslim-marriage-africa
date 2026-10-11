@@ -174,6 +174,10 @@ function applyResetView(html: string, view: ResetView): string {
   }
   if (view === 'renew') {
     return html
+      .replace(
+        /<p class="font-body text-sm leading-relaxed text-deep-navy\/70 max-w-md mx-auto">\s*Renseignez l'adresse email associée à votre compte AnKanu pour recevoir un lien sécurisé à usage unique\.\s*<\/p>/,
+        '',
+      )
       .replace(/<!-- Email Input Group -->[\s\S]*?<!-- Primary Action Button -->/, `${RESET_RENEW}<!-- Primary Action Button -->`)
       .replace('Envoyer le lien de réinitialisation', 'Valider et renouveler l\'accès')
   }

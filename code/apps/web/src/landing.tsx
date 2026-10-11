@@ -7,9 +7,9 @@ export function LandingPage() {
   return (
     <div className="bg-sand text-ink-primary font-sans antialiased min-h-screen flex flex-col selection:bg-gold-soft selection:text-indigo-deep">
 <header className="w-full bg-sand/95 border-b border-border-hairline sticky top-0 z-40 backdrop-blur-sm">
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 min-h-20 py-2 flex items-center justify-between gap-3">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 min-h-20 py-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 lg:flex-nowrap">
       
-      <a href="#hero" className="flex items-center gap-3.5 group focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-md p-1">
+      <a href="#hero" className="order-1 flex items-center gap-3.5 group focus:outline-none focus:ring-2 focus:ring-focus-ring rounded-md p-1 lg:order-none">
         <div className="w-10 h-10 rounded-full border border-indigo flex items-center justify-center bg-raised text-indigo shadow-xs">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 3c-4.5 0-8 3.5-8 8v10h16V11c0-4.5-3.5-8-8-8z"/>
@@ -23,16 +23,16 @@ export function LandingPage() {
       </a>
 
       
-      <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-ink-secondary">
-        <a href="#vision" className="hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">La Vision</a>
-        <a href="#academie" className="hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Académie</a>
-        <a href="#board" className="hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Board consultatif</a>
-        <a href="#showcase" className="hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Médiation & Tuteur</a>
-        <a href="#tarifs" className="hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Tarifs transparents</a>
+      <nav className="order-3 hidden w-full basis-full md:flex md:flex-wrap md:items-center md:justify-center md:gap-x-4 md:gap-y-2 text-sm font-medium text-ink-secondary lg:order-none lg:w-auto lg:basis-auto lg:flex-nowrap lg:justify-start lg:gap-7">
+        <a href="#vision" className="whitespace-nowrap hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">La Vision</a>
+        <a href="#academie" className="whitespace-nowrap hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Académie</a>
+        <a href="#board" className="whitespace-nowrap hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Board consultatif</a>
+        <a href="#showcase" className="whitespace-nowrap hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Médiation & Tuteur</a>
+        <a href="#tarifs" className="whitespace-nowrap hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1.5 py-1 transition-colors">Tarifs transparents</a>
       </nav>
 
       
-      <div className="flex flex-col items-end justify-center gap-1 shrink-0">
+      <div className="order-2 flex flex-col items-end justify-center gap-1 shrink-0 lg:order-none">
         <nav aria-label="Compte">
           <a href="/auth" className="block max-w-[11rem] text-right text-[13px] leading-tight font-medium text-ink-secondary hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1 py-0.5">
             Déjà inscrit·e ? Se connecter

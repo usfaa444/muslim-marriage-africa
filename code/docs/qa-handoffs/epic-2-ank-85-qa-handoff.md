@@ -134,3 +134,22 @@ Unit tests accept captcha token `test-ok`. Staging uses the public Google test k
 - S3 access values were copied back from the still-running bucket container after the API recreate. Lengths only: access key 16, secret 36. Do not print them.
 - The local mismatch sentence `password : la confirmation ne correspond pas.` was not in the board text.
 - Push is not done. It waits for this QA pass.
+
+## Second QA return (2026-10-11, retest fail)
+
+Two web-only fixes. API was not recreated. `SMTP_URL`, `EVIDENCE_KEY`, and `EVIDENCE_KID` are still empty and were not invented.
+
+1. `applyResetView` renew now removes the request sentence `Renseignez l'adresse email…`. The request screen still has it. `GET /password-reset?token=` has the password fields and does not have that sentence or `#email`.
+2. Landing header at 768: the section links sit on their own wrapped row; the mark and `Commencer l'inscription` stay on the first row. At 1024 and above the single row returns. Nothing was removed.
+
+Web container `ankanu-web-1` recreated after this change. API, worker, postgres, redis, and bucket were left running.
+
+Checked on `http://127.0.0.1:4012`. Cells are `document.documentElement.scrollWidth`. `window.innerWidth` is the column header. Every `scrollWidth` is less than or equal to `innerWidth`, and no element box crossed the viewport.
+
+| Page | 360 | 390 | 768 | 1024 | 1280 | 1440 |
+| --- | --- | --- | --- | --- | --- | --- |
+| `/` | 360 | 390 | 753 | 1009 | 1265 | 1425 |
+| `/password-reset` | 360 | 390 | 768 | 1024 | 1280 | 1440 |
+| `/password-reset?token=sample-token` | 360 | 390 | 753 | 1009 | 1265 | 1425 |
+
+`npx vitest run --fileParallelism false apps/web/src/v2-flow.test.ts apps/web/src/landing-auth-links.test.ts`: 2 files, 14 tests passed.

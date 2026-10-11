@@ -12,5 +12,7 @@ describe('landing auth links', () => {
     expect(html.match(/href="\/auth"/g)?.length).toBe(2)
     expect(html).not.toContain('#auth-inscription"')
     expect(html).not.toContain('mode=')
+    expect(html).toContain('lg:flex-nowrap')
+    expect(html).toContain('basis-full')
   })
 })

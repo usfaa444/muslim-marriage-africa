@@ -136,6 +136,7 @@ describe('v2 signup and sign-in screens', () => {
     expect(renew).toContain('PASSWORD_RESET_INVALID')
     expect(renew).toContain('history.replaceState')
     expect(renew).not.toContain('id="email"')
+    expect(renew).not.toContain("Renseignez l'adresse email")
     expect(renew).not.toContain('Scaleway')
     const invalid = resetHtml(stitch('05-password-reset'), 'invalid')
     expect(invalid).toContain('Lien expiré ou adresse inconnue')
@@ -269,6 +270,7 @@ describe('route files', () => {
       const renewBody = await renew.text()
       expect(renewBody).toContain('id="reset-password"')
       expect(renewBody).not.toContain('id="email"')
+      expect(renewBody).not.toContain("Renseignez l'adresse email")
     } finally {
       process.chdir(previous)
     }
