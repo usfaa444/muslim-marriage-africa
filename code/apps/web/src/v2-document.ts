@@ -2,7 +2,13 @@
 
 const RESPONSIVE = `<style id="ankanu-responsive">
 *, *::before, *::after { box-sizing: border-box; }
-html, body { max-width: 100%; }
+html, body {
+  max-width: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 100%;
+  overflow: auto !important;
+}
 img, svg, video, canvas { max-width: 100%; height: auto; }
 iframe { max-width: 100%; }
 main, section, form, header, footer { min-width: 0; max-width: 100%; }
@@ -24,8 +30,16 @@ export function stripInlineHandlers(html: string): string {
   return html.replace(/\s(?:onclick|oninput|onchange|onsubmit)="[^"]*"/gi, '')
 }
 
+/** Stitch exports lock the document to a desktop frame. That frame must not ship. */
+function unlockStitchCanvas(html: string): string {
+  return html.replace(
+    /(<html\b[^>]*?)\sstyle="width:\s*\d+px;\s*height:\s*\d+px;\s*overflow:\s*hidden;\s*position:\s*relative;?"/i,
+    '$1',
+  )
+}
+
 export function prepareV2(html: string, script: string): string {
-  let next = stripInlineHandlers(stripDemoScripts(html))
+  let next = unlockStitchCanvas(stripInlineHandlers(stripDemoScripts(html)))
   if (next.includes('</head>')) {
     next = next.replace('</head>', `${RESPONSIVE}</head>`)
   } else {

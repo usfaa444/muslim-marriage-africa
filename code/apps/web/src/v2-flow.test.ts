@@ -118,6 +118,8 @@ describe('v2 signup and sign-in screens', () => {
     expect(pin).toContain("fetch('/v1/pin/unlock'")
     expect(pin).toContain('digits.length === 4')
     expect(pin).toContain('pin-dot')
+    expect(pin).not.toContain('width: 1280px')
+    expect(statusHtml(stitch('28-delete-export-status'))).not.toContain('width: 1280px')
   })
 
   it('clears the specimen status until the ticket is read', () => {
