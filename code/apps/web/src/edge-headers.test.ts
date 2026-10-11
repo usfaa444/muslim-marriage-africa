@@ -37,6 +37,17 @@ describe('edge headers on the published listener', () => {
     expect(decision).toEqual({ proto: 'http', host: '72.61.0.79:4012', rawListener: true })
   })
 
+  it('forces http when Next already copied X-Forwarded-Proto into the request URL', () => {
+    const decision = edgeHeaderDecision({
+      host: '72.61.0.79:4012',
+      protocol: 'https:',
+      forwardedProto: 'https',
+      forwardedHost: 'staging.ankanu.com',
+      allowedOrigins: undefined,
+    })
+    expect(decision).toEqual({ proto: 'http', host: '72.61.0.79:4012', rawListener: true })
+  })
+
   it('keeps the https edge hop when the host is not the raw IP', () => {
     const decision = edgeHeaderDecision({
       host: 'staging.ankanu.com',
