@@ -65,7 +65,7 @@ Primary host: `https://staging.ankanu.com`. Fallback: `http://72.61.0.79:4012`. 
 | Spoofed host | GET with `X-Forwarded-Host: evil.example` | Location is `https://staging.ankanu.com/...`, not the spoofed host. |
 | Edge redirect | GET through the loaded https site | Location is `https://staging.ankanu.com/...`. |
 | Sign-in email step | 201, then gate `email` | Lands on `/email-verification`. Reload stays there. |
-| Other gate steps | Gate returns `phone`, `otp`, `identity`, or `account` | `/phone`, `/otp`, `/id-liveness`, `/onboarding`. |
+| Other gate steps | One real account on `https://staging.ankanu.com`, signed in again at each unfinished step. See below. | `/phone`, `/otp`, `/id-liveness`, `/onboarding`. |
 | Dropped session | 201, then gate 401 or a failed read | `DELETE /v1/sessions/current`, stay on `/auth` with `La session n'a pas été conservée.` Reload stays on `/auth`. No `/onboarding` fallback. |
 | Wrong password, captcha, rate limit | The existing French messages | Shown inline on `#login-error`. Password cleared, email kept, captcha reset. |
 | Layout | Error line visible | No horizontal scroll at 360, 390, 768, 1024, 1280, and 1440. `document.documentElement.scrollWidth <= window.innerWidth`. |
@@ -75,6 +75,17 @@ Primary host: `https://staging.ankanu.com`. Fallback: `http://72.61.0.79:4012`. 
 Staging uses the reCAPTCHA test keys (`RECAPTCHA_ALLOW_TEST_KEYS=1`). A new member needs a unique email and pseudonym, gender, the pledge, civil names, `coc_version` `FR-089`, a DOB that is at least 19, and a password that meets the published rule. A brand-new account's gate step is `email`. Mail is `log:`, so the link is one stdout line: `email <recipient> AnKanu <full link>`.
 
 Do not reuse a member password from a real person. This check created one disposable `@example.bf` account. The password was not written down.
+
+## Sign in at phone, OTP, identity, and account
+
+Use one new member on `https://staging.ankanu.com`. Do not create extra accounts just to reach a step. After each step below, `DELETE /v1/sessions/current` (204, cookie cleared), then sign in again on `/auth` and confirm the landing. Reload must stay on that landing. Do not trip `rl_auth_per_min` on staging. A 429 check stays in the unit tests.
+
+1. Email. A new account signs in to `/email-verification`. The verify link is one `docker logs ankanu-api-1` line, `email <recipient> AnKanu <full link>`, and the path is `https://staging.ankanu.com/email-verification`. Do not copy the token into the ticket. Consuming it moves the gate to `phone`.
+2. Phone. The phone page sends `+226` plus the 8 digits entered. `POST /v1/verifications/otp` with `{ "action": "send", "phone_e164": "<E.164>" }` returns 201. The code is one stdout line, `otp <six digits>`. Do not copy it into the ticket.
+3. OTP. On `/otp`, submit those 6 digits (`{ "action": "verify", "code": "<six digits>" }`). `status: granted` goes to `/id-liveness`. Sign out and sign in again. The landing is `/id-liveness` (gate `identity`).
+4. Identity and account. There is no specimen image in the repo. Use a JPEG or PNG under 5 MiB. The ID control posts that file to `POST /v1/verifications/id`. The liveness control on the page uses the camera and posts a JPEG to `POST /v1/verifications/liveness`. A headless browser with no camera can POST the same JPEG to that path with the session cookie, reload `/id-liveness`, and use `Confirmer et transmettre`. Both responses are 201 with `status` `pending` and no evidence URI. Gate `account` then opens `/onboarding`. Sign out and sign in again. The landing is `/onboarding`. `GET /id-liveness` is `303` to `/onboarding`.
+
+Step 7 can be run on this staging api. Evidence key length 44, kid length 25, `SMTP_URL` scheme `log`. The same upload already returned 201 on 2026-10-11 in `code/docs/qa-handoffs/epic-2-ank-84-qa-report.md`. If a post returns 503, stop and say so. Do not invent a key.
 
 ## My results
 
