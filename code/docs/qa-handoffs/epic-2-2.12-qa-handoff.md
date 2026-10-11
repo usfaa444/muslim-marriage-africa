@@ -1,5 +1,7 @@
 # Epic 2 Story 2.12 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 A member can confirm account deletion, request a data export, and reopen a status URL. Identity writes `account.status`. Operator is the only writer of `cil_ticket`. Audit is append-only.
@@ -25,7 +27,7 @@ Audit hash is sha256 hex of `prev_hash`, `id`, `actor_id` (empty when null), `ac
 
 `POST /v1/me/deactivate` and `POST /v1/me/reactivate` return `403 FORBIDDEN` `details {"status":"pending_deletion"}` message `Un compte en suppression ne se met pas en pause.` when status is `pending_deletion`. `GET /v1/me/deactivate` returns that status. `profile.visibility` is not touched. No SMS, invite, or media write.
 
-`GET /settings` serves `code/design-stitch/40-settings/screen.html`. `GET /privacy/status/:ticketId` serves `code/design-stitch/41-delete-export-status/screen.html` only when `ticketId` is a UUID v7. Any other id is `404` and the Stitch page is not rendered. The ticket id inside the status script escapes `<` as `\u003c`. Both responses are `text/html; charset=utf-8`, `cache-control: no-store`, `referrer-policy: no-referrer`. The Stitch files are not edited. Scaleway, Paris, Île-de-France, fr-par, and « hébergée souverainement » lines are removed with nothing in their place. The deletion paragraph is the only settings sentence removed from that card. Mode Allégé, Langue des Directives Vocales, Sécurité du Sanctuaire, Formule d’Engagement, and the export button stay in the markup. Status also drops the Wali ZIP blurb, the ZIP download label, the 24 octobre 2025 line, and the tuteur dissolution title, with nothing in their place. The PIN guard is injected. Google stays unwired. Lite, audio, PIN, and packs stay as they were.
+`GET /settings` serves `code/design-stitch/ankanu-v2/27-settings/screen.html`. `GET /privacy/status/:ticketId` serves `code/design-stitch/ankanu-v2/28-delete-export-status/screen.html` only when `ticketId` is a UUID v7. Any other id is `404` and the Stitch page is not rendered. The ticket id inside the status script escapes `<` as `\u003c`. Both responses are `text/html; charset=utf-8`, `cache-control: no-store`, `referrer-policy: no-referrer`. The Stitch files are not edited. Scaleway, Paris, Île-de-France, fr-par, and « hébergée souverainement » lines are removed with nothing in their place. The deletion paragraph is the only settings sentence removed from that card. Mode Allégé, Langue des Directives Vocales, Sécurité du Sanctuaire, Formule d’Engagement, and the export button stay in the markup. Status also drops the Wali ZIP blurb, the ZIP download label, the 24 octobre 2025 line, and the tuteur dissolution title, with nothing in their place. The PIN guard is injected. Google stays unwired. Lite, audio, PIN, and packs stay as they were.
 
 Settings: « Exporter mon dossier civil » posts export and opens `origin + status_url`. « Demande de suppression définitive » opens `#modal-deletion`. « Conserver mon sanctuaire » closes it. « Confirmer le scellage définitif » posts delete and opens `status_url`. The remaining modal bullet reads `Émission d’un ticket CIL de clôture.`
 
@@ -115,10 +117,10 @@ Board comment on [ANK-68](/ANK/issues/ANK-68). SOLUTION-DESIGN `cil_ticket` row 
 
 ## Stitch files
 
-- `code/design-stitch/40-settings/screen.html`
-- `code/design-stitch/40-settings/screen.png`
-- `code/design-stitch/41-delete-export-status/screen.html`
-- `code/design-stitch/41-delete-export-status/screen.png`
+- `code/design-stitch/ankanu-v2/27-settings/screen.html`
+- `code/design-stitch/ankanu-v2/27-settings/screen.png`
+- `code/design-stitch/ankanu-v2/28-delete-export-status/screen.html`
+- `code/design-stitch/ankanu-v2/28-delete-export-status/screen.png`
 
 `DESIGN.md` is not the layout. The served pages keep the Stitch folio after the named drops.
 

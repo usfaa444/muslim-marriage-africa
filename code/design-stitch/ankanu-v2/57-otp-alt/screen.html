@@ -1,0 +1,199 @@
+<!DOCTYPE html><html class="h-full" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Vérification du numéro • AnKanu</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8'
+          },
+          borderRadius: {
+            'DEFAULT': '0.25rem',
+            'md': '8px',
+            'lg': '0.5rem',
+            'xl': '0.75rem',
+            '2xl': '1rem',
+            'full': '9999px'
+          },
+          fontFamily: {
+            'headline': ['Newsreader', 'Georgia', 'serif'],
+            'display': ['Newsreader', 'Georgia', 'serif'],
+            'body': ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            'label': ['Plus Jakarta Sans', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="bg-cream text-deep-navy font-body min-h-full flex flex-col antialiased selection:bg-soft-gold selection:text-deep-navy">
+<!-- Sticky Header (Auth Variant) -->
+<header class="w-full top-0 sticky z-50 bg-cream border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<div class="flex flex-col md:flex-row md:items-baseline md:gap-3">
+<span class="font-display text-2xl md:text-3xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+<span class="text-xs text-deep-navy/60 font-body hidden sm:inline-block tracking-tight">Burkina Faso • Ta’aruf &amp; Mariage Noble</span>
+</div>
+<div class="flex items-center">
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-hairline bg-cream/50 text-deep-navy/80 text-xs font-medium tracking-tight">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="shield">shield</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Centered Content Column -->
+<main class="flex-grow flex items-center justify-center px-4 py-12 md:py-20">
+<section class="w-full max-w-[580px] mx-auto border border-hairline rounded-2xl p-8 sm:p-12 shadow-[0_4px_24px_rgba(11,29,54,0.03)] flex flex-col items-center text-center" style="background-color: #FBF8F1;">
+<!-- Quiet Security Badge -->
+<div class="w-14 h-14 rounded-full bg-cream border border-hairline flex items-center justify-center mb-6 shadow-sm">
+<div class="w-10 h-10 rounded-full bg-[#FAF6EC] border border-hairline/80 flex items-center justify-center">
+<span class="material-symbols-outlined text-soft-gold text-xl" data-icon="sms">sms</span>
+</div>
+</div>
+<!-- Heading & Noble Subtitle -->
+<h1 class="font-display text-2xl sm:text-3xl font-normal text-deep-navy tracking-tight leading-snug mb-3">
+        Vérification du numéro de téléphone
+      </h1>
+<p class="font-body text-xs sm:text-sm text-deep-navy/70 leading-relaxed max-w-md mb-8">
+        Étape préalable requise avant toute visibilité publique au sein de l’espace Ta’aruf. Veuillez saisir le code à 6 chiffres transmis par SMS.
+      </p>
+<!-- OTP Form -->
+<form class="w-full space-y-7" id="otp-form" onsubmit="event.preventDefault();">
+<!-- 6-digit OTP Inputs -->
+<div class="flex justify-between items-center gap-2 sm:gap-3 max-w-sm mx-auto">
+<input aria-label="Chiffre 1" autofocus="" class="otp-digit w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-medium font-body bg-cream border border-hairline rounded-md text-deep-navy focus:border-soft-gold focus:ring-1 focus:ring-soft-gold outline-none transition-all duration-150" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text">
+<input aria-label="Chiffre 2" class="otp-digit w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-medium font-body bg-cream border border-hairline rounded-md text-deep-navy focus:border-soft-gold focus:ring-1 focus:ring-soft-gold outline-none transition-all duration-150" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text">
+<input aria-label="Chiffre 3" class="otp-digit w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-medium font-body bg-cream border border-hairline rounded-md text-deep-navy focus:border-soft-gold focus:ring-1 focus:ring-soft-gold outline-none transition-all duration-150" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text">
+<input aria-label="Chiffre 4" class="otp-digit w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-medium font-body bg-cream border border-hairline rounded-md text-deep-navy focus:border-soft-gold focus:ring-1 focus:ring-soft-gold outline-none transition-all duration-150" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text">
+<input aria-label="Chiffre 5" class="otp-digit w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-medium font-body bg-cream border border-hairline rounded-md text-deep-navy focus:border-soft-gold focus:ring-1 focus:ring-soft-gold outline-none transition-all duration-150" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text">
+<input aria-label="Chiffre 6" class="otp-digit w-11 h-14 sm:w-12 sm:h-16 text-center text-xl sm:text-2xl font-medium font-body bg-cream border border-hairline rounded-md text-deep-navy focus:border-soft-gold focus:ring-1 focus:ring-soft-gold outline-none transition-all duration-150" inputmode="numeric" maxlength="1" pattern="[0-9]*" type="text">
+</div>
+<!-- Primary Action Button -->
+<button class="w-full py-3.5 px-6 rounded-md bg-deep-navy text-cream font-body text-sm font-medium tracking-wide hover:bg-deep-navy/90 active:opacity-90 transition-all duration-150 flex items-center justify-center gap-2" id="submit-btn" type="submit">
+<span class="">Confirmer le code</span>
+<span class="material-symbols-outlined text-soft-gold text-lg" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</form>
+<!-- Resend and Trust Area -->
+<div class="mt-8 pt-6 border-t border-hairline/60 w-full flex flex-col items-center gap-3">
+<div class="flex items-center justify-center text-xs font-body text-deep-navy/70 gap-1.5">
+<span class="">Vous n'avez pas reçu le code ?</span>
+<button class="font-medium text-deep-navy hover:text-soft-gold transition-colors duration-150 underline underline-offset-4 decoration-hairline cursor-not-allowed opacity-80" disabled="" id="resend-btn" type="button">
+            Renvoyer le code (<span id="timer-count" class="">0:14</span>)
+          </button>
+</div><a href="#" class="font-body text-xs text-deep-navy/70 hover:text-soft-gold underline underline-offset-4 decoration-hairline transition-colors duration-150 inline-flex items-center gap-1 mt-1"><span class="">Modifier le numéro</span></a>
+<div class="flex items-center gap-1.5 text-[11px] text-deep-navy/50 font-body tracking-tight mt-1">
+<span class="material-symbols-outlined text-xs text-soft-gold" data-icon="lock">lock</span>
+<span class="">Code confidentiel à usage unique valide 10 minutes.</span>
+</div>
+</div>
+</section>
+</main>
+<!-- Shared Footer -->
+<footer class="w-full border-t border-hairline/60 mt-auto bg-cream">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-display text-xl text-deep-navy font-normal">AnKanu</span>
+<p class="font-body text-xs font-normal text-deep-navy/60 text-center md:text-left">
+          © 2026 AnKanu. Cadre d’union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<nav class="flex flex-wrap justify-center items-center gap-y-2 gap-x-6">
+<a class="font-body text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#charte">Charte d’Honneur</a>
+<a class="font-body text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#wali">Rôle du Tuteur (Wali)</a>
+<a class="font-body text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#donnees">Protection des Données</a>
+<a class="font-body text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#taaruf">Démarche Ta’aruf</a>
+<a class="font-body text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#contact">Contact Serein</a>
+</nav>
+</div>
+</footer>
+<!-- Script for OTP Focus Shifting & Countdown -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputs = document.querySelectorAll('.otp-digit');
+      
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          const val = e.target.value.replace(/[^0-9]/g, '');
+          e.target.value = val;
+          if (val && index < inputs.length - 1) {
+            inputs[index + 1].focus();
+          }
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !e.target.value && index > 0) {
+            inputs[index - 1].focus();
+          }
+        });
+
+        input.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const pasteData = (e.clipboardData || window.clipboardData).getData('text').trim();
+          const numericData = pasteData.replace(/[^0-9]/g, '').slice(0, inputs.length);
+          
+          numericData.split('').forEach((char, i) => {
+            if (inputs[i]) {
+              inputs[i].value = char;
+            }
+          });
+
+          const nextIndex = Math.min(numericData.length, inputs.length - 1);
+          inputs[nextIndex].focus();
+        });
+      });
+
+      // Simple Cooldown Timer Simulation
+      let secondsLeft = 45;
+      const timerSpan = document.getElementById('timer-count');
+      const resendBtn = document.getElementById('resend-btn');
+
+      const interval = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft <= 0) {
+          clearInterval(interval);
+          resendBtn.disabled = false;
+          resendBtn.classList.remove('cursor-not-allowed', 'opacity-80');
+          resendBtn.textContent = 'Renvoyer le code';
+        } else {
+          const secStr = secondsLeft < 10 ? '0' + secondsLeft : secondsLeft;
+          timerSpan.textContent = `0:${secStr}`;
+        }
+      }, 1000);
+    });
+  </script>
+
+
+</body></html>

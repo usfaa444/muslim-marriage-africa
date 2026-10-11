@@ -1,0 +1,253 @@
+<!DOCTYPE html><html class="h-full" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Pseudonyme &amp; Date de naissance</title>
+<!-- Google Fonts: Playfair Display & Cormorant Garamond for luxury serif + Plus Jakarta Sans for clean typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration matching AnKanu design tokens -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              cream: '#F7F1E3',
+              card: '#FBF8F1',
+              navy: '#0B1D36',
+              gold: '#C9A86C',
+              'gold-light': '#F1E7D4',
+              'gold-hover': '#B89658',
+              border: '#E2D4B8',
+              muted: '#7A7569',
+              'muted-dark': '#484339'
+            }
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif']
+          },
+          boxShadow: {
+            subtle: '0 10px 35px -10px rgba(11, 29, 54, 0.04), 0 2px 10px -2px rgba(11, 29, 54, 0.02)',
+            card: '0 20px 40px -15px rgba(11, 29, 54, 0.05), 0 1px 3px rgba(226, 212, 184, 0.4)'
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom styles for elegant input appearance -->
+<style data-purpose="custom-inputs">
+    /* Remove default appearance for custom styled selects */
+    select {
+      background-image: none !important;
+    }
+    
+    /* Subtle focus ring and transition matching AnKanu palette */
+    .form-input-custom:focus-within {
+      border-color: #C9A86C !important;
+      box-shadow: 0 0 0 1.5px rgba(201, 168, 108, 0.35);
+    }
+  </style>
+</head>
+<body class="min-h-full bg-brand-cream text-brand-navy font-sans antialiased flex flex-col justify-between selection:bg-brand-gold/20 selection:text-brand-navy">
+<!-- BEGIN: MinimalHeader -->
+<!-- Top brand header matching SCREEN_3 with solitary elegant wordmark -->
+<header class="w-full px-8 md:px-14 py-7 border-b border-brand-border/40" data-purpose="top-navigation">
+<div class="max-w-7xl mx-auto flex items-center">
+<a aria-label="Accueil AnKanu" class="font-serif text-2xl md:text-[27px] tracking-tight font-semibold text-brand-navy transition-opacity hover:opacity-80" href="#">
+        AnKanu
+      </a>
+</div>
+</header>
+<!-- END: MinimalHeader -->
+<!-- BEGIN: MainContent -->
+<!-- Main centered viewport matching SCREEN_3 layout and proportions -->
+<main class="flex-1 flex items-center justify-center px-4 py-10 md:py-16">
+<div class="w-full max-w-[530px]" data-purpose="identification-container">
+<!-- Card container with soft hairline border and warm cream background -->
+<div class="bg-brand-card/90 rounded-2xl border border-brand-border shadow-card px-7 py-9 sm:px-10 sm:py-11">
+<!-- Top circular profile icon badge -->
+<div class="flex justify-center mb-6">
+<div aria-hidden="true" class="w-14 h-14 rounded-full bg-brand-gold-light/60 border border-brand-gold/40 flex items-center justify-center text-brand-gold shadow-sm">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24">
+<path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<!-- Section Title and Subtitle -->
+<div class="text-center mb-8">
+<h1 class="font-serif text-3xl sm:text-[34px] leading-tight font-medium tracking-tight text-brand-navy">
+            Choisissez votre pseudonyme
+          </h1>
+<p class="mt-3 text-xs sm:text-[13px] leading-relaxed text-brand-muted max-w-sm mx-auto font-normal">
+            Définissez votre pseudonyme d'usage ainsi que votre date de naissance pour compléter votre démarche.
+          </p>
+</div>
+<!-- Form fields -->
+<form action="#" class="space-y-6" data-purpose="pseudonym-birth-form" method="POST">
+<!-- Pseudonyme Field -->
+<div class="space-y-1.5" data-purpose="field-pseudonym">
+<label class="block text-[11px] font-semibold tracking-wider text-brand-navy uppercase" for="pseudonym">
+              Pseudonyme unique <span class="text-brand-gold">*</span>
+</label>
+<div class="relative form-input-custom rounded-xl border border-brand-border/90 bg-[#F5EEDB]/40 hover:bg-[#F5EEDB]/60 transition-colors">
+<input autocomplete="off" class="w-full bg-transparent border-0 py-3.5 pl-4 pr-11 text-sm text-brand-navy placeholder:text-brand-muted/70 focus:ring-0 focus:outline-none" id="pseudonym" name="pseudonym" placeholder="Ex. kader_226, awa_94" required="" type="text">
+<!-- Identification Badge Icon -->
+<div aria-hidden="true" class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-brand-muted/70">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+<path d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.364a4.125 4.125 0 00-6.338 0 .375.375 0 00.29.611h5.758a.375.375 0 00.29-.611z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+<!-- Discreet Privacy Note -->
+<p class="text-[11px] leading-normal text-brand-muted/90 pt-0.5">
+              Ce pseudonyme préserve l'intimité de votre nom civil au sein des espaces de découverte.
+            </p>
+</div>
+<!-- Date of Birth Section -->
+<div class="space-y-1.5" data-purpose="field-birthdate">
+<div class="flex justify-between items-baseline">
+<label class="block text-[11px] font-semibold tracking-wider text-brand-navy uppercase">
+                Date de naissance <span class="text-brand-gold">*</span>
+</label>
+</div>
+<!-- 3 Column Selector matching SCREEN_3 -->
+<div class="grid grid-cols-3 gap-2.5">
+<!-- Jour Selector -->
+<div class="space-y-1">
+<span class="block text-[10px] text-brand-muted font-medium ml-1">Jour</span>
+<div class="relative form-input-custom rounded-xl border border-brand-border/90 bg-[#F5EEDB]/40 hover:bg-[#F5EEDB]/60 transition-colors">
+<select class="w-full bg-transparent border-0 py-3.5 pl-3.5 pr-8 text-sm text-brand-navy font-medium focus:ring-0 focus:outline-none cursor-pointer" id="birth_day" name="birth_day" required="">
+<option disabled="" selected="" value="">JJ</option>
+<option value="01">01</option>
+<option value="02">02</option>
+<option value="03">03</option>
+<option value="04">04</option>
+<option value="05">05</option>
+<option value="06">06</option>
+<option value="07">07</option>
+<option value="08">08</option>
+<option value="09">09</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+</select>
+<div aria-hidden="true" class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-brand-muted/70">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M19.5 8.25l-7.5 7.5-7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Mois Selector -->
+<div class="space-y-1">
+<span class="block text-[10px] text-brand-muted font-medium ml-1">Mois</span>
+<div class="relative form-input-custom rounded-xl border border-brand-border/90 bg-[#F5EEDB]/40 hover:bg-[#F5EEDB]/60 transition-colors">
+<select class="w-full bg-transparent border-0 py-3.5 pl-3.5 pr-8 text-sm text-brand-navy font-medium focus:ring-0 focus:outline-none cursor-pointer" id="birth_month" name="birth_month" required="">
+<option disabled="" selected="" value="">MM</option>
+<option value="01">01</option>
+<option value="02">02</option>
+<option value="03">03</option>
+<option value="04">04</option>
+<option value="05">05</option>
+<option value="06">06</option>
+<option value="07">07</option>
+<option value="08">08</option>
+<option value="09">09</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+</select>
+<div aria-hidden="true" class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-brand-muted/70">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M19.5 8.25l-7.5 7.5-7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Année Selector -->
+<div class="space-y-1">
+<span class="block text-[10px] text-brand-muted font-medium ml-1">Année</span>
+<div class="relative form-input-custom rounded-xl border border-brand-border/90 bg-[#F5EEDB]/40 hover:bg-[#F5EEDB]/60 transition-colors">
+<select class="w-full bg-transparent border-0 py-3.5 pl-3.5 pr-8 text-sm text-brand-navy font-medium focus:ring-0 focus:outline-none cursor-pointer" id="birth_year" name="birth_year" required="">
+<option disabled="" selected="" value="">AAAA</option>
+<option value="2005">2005</option>
+<option value="2004">2004</option>
+<option value="2003">2003</option>
+<option value="2002">2002</option>
+<option value="2001">2001</option>
+<option value="2000">2000</option>
+<option value="1999">1999</option>
+<option value="1998">1998</option>
+<option value="1997">1997</option>
+<option value="1996">1996</option>
+<option value="1995">1995</option>
+<option value="1994">1994</option>
+<option value="1993">1993</option>
+<option value="1992">1992</option>
+<option value="1991">1991</option>
+<option value="1990">1990</option>
+<option value="1989">1989</option>
+<option value="1988">1988</option>
+<option value="1987">1987</option>
+<option value="1986">1986</option>
+<option value="1985">1985</option>
+<option value="1984">1984</option>
+<option value="1983">1983</option>
+<option value="1982">1982</option>
+<option value="1981">1981</option>
+<option value="1980">1980</option>
+</select>
+<div aria-hidden="true" class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-brand-muted/70">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M19.5 8.25l-7.5 7.5-7.5-7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+<!-- Majority verification notice -->
+<p class="text-[11px] leading-normal text-brand-muted/90 pt-1">
+              Accès réservé aux personnes majeures de 19 ans et plus.
+            </p>
+</div>
+<!-- Primary Continue Button -->
+<div class="pt-3" data-purpose="submit-action">
+<button class="w-full flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-brand-navy hover:bg-[#122849] active:bg-[#071324] text-brand-cream font-medium text-sm transition-all duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2 focus:ring-offset-brand-card" type="submit">
+<span class="">Continuer</span>
+<svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</form>
+</div>
+</div>
+</main>
+<!-- END: MainContent -->
+<div aria-hidden="true" class="py-4"></div>
+
+
+</body></html>

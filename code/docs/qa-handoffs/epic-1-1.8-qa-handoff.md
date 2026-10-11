@@ -1,5 +1,7 @@
 # Epic 1 Story 1.8 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 `code/compose.yaml` stays the one self-managed environment: project `ankanu`, services `web`, `api`, `worker`, `postgres`, `redis`, and `bucket`. No second compose file, no `profiles`, no `infra/` env module, no OpenTofu, and no Kapsule.
@@ -65,8 +67,8 @@ No accounts, secrets, or containers. The forbidden sentence checked for absence 
 
 Do not pixel-match these hosting blocks. They name Scaleway, Paris, or Île-de-France, and this story forbids that sentence and any invented replacement.
 
-- `code/design-stitch/02-legal-hub/screen.html`
-- `code/design-stitch/02-legal-hub/screen.png`
+- `code/design-stitch/ankanu-v2/MANIFEST.md (v2 coverage gaps — Legal hub)`
+- `code/design-stitch/ankanu-v2/MANIFEST.md (v2 coverage gaps — Legal hub)`
 
 Strings that must not appear in the built UI:
 
@@ -76,7 +78,7 @@ Strings that must not appear in the built UI:
 - `Hébergé en infrastructure souveraine en France (Scaleway / Île-de-France).`
 - `Serveurs Régionaux Chiffrés`
 
-`code/design-stitch/tokens/DESIGN.md` is tokens only. Matching its tone or colors is a fail. `code/design-stitch/SCREEN-INVENTORY.md` still says the old hosting sentence ships. That line was not used as copy.
+`code/design-stitch/ankanu-v2/DESIGN.md` is tokens only. Matching its tone or colors is a fail. `code/design-stitch/SCREEN-INVENTORY.md` still says the old hosting sentence ships. That line was not used as copy.
 
 ## Known gaps
 

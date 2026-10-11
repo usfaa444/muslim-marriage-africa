@@ -14,6 +14,8 @@ inputDocuments:
   - _bmad-output/planning-artifacts/architecture/architecture-muslim-marriage-africa-2026-09-27/SOLUTION-DESIGN.md
   - _bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/DESIGN.md
   - _bmad-output/planning-artifacts/ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md
+  - code/design-stitch/ankanu-v2/MANIFEST.md
+  - code/design-stitch/ankanu-v2/DESIGN.md
 excludedDocuments:
   - superseded architecture and PRD reviews that still describe pre-delivery holds or fail-closed Chat
 lockedDecisions:
@@ -301,7 +303,7 @@ From [ARCHITECTURE-SPINE.md](architecture/architecture-muslim-marriage-africa-20
 
 ### UX Design Requirements
 
-From [DESIGN.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/DESIGN.md) and [EXPERIENCE.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md). Both status final. Product name is **AnKanu** (ankanu.com on Hostinger, 2026-10-03). Do not print the historical shortlist as the product name.
+From [DESIGN.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/DESIGN.md) and [EXPERIENCE.md](ux-designs/ux-muslim-marriage-africa-2026-10-01/EXPERIENCE.md). Both status final. Product name is **AnKanu** (ankanu.com on Hostinger, 2026-10-03). Do not print the historical shortlist as the product name. Shipping layout is Stitch **AnKanu v2** at `code/design-stitch/ankanu-v2/` (`MANIFEST.md`). The UX-folder DESIGN.md is tokens only.
 
 - UX-DR1: Implement DESIGN.md tokens in Tailwind 4 — colors (sand, raised, indigo, gold, mihrab, blur-wash, danger, success, staff, disabled), typography (Source Serif 4 display/title/heading; Source Sans 3 body/meta/caption), spacing 4/8/12/16/24/32/48, rounded sm/md/lg/full.
 - UX-DR2: `button-primary` (indigo, 48px, one commit per screen; never a send that waits on AI), `button-secondary`, `button-quiet` (quiet decline / Revoke / remove Mahram).

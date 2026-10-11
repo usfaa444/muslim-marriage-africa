@@ -1,0 +1,283 @@
+<!DOCTYPE html><html class="h-full" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Révocation &amp; Signalement du Tuteur (Mahram)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8',
+          },
+          borderRadius: {
+            'DEFAULT': '0.25rem',
+            'md': '8px',
+            'lg': '0.5rem',
+            'xl': '0.75rem',
+            'full': '9999px'
+          },
+          fontFamily: {
+            'headline': ['Newsreader', 'Georgia', 'serif'],
+            'display': ['Newsreader', 'Georgia', 'serif'],
+            'body': ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            'label': ['Plus Jakarta Sans', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #E2D4B8;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-cream text-deep-navy font-body antialiased min-h-full flex flex-col selection:bg-gold-soft selection:text-deep-navy pb-32">
+<!-- Public / Identity Chrome: Sticky Header -->
+<header class="w-full top-0 sticky z-40 bg-cream/95 backdrop-blur-sm border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Wordmark & Subtitle -->
+<div class="flex items-baseline gap-4">
+<a class="font-display text-2xl tracking-wide font-normal text-deep-navy hover:text-soft-gold transition-colors duration-200" href="#">
+          AnKanu
+        </a>
+<span class="hidden md:inline text-xs tracking-wider text-deep-navy/60 font-body border-l border-hairline pl-4">
+          Burkina Faso • Ta'aruf &amp; Mariage Noble
+        </span>
+</div>
+<!-- Trust Badge & Secondary Info -->
+<div class="flex items-center gap-6">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-hairline bg-cream/50 text-xs font-medium text-deep-navy/80">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="shield">shield</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+<div class="hidden sm:flex items-center gap-3 border-l border-hairline pl-6">
+<button aria-label="Notifications" class="text-deep-navy/70 hover:text-deep-navy transition-colors relative" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-deep-navy/5 border border-hairline flex items-center justify-center font-display text-xs text-deep-navy">
+            FR
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Layout -->
+<main class="flex-grow w-full max-w-4xl mx-auto px-6 md:px-8 py-10 md:py-14">
+<!-- Context Back Link -->
+<div class="mb-8">
+<a class="inline-flex items-center gap-2 text-sm text-deep-navy/70 hover:text-deep-navy transition-colors font-medium group" href="#">
+<span class="text-soft-gold group-hover:-translate-x-0.5 transition-transform duration-150">←</span>
+<span class="">Retour à mon profil et gestion tutélaire</span>
+</a>
+</div>
+<!-- Editorial Header Section -->
+<div class="border-b border-hairline pb-8 mb-10">
+<p class="text-xs uppercase tracking-widest text-soft-gold font-semibold mb-3">
+        ACCOMPAGNEMENT TUTÉLAIRE • SOUVERAINETÉ DE LA SŒUR
+      </p>
+<h1 class="font-display text-3xl sm:text-4xl lg:text-[42px] font-normal leading-tight text-deep-navy tracking-tight mb-4">
+        Révocation &amp; Mesures relatives au Tuteur
+      </h1>
+<p class="text-base text-deep-navy/80 max-w-2xl leading-relaxed font-normal">
+        Vous conservez la pleine maîtrise de votre accompagnement. Toute modification ou signalement s'exécute avec retenue, dans le respect de votre dignité et de vos convenances personnelles.
+      </p>
+</div>
+<!-- Mahram Status Card -->
+<section class="bg-cream border border-hairline rounded-md p-6 sm:p-7 mb-8 shadow-[0_1px_3px_rgba(11,29,54,0.03)]" style="background-color: rgb(251, 248, 241);">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-deep-navy text-cream flex items-center justify-center font-display text-lg tracking-wider shrink-0">
+            OS
+          </div>
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-display text-xl text-deep-navy font-medium">Ousmane Sawadogo</h2>
+<span class="text-xs px-2 py-0.5 rounded-full bg-gold-soft/30 text-deep-navy font-body font-medium">
+                Père / Tuteur légal
+              </span>
+</div>
+<p class="text-xs sm:text-sm text-deep-navy/70 mt-1 flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold inline-block"></span>
+              Accompagnement actif sur 2 salons de discussion
+            </p>
+</div>
+</div>
+<div class="text-xs sm:text-right text-deep-navy/60 max-w-xs border-t sm:border-t-0 sm:border-l border-hairline/70 pt-3 sm:pt-0 sm:pl-5">
+<span class="material-symbols-outlined text-xs text-soft-gold align-baseline mr-1" data-icon="sms">sms</span>
+          Notification bilatérale transmise par SMS lors de toute modification de statut
+        </div>
+</div>
+</section>
+<!-- Main Decisions Container -->
+<div class="space-y-6">
+<!-- Section 1: Portée de la révocation -->
+<section class="bg-cream border border-hairline rounded-md p-6 sm:p-7" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start gap-3 mb-4">
+<span class="material-symbols-outlined text-soft-gold text-xl mt-0.5" data-icon="lock_reset">lock_reset</span>
+<div>
+<h3 class="font-display text-xl text-deep-navy font-medium">Portée de la révocation intégrale</h3>
+<p class="text-xs text-deep-navy/60 mt-0.5">Clôture formelle et irrévocable des permissions de supervision</p>
+</div>
+</div>
+<div class="p-4 rounded-md border border-hairline/80 bg-cream/40 flex items-start gap-3.5">
+<input checked="" class="mt-1 h-4 w-4 rounded text-deep-navy focus:ring-soft-gold border-hairline cursor-not-allowed bg-deep-navy/10" disabled="" id="revoke_scope" type="checkbox">
+<label class="text-sm leading-relaxed text-deep-navy/90 select-none" for="revoke_scope">
+<strong class="font-semibold text-deep-navy block mb-1">Révocation intégrale des accès tutélaires</strong>
+            Retire immédiatement et définitivement les autorisations de lecture accordées à ce tuteur sur l'ensemble de vos fils de discussion (<span class="underline decoration-hairline">Al-Hassan_BF</span>, <span class="underline decoration-hairline">Ibrahim_S</span>). Aucun échange futur ne lui sera accessible sans une nouvelle invitation expresse émanant de vous.
+          </label>
+</div>
+</section>
+<!-- Section 2: Option de sauvegarde d'urgence -->
+<section class="bg-cream border border-hairline rounded-md p-6 sm:p-7" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-soft-gold text-xl mt-0.5" data-icon="pause_circle">pause_circle</span>
+<div>
+<h3 class="font-display text-xl text-deep-navy font-medium">Mise en réserve d'urgence</h3>
+<p class="text-sm text-deep-navy/80 mt-1 max-w-xl leading-relaxed">
+                Masque temporairement votre profil de toutes les listes de recherche et de découverte pendant 24 heures pour vous accorder un temps de sérénité et de concertation.
+              </p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" id="emergency_pause" type="checkbox">
+<div class="w-11 h-6 bg-deep-navy/20 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-deep-navy"></div>
+</label>
+</div>
+<div class="mt-3.5 pl-8 text-xs text-deep-navy/60 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs text-soft-gold" data-icon="info">info</span>
+          Activation recommandée lors d'une transition délicate ou d'un besoin de médiation familiale.
+        </div>
+</section>
+<!-- Section 3: Signalement éthique au Conseil de médiation -->
+<section class="bg-cream border border-hairline rounded-md p-6 sm:p-7" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start gap-3 mb-4">
+<span class="material-symbols-outlined text-soft-gold text-xl mt-0.5" data-icon="verified_user">verified_user</span>
+<div>
+<h3 class="font-display text-xl text-deep-navy font-medium">
+              Transmettre un signalement au Conseil de médiation <span class="font-body text-xs font-normal text-deep-navy/50">(Optionnel)</span>
+</h3>
+<p class="text-xs text-deep-navy/60 mt-0.5">Instruit en toute confidentialité par nos référents éthiques indépendants.</p>
+</div>
+</div>
+<div class="mt-4 space-y-3">
+<p class="text-xs uppercase tracking-wider text-deep-navy/70 font-semibold mb-2">
+            Motif de sollicitation éthique :
+          </p>
+<label class="flex items-center gap-3 p-3 rounded border border-hairline/70 hover:border-soft-gold transition-colors cursor-pointer bg-cream/20">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="mediation_reason" type="radio" value="decorum">
+<span class="text-sm text-deep-navy/85">Désaccord sur la bienséance ou le rythme du ta'aruf</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded border border-hairline/70 hover:border-soft-gold transition-colors cursor-pointer bg-cream/20">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="mediation_reason" type="radio" value="pressure">
+<span class="text-sm text-deep-navy/85">Pression indue, obstruction au consentement libre ou contrainte</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded border border-hairline/70 hover:border-soft-gold transition-colors cursor-pointer bg-cream/20">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="mediation_reason" type="radio" value="identity">
+<span class="text-sm text-deep-navy/85">Usurpation de lien de parenté ou défaut de légitimité tutélaire</span>
+</label>
+<div class="pt-2">
+<label class="block text-xs text-deep-navy/70 mb-1.5 font-medium" for="optional_notes">
+              Précisions réservées exclusivement au comité de déontologie (facultatif) :
+            </label>
+<textarea class="w-full text-sm bg-cream/50 border border-hairline rounded-md p-3 text-deep-navy placeholder:text-deep-navy/40 focus:ring-1 focus:ring-soft-gold focus:border-soft-gold outline-none" id="optional_notes" placeholder="Rédigez avec concision et pudeur toute information utile pour éclairer nos médiateurs..." rows="3"></textarea>
+</div>
+</div>
+</section>
+<!-- Transparency Note on SMS Notification -->
+<div class="px-4 py-3.5 bg-cream border border-hairline/70 rounded-md text-xs text-deep-navy/75 leading-relaxed flex items-start gap-2.5" style="background-color: rgb(251, 248, 241);">
+<span class="material-symbols-outlined text-soft-gold text-base shrink-0 mt-0.5" data-icon="policy">policy</span>
+<p class="">
+          Conformément aux règles de courtoisie et de transparence, un message sobre d'information par SMS est notifié aux deux parties sans mention désobligeante.
+        </p>
+</div>
+<!-- Action Buttons Cluster -->
+<div class="pt-6 border-t border-hairline flex flex-col sm:flex-row items-center justify-between gap-4">
+<a class="text-xs sm:text-sm text-deep-navy/70 hover:text-deep-navy underline underline-offset-4 decoration-hairline transition-colors order-3 sm:order-1 text-center sm:text-left py-2" href="#">
+          Conserver la situation actuelle et retourner au profil
+        </a>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto order-1 sm:order-2">
+<button class="px-5 py-2.5 rounded-md border border-deep-navy/30 text-deep-navy hover:border-deep-navy text-sm font-medium transition-colors text-center" type="button">
+            Signaler et révoquer simultanément
+          </button>
+<button class="px-6 py-2.5 rounded-md bg-deep-navy text-cream hover:bg-deep-navy/90 text-sm font-medium transition-all shadow-sm active:scale-[0.99] text-center" type="button">
+            Révoquer le tuteur et clore les accès
+          </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Member Navigation: Floating pill bottom navigation -->
+<nav class="fixed bottom-6 inset-x-0 mx-auto w-fit z-50 px-4">
+<div class="bg-cream/95 backdrop-blur-md border border-hairline rounded-full px-2 py-1.5 flex items-center gap-1 shadow-[0_4px_20px_rgba(11,29,54,0.08)]">
+<!-- Découvrir -->
+<a class="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-deep-navy/70 hover:text-deep-navy hover:bg-deep-navy/5 transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="explore">explore</span>
+<span class="hidden sm:inline">Découvrir</span>
+</a>
+<!-- Invitations -->
+<a class="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-deep-navy/70 hover:text-deep-navy hover:bg-deep-navy/5 transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+<span class="hidden sm:inline">Invitations</span>
+</a>
+<!-- Discussions -->
+<a class="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-medium text-deep-navy/70 hover:text-deep-navy hover:bg-deep-navy/5 transition-all" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="chat_bubble">chat_bubble</span>
+<span class="hidden sm:inline">Discussions</span>
+</a>
+<!-- Profil: SELECTED -->
+<a class="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-deep-navy text-cream shadow-sm transition-all" href="#">
+<span class="material-symbols-outlined text-lg text-cream" data-icon="person">person</span>
+<span class="">Profil</span>
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold inline-block ml-0.5"></span>
+</a>
+</div>
+</nav>
+<!-- Public Identity Footer -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<p class="text-xs text-deep-navy/60 font-normal">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<div class="flex flex-wrap justify-center gap-5 sm:gap-6 text-xs text-deep-navy/70 font-normal">
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Charte d'Honneur</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Rôle du Tuteur (Wali)</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Protection des Données</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Démarche Ta'aruf</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Contact Serein</a>
+</div>
+</div>
+</footer>
+
+
+</body></html>

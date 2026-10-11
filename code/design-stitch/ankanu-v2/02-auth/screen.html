@@ -1,0 +1,425 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu — Authentification &amp; Ta'aruf Noble</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Newsreader (Display) & Plus Jakarta Sans (Body) -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Subtle focus outline conforming to soft-gold accent */
+    input:focus, select:focus, textarea:focus, button:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(201, 168, 108, 0.45);
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col justify-between bg-cream text-deep-navy font-body antialiased selection:bg-gold-soft selection:text-deep-navy">
+<!-- Minimal Dignified Topbar Anchor (Transactional context: Clean & Focused) -->
+<header class="w-full border-b border-hairline/60 bg-cream/90 backdrop-blur-sm sticky top-0 z-40">
+<div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+<span class="hidden sm:inline-block w-px h-5 bg-hairline"></span>
+<span class="hidden sm:inline-block text-xs font-normal text-deep-navy/70 tracking-wide">
+          Burkina Faso • Ta'aruf &amp; Mariage Noble
+        </span>
+</div>
+<div class="flex items-center gap-2 text-xs font-medium text-deep-navy/80 bg-cream border border-hairline px-3.5 py-2 rounded-md">
+<span class="material-symbols-outlined text-[18px] text-soft-gold" data-icon="shield">shield</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas Container -->
+<main class="w-full flex-grow flex items-center justify-center px-4 sm:px-6 py-10 md:py-14">
+<div class="w-full max-w-[580px] rounded-md border border-hairline p-6 sm:p-10 shadow-[0_4px_24px_-8px_rgba(11,29,54,0.06)]" style="background-color: #FBF8F1;">
+<!-- Noble Header -->
+<div class="text-center mb-8">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full border border-hairline bg-cream mb-4 text-soft-gold">
+<span class="material-symbols-outlined text-2xl" data-icon="gavel">gavel</span>
+</div>
+<h1 class="font-display text-3xl sm:text-4xl text-deep-navy font-normal tracking-tight">
+          AnKanu
+        </h1>
+<p class="font-body text-sm text-deep-navy/75 mt-2 font-normal">
+          Plateforme noble d'engagement et de Ta'aruf
+        </p>
+</div>
+<!-- Segmented View Switcher -->
+<div aria-label="Mode d'accès" class="relative bg-hairline/40 p-1 rounded-md mb-8 flex" role="tablist">
+<button aria-controls="panel-signup" aria-selected="true" class="flex-1 min-h-[44px] text-xs font-medium text-center rounded transition-all duration-150 py-2.5 px-3 bg-cream text-deep-navy shadow-sm font-semibold" id="tab-signup" onclick="switchTab('signup')" role="tab" type="button">
+          Créer un compte
+        </button>
+<button aria-controls="panel-login" aria-selected="false" class="flex-1 min-h-[44px] text-xs font-medium text-center rounded transition-all duration-150 py-2.5 px-3 text-deep-navy/70 hover:text-deep-navy" id="tab-login" onclick="switchTab('login')" role="tab" type="button">
+          Connexion
+        </button>
+</div>
+<!-- SIGNUP VIEW -->
+<section aria-labelledby="tab-signup" class="space-y-6" id="panel-signup" role="tabpanel">
+<form class="space-y-6" id="signup-form" onsubmit="event.preventDefault();">
+<!-- 1. Pseudonyme Unique -->
+<div class="space-y-1.5">
+
+<div class="relative">
+
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-deep-navy/40 text-[20px]" data-icon="badge">badge</span>
+</div>
+
+<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="pseudo-error">
+<span class="material-symbols-outlined text-[14px]" data-icon="error">error</span>
+              Le pseudonyme est requis (au moins 3 caractères nobles).
+            </p>
+</div>
+<!-- 2. Email Address -->
+<div class="space-y-1.5">
+<label class="block text-xs font-semibold uppercase tracking-wider text-deep-navy/80" for="signup-email">
+              Adresse email <span class="text-soft-gold">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded-md bg-cream border border-hairline text-deep-navy text-sm placeholder:text-deep-navy/40 focus:border-soft-gold focus:ring-0 transition-colors" id="signup-email" name="email" oninput="validateSignup()" placeholder="nom@exemple.bf" required="" type="email">
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-deep-navy/40 text-[20px]" data-icon="mail">mail</span>
+</div>
+<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="email-error">
+<span class="material-symbols-outlined text-[14px]" data-icon="error">error</span>
+              Veuillez renseigner une adresse email valide.
+            </p>
+</div>
+<!-- 3. Password -->
+<div class="space-y-1.5">
+<label class="block text-xs font-semibold uppercase tracking-wider text-deep-navy/80" for="signup-password">
+              Mot de passe <span class="text-soft-gold">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-12 pl-4 pr-12 rounded-md bg-cream border border-hairline text-deep-navy text-sm placeholder:text-deep-navy/40 focus:border-soft-gold focus:ring-0 transition-colors" id="signup-password" name="mot_de_passe" oninput="validateSignup()" placeholder="••••••••••••" required="" type="password">
+<button aria-label="Afficher ou masquer le mot de passe" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-deep-navy/60 hover:text-deep-navy" onclick="togglePassword('signup-password', 'signup-pwd-icon')" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility" id="signup-pwd-icon">visibility</span>
+</button>
+</div>
+<p class="text-xs text-deep-navy/60">
+              Minimum 8 caractères, incluant au moins un chiffre et un caractère spécial.
+            </p>
+</div>
+<!-- 4. Genre (Sœur / Frère) -->
+<div class="space-y-2 pt-1">
+
+<div aria-label="Genre" class="grid grid-cols-2 gap-3" role="radiogroup">
+
+
+</div>
+
+</div>
+<!-- 5. Bloc d'Engagement et Sincérité (Solemn Ta'aruf Pledge) -->
+<div class="border border-soft-gold/60 bg-[#FAF6EE] p-4 sm:p-5 rounded-md space-y-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-soft-gold text-[20px]" data-icon="verified">verified</span>
+<h2 class="text-xs uppercase tracking-wider font-semibold text-deep-navy">
+                Engagement Solennel de Ta'aruf
+              </h2>
+</div>
+<p class="text-xs text-deep-navy/85 leading-relaxed font-serif italic">
+              « Je m'engage avec sincérité devant Allah dans une démarche exclusive en vue du mariage (Nikah). Je m'engage a déclarer sur l'honneur, l'exactitude de ma situation matrimoniale, le respect strict de la pudeur et des règles de bienséance islamique, ainsi que l'acceptation de la charte de confidentialité. »
+            </p>
+<label class="flex items-start gap-3 cursor-pointer pt-2">
+<input class="mt-0.5 w-4 h-4 rounded border-hairline text-deep-navy focus:ring-soft-gold" id="signup-pledge" onchange="validateSignup()" required="" type="checkbox">
+<span class="text-xs font-medium text-deep-navy">
+                J'atteste et je souscris à cet engagement moral.
+              </span>
+</label>
+</div>
+<!-- 6. Note d'âge 19+ -->
+
+<!-- 7. Contrôle Captcha / Anti-robot Serein -->
+
+<!-- 8. Se souvenir de moi -->
+<div class="flex items-center px-1">
+
+</div>
+<!-- 9. Bouton Principal d'action -->
+<button class="w-full min-h-[48px] px-6 rounded-md bg-deep-navy text-on-navy font-medium text-sm transition-opacity duration-150 flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled="" id="signup-submit" type="submit">
+<span class="material-symbols-outlined text-[18px] text-soft-gold" data-icon="how_to_reg">how_to_reg</span>
+<span class="">Créer mon compte</span>
+</button>
+<!-- Divider -->
+<div class="relative my-4 flex items-center justify-center">
+<div class="w-full border-t border-hairline"></div>
+<span class="bg-cream px-3 text-[11px] uppercase tracking-wider text-deep-navy/50 font-semibold absolute">
+              ou
+            </span>
+</div>
+<!-- 10. Option additionnelle Google (No Apple button) -->
+<button class="w-full min-h-[48px] px-4 rounded-md border border-hairline bg-cream hover:bg-hairline/20 text-deep-navy text-xs font-medium transition-colors flex items-center justify-center gap-3" type="button">
+<svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"></path>
+</svg>
+<span class="">Continuer avec Google</span>
+</button>
+</form>
+</section>
+<!-- LOGIN VIEW (Initially Hidden) -->
+<section aria-labelledby="tab-login" class="hidden space-y-6" id="panel-login" role="tabpanel">
+<form class="space-y-6" id="login-form" onsubmit="event.preventDefault();">
+<!-- Email -->
+<div class="space-y-1.5">
+<label class="block text-xs font-semibold uppercase tracking-wider text-deep-navy/80" for="login-email">
+              Adresse email <span class="text-soft-gold">*</span>
+</label>
+<div class="relative">
+<input class="w-full h-12 px-4 rounded-md bg-cream border border-hairline text-deep-navy text-sm placeholder:text-deep-navy/40 focus:border-soft-gold focus:ring-0 transition-colors" id="login-email" name="email" oninput="validateLogin()" placeholder="nom@exemple.bf" required="" type="email">
+<span class="material-symbols-outlined absolute right-3.5 top-1/2 -translate-y-1/2 text-deep-navy/40 text-[20px]" data-icon="mail">mail</span>
+</div>
+</div>
+<!-- Mot de passe -->
+<div class="space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="block text-xs font-semibold uppercase tracking-wider text-deep-navy/80" for="login-password">
+                Mot de passe <span class="text-soft-gold">*</span>
+</label>
+<a class="text-xs text-soft-gold hover:underline font-medium" href="#">Mot de passe oublié ?</a>
+</div>
+<div class="relative">
+<input class="w-full h-12 pl-4 pr-12 rounded-md bg-cream border border-hairline text-deep-navy text-sm placeholder:text-deep-navy/40 focus:border-soft-gold focus:ring-0 transition-colors" id="login-password" name="mot_de_passe" oninput="validateLogin()" placeholder="••••••••••••" required="" type="password">
+<button aria-label="Afficher ou masquer le mot de passe" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 flex items-center justify-center text-deep-navy/60 hover:text-deep-navy" onclick="togglePassword('login-password', 'login-pwd-icon')" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility" id="login-pwd-icon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Se souvenir de moi -->
+<div class="flex items-center justify-between px-1">
+<label class="flex items-center gap-2.5 cursor-pointer">
+<input class="w-4 h-4 rounded border-hairline text-deep-navy focus:ring-soft-gold" id="login-remember" name="remember" type="checkbox">
+<span class="text-xs text-deep-navy/80">Se souvenir de moi</span>
+</label>
+</div>
+<!-- Captcha Anti-robot -->
+<div class="p-3.5 border border-hairline rounded-md bg-cream flex items-center justify-between">
+<label class="flex items-center gap-3 cursor-pointer">
+<input class="w-5 h-5 rounded border-hairline text-deep-navy focus:ring-soft-gold" id="login-captcha" onchange="toggleCaptchaBadge('login-captcha-badge', this.checked); validateLogin();" required="" type="checkbox">
+<span class="text-xs font-medium text-deep-navy">
+                Je certifie être une personne humaine
+              </span>
+</label>
+<div class="flex items-center gap-1.5 text-xs text-deep-navy/50" id="login-captcha-badge">
+<span class="material-symbols-outlined text-[18px]" data-icon="shield">shield</span>
+<span class="text-[11px]">Vérification intègre</span>
+</div>
+</div>
+<!-- Bouton Connexion -->
+<button class="w-full min-h-[48px] px-6 rounded-md bg-deep-navy text-on-navy font-medium text-sm transition-opacity duration-150 flex items-center justify-center gap-2 opacity-50 cursor-not-allowed" disabled="" id="login-submit" type="submit">
+<span class="material-symbols-outlined text-[18px] text-soft-gold" data-icon="login">login</span>
+<span class="">Se connecter</span>
+</button>
+<!-- Divider -->
+<div class="relative my-4 flex items-center justify-center">
+<div class="w-full border-t border-hairline"></div>
+<span class="bg-cream px-3 text-[11px] uppercase tracking-wider text-deep-navy/50 font-semibold absolute">
+              ou
+            </span>
+</div>
+<!-- Google Login -->
+<button class="w-full min-h-[48px] px-4 rounded-md border border-hairline bg-cream hover:bg-hairline/20 text-deep-navy text-xs font-medium transition-colors flex items-center justify-center gap-3" type="button">
+<svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"></path>
+</svg>
+<span class="">Continuer avec Google</span>
+</button>
+</form>
+</section>
+</div>
+</main>
+<!-- Respectful, Serein Footer conforming to Shared Components JSON -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<span class="hidden sm:inline text-hairline/80">•</span>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<nav aria-label="Liens d'éthique et d'information" class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Protection des Données</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Contact Serein</a>
+</nav>
+</div>
+</footer>
+<!-- Interactive Logic -->
+<script>
+    function switchTab(target) {
+      const tabSignup = document.getElementById('tab-signup');
+      const tabLogin = document.getElementById('tab-login');
+      const panelSignup = document.getElementById('panel-signup');
+      const panelLogin = document.getElementById('panel-login');
+
+      if (target === 'signup') {
+        tabSignup.classList.add('bg-cream', 'text-deep-navy', 'shadow-sm', 'font-semibold');
+        tabSignup.classList.remove('text-deep-navy/70');
+        tabSignup.setAttribute('aria-selected', 'true');
+
+        tabLogin.classList.remove('bg-cream', 'text-deep-navy', 'shadow-sm', 'font-semibold');
+        tabLogin.classList.add('text-deep-navy/70');
+        tabLogin.setAttribute('aria-selected', 'false');
+
+        panelSignup.classList.remove('hidden');
+        panelLogin.classList.add('hidden');
+      } else {
+        tabLogin.classList.add('bg-cream', 'text-deep-navy', 'shadow-sm', 'font-semibold');
+        tabLogin.classList.remove('text-deep-navy/70');
+        tabLogin.setAttribute('aria-selected', 'true');
+
+        tabSignup.classList.remove('bg-cream', 'text-deep-navy', 'shadow-sm', 'font-semibold');
+        tabSignup.classList.add('text-deep-navy/70');
+        tabSignup.setAttribute('aria-selected', 'false');
+
+        panelLogin.classList.remove('hidden');
+        panelSignup.classList.add('hidden');
+      }
+    }
+
+    function togglePassword(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.textContent = 'visibility';
+      }
+    }
+
+    function updateGenderStyle() {
+      const cards = document.querySelectorAll('.gender-card');
+      cards.forEach(card => {
+        const radio = card.querySelector('input[type="radio"]');
+        const dot = card.querySelector('.dot');
+        if (radio.checked) {
+          card.classList.add('border-soft-gold', 'bg-[#FAF6EE]');
+          dot.classList.remove('opacity-0');
+        } else {
+          card.classList.remove('border-soft-gold', 'bg-[#FAF6EE]');
+          dot.classList.add('opacity-0');
+        }
+      });
+    }
+
+    function toggleCaptchaBadge(badgeId, checked) {
+      const badge = document.getElementById(badgeId);
+      if (checked) {
+        badge.classList.remove('text-deep-navy/50');
+        badge.classList.add('text-deep-navy', 'font-medium');
+        badge.innerHTML = `<span class="material-symbols-outlined text-[18px] text-soft-gold fill" data-icon="check_circle">check_circle</span><span class="text-[11px]">Vérifié avec dignité</span>`;
+      } else {
+        badge.classList.add('text-deep-navy/50');
+        badge.classList.remove('text-deep-navy', 'font-medium');
+        badge.innerHTML = `<span class="material-symbols-outlined text-[18px]" data-icon="shield">shield</span><span class="text-[11px]">Vérification intègre</span>`;
+      }
+    }
+
+    function validateSignup() {
+      const pseudo = document.getElementById('signup-pseudo').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const genderSelected = document.querySelector('input[name="genre"]:checked');
+      const pledge = document.getElementById('signup-pledge').checked;
+      const captcha = document.getElementById('signup-captcha').checked;
+      const submitBtn = document.getElementById('signup-submit');
+
+      const isPseudoValid = pseudo.length >= 3;
+      const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const isPasswordValid = password.length >= 8;
+
+      if (isPseudoValid && isEmailValid && isPasswordValid && genderSelected && pledge && captcha) {
+        submitBtn.removeAttribute('disabled');
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        submitBtn.classList.add('hover:opacity-90', 'cursor-pointer');
+      } else {
+        submitBtn.setAttribute('disabled', 'true');
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        submitBtn.classList.remove('hover:opacity-90', 'cursor-pointer');
+      }
+    }
+
+    function validateLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const captcha = document.getElementById('login-captcha').checked;
+      const submitBtn = document.getElementById('login-submit');
+
+      const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const isPasswordValid = password.length >= 6;
+
+      if (isEmailValid && isPasswordValid && captcha) {
+        submitBtn.removeAttribute('disabled');
+        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        submitBtn.classList.add('hover:opacity-90', 'cursor-pointer');
+      } else {
+        submitBtn.setAttribute('disabled', 'true');
+        submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        submitBtn.classList.remove('hover:opacity-90', 'cursor-pointer');
+      }
+    }
+  </script>
+
+
+
+
+
+
+
+
+</body></html>

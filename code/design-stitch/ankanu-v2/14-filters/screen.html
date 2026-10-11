@@ -1,0 +1,313 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu • Filtres de convenance</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Newsreader and Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "gold-soft": "#E6D5A8",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Subtle focus outline conforming to Soft Gold */
+    input:focus, select:focus, button:focus {
+      outline: 2px solid #C9A86C;
+      outline-offset: 1px;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-cream text-deep-navy font-body antialiased selection:bg-gold-soft selection:text-deep-navy">
+<!-- STICKY TOP APP BAR -->
+<header class="w-full top-0 sticky z-40 bg-cream/95 backdrop-blur-sm border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand & Subtitle -->
+<div class="flex flex-col">
+<a class="font-display text-2xl tracking-wide font-normal text-deep-navy hover:text-soft-gold transition-colors duration-200" href="#">
+          AnKanu
+        </a>
+<span class="font-body text-xs text-deep-navy/70 tracking-normal mt-0.5">
+          Burkina Faso • Ta'aruf &amp; Mariage Noble
+        </span>
+</div>
+<!-- Right quiet badge / status -->
+<div class="flex items-center gap-3">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-hairline bg-cream text-deep-navy/80 text-xs font-medium">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="shield">shield</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS / BACKGROUND CONTEXT WITH FILTER MODAL SURFACE -->
+<main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 py-8 md:py-12 flex flex-col items-center justify-center">
+<!-- Filter Modal Card Container -->
+<div class="w-full max-w-2xl border border-hairline rounded-md p-6 sm:p-10 md:p-12 shadow-[0_4px_24px_rgba(11,29,54,0.04)]" style="background-color: #FBF8F1;">
+<!-- Modal Header -->
+<div class="border-b border-hairline pb-6 mb-8 text-center sm:text-left">
+<div class="flex items-center justify-between">
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal tracking-tight">
+            Filtres de convenance
+          </h1>
+<span class="hidden sm:inline-flex text-soft-gold">
+<span class="material-symbols-outlined text-2xl" data-icon="tune">tune</span>
+</span>
+</div>
+<p class="font-body text-sm text-deep-navy/75 mt-2.5 leading-relaxed max-w-xl">
+          Ajustez les critères selon vos convenances éthiques et projets de vie dans le respect des règles de bienséance.
+        </p>
+</div>
+<form class="space-y-8" onsubmit="event.preventDefault();">
+<!-- 1. Ville / Localisation -->
+<div class="space-y-3">
+<label class="block font-display text-lg text-deep-navy font-medium">
+            1. Ville / Localisation
+          </label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+<label class="relative flex items-center justify-between p-3.5 border border-soft-gold bg-gold-soft/20 rounded-md cursor-pointer transition-colors duration-150">
+<span class="font-body text-sm font-medium text-deep-navy">Ouagadougou</span>
+<input checked="" class="text-deep-navy focus:ring-soft-gold border-hairline" name="ville" type="radio" value="Ouagadougou">
+</label>
+<label class="relative flex items-center justify-between p-3.5 border border-hairline bg-cream hover:border-soft-gold/60 rounded-md cursor-pointer transition-colors duration-150">
+<span class="font-body text-sm text-deep-navy/85">Bobo-Dioulasso</span>
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="ville" type="radio" value="Bobo-Dioulasso">
+</label>
+<label class="relative flex items-center justify-between p-3.5 border border-hairline bg-cream hover:border-soft-gold/60 rounded-md cursor-pointer transition-colors duration-150">
+<span class="font-body text-sm text-deep-navy/85">Koudougou</span>
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="ville" type="radio" value="Koudougou">
+</label>
+<label class="relative flex items-center justify-between p-3.5 border border-hairline bg-cream hover:border-soft-gold/60 rounded-md cursor-pointer transition-colors duration-150">
+<span class="font-body text-sm text-deep-navy/85">Autre ville / Diaspora</span>
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="ville" type="radio" value="Autre ville / Diaspora">
+</label>
+</div>
+</div>
+<div class="w-full h-px bg-hairline/60"></div>
+<!-- 2. Distance -->
+<div class="space-y-3">
+<label class="block font-display text-lg text-deep-navy font-medium">
+            2. Rayon géographique
+          </label>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<label class="flex items-center justify-center py-2.5 px-3 border border-hairline rounded-md cursor-pointer hover:border-soft-gold transition-colors duration-150 text-center">
+<input class="sr-only peer" name="distance" type="radio" value="10 km">
+<span class="font-body text-sm text-deep-navy/80 peer-checked:text-deep-navy peer-checked:font-semibold">10 km</span>
+</label>
+<label class="flex items-center justify-center py-2.5 px-3 border border-hairline rounded-md cursor-pointer hover:border-soft-gold transition-colors duration-150 text-center">
+<input class="sr-only peer" name="distance" type="radio" value="25 km">
+<span class="font-body text-sm text-deep-navy/80 peer-checked:text-deep-navy peer-checked:font-semibold">25 km</span>
+</label>
+<label class="flex items-center justify-center py-2.5 px-3 border border-soft-gold bg-gold-soft/20 rounded-md cursor-pointer text-center">
+<input checked="" class="sr-only peer" name="distance" type="radio" value="50 km">
+<span class="font-body text-sm text-deep-navy font-semibold">50 km</span>
+</label>
+<label class="flex items-center justify-center py-2.5 px-3 border border-hairline rounded-md cursor-pointer hover:border-soft-gold transition-colors duration-150 text-center">
+<input class="sr-only peer" name="distance" type="radio" value="Toute la ville">
+<span class="font-body text-sm text-deep-navy/80 peer-checked:text-deep-navy peer-checked:font-semibold">Toute la ville</span>
+</label>
+</div>
+</div>
+<div class="w-full h-px bg-hairline/60"></div>
+<!-- 3. Situation matrimoniale -->
+<div class="space-y-3">
+<div class="flex items-baseline justify-between">
+<label class="block font-display text-lg text-deep-navy font-medium">
+              3. Situation matrimoniale
+            </label>
+<span class="text-xs text-deep-navy/60">Choix unique</span>
+</div>
+<div class="flex flex-wrap gap-2.5">
+<label class="inline-flex items-center px-4 py-2 rounded-full border border-soft-gold bg-gold-soft/20 cursor-pointer text-xs sm:text-sm font-medium text-deep-navy">
+<input checked="" class="sr-only" name="situation" type="radio" value="Célibataire">
+<span class="">Célibataire</span>
+</label>
+<label class="inline-flex items-center px-4 py-2 rounded-full border border-hairline hover:border-soft-gold cursor-pointer text-xs sm:text-sm text-deep-navy/80">
+<input class="sr-only" name="situation" type="radio" value="Marié(e)">
+<span class="">Marié(e)</span>
+</label>
+<label class="inline-flex items-center px-4 py-2 rounded-full border border-hairline hover:border-soft-gold cursor-pointer text-xs sm:text-sm text-deep-navy/80">
+<input class="sr-only" name="situation" type="radio" value="Divorcé(e)">
+<span class="">Divorcé(e)</span>
+</label>
+<label class="inline-flex items-center px-4 py-2 rounded-full border border-hairline hover:border-soft-gold cursor-pointer text-xs sm:text-sm text-deep-navy/80">
+<input class="sr-only" name="situation" type="radio" value="Veuf/Veuve">
+<span class="">Veuf/Veuve</span>
+</label>
+</div>
+<!-- Ethical guidance notice for sisters -->
+<div class="mt-3.5 p-3.5 rounded-md bg-gold-soft/15 border-l-2 border-soft-gold">
+<div class="flex gap-2.5">
+<span class="material-symbols-outlined text-soft-gold text-lg flex-shrink-0" data-icon="info">info</span>
+<p class="font-body text-xs text-deep-navy/85 leading-relaxed">
+                Pour les sœurs : la sélection d'un prétendant déjà marié avec accord pour polygamie requiert que le profil ait explicitement déclaré cette démarche dans la clarté.
+              </p>
+</div>
+</div>
+</div>
+<div class="w-full h-px bg-hairline/60"></div>
+<!-- 4. Pratique & Critères religieux -->
+<div class="space-y-4">
+<label class="block font-display text-lg text-deep-navy font-medium">
+            4. Pratique &amp; Critères religieux
+          </label>
+<div class="space-y-2.5">
+<span class="text-xs uppercase tracking-wider font-semibold text-deep-navy/70">Engagement spirituel</span>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+<label class="flex items-center justify-between sm:justify-center p-3 border border-soft-gold bg-gold-soft/20 rounded-md cursor-pointer text-center">
+<input checked="" class="sr-only" name="pratique" type="radio" value="Pratique assidue">
+<span class="font-body text-xs sm:text-sm font-medium text-deep-navy">Pratique assidue</span>
+</label>
+<label class="flex items-center justify-between sm:justify-center p-3 border border-hairline hover:border-soft-gold rounded-md cursor-pointer text-center">
+<input class="sr-only" name="pratique" type="radio" value="Prières à l'heure">
+<span class="font-body text-xs sm:text-sm text-deep-navy/85">Prières à l'heure</span>
+</label>
+<label class="flex items-center justify-between sm:justify-center p-3 border border-hairline hover:border-soft-gold rounded-md cursor-pointer text-center">
+<input class="sr-only" name="pratique" type="radio" value="En cheminement sincère">
+<span class="font-body text-xs sm:text-sm text-deep-navy/85">En cheminement sincère</span>
+</label>
+</div>
+</div>
+<div class="space-y-2 pt-2">
+<label class="text-xs uppercase tracking-wider font-semibold text-deep-navy/70" for="madhhab-select">
+              Sensibilité jurisprudentielle (Madhhab)
+            </label>
+<div class="relative">
+<select class="w-full bg-cream border border-hairline text-deep-navy text-sm rounded-md p-3 focus:border-soft-gold focus:ring-1 focus:ring-soft-gold pr-10 appearance-none" id="madhhab-select">
+<option selected="">Maliki (courant majoritaire burkinabè)</option>
+<option>Hanafi</option>
+<option>Shafi'i</option>
+<option>Hanbali</option>
+<option>Sans attachement strict</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-deep-navy/60" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<div class="w-full h-px bg-hairline/60"></div>
+<!-- 5. Projet de vie & Échéance -->
+<div class="space-y-3">
+<label class="block font-display text-lg text-deep-navy font-medium">
+            5. Projet de vie &amp; Échéance
+          </label>
+<div class="space-y-2">
+<label class="flex items-center justify-between p-3.5 border border-hairline hover:border-soft-gold rounded-md cursor-pointer transition-colors duration-150">
+<div class="flex items-center gap-3">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="echeance" type="radio" value="ready_now">
+<span class="font-body text-sm text-deep-navy font-medium">Prêt(e) immédiatement</span>
+</div>
+<span class="text-xs text-deep-navy/60">Engagement prompt</span>
+</label>
+<label class="flex items-center justify-between p-3.5 border border-soft-gold bg-gold-soft/20 rounded-md cursor-pointer transition-colors duration-150">
+<div class="flex items-center gap-3">
+<input checked="" class="text-deep-navy focus:ring-soft-gold border-hairline" name="echeance" type="radio" value="within_year">
+<span class="font-body text-sm text-deep-navy font-medium">D'ici un an</span>
+</div>
+<span class="text-xs text-deep-navy/60">Mise en place progressive</span>
+</label>
+<label class="flex items-center justify-between p-3.5 border border-hairline hover:border-soft-gold rounded-md cursor-pointer transition-colors duration-150">
+<div class="flex items-center gap-3">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="echeance" type="radio" value="exploring">
+<span class="font-body text-sm text-deep-navy font-medium">En démarche d'exploration sereine</span>
+</div>
+<span class="text-xs text-deep-navy/60">Échange initial encadré</span>
+</label>
+</div>
+</div>
+<!-- Modal Actions -->
+<div class="pt-6 border-t border-hairline flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto px-6 py-3 text-sm font-medium text-deep-navy/70 hover:text-deep-navy transition-colors duration-150 text-center" type="reset">
+            Réinitialiser
+          </button>
+<button class="w-full sm:w-auto px-8 py-3.5 bg-deep-navy text-on-navy rounded-md font-medium text-sm hover:bg-deep-navy/90 active:opacity-95 transition-all duration-150 shadow-sm flex items-center justify-center gap-2" type="submit">
+<span class="">Appliquer les filtres</span>
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+</div>
+</main>
+<!-- MEMBER BOTTOM NAVIGATION BAR (Fixed/Centered floating noble bar with 44px min touch target) -->
+<nav class="sticky bottom-0 z-40 w-full bg-cream/95 backdrop-blur-sm border-t border-hairline/70 py-2">
+<div class="max-w-md mx-auto px-4 flex items-center justify-around h-14">
+<!-- Découvrir (Active) -->
+<a class="min-h-[44px] min-w-[44px] flex flex-col items-center justify-center text-deep-navy border-b-2 border-soft-gold pb-0.5" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="explore">explore</span>
+<span class="font-body text-xs font-semibold mt-0.5">Découvrir</span>
+</a>
+<!-- Invitations -->
+<a class="min-h-[44px] min-w-[44px] flex flex-col items-center justify-center text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="mail">mail</span>
+<span class="font-body text-xs font-normal mt-0.5">Invitations</span>
+</a>
+<!-- Discussions -->
+<a class="min-h-[44px] min-w-[44px] flex flex-col items-center justify-center text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="forum">forum</span>
+<span class="font-body text-xs font-normal mt-0.5">Discussions</span>
+</a>
+<!-- Profil -->
+<a class="min-h-[44px] min-w-[44px] flex flex-col items-center justify-center text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-2xl" data-icon="person">person</span>
+<span class="font-body text-xs font-normal mt-0.5">Profil</span>
+</a>
+</div>
+</nav>
+<!-- FOOTER -->
+<footer class="w-full border-t border-hairline/60 bg-cream">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-1">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<p class="font-body text-xs font-normal text-deep-navy/60 max-w-xl">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Quiet Links -->
+<div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Protection des Données</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+</div>
+</div>
+</footer>
+
+
+</body></html>

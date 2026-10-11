@@ -1,5 +1,7 @@
 # Epic 2 Story 2.7 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 A signed-in member can send and check a phone code on one path, `POST /v1/verifications/otp`. The body field `action` is `send` or `verify`. Any other action is 400 `UNHANDLED`, message `Action inconnue.`. No session cookie is 401 `UNAUTHENTICATED`, message `Authentification requise.`.
@@ -16,7 +18,7 @@ Verify body: `{ "action": "verify", "code": "<six digits>" }`. A matching unexpi
 
 Nothing in this story writes `profile.visibility`. The profile stays unlistable.
 
-`GET /otp` serves `code/design-stitch/14-otp/screen.html` with `cache-control: no-store` and `referrer-policy: no-referrer`. The Stitch file is not edited. A script injected before `</body>` replaces `handleFormSubmit`, `triggerResend`, and `openModifyNumberModal`. The first paint keeps the Stitch screen, including the 58s label, the specimen `+226 70 •• •• 84`, the Scaleway line, and the audit bar. The client strips spaces, dots, dashes, and parentheses before the post. A 201 runs the existing alert, `setScreenState('sent')`, and `startCooldown(60)`. A 200 inside the wait does not alert, does not change the mask, and does not change the number a later resend posts. A verify 200 runs `setScreenState('success')` and a later submit does not post again. Any other verify response runs `setScreenState('error')` and then `startCooldown(60)`, so the wait is 60 seconds rather than the Stitch error-state 42. The page does not navigate. The age gate still does not open `/otp`.
+`GET /otp` serves `code/design-stitch/ankanu-v2/06-otp/screen.html` with `cache-control: no-store` and `referrer-policy: no-referrer`. The Stitch file is not edited. A script injected before `</body>` replaces `handleFormSubmit`, `triggerResend`, and `openModifyNumberModal`. The first paint keeps the Stitch screen, including the 58s label, the specimen `+226 70 •• •• 84`, the Scaleway line, and the audit bar. The client strips spaces, dots, dashes, and parentheses before the post. A 201 runs the existing alert, `setScreenState('sent')`, and `startCooldown(60)`. A 200 inside the wait does not alert, does not change the mask, and does not change the number a later resend posts. A verify 200 runs `setScreenState('success')` and a later submit does not post again. Any other verify response runs `setScreenState('error')` and then `startCooldown(60)`, so the wait is 60 seconds rather than the Stitch error-state 42. The page does not navigate. The age gate still does not open `/otp`.
 
 ## Where
 
@@ -106,8 +108,8 @@ Founder sentences on this ticket. One route, `POST /v1/verifications/otp`, with 
 
 ## Stitch files
 
-- `code/design-stitch/14-otp/screen.html`
-- `code/design-stitch/14-otp/screen.png`
+- `code/design-stitch/ankanu-v2/06-otp/screen.html`
+- `code/design-stitch/ankanu-v2/06-otp/screen.png`
 
 The HTML file was not edited. The page injects a script before `</body>`.
 
@@ -123,6 +125,6 @@ The HTML file was not edited. The page injects a script before `</body>`.
 - The age-gate adult alert still does not open `/otp`.
 - Audio controls on this screen stay inert.
 - Google sign-in is not on this screen. Story 2.5 stays deferred.
-- `design-stitch/12-age-gate/screen.html` and `design-stitch/13-email-verification/screen.html` are still excluded by `.dockerignore` while the web Dockerfile copies them. `14-otp/screen.html` is re-included.
+- `design-stitch/ankanu-v2/03-age-gate/screen.html` and `design-stitch/ankanu-v2/04-email-verification/screen.html` are still excluded by `.dockerignore` while the web Dockerfile copies them. `ankanu-v2/06-otp/screen.html` is re-included.
 - Chrome posted to the dev server only through a stub. The rewrite to `api:3000` is not a live API on that port. The HTTP cases are locked by `phone-otp.test.ts`.
 - This commit stays local until QA passes. Do not treat it as pushed.

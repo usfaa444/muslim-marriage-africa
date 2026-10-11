@@ -1,5 +1,7 @@
 # Epic 1 Story 1.9 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 GitHub Actions runs five checks on a pull request: oxlint, types, unit, integration, and migration check. The workflow file is `.github/workflows/ci.yml` because that is the directory GitHub Actions loads. Each job uses `working-directory: code`. No secret is stored in the file.
@@ -94,9 +96,9 @@ None matched. Do not build Operator metrics.
 
 These files are on disk and were not used as layout:
 
-- `code/design-stitch/63-operator-metrics/screen.html`
-- `code/design-stitch/63-operator-metrics/screen.png`
-- `code/design-stitch/tokens/DESIGN.md`
+- `code/design-stitch/ankanu-v2/49-operator-metrics/screen.html`
+- `code/design-stitch/ankanu-v2/49-operator-metrics/screen.png`
+- `code/design-stitch/ankanu-v2/DESIGN.md`
 
 `DESIGN.md` is tokens only. Matching its tone or colors is a fail.
 

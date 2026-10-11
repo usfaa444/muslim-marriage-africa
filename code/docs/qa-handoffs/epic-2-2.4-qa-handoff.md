@@ -1,5 +1,7 @@
 # Epic 2 Story 2.4 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 `password_reset` stores the reset link. Columns are `id`, `account_id`, `token_hash`, `expires_at`, `consumed_at`, `superseded_at`, and `created_at`. The raw token is never stored. The hash is SHA-256 hex. `expires_at` is `created_at` plus 15 minutes. A new row sets `superseded_at` on older unconsumed rows for that account. A row with `consumed_at` set, `superseded_at` set, or `expires_at` not after now cannot be used. This table is not `email_verification`.
@@ -102,8 +104,8 @@ Founder sentences on this ticket, and only those sentences. `password_reset` N:1
 
 ## Stitch files
 
-- `code/design-stitch/15-password-reset/screen.html`
-- `code/design-stitch/15-password-reset/screen.png`
+- `code/design-stitch/ankanu-v2/05-password-reset/screen.html`
+- `code/design-stitch/ankanu-v2/05-password-reset/screen.png`
 
 The HTML file was not edited. The page removes the two hosting sentences, joins the card line at the period, replaces the 2025 copyright, strips the specimen `value` attributes, strips the two form `onsubmit` handlers that only switched panels, and injects a script before `</body>`.
 

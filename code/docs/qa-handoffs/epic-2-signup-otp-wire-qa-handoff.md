@@ -1,5 +1,7 @@
 # Epic 2 signup OTP wire QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 An adult date of birth on `/age-gate` creates the account, opens a web session, and navigates to `/otp`. There is no native dialog. A failed session leaves the signup draft in place and turns the continue button back on. If the account already exists (`409`) and the same draft password opens a session, the page still goes to `/otp`. A `held` response still shows `#stateUnderage` and does not open a session.
@@ -87,10 +89,10 @@ A new send writes one line `otp` followed by six digits. Do not read logs from a
 
 ## Stitch files
 
-- `code/design-stitch/12-age-gate/screen.html`
-- `code/design-stitch/12-age-gate/screen.png`
-- `code/design-stitch/14-otp/screen.html`
-- `code/design-stitch/14-otp/screen.png`
+- `code/design-stitch/ankanu-v2/03-age-gate/screen.html`
+- `code/design-stitch/ankanu-v2/03-age-gate/screen.png`
+- `code/design-stitch/ankanu-v2/06-otp/screen.html`
+- `code/design-stitch/ankanu-v2/06-otp/screen.png`
 
 `DESIGN.md` is tokens only. The HTML files were not edited.
 

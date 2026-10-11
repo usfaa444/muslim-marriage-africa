@@ -1,5 +1,7 @@
 # Epic 2 Story 2.3 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 `email_verification` stores the link. Columns are `id`, `account_id`, `token_hash`, `expires_at`, `consumed_at`, `superseded_at`, and `created_at`. The raw token is never stored. The hash is SHA-256. `credential.email_verified_at` on the password credential is the only verified marker. `account` has no verified column.
@@ -102,8 +104,8 @@ Founder sentences on this ticket, and only those sentences. `email_verification`
 
 ## Stitch files
 
-- `code/design-stitch/13-email-verification/screen.html`
-- `code/design-stitch/13-email-verification/screen.png`
+- `code/design-stitch/ankanu-v2/04-email-verification/screen.html`
+- `code/design-stitch/ankanu-v2/04-email-verification/screen.png`
 
 The HTML file was not edited. The page injects a script before `</body>`. The visible inbox replaces the specimen. Resend calls the issue POST. `Modifier l'adresse` stays visible and does not change the email.
 

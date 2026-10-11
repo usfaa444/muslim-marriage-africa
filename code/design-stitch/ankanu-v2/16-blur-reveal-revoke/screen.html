@@ -1,0 +1,336 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style="width: 1280px; height: 1695px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Visibilité &amp; Révocation de la photographie</title>
+<!-- Material Symbols & Web Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "display": ["Newsreader", "Georgia", "serif"],
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+      color: #0B1D36;
+      background-color: #F7F1E3;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col justify-between selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- Top Sticky Navigation (Identity Chrome) -->
+<header class="w-full top-0 sticky z-50 bg-[#F7F1E3]/95 backdrop-blur-sm border-b border-[#E2D4B8]/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Left: Brand mark & Subtitle -->
+<div class="flex items-center gap-4">
+<a aria-label="Accueil AnKanu" class="font-display text-2xl tracking-wide font-normal text-deep-navy hover:text-soft-gold transition-colors duration-200" href="#">
+          AnKanu
+        </a>
+<div class="hidden sm:block h-4 w-px bg-hairline"></div>
+<p class="hidden sm:block text-xs font-body tracking-wider text-deep-navy/70">
+          Burkina Faso • Ta'aruf &amp; Mariage Noble
+        </p>
+</div>
+<!-- Right: Quiet Shield Badge -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-cream border border-hairline text-deep-navy/85 text-xs font-medium tracking-normal">
+<span aria-hidden="true" class="material-symbols-outlined text-soft-gold text-base">shield</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-grow py-10 px-4 sm:px-6 lg:px-8">
+<div class="max-w-3xl mx-auto">
+<!-- Breadcrumb / Back Link -->
+<nav aria-label="Fil d'Ariane" class="mb-6">
+<a class="inline-flex items-center gap-2 text-xs font-medium text-deep-navy/75 hover:text-deep-navy transition-colors group" href="#profil">
+<span aria-hidden="true" class="text-soft-gold group-hover:-translate-x-0.5 transition-transform">←</span>
+<span class="">Retour au profil</span>
+</a>
+</nav>
+<!-- Page Header -->
+<header class="mb-8">
+<h1 class="font-display text-3xl sm:text-4xl text-deep-navy font-normal tracking-tight">
+          Visibilité &amp; Révocation de la photographie
+        </h1>
+<p class="mt-2.5 text-sm sm:text-base text-deep-navy/70 leading-relaxed font-body">
+          Contrôle souverain et immédiat du flou protecteur accordé aux prétendants dans le respect de la pudeur.
+        </p>
+</header>
+<!-- Main Config Container Card -->
+<div class="border border-hairline/60 rounded-2xl p-6 sm:p-9 divide-y divide-hairline/60 shadow-none space-y-10" style="background-color: #FBF8F1;">
+<!-- 1. SECTION: RÈGLE GÉNÉRALE DE VISIBILITÉ -->
+<section aria-labelledby="section-policy-title">
+<div class="mb-6">
+<h2 class="font-display text-2xl text-deep-navy font-medium" id="section-policy-title">
+              Politique par défaut de ma photo de profile</h2>
+<p class="mt-1 text-xs text-deep-navy/70">
+              S'applique de manière égale aux sœurs et aux frères selon la bienséance.
+            </p>
+</div>
+<!-- Radio Selection Cards -->
+<fieldset class="space-y-3">
+<legend class="sr-only">Choisissez la politique de visibilité par défaut</legend>
+<!-- Option 1: on_accept -->
+<label class="group relative flex items-start p-4 rounded-xl border border-hairline/70 bg-cream/40 hover:bg-cream hover:border-hairline cursor-pointer transition-colors duration-150">
+<input class="mt-1 h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-cream accent-deep-navy" name="photo_visibility" type="radio" value="on_accept">
+<div class="ml-3.5 flex-1">
+<span class="block text-sm font-semibold text-deep-navy group-hover:text-deep-navy">
+                  À l'acceptation mutuelle
+                </span>
+<span class="mt-0.5 block text-xs text-deep-navy/75 leading-normal">
+                  La photo net n'est dévoilé qu'après accord mutuel d'engagement.
+                </span>
+</div>
+</label>
+<!-- Option 2: on_request (Selected) -->
+<label class="group relative flex items-start p-4 rounded-xl border-2 border-soft-gold bg-cream cursor-pointer">
+<input checked="" class="mt-1 h-4 w-4 text-deep-navy border-soft-gold focus:ring-soft-gold focus:ring-offset-cream accent-deep-navy" name="photo_visibility" type="radio" value="on_request">
+<div class="ml-3.5 flex-1">
+<div class="flex items-center gap-2">
+<span class="block text-sm font-semibold text-deep-navy">
+                    Sur demande expresse uniquement
+                  </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-soft-gold/20 text-deep-navy border border-soft-gold/40">
+                    Actif
+                  </span>
+</div>
+<span class="mt-0.5 block text-xs text-deep-navy/75 leading-normal">
+                  La photographie demeure floutée ; vous la rendez visible par pr<span style="color: rgba(11, 29, 54, 0.75);" class="">étendant(e)s de votre choix.</span></span>
+</div>
+</label>
+<!-- Option 3: never -->
+<label class="group relative flex items-start p-4 rounded-xl border border-hairline/70 bg-cream/40 hover:bg-cream hover:border-hairline cursor-pointer transition-colors duration-150">
+<input class="mt-1 h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-cream accent-deep-navy" name="photo_visibility" type="radio" value="never">
+<div class="ml-3.5 flex-1">
+<span class="block text-sm font-semibold text-deep-navy group-hover:text-deep-navy">
+                  Jamais visible en ligne
+                </span>
+<span class="mt-0.5 block text-xs text-deep-navy/75 leading-normal">
+                  Présentation strictement anonymisée et sans visuel ; rencontre uniquement en présence physique du tuteur légal.
+                </span>
+</div>
+</label>
+</fieldset>
+<!-- Integrity Note -->
+<div class="mt-5 flex items-start gap-3 p-3.5 rounded-lg bg-hairline/30 border border-hairline/60">
+<span aria-hidden="true" class="material-symbols-outlined text-deep-navy/70 text-lg flex-shrink-0 mt-0.5">verified_user</span>
+<p class="text-xs text-deep-navy/80 leading-relaxed">
+<span class="font-semibold text-deep-navy">Principe d'intégrité :</span> Aucun statut payant ou avantage ne peut débloquer ou forcer la révélation de votre photographie. La pudeur est non monétisable, et votre&nbsp;choix reste notre priorité.</p>
+</div>
+</section>
+<!-- 2. SECTION: GESTION EN COURS & RÉVOCATION ACTIVE -->
+<section aria-labelledby="section-active-title" class="pt-8">
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-6">
+<div>
+<h2 class="font-display text-2xl text-deep-navy font-medium" id="section-active-title">
+                Autorisations actives &amp; Demandes en attente
+              </h2>
+<p class="mt-1 text-xs text-deep-navy/70">
+                Plafond strict : 1 seule demande en attente par prétendant (aucun(e) pretendant(e) ne peu voust spamer<span style="color: rgba(11, 29, 54, 0.7);" class="">&nbsp;avec</span>&nbsp;multiple demandes pour visualiser votre profile)</p>
+</div>
+<span class="text-xs font-medium text-deep-navy/60">2 contacts concernés</span>
+</div>
+<div class="space-y-5">
+<!-- Card 1: Active Granted Reveal State -->
+<article class="p-5 sm:p-6 rounded-xl border border-hairline bg-cream relative">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-hairline/60">
+<div>
+<h3 class="font-semibold text-base text-deep-navy tracking-tight">
+                    Al-Hassan_BF <span class="text-xs font-normal text-deep-navy/60">(Prétendant engagé)</span>
+</h3>
+<p class="text-xs text-deep-navy/60 mt-0.5 flex items-center gap-1.5">
+<span aria-hidden="true" class="material-symbols-outlined text-sm text-deep-navy/50">schedule</span>
+                    Accordé il y a 18 secondes
+                  </p>
+</div>
+<!-- Status Chip (Multi-signal: icon + text + border) -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-soft-gold/20 border border-soft-gold/60 text-deep-navy text-xs font-medium self-start sm:self-center">
+<span aria-hidden="true" class="material-symbols-outlined text-sm text-deep-navy fill">verified</span>
+<span class="">Révélé — Visible pour Al-Hassan_BF</span>
+</div>
+</div>
+<!-- Fast-Revoke Action Zone -->
+<div class="pt-4 space-y-3">
+<button aria-pressed="false" class="w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-lg bg-deep-navy hover:bg-deep-navy/90 text-cream text-xs font-semibold tracking-normal inline-flex items-center justify-center gap-2 border border-deep-navy transition-all duration-150 active:opacity-80 focus:outline-none focus:ring-2 focus:ring-soft-gold focus:ring-offset-2" id="revoke-btn" onclick="triggerRevocation()" role="button" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-base text-soft-gold">lock</span>
+<span class="">Révoquer l'accès immédiatement (Rétablir le flou)</span>
+</button>
+<p class="text-xs text-deep-navy/70 leading-relaxed">
+                  Révocation immédiate active (délai garanti ≤ 60s). En cliquant, le flou protecteur est instantanément réappliqué sur l'écran du prétendant.
+                </p>
+<!-- Feedback Toast/Banner (Accessible state change indicator) -->
+<div aria-live="polite" class="hidden items-center gap-2.5 p-3 rounded-lg bg-hairline/40 border border-hairline text-deep-navy text-xs mt-3" id="revoke-toast" role="status">
+<span aria-hidden="true" class="material-symbols-outlined text-base text-deep-navy">check_circle</span>
+<span class="">Announce : « Flou rétabli avec succès. Photographie à nouveau masquée. »</span>
+</div>
+</div>
+</article>
+<!-- Card 2: Pending Request State -->
+<article class="p-5 sm:p-6 rounded-xl border border-hairline bg-cream">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-hairline/60">
+<div>
+<h3 class="font-semibold text-base text-deep-navy tracking-tight">
+                    Oumar_K <span class="text-xs font-normal text-deep-navy/60">(Demande reçue)</span>
+</h3>
+<p class="text-xs text-deep-navy/60 mt-0.5 flex items-center gap-1.5">
+<span aria-hidden="true" class="material-symbols-outlined text-sm text-deep-navy/50">info</span>
+                    Seconde étape de correspondance
+                  </p>
+</div>
+<!-- Status Chip -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cream border border-hairline text-deep-navy/80 text-xs font-medium self-start sm:self-center">
+<span aria-hidden="true" class="material-symbols-outlined text-sm text-soft-gold">hourglass_top</span>
+<span class="">Demande d'accès en attente (1/1 maximum)</span>
+</div>
+</div>
+<!-- Action Controls -->
+<div class="pt-4 space-y-3">
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+<!-- Primary Action -->
+<button class="min-h-[44px] px-5 py-2.5 rounded-lg bg-deep-navy hover:bg-deep-navy/90 text-cream text-xs font-semibold tracking-normal inline-flex items-center justify-center gap-2 transition-all duration-150 active:opacity-80 focus:outline-none focus:ring-2 focus:ring-soft-gold focus:ring-offset-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-base text-soft-gold">visibility</span>
+<span class="">Accorder la révélation</span>
+</button>
+<!-- Neutral Outline Action -->
+<button class="min-h-[44px] px-5 py-2.5 rounded-lg bg-transparent hover:bg-hairline/30 text-deep-navy text-xs font-semibold tracking-normal border border-hairline inline-flex items-center justify-center transition-all duration-150 active:opacity-80 focus:outline-none focus:ring-2 focus:ring-soft-gold focus:ring-offset-2" type="button">
+<span class="">Décliner avec égards</span>
+</button>
+</div>
+<p class="text-xs text-deep-navy/60 italic">
+                  Aucune révélation au survol. La décision nécessite une action intentionnelle et explicite de votre part.
+                </p>
+</div>
+</article>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Member Navigation Bar (Sub-app Destination Bar) -->
+<nav aria-label="Navigation membre" class="w-full bg-[#F7F1E3] border-t border-hairline/60 py-2">
+<div class="max-w-3xl mx-auto px-4 flex items-center justify-around">
+<!-- Découvrir (Active Tab) -->
+<a aria-current="page" class="min-h-[44px] min-w-[44px] px-4 py-2 flex flex-col items-center justify-center text-deep-navy font-semibold relative group" href="#decouvrir">
+<span aria-hidden="true" class="material-symbols-outlined text-xl mb-1 text-deep-navy">explore</span>
+<span class="text-xs tracking-normal">Découvrir</span>
+<span class="absolute bottom-0 w-8 h-0.5 bg-soft-gold rounded-full"></span>
+</a>
+<!-- Invitations -->
+<a class="min-h-[44px] min-w-[44px] px-4 py-2 flex flex-col items-center justify-center text-deep-navy/70 hover:text-deep-navy transition-colors" href="#invitations">
+<span aria-hidden="true" class="material-symbols-outlined text-xl mb-1 text-deep-navy/70">mail</span>
+<span class="text-xs tracking-normal">Invitations</span>
+</a>
+<!-- Discussions -->
+<a class="min-h-[44px] min-w-[44px] px-4 py-2 flex flex-col items-center justify-center text-deep-navy/70 hover:text-deep-navy transition-colors" href="#discussions">
+<span aria-hidden="true" class="material-symbols-outlined text-xl mb-1 text-deep-navy/70">forum</span>
+<span class="text-xs tracking-normal">Discussions</span>
+</a>
+<!-- Profil -->
+<a class="min-h-[44px] min-w-[44px] px-4 py-2 flex flex-col items-center justify-center text-deep-navy/70 hover:text-deep-navy transition-colors" href="#profil">
+<span aria-hidden="true" class="material-symbols-outlined text-xl mb-1 text-deep-navy/70">person</span>
+<span class="text-xs tracking-normal">Profil</span>
+</a>
+</div>
+</nav>
+<!-- Shared Component: Footer -->
+<footer class="w-full border-t border-hairline/60 mt-auto bg-cream">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand & Legal Attribution -->
+<div class="flex flex-col items-center md:items-start text-center md:text-left">
+<span class="font-display text-xl text-deep-navy tracking-wide">AnKanu</span>
+<p class="mt-1 text-xs font-normal text-deep-navy/60 max-w-md">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Compliance & Charter Links -->
+<nav aria-label="Liens éthiques et légaux" class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#charte">
+          Charte d'Honneur
+        </a>
+<a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#wali">
+          Rôle du Tuteur (Wali)
+        </a>
+<a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#donnees">
+          Protection des Données
+        </a>
+<a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#taaruf">
+          Démarche Ta'aruf
+        </a>
+<a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-150" href="#contact">
+          Contact Serein
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Subtle Micro-Interactions (Non-intrusive) -->
+<script>
+    function triggerRevocation() {
+      const btn = document.getElementById('revoke-btn');
+      const toast = document.getElementById('revoke-toast');
+      
+      const isPressed = btn.getAttribute('aria-pressed') === 'true';
+      btn.setAttribute('aria-pressed', (!isPressed).toString());
+      
+      if (!isPressed) {
+        btn.innerHTML = `<span class="material-symbols-outlined text-base text-soft-gold">lock_clock</span><span>Rétablissement en cours...</span>`;
+        btn.classList.add('opacity-75');
+        
+        setTimeout(() => {
+          btn.innerHTML = `<span class="material-symbols-outlined text-base text-soft-gold">check</span><span>Flou rétabli</span>`;
+          btn.classList.remove('opacity-75');
+          btn.disabled = true;
+          btn.classList.add('cursor-not-allowed', 'bg-deep-navy/70');
+          toast.classList.remove('hidden');
+          toast.classList.add('flex');
+        }, 500);
+      }
+    }
+  </script>
+
+
+<div id="snapdom-sandbox" data-snapdom-sandbox="true" aria-hidden="true" style="position: absolute; left: -9999px; top: -9999px; width: 0px; height: 0px; overflow: hidden;"></div>
+
+</body></html>

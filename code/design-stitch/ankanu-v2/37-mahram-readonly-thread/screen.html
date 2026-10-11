@@ -1,0 +1,278 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Consultation Tuteur (Fil en lecture seule)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Newsreader (display/headline) and Plus Jakarta Sans (body) -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms and Container Queries plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config verbatim per Design System rules -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    ::selection {
+      background-color: #C9A86C;
+      color: #0B1D36;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-body bg-cream text-deep-navy antialiased selection:bg-soft-gold selection:text-deep-navy">
+<!-- HEADER: MAHRAM SPECIALIZED SHELL (NO MEMBER BOTTOM NAV, NO DATING TABS) -->
+<header class="w-full top-0 sticky z-50 bg-cream/95 backdrop-blur-md border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand & Quiet Context -->
+<div class="flex items-center gap-6">
+<a class="font-display text-2xl tracking-wide font-normal text-deep-navy flex items-center gap-2 transition-opacity duration-150 hover:opacity-80" href="#">
+<span class="text-deep-navy">AnKanu</span>
+</a>
+<div class="h-5 w-px bg-hairline hidden sm:block"></div>
+<div class="hidden sm:flex items-center gap-2 text-xs font-medium text-deep-navy/80">
+<span class="w-2 h-2 rounded-full bg-soft-gold inline-block"></span>
+<span class="">Espace Tuteur (Mahram) • Fil de discussion suivi</span>
+</div>
+</div>
+<!-- Right Side Badges & Wali Verification Pill -->
+<div class="flex items-center gap-3 md:gap-4">
+<div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/60 border border-hairline/80 text-deep-navy text-xs font-medium">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="verified_user">verified_user</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+<div class="flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-deep-navy text-cream text-xs font-semibold shadow-xs">
+<span class="material-symbols-outlined text-soft-gold text-sm" data-icon="shield">shield</span>
+<span class="">Wali vérifié (CNIB &amp; Parenté)</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS: FOCUSED READ-ONLY OBSERVATION CANVASES -->
+<main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 md:py-10 flex flex-col gap-8">
+<!-- NAVIGATION & THREAD CONTEXT BANNER -->
+<div class="flex flex-col gap-6">
+<!-- Back Link & Status Note -->
+<div class="flex flex-wrap items-center justify-between gap-4">
+<a class="inline-flex items-center gap-2 text-xs font-medium text-deep-navy/70 hover:text-soft-gold transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+<span class="">Retour à mes salons suivis</span>
+</a>
+<div class="flex items-center gap-2 text-xs text-deep-navy/60">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="lock_clock">lock_clock</span>
+<span class="">Statut d'accès : <strong class="font-medium text-deep-navy">Actif et accordé</strong></span>
+</div>
+</div>
+<!-- Context Card: Interlocutor & Protected Ward (Protégée) Summary -->
+<div class="bg-white/80 border border-hairline rounded-md p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div class="space-y-3">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2.5 py-0.5 rounded text-[11px] font-semibold tracking-wide bg-cream border border-hairline text-deep-navy uppercase">Salon Ta'aruf</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-medium bg-cream text-deep-navy border border-hairline/80">
+<span class="material-symbols-outlined text-xs text-soft-gold" data-icon="check_circle">check_circle</span>
+              Identité vérifiée (CNIB)
+            </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-medium bg-cream text-deep-navy border border-hairline/80">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+              Accord mutuel actif
+            </span>
+</div>
+<div>
+<h1 class="font-display text-2xl md:text-3xl text-deep-navy tracking-tight">
+              Salon accordé : Al-Hassan_BF, 29 ans <span class="text-lg font-normal text-deep-navy/70">(Ouagadougou)</span>
+</h1>
+<p class="text-sm font-medium text-deep-navy/80 mt-1 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="supervisor_account">supervisor_account</span>
+<span class="">Protégée sous votre tutelle : <span class="font-semibold text-deep-navy">Fatimata D.</span> (Nièce / Filleule)</span>
+</p>
+</div>
+</div>
+<!-- Mahram Contextual Actions -->
+<div class="flex flex-row md:flex-col items-stretch justify-end gap-2 shrink-0 border-t md:border-t-0 md:border-l border-hairline pt-4 md:pt-0 md:pl-6">
+<button class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border border-hairline bg-cream/50 text-deep-navy text-xs font-medium hover:border-soft-gold hover:text-deep-navy transition-all duration-150 active:opacity-80" type="button">
+<span class="material-symbols-outlined text-sm text-deep-navy/70" data-icon="pause_circle">pause_circle</span>
+<span class="">Mettre en pause l'accès</span>
+</button>
+<button class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border border-hairline bg-cream/50 text-deep-navy text-xs font-medium hover:border-soft-gold hover:text-deep-navy transition-all duration-150 active:opacity-80" type="button">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="flag">flag</span>
+<span class="">Signaler une non-convenance</span>
+</button>
+<button class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-md border border-hairline bg-cream/50 text-deep-navy text-xs font-medium hover:border-soft-gold hover:text-deep-navy transition-all duration-150 active:opacity-80" type="button">
+<span class="material-symbols-outlined text-sm text-deep-navy/70" data-icon="cancel">cancel</span>
+<span class="">Clôturer mon accompagnement</span>
+</button>
+</div>
+</div>
+<!-- Solemn Mahram Read-Only Notice Banner -->
+<div class="bg-cream border border-soft-gold/60 rounded-md p-4 flex items-start gap-3.5">
+<span class="material-symbols-outlined text-soft-gold text-xl shrink-0 mt-0.5" data-icon="visibility">visibility</span>
+<div class="text-xs md:text-sm text-deep-navy/90 leading-relaxed font-normal">
+<strong class="font-semibold text-deep-navy">Consultation bienveillante en lecture seule.</strong> Vous assistez aux échanges de convenance dans le respect rigoureux de la pudeur et de l'honneur familial. Conformément aux règles d'alliance d'AnKanu, vous ne pouvez pas rédiger ni intervenir directement dans ce fil de discussion numérique.
+        </div>
+</div>
+</div>
+<!-- CONVERSATION TIMELINE CONTAINER (READ-ONLY) -->
+<section class="bg-white/60 border border-hairline rounded-md p-5 sm:p-8 space-y-6">
+<!-- Date Separator -->
+<div class="flex items-center justify-center gap-4 my-2">
+<div class="h-px bg-hairline flex-grow max-w-xs"></div>
+<span class="text-[11px] font-medium tracking-wider text-deep-navy/50 uppercase">Ouverture du fil de convenance • 10 Octobre</span>
+<div class="h-px bg-hairline flex-grow max-w-xs"></div>
+</div>
+<!-- MESSAGE 1: Message Flash d'introduction initial (Al-Hassan_BF) -->
+<article class="flex flex-col items-start max-w-2xl mr-auto">
+<div class="flex items-baseline gap-2 mb-1.5 px-1">
+<span class="text-xs font-semibold text-deep-navy">Al-Hassan_BF</span>
+<span class="text-[10px] text-deep-navy/50 font-normal">10 octobre, 14:20</span>
+<span class="text-[10px] px-1.5 py-0.2 rounded bg-cream border border-hairline text-deep-navy/70 font-medium">Message initial</span>
+</div>
+<div class="bg-cream border border-hairline/80 rounded-md p-4 text-deep-navy text-sm leading-relaxed">
+          « Assalamu alaykum, en quête d'une démarche sincère et concertée avec respect de votre tuteur, je sollicite l'ouverture d'un échange ordonné sur nos principes d'alliance et de vie. »
+        </div>
+<div class="flex items-center gap-1.5 text-[10px] text-deep-navy/50 mt-1 px-1">
+<span class="material-symbols-outlined text-xs text-soft-gold" data-icon="task_alt">task_alt</span>
+<span class="">Consultation notifiée au Wali le 10 oct. à 14:21</span>
+</div>
+</article>
+<!-- MESSAGE 2: Réponse de la sœur protégée (Fatimata D.) -->
+<article class="flex flex-col items-end max-w-2xl ml-auto">
+<div class="flex items-baseline gap-2 mb-1.5 px-1">
+<span class="text-[10px] text-deep-navy/50 font-normal">10 octobre, 16:45</span>
+<span class="text-xs font-semibold text-deep-navy">Fatimata D. (Votre protégée)</span>
+<span class="text-[10px] px-1.5 py-0.2 rounded bg-soft-gold/20 text-deep-navy font-medium">Réponse vérifiée</span>
+</div>
+<div class="bg-deep-navy text-cream border border-deep-navy rounded-md p-4 text-sm leading-relaxed text-left">
+          « Wa alaykum salam wa rahmatullah. Qu'Allah bénisse cette démarche. Mon tuteur a été informé de l'ouverture de ce salon et consulte nos échanges conformément à la règle de bienséance. »
+        </div>
+<div class="flex items-center gap-1.5 text-[10px] text-deep-navy/50 mt-1 px-1">
+<span class="material-symbols-outlined text-xs text-soft-gold" data-icon="visibility">visibility</span>
+<span class="">Présence bienveillante enregistrée par le Mahram</span>
+</div>
+</article>
+<!-- MESSAGE 3: Note vocale sobre de présentation -->
+<article class="flex flex-col items-start max-w-xl mr-auto">
+<div class="flex items-baseline gap-2 mb-1.5 px-1">
+<span class="text-xs font-semibold text-deep-navy">Al-Hassan_BF</span>
+<span class="text-[10px] text-deep-navy/50 font-normal">11 octobre, 10:15</span>
+<span class="text-[10px] px-1.5 py-0.2 rounded bg-cream border border-hairline text-deep-navy/70 font-medium">Présentation sobre</span>
+</div>
+<div class="w-full bg-cream border border-hairline/80 rounded-md p-4 flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<button aria-label="Écouter la présentation vocale" class="w-10 h-10 rounded-full bg-deep-navy text-cream flex items-center justify-center shrink-0 hover:bg-deep-navy/90 transition-all duration-150" type="button">
+<span class="material-symbols-outlined text-lg pl-0.5" data-icon="play_arrow">play_arrow</span>
+</button>
+<div class="flex-grow space-y-1.5">
+<div class="flex items-center justify-between text-xs text-deep-navy">
+<span class="font-medium">Note vocale de convenance</span>
+<span class="text-[11px] font-mono text-deep-navy/60">0:48</span>
+</div>
+<!-- Clean quiet waveform visualization -->
+<div class="flex items-center gap-0.5 h-6 w-full py-1">
+<div class="w-1 bg-soft-gold h-2 rounded-full"></div>
+<div class="w-1 bg-soft-gold h-4 rounded-full"></div>
+<div class="w-1 bg-soft-gold h-3 rounded-full"></div>
+<div class="w-1 bg-soft-gold h-5 rounded-full"></div>
+<div class="w-1 bg-soft-gold h-3 rounded-full"></div>
+<div class="w-1 bg-soft-gold h-6 rounded-full"></div>
+<div class="w-1 bg-soft-gold h-4 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-5 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-3 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-4 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-2 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-4 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-5 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-3 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-2 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-4 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-6 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-3 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-2 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-4 rounded-full"></div>
+<div class="w-1 bg-deep-navy/30 h-2 rounded-full"></div>
+</div>
+</div>
+</div>
+<p class="text-[11px] text-deep-navy/60 italic border-t border-hairline/60 pt-2">
+            « Présentation de ma situation professionnelle, de mes attaches familiales et de mes attentes pour un foyer digne à Ouagadougou. »
+          </p>
+</div>
+</article>
+<!-- MESSAGE 4: Message récent de Al-Hassan_BF -->
+<article class="flex flex-col items-start max-w-2xl mr-auto">
+<div class="flex items-baseline gap-2 mb-1.5 px-1">
+<span class="text-xs font-semibold text-deep-navy">Al-Hassan_BF</span>
+<span class="text-[10px] text-deep-navy/50 font-normal">Aujourd'hui, 09:12</span>
+</div>
+<div class="bg-cream border border-hairline/80 rounded-md p-4 text-deep-navy text-sm leading-relaxed">
+          « J'ai bien pris note des précisions transmises sur votre vision du foyer et les convenances familiales à Ouagadougou. Une rencontre formelle en présence de votre tuteur pourra être envisagée le moment venu selon vos convenances. »
+        </div>
+<!-- Acquittement spécifique -->
+<div class="flex items-center gap-1.5 text-[11px] text-deep-navy/70 mt-1.5 px-1 font-medium">
+<span class="material-symbols-outlined text-xs text-soft-gold" data-icon="done_all">done_all</span>
+<span class="">Lu par le tuteur • Présence bienveillante enregistrée</span>
+</div>
+</article>
+</section>
+<!-- STRICTLY NO COMPOSE / NO INPUT BAR: REPLACED BY READ-ONLY SOLEMN STATUS BOX -->
+
+</main>
+<!-- FOOTER: EXACT SHARED COMPONENT SPECIFICATION -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<p class="font-body text-xs font-normal text-deep-navy/60 text-center md:text-left">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<nav class="flex flex-wrap justify-center gap-6 text-xs">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Protection des Données</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Contact Serein</a>
+</nav>
+</div>
+</footer>
+
+
+</body></html>

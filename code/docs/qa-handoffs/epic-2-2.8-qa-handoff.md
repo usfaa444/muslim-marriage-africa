@@ -1,5 +1,7 @@
 # Epic 2 Story 2.8 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 A signed-in member with a granted phone can submit one ID photo and one liveness frame. Both posts use the same session cookie as `POST /v1/verifications/otp`. There is no extra CSRF token. Nothing in this story calls `BillingPort` or sets `profile.visibility` to `public`.
@@ -21,7 +23,7 @@ The bytes are encrypted in memory with AES-256-GCM before anything is stored. Th
 
 If the account is already `held`, the new row is `held` and `profile.visibility` stays `held`. An adult account leaves `visibility` null. This story does not compare the selfie with a profile photo. `photo_asset` is not read. A `rejected` row is a record state, not an HTTP error. Seeding one and calling GET returns `rejected`.
 
-`GET /id-liveness` serves `code/design-stitch/17-id-liveness/screen.html` with `cache-control: no-store` and `referrer-policy: no-referrer`. The Stitch file is not edited. The served HTML does not contain `Scaleway`. The hosting sentences are removed and nothing is put in their place. A script before `</body>` loads both GET routes. Held on either kind shows `#status-minorhold`. Otherwise rejected on either kind shows `#status-mismatch`. Success shows only when both are `pending`. Otherwise the screen stays `#status-ready`. The ID file input is the one already in the HTML. A click on the camera viewport opens a hidden file input for the selfie. Submit posts whichever images were chosen, then reloads the two GET routes. The free retake button inside `#status-mismatch` returns the screen to ready so the member can post again. Audio buttons stay unwired. The audit simulator buttons stay, because they are in the downloaded HTML.
+`GET /id-liveness` serves `code/design-stitch/ankanu-v2/07-id-liveness/screen.html` with `cache-control: no-store` and `referrer-policy: no-referrer`. The Stitch file is not edited. The served HTML does not contain `Scaleway`. The hosting sentences are removed and nothing is put in their place. A script before `</body>` loads both GET routes. Held on either kind shows `#status-minorhold`. Otherwise rejected on either kind shows `#status-mismatch`. Success shows only when both are `pending`. Otherwise the screen stays `#status-ready`. The ID file input is the one already in the HTML. A click on the camera viewport opens a hidden file input for the selfie. Submit posts whichever images were chosen, then reloads the two GET routes. The free retake button inside `#status-mismatch` returns the screen to ready so the member can post again. Audio buttons stay unwired. The audit simulator buttons stay, because they are in the downloaded HTML.
 
 ## Where
 
@@ -119,10 +121,10 @@ Founder sentences on this ticket. `verification_record` already allows `liveness
 
 ## Stitch files
 
-- `code/design-stitch/17-id-liveness/screen.html`
-- `code/design-stitch/17-id-liveness/screen.png`
+- `code/design-stitch/ankanu-v2/07-id-liveness/screen.html`
+- `code/design-stitch/ankanu-v2/07-id-liveness/screen.png`
 
-The HTML file was not edited. The page injects a script before `</body>` and removes the hosting lines from the served copy only. The web image copies `17-id-liveness/screen.html`.
+The HTML file was not edited. The page injects a script before `</body>` and removes the hosting lines from the served copy only. The web image copies `ankanu-v2/07-id-liveness/screen.html`.
 
 ## Known gaps
 

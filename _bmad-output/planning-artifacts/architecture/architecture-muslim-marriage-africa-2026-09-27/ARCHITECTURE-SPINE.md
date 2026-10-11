@@ -26,6 +26,8 @@ companions:
 
 Product name **AnKanu** (locked 2026-10-03, Maitchibi Fayçal via Harris). Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, and `nisfdin` are history of the search that was not chosen — those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed. Assumptions A1–A3 stay as written in the brief/PRD.
 
+UI layout for build is Google Stitch **AnKanu v2** (`code/design-stitch/ankanu-v2/`, map `MANIFEST.md`). The UX-folder `DESIGN.md` is tokens only and is not the layout.
+
 ## Design Paradigm
 
 **Hexagonal modular monolith.** One API *product* from one image: `api` + `worker` process roles (AD-1), plus an in-region `web` role (AD-4). Each capability is a module with `domain` + `application` + inbound/outbound **ports**; vendor I/O lives only in **adapters**. The Next.js/Capacitor clients are a single UI shell that talks HTTP+WebSocket — they do not own invariants.

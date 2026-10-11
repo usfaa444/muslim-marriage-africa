@@ -1,5 +1,7 @@
 # Epic 2 Story 2.2 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 `POST /v1/sessions` opens a `web` session. Body fields are `identifier` (required text; email matched case-insensitively, pseudonym matched exactly as stored), `password` (required text), and `remember_me` (required boolean). Success is 201 `{ id, kind: "web", expires_at }`. The response sets cookie `ankanu_session` to the session id, with `Path=/`, `Secure`, `HttpOnly`, and `SameSite=Lax`.
@@ -114,8 +116,8 @@ The migrate test starts a throwaway Postgres 17 container and removes it. Auth H
 
 ## Stitch files
 
-- `code/design-stitch/11-auth/screen.html`
-- `code/design-stitch/11-auth/screen.png`
+- `code/design-stitch/ankanu-v2/02-auth/screen.html`
+- `code/design-stitch/ankanu-v2/02-auth/screen.png`
 
 The HTML file was not edited. The page injects a script before `</body>`.
 

@@ -16,7 +16,7 @@ context:
 
 **Problem:** There is no `apps/web` shell. A visitor cannot open a French AnKanu landing or splash, and nothing refuses a staff cookie on a member route.
 
-**Approach:** Add a Next.js App Router shell under `code/apps/web`. `/` matches `code/design-stitch/01-public-landing`. `/splash` matches `code/design-stitch/10-splash`. Tailwind tokens match `code/design-stitch/tokens/DESIGN.md`. Role chrome components exist and are not mounted on those two pages. Member routes refuse `ankanu_session=staff` with the kernel error envelope.
+**Approach:** Add a Next.js App Router shell under `code/apps/web`. `/` matches `code/design-stitch/ankanu-v2/MANIFEST.md (v2 coverage gaps — Public landing)`. `/splash` matches `code/design-stitch/ankanu-v2/01-splash`. Tailwind tokens match `code/design-stitch/ankanu-v2/DESIGN.md`. Role chrome components exist and are not mounted on those two pages. Member routes refuse `ankanu_session=staff` with the kernel error envelope.
 
 ## Boundaries & Constraints
 
@@ -42,9 +42,9 @@ context:
 
 - `code/apps/api` — leave the health body and worker shell unchanged.
 - `code/packages/kernel/src/error.ts` — `errorEnvelope`. Reuse it. Do not add a second envelope.
-- `code/design-stitch/01-public-landing/screen.html` — landing layout and copy. Match it.
-- `code/design-stitch/10-splash/screen.html` — splash layout and copy. Match it. Splash spacing keys 5 and 6 differ from the landing scale; keep landing on default Tailwind spacing.
-- `code/design-stitch/tokens/DESIGN.md` — color, type, and radius tokens. Not the layout.
+- `code/design-stitch/ankanu-v2/MANIFEST.md (v2 coverage gaps — Public landing)` — landing layout and copy. Match it.
+- `code/design-stitch/ankanu-v2/01-splash/screen.html` — splash layout and copy. Match it. Splash spacing keys 5 and 6 differ from the landing scale; keep landing on default Tailwind spacing.
+- `code/design-stitch/ankanu-v2/DESIGN.md` — color, type, and radius tokens. Not the layout.
 - `code/package.json` — add the web workspace to typecheck. Do not change API pins.
 
 ## Tasks & Acceptance
@@ -61,7 +61,7 @@ context:
 
 ## Implementation Notes
 
-- Stitch files for this story were on `origin/main` and absent from the local branch. Checked out `01-public-landing`, `10-splash`, and `tokens` only.
+- Stitch files for this story were on `origin/main` and absent from the local branch. Checked out `v2 coverage gap — Public landing`, `01-splash`, and `tokens` only.
 - `GET /v1/public/marriage-count` is not in `apps/api`. The landing counter is the Stitch literal `Mariages confirmés : 0`. No second metrics endpoint.
 - Cookie `ankanu_session` value is the session kind. Member paths return JSON only.
 - Splash install click replaces the Stitch sentence. It does not call an install API.

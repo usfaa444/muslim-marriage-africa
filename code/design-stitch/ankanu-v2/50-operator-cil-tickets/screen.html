@@ -1,0 +1,334 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu — Registre des Requêtes CIL &amp; Effacement</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8'
+          },
+          borderRadius: {
+            'DEFAULT': '0.25rem',
+            'md': '8px',
+            'lg': '0.5rem',
+            'xl': '0.75rem',
+            'full': '9999px'
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="min-h-full bg-cream text-deep-navy font-body antialiased flex flex-col selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- STAFF & CONFORMITÉ CIL TOP BAR -->
+<header class="w-full bg-deep-navy text-cream sticky top-0 z-50 border-b border-soft-gold/20 shadow-sm">
+<div class="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+<!-- Brand & Security Scope -->
+<div class="flex items-center space-x-4 md:space-x-6">
+<a class="font-display text-2xl tracking-wide font-normal text-cream hover:text-soft-gold transition-colors duration-150" href="#">
+          AnKanu
+        </a>
+<div class="h-4 w-px bg-soft-gold/30"></div>
+<div class="flex items-center space-x-2">
+<span class="text-xs font-semibold tracking-wider text-soft-gold uppercase font-body">Staff &amp; Conformité CIL</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-medium bg-soft-gold/15 text-gold-soft border border-soft-gold/30">
+<span class="material-symbols-outlined text-[13px]" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+            Espace Opérateur (Confidentiel)
+          </span>
+</div>
+</div>
+<!-- Operator Details & Active Session -->
+<div class="flex items-center space-x-6 text-xs text-cream/80">
+<div class="hidden sm:flex items-center space-x-2 border-r border-soft-gold/20 pr-6">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="shield">shield</span>
+<span class="font-medium text-cream">Opérateur DPO / CIL • Ouagadougou</span>
+</div>
+<div class="flex items-center space-x-3">
+<span class="inline-block w-2 h-2 rounded-full bg-soft-gold animate-pulse"></span>
+<span class="font-mono text-[11px] text-cream/70 tracking-tight">SESSION-ID: BF-CIL-7092-A</span>
+</div>
+</div>
+</div>
+</header>
+<!-- SUB-HEADER NAVIGATION & CRYPTOGRAPHIC BANNER -->
+<nav class="bg-cream border-b border-hairline/60">
+<div class="max-w-7xl mx-auto px-6 md:px-10 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+<a class="inline-flex items-center gap-1.5 font-medium text-deep-navy/80 hover:text-deep-navy transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+<span>← Retour à la console de conformité</span>
+</a>
+<div class="flex items-center gap-2 text-deep-navy/70 font-mono text-[11px]">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified">verified</span>
+<span>Registre CIL certifié GMT • Ouagadougou (Loi 001-2021/AN)</span>
+</div>
+</div>
+</nav>
+<!-- MAIN OPERATOR CONTENT AREA -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-6 md:px-10 py-8">
+<!-- Title Area -->
+<div class="mb-8">
+<div class="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 border-b border-hairline pb-5">
+<div>
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy tracking-tight font-normal">
+            Registre des Requêtes CIL &amp; Effacement
+          </h1>
+<p class="font-body text-sm text-deep-navy/75 mt-1.5 max-w-3xl leading-relaxed">
+            Instruction des demandes d'exportation et d'effacement définitif de données personnelles conformément aux délibérations CIL Burkina Faso.
+          </p>
+</div>
+<div class="flex items-center gap-3 self-start md:self-auto text-xs font-medium text-deep-navy/80">
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-hairline/40 rounded-md border border-hairline">
+<span class="material-symbols-outlined text-sm text-deep-navy" data-icon="folder_managed">folder_managed</span>
+            3 tickets en cours d'instruction
+          </span>
+</div>
+</div>
+</div>
+<!-- Two-Pane Layout (Desktop Split) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- LEFT PANE: Queue List (5 Cols) -->
+<section class="lg:col-span-5 flex flex-col space-y-4">
+<div class="flex items-center justify-between pb-1">
+<h2 class="text-xs font-semibold uppercase tracking-wider text-deep-navy/60 font-body">
+            File d'attente active des requêtes
+          </h2>
+<span class="text-xs text-deep-navy/50 font-mono">Tri : Horodatage légal</span>
+</div>
+<!-- Ticket 1: Active Selected -->
+<article class="p-4 rounded-md bg-white border-2 border-soft-gold shadow-sm transition-all relative">
+<div class="absolute -left-1 top-4 bottom-4 w-1 bg-soft-gold rounded-full"></div>
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="font-mono text-xs font-bold text-deep-navy tracking-tight">ANK-2026-84920</span>
+<p class="text-sm font-semibold text-deep-navy mt-0.5">Membre : Souleymane_T</p>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-soft-gold/20 text-deep-navy border border-soft-gold/40">
+              Délai de grâce actif
+            </span>
+</div>
+<div class="mt-3 pt-3 border-t border-hairline/50 flex flex-col gap-1.5 text-xs text-deep-navy/80">
+<div class="flex items-center justify-between">
+<span class="text-deep-navy/60">Compte à rebours :</span>
+<span class="font-mono font-semibold text-deep-navy">47:58:08</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-deep-navy/60">Délai légal CIL :</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-deep-navy">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+                Horloge respectée
+              </span>
+</div>
+</div>
+</article>
+<!-- Ticket 2: Approaching SLA breach -->
+<article class="p-4 rounded-md bg-white/70 hover:bg-white border border-hairline transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="font-mono text-xs font-bold text-deep-navy/80 tracking-tight">ANK-2026-84903</span>
+<p class="text-sm font-medium text-deep-navy mt-0.5">Membre : Aminata_K</p>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-deep-navy/10 text-deep-navy border border-hairline">
+              Archive chiffrée prête
+            </span>
+</div>
+<div class="mt-3 pt-3 border-t border-hairline/50 flex flex-col gap-1.5 text-xs text-deep-navy/80">
+<div class="flex items-center justify-between">
+<span class="text-deep-navy/60">Échéance de purge :</span>
+<span class="font-mono font-medium text-deep-navy">19:12:40 restante</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-deep-navy/60">Délai légal CIL :</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-deep-navy border border-soft-gold/60 px-1.5 py-0.5 rounded bg-soft-gold/10">
+<span class="material-symbols-outlined text-[13px] text-soft-gold" data-icon="schedule">schedule</span>
+                Alerte échéance CIL &lt; 24h
+              </span>
+</div>
+</div>
+</article>
+<!-- Ticket 3: Scheduled Purge -->
+<article class="p-4 rounded-md bg-white/70 hover:bg-white border border-hairline transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-2">
+<div>
+<span class="font-mono text-xs font-bold text-deep-navy/80 tracking-tight">ANK-2026-84882</span>
+<p class="text-sm font-medium text-deep-navy mt-0.5">Membre : Al-Hassan_BF</p>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-hairline/70 text-deep-navy/90 border border-hairline">
+              Purge programmée
+            </span>
+</div>
+<div class="mt-3 pt-3 border-t border-hairline/50 flex flex-col gap-1.5 text-xs text-deep-navy/80">
+<div class="flex items-center justify-between">
+<span class="text-deep-navy/60">Statut de la grâce :</span>
+<span class="text-deep-navy/70">Délai expiré sans rétractation</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-deep-navy/60">Délai légal CIL :</span>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-deep-navy">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+                Horloge respectée (purge à exécuter)
+              </span>
+</div>
+</div>
+</article>
+<!-- Simple procedural notice -->
+<div class="p-3.5 rounded-md bg-hairline/30 border border-hairline/60 text-xs text-deep-navy/70 flex gap-2.5 items-start">
+<span class="material-symbols-outlined text-base text-deep-navy/60 shrink-0 mt-0.5" data-icon="info">info</span>
+<p class="leading-relaxed">
+            Les demandes sont traitées selon l'ordre strict de dépôt horodaté par l'autorité de certification CIL de Ouagadougou.
+          </p>
+</div>
+</section>
+<!-- RIGHT PANE: Ticket Detail / Action Pane (7 Cols) -->
+<section class="lg:col-span-7 bg-white rounded-md border border-hairline p-6 md:p-8 space-y-6">
+<!-- Header of selected ticket -->
+<div class="border-b border-hairline pb-5">
+<div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+<div class="flex items-center gap-2.5">
+<span class="font-mono text-sm font-bold text-deep-navy tracking-tight px-2 py-1 rounded bg-cream border border-hairline">
+                ANK-2026-84920
+              </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold bg-soft-gold/15 text-deep-navy border border-soft-gold/30">
+<span class="w-2 h-2 rounded-full bg-soft-gold"></span>
+                Délai de grâce actif (47:58:08)
+              </span>
+</div>
+<span class="text-xs text-deep-navy/60 font-mono">Dossier CIL-BF #2026-X8</span>
+</div>
+<div class="mt-3 flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+<h2 class="font-display text-2xl text-deep-navy">
+              Membre requérant : <span class="font-medium">Souleymane_T</span>
+</h2>
+<span class="text-xs text-deep-navy/70">Wali rattaché : Actif &amp; Notifié</span>
+</div>
+</div>
+<!-- Information matching Member Status Page Context -->
+<div class="space-y-4">
+<h3 class="text-xs font-semibold uppercase tracking-wider text-deep-navy/60 font-body">
+            Éléments du dossier technique
+          </h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Item 1: Cryptographic Archive -->
+<div class="p-3.5 rounded-md bg-cream/50 border border-hairline">
+<div class="flex items-center gap-2 text-deep-navy font-medium text-xs mb-1">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="lock_clock">lock_clock</span>
+                Archive chiffrée AES-256
+              </div>
+<p class="text-xs text-deep-navy/75 leading-relaxed">
+                Générée et mise à disposition du membre sur son espace sécurisé. Clé dérivée unique valide 48h.
+              </p>
+</div>
+<!-- Item 2: Certified Timestamp -->
+<div class="p-3.5 rounded-md bg-cream/50 border border-hairline">
+<div class="flex items-center gap-2 text-deep-navy font-medium text-xs mb-1">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified">verified</span>
+                Horodatage CIL certifié
+              </div>
+<p class="text-xs text-deep-navy/75 leading-relaxed font-mono">
+                12 Octobre 2026 - 09:14:22 GMT<br>
+                Reçu d'émargement : BF-CIL-REC-84920
+              </p>
+</div>
+</div>
+</div>
+<!-- Clock Monitoring & SLA Section -->
+<div class="p-4 rounded-md bg-hairline/25 border border-hairline space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-deep-navy text-lg" data-icon="hourglass_top">hourglass_top</span>
+<span class="text-xs font-semibold text-deep-navy uppercase tracking-wide">
+                Contrôle des Délais Réglementaires CIL
+              </span>
+</div>
+<span class="text-xs font-mono font-medium text-deep-navy">Horloge respectée</span>
+</div>
+<div class="w-full bg-cream h-2 rounded-full overflow-hidden border border-hairline">
+<div aria-valuemax="100" aria-valuemin="0" aria-valuenow="34" class="bg-soft-gold h-full w-[34%]" role="progressbar"></div>
+</div>
+<div class="grid grid-cols-2 gap-4 text-xs pt-1 text-deep-navy/80">
+<div>
+<p class="text-deep-navy/60 text-[11px]">Délai de grâce membre (48h) :</p>
+<p class="font-medium text-deep-navy">Expire le 14 Oct. 2026 à 09:14 GMT</p>
+</div>
+<div>
+<p class="text-deep-navy/60 text-[11px]">SLA régimentaire CIL (Purge &lt; 72h) :</p>
+<p class="font-medium text-deep-navy">Limite d'exécution le 15 Oct. 2026</p>
+</div>
+</div>
+</div>
+<!-- Operational Staff Actions -->
+<div class="space-y-3 pt-2">
+<h3 class="text-xs font-semibold uppercase tracking-wider text-deep-navy/60 font-body">
+            Actions d'instruction opérateur
+          </h3>
+<div class="flex flex-col sm:flex-row gap-3">
+<button class="flex-1 inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-deep-navy text-cream rounded-md text-xs font-medium hover:bg-deep-navy/90 transition-colors shadow-none" type="button">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="delete_forever">delete_forever</span>
+              Valider la purge irréversible
+            </button>
+<button class="inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-cream text-deep-navy border border-hairline rounded-md text-xs font-medium hover:border-soft-gold transition-colors" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="mark_email_read">mark_email_read</span>
+              Notifier le membre par SMS/email sécurisé
+            </button>
+</div>
+<div>
+<button class="w-full inline-flex justify-center items-center gap-2 px-4 py-2.5 bg-cream text-deep-navy border border-hairline rounded-md text-xs font-medium hover:border-soft-gold transition-colors" type="button">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="history_edu">history_edu</span>
+              Consigner l'attestation de conformité CIL
+            </button>
+</div>
+</div>
+<!-- Sceau Cryptographique SHA-256 -->
+<div class="pt-4 border-t border-hairline/60">
+<div class="flex items-center justify-between text-[11px] text-deep-navy/60 mb-1">
+<span class="font-semibold tracking-wide uppercase">Sceau cryptographique SHA-256 de traçabilité</span>
+<span class="font-mono">Registre immuable</span>
+</div>
+<div class="p-2.5 bg-cream/70 rounded border border-hairline font-mono text-[11px] text-deep-navy/80 break-all select-all">
+            e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855::ANK-BF-2026-84920::CIL-PURGE-AUTH
+          </div>
+</div>
+</section>
+</div>
+</main>
+<!-- CLEAN OPERATOR FOOTER (NO MEMBER BOTTOM NAV) -->
+<footer class="w-full bg-cream border-t border-hairline/60 mt-auto">
+<div class="max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col md:flex-row items-center gap-3 md:gap-6 text-center md:text-left">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<nav class="flex flex-wrap items-center justify-center gap-6 text-xs text-deep-navy/70">
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="hover:text-soft-gold transition-colors duration-150 font-medium text-deep-navy underline underline-offset-4 decoration-soft-gold" href="#">Protection des Données</a>
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Contact Serein</a>
+</nav>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Tarification &amp; Packs Opérateur (Staff) — AnKanu</title>
+<!-- Google Fonts: Newsreader & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400&amp;family=Plus Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "gold-soft": "#E6D5A8",
+            "cream": "#F7F1E3",
+            "hairline": "#E2D4B8",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    body {
+      background-color: #F7F1E3;
+      color: #0B1D36;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between text-deep-navy antialiased selection:bg-soft-gold selection:text-deep-navy">
+<!-- STAFF SHELL HEADER -->
+<header class="w-full bg-[#F7F1E3] border-b border-hairline/80 sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-6 md:px-12 h-16 flex items-center justify-between">
+<!-- Left Anchor: Brand & Ethical Staff Badge -->
+<div class="flex items-center space-x-3.5">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+<span class="h-4 w-px bg-hairline"></span>
+<div class="flex items-center space-x-2">
+<span class="text-xs font-semibold uppercase tracking-widest text-deep-navy/80">Staff &amp; Administration Éthique</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-deep-navy/5 text-deep-navy/70 border border-hairline">
+            Usage Interne / Espace Réservé Staff
+          </span>
+</div>
+</div>
+<!-- Right Anchor: Audit Trail & Location -->
+<div class="flex items-center space-x-5 text-xs text-deep-navy/70">
+<div class="hidden sm:flex flex-col text-right">
+<span class="font-medium text-deep-navy">Opérateur Référent • Ouagadougou</span>
+<span class="font-mono text-[11px] text-deep-navy/50">Session auditable #STF-2026-BF</span>
+</div>
+<div class="h-8 w-8 rounded-full border border-hairline flex items-center justify-center text-deep-navy/70 bg-cream" title="Connexion sécurisée">
+<span class="material-symbols-outlined text-[18px]">shield</span>
+</div>
+</div>
+</div>
+</header>
+<!-- SUB-HEADER NAVIGATION / BREADCRUMB -->
+<section class="w-full border-b border-hairline/50 bg-[#F7F1E3]">
+<div class="max-w-7xl mx-auto px-6 md:px-12 py-3 flex flex-wrap items-center justify-between text-xs gap-3">
+<a class="inline-flex items-center text-deep-navy/70 hover:text-deep-navy transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[16px] mr-1.5">arrow_back</span>
+        Retour aux seuils &amp; politiques opérationnelles
+      </a>
+<div class="flex items-center space-x-2 text-deep-navy/60 font-mono text-[11px]">
+<span class="inline-block w-2 h-2 rounded-full bg-soft-gold"></span>
+<span class="">Registre tarifaire certifié GMT</span>
+</div>
+</div>
+</section>
+<!-- MAIN CANVAS -->
+<main class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex-grow">
+<!-- Title & Purpose -->
+<div class="mb-10 max-w-3xl">
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy tracking-tight mb-3">
+        Grille Tarifaire &amp; Paramètres des Packs Ta'aruf
+      </h1>
+<p class="text-sm md:text-base text-deep-navy/75 leading-relaxed font-body">
+        Cadre de tarification des démarches d'accompagnement. Les contributions soutiennent l'infrastructure de médiation sans aucune recherche de rente récurrente ni de captation d'attention.
+      </p>
+</div>
+<!-- Two-pane desktop layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- LEFT COLUMN: Main Grids & Architectural Rules (8 Cols) -->
+<div class="lg:col-span-8 space-y-8">
+<!-- SECTION 1: Barème des Packs -->
+<div class="bg-cream border border-hairline rounded-md p-6 md:p-8">
+<div class="flex items-center justify-between pb-5 border-b border-hairline/70 mb-6">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Barème des Packs de Démarche</h2>
+<p class="text-xs text-deep-navy/60 mt-0.5">Durées &amp; Tarifs officiels autorisés</p>
+</div>
+<span class="text-xs font-mono font-medium px-2.5 py-1 rounded bg-deep-navy/5 text-deep-navy border border-hairline">
+              Devise : Franc CFA (XOF)
+            </span>
+</div>
+<!-- Cards Bento-like Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Pack 1 -->
+<div class="border border-hairline/80 rounded-md p-5 bg-white/40 flex flex-col justify-between">
+<div>
+<span class="text-[11px] font-mono uppercase tracking-wider text-deep-navy/50 block mb-1">Durée courte</span>
+<h3 class="font-display text-lg text-deep-navy">Démarche Découverte</h3>
+<p class="text-xs text-deep-navy/70 mt-1">1 mois (30 jours)</p>
+<div class="my-5">
+<div class="text-2xl font-display font-medium text-deep-navy">3 500 <span class="text-xs font-sans text-deep-navy/60">XOF</span></div>
+<span class="text-[11px] text-deep-navy/50">Paiement unique direct</span>
+</div>
+</div>
+<div class="pt-3 border-t border-hairline/60 text-[11px] text-deep-navy/65">
+                Accès de base au registre des médiations.
+              </div>
+</div>
+<!-- Pack 2 (Reference) -->
+<div class="border-2 border-soft-gold rounded-md p-5 bg-white/80 relative flex flex-col justify-between">
+<div class="absolute -top-3 right-3 bg-soft-gold text-deep-navy font-medium text-[10px] uppercase tracking-wider px-2 py-0.5 rounded">
+                Formule de référence
+              </div>
+<div>
+<span class="text-[11px] font-mono uppercase tracking-wider text-deep-navy/60 block mb-1">Rythme recommandé</span>
+<h3 class="font-display text-lg text-deep-navy">Démarche Approfondie</h3>
+<p class="text-xs text-deep-navy/70 mt-1">3 mois (90 jours)</p>
+<div class="my-5">
+<div class="text-2xl font-display font-medium text-deep-navy">9 000 <span class="text-xs font-sans text-deep-navy/60">XOF</span></div>
+<span class="text-[11px] text-deep-navy/60">Soit 3 000 XOF / mois • Unique</span>
+</div>
+</div>
+<div class="pt-3 border-t border-hairline/60 text-[11px] text-deep-navy/75 font-medium">
+                Période optimale d'échange avec concertation familiale.
+              </div>
+</div>
+<!-- Pack 3 -->
+<div class="border border-hairline/80 rounded-md p-5 bg-white/40 flex flex-col justify-between">
+<div>
+<span class="text-[11px] font-mono uppercase tracking-wider text-deep-navy/50 block mb-1">Durée étendue</span>
+<h3 class="font-display text-lg text-deep-navy">Engagement Serein</h3>
+<p class="text-xs text-deep-navy/70 mt-1">6 mois (180 jours)</p>
+<div class="my-5">
+<div class="text-2xl font-display font-medium text-deep-navy">16 000 <span class="text-xs font-sans text-deep-navy/60">XOF</span></div>
+<span class="text-[11px] text-deep-navy/50">Soit ~2 660 XOF / mois • Unique</span>
+</div>
+</div>
+<div class="pt-3 border-t border-hairline/60 text-[11px] text-deep-navy/65">
+                Accompagnement étendu avec médiation continue.
+              </div>
+</div>
+</div>
+<!-- Précision d'équité -->
+<div class="mt-6 pt-5 border-t border-hairline/60 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-deep-navy/70 gap-2">
+<span class="font-medium text-deep-navy">Paiement forfaitaire unique direct :</span>
+<div class="flex items-center space-x-2 font-mono text-[11px] text-deep-navy/80">
+<span class="px-2 py-0.5 rounded bg-hairline/30 border border-hairline">Orange Money</span>
+<span class="px-2 py-0.5 rounded bg-hairline/30 border border-hairline">Moov Africa</span>
+<span class="px-2 py-0.5 rounded bg-hairline/30 border border-hairline">Wave / Coris</span>
+<span class="px-2 py-0.5 rounded bg-hairline/30 border border-hairline">Carte</span>
+</div>
+</div>
+</div>
+<!-- SECTION 2: Règle absolue de conception (Auto-renew OFF) -->
+<div class="border border-hairline rounded-md p-6 md:p-8 bg-cream" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start justify-between gap-4">
+<div class="space-y-2">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-soft-gold text-lg">lock</span>
+<h2 class="font-display text-xl text-deep-navy">Règle de non-reconduction tacite (Auto-renew OFF)</h2>
+</div>
+<p class="text-xs md:text-sm text-deep-navy/80 leading-relaxed max-w-2xl font-body">
+                Tout abonnement ou reconduction automatique par prélèvement continu est formellement banni du protocole AnKanu pour préserver le consentement plein et renouvelé de chaque prétendant.
+              </p>
+</div>
+<!-- Absolute Lock Indicator - Explicitly NOT a toggle -->
+<div class="shrink-0 flex items-center space-x-2 bg-deep-navy text-cream px-3 py-1.5 rounded-md border border-hairline/20 shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-soft-gold">block</span>
+<span class="text-xs font-semibold tracking-wide uppercase">DÉSACTIVÉ EN DUR</span>
+</div>
+</div>
+<div class="mt-5 p-3.5 rounded bg-deep-navy/5 border border-hairline/70 text-xs text-deep-navy/75 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-deep-navy/50 text-[18px]">verified_user</span>
+<span class="">Architecture verrouillée en production : aucun interrupteur logiciel n'existe dans le système.</span>
+</div>
+<span class="font-mono text-[10px] text-deep-navy/50">IMMUTABLE_FLAG = TRUE</span>
+</div>
+</div>
+<!-- SECTION 3: Entrées Associées (Related entries) -->
+<div class="border border-hairline rounded-md p-6 bg-cream">
+<h2 class="font-display text-lg text-deep-navy mb-4">Politiques connexes &amp; Seuils liés</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Related 1 -->
+<a class="p-4 rounded border border-hairline/70 bg-white/40 hover:border-soft-gold hover:bg-white/80 transition-all duration-150 flex flex-col justify-between group" href="#">
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-mono uppercase text-deep-navy/50">Politique d'inclusivité</span>
+<span class="material-symbols-outlined text-deep-navy/40 group-hover:text-soft-gold text-[16px] transition-colors">arrow_forward</span>
+</div>
+<h4 class="font-medium text-sm text-deep-navy">Accès Sœurs &amp; Facilitation de démarche (Sister-reach mode)</h4>
+<p class="text-xs text-deep-navy/65 mt-1.5 leading-relaxed">
+                  Cadre de gratuité intégrale et de fluidité de démarche pour les postulantes accompagnées de leur Wali.
+                </p>
+</div>
+<span class="text-[11px] text-soft-gold font-medium mt-3 inline-block">Consulter la charte Wali →</span>
+</a>
+<!-- Related 2 -->
+<a class="p-4 rounded border border-hairline/70 bg-white/40 hover:border-soft-gold hover:bg-white/80 transition-all duration-150 flex flex-col justify-between group" href="#">
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-mono uppercase text-deep-navy/50">Retenue des échanges</span>
+<span class="material-symbols-outlined text-deep-navy/40 group-hover:text-soft-gold text-[16px] transition-colors">arrow_forward</span>
+</div>
+<h4 class="font-medium text-sm text-deep-navy">Plafond &amp; Quota de messages journaliers (Message cap)</h4>
+<p class="text-xs text-deep-navy/65 mt-1.5 leading-relaxed">
+                  Seuil de modération strict limitant à 5 messages/jour en accès initial pour éviter toute dispersion.
+                </p>
+</div>
+<span class="text-[11px] text-soft-gold font-medium mt-3 inline-block">Voir seuils de modération →</span>
+</a>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Staff Context, Certification & Operator Controls (4 Cols) -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Staff Badge & Habilitation -->
+<div class="border border-hairline rounded-md p-6 bg-cream" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-center space-x-2 text-xs font-mono font-medium text-deep-navy/70 pb-3 border-b border-hairline/60 mb-4">
+<span class="material-symbols-outlined text-soft-gold text-[18px]">verified</span>
+<span class="">Habilitation Trésorerie &amp; Déontologie</span>
+</div>
+<div class="space-y-4">
+<div>
+<span class="text-[11px] text-deep-navy/50 uppercase tracking-wider block">Niveau d'accréditation</span>
+<span class="text-sm font-semibold text-deep-navy">Comité Éthique &amp; Gestion Ouagadougou</span>
+</div>
+<div>
+<span class="text-[11px] text-deep-navy/50 uppercase tracking-wider block">Dernier audit de conformité</span>
+<span class="text-xs text-deep-navy/75 font-mono">14 Sha'ban 1447 / 03 Fév 2026</span>
+</div>
+</div>
+</div>
+<!-- Principes Éthiques Financiers -->
+<div class="border border-hairline rounded-md p-6 bg-cream space-y-4" style="background-color: rgb(251, 248, 241);">
+<h3 class="font-display text-lg text-deep-navy">Principes Éthiques Financiers</h3>
+<ul class="space-y-3 text-xs text-deep-navy/75">
+<li class="flex items-start space-x-2.5">
+<span class="text-soft-gold font-bold">•</span>
+<span class=""><strong>Transparence monétaire :</strong> Tous les flux sont libellés exclusivement en monnaie locale (XOF) sans conversion cachée.</span>
+</li>
+<li class="flex items-start space-x-2.5">
+<span class="text-soft-gold font-bold">•</span>
+<span class=""><strong>Intégrité de la pudeur :</strong> Interdiction absolue de tarifier le floutage, le défloutage ou l'accès aux photos. La dignité n'est pas un actif commercial.</span>
+</li>
+<li class="flex items-start space-x-2.5">
+<span class="text-soft-gold font-bold">•</span>
+<span class=""><strong>Aucun algorithme d'attention :</strong> Aucune option « boost », mise en avant payante ou badge de visibilité artificielle.</span>
+</li>
+<li class="flex items-start space-x-2.5">
+<span class="text-soft-gold font-bold">•</span>
+<span class=""><strong>Traçabilité :</strong> Chaque versement fait l'objet d'un reçu nominatif remis au compte et vérifiable par le Wali.</span>
+</li>
+</ul>
+</div>
+<!-- Operator Actions -->
+<div class="border border-hairline rounded-md p-6 bg-cream space-y-3" style="background-color: rgb(251, 248, 241);">
+<h3 class="font-display text-base text-deep-navy mb-2">Actions d'Audit Staff</h3>
+<button class="w-full bg-deep-navy text-cream hover:bg-deep-navy/90 text-xs font-medium py-2.5 px-4 rounded transition-colors duration-150 flex items-center justify-center space-x-2" type="button">
+<span class="material-symbols-outlined text-[16px] text-soft-gold">assignment_turned_in</span>
+<span class="">Consigner les modifications de grille</span>
+</button>
+<button class="w-full border border-hairline hover:bg-deep-navy/5 text-deep-navy/80 text-xs font-medium py-2.5 px-4 rounded transition-colors duration-150 flex items-center justify-center space-x-2" type="button">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span class="">Rétablir les tarifs de référence</span>
+</button>
+<p class="text-[10px] text-center text-deep-navy/40 pt-2 font-mono">
+            Toute altération génère une signature cryptographique dans le journal d'audit central.
+          </p>
+</div>
+</div>
+</div>
+</main>
+<!-- INSTITUTIONAL FOOTER -->
+<footer class="w-full border-t border-hairline/60 bg-[#F7F1E3] mt-16">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand & Legal Mentions -->
+<div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4 text-center sm:text-left">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<span class="hidden sm:inline text-hairline/80">|</span>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Footer Policy Links -->
+<div class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs">
+<a class="text-deep-navy/70 hover:text-soft-gold transition-colors duration-200" href="#">Charte d'Honneur</a>
+<a class="text-deep-navy/70 hover:text-soft-gold transition-colors duration-200" href="#">Rôle du Tuteur (Wali)</a>
+<a class="text-deep-navy/70 hover:text-soft-gold transition-colors duration-200" href="#">Protection des Données</a>
+<a class="text-deep-navy/70 hover:text-soft-gold transition-colors duration-200" href="#">Démarche Ta'aruf</a>
+<a class="text-deep-navy/70 hover:text-soft-gold transition-colors duration-200" href="#">Contact Serein</a>
+</div>
+</div>
+</footer>
+
+
+</body></html>

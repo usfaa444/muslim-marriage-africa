@@ -1,0 +1,376 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Seuils &amp; Politiques Opérateur (Staff)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Newsreader and Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8'
+          },
+          borderRadius: {
+            'DEFAULT': '0.25rem',
+            'md': '8px',
+            'lg': '0.5rem',
+            'xl': '0.75rem',
+            'full': '9999px'
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 9999px;
+      background: #0B1D36;
+      border: 2px solid #C9A86C;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(11,29,54,0.25);
+    }
+    input[type=range]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 9999px;
+      background: #0B1D36;
+      border: 2px solid #C9A86C;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-cream text-deep-navy font-body antialiased selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- Staff App Bar (Confidential Operator Scope) -->
+<header class="w-full top-0 sticky z-50 bg-cream border-b border-hairline/70">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand & Scope Identity -->
+<div class="flex items-center gap-4">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+<div class="h-5 w-px bg-hairline"></div>
+<div class="flex items-center gap-3">
+<span class="font-body text-xs font-semibold tracking-wider text-deep-navy/80 uppercase">Staff &amp; Médiation Éthique</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-soft-gold/15 text-deep-navy border border-soft-gold/40">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+            Espace Modération (Confidentiel)
+          </span>
+</div>
+</div>
+<!-- Right Operator Metadata & Profile Indicator -->
+<div class="flex items-center gap-6">
+<div class="hidden lg:flex flex-col text-right">
+<span class="text-xs font-semibold text-deep-navy">Médiateur Référent • Ouagadougou</span>
+<span class="text-[11px] font-mono text-deep-navy/60">Audit Session #STF-2026-BF</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-md bg-deep-navy text-cream flex items-center justify-center border border-hairline/80">
+<span class="material-symbols-outlined text-lg" data-icon="shield">shield</span>
+</div>
+<div class="w-9 h-9 rounded-md bg-hairline/30 text-deep-navy flex items-center justify-center border border-hairline">
+<span class="material-symbols-outlined text-lg" data-icon="notifications">notifications</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Staff Context Breadcrumb Sub-bar -->
+<div class="w-full bg-cream border-b border-hairline/50">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+<div class="flex items-center gap-3">
+<a class="inline-flex items-center gap-1.5 text-deep-navy/80 hover:text-deep-navy transition-colors font-medium" href="#flux">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+<span class="">Retour à la file d'examen (#FLG-2026-0891)</span>
+</a>
+<span class="text-hairline">•</span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-medium bg-deep-navy/5 text-deep-navy border border-hairline">
+<span class="material-symbols-outlined text-xs" data-icon="lock">lock</span>
+          Seuils &amp; Politiques d'Arbitrage
+        </span>
+</div>
+<div class="flex items-center gap-2 text-deep-navy/60">
+<span class="w-2 h-2 rounded-full bg-soft-gold"></span>
+<span class="font-normal">Procédure Ta'aruf conforme • Horodatage certifié GMT</span>
+</div>
+</div>
+</div>
+<!-- Main Canvas: Two-pane Desktop Architecture -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-6 md:px-12 py-10">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<!-- PANE 1: Left / Main Pane (Operator Form & Critical Principles) -->
+<section class="lg:col-span-8 flex flex-col gap-8">
+<!-- Header Section -->
+<header class="flex flex-col gap-3">
+<div class="flex items-center gap-2">
+<span class="text-[11px] font-semibold tracking-wider text-deep-navy/70 uppercase bg-hairline/40 px-2.5 py-1 rounded-md border border-hairline/60">
+              Politique d'inspection &amp; règles système
+            </span>
+<span class="text-[11px] font-medium text-soft-gold bg-deep-navy px-2.5 py-1 rounded-md">
+              Usage Interne
+            </span>
+</div>
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal leading-tight">
+            Seuils de modération &amp; Déontologie de l'IA
+          </h1>
+<p class="font-body text-sm md:text-base text-deep-navy/75 leading-relaxed max-w-3xl">
+            Garanties d'intégrité de la médiation humaine. Le système d'analyse automatisée assiste sans jamais se substituer à la conscience et à la responsabilité souveraine des arbitres.
+          </p>
+</header>
+<!-- Mandatory Exact Principles Card -->
+<div class="rounded-md border border-hairline p-6 md:p-7 relative overflow-hidden shadow-sm" style="background-color: #FBF8F1;">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-soft-gold"></div>
+<div class="flex items-center gap-2 text-deep-navy mb-4">
+<span class="material-symbols-outlined text-soft-gold text-xl" data-icon="gavel">gavel</span>
+<h2 class="font-display text-xl font-medium tracking-wide">Règles Déontologiques Immuables</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-1.5 text-xs font-semibold text-deep-navy tracking-tight">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="forward_to_inbox">forward_to_inbox</span>
+<span class="">Délivré puis examiné</span>
+</div>
+<p class="text-xs text-deep-navy/70 leading-relaxed">
+                Tout échange est délivré aux correspondants sans rétention préalable. L'analyse algorithmique s'exécute a posteriori pour préserver la confiance et l'instantanéité respectueuse.
+              </p>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-1.5 text-xs font-semibold text-deep-navy tracking-tight">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="contact_support">contact_support</span>
+<span class="">Assistance humaine sans blocage</span>
+</div>
+<p class="text-xs text-deep-navy/70 leading-relaxed">
+                L'IA se limite à signaler un motif à l'examen d'un médiateur humain. L'IA ne supprime jamais silencieusement, ne bloque jamais un compte et ne retient aucun message d'autorité.
+              </p>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-1.5 text-xs font-semibold text-deep-navy tracking-tight">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="person_check">person_check</span>
+<span class="">Instruction humaine exclusive</span>
+</div>
+<p class="text-xs text-deep-navy/70 leading-relaxed">
+                Aucune sanction n'est prononcée par un automatisme. Toute qualification d'écart requiert le discernement collégial d'un arbitre assermenté.
+              </p>
+</div>
+</div>
+</div>
+<!-- Seuil de Confiance de Signalement -->
+<div class="bg-cream rounded-md border border-hairline p-6 md:p-7 flex flex-col gap-6" style="background-color: rgb(251, 248, 241);">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-hairline/60 pb-4">
+<div>
+<h3 class="font-display text-lg text-deep-navy font-medium">Seuil de sensibilité algorithmique (Indice de confiance)</h3>
+<p class="text-xs text-deep-navy/60 mt-0.5">Valeur déclenchant la génération d'une fiche d'incident dans la file des médiateurs.</p>
+</div>
+<span class="inline-flex items-center self-start md:self-auto px-3 py-1 rounded bg-deep-navy text-cream font-mono text-xs font-medium tracking-tight">
+              Seuil Actuel : 75 / 100
+            </span>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between text-xs text-deep-navy/60 font-medium">
+<span class="">Haute tolérance (Sensibilité 50)</span>
+<span class="text-deep-navy font-semibold">Indice 75 / 100 (Recommandé - Filtre les signalements de bienséance à haute certitude)</span>
+<span class="">Sensibilité stricte (Indice 90)</span>
+</div>
+<div class="relative w-full py-2">
+<input class="w-full h-2 bg-hairline rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-soft-gold" max="95" min="50" step="5" type="range" value="75">
+<div class="flex justify-between w-full px-1 pt-2 text-[10px] text-deep-navy/40 font-mono">
+<span class="">50</span>
+<span class="">60</span>
+<span class="">70</span>
+<span class="text-deep-navy font-bold">75</span>
+<span class="">80</span>
+<span class="">90</span>
+<span class="">95</span>
+</div>
+</div>
+<div class="bg-hairline/20 rounded p-3.5 border border-hairline/60 flex items-start gap-3">
+<span class="material-symbols-outlined text-soft-gold text-lg mt-0.5" data-icon="info">info</span>
+<p class="text-xs text-deep-navy/80 leading-relaxed">
+<strong class="font-semibold text-deep-navy">Règle de déclenchement :</strong> Tout contenu atteignant un indice de détection égal ou supérieur à 75 génère une notification non-bloquante au bureau des arbitres de Ouagadougou. En deçà, les données ne sont ni conservées ni indexées.
+              </p>
+</div>
+</div>
+</div>
+<!-- Compteur de Strike Photographie -->
+<div class="bg-cream rounded-md border border-hairline p-6 md:p-7 flex flex-col gap-5" style="background-color: rgb(251, 248, 241);">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-hairline/60 pb-4">
+<div>
+<h3 class="font-display text-lg text-deep-navy font-medium">Plafond d'infractions photographiques (Photo-Strike Count)</h3>
+<p class="text-xs text-deep-navy/60 mt-0.5">Cadre de contrôle pour la préservation de la pudeur et de l'authenticité des portraits.</p>
+</div>
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-cream border border-soft-gold/70 text-deep-navy font-body text-xs font-semibold">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="filter_vintage">filter_vintage</span>
+              Protocole Pudeur Actif
+            </div>
+</div>
+<div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 bg-hairline/20 p-4 rounded border border-hairline/60">
+<div class="flex flex-col gap-1">
+<span class="text-xs uppercase tracking-wider font-semibold text-deep-navy/70">Tolérance paramétrée</span>
+<span class="text-sm font-semibold text-deep-navy">
+                Seuil : 3 Strikes avant passage automatique en revue obligatoire par un médiateur
+              </span>
+<p class="text-xs text-deep-navy/60">
+                La règle de pudeur impose un examen visuel manuel sous protocole de flou protecteur.
+              </p>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-8 h-8 rounded border border-hairline bg-cream text-deep-navy flex items-center justify-center hover:border-soft-gold transition-colors text-sm font-bold" type="button">2</button>
+<button class="w-8 h-8 rounded border-2 border-deep-navy bg-deep-navy text-cream flex items-center justify-center text-sm font-bold shadow-sm" type="button">3</button>
+<button class="w-8 h-8 rounded border border-hairline bg-cream text-deep-navy flex items-center justify-center hover:border-soft-gold transition-colors text-sm font-bold" type="button">4</button>
+</div>
+</div>
+</div>
+<!-- Portée Prospective Stricte -->
+<div class="bg-cream rounded-md border border-hairline p-6 md:p-7 flex flex-col gap-4" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-soft-gold/15 text-deep-navy flex items-center justify-center border border-soft-gold/30">
+<span class="material-symbols-outlined text-lg" data-icon="update">update</span>
+</div>
+<div>
+<h3 class="font-display text-lg text-deep-navy font-medium">Application aux analyses ultérieures uniquement (Subsequent scans only)</h3>
+<span class="text-[11px] font-mono text-deep-navy/60">Principe de non-rétroactivité absolue</span>
+</div>
+</div>
+<span class="inline-flex items-center px-2.5 py-1 rounded text-xs font-medium bg-deep-navy/5 text-deep-navy border border-hairline">
+              Aucune rétroaction sur les dossiers archivés
+            </span>
+</div>
+<p class="text-xs text-deep-navy/75 leading-relaxed bg-hairline/15 p-4 rounded border border-hairline/40">
+            Toute modification des seuils s'applique exclusivement aux prochains flux analysés. Le système ne réécrit jamais silencieusement les décisions antérieures ni les classements passés. Les procès-verbaux de clôture demeurent scellés.
+          </p>
+</div>
+<!-- Règle de Non-Reconduction (Verrouillée par Conception) -->
+<div class="bg-cream rounded-md border border-hairline p-6 md:p-7 flex flex-col gap-4" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-center justify-between gap-4 border-b border-hairline/60 pb-3">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-deep-navy text-xl" data-icon="lock_clock">lock_clock</span>
+<h3 class="font-display text-lg text-deep-navy font-medium">Engagement de transparence financière &amp; déontologique</h3>
+</div>
+<span class="text-[11px] font-semibold tracking-wider uppercase text-deep-navy/60">Architecture Neutre</span>
+</div>
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded bg-hairline/25 border border-hairline">
+<div class="flex flex-col gap-1 max-w-xl">
+<div class="flex items-center gap-2">
+<span class="text-xs font-semibold text-deep-navy">Renouvellement automatique des packs :</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-semibold bg-deep-navy text-cream">Désactivé en dur (Verrouillé par conception)</span>
+</div>
+<p class="text-xs text-deep-navy/70 leading-relaxed mt-1">
+                Aucun mécanisme de reconduction tacite ou de prélèvement continu n'existe sur la plateforme AnKanu. Cette règle est immuable et sans dérogation possible. Aucun curseur ne permet son activation.
+              </p>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded bg-cream border border-hairline text-deep-navy/70 text-xs font-mono">
+<span class="material-symbols-outlined text-sm" data-icon="verified_user">verified_user</span>
+<span class="">VERROU_SYSTÈME</span>
+</div>
+</div>
+</div>
+</section>
+<!-- PANE 2: Right / Secondary Pane (Governance, Audit & Validation) -->
+<aside class="lg:col-span-4 flex flex-col gap-6">
+<!-- Cadre d'Engagement & Audit Trail -->
+<div class="bg-cream rounded-md border border-hairline p-6 flex flex-col gap-5 sticky top-28" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-center gap-2.5 border-b border-hairline pb-4">
+<span class="material-symbols-outlined text-soft-gold text-xl" data-icon="verified">verified</span>
+<div>
+<h2 class="font-display text-lg text-deep-navy font-medium">Charte déontologique du médiateur</h2>
+<span class="text-[11px] font-mono text-deep-navy/55">Référentiel Ta'aruf Éthique</span>
+</div>
+</div>
+<!-- Metadata Tag -->
+<div class="bg-hairline/30 rounded p-3 border border-hairline flex flex-col gap-1 text-xs">
+<span class="text-[11px] font-semibold uppercase tracking-wider text-deep-navy/60">Traçabilité Opérationnelle</span>
+<span class="font-mono text-deep-navy font-medium text-[11px] leading-tight break-all">
+              Version du protocole : POL-2026-V3 • Bureau de Ouagadougou
+            </span>
+</div>
+<!-- Checklist of Invariants -->
+<div class="flex flex-col gap-3.5 pt-1">
+<span class="text-xs font-semibold uppercase tracking-wider text-deep-navy/80">Invariants Institutionnels</span>
+<div class="flex items-start gap-2.5 text-xs text-deep-navy/80 leading-snug">
+<span class="material-symbols-outlined text-base text-soft-gold shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="">Notification humaine obligatoire avant toute mesure d'avertissement ou de modération.</span>
+</div>
+<div class="flex items-start gap-2.5 text-xs text-deep-navy/80 leading-snug">
+<span class="material-symbols-outlined text-base text-soft-gold shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="">Inviolabilité du regard tutélaire (Wali) et respect scrupuleux du consentement familial.</span>
+</div>
+<div class="flex items-start gap-2.5 text-xs text-deep-navy/80 leading-snug">
+<span class="material-symbols-outlined text-base text-soft-gold shrink-0 mt-0.5" data-icon="check_circle">check_circle</span>
+<span class="">Traçabilité cryptographique SHA-256 de toute modification de seuil et horodatage certifié.</span>
+</div>
+</div>
+<!-- Cryptographic Digest Stamp -->
+<div class="border-t border-hairline pt-4 flex flex-col gap-1.5">
+<div class="flex justify-between items-center text-[10px] font-mono text-deep-navy/60">
+<span class="">EMPREINTE DU REGISTRE</span>
+<span class="">NODE_BF_01</span>
+</div>
+<p class="font-mono text-[10px] text-deep-navy/50 break-all bg-hairline/20 p-2 rounded">
+              e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+            </p>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 pt-2">
+<button class="w-full bg-deep-navy text-cream hover:bg-deep-navy/90 px-4 py-3 rounded text-xs font-semibold tracking-wide transition-all shadow-sm active:opacity-90 flex items-center justify-center gap-2 border border-deep-navy" type="button">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="save">save</span>
+<span class="">Enregistrer les seuils (Prise d'effet immédiate sur les futurs flux)</span>
+</button>
+<button class="w-full bg-cream text-deep-navy/80 hover:text-deep-navy border border-hairline hover:border-hairline/80 px-4 py-2.5 rounded text-xs font-medium transition-all active:opacity-75 flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-sm" data-icon="restart_alt">restart_alt</span>
+<span class="">Rétablir les seuils recommandés</span>
+</button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Institutional AnKanu Footer (Immutable Shared Blueprint) -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 text-center sm:text-left">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<span class="text-hairline hidden sm:inline">|</span>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<nav class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#charte">Charte d'Honneur</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#wali">Rôle du Tuteur (Wali)</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#protection">Protection des Données</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#taaruf">Démarche Ta'aruf</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#contact">Contact Serein</a>
+</nav>
+</div>
+</footer>
+
+
+</body></html>

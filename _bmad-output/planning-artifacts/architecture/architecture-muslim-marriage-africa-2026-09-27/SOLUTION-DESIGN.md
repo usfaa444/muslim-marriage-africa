@@ -24,6 +24,8 @@ Companion to `ARCHITECTURE-SPINE.md`. The spine is the consistency contract (inv
 
 Product name **AnKanu** (locked 2026-10-03, Maitchibi Fayçal via Harris). Domain **ankanu.com** purchased on Hostinger. Repository slug `muslim-marriage-africa` is not the product name. Nisfuddin, Nikahsira, Sakinaa, Mithaqun, Nonglem, and `nisfdin` are history of the search that was not chosen — those domains were not purchased. OAPI/WIPO for AnKanu is not recorded as completed.
 
+UI layout for build is Google Stitch **AnKanu v2** (`code/design-stitch/ankanu-v2/`, map `MANIFEST.md`). Planning `DESIGN.md` is tokens only and is not the layout.
+
 ## 1. Purpose and audience
 
 | Who | What they need from this pair of docs |

@@ -1,5 +1,7 @@
 # ANK-70 landing signup and login QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 From the public landing, a new visitor can open signup, and a returning visitor can open login.
@@ -9,12 +11,12 @@ From the public landing, a new visitor can open signup, and a returning visitor 
 - « Déjà inscrit·e ? Se connecter » is in the header (nav `Compte`, stacked above the inscription button) and again under the section button. Both go to `/auth?mode=login`.
 - `/auth` reads `mode` on load. `login` shows the login panel. `signup` shows the signup panel. Any other value, including no query, shows signup. The address is not rewritten when someone clicks a tab.
 
-Founder-requested deviation from the landing PNG: those two login links were not in `01-public-landing`. The header control is stacked so the five section links keep their row. Below `md`, the inscription section has extra bottom padding so the cookie bar does not cover the new link. `DESIGN.md` is not the layout.
+Founder-requested deviation from the landing PNG: those two login links were not in `v2 coverage gap — Public landing`. The header control is stacked so the five section links keep their row. Below `md`, the inscription section has extra bottom padding so the cookie bar does not cover the new link. `DESIGN.md` is not the layout.
 
 ## Where
 
 - `code/apps/web/src/landing.tsx`
-- `code/design-stitch/01-public-landing/screen.html` (same links as the React page)
+- `code/design-stitch/ankanu-v2/MANIFEST.md (v2 coverage gaps — Public landing)` (same links as the React page)
 - `code/apps/web/src/auth-page.ts` — script inserted before `</body>` on `GET /auth`
 - `code/apps/web/app/auth/route.ts` — unchanged; it already serves `authPageHtml`
 - `code/apps/web/src/landing-auth-links.test.ts`
@@ -72,10 +74,10 @@ This ticket did not paste a SOLUTION-DESIGN section. No new table, field, relati
 
 ## Stitch files
 
-- `code/design-stitch/01-public-landing/screen.html` — updated with the same hrefs as the app
-- `code/design-stitch/01-public-landing/screen.png` — not edited. The login links are a founder-requested deviation from that PNG
-- `code/design-stitch/11-auth/screen.html` — not edited. The mode script is injected at request time
-- `code/design-stitch/11-auth/screen.png` — not edited
+- `code/design-stitch/ankanu-v2/MANIFEST.md (v2 coverage gaps — Public landing)` — updated with the same hrefs as the app
+- `code/design-stitch/ankanu-v2/MANIFEST.md (v2 coverage gaps — Public landing)` — not edited. The login links are a founder-requested deviation from that PNG
+- `code/design-stitch/ankanu-v2/02-auth/screen.html` — not edited. The mode script is injected at request time
+- `code/design-stitch/ankanu-v2/02-auth/screen.png` — not edited
 
 ## Known gaps
 

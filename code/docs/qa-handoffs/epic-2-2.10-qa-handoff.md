@@ -1,10 +1,12 @@
 # Epic 2 Story 2.10 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 Shared-device PIN for the signed-in web session. The hash lives in `pin_lock`. The fail count lives in the API process, keyed by `session.id`. A missing map entry is locked when a PIN exists.
 
-`GET /pin` serves `code/design-stitch/19-pin-lock/screen.html`. The response uses `content-type: text/html; charset=utf-8`, `cache-control: no-store`, and `referrer-policy: no-referrer`. The Stitch file on disk is not edited. The served page removes the simulator toolbar (`Simuler états`), starts the four wells empty, removes the Scaleway hosting line and puts nothing in its place, and does not ship the demo script (`1234`, `alert(`, prefilled wells). Touch ID stays visible and does nothing. The SMS OTP button stays visible and does nothing. « Mot de passe maître » goes to `/auth` and does not call `DELETE`. « Code PIN oublié ? » and « Se déconnecter du sanctuaire » call `DELETE /v1/sessions/current`, then go to `/auth`.
+`GET /pin` serves `code/design-stitch/ankanu-v2/10-pin-lock/screen.html`. The response uses `content-type: text/html; charset=utf-8`, `cache-control: no-store`, and `referrer-policy: no-referrer`. The Stitch file on disk is not edited. The served page removes the simulator toolbar (`Simuler états`), starts the four wells empty, removes the Scaleway hosting line and puts nothing in its place, and does not ship the demo script (`1234`, `alert(`, prefilled wells). Touch ID stays visible and does nothing. The SMS OTP button stays visible and does nothing. « Mot de passe maître » goes to `/auth` and does not call `DELETE`. « Code PIN oublié ? » and « Se déconnecter du sanctuaire » call `DELETE /v1/sessions/current`, then go to `/auth`.
 
 The attempt banner stays the Stitch sentence, including « 3 tentatives restantes ». `attempts_left` is only on the API error. The client does not compare digits and does not store a PIN literal. Lockout hides that warning, shows `#lockout-banner`, and dims the keypad.
 
@@ -128,8 +130,8 @@ Founder sentences on this ticket. Resource map entry for `/v1/pin`. AD-7 error e
 
 ## Stitch files
 
-- `code/design-stitch/19-pin-lock/screen.html`
-- `code/design-stitch/19-pin-lock/screen.png`
+- `code/design-stitch/ankanu-v2/10-pin-lock/screen.html`
+- `code/design-stitch/ankanu-v2/10-pin-lock/screen.png`
 
 `DESIGN.md` is not the layout. The PNG still shows the simulator, two filled wells, and the Scaleway footer. Those three stay out of the served page.
 

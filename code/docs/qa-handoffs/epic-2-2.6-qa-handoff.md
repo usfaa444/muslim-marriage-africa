@@ -1,5 +1,7 @@
 # Epic 2 Story 2.6 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 The account is created on the age-gate submit, not on the Auth screen. Auth stores the existing signup fields in `sessionStorage` under `ankanu.signup` and opens `/age-gate`. The password is not put in the URL. `POST /v1/accounts` takes those fields plus `dob`. A second post with the same email still returns 409 and does not insert a second profile.
@@ -12,7 +14,7 @@ An adult (`age >= min_age`) is `status` `Active` and `age_attested` true. The pr
 
 A missing, blank, or impossible `dob` is 400 `UNHANDLED`, `details.field` `dob`, message `dob : une date de naissance est requise.`, and creates nothing. An unreadable `min_age` is 503 `UNHANDLED`, `details.field` `min_age`, message `min_age : la configuration est illisible.`, `retryable` true, and creates nothing. Password rules are still checked before `dob`, so a bad password names `password`.
 
-`GET /age-gate` serves `code/design-stitch/12-age-gate/screen.html`. The served HTML removes the Scaleway / Loi 010-2004/AN line and puts nothing in its place. The supervision line and the marriage counter stay. The Stitch files are not edited. The injected script replaces `handleContinue`. A disabled button does nothing. An enabled button posts the draft plus `dob`. A 201 with `status` `held` shows `#stateUnderage` and does not alert. Any other 201 removes the draft and alerts `Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.` It does not navigate. The Google button on Auth stays visible and does not navigate.
+`GET /age-gate` serves `code/design-stitch/ankanu-v2/03-age-gate/screen.html`. The served HTML removes the Scaleway / Loi 010-2004/AN line and puts nothing in its place. The supervision line and the marriage counter stay. The Stitch files are not edited. The injected script replaces `handleContinue`. A disabled button does nothing. An enabled button posts the draft plus `dob`. A 201 with `status` `held` shows `#stateUnderage` and does not alert. Any other 201 removes the draft and alerts `Redirection vers la passerelle OTP SMS d'AnKanu Burkina Faso.` It does not navigate. The Google button on Auth stays visible and does not navigate.
 
 ## Where
 
@@ -103,10 +105,10 @@ Founder sentences on this ticket. `profile` is 1:1 with `account` via `profile.a
 
 ## Stitch files
 
-- `code/design-stitch/12-age-gate/screen.html`
-- `code/design-stitch/12-age-gate/screen.png`
+- `code/design-stitch/ankanu-v2/03-age-gate/screen.html`
+- `code/design-stitch/ankanu-v2/03-age-gate/screen.png`
 
-The HTML file was not edited. The page removes the hosting statute line and injects a script before `</body>`. Auth still serves `code/design-stitch/11-auth/screen.html` and `screen.png`. The Google button stays on that screen.
+The HTML file was not edited. The page removes the hosting statute line and injects a script before `</body>`. Auth still serves `code/design-stitch/ankanu-v2/02-auth/screen.html` and `screen.png`. The Google button stays on that screen.
 
 ## Known gaps
 

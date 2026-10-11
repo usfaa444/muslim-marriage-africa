@@ -1,5 +1,7 @@
 # ANK-74 strip Stitch state switchers QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 Each Epic 2 screen now shows one Stitch state, the one that matches the real client or API result. The review tabs, demo buttons, and the signup specimen gallery are removed when the page is served. The Stitch HTML files on disk are unchanged.
@@ -75,7 +77,7 @@ Phone OTP tests use `aminata@example.bf`, password `phrase avec espaces`, pseudo
 - `oxlint` on the touched sources: clean.
 - `tsc` for `apps/web` and `apps/api`: passed.
 - Headless Chromium served `/otp` on localhost, sent `+22670123484`, and verified `222222`. The boxes stayed `222222`, the success banner showed, the submit label stayed "Confirmer le code scellé", the submit button stayed disabled, "Modifier le numéro" was hidden, and "Renvoyer maintenant" stayed disabled after the clock was cleared. The page did not show "Accéder à l'étape Wali".
-- Headless Chromium at 1280×900 rendered the served HTML for OTP, email, auth, password reset, and ID. OTP had no switcher; error and success were hidden. Email showed waiting only. Auth showed signup, hid login, and kept both tabs, with no specimen text. Reset showed the request form only. ID showed ready only. The OTP card matches `14-otp/screen.png` except the "Audit de conformité" tab bar, which is the artifact this ticket removes. The auth card matches `11-auth/screen.png` except the three example banners at the bottom.
+- Headless Chromium at 1280×900 rendered the served HTML for OTP, email, auth, password reset, and ID. OTP had no switcher; error and success were hidden. Email showed waiting only. Auth showed signup, hid login, and kept both tabs, with no specimen text. Reset showed the request form only. ID showed ready only. The OTP card matches `ankanu-v2/06-otp/screen.png` except the "Audit de conformité" tab bar, which is the artifact this ticket removes. The auth card matches `ankanu-v2/02-auth/screen.png` except the three example banners at the bottom.
 - ANK-77 passed `a91fddedd304d562aff34df8e64cc52fd3adc5e2`. Staging `http://72.61.0.79:4012` is serving that build. Only the `ankanu` web and api containers were recreated.
 
 ## Three validation passes
@@ -95,11 +97,11 @@ Phone OTP tests use `aminata@example.bf`, password `phrase avec espaces`, pseudo
 
 Matched, not edited:
 
-- `code/design-stitch/14-otp/screen.html` and `screen.png`
-- `code/design-stitch/13-email-verification/screen.html` and `screen.png`
-- `code/design-stitch/17-id-liveness/screen.html` and `screen.png`
-- `code/design-stitch/15-password-reset/screen.html` and `screen.png`
-- `code/design-stitch/11-auth/screen.html` and `screen.png`
+- `code/design-stitch/ankanu-v2/06-otp/screen.html` and `screen.png`
+- `code/design-stitch/ankanu-v2/04-email-verification/screen.html` and `screen.png`
+- `code/design-stitch/ankanu-v2/07-id-liveness/screen.html` and `screen.png`
+- `code/design-stitch/ankanu-v2/05-password-reset/screen.html` and `screen.png`
+- `code/design-stitch/ankanu-v2/02-auth/screen.html` and `screen.png`
 
 The served page keeps that screen's real panel and omits the review chrome.
 

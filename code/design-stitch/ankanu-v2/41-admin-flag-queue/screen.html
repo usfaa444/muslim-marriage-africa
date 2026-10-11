@@ -1,0 +1,430 @@
+<!DOCTYPE html><html class="h-full" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu — File de Modération &amp; Médiation Éthique (Staff)</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "gold-soft": "#E6D5A8",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            md: "8px",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      background-color: #F7F1E3;
+      color: #0B1D36;
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 20px;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+    }
+    /* Discrete scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F1E3;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E2D4B8;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C9A86C;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-cream text-deep-navy selection:bg-gold-soft selection:text-deep-navy">
+<!-- Staff Chrome: Dedicated Admin Top Bar (Confidential & Restrained) -->
+<header class="w-full sticky top-0 z-50 bg-cream border-b border-hairline/70">
+<div class="max-w-7xl mx-auto px-6 md:px-10 h-20 flex items-center justify-between">
+<!-- Brand & Staff Identification -->
+<div class="flex items-center gap-4">
+<div class="flex items-baseline gap-2">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+<span class="font-body text-xs text-deep-navy/40 tracking-wider">/</span>
+<span class="font-body text-sm font-semibold tracking-wide text-deep-navy">Staff &amp; Médiation Éthique</span>
+</div>
+<span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-deep-navy/5 text-deep-navy border border-hairline">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+          Espace Modération (Confidentiel)
+        </span>
+</div>
+<!-- Staff Actions & Identity indicator -->
+<div class="flex items-center gap-6 text-sm">
+<div class="hidden sm:flex flex-col text-right">
+<span class="text-xs font-semibold text-deep-navy">Médiateur Référent • Ouagadougou</span>
+<span class="text-[11px] text-deep-navy/60">Session auditable #STF-2026-BF</span>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-hairline/80">
+<span class="material-symbols-outlined text-deep-navy/70" title="Protocole de conformité actif">shield</span>
+<div class="w-8 h-8 rounded-full bg-deep-navy text-cream flex items-center justify-center font-body text-xs font-medium">
+            AK
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- Notice Banner: Immutability & Archival Nature -->
+<div class="bg-gold-soft/30 border-b border-hairline/50 py-2.5 px-6 md:px-10">
+<div class="max-w-7xl mx-auto flex items-center justify-between text-xs text-deep-navy/80">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-soft-gold text-base">info</span>
+<span class=""><strong>Registre de conformité :</strong> Tous les échanges répertoriés sont déjà transmis aux destinataires. L’ouverture d’une fiche ne suspend ni n’altère la remise.</span>
+</div>
+<div class="hidden md:flex items-center gap-4 text-[11px] text-deep-navy/60">
+<span class="">Horodatage officiel : GMT (Ouagadougou)</span>
+<button class="underline hover:text-deep-navy transition-colors text-[11px] cursor-pointer" id="toggle-empty-view-btn">
+          Basculer vue test (File vide)
+        </button>
+</div>
+</div>
+</div>
+<!-- Main Content Canvas (Two-Pane Split Layout) -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-6 md:px-10 py-8">
+<!-- Subheader with Filter Count and Calm Controls -->
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-6 border-b border-hairline/80 mb-6">
+<div>
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal">File d'examen de bienséance</h1>
+<p class="font-body text-sm text-deep-navy/60 mt-1 max-w-2xl">
+          Analyse des signalements d’honneur, révisions différées et vérifications d'intégrité selon la charte Ta'aruf.
+        </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-cream border border-hairline rounded-md px-3 py-1.5 text-xs text-deep-navy/80">
+<span class="material-symbols-outlined text-base mr-2 text-deep-navy/50">filter_list</span>
+<span class="">Filtre : <strong class="font-medium text-deep-navy">Tous les types (3 en attente)</strong></span>
+</div>
+</div>
+</div>
+<!-- Normal Content View: Two Panes -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start" id="queue-content-view">
+<!-- LEFT PANE: Flag Queue Rows (col-span-5) -->
+<section aria-label="Liste des fiches à examiner" class="md:col-span-5 flex flex-col gap-3.5">
+<div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-deep-navy/50 px-1">
+<span class="">Signalements &amp; Contrôles</span>
+<span class="">Priorité Éthique</span>
+</div>
+<!-- Row 1: flag-for-admin (Selected state) -->
+<article class="cursor-pointer bg-cream rounded-md p-4 transition-all duration-150 hover:bg-gold-soft/10 relative border-hairline" id="item-row-1" onclick="selectItem(1)" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start justify-between gap-2 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-deep-navy text-cream">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+              Réservé Staff / Confidentiel
+            </span>
+<span class="text-[11px] font-medium text-deep-navy/60">Aujourd'hui, 09:41</span>
+</div>
+<div class="flex items-baseline justify-between mt-1">
+<h2 class="text-base font-semibold text-deep-navy tracking-tight">Al-Hassan_BF</h2>
+<span class="text-xs font-semibold px-2 py-0.5 rounded bg-amber-50 text-amber-900 border border-amber-200/70">
+              flag-for-admin
+            </span>
+</div>
+<p class="text-xs text-deep-navy/70 mt-2 line-clamp-2 leading-relaxed">
+            Signalement explicite par le tuteur légal (Wali de Mariam_K) : mention d’une insistance non conforme aux convenances préalables.
+          </p>
+<div class="mt-3.5 pt-2.5 border-t border-hairline/60 flex items-center justify-between text-[11px] text-deep-navy/60">
+<span class="">Source : <strong>Wali référent (Famille Kaboré)</strong></span>
+<span class="text-deep-navy font-semibold flex items-center gap-1">
+              Examiner <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+</div>
+</article>
+<!-- Row 2: scan-deferred -->
+<article class="cursor-pointer bg-cream border rounded-md p-4 transition-all duration-150 hover:border-soft-gold/80 hover:bg-gold-soft/5 relative border-hairline" id="item-row-2" onclick="selectItem(2)" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start justify-between gap-2 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-deep-navy/5 text-deep-navy border border-hairline">
+              Réservé Staff / Confidentiel
+            </span>
+<span class="text-[11px] font-normal text-deep-navy/60">Hier, 22:15</span>
+</div>
+<div class="flex items-baseline justify-between mt-1">
+<h2 class="text-base font-semibold text-deep-navy tracking-tight">Oumar_K</h2>
+<span class="text-xs font-medium px-2 py-0.5 rounded bg-stone-100 text-stone-700 border border-stone-200">
+              scan-deferred
+            </span>
+</div>
+<p class="text-xs text-deep-navy/70 mt-2 line-clamp-2 leading-relaxed">
+            Vérification différée : tentative perçue d’échange de coordonnées privées avant la validation bilatérale du protocole Wali.
+          </p>
+<div class="mt-3.5 pt-2.5 border-t border-hairline/60 flex items-center justify-between text-[11px] text-deep-navy/60">
+<span class="">Source : <strong>Analyse d'étiquette linguistique</strong></span>
+<span class="text-deep-navy/70 flex items-center gap-1">
+              Examiner <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+</div>
+</article>
+<!-- Row 3: scan-failed -->
+<article class="cursor-pointer bg-cream border rounded-md p-4 transition-all duration-150 hover:border-soft-gold/80 hover:bg-gold-soft/5 relative border-2 border-deep-navy" id="item-row-3" onclick="selectItem(3)" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-start justify-between gap-2 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-deep-navy/5 text-deep-navy border border-hairline">
+              Réservé Staff / Confidentiel
+            </span>
+<span class="text-[11px] font-normal text-deep-navy/60">08 Oct, 14:02</span>
+</div>
+<div class="flex items-baseline justify-between mt-1">
+<h2 class="text-base font-semibold text-deep-navy tracking-tight">Souleymane_T</h2>
+<span class="text-xs font-medium px-2 py-0.5 rounded bg-rose-50 text-rose-800 border border-rose-200">
+              scan-failed
+            </span>
+</div>
+<p class="text-xs text-deep-navy/70 mt-2 line-clamp-2 leading-relaxed">
+            Échec d'analyse automatique : document de présentation rédigé en alphabet n'ko ou encodage mixte non résolu. Contrôle visuel requis.
+          </p>
+<div class="mt-3.5 pt-2.5 border-t border-hairline/60 flex items-center justify-between text-[11px] text-deep-navy/60">
+<span class="">Source : <strong>Passerelle OCR / Système</strong></span>
+<span class="text-deep-navy/70 flex items-center gap-1">
+              Examiner <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</span>
+</div>
+</article>
+</section>
+<!-- RIGHT PANE: Selected Row Details & Context (col-span-7) -->
+<section aria-label="Détails du dossier sélectionné" class="md:col-span-7 bg-cream border border-hairline rounded-md p-6 md:p-8 flex flex-col gap-6" style="background-color: rgb(251, 248, 241);">
+<!-- Audit trail banner (Immutable state) -->
+<div class="bg-deep-navy text-cream p-4 rounded-md flex items-start gap-3.5 border-l-4 border-soft-gold">
+<span class="material-symbols-outlined text-soft-gold text-xl flex-shrink-0 mt-0.5">verified_user</span>
+<div class="space-y-1">
+<p class="text-xs font-medium text-cream leading-snug">
+              Consultation d'archive transmise • L'ouverture de cette fiche ne modifie en aucun cas l'état de diffusion du message.
+            </p>
+<p class="text-[11px] text-cream/70">
+              Règle d'équité : aucune rupture unilatérale silencieuse sans notification motivée au tuteur.
+            </p>
+</div>
+</div>
+<!-- Selected Case Header -->
+<div class="border-b border-hairline/80 pb-5">
+<div class="flex flex-wrap items-center justify-between gap-3 mb-2">
+<div class="flex items-center gap-2">
+<span class="text-xs font-semibold px-2.5 py-0.5 rounded border bg-rose-50 text-rose-800 border-rose-200" id="detail-trigger-badge">scan-failed</span>
+<span class="text-xs font-mono text-deep-navy/50">REF: #FLG-2026-0891</span>
+</div>
+<span class="text-xs text-deep-navy/60 font-medium" id="detail-timestamp">08 Oct, 14:02 (GMT)</span>
+</div>
+<div class="flex items-baseline justify-between mt-3">
+<div>
+<p class="text-xs font-medium text-deep-navy/50 uppercase tracking-wider">Membre concerné</p>
+<h2 class="font-display text-2xl text-deep-navy font-medium mt-0.5" id="detail-pseudonym">Souleymane_T</h2>
+</div>
+<div class="text-right">
+<p class="text-xs font-medium text-deep-navy/50 uppercase tracking-wider">Émetteur du signalement</p>
+<p class="text-sm font-semibold text-deep-navy mt-0.5" id="detail-source">Passerelle OCR / Système</p>
+</div>
+</div>
+</div>
+<!-- Exchange Snippet Context Card -->
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<h3 class="font-body text-xs font-semibold tracking-wider uppercase text-deep-navy/60">
+              Contenu transmis enregistré
+            </h3>
+<span class="text-[11px] text-deep-navy/50">Horodatage de remise : 09:38 (Transmis avec succès)</span>
+</div>
+<div class="p-5 bg-gold-soft/10 rounded-md border border-hairline/80 text-sm leading-relaxed text-deep-navy/90 font-serif italic" id="detail-message-body">[Fichier joint : Document d'engagement familial manuscrit scanné. Encodage mixte bilingue français / mooré non transcriptible automatiquement par les algorithmes de filtrage standard.]</div>
+<div class="p-3.5 bg-cream border border-hairline rounded text-xs space-y-1">
+<div class="flex items-center gap-1.5 font-medium text-deep-navy">
+<span class="material-symbols-outlined text-sm text-soft-gold">rule</span>
+<span class="">Motif du signalement communiqué au Staff</span>
+</div>
+<p class="text-deep-navy/70 pl-5" id="detail-reason">Nécessite la validation d’un modérateur humain assermenté afin d’attester de l’authenticité de la procuration tutélaire.</p>
+</div>
+</div>
+<!-- Profile Brief Data (Contextual & Non-Dating) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 py-2 border-y border-hairline/80 text-xs">
+<div>
+<span class="text-deep-navy/50">Localisation déclarée :</span>
+<p class="font-medium text-deep-navy mt-0.5">Ouagadougou, Secteur 15</p>
+</div>
+<div>
+<span class="text-deep-navy/50">Accord tutélaire (Wali) :</span>
+<p class="font-medium text-deep-navy mt-0.5">Validé le 12 Janvier 2026</p>
+</div>
+<div>
+<span class="text-deep-navy/50">Antécédents de médiation :</span>
+<p class="font-medium text-deep-navy mt-0.5">Aucun rappel à l'ordre antérieur</p>
+</div>
+<div>
+<span class="text-deep-navy/50">Niveau d'intervention requis :</span>
+<p class="font-medium text-soft-gold font-semibold mt-0.5">Échange amiable &amp; Rappel de bienséance</p>
+</div>
+</div>
+<!-- Ethical Actions: Calm, Responsible Mediation Choices -->
+<div class="pt-2 flex flex-col sm:flex-row gap-3">
+<button class="flex-1 bg-deep-navy hover:bg-deep-navy/90 text-cream px-4 py-3 rounded-md text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm text-soft-gold">contact_support</span>
+            Proposer un entretien de médiation
+          </button>
+<button class="bg-cream hover:bg-gold-soft/20 text-deep-navy border border-hairline px-4 py-3 rounded-md text-xs font-semibold tracking-wide transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">mark_email_read</span>
+            Rappeler la charte Ta'aruf
+          </button>
+<button class="bg-cream hover:bg-stone-100 text-deep-navy/70 border border-hairline px-3 py-3 rounded-md text-xs font-medium transition-all" title="Clôturer le signalement sans suite">
+            Classer sans suite
+          </button>
+</div>
+</section>
+</div>
+<!-- EMPTY STATE PREVIEW (Hidden by default, toggleable via top banner) -->
+<div class="hidden py-16 px-6 max-w-xl mx-auto text-center" id="queue-empty-view">
+<div class="w-16 h-16 mx-auto rounded-full bg-deep-navy/5 border border-hairline flex items-center justify-center mb-5 text-deep-navy">
+<span class="material-symbols-outlined text-2xl text-soft-gold">check_circle</span>
+</div>
+<h2 class="font-display text-2xl md:text-3xl text-deep-navy font-normal">File d'attente sereine</h2>
+<p class="font-body text-sm text-deep-navy/70 mt-3 leading-relaxed">
+        Aucun signalement ni anomalie de bienséance en instance. La communauté évolue actuellement dans le strict respect de la charte d'honneur et des protocoles de Ta'aruf.
+      </p>
+<div class="mt-8 flex justify-center">
+<button class="px-5 py-2.5 rounded-md border border-deep-navy text-deep-navy hover:bg-deep-navy hover:text-cream text-xs font-medium transition-colors" onclick="toggleEmptyView()">
+          Revenir à la file active
+        </button>
+</div>
+</div>
+</main>
+<!-- Footer with Institutional Links (Strictly Respecting Shared Components JSON) -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand & Copyright -->
+<div class="flex flex-col md:flex-row items-center gap-3 md:gap-6 text-center md:text-left">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<span class="text-xs text-deep-navy/60 font-body">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </span>
+</div>
+<!-- Links from JSON -->
+<nav aria-label="Navigation légale et éthique" class="flex flex-wrap justify-center gap-5 md:gap-7">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#charte">
+          Charte d'Honneur
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#wali">
+          Rôle du Tuteur (Wali)
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#donnees">
+          Protection des Données
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#demarche">
+          Démarche Ta'aruf
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#contact">
+          Contact Serein
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Simple script for Queue item switching & empty-state demonstration -->
+<script>
+    const itemsData = {
+      1: {
+        pseudonym: "Al-Hassan_BF",
+        trigger: "flag-for-admin",
+        triggerClass: "bg-amber-50 text-amber-900 border-amber-200/80",
+        timestamp: "Aujourd'hui, 09:41 (GMT)",
+        source: "Wali référent (Kaboré)",
+        message: "« As-salamu alaykum Sidi. Je souhaite poursuivre nos échanges directement sans solliciter la présence de votre oncle lors de notre prochaine entrevue à Ouaga 2000. Cela me paraît plus simple pour aborder les projets d’avenir en toute liberté. »",
+        reason: "Demande réitérée de contournement du cadre d’accompagnement familial expressément convenu lors de la présentation d’honneur."
+      },
+      2: {
+        pseudonym: "Oumar_K",
+        trigger: "scan-deferred",
+        triggerClass: "bg-stone-100 text-stone-700 border-stone-200",
+        timestamp: "Hier, 22:15 (GMT)",
+        source: "Analyse d'étiquette linguistique",
+        message: "« Retrouvons-nous plutôt sur WhatsApp au +226 70 ** ** ** pour envoyer des photos privées sans passer par le carnet de suivi du tuteur. »",
+        reason: "Partage prématuré de canaux non encadrés avant la complétion de la première phase de présentation mutuelle."
+      },
+      3: {
+        pseudonym: "Souleymane_T",
+        trigger: "scan-failed",
+        triggerClass: "bg-rose-50 text-rose-800 border-rose-200",
+        timestamp: "08 Oct, 14:02 (GMT)",
+        source: "Passerelle OCR / Système",
+        message: "[Fichier joint : Document d'engagement familial manuscrit scanné. Encodage mixte bilingue français / mooré non transcriptible automatiquement par les algorithmes de filtrage standard.]",
+        reason: "Nécessite la validation d’un modérateur humain assermenté afin d’attester de l’authenticité de la procuration tutélaire."
+      }
+    };
+
+    function selectItem(id) {
+      // Highlight current row
+      for (let i = 1; i <= 3; i++) {
+        const row = document.getElementById(`item-row-${i}`);
+        if (i === id) {
+          row.classList.remove('border-hairline');
+          row.classList.add('border-2', 'border-deep-navy');
+        } else {
+          row.classList.remove('border-2', 'border-deep-navy');
+          row.classList.add('border-hairline');
+        }
+      }
+
+      // Update Detail Pane
+      const data = itemsData[id];
+      document.getElementById('detail-pseudonym').innerText = data.pseudonym;
+      document.getElementById('detail-timestamp').innerText = data.timestamp;
+      document.getElementById('detail-source').innerText = data.source;
+      document.getElementById('detail-message-body').innerText = data.message;
+      document.getElementById('detail-reason').innerText = data.reason;
+
+      const badge = document.getElementById('detail-trigger-badge');
+      badge.innerText = data.trigger;
+      badge.className = `text-xs font-semibold px-2.5 py-0.5 rounded border ${data.triggerClass}`;
+    }
+
+    function toggleEmptyView() {
+      const contentView = document.getElementById('queue-content-view');
+      const emptyView = document.getElementById('queue-empty-view');
+      const toggleBtn = document.getElementById('toggle-empty-view-btn');
+
+      if (contentView.classList.contains('hidden')) {
+        contentView.classList.remove('hidden');
+        emptyView.classList.add('hidden');
+        toggleBtn.innerText = "Basculer vue test (File vide)";
+      } else {
+        contentView.classList.add('hidden');
+        emptyView.classList.remove('hidden');
+        toggleBtn.innerText = "Revenir à la file active";
+      }
+    }
+
+    document.getElementById('toggle-empty-view-btn').addEventListener('click', toggleEmptyView);
+  </script>
+
+
+</body></html>

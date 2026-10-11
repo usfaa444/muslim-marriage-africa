@@ -1,0 +1,319 @@
+<!DOCTYPE html><html class="h-full" lang="fr" style="width: 1280px; height: 1586px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu — Statut d'export et d'effacement sécurisé</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "gold-soft": "#E6D5A8",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            DEFAULT: "8px",
+            md: "8px",
+            lg: "8px",
+            xl: "8px",
+            full: "9999px"
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-cream text-deep-navy font-body antialiased min-h-full flex flex-col selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- TOP HEADER (Public/Identity Chrome) -->
+<header class="w-full top-0 sticky z-40 bg-cream/90 backdrop-blur-md border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Left Branding -->
+<div class="flex items-center space-x-4">
+<a class="font-display text-2xl tracking-wide font-normal text-deep-navy hover:text-soft-gold transition-colors duration-150" href="#">
+          AnKanu
+        </a>
+<div class="h-4 w-px bg-hairline"></div>
+<span class="text-xs md:text-sm text-deep-navy/70 tracking-normal font-light hidden sm:inline-block">
+          Burkina Faso • Ta'aruf &amp; Mariage Noble
+        </span>
+</div>
+<!-- Right Protected Cadre Chip -->
+<div class="flex items-center">
+<div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full border border-hairline bg-cream/50 text-xs font-medium text-deep-navy/80">
+<span class="material-symbols-outlined text-[16px] text-soft-gold" data-icon="shield">shield</span>
+<span class="tracking-wide">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 w-full max-w-3xl mx-auto px-6 pt-10 pb-36">
+<!-- Back to Settings Link -->
+<div class="mb-8">
+<a class="inline-flex items-center text-xs tracking-wide text-deep-navy/70 hover:text-deep-navy transition-colors duration-150 group" href="#">
+<span class="mr-1.5 transition-transform group-hover:-translate-x-1 duration-150">←</span>
+<span class="">Retour aux paramètres</span>
+</a>
+</div>
+<!-- Page Introduction Header -->
+<div class="space-y-3 mb-10 text-left">
+<p class="text-[11px] font-semibold tracking-widest text-soft-gold uppercase">
+        CONFIDENTIALITÉ &amp; GESTION DES DONNÉES
+      </p>
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal leading-tight">
+        Suivi de votre demande d'export et d'effacement
+      </h1>
+<p class="text-deep-navy/80 text-sm md:text-base leading-relaxed max-w-2xl font-normal pt-1">
+        Conformément aux principes de dignité et à la réglementation burkinabè (CIL), l'archivage chiffré et le protocole de retrait de vos données s'exécutent avec rigueur et circonspection.
+      </p>
+</div>
+<!-- MAIN STATUS CONTAINER -->
+<div class="space-y-6">
+<!-- ITEM 1: Tracking URL & Reference Ticket (Unified Quiet Card) -->
+<div class="bg-cream border border-hairline rounded-md p-6 space-y-6 shadow-[0_1px_3px_rgba(11,29,54,0.02)]" style="background-color: rgb(251, 248, 241);">
+<!-- Reference Details Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-hairline/60 gap-3" style="background-color: rgb(251, 248, 241);">
+<div style="background-color: rgb(251, 248, 241);">
+<span class="text-[11px] uppercase tracking-wider text-deep-navy/60 font-medium block">Référence de la requête</span>
+<span class="font-display text-lg font-normal text-deep-navy">Ticket N° ANK-2026-84920</span>
+</div>
+<div class="inline-flex items-center space-x-2 text-xs text-deep-navy/70 bg-hairline/25 px-3 py-1.5 rounded">
+<span class="material-symbols-outlined text-[15px] text-soft-gold" data-icon="mark_email_read">mark_email_read</span>
+<span class="">Notification transmise par SMS et courriel sécurisé</span>
+</div>
+</div>
+<!-- URL Read-Only Input Field -->
+<div class="space-y-2">
+<label class="block text-xs font-medium text-deep-navy/80" for="tracking-url">
+            Lien de suivi sécurisé (jeton unique de consultation)
+          </label>
+<div class="flex items-center space-x-2">
+<div class="relative flex-1">
+<input class="w-full bg-cream/70 border border-hairline text-deep-navy/90 text-xs font-mono py-2.5 px-3.5 rounded select-all focus:outline-none focus:border-soft-gold focus:ring-1 focus:ring-soft-gold" id="tracking-url" readonly="" type="text" value="https://ankanu.bf/securite/demande/exp-84092-bf">
+</div>
+<button class="inline-flex items-center space-x-1.5 px-4 py-2.5 bg-deep-navy text-cream text-xs font-medium rounded hover:bg-deep-navy/90 active:scale-[0.99] transition-all duration-150" id="copyBtn" onclick="copyTrackingLink()" type="button">
+<span class="material-symbols-outlined text-[15px]" data-icon="content_copy">content_copy</span>
+<span id="copyText" class="">Copier le lien</span>
+</button>
+</div>
+<p class="text-[11px] text-deep-navy/60 font-light">Ce lien confidentiel vous permet de vérifier l'avancement sans nécessité de session active prolongée.</p>
+</div>
+</div>
+<!-- ITEM 2: Ready Export Archive Block -->
+<div class="bg-cream border border-hairline rounded-md p-6 space-y-4" style="background-color: rgb(251, 248, 241);">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+<div class="space-y-1">
+<div class="inline-flex items-center space-x-2">
+<span class="material-symbols-outlined text-soft-gold text-[20px]" data-icon="inventory_2">inventory_2</span>
+<h2 class="font-display text-lg text-deep-navy font-normal">Archive chiffrée de vos données (ZIP sécurisé)</h2>
+</div>
+<p class="text-xs text-deep-navy/70 leading-normal pl-7">
+              Statut : <span class="font-medium text-deep-navy">Prête au téléchargement</span> (Taille : 2.4 Mo • Chiffrement AES-256)
+            </p>
+</div>
+<button class="self-start sm:self-auto inline-flex items-center space-x-2 bg-deep-navy text-cream px-5 py-2.5 rounded text-xs font-medium hover:bg-deep-navy/90 active:scale-[0.99] transition-all shadow-none" type="button">
+<span class="material-symbols-outlined text-[16px] text-soft-gold" data-icon="download">download</span>
+<span class="">Télécharger mon archive chiffrée</span>
+</button>
+</div>
+<div class="pt-3 border-t border-hairline/60 flex items-center justify-between text-[11px] text-deep-navy/60">
+<span class="flex items-center space-x-1.5">
+<span class="material-symbols-outlined text-[14px] text-soft-gold" data-icon="schedule">schedule</span>
+<span class="">Disponible au téléchargement pendant 7 jours.</span>
+</span>
+<span class="font-mono text-[10px] text-deep-navy/40">EXP: 13-10-2026</span>
+</div>
+</div>
+<!-- ITEM 3: Working Clocks & Status Progression (Unlabeled Timings) -->
+<div class="bg-cream border border-hairline rounded-md p-6 space-y-6" style="background-color: rgb(251, 248, 241);">
+<div class="border-b border-hairline/60 pb-3">
+<h3 class="font-display text-base text-deep-navy font-normal">Séquence du protocole de conformité</h3>
+</div>
+<div class="relative pl-6 space-y-8 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:bg-hairline">
+<!-- Step 1: Request Registered -->
+<div class="relative group">
+<div class="absolute -left-[27px] top-1 h-3 w-3 rounded-full bg-soft-gold border-2 border-cream ring-2 ring-hairline/50"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<div>
+<h4 class="text-xs font-semibold text-deep-navy">Demande enregistrée</h4>
+<p class="text-xs text-deep-navy/70">Signature numérique et consignation au registre CIL</p>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-mono text-xs font-medium text-deep-navy bg-hairline/30 px-2.5 py-1 rounded tracking-wider">
+                  00:00:00 • Horodatage certifié
+                </span>
+</div>
+</div>
+</div>
+<!-- Step 2: Generation Ready -->
+<div class="relative group">
+<div class="absolute -left-[27px] top-1 h-3 w-3 rounded-full bg-soft-gold border-2 border-cream ring-2 ring-hairline/50"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<div>
+<h4 class="text-xs font-semibold text-deep-navy">Génération de l'archive chiffrée</h4>
+<p class="text-xs text-deep-navy/70">Synthèse intègre des informations d'état et d'échanges</p>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-mono text-xs font-medium text-soft-gold bg-deep-navy px-2.5 py-1 rounded tracking-wider">
+                  Prête
+                </span>
+</div>
+</div>
+</div>
+<!-- Step 3: Grace Period Countdown (Working Clock) -->
+<div class="relative group">
+<div class="absolute -left-[27px] top-1 h-3 w-3 rounded-full bg-deep-navy border-2 border-cream ring-2 ring-hairline/50 animate-pulse"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<div>
+<h4 class="text-xs font-semibold text-deep-navy">Délai de grâce avant effacement définitif des correspondances</h4>
+<p class="text-xs text-deep-navy/70">Période sereine accordée pour finaliser la sauvegarde de vos données</p>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-mono text-xs font-semibold text-deep-navy bg-soft-gold/20 border border-soft-gold/40 px-2.5 py-1 rounded tracking-wider inline-block" id="countdownClock">47:57:30</span>
+</div>
+</div>
+</div>
+<!-- Step 4: Final Irreversible Purge -->
+<div class="relative group">
+<div class="absolute -left-[27px] top-1 h-3 w-3 rounded-full bg-hairline border-2 border-cream"></div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+<div>
+<h4 class="text-xs font-semibold text-deep-navy/60">Suppression irréversible des serveurs sécurisés</h4>
+<p class="text-xs text-deep-navy/50">Purge cryptographique des clés, profils et journaux de contact</p>
+</div>
+<div class="text-left sm:text-right">
+<span class="font-mono text-xs text-deep-navy/50 bg-hairline/20 px-2.5 py-1 rounded tracking-wider">
+                  Programmé à l'échéance du délai
+                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Note of Serenity -->
+<div class="bg-cream/40 border-t border-hairline/60 pt-4 flex items-start space-x-2 text-[11px] text-deep-navy/70 leading-relaxed font-light">
+<span class="material-symbols-outlined text-[16px] text-soft-gold shrink-0 mt-0.5" data-icon="lock">lock</span>
+<span class="">
+            Pendant ce délai de grâce, votre compte demeure suspendu et inaccessible publiquement. Passé ce compte à rebours, aucune restauration ne sera techniquement possible.
+          </span>
+</div>
+</div>
+</div>
+</main>
+<!-- FLOATING PILL MEMBER NAVIGATION BAR -->
+<!-- 4 Items: Découvrir, Invitations, Discussions, Profil (Profil Selected) -->
+<aside aria-label="Navigation membre" class="fixed bottom-6 inset-x-0 z-50 pointer-events-none flex justify-center px-4">
+<nav class="pointer-events-auto bg-deep-navy/95 text-cream backdrop-blur-md px-2 py-1.5 rounded-full shadow-lg border border-soft-gold/30 flex items-center space-x-1">
+<!-- Découvrir -->
+<a class="flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-cream/70 hover:text-cream transition-colors duration-150 min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="explore">explore</span>
+<span class="hidden sm:inline">Découvrir</span>
+</a>
+<!-- Invitations -->
+<a class="flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-cream/70 hover:text-cream transition-colors duration-150 min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="mail">mail</span>
+<span class="hidden sm:inline">Invitations</span>
+</a>
+<!-- Discussions -->
+<a class="flex items-center space-x-1.5 px-3.5 py-2 rounded-full text-xs font-medium text-cream/70 hover:text-cream transition-colors duration-150 min-h-[44px]" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="forum">forum</span>
+<span class="hidden sm:inline">Discussions</span>
+</a>
+<!-- Profil (Active) -->
+<a class="flex items-center space-x-1.5 px-4 py-2 rounded-full text-xs font-semibold bg-soft-gold text-deep-navy transition-all duration-150 min-h-[44px] shadow-sm" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="">Profil</span>
+</a>
+</nav>
+</aside>
+<!-- FOOTER -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto pb-24 md:pb-12">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+<div class="space-y-1">
+<div class="font-display text-xl text-deep-navy">AnKanu</div>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Legal Links -->
+<div class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2 text-xs text-deep-navy/70">
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Protection des Données</a>
+<a class="hover:text-soft-gold transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+</div>
+</div>
+</footer>
+<!-- Light Vanilla Interactivity for Real-time Working Countdown & Copy Button -->
+<script>
+    // Copy link helper
+    function copyTrackingLink() {
+      const input = document.getElementById('tracking-url');
+      input.select();
+      input.setSelectionRange(0, 99999);
+      navigator.clipboard.writeText(input.value).then(() => {
+        const copyText = document.getElementById('copyText');
+        const original = copyText.textContent;
+        copyText.textContent = "Copié";
+        setTimeout(() => {
+          copyText.textContent = original;
+        }, 2000);
+      });
+    }
+
+    // Working Live Clock Countdown logic (47 hours, 58 minutes, 12 seconds)
+    let totalSeconds = (47 * 3600) + (58 * 60) + 12;
+    const clockEl = document.getElementById('countdownClock');
+
+    function updateClock() {
+      if (totalSeconds <= 0) {
+        clockEl.textContent = "00:00:00";
+        return;
+      }
+      totalSeconds--;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      
+      const pad = (n) => n.toString().padStart(2, '0');
+      clockEl.textContent = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    }
+
+    setInterval(updateClock, 1000);
+  </script>
+
+
+
+
+
+
+
+
+</body></html>

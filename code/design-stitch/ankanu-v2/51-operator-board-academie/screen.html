@@ -1,0 +1,355 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Académie &amp; Publications Éthiques (Operator Board)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Newsreader & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8',
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+    }
+    /* Subtle custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F7F1E3;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E2D4B8;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #C9A86C;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-cream text-deep-navy font-body antialiased selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- STAFF SHELL HEADER -->
+<header class="w-full bg-cream border-b border-hairline/70 sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-6 md:px-10 h-16 flex items-center justify-between">
+<!-- Brand & Staff Designation -->
+<div class="flex items-center gap-4">
+<div class="flex items-baseline gap-2.5">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+<span class="text-xs font-label uppercase tracking-widest text-deep-navy/40 font-semibold border-l border-hairline/80 pl-3">Staff &amp; Comité Déontologique</span>
+</div>
+<span class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium tracking-wide bg-deep-navy/5 text-deep-navy border border-hairline">
+<span class="material-symbols-outlined text-[13px] text-soft-gold">verified_user</span>
+          Espace Opérateur (Confidentiel)
+        </span>
+</div>
+<!-- Right Staff Context -->
+<div class="flex items-center gap-5 text-xs text-deep-navy/70">
+<div class="hidden md:flex flex-col text-right">
+<span class="font-medium text-deep-navy">Opérateur Référent • Ouagadougou</span>
+<span class="font-mono text-[11px] text-deep-navy/50">#STF-2026-PUB</span>
+</div>
+<div class="h-8 w-px bg-hairline hidden md:block"></div>
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-deep-navy/5 border border-hairline flex items-center justify-center text-deep-navy">
+<span class="material-symbols-outlined text-lg" data-icon="shield">shield</span>
+</div>
+<span class="hidden lg:inline text-xs font-medium text-deep-navy/90">Session sécurisée</span>
+</div>
+</div>
+</div>
+<!-- Secondary Meta Bar -->
+<div class="bg-cream/60 border-t border-hairline/40 px-6 md:px-10 py-2">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-xs">
+<a class="inline-flex items-center gap-1.5 text-deep-navy/70 hover:text-deep-navy font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+          Retour aux politiques &amp; gouvernance
+        </a>
+<div class="flex items-center gap-2 font-mono text-[11px] text-deep-navy/60">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold animate-pulse"></span>
+          Horodate d'arbitrage : Ouagadougou GMT
+        </div>
+</div>
+</div>
+</header>
+<!-- MAIN OPERATIONAL VIEWPORT -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-6 md:px-10 py-8">
+<!-- Editorial Intro & Page Intent -->
+<div class="mb-8 border-b border-hairline/60 pb-6">
+<span class="text-xs font-semibold tracking-wider text-soft-gold uppercase font-body">Académie Ta'aruf &amp; Gouvernance Éthique</span>
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy mt-1 tracking-tight font-normal">Gestion des Publications &amp; Référentiels Éthiques</h1>
+<p class="text-deep-navy/75 text-sm md:text-base mt-2 max-w-3xl leading-relaxed">
+        Administration sobre des articles doctrinaux et guides de convenance. Tout article non publié demeure sous statut <span class="font-semibold text-deep-navy">"Non publié (404 public)"</span> et requiert l'attestation formelle d'un référent religieux/académique.
+      </p>
+</div>
+<!-- TWO-PANE OPERATIONAL WORKSPACE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- LEFT PANE: List of Articles (5 columns on desktop) -->
+<section class="lg:col-span-5 flex flex-col gap-4">
+<div class="flex items-center justify-between pb-2">
+<h2 class="font-display text-lg text-deep-navy flex items-center gap-2">
+<span>Articles et Directives</span>
+<span class="text-xs font-body font-normal text-deep-navy/50 bg-deep-navy/5 px-2 py-0.5 rounded-md">5 répertoriés</span>
+</h2>
+<span class="text-xs text-deep-navy/50">Tri par priorité doctrinale</span>
+</div>
+<!-- Article Stack -->
+<div class="space-y-3">
+<!-- Article 1: Publié -->
+<article class="p-4 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-hairline transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-deep-navy text-cream">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+                Publié (Actif)
+              </span>
+<span class="text-[11px] font-mono text-deep-navy/50">RÉF-AC-102</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-medium leading-snug">Les convenances de l'entretien en présence du tuteur</h3>
+<div class="mt-2.5 flex items-center justify-between text-xs text-deep-navy/60 pt-2 border-t border-hairline/40">
+<span>Visa collégial vérifié</span>
+<span>12 Oct. 2026</span>
+</div>
+</article>
+<!-- Article 2: Publié -->
+<article class="p-4 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-hairline transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-deep-navy text-cream">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+                Publié (Actif)
+              </span>
+<span class="text-[11px] font-mono text-deep-navy/50">RÉF-AC-104</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-medium leading-snug">Pudeur du regard et préservation des clichés photographiques</h3>
+<div class="mt-2.5 flex items-center justify-between text-xs text-deep-navy/60 pt-2 border-t border-hairline/40">
+<span>Comité d'éthique visuelle</span>
+<span>08 Oct. 2026</span>
+</div>
+</article>
+<!-- Article 3: En revue contradictoire -->
+<article class="p-4 rounded-md border border-soft-gold/60 bg-cream/80 hover:border-soft-gold transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-soft-gold/20 text-deep-navy border border-soft-gold/40">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+                En revue contradictoire
+              </span>
+<span class="text-[11px] font-mono text-deep-navy/50">RÉF-REV-088</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-medium leading-snug">De la dot (Mahr) sobre et de la facilitation du mariage noble</h3>
+<div class="mt-2.5 flex items-center justify-between text-xs text-deep-navy/60 pt-2 border-t border-hairline/40">
+<span>Instance consultative Ouaga</span>
+<span>Session en cours</span>
+</div>
+</article>
+<!-- Article 4: SELECTED ITEM (Non publié) -->
+<article class="p-4 rounded-md border-2 border-deep-navy bg-white shadow-sm relative transition-all">
+<div class="absolute -left-1.5 top-5 w-3 h-3 bg-deep-navy rotate-45 transform"></div>
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-hairline/70 text-deep-navy border border-hairline">
+<span class="w-1.5 h-1.5 rounded-full bg-deep-navy/60"></span>
+                Non publié (404 public)
+              </span>
+<span class="text-[11px] font-mono font-semibold text-deep-navy">SÉLECTIONNÉ</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-semibold leading-snug">Règles d'arbitrage en cas de rupture de démarche</h3>
+<div class="mt-2.5 flex items-center justify-between text-xs text-deep-navy/70 pt-2 border-t border-hairline/50">
+<span>Soumis par: Cellule Médiation</span>
+<span class="font-medium text-deep-navy">En attente d'attestation</span>
+</div>
+</article>
+<!-- Article 5: Non publié -->
+<article class="p-4 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-hairline transition-all cursor-pointer">
+<div class="flex items-start justify-between gap-3 mb-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium bg-hairline/60 text-deep-navy/80">
+<span class="w-1.5 h-1.5 rounded-full bg-deep-navy/40"></span>
+                Non publié (404 public)
+              </span>
+<span class="text-[11px] font-mono text-deep-navy/50">RÉF-DRA-019</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-medium leading-snug">Le rôle protecteur du Wali selon les coutumes et la Sunnah</h3>
+<div class="mt-2.5 flex items-center justify-between text-xs text-deep-navy/60 pt-2 border-t border-hairline/40">
+<span>Commission doctrinale</span>
+<span>Brouillon consolidé</span>
+</div>
+</article>
+</div>
+<div class="mt-3 p-3.5 rounded-md bg-cream border border-hairline/70 text-xs text-deep-navy/70 flex items-start gap-2.5">
+<span class="material-symbols-outlined text-sm text-soft-gold shrink-0 mt-0.5">policy</span>
+<span>L'ordre d'arbitrage respecte le principe d'étanchéité : aucune modification doctrinale n'est rendue visible sans double attestation.</span>
+</div>
+</section>
+<!-- RIGHT PANE: Review and Publication Record (7 columns on desktop) -->
+<section class="lg:col-span-7 bg-white rounded-md border border-hairline p-6 md:p-8 shadow-sm">
+<!-- Header of Selected Entity -->
+<div class="border-b border-hairline/70 pb-5">
+<div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+<span class="text-xs font-mono uppercase tracking-wider text-deep-navy/60 font-medium">Dossier d'homologation #PUB-BF-2026-04</span>
+<span class="px-2.5 py-0.5 text-xs rounded-full font-medium bg-hairline/50 text-deep-navy border border-hairline">
+              Statut actuel : Non publié (Renvoie une erreur 404 sur l'espace membre)
+            </span>
+</div>
+<h2 class="font-display text-2xl md:text-3xl text-deep-navy font-normal">
+            Règles d'arbitrage en cas de rupture de démarche
+          </h2>
+<!-- Strict Warning Notice -->
+<div class="mt-4 p-3.5 rounded-md bg-cream/70 border-l-2 border-soft-gold text-xs leading-relaxed text-deep-navy/80">
+<span class="font-semibold text-deep-navy block mb-0.5">Règle de rigueur</span>
+            Tout article non validé collégialement renvoie vers une page introuvable (404) pour les membres afin d'éviter toute doctrine non certifiée.
+          </div>
+</div>
+<!-- FORM & SCHOLAR RECORD -->
+<form class="mt-6 space-y-6" onsubmit="event.preventDefault();">
+<!-- Scholar Review Record Required Section -->
+<div class="bg-cream/40 rounded-md border border-hairline/80 p-5 space-y-4">
+<div class="flex items-center justify-between border-b border-hairline/60 pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-soft-gold text-lg">verified</span>
+<h3 class="font-display text-base text-deep-navy font-medium">Revue savante obligatoire</h3>
+</div>
+<span class="text-[11px] font-mono text-deep-navy/50">Visa &amp; Attestation du comité référent</span>
+</div>
+<!-- Identity of Reviewer (Neutral labels without hardcoded personal names) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-semibold text-deep-navy mb-1.5" for="scholar-name">
+                  Nom du référent / savant instructeur
+                </label>
+<input class="w-full text-xs rounded-md bg-white border border-hairline px-3 py-2 text-deep-navy placeholder:text-deep-navy/40 focus:border-soft-gold focus:ring-1 focus:ring-soft-gold transition-colors" id="scholar-name" placeholder="Saisir l'identité du référent habilité..." type="text">
+</div>
+<div>
+<label class="block text-xs font-semibold text-deep-navy mb-1.5" for="scholar-instance">
+                  Fonction / Instance déontologique
+                </label>
+<input class="w-full text-xs rounded-md bg-white border border-hairline px-3 py-2 text-deep-navy placeholder:text-deep-navy/40 focus:border-soft-gold focus:ring-1 focus:ring-soft-gold transition-colors" id="scholar-instance" placeholder="Ex: Instance collégiale d'arbitrage matrimonial" type="text">
+</div>
+</div>
+<!-- Date & GMT Timestamp -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+<div>
+<label class="block text-xs font-semibold text-deep-navy mb-1.5" for="visa-date">
+                  Date de visa / horodatage GMT
+                </label>
+<div class="relative">
+<input class="w-full font-mono text-xs rounded-md bg-white/70 border border-hairline px-3 py-2 text-deep-navy focus:border-soft-gold focus:ring-1 focus:ring-soft-gold" id="visa-date" type="text" value="2026-10-14 11:42:00 GMT">
+<span class="material-symbols-outlined absolute right-2.5 top-2.5 text-xs text-deep-navy/40 pointer-events-none">schedule</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-deep-navy mb-1.5">
+                  Cadre territorial de référence
+                </label>
+<div class="text-xs font-mono py-2 px-3 bg-white/50 border border-hairline rounded-md text-deep-navy/70">
+                  Juridiction locale : Ouagadougou (Burkina Faso)
+                </div>
+</div>
+</div>
+<!-- Solemn Checkbox Certification -->
+<div class="pt-2">
+<label class="flex items-start gap-3 cursor-pointer select-none">
+<input class="mt-0.5 rounded border-hairline text-deep-navy focus:ring-soft-gold h-4 w-4 bg-white" type="checkbox">
+<span class="text-xs text-deep-navy/90 leading-relaxed font-body">
+                  Je certifie que cet article a fait l'objet d'une lecture contradictoire et d'une validation d'intégrité religieuse conforme à la charte Ta'aruf.
+                </span>
+</label>
+</div>
+</div>
+<!-- Publication Status Radios -->
+<div class="space-y-3 pt-2">
+<span class="block text-xs font-semibold text-deep-navy uppercase tracking-wider font-body">Statut d'exposition publique</span>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+<!-- Option 1: Selected (404) -->
+<label class="flex items-start gap-3 p-3.5 rounded-md border-2 border-deep-navy bg-cream/30 cursor-pointer">
+<input checked="" class="mt-1 text-deep-navy focus:ring-soft-gold border-hairline h-4 w-4" name="publication-state" type="radio" value="404">
+<div class="space-y-0.5">
+<span class="font-medium text-xs text-deep-navy block">Maintenir non publié (404 public)</span>
+<span class="text-[11px] text-deep-navy/60 block leading-normal">L'URL renvoie un code 404 strict côté adhérents.</span>
+</div>
+</label>
+<!-- Option 2: Valider et publier -->
+<label class="flex items-start gap-3 p-3.5 rounded-md border border-hairline hover:border-soft-gold bg-white cursor-pointer transition-colors">
+<input class="mt-1 text-deep-navy focus:ring-soft-gold border-hairline h-4 w-4" name="publication-state" type="radio" value="publish">
+<div class="space-y-0.5">
+<span class="font-medium text-xs text-deep-navy block">Valider et publier dans l'Académie</span>
+<span class="text-[11px] text-deep-navy/60 block leading-normal">Indexation immédiate dans l'espace membre certifié.</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Buttons Group -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-hairline/60">
+<button class="w-full sm:w-auto px-4 py-2.5 rounded-md text-xs font-medium text-deep-navy/70 hover:text-deep-navy hover:bg-cream border border-hairline transition-colors order-2 sm:order-1" type="button">
+              Rétablir l'état antérieur
+            </button>
+<button class="w-full sm:w-auto px-6 py-2.5 rounded-md bg-deep-navy text-cream text-xs font-semibold hover:bg-deep-navy/90 focus:outline-none focus:ring-2 focus:ring-soft-gold transition-all duration-150 active:opacity-80 flex items-center justify-center gap-2 order-1 sm:order-2 shadow-sm" type="submit">
+<span class="material-symbols-outlined text-sm text-soft-gold">gavel</span>
+              Consigner le visa &amp; Enregistrer le statut
+            </button>
+</div>
+<!-- Cryptographic SHA-256 Seal Box -->
+<div class="p-3 bg-cream/40 rounded-md border border-hairline/60 flex items-center justify-between text-[11px] text-deep-navy/60 font-mono">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs text-soft-gold">fingerprint</span>
+<span>Empreinte cryptographique d'audit (SHA-256) :</span>
+</div>
+<span class="truncate max-w-[220px] md:max-w-xs text-deep-navy font-semibold">9f8e7b1a2c3d4e5f60718293a4b5c6d7e8f90123</span>
+</div>
+</form>
+</section>
+</div>
+</main>
+<!-- FOOTER -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col md:flex-row items-center gap-3 md:gap-6 text-center md:text-left">
+<span class="font-display text-xl text-deep-navy tracking-normal">AnKanu</span>
+<span class="text-xs font-normal text-deep-navy/60 max-w-md">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </span>
+</div>
+<nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-deep-navy/70">
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Charte d'Honneur</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Rôle du Tuteur (Wali)</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Protection des Données</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Démarche Ta'aruf</a>
+<a class="hover:text-soft-gold transition-colors duration-200" href="#">Contact Serein</a>
+</nav>
+</div>
+</footer>
+</body></html>

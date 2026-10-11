@@ -1,0 +1,244 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu • Vérification d'identité Tuteur (Wali vérifié)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            md: "8px",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+    }
+    ::selection {
+      background-color: #E6D5A8;
+      color: #0B1D36;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-cream text-deep-navy font-body antialiased flex flex-col justify-between selection:bg-gold-soft selection:text-deep-navy">
+<!-- Top App Bar / Mahram Shell Header -->
+<header class="w-full top-0 sticky z-50 bg-cream/95 backdrop-blur-sm border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Left side: Brand identity & quiet Mahram context -->
+<div class="flex items-center gap-6">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">
+          AnKanu
+        </span>
+<div class="h-4 w-px bg-hairline hidden sm:block"></div>
+<p class="text-xs md:text-sm font-medium text-deep-navy/75 tracking-tight hidden sm:flex items-center gap-2">
+<span class="">Espace Tuteur (Mahram)</span>
+<span class="text-hairline">•</span>
+<span class="text-deep-navy/60">Vérification d'identité (Optionnel)</span>
+</p>
+</div>
+<!-- Right side: Quiet assurance chip -->
+<div class="flex items-center">
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-hairline bg-cream text-deep-navy text-xs font-medium">
+<span class="material-symbols-outlined text-[17px] text-soft-gold" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Canvas Container -->
+<main class="w-full max-w-4xl mx-auto px-6 md:px-12 py-10 md:py-16 flex-1 flex flex-col justify-start">
+<!-- Subtle Return Link -->
+<div class="mb-8">
+<a class="inline-flex items-center gap-2 text-sm font-medium text-deep-navy/70 hover:text-soft-gold transition-colors duration-200 group" href="#">
+<span class="text-xs transition-transform duration-200 group-hover:-translate-x-0.5">←</span>
+<span class="">Retour aux paramètres tuteur</span>
+</a>
+</div>
+<!-- Header Section -->
+<div class="space-y-4 mb-10">
+<span class="block text-xs font-semibold tracking-wider text-soft-gold">
+        ACCOMPAGNEMENT TUTÉLAIRE • DÉMARCHE OPTIONNELLE
+      </span>
+<h1 class="font-display text-3xl md:text-4xl lg:text-[40px] leading-tight font-normal text-deep-navy">
+        Vérification d'identité du Tuteur (Mahram)
+      </h1>
+<p class="text-deep-navy/80 text-sm md:text-base leading-relaxed max-w-3xl">
+        Cette démarche d'authentification facultative renforce la confiance et la sérénité des familles. Elle confère la mention « Wali vérifié » visible sur les salons de convenance accordés par votre protégée.
+      </p>
+<!-- Scope Notice Box -->
+<div class="mt-6 rounded-md bg-[#F2EBDA] border border-hairline/80 p-5 md:p-6 flex items-start gap-4 text-xs md:text-sm text-deep-navy/85 leading-relaxed">
+<span class="material-symbols-outlined text-soft-gold text-xl flex-shrink-0 mt-0.5" style="font-variation-settings: 'FILL' 1;">info</span>
+<div>
+<span class="font-semibold text-deep-navy">Portée de la vérification :</span>
+<span class=""> L'attestation d'identité ne modifie en rien la souveraineté de votre protégée. Vos accès demeurent strictement limités aux seuls salons de discussion qu'elle choisit de vous accorder.</span>
+</div>
+</div>
+</div>
+<!-- Two-Step Verification Section -->
+<div class="space-y-8 mb-10">
+<!-- Step 1: Official Identity Document -->
+<section class="bg-cream border border-hairline rounded-md p-6 md:p-8" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-center gap-3 mb-5 pb-4 border-b border-hairline/60">
+<div class="w-6 h-6 rounded-full bg-deep-navy text-cream flex items-center justify-center text-xs font-semibold font-body">
+            1
+          </div>
+<h2 class="font-display text-xl text-deep-navy">
+            Pièce officielle d'identité (CNIB, Passeport ou Carte Consulaire burkinabè)
+          </h2>
+</div>
+<div class="bg-[#FAF7EF] border border-hairline/80 rounded-md p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-11 h-11 rounded-md bg-cream border border-hairline flex items-center justify-center text-deep-navy/70 flex-shrink-0">
+<span class="material-symbols-outlined text-2xl text-deep-navy">badge</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-deep-navy">CNIB_tuteur_recto_verso.pdf</p>
+<div class="flex items-center gap-2 mt-0.5 text-xs text-deep-navy/70">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+<span class="">Document conforme &amp; lisible</span>
+<span class="text-hairline">•</span>
+<span class="">2.4 Mo</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+<button class="px-4 py-2 border border-hairline bg-cream hover:border-soft-gold text-deep-navy text-xs font-medium rounded-md transition-colors duration-150 active:opacity-80 flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-sm">cached</span>
+<span class="">Remplacer</span>
+</button>
+<button class="px-4 py-2 border border-hairline/80 bg-cream/70 hover:bg-cream text-deep-navy/70 hover:text-deep-navy text-xs font-medium rounded-md transition-colors duration-150" type="button">
+              Aperçu
+            </button>
+</div>
+</div>
+<p class="text-xs text-deep-navy/60 mt-3 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">lock</span>
+          Les pièces numérisées sont protégées par chiffrement de bout en bout et conservées uniquement le temps de la validation.
+        </p>
+</section>
+<!-- Step 2: Liveness Verification -->
+<section class="bg-cream border border-hairline rounded-md p-6 md:p-8" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-center gap-3 mb-6 pb-4 border-b border-hairline/60">
+<div class="w-6 h-6 rounded-full bg-deep-navy text-cream flex items-center justify-center text-xs font-semibold font-body">
+            2
+          </div>
+<h2 class="font-display text-xl text-deep-navy">
+            Preuve de présence réelle (Liveness / Vérification faciale)
+          </h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+<!-- Oval Frame -->
+<div class="md:col-span-5 flex flex-col items-center justify-center">
+<div class="w-48 h-64 rounded-[90px] border-2 border-dashed border-soft-gold/70 bg-[#FAF7EF] flex flex-col items-center justify-center p-6 relative overflow-hidden group">
+<!-- Subtle decorative alignment markings -->
+<div class="absolute inset-x-8 top-6 h-px bg-hairline/50"></div>
+<div class="absolute inset-x-8 bottom-6 h-px bg-hairline/50"></div>
+<div class="w-20 h-20 rounded-full bg-cream border border-hairline flex items-center justify-center mb-3 text-deep-navy/40">
+<span class="material-symbols-outlined text-4xl text-deep-navy/50">person</span>
+</div>
+<span class="text-xs font-medium text-deep-navy/70 text-center tracking-tight">
+                Positionnez votre visage au centre du repère
+              </span>
+</div>
+<div class="mt-3 flex items-center gap-1.5 text-xs text-deep-navy/70">
+<span class="inline-block w-2 h-2 rounded-full bg-soft-gold animate-pulse"></span>
+<span class="font-medium">Caméra au repos / Prête</span>
+</div>
+</div>
+<!-- Action & guidance beside frame -->
+<div class="md:col-span-7 space-y-4">
+<div class="space-y-2">
+<h3 class="text-sm font-semibold text-deep-navy">Contrôle biométrique passif et respectueux</h3>
+<p class="text-xs leading-relaxed text-deep-navy/75">
+                Une brève capture de face permet d'attester que vous êtes bien la personne physique désignée par la pièce officielle. Aucun enregistrement vidéo continu n'est conservé.
+              </p>
+</div>
+<div class="pt-2 flex flex-wrap gap-3">
+<button class="px-4 py-2.5 bg-deep-navy text-cream text-xs font-medium rounded-md hover:bg-deep-navy/90 transition-colors duration-150 flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-base">photo_camera</span>
+<span class="">Activer la caméra pour la capture</span>
+</button>
+<button class="px-4 py-2.5 border border-hairline hover:border-soft-gold text-deep-navy text-xs font-medium rounded-md bg-cream transition-colors duration-150 flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-base">refresh</span>
+<span class="">Reprendre la capture</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Clarification Notes -->
+<div class="space-y-3 mb-10 text-xs md:text-sm text-deep-navy/75 border-l-2 border-soft-gold pl-4 py-1">
+<p class="">
+<span class="font-semibold text-deep-navy">Note d'intégrité :</span>
+<span class=""> Aucun document de parenté n'est exigé ici. La vérification porte uniquement sur la concordance de l'identité civile du tuteur.</span>
+</p>
+<p class="">
+<span class="font-semibold text-deep-navy">Attribution du statut :</span>
+<span class=""> La mention « Wali vérifié » sera attribuée une fois la pièce d'identité et la preuve de présence validées par nos référents déontologiques.</span>
+</p>
+</div>
+<!-- Actions Section -->
+<div class="pt-6 border-t border-hairline/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto px-7 py-3.5 bg-deep-navy text-cream font-medium text-sm rounded-md hover:bg-deep-navy/90 transition-all duration-150 active:opacity-90 shadow-none text-center" type="button">
+        Transmettre pour vérification (Wali vérifié)
+      </button>
+<button class="w-full sm:w-auto px-4 py-3 text-deep-navy/70 hover:text-deep-navy text-xs md:text-sm font-medium transition-colors duration-150 text-center" type="button">
+        Conserver l'accompagnement sans badge d'identité
+      </button>
+</div>
+</main>
+<!-- Standard AnKanu Footer -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<span class="hidden md:inline text-hairline">•</span>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<nav aria-label="Liens institutionnels" class="flex flex-wrap justify-center items-center gap-6">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Protection des Données</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Contact Serein</a>
+</nav>
+</div>
+</footer>
+
+
+</body></html>

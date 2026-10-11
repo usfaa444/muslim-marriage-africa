@@ -1,0 +1,189 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Vérification d'âge (Age Gate)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col justify-between bg-cream text-deep-navy font-body antialiased selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- App Header (Linear / Task-focused view: No standard member navigation shell as per task mandate) -->
+<header class="w-full bg-cream border-b border-hairline/60 py-4 px-6 md:px-12 sticky top-0 z-40">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+</div>
+</div>
+</header>
+<!-- Main Focus Container -->
+<main class="flex-grow flex items-center justify-center px-4 py-12 md:py-16">
+<div class="w-full max-w-[560px] mx-auto">
+<!-- Primary Card -->
+<div class="bg-cream/70 backdrop-blur-sm border border-hairline rounded-2xl p-6 sm:p-10 shadow-none relative overflow-hidden" style="background-color: rgb(251, 248, 241);"><div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#C9A86C] to-transparent pointer-events-none"></div>
+<!-- Header Section inside Card -->
+<div class="text-center mb-8">
+<div class="w-12 h-12 mx-auto rounded-full bg-soft-gold/15 flex items-center justify-center mb-4 text-soft-gold border border-soft-gold/30"><svg class="w-6 h-6 text-soft-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+<h1 class="font-display text-2xl md:text-3xl font-medium text-deep-navy mb-3 tracking-normal">Comment vous appelez-vous ?</h1>
+<p class="text-sm leading-relaxed text-deep-navy/75 px-1 sm:px-4">Veuillez renseigner votre identité et votre genre pour continuer.</p>
+</div>
+<!-- Form Context -->
+<form class="space-y-6" id="ageGateForm" onsubmit="event.preventDefault();"><div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+  <div class="space-y-1.5">
+    <label class="block text-xs font-semibold text-deep-navy/80 tracking-wide uppercase" for="first-name">Prénom *</label>
+    <div class="relative">
+      <input aria-label="Prénom" autocomplete="given-name" class="w-full h-12 px-4 pr-10 text-base font-medium rounded-md border border-hairline bg-cream/90 text-deep-navy placeholder:text-deep-navy/35 focus:border-soft-gold focus:ring-1 focus:ring-soft-gold transition-colors outline-none" id="first-name" name="firstname" placeholder="Maitchibi" type="text">
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-deep-navy/40">
+        <span class="material-symbols-outlined text-[20px]">person</span>
+      </div>
+    </div>
+  </div>
+  <div class="space-y-1.5">
+    <label class="block text-xs font-semibold text-deep-navy/80 tracking-wide uppercase" for="last-name">Nom *</label>
+    <div class="relative">
+      <input aria-label="Nom de famille" autocomplete="family-name" class="w-full h-12 px-4 pr-10 text-base font-medium rounded-md border border-hairline bg-cream/90 text-deep-navy placeholder:text-deep-navy/35 focus:border-soft-gold focus:ring-1 focus:ring-soft-gold transition-colors outline-none" id="last-name" name="lastname" placeholder="Faycal" type="text">
+      <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-deep-navy/40">
+        <span class="material-symbols-outlined text-[20px]">badge</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="">
+<label class="block text-xs font-semibold text-deep-navy/80 tracking-wide uppercase mb-3">VOTRE GENRE *
+</label>
+<div class="grid grid-cols-2 gap-3">
+  <label class="relative flex items-center justify-between p-4 rounded-md border border-hairline bg-cream/90 hover:border-soft-gold cursor-pointer transition-colors group has-[:checked]:border-soft-gold has-[:checked]:bg-soft-gold/15">
+    <div class="flex items-center gap-3">
+      <input class="w-4 h-4 text-soft-gold border-hairline focus:ring-soft-gold focus:ring-1 bg-cream" name="gender" type="radio" value="soeur">
+      <span class="text-base font-medium text-deep-navy">Sœur</span>
+    </div>
+    <span class="material-symbols-outlined text-[20px] text-deep-navy/40 group-has-[:checked]:text-soft-gold">female</span>
+  </label>
+  <label class="relative flex items-center justify-between p-4 rounded-md border border-hairline bg-cream/90 hover:border-soft-gold cursor-pointer transition-colors group has-[:checked]:border-soft-gold has-[:checked]:bg-soft-gold/15">
+    <div class="flex items-center gap-3">
+      <input class="w-4 h-4 text-soft-gold border-hairline focus:ring-soft-gold focus:ring-1 bg-cream" name="gender" type="radio" value="frere">
+      <span class="text-base font-medium text-deep-navy">Frère</span>
+    </div>
+    <span class="material-symbols-outlined text-[20px] text-deep-navy/40 group-has-[:checked]:text-soft-gold">male</span>
+  </label>
+</div><div class="flex items-start gap-2 mt-2.5 text-xs text-deep-navy/75 leading-relaxed"><span class="material-symbols-outlined text-[16px] text-soft-gold shrink-0 mt-0.5">info</span><p class=""><span class="font-semibold text-deep-navy">Note :</span> Le genre renseigné ne pourra plus être modifié ultérieurement sans l'intervention d'un opérateur et vérification tutélaire.</p></div>
+</div>
+<!-- Primary Action Button (Disabled by default as DOB is blank) -->
+<div class="pt-2">
+<button aria-disabled="true" class="w-full min-h-[46px] h-12 rounded-md font-medium text-sm transition-all duration-200 flex items-center justify-center gap-2 bg-deep-navy/40 text-cream cursor-not-allowed opacity-50" disabled="" id="submitBtn" type="submit">
+<span class="">Continuer</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Discreet Privacy Guarantee -->
+</div>
+<!-- Additional Sub-Context Information -->
+</div>
+</main>
+<!-- Footer (AnKanu Standard Ground) -->
+<!-- Light Vanilla Script to handle the required interaction & valid state toggles gracefully -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dayInput = document.getElementById('dob-day');
+      const monthInput = document.getElementById('dob-month');
+      const yearInput = document.getElementById('dob-year');
+      const submitBtn = document.getElementById('submitBtn');
+
+      function checkEligibility() {
+        const d = parseInt(dayInput.value, 10);
+        const m = parseInt(monthInput.value, 10);
+        const y = parseInt(yearInput.value, 10);
+
+        const isFilled = !isNaN(d) && !isNaN(m) && !isNaN(y) && dayInput.value.length >= 1 && monthInput.value.length >= 1 && yearInput.value.length === 4;
+
+        if (isFilled && d >= 1 && d <= 31 && m >= 1 && m <= 12 && y >= 1920 && y <= 2026) {
+          // Enable button when valid input is provided
+          submitBtn.removeAttribute('disabled');
+          submitBtn.setAttribute('aria-disabled', 'false');
+          submitBtn.classList.remove('bg-deep-navy/40', 'opacity-50', 'cursor-not-allowed');
+          submitBtn.classList.add('bg-deep-navy', 'hover:bg-deep-navy/90', 'cursor-pointer', 'shadow-sm');
+        } else {
+          // Strict Default: Disabled
+          submitBtn.setAttribute('disabled', 'true');
+          submitBtn.setAttribute('aria-disabled', 'true');
+          submitBtn.classList.add('bg-deep-navy/40', 'opacity-50', 'cursor-not-allowed');
+          submitBtn.classList.remove('bg-deep-navy', 'hover:bg-deep-navy/90', 'cursor-pointer', 'shadow-sm');
+        }
+      }
+
+      // Auto-advance behavior for clean user experience
+      dayInput.addEventListener('input', (e) => {
+        if (e.target.value.length >= 2) monthInput.focus();
+        checkEligibility();
+      });
+
+      monthInput.addEventListener('input', (e) => {
+        if (e.target.value.length >= 2) yearInput.focus();
+        checkEligibility();
+      });
+
+      yearInput.addEventListener('input', checkEligibility);
+    });
+  </script>
+
+
+
+
+
+
+
+
+</body></html>

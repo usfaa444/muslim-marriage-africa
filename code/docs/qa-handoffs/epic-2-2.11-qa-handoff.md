@@ -1,5 +1,7 @@
 # Epic 2 Story 2.11 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 A member can deactivate with a named life-pause and one-tap reactivate. Identity writes only `account.status`. The reason and the free-text note are validated and discarded. Nothing else is written.
@@ -16,7 +18,7 @@ Errors use the AD-7 envelope and no new code: `401 UNAUTHENTICATED`; `401 PIN_RE
 
 `profile.visibility` is not written. Verification, credential, email verification, session, PIN, and profile rows are not inserted, updated, or deleted. Sessions stay open. `create-session` does not read status, so a deactivated member can sign in and reactivate from the screen. The reason is not returned, logged, or put in error details.
 
-`GET /profile-edit` serves `code/design-stitch/21-profile-edit/screen.html` with `content-type: text/html; charset=utf-8`, `cache-control: no-store`, and `referrer-policy: no-referrer`. The Stitch file is not edited. This file has no Scaleway, Paris, Île-de-France, fr-par, or « hébergée souverainement » line. The PIN guard script is injected. `/profil` stays the JSON member shell.
+`GET /profile-edit` serves `code/design-stitch/ankanu-v2/11-profile-edit/screen.html` with `content-type: text/html; charset=utf-8`, `cache-control: no-store`, and `referrer-policy: no-referrer`. The Stitch file is not edited. This file has no Scaleway, Paris, Île-de-France, fr-par, or « hébergée souverainement » line. The PIN guard script is injected. `/profil` stays the JSON member shell.
 
 On load the page calls `GET /v1/me/deactivate`. While `Active`, `#togglePauseBtn` toggles `#pauseDrawer`. The checked `pause_reason` radio is `reason`. The unnamed text input in the drawer is `note`. `#saveButton` posts deactivate only when the drawer is open. The printed spinner shows and the label becomes `Examen de conformité...`. Success sets `#alertSuccess` title to `Pause enregistrée` and the second line to `Réactivation en un clic sans reprise du parcours initial — vérifications d'identité préservées.` Failure puts the server message in `#alertErrorMessage`. `Annuler` closes the drawer and does not call. While `deactivated`, the same `#togglePauseBtn` shows icon `play_circle` and label `Réactiver mon profil`, the drawer stays closed, and one click posts `/v1/me/reactivate` with body `{}`. Success title is `Profil réactivé` and the second line is `Votre compte est de nouveau actif.` While `held`, the button is disabled, color `#B5A894`, and no call is made. Profile fields, photos, and PIN enable stay unwired.
 
@@ -107,8 +109,8 @@ Later packs, not built here: a member is listable only when `profile.visibility 
 
 ## Stitch files
 
-- `code/design-stitch/21-profile-edit/screen.html`
-- `code/design-stitch/21-profile-edit/screen.png`
+- `code/design-stitch/ankanu-v2/11-profile-edit/screen.html`
+- `code/design-stitch/ankanu-v2/11-profile-edit/screen.png`
 
 `DESIGN.md` is not the layout. The served page keeps the Stitch folio. Deactivated and held states change only the printed pause button, the existing alerts, and the existing spinner.
 

@@ -1,5 +1,7 @@
 # Epic 1 Story 1.4 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 A French Next.js public shell. `/` is the public landing. `/splash` is the splash. Tailwind tokens carry the sand, indigo, gold, staff, and blur-wash colors and Source Serif 4 / Source Sans 3. `button-primary`, `button-secondary`, `button-quiet`, `empty-state`, and `error-banner` exist. Member, Mahram, and Staff chrome components exist and are not mounted on the public pages. A staff session cookie cannot open a member route.
@@ -90,11 +92,10 @@ Chromium against the Stitch files: the hero `h1` is 30px / 36px and 108px tall a
 
 ## Stitch files
 
-- `code/design-stitch/01-public-landing/screen.html`
-- `code/design-stitch/01-public-landing/screen.png`
-- `code/design-stitch/10-splash/screen.html`
-- `code/design-stitch/10-splash/screen.png`
-- Tokens only: `code/design-stitch/tokens/DESIGN.md`
+- Public landing: `code/design-stitch/ankanu-v2/MANIFEST.md` (v2 coverage gaps — Public landing). No v2 HTML/PNG.
+- `code/design-stitch/ankanu-v2/01-splash/screen.html`
+- `code/design-stitch/ankanu-v2/01-splash/screen.png`
+- Tokens only: `code/design-stitch/ankanu-v2/DESIGN.md`
 
 ## Known gaps
 

@@ -1,8 +1,10 @@
 # Epic 2 Story 2.9 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
-`GET /onboarding` serves `code/design-stitch/16-onboarding/screen.html`. `GET /photo-rules` serves `code/design-stitch/18-photo-rules/screen.html`. Both responses use `content-type: text/html; charset=utf-8`, `cache-control: no-store`, and `referrer-policy: no-referrer`. The Stitch files are not edited.
+`GET /onboarding` serves `code/design-stitch/ankanu-v2/08-onboarding/screen.html`. `GET /photo-rules` serves `code/design-stitch/ankanu-v2/09-photo-rules/screen.html`. Both responses use `content-type: text/html; charset=utf-8`, `cache-control: no-store`, and `referrer-policy: no-referrer`. The Stitch files are not edited.
 
 The photo-rules hosting line comes off the served page and nothing replaces it: `Infrastructure de confiance hébergée souverainement · Scaleway Paris & Relais Ouagadougou · Conformité CIL Burkina Faso`. The served photo-rules body does not contain `Scaleway`, `Paris`, `Île-de-France`, `fr-par`, or `hébergée souverainement`. The onboarding footer `Hébergement souverain chiffré • Ouagadougou, Burkina Faso` stays. It is not that sentence.
 
@@ -71,12 +73,12 @@ Founder sentences on this ticket. This story does not call `PUT /v1/me/onboardin
 
 ## Stitch files
 
-- `code/design-stitch/16-onboarding/screen.html`
-- `code/design-stitch/16-onboarding/screen.png`
-- `code/design-stitch/18-photo-rules/screen.html`
-- `code/design-stitch/18-photo-rules/screen.png`
+- `code/design-stitch/ankanu-v2/08-onboarding/screen.html`
+- `code/design-stitch/ankanu-v2/08-onboarding/screen.png`
+- `code/design-stitch/ankanu-v2/09-photo-rules/screen.html`
+- `code/design-stitch/ankanu-v2/09-photo-rules/screen.png`
 
-`code/design-stitch/tokens/DESIGN.md` is not the layout. The HTML files were not edited. The served photo-rules page removes one hosting div. The served onboarding page adds the audio script only, and that script sets a 44px minimum on the language buttons and the speaker disc.
+`code/design-stitch/ankanu-v2/DESIGN.md` is not the layout. The HTML files were not edited. The served photo-rules page removes one hosting div. The served onboarding page adds the audio script only, and that script sets a 44px minimum on the language buttons and the speaker disc.
 
 ## Known gaps
 

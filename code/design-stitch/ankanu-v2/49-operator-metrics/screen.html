@@ -1,0 +1,401 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Métriques &amp; Indicateurs Opérateur (Staff)</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            md: "8px",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            mono: ["Plus Jakarta Sans", "monospace"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-cream text-deep-navy font-body antialiased selection:bg-gold-soft selection:text-deep-navy">
+<!-- Top Staff Header (Espace Réservé Staff) -->
+<header class="w-full bg-cream border-b border-hairline sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Left: Logo & Staff Badge -->
+<div class="flex items-center gap-3.5">
+<a class="font-display text-2xl tracking-wide font-normal text-deep-navy" href="#">AnKanu</a>
+<span class="text-hairline font-light text-xl select-none">|</span>
+<div class="flex items-center gap-2">
+<span class="text-xs uppercase tracking-wider font-semibold text-deep-navy/80 hidden sm:inline">Staff &amp; Administration Éthique</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-deep-navy text-cream">
+            Espace Opérateur (Confidentiel)
+          </span>
+</div>
+</div>
+<!-- Right: Staff Session Status -->
+<div class="flex items-center gap-4">
+<div class="hidden lg:flex flex-col items-end text-right">
+<div class="flex items-center gap-1.5 text-xs font-medium text-deep-navy">
+<span class="w-2 h-2 rounded-full bg-soft-gold inline-block"></span>
+<span class="">Opérateur Référent • Ouagadougou</span>
+</div>
+<span class="text-[11px] text-deep-navy/60 font-mono">Session #BF-2026-ETHIC</span>
+</div>
+<div class="flex items-center gap-2 pl-3 border-l border-hairline">
+<button class="inline-flex items-center justify-center w-9 h-9 rounded-md bg-deep-navy/5 text-deep-navy hover:bg-deep-navy/10 transition-colors" title="Registre vérifié &amp; Chiffré" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="shield">shield</span>
+</button>
+<div class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md text-xs font-mono bg-cream border border-hairline text-deep-navy/80">
+            Niv. 3 Référent
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- Subheader / Audit Breadcrumb Ribbon -->
+<div class="w-full bg-cream border-b border-hairline/80">
+<div class="max-w-7xl mx-auto px-6 md:px-12 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+<div class="flex items-center gap-2 text-deep-navy/70">
+<a class="inline-flex items-center gap-1 hover:text-deep-navy transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[16px]" data-icon="arrow_back">arrow_back</span>
+<span class="">Retour aux seuils &amp; politiques opérationnelles</span>
+</a>
+</div>
+<div class="flex flex-wrap items-center gap-3 text-deep-navy/60 text-[11px] font-mono">
+<span class="inline-flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+          Registre d'indicateurs certifié GMT
+        </span>
+<span class="text-hairline">•</span>
+<span class="">Horodatage certifié : 14 Octobre 2026 10:42:09 GMT</span>
+</div>
+</div>
+</div>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-7xl mx-auto px-6 md:px-12 py-8 md:py-10">
+<!-- Page Title & Dignified Introduction -->
+<div class="mb-10 max-w-4xl">
+<div class="inline-flex items-center gap-2 text-[11px] uppercase tracking-widest text-deep-navy/60 font-semibold mb-2">
+<span class="w-1 h-3 bg-soft-gold rounded-full inline-block"></span>
+<span class="">AUDIT OPÉRATIONNEL &amp; GOUVERNANCE ÉTHIQUE</span>
+</div>
+<h1 class="font-display text-3xl sm:text-4xl text-deep-navy font-normal tracking-tight leading-tight">
+        Métriques &amp; Indicateurs d'Activité Opérateur
+      </h1>
+<p class="mt-3 text-sm md:text-base text-deep-navy/80 leading-relaxed font-body">
+        Suivi rigoureux et sobre des indicateurs de conformité déontologique, des délais de traitement et de la pérennité des unions nobles. Zéro logique de rétention addictive ou de rentabilité marchande.
+      </p>
+</div>
+<!-- Two-Pane Layout (Grid: Analytical Metrics 8-cols, Staff Context / Governance 4-cols) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- LEFT PANE: Operational & Ethical Metrics (8 cols) -->
+<div class="lg:col-span-8 space-y-6">
+<!-- METRIC 1: Membres vérifiés par niveau -->
+<section class="border border-hairline rounded-md p-6 relative" style="background-color: #FBF8F1;">
+<div class="flex flex-wrap items-baseline justify-between gap-2 border-b border-hairline pb-4 mb-5">
+<div>
+<span class="text-[11px] font-mono uppercase tracking-wider text-deep-navy/60">Indicateur 01 • Rigueur Déontologique</span>
+<h2 class="font-display text-xl text-deep-navy font-medium mt-0.5">Membres vérifiés par niveau</h2>
+</div>
+<span class="text-xs font-mono text-deep-navy/70 bg-deep-navy/5 px-2.5 py-1 rounded">295 membres sous contrôle</span>
+</div>
+<!-- Counters Bento Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Niveau 1 -->
+<div class="bg-cream border border-hairline/80 rounded-md p-4 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between text-xs text-deep-navy/60 mb-2">
+<span class="font-mono text-[11px] font-medium">NIVEAU 1</span>
+<span class="material-symbols-outlined text-[18px] text-deep-navy/50" data-icon="phone_android">phone_android</span>
+</div>
+<div class="text-2xl font-display font-medium text-deep-navy">142</div>
+<div class="text-xs font-medium text-deep-navy mt-1">Vérification Téléphone OTP</div>
+</div>
+<p class="text-[11px] text-deep-navy/60 mt-3 pt-2 border-t border-hairline/60">
+                Numéro local contrôlé, clé temporaire sécurisée sans conservation marketing.
+              </p>
+</div>
+<!-- Niveau 2 -->
+<div class="bg-cream border border-hairline/80 rounded-md p-4 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between text-xs text-deep-navy/60 mb-2">
+<span class="font-mono text-[11px] font-medium">NIVEAU 2</span>
+<span class="material-symbols-outlined text-[18px] text-deep-navy/50" data-icon="badge">badge</span>
+</div>
+<div class="text-2xl font-display font-medium text-deep-navy">89</div>
+<div class="text-xs font-medium text-deep-navy mt-1">Identité CNIB validée</div>
+</div>
+<p class="text-[11px] text-deep-navy/60 mt-3 pt-2 border-t border-hairline/60">
+                Contrôle physique de la carte nationale &amp; preuve de vie par agent habilité.
+              </p>
+</div>
+<!-- Niveau 3 -->
+<div class="bg-cream border border-soft-gold/50 rounded-md p-4 flex flex-col justify-between bg-gradient-to-b from-cream to-hairline/20">
+<div>
+<div class="flex items-center justify-between text-xs text-deep-navy/70 mb-2">
+<span class="font-mono text-[11px] font-medium text-deep-navy">NIVEAU 3 • COMPLET</span>
+<span class="material-symbols-outlined text-[18px] text-soft-gold" data-icon="supervised_user_circle">supervised_user_circle</span>
+</div>
+<div class="text-2xl font-display font-medium text-deep-navy">64</div>
+<div class="text-xs font-semibold text-deep-navy mt-1">Tuteur Wali rattaché</div>
+</div>
+<p class="text-[11px] text-deep-navy/70 mt-3 pt-2 border-t border-soft-gold/30">
+                Consentement actif du garant légal et vérification bilatérale complétée.
+              </p>
+</div>
+</div>
+</section>
+<!-- METRIC 2 & 3: Mariages confirmés & SLA de traitement (2 Columns Bento) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- METRIC 2: Mariages confirmés bilatéralement -->
+<section class="bg-cream border border-hairline rounded-md p-6 flex flex-col justify-between" style="background-color: rgb(251, 248, 241);">
+<div>
+<div class="flex items-center justify-between border-b border-hairline pb-3 mb-4">
+<span class="text-[11px] font-mono uppercase tracking-wider text-deep-navy/60">Indicateur 02 • Finalité</span>
+<span class="material-symbols-outlined text-[18px] text-soft-gold" data-icon="done_all">done_all</span>
+</div>
+<h2 class="font-display text-lg text-deep-navy font-medium">Mariages confirmés bilatéralement</h2>
+<p class="text-xs text-deep-navy/70 mt-1 mb-4">Déclarations de Nikah authentifiées conjointement avec l'assentiment formel du Wali.</p>
+<div class="flex items-baseline gap-3 my-2">
+<span class="font-display text-4xl font-normal text-deep-navy">12</span>
+<span class="text-xs font-medium text-deep-navy/80 uppercase tracking-wide">unions consacrées</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-hairline text-[11px] text-deep-navy/60 space-y-1">
+<div class="flex justify-between">
+<span class="">Validation conjointe époux/épouse :</span>
+<span class="font-mono text-deep-navy">12/12</span>
+</div>
+<div class="flex justify-between">
+<span class="">Validation du Tuteur (Wali) :</span>
+<span class="font-mono text-deep-navy">12/12 (100%)</span>
+</div>
+</div>
+</section>
+<!-- METRIC 3: SLA de traitement des signalements -->
+<section class="bg-cream border border-hairline rounded-md p-6 flex flex-col justify-between" style="background-color: rgb(251, 248, 241);">
+<div>
+<div class="flex items-center justify-between border-b border-hairline pb-3 mb-4">
+<span class="text-[11px] font-mono uppercase tracking-wider text-deep-navy/60">Indicateur 03 • Vigilance Humaine</span>
+<span class="material-symbols-outlined text-[18px] text-deep-navy/50" data-icon="schedule">schedule</span>
+</div>
+<h2 class="font-display text-lg text-deep-navy font-medium">SLA de traitement des signalements</h2>
+<p class="text-xs text-deep-navy/70 mt-1 mb-4">Temps moyen d'instruction par un arbitre humain assermenté.</p>
+<div class="flex items-baseline gap-3 my-2">
+<span class="font-display text-4xl font-normal text-deep-navy">3h 40min</span>
+<span class="text-xs font-mono text-soft-gold font-semibold">Cible &lt; 24h</span>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-hairline text-[11px] text-deep-navy/60">
+<div class="w-full bg-hairline/60 h-1.5 rounded-full overflow-hidden mb-2">
+<div class="bg-soft-gold h-full rounded-full" style="width: 15.3%;"></div>
+</div>
+<div class="flex justify-between text-[11px]">
+<span class="">Marge de sécurité garantie :</span>
+<span class="font-mono text-deep-navy font-medium">Conforme (+20h 20min d'avance)</span>
+</div>
+</div>
+</section>
+</div>
+<!-- METRIC 4, 5 & 6: Scan-deferred, Réexamens & Alertes SLA -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- METRIC 4: Analyses différées (Scan-deferred) -->
+<section class="border border-hairline rounded-md p-5 flex flex-col justify-between" style="background-color: #FBF8F1;">
+<div>
+<div class="flex items-center justify-between pb-2 border-b border-hairline mb-3">
+<span class="text-[10px] font-mono uppercase text-deep-navy/60">Indicateur 04</span>
+<span class="material-symbols-outlined text-[16px] text-deep-navy/60" data-icon="pending_actions">pending_actions</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-medium">Analyses différées</h3>
+<p class="text-[11px] text-deep-navy/70 mt-1 mb-3">Flux textuels ou vocaux en attente d'arbitrage manuel.</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-3xl text-deep-navy font-normal">4</span>
+<span class="text-[11px] text-deep-navy/70">dossiers en cours</span>
+</div>
+</div>
+<div class="mt-4 pt-2.5 border-t border-hairline">
+<span class="inline-flex items-center gap-1 text-[10px] font-medium text-deep-navy/80">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+                Transparence totale : file non masquée
+              </span>
+</div>
+</section>
+<!-- METRIC 5: Réexamens & Infirmités de sanction -->
+<section class="bg-cream border border-hairline rounded-md p-5 flex flex-col justify-between" style="background-color: rgb(251, 248, 241);">
+<div>
+<div class="flex items-center justify-between pb-2 border-b border-hairline mb-3">
+<span class="text-[10px] font-mono uppercase text-deep-navy/60">Indicateur 05</span>
+<span class="material-symbols-outlined text-[16px] text-deep-navy/60" data-icon="balance">balance</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-medium">Réexamens &amp; Infirmités</h3>
+<p class="text-[11px] text-deep-navy/70 mt-1 mb-3">Décisions infirmées en seconde instance par un médiateur.</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-3xl text-deep-navy font-normal">2 <span class="text-sm font-body text-deep-navy/60">/ 9</span></span>
+</div>
+</div>
+<div class="mt-4 pt-2.5 border-t border-hairline text-[10px] text-deep-navy/70">
+<span class="">Recours instruits garantissant le contradictoire équitable.</span>
+</div>
+</section>
+<!-- METRIC 6: Alertes de dépassement SLA -->
+<section class="bg-cream border border-hairline rounded-md p-5 flex flex-col justify-between" style="background-color: rgb(251, 248, 241);">
+<div>
+<div class="flex items-center justify-between pb-2 border-b border-hairline mb-3">
+<span class="text-[10px] font-mono uppercase text-deep-navy/60">Indicateur 06</span>
+<span class="material-symbols-outlined text-[16px] text-deep-navy/60" data-icon="notification_important">notification_important</span>
+</div>
+<h3 class="font-display text-base text-deep-navy font-medium">Alertes dépassement SLA</h3>
+<p class="text-[11px] text-deep-navy/70 mt-1 mb-3">Signalements sans instruction dépassant le seuil de 24h.</p>
+<div class="flex items-baseline gap-2">
+<span class="font-display text-3xl text-deep-navy font-normal">0</span>
+<span class="text-[11px] text-deep-navy/70">dépassement actif</span>
+</div>
+</div>
+<div class="mt-4 pt-2.5 border-t border-hairline">
+<span class="inline-flex items-center gap-1 text-[10px] font-mono text-deep-navy">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+                Registre conforme aux seuils d'alerte
+              </span>
+</div>
+</section>
+</div>
+<!-- Note of Compliance below indicators -->
+<div class="p-4 rounded-md border border-hairline bg-cream text-xs text-deep-navy/70 flex items-start gap-3">
+<span class="material-symbols-outlined text-[18px] text-soft-gold flex-shrink-0 mt-0.5" data-icon="verified">verified</span>
+<p class="leading-relaxed">
+<strong class="font-semibold text-deep-navy">Intégrité des métriques :</strong> Toutes les données opérationnelles présentées sur cette console sont synchronisées en continu avec le registre d'arbitrage de Ouagadougou. Chaque entrée d'arbitrage manuel requiert la double signature d'un superviseur accrédité.
+          </p>
+</div>
+</div>
+<!-- RIGHT PANE: Governance / Staff Context (4 cols) -->
+<aside class="lg:col-span-4 space-y-6">
+<!-- Card 1: Habilitation Opérationnelle & Conformité -->
+<div class="bg-cream border border-hairline rounded-md p-6" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-deep-navy/70 pb-3 border-b border-hairline mb-4">
+<span class="material-symbols-outlined text-[16px] text-soft-gold" data-icon="policy">policy</span>
+<span class="">Habilitation Opérationnelle</span>
+</div>
+<ul class="space-y-4 text-xs">
+<li class="flex flex-col gap-0.5">
+<span class="text-deep-navy/60 font-body">Niveau d'accréditation :</span>
+<span class="font-semibold text-deep-navy">Niv. 3 Référent Éthique &amp; Médiation</span>
+</li>
+<li class="flex flex-col gap-0.5">
+<span class="text-deep-navy/60 font-body">Bureau de tutelle :</span>
+<span class="font-semibold text-deep-navy">Bureau de Ouagadougou, Burkina Faso</span>
+</li>
+<li class="flex flex-col gap-0.5">
+<span class="text-deep-navy/60 font-body">Fréquence de consolidation :</span>
+<span class="font-mono text-deep-navy">Temps réel / Horodatage WORM</span>
+</li>
+<li class="flex flex-col gap-0.5">
+<span class="text-deep-navy/60 font-body">Contrôle contradictoire :</span>
+<span class="text-deep-navy">Comité de surveillance collégial actif</span>
+</li>
+</ul>
+</div>
+<!-- Card 2: Principes de Sobriété Métrique -->
+<div class="bg-cream border border-hairline rounded-md p-6" style="background-color: rgb(251, 248, 241);">
+<div class="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-deep-navy/70 pb-3 border-b border-hairline mb-4">
+<span class="material-symbols-outlined text-[16px] text-soft-gold" data-icon="menu_book">menu_book</span>
+<span class="">Principes de Sobriété Métrique</span>
+</div>
+<div class="space-y-4 text-xs text-deep-navy/80 leading-relaxed font-body">
+<div class="p-3 bg-hairline/30 rounded border border-hairline/60">
+<h4 class="font-semibold text-deep-navy mb-1">Rejet absolu du volume (DAU / MAU)</h4>
+<p class="text-[11px] text-deep-navy/70">
+                La réussite se mesure à la paix des foyers et à la pudeur des échanges, non au temps d'écran ni aux volumes de sessions captifs.
+              </p>
+</div>
+<div class="p-3 bg-hairline/30 rounded border border-hairline/60">
+<h4 class="font-semibold text-deep-navy mb-1">Inviolabilité du regard humain</h4>
+<p class="text-[11px] text-deep-navy/70">
+                Aucun seuil SLA ne peut autoriser un robot à prononcer une sanction automatique. Chaque décision d'exclusion ou de rappel à l'ordre est motivée par un arbitre.
+              </p>
+</div>
+<div class="p-3 bg-hairline/30 rounded border border-hairline/60">
+<h4 class="font-semibold text-deep-navy mb-1">Traçabilité scellée ISO-Ethic</h4>
+<p class="text-[11px] text-deep-navy/70">
+                Toute modification des critères déontologiques est scellée sous signature SHA-256 inaltérable.
+              </p>
+</div>
+</div>
+</div>
+<!-- Card 3: Empreinte Cryptographique de Session -->
+<div class="bg-cream border border-hairline rounded-md p-5 text-xs font-mono text-deep-navy/70">
+<div class="flex items-center justify-between text-[11px] uppercase tracking-wider text-deep-navy/60 pb-2 border-b border-hairline mb-3">
+<span class="">Sceau Cryptographique</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="lock">lock</span>
+</div>
+<div class="text-[10px] break-all leading-relaxed bg-cream p-2 rounded border border-hairline/60 text-deep-navy/80 select-all font-mono">
+            SHA256: 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069
+          </div>
+<p class="mt-2 text-[10px] text-deep-navy/50">
+            Audit-log scellé à chaque clôture de vacations. Aucun accès extérieur autorisé.
+          </p>
+</div>
+</aside>
+</div>
+</main>
+<!-- Quiet Staff Footer matching Shared Components JSON strictly -->
+<footer class="w-full bg-cream border-t border-hairline/60 mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand & Ouagadougou Line -->
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-1">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Quiet Links -->
+<div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Charte d'Honneur</a>
+<span class="text-hairline hidden sm:inline">•</span>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<span class="text-hairline hidden sm:inline">•</span>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Protection des Données</a>
+<span class="text-hairline hidden sm:inline">•</span>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+<span class="text-hairline hidden sm:inline">•</span>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150" href="#">Contact Serein</a>
+</div>
+</div>
+</footer>
+
+
+</body></html>

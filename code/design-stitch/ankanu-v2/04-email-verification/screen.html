@@ -1,0 +1,228 @@
+<!DOCTYPE html><html class="h-full" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Vérification de l'adresse email — AnKanu</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Literata:wght@400;500;700&amp;family=Nunito+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<!-- Google Fonts: Newsreader (display/headline) & Plus Jakarta Sans (body) -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"deep-navy": "#0B1D36", "soft-gold": "#C9A86C", cream: "#F7F1E3", "on-navy": "#F7F1E3", "on-cream": "#0B1D36", "gold-soft": "#E6D5A8", hairline: "#E2D4B8", "on-primary": "#ffffff", "on-primary-fixed": "#002110", "surface-bright": "#faf6f0", secondary: "#6b6358", "on-secondary": "#ffffff", "inverse-surface": "#2e3230", "on-tertiary-container": "#554020", tertiary: "#705c30", "secondary-container": "#f0e8db", "on-primary-fixed-variant": "#2a6038", "on-surface-variant": "#4a4e4a", "tertiary-fixed-dim": "#dcc48e", "surface-container-low": "#f5f1ea", "on-tertiary-fixed": "#221a05", "surface-container-lowest": "#ffffff", "primary-container": "#78a886", outline: "#74796e", "tertiary-container": "#c4a66a", "primary-fixed": "#c8e8d0", "surface-container-high": "#eae6de", "inverse-on-surface": "#f5f0e8", "on-primary-container": "#d8f0de", "surface-tint": "#4a7c59", "outline-variant": "#c4c8bc", primary: "#4a7c59", "surface-container": "#f0ece4", "on-error-container": "#690005", "primary-fixed-dim": "#8ecf9e", "error-container": "#ffdad8", surface: "#faf6f0", "on-surface": "#2e3230", "surface-container-highest": "#e4e0d8", "on-secondary-fixed-variant": "#4a4538", "inverse-primary": "#8ecf9e", background: "#faf6f0", "on-secondary-container": "#5e5548", error: "#b83230", "on-tertiary": "#ffffff", "secondary-fixed-dim": "#d4ccbf", "surface-dim": "#dbd7cf", "on-background": "#2e3230", "surface-variant": "#e4e0d8", "on-tertiary-fixed-variant": "#554020", "on-secondary-fixed": "#1e1a13", "on-error": "#ffffff", "secondary-fixed": "#f0e8db", "tertiary-fixed": "#f8e0a8"}, borderRadius: {DEFAULT: "0.5rem", lg: "1rem", xl: "1.5rem", full: "9999px"}, fontFamily: {headline: ["Literata"], display: ["Literata"], body: ["Nunito Sans"], label: ["Nunito Sans"]}, fontSize: {}}}};</script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::selection {
+      background-color: #E6D5A8;
+      color: #0B1D36;
+    }
+  </style>
+</head>
+<body class="bg-cream text-deep-navy font-body antialiased min-h-screen flex flex-col justify-between selection:bg-gold-soft selection:text-deep-navy">
+<!-- En-tête sobre AnKanu (Top Shell sans bordures tranchées) -->
+<header class="w-full bg-cream sticky top-0 z-40 shadow-sm/5">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand Anchor -->
+<div class="flex items-center gap-4">
+<a aria-label="Accueil AnKanu" class="font-display text-2xl tracking-wide font-normal text-deep-navy hover:text-soft-gold transition-colors duration-200" href="#">
+          AnKanu
+        </a>
+<span class="hidden sm:inline-block w-px h-5 bg-hairline"></span>
+<span class="hidden sm:inline-block text-xs text-deep-navy/70 tracking-tight font-medium">
+          Plateforme noble d'engagement et de Ta'aruf • Burkina Faso
+        </span>
+</div>
+<!-- Sceau de protection / Contexte pudique -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gold-soft/20 border border-hairline/80 text-deep-navy text-xs font-medium">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="shield">shield</span>
+<span class="tracking-wide">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</header>
+<!-- Zone de Contenu Principal : Carte de Vérification centrée -->
+<main class="flex-grow flex items-center justify-center px-4 py-12 md:py-16">
+<section class="w-full max-w-[560px] bg-cream border border-hairline/80 rounded-md p-8 md:p-11 shadow-sm relative transition-all duration-200" style="background-color: rgb(251, 248, 241);">
+<!-- Symbole d'enveloppe noble et sceau épuré -->
+<div class="flex justify-center mb-6">
+<div class="w-16 h-16 rounded-full bg-gold-soft/30 border border-soft-gold/40 flex items-center justify-center text-deep-navy">
+<span class="material-symbols-outlined text-3xl text-soft-gold" data-icon="mark_email_read">mark_email_read</span>
+</div>
+</div>
+<!-- Titre digne et sobre -->
+<div class="text-center space-y-2 mb-6">
+<h1 class="font-display text-2xl md:text-3xl text-deep-navy tracking-tight font-normal">
+          Vérification de votre adresse email
+        </h1>
+<div class="w-10 h-0.5 bg-soft-gold mx-auto mt-3 rounded-full opacity-80"></div>
+</div>
+<!-- État d'attente (Waiting-for-link) -->
+<div class="space-y-4 text-center">
+<p class="text-deep-navy/85 text-sm md:text-base leading-relaxed font-normal">
+          Un lien sécurisé de confirmation a été envoyé à votre adresse email. Veuillez cliquer dessus pour poursuivre votre démarche.
+        </p>
+<!-- Adresse de référence & Modification interactive -->
+<div class="bg-gold-soft/15 border border-hairline rounded-md px-4 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+<div class="flex items-center gap-2.5 overflow-hidden w-full sm:w-auto">
+<span class="material-symbols-outlined text-soft-gold text-lg shrink-0" data-icon="mail">mail</span>
+<span class="text-sm font-semibold text-deep-navy truncate" id="currentEmail">
+              ibrahim.sawadogo@exemple.bf
+            </span>
+</div>
+<button class="text-xs text-deep-navy/70 hover:text-deep-navy underline underline-offset-4 decoration-hairline transition-colors shrink-0" id="editEmailBtn" onclick="toggleEditEmail()" type="button">
+            Modifier l'adresse
+          </button>
+</div>
+<!-- Formulaire de correction d'adresse (Caché par défaut) -->
+<div class="hidden text-left pt-2 pb-1 space-y-3" id="editEmailForm">
+<label class="block text-xs font-medium text-deep-navy/80" for="newEmailInput">
+            Corriger l'adresse de réception
+          </label>
+<div class="flex gap-2">
+<input class="w-full text-sm bg-cream border border-hairline rounded-md px-3.5 py-2 text-deep-navy placeholder:text-deep-navy/40 focus:outline-none focus:border-soft-gold focus:ring-1 focus:ring-soft-gold" id="newEmailInput" placeholder="votre.nom@exemple.bf" type="email">
+<button class="px-4 py-2 bg-deep-navy text-cream text-xs font-medium rounded-md hover:bg-deep-navy/90 transition-colors" onclick="saveEmailCorrection()" type="button">
+              Enregistrer
+            </button>
+</div>
+<p class="text-[11px] text-deep-navy/60">
+            Un nouveau lien unique sera immédiatement transmis à cette nouvelle boîte.
+          </p>
+</div>
+<!-- Notification de succès d'envoi -->
+<div class="hidden p-3 rounded-md bg-gold-soft/25 border border-soft-gold/30 text-xs text-deep-navy text-center flex items-center justify-center gap-2 animate-fade" id="resendSuccessBanner">
+<span class="material-symbols-outlined text-base text-soft-gold" data-icon="check_circle">check_circle</span>
+<span class="">Un nouveau message de confirmation vient de vous être adressé.</span>
+</div>
+</div>
+<!-- Contrôle de renvoi (Resend control) & Statut interactif -->
+<div class="mt-8 pt-6 border-t border-hairline/60 flex flex-col items-center text-center space-y-3">
+<button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-md bg-deep-navy text-cream text-sm font-medium hover:bg-deep-navy/90 transition-all duration-150 active:scale-[0.99] focus:outline-none focus:ring-2 focus:ring-soft-gold focus:ring-offset-2 focus:ring-offset-cream disabled:opacity-60 disabled:cursor-not-allowed" id="resendBtn" onclick="handleResendVerification()" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="refresh" id="btnIcon">refresh</span>
+<span id="btnText" class="">Renvoyer le lien de confirmation</span>
+</button>
+<p class="text-xs text-deep-navy/60 max-w-sm leading-normal">
+          Tout nouvel envoi désactivera immédiatement le lien précédent pour garantir la sécurité absolue de votre compte.
+        </p>
+</div>
+<!-- Pied de carte éthique -->
+<div class="mt-8 pt-4 border-t border-hairline/40 flex items-center justify-center gap-2 text-deep-navy/60 text-xs">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="lock">lock</span>
+<span class="">Transmission chiffrée selon les règles d'intégrité et de bienséance.</span>
+</div>
+</section>
+</main>
+<!-- Footer institutionnel conforme au Shared Components JSON -->
+<footer class="w-full bg-cream border-t border-hairline/60 mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Mentions d'engagement et localisation -->
+<div class="space-y-1 text-center md:text-left">
+<p class="font-display text-lg text-deep-navy">AnKanu</p>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Liens institutionnels définis dans les ancres de la marque -->
+<nav aria-label="Liens d'information et légaux" class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#">
+          Charte d'Honneur
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#">
+          Rôle du Tuteur (Wali)
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#">
+          Protection des Données
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#">
+          Démarche Ta'aruf
+        </a>
+<a class="text-deep-navy/70 hover:text-deep-navy text-xs transition-colors duration-150 hover:text-soft-gold" href="#">
+          Contact Serein
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Script interactif léger pour la gestion de renvoi et modification -->
+<script>
+    function toggleEditEmail() {
+      const form = document.getElementById('editEmailForm');
+      const input = document.getElementById('newEmailInput');
+      const current = document.getElementById('currentEmail').innerText.trim();
+
+      if (form.classList.contains('hidden')) {
+        form.classList.remove('hidden');
+        input.value = current;
+        input.focus();
+      } else {
+        form.classList.add('hidden');
+      }
+    }
+
+    function saveEmailCorrection() {
+      const input = document.getElementById('newEmailInput');
+      const emailVal = input.value.trim();
+      const currentEmail = document.getElementById('currentEmail');
+      const form = document.getElementById('editEmailForm');
+
+      if (emailVal && emailVal.includes('@') && emailVal.includes('.')) {
+        currentEmail.innerText = emailVal;
+        form.classList.add('hidden');
+        handleResendVerification(true);
+      } else {
+        input.focus();
+      }
+    }
+
+    function handleResendVerification(isImmediate = false) {
+      const btn = document.getElementById('resendBtn');
+      const btnIcon = document.getElementById('btnIcon');
+      const btnText = document.getElementById('btnText');
+      const banner = document.getElementById('resendSuccessBanner');
+
+      // État de chargement discret (resend-in-flight)
+      btn.disabled = true;
+      btnIcon.classList.add('animate-spin');
+      btnText.textContent = "Transmission en cours...";
+      banner.classList.add('hidden');
+
+      setTimeout(() => {
+        btnIcon.classList.remove('animate-spin');
+        btnText.textContent = "Lien transmis";
+        btn.classList.remove('bg-deep-navy');
+        btn.classList.add('bg-deep-navy/80');
+        banner.classList.remove('hidden');
+
+        // Décompte de courtoisie avant réactivation
+        let secondsLeft = 30;
+        const countdownInterval = setInterval(() => {
+          secondsLeft--;
+          if (secondsLeft > 0) {
+            btnText.textContent = `Patienter (${secondsLeft}s)`;
+          } else {
+            clearInterval(countdownInterval);
+            btn.disabled = false;
+            btnText.textContent = "Renvoyer le lien de confirmation";
+            btn.classList.remove('bg-deep-navy/80');
+            btn.classList.add('bg-deep-navy');
+          }
+        }, 1000);
+
+      }, isImmediate ? 400 : 900);
+    }
+  </script>
+
+
+</body></html>

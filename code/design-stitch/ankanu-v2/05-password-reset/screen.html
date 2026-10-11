@@ -1,0 +1,172 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu — Réinitialisation du mot de passe</title>
+<!-- Google Fonts: Newsreader & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col justify-between bg-cream text-deep-navy font-body antialiased selection:bg-gold-soft selection:text-deep-navy">
+<!-- Minimal Top Header: AnKanu wordmark & Dignified Protected Badge -->
+<header class="w-full border-b border-hairline/60 bg-cream/90 backdrop-blur-sm sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Brand Logo -->
+<a class="group inline-flex items-baseline space-x-2 focus:outline-none focus-visible:ring-1 focus-visible:ring-soft-gold rounded-sm" href="#">
+<span class="font-display text-2xl md:text-3xl font-normal tracking-wide text-deep-navy group-hover:text-soft-gold transition-colors duration-200">
+          AnKanu
+        </span>
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-soft-gold mb-1"></span>
+</a>
+<!-- Quiet Trust Anchor Badge -->
+<div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-cream border border-hairline text-deep-navy/80 text-xs font-medium tracking-wide">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="verified_user">verified_user</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas: Focused Centered Card -->
+<main class="flex-1 flex items-center justify-center px-4 py-12 md:py-20">
+<div class="w-full max-w-[560px]">
+<!-- Card Container -->
+<div class="border border-hairline rounded-md p-8 md:p-12 shadow-[0_4px_24px_-8px_rgba(11,29,54,0.06)] relative overflow-hidden" style="background-color: #FBF8F1;">
+<!-- Subtle Gold Decorative Accent Line -->
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-soft-gold to-transparent opacity-80"></div>
+<!-- Discreet Medallion Icon -->
+<div class="flex justify-center mb-6">
+<div class="w-14 h-14 rounded-full bg-gold-soft/30 border border-hairline flex items-center justify-center text-soft-gold">
+<span class="material-symbols-outlined text-2xl text-soft-gold" data-icon="lock_reset">lock_reset</span>
+</div>
+</div>
+<!-- Header Block -->
+<div class="text-center space-y-3 mb-8">
+<h1 class="font-display text-2xl md:text-3xl font-medium tracking-tight text-deep-navy">
+            Réinitialisation du mot de passe
+          </h1>
+<p class="font-body text-sm leading-relaxed text-deep-navy/70 max-w-md mx-auto">
+            Renseignez l'adresse email associée à votre compte AnKanu pour recevoir un lien sécurisé à usage unique.
+          </p>
+</div>
+<!-- Password Reset Request Form -->
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<!-- Email Input Group -->
+<div class="space-y-2">
+<label class="block font-label text-xs font-semibold uppercase tracking-wider text-deep-navy/80" for="email">
+              ADRESSE EMAIL
+            </label>
+<div class="relative rounded-md border border-hairline bg-cream focus-within:border-soft-gold focus-within:ring-1 focus-within:ring-soft-gold transition-colors duration-150">
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-deep-navy/50">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+</div>
+<input autocomplete="email" class="block w-full pl-11 pr-4 py-3 bg-transparent border-0 text-sm text-deep-navy placeholder:text-deep-navy/35 focus:ring-0 rounded-md font-body" id="email" name="email" placeholder="nom@exemple.bf" required="" type="email">
+</div>
+<p class="text-[11px] text-deep-navy/50 font-normal">
+              Exemple : tuteur ou membre inscrit au Burkina Faso ou dans la diaspora.
+            </p>
+</div>
+<!-- Primary Action Button -->
+<div class="pt-2">
+<button class="w-full min-h-[44px] py-3.5 px-6 rounded-md bg-deep-navy text-cream font-body text-sm font-semibold tracking-wide hover:bg-deep-navy/95 active:scale-[0.99] transition-all duration-150 shadow-sm flex items-center justify-center space-x-2 border border-deep-navy focus:outline-none focus-visible:ring-2 focus-visible:ring-soft-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream" type="submit">
+<span class="">Envoyer le lien de réinitialisation</span>
+<span class="material-symbols-outlined text-base text-soft-gold" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Return to Login Link -->
+<div class="text-center pt-2">
+<a class="inline-flex items-center space-x-1.5 text-xs font-medium text-deep-navy/70 hover:text-deep-navy transition-colors duration-150 focus:outline-none focus:underline underline-offset-4 decoration-soft-gold" href="#">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+<span class="">Retour à la connexion</span>
+</a>
+</div>
+</form>
+<!-- Reassurance Footer Note Inside Card -->
+<div class="mt-8 pt-6 border-t border-hairline/60 flex items-start space-x-3 text-deep-navy/65">
+<span class="material-symbols-outlined text-base text-soft-gold shrink-0 mt-0.5" data-icon="shield">shield</span>
+<p class="font-body text-xs leading-relaxed">
+            Un lien temporaire et strictement confidentiel vous sera transmis. Aucune information sensible n'est divulguée.
+          </p>
+</div>
+</div>
+<!-- Dignified Ethical Callout Under Card -->
+<div class="mt-6 text-center">
+<p class="text-xs text-deep-navy/50 font-body">
+          Besoin d'accompagnement de votre Wali ou d'assistance directe ? <a class="text-deep-navy/75 underline underline-offset-2 hover:text-deep-navy decoration-hairline" href="#">Contacter le pôle médiation</a>
+</p>
+</div>
+</div>
+</main>
+<!-- Standard Discrete AnKanu Footer -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-8 md:py-10 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+<!-- Legal Identification -->
+<div class="space-y-1">
+<p class="font-display text-base font-normal text-deep-navy tracking-tight">
+          AnKanu
+        </p>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Trust Links -->
+<nav class="flex flex-wrap justify-center items-center gap-6">
+<a class="font-body text-xs text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">
+          Charte d'Honneur
+        </a>
+<span class="text-hairline select-none">•</span>
+<a class="font-body text-xs text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">
+          Protection des Données
+        </a>
+<span class="text-hairline select-none">•</span>
+<a class="font-body text-xs text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">
+          Contact Serein
+        </a>
+</nav>
+</div>
+</footer>
+
+
+</body></html>

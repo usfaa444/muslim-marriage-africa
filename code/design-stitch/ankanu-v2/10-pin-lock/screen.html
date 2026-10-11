@@ -1,0 +1,258 @@
+<!DOCTYPE html><html class="h-full" lang="fr" style="width: 1280px; height: 1194px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Verrouillage de Sécurité — AnKanu</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8'
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-cream text-deep-navy font-body min-h-full flex flex-col antialiased selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- Sticky Header -->
+<header class="w-full top-0 sticky z-50 bg-cream border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Left: Wordmark & Burkina Context -->
+<div class="flex items-center gap-3 md:gap-4">
+<span class="font-display text-2xl tracking-wide font-normal text-deep-navy">AnKanu</span>
+<span class="w-px h-5 bg-hairline"></span>
+<span class="text-xs md:text-sm text-deep-navy/70 font-medium tracking-normal">Burkina Faso • Ta'aruf &amp; Mariage Noble</span>
+</div>
+<!-- Right: Privacy Pill Chip -->
+<div class="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-hairline bg-cream shadow-none">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="shield">shield</span>
+<span class="text-xs font-medium text-deep-navy/80 tracking-tight">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas: Centered PIN Lock Screen -->
+<main class="flex-1 flex items-center justify-center px-4 py-12 md:py-16">
+<div class="w-full max-w-[580px] bg-cream border border-hairline rounded-md p-8 md:p-12 flex flex-col items-center text-center" style="background-color: rgb(251, 248, 241);">
+<!-- Security Icon Badge -->
+<div class="w-16 h-16 rounded-full bg-cream border border-soft-gold/50 flex items-center justify-center mb-6 text-soft-gold shadow-none">
+<span class="material-symbols-outlined text-3xl" data-icon="lock">lock</span>
+</div>
+<!-- Headline & Subtitle -->
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal mb-3 tracking-tight">
+        Code d'accès confidentiel
+      </h1>
+<p class="text-sm leading-relaxed text-deep-navy/75 max-w-md mx-auto mb-8 font-normal">
+        Saisissez votre code PIN pour accéder à votre espace noble et préserver la confidentialité de vos échanges.
+      </p>
+<!-- PIN Discrete Indicators (6 digits) -->
+<div class="flex items-center justify-center gap-3 md:gap-4 mb-8" id="pin-display">
+<div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="0">
+<div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
+</div>
+<div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="1">
+<div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
+</div>
+<div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="2">
+<div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
+</div>
+<div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="3">
+<div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
+</div>
+<div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="4">
+<div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
+</div>
+<div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="5">
+<div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
+</div>
+</div>
+<!-- Numeric Keypad Layout -->
+<div class="grid grid-cols-3 gap-3 md:gap-4 w-full max-w-[320px] mb-8">
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="1" type="button">1</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="2" type="button">2</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="3" type="button">3</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="4" type="button">4</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="5" type="button">5</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="6" type="button">6</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="7" type="button">7</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="8" type="button">8</button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="9" type="button">9</button>
+<!-- Clear Action -->
+<button class="h-14 rounded-md border border-transparent hover:border-hairline text-xs font-medium text-deep-navy/60 hover:text-deep-navy transition-all duration-150 flex items-center justify-center focus:outline-none" id="btn-clear" type="button">
+          Effacer
+        </button>
+<button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="0" type="button">0</button>
+<!-- Backspace Action -->
+<button aria-label="Supprimer un chiffre" class="h-14 rounded-md border border-transparent hover:border-hairline text-deep-navy/70 hover:text-deep-navy transition-all duration-150 flex items-center justify-center focus:outline-none" id="btn-backspace" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="backspace">backspace</span>
+</button>
+</div>
+<!-- Action Button -->
+<div class="w-full max-w-[320px] space-y-4">
+<button class="w-full h-12 bg-deep-navy hover:bg-deep-navy/90 text-cream rounded-md font-medium text-sm flex items-center justify-center gap-2 transition-all duration-150 active:opacity-90" id="btn-submit" type="button">
+<span class="">Déverrouiller l'espace</span>
+<span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Secondary subtle recovery link -->
+<div class="pt-2">
+<a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-200 underline underline-offset-4 decoration-hairline" href="#">
+            Code oublié ?
+          </a>
+<span class="text-hairline mx-2">•</span>
+<a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-200 underline underline-offset-4 decoration-hairline" href="#">
+            S'identifier à nouveau
+          </a>
+</div>
+</div>
+<!-- Micro Status Hint -->
+<div class="mt-6 text-xs text-deep-navy/50 flex items-center gap-1.5" id="status-hint">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user">verified_user</span>
+<span class="">Chiffrement et vérification locale sécurisée</span>
+</div>
+</div>
+</main>
+<!-- Shared Footer -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Legal Text -->
+<div class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center sm:text-left">
+<span class="font-display text-lg text-deep-navy tracking-wide">AnKanu</span>
+<span class="hidden sm:inline text-deep-navy/30">•</span>
+<p class="font-body text-xs font-normal text-deep-navy/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Footer Policy Links -->
+<div class="flex flex-wrap justify-center items-center gap-6">
+<a class="text-deep-navy/70 hover:text-soft-gold text-xs transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="text-deep-navy/70 hover:text-soft-gold text-xs transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="text-deep-navy/70 hover:text-soft-gold text-xs transition-colors duration-150" href="#">Protection des Données</a>
+<a class="text-deep-navy/70 hover:text-soft-gold text-xs transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+<a class="text-deep-navy/70 hover:text-soft-gold text-xs transition-colors duration-150" href="#">Contact Serein</a>
+</div>
+</div>
+</footer>
+<!-- Micro-interactions Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let currentPin = '';
+      const maxDigits = 6;
+      const slots = document.querySelectorAll('.pin-slot');
+      const dots = document.querySelectorAll('.pin-dot');
+
+      function updateDisplay() {
+        slots.forEach((slot, index) => {
+          const dot = dots[index];
+          if (index < currentPin.length) {
+            dot.classList.remove('opacity-0');
+            slot.classList.add('border-soft-gold');
+            slot.classList.remove('border-hairline');
+          } else {
+            dot.classList.add('opacity-0');
+            slot.classList.remove('border-soft-gold');
+            slot.classList.add('border-hairline');
+          }
+        });
+      }
+
+      function addDigit(digit) {
+        if (currentPin.length < maxDigits) {
+          currentPin += digit;
+          updateDisplay();
+        }
+      }
+
+      function removeDigit() {
+        if (currentPin.length > 0) {
+          currentPin = currentPin.slice(0, -1);
+          updateDisplay();
+        }
+      }
+
+      function clearPin() {
+        currentPin = '';
+        updateDisplay();
+      }
+
+      document.querySelectorAll('.num-key').forEach(button => {
+        button.addEventListener('click', () => {
+          const key = button.getAttribute('data-key');
+          addDigit(key);
+        });
+      });
+
+      document.getElementById('btn-backspace').addEventListener('click', () => {
+        removeDigit();
+      });
+
+      document.getElementById('btn-clear').addEventListener('click', () => {
+        clearPin();
+      });
+
+      // Keyboard support
+      window.addEventListener('keydown', (e) => {
+        if (/^[0-9]$/.test(e.key)) {
+          addDigit(e.key);
+        } else if (e.key === 'Backspace') {
+          removeDigit();
+        } else if (e.key === 'Escape') {
+          clearPin();
+        }
+      });
+
+      document.getElementById('btn-submit').addEventListener('click', () => {
+        if (currentPin.length >= 4) {
+          const hint = document.getElementById('status-hint');
+          hint.innerHTML = '<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="lock_open">lock_open</span><span>Validation du code en cours...</span>';
+          setTimeout(() => {
+            hint.innerHTML = '<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user">verified_user</span><span>Chiffrement et vérification locale sécurisée</span>';
+          }, 1200);
+        }
+      });
+    });
+  </script>
+
+
+<div id="snapdom-sandbox" data-snapdom-sandbox="true" aria-hidden="true" style="position: absolute; left: -9999px; top: -9999px; width: 0px; height: 0px; overflow: hidden;"></div>
+
+</body></html>

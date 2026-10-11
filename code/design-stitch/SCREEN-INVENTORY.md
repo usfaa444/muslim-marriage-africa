@@ -2508,6 +2508,78 @@ Brief named surfaces used only to confirm scope (P13 status page, P43 suspended-
 
 # 8. Stitch files in this folder
 
-Founder-approved HTML and PNG are on disk. Map: `MANIFEST.md`. Tokens: `tokens/DESIGN.md` (copy; layout is the PNG) and `tokens/stitch-design-system.json`.
+Founder-approved AnKanu v2 HTML and PNG are on disk under `code/design-stitch/ankanu-v2/`. Map: `code/design-stitch/ankanu-v2/MANIFEST.md`. Tokens: `code/design-stitch/ankanu-v2/DESIGN.md` (tokens only; layout is the PNG).
 
-Each named inventory screen has one folder: `NN-slug/screen.html` and `NN-slug/screen.png` (66 / 66). Gaps G1–G25 and Unspecified chrome were not invented. Extra Stitch assets not on the approved map were not downloaded. Mock HTML was not used.
+Old numbered folders (`01-public-landing` … `66-ts-visit-signals`) and the old `MANIFEST.md` were removed on 2026-10-11. The Google Stitch v1 project was not deleted.
+
+Each v2 screen is `ankanu-v2/NN-slug/screen.html` and `screen.png` (57 / 57). Screens outside inventory numbering (PWA icons, manifest, duplicate OTP, pseudonym/DOB) were still downloaded. Inventory gaps and the skipped public landing are listed in MANIFEST **v2 coverage gaps** — do not invent them.
+
+| Inventory screen | v2 folder | v2 Stitch name |
+|---|---|---|
+| Splash | `01-splash` | AnKanu - Splash |
+| Auth (signup / login) | `02-auth` | AnKanu - Authentification & Inscription |
+| Age gate | `03-age-gate` | AnKanu - Identification & Date de naissance |
+| Email verification | `04-email-verification` | AnKanu - Vérification d'email |
+| Password reset | `05-password-reset` | AnKanu - Réinitialisation de mot de passe |
+| OTP | `06-otp` | AnKanu - Vérification Téléphone & OTP |
+| ID + liveness | `07-id-liveness` | AnKanu - Vérification d'identité & Preuve de vie |
+| Onboarding | `08-onboarding` | AnKanu - Onboarding |
+| Photo rules | `09-photo-rules` | AnKanu - Règles relatives aux photographies |
+| PIN lock | `10-pin-lock` | AnKanu - Verrouillage PIN |
+| Profile edit | `11-profile-edit` | AnKanu - Édition du profil |
+| Profile not-yet-public | `12-profile-not-yet-public` | AnKanu - Profil en revue (Non public) |
+| Search | `13-search` | AnKanu - Recherche |
+| Filters | `14-filters` | AnKanu - Filtres |
+| Profile detail | `15-profile-detail` | AnKanu - Profil détaillé |
+| Blur / Reveal / Revoke | `16-blur-reveal-revoke` | AnKanu - Révélation & Révocation de photo |
+| Favourites | `17-favourites` | AnKanu - Favoris |
+| Invite compose + Message Flash | `18-invite-compose-flash` | AnKanu - Envoi d'invitation & Message Flash |
+| Invite inbox | `19-invite-inbox` | AnKanu - Invitations |
+| Discussions list | `20-discussions-list` | AnKanu - Discussions |
+| Chat thread | `21-chat-thread` | AnKanu - Fil de Discussion Ta'aruf |
+| Contact-share interstitial | `22-contact-share-interstitial` | AnKanu - Échange de coordonnées & Consentement |
+| Report / Block | `23-report-block` | AnKanu - Signaler et Bloquer |
+| Marriage dual-confirm | `24-marriage-dual-confirm` | AnKanu - Confirmation mutuelle de mariage (Nikah) |
+| Payment pack | `25-payment-pack` | AnKanu - Packs & Formules Ta'aruf (Gratuit & Premium) |
+| Notifications | `26-notifications` | AnKanu - Notifications |
+| Settings | `27-settings` | AnKanu - Paramètres |
+| Delete / export status | `28-delete-export-status` | AnKanu - Statut de suppression et d'export |
+| Appeal | `29-appeal` | AnKanu - Recours & Réexamen de sanction |
+| Family guidance | `30-family-guidance` | AnKanu - Guidance familiale & Rôle du Tuteur |
+| Suspended-account screen *(PRD-named, IA omitted)* | `31-suspended-account` | AnKanu - Compte suspendu & Voie de recours |
+| Mahram invite (Sister) | `32-mahram-invite` | AnKanu - Invitation du Tuteur (Mahram) |
+| Mahram OTP + relationship | `33-mahram-otp-relationship` | AnKanu - Accès Tuteur (Mahram) : OTP & Lien de parenté |
+| Sister confirm Mahram | `34-sister-confirm-mahram` | AnKanu - Confirmation du Tuteur (Mahram) |
+| Mahram grant list | `35-mahram-grant-list` | AnKanu - Accès accordés au Tuteur (Mahram) |
+| Mahram thread list | `36-mahram-thread-list` | AnKanu - Espace Tuteur (Discussions suivies) |
+| Mahram read-only thread | `37-mahram-readonly-thread` | AnKanu - Consultation Tuteur (Fil en lecture seule) |
+| Mahram pause / end / flag | `38-mahram-pause-end-flag` | AnKanu - Mesures tutélaires (Pause, Fin, Signalement) |
+| Verified-Mahram ID (optional) | `39-verified-mahram-id` | AnKanu - Vérification d'identité Tuteur (Wali vérifié) |
+| Remove / Report Mahram | `40-remove-report-mahram` | AnKanu - Révocation & Signalement du Tuteur |
+| Admin flag queue | `41-admin-flag-queue` | AnKanu - File de Modération & Signalements (Staff) |
+| Case file | `42-case-file` | AnKanu - Instruction de dossier (Staff) |
+| Sanction | `43-sanction` | AnKanu - Sanction déontologique (Staff) |
+| Appeal review | `44-appeal-review` | AnKanu - Réexamen de recours (Staff) |
+| Operator policy / thresholds | `45-operator-policy` | AnKanu - Seuils & Politiques Opérateur (Staff) |
+| Operator pricing | `46-operator-pricing` | AnKanu - Tarification & Packs Opérateur (Staff) |
+| Operator sister-reach mode | `47-operator-sister-reach` | AnKanu - Accès Sœurs & Plafonds Opérateur (Staff) |
+| Operator daily message cap | `48-operator-message-cap` | AnKanu - Plafond Journalier de Messages & Accès Sœurs (Staff) |
+| Operator metrics | `49-operator-metrics` | AnKanu - Métriques Opérateur (Staff) |
+| Operator CIL / deletion tickets | `50-operator-cil-tickets` | AnKanu - File des Requêtes CIL & Effacement (Staff) |
+| Operator Board / Académie publish | `51-operator-board-academie` | AnKanu - Académie & Publications Éthiques (Staff) |
+| T&S visit signals | `52-ts-visit-signals` | AnKanu - Signaux de visite T&S & Modération (Staff) |
+| Public landing | — | **v2 coverage gap** (skipped on founder order) |
+| Legal hub | — | **v2 coverage gap** |
+| Public pricing | — | **v2 coverage gap** |
+| Académie list + article | — | **v2 coverage gap** |
+| Advisory Board | — | **v2 coverage gap** |
+| FAQ + contact | — | **v2 coverage gap** |
+| Showcase | — | **v2 coverage gap** |
+| Cookie consent | — | **v2 coverage gap** |
+| SEO pages | — | **v2 coverage gap** |
+| Discover | — | **v2 coverage gap** |
+| Sister invite quota wall | — | **v2 coverage gap** |
+| Message quota wall | — | **v2 coverage gap** |
+| Consent story | — | **v2 coverage gap** |
+| Mahram revoke one thread | — | **v2 coverage gap** |
+| Gaps G1–G25 | — | **v2 coverage gap** (unnamed — not invented) |

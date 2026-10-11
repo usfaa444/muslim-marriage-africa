@@ -1,0 +1,282 @@
+<!DOCTYPE html><html class="h-full min-h-screen" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Signaler ou bloquer le profil</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8'
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-cream text-deep-navy font-body antialiased min-h-screen flex flex-col justify-between selection:bg-gold-soft selection:text-deep-navy">
+<!-- PUBLIC / IDENTITY CHROME (Sticky Top Header) -->
+<header class="w-full top-0 sticky z-40 bg-cream/95 backdrop-blur-md border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Left: Brand + Quiet Tagline -->
+<div class="flex items-center gap-4">
+<a class="font-display text-2xl tracking-wide font-normal text-deep-navy hover:text-soft-gold transition-colors duration-200" href="#">
+          AnKanu
+        </a>
+<div class="h-4 w-px bg-hairline"></div>
+<span class="text-xs tracking-wider text-deep-navy/70 font-medium hidden sm:inline-block">
+          Burkina Faso • Ta'aruf &amp; Mariage Noble
+        </span>
+</div>
+<!-- Right: Discreet Identity Badge -->
+<div class="flex items-center">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-cream border border-hairline text-deep-navy text-xs tracking-wide">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="shield">shield</span>
+<span class="font-medium">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT CONTAINER -->
+<main class="flex-grow w-full max-w-2xl mx-auto px-4 sm:px-6 md:px-8 py-6 md:py-10 pb-20 md:pb-12">
+<!-- Breadcrumb Action -->
+<div class="mb-6">
+<a class="inline-flex items-center gap-2 text-xs font-medium text-deep-navy/70 hover:text-deep-navy transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined text-base group-hover:-translate-x-0.5 transition-transform duration-150" data-icon="arrow_back">arrow_back</span>
+<span class="">Retour au profil</span>
+</a>
+</div>
+<!-- Main Card -->
+<div class="bg-cream rounded-md border border-hairline p-6 md:p-10" style="background-color: rgb(251, 248, 241);">
+<!-- Card Header -->
+<div class="border-b border-hairline/60 pb-7">
+<div class="flex items-center gap-3.5 mb-3">
+<div class="w-10 h-10 rounded-full bg-cream border border-hairline flex items-center justify-center text-soft-gold flex-shrink-0">
+<span class="material-symbols-outlined text-xl" data-icon="security">security</span>
+</div>
+<div>
+<span class="text-[11px] font-semibold tracking-wider text-soft-gold">SÉCURITÉ &amp; BIENSÉANCE</span>
+<h1 class="font-display text-2xl md:text-3xl text-deep-navy font-normal mt-0.5 leading-tight">
+              Signaler ou bloquer ce profil
+            </h1>
+</div>
+</div>
+<p class="text-xs md:text-sm text-deep-navy/80 leading-relaxed font-light mt-3">
+          Afin de préserver la solennité de la démarche et la dignité des échanges, tout comportement non conforme fait l'objet d'un examen attentif par notre pôle de modération éthique.
+        </p>
+<!-- Target Profile Summary Chip -->
+<div class="mt-4 inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-cream border border-hairline text-xs text-deep-navy/90">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="person">person</span>
+<span class="">Profil concerné : <strong class="font-semibold text-deep-navy">Al-Hassan_BF</strong> (Ouagadougou)</span>
+</div>
+</div>
+<!-- Form Body -->
+<form class="mt-8 space-y-8" onsubmit="event.preventDefault();">
+<!-- SECTION 1: Motif du signalement -->
+<div>
+<div class="flex items-baseline justify-between mb-3.5">
+<label class="block text-xs font-semibold tracking-wide text-deep-navy">
+              Motif du signalement <span class="text-soft-gold font-normal">(requis)</span>
+</label>
+<span class="text-[11px] text-deep-navy/60 italic">Sélectionnez le motif principal</span>
+</div>
+<!-- Radio Options Group (Strictly matches French list) -->
+<div class="grid grid-cols-1 gap-2.5">
+<!-- Option 1 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input checked="" class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="indecence">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Indécence ou tenue inappropriée</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 2 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="sexuel">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Propos à caractère sexuel</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 3 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="usurpation">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Usurpation d'identité</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 4 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="multiples">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Comptes multiples</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 5 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="harcelement">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Harcèlement ou insistance déplacée</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 6 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="escroquerie">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Demande d'argent ou tentative d'escroquerie</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 7 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="haine">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Propos haineux ou irrespectueux</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 8 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="non_matrimonial">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Usage non matrimonial</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+<!-- Option 9 -->
+<label class="relative flex items-center justify-between p-3.5 rounded-md border border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group">
+<div class="flex items-center gap-3">
+<input class="h-4 w-4 text-deep-navy border-hairline focus:ring-soft-gold focus:ring-offset-0 bg-cream" name="report_reason" type="radio" value="dissimulation">
+<span class="text-xs md:text-sm text-deep-navy group-hover:text-deep-navy font-medium">Dissimulation ou fausse déclaration de situation matrimoniale</span>
+</div>
+<span class="material-symbols-outlined text-deep-navy/30 group-hover:text-soft-gold text-lg" data-icon="check_circle">check_circle</span>
+</label>
+</div>
+<!-- Optional Context Area -->
+<div class="mt-4">
+<label class="block text-xs font-semibold text-deep-navy mb-1.5" for="details">
+              Précisions utiles pour les modérateurs <span class="text-deep-navy/50 font-normal">(facultatif)</span>
+</label>
+<textarea class="w-full bg-cream rounded-md border border-hairline p-3 text-xs md:text-sm text-deep-navy placeholder:text-deep-navy/40 focus:border-soft-gold focus:ring-1 focus:ring-soft-gold resize-none outline-none leading-relaxed" id="details" placeholder="Mentionnez respectueusement les éléments observés afin d'orienter notre vérification..." rows="3"></textarea>
+</div><div class="mt-4"><div class="flex items-baseline justify-between mb-1.5"><label class="block text-xs font-semibold text-deep-navy">Pièce justificative ou capture d'écran <span class="text-deep-navy/50 font-normal">(facultatif)</span></label></div><p class="text-[11px] text-deep-navy/70 mb-2 leading-relaxed">Joignez une capture d'écran pour étayer votre signalement auprès du pôle de modération éthique.</p><label class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3.5 rounded-md border border-dashed border-hairline/80 bg-cream/50 hover:bg-cream hover:border-soft-gold cursor-pointer transition-all duration-150 group"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-full bg-cream border border-hairline flex items-center justify-center text-soft-gold group-hover:border-soft-gold transition-colors duration-150 flex-shrink-0"><span class="material-symbols-outlined text-lg" data-icon="attach_file">attach_file</span></div><div class="text-left"><span class="text-xs md:text-sm font-medium text-deep-navy block">Ajouter une capture d'écran</span><span class="text-[11px] text-deep-navy/60 block mt-0.5">Formats PNG, JPG jusqu'à 5 Mo</span></div></div><div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-cream border border-hairline text-deep-navy text-xs group-hover:border-soft-gold transition-colors duration-150"><span class="material-symbols-outlined text-sm text-soft-gold" data-icon="upload_file">upload_file</span><span class="font-medium text-[11px]">Parcourir</span></div><input accept="image/png, image/jpeg, image/jpg" class="hidden" type="file"></label></div>
+</div>
+<!-- SECTION 2: Option de blocage -->
+<div class="pt-4 border-t border-hairline/60">
+<div class="p-4 rounded-md bg-cream border border-hairline flex items-start gap-3">
+<div class="flex items-center h-5 mt-0.5">
+<input checked="" class="h-4 w-4 text-deep-navy border-hairline rounded focus:ring-soft-gold focus:ring-offset-0 bg-cream" id="block_toggle" type="checkbox">
+</div>
+<div class="text-xs leading-relaxed">
+<label class="font-semibold text-deep-navy cursor-pointer" for="block_toggle">
+                Bloquer également ce profil
+              </label>
+<p class="text-deep-navy/70 mt-1">
+                En cochant cette option, ce membre ne pourra plus consulter votre fiche ni vous envoyer d'invitation ou de message. Cette action s'applique immédiatement et avec discrétion.
+              </p>
+</div>
+</div>
+</div>
+<!-- SECTION 3: Submission & Cancel -->
+<div class="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+<button class="w-full sm:w-auto px-7 py-3 rounded-md bg-deep-navy text-cream font-medium text-xs md:text-sm tracking-wide hover:opacity-95 active:opacity-90 border border-deep-navy transition-all duration-150 shadow-none inline-flex items-center justify-center gap-2 cursor-pointer" type="submit">
+<span class="material-symbols-outlined text-base text-soft-gold" data-icon="send">send</span>
+<span class="">Transmettre le signalement</span>
+</button>
+<a class="text-xs font-medium text-deep-navy/70 hover:text-deep-navy transition-colors duration-150 underline underline-offset-4 decoration-hairline hover:decoration-soft-gold" href="#">
+            Annuler et retourner au profil
+          </a>
+</div>
+</form>
+</div>
+</main>
+<!-- MEMBER NAVIGATION (Floating/Sticky Bottom Bar) -->
+<nav class="sticky bottom-4 z-40 max-w-md mx-auto w-[92%] mb-6">
+<div class="bg-deep-navy text-cream rounded-full px-4 py-2 border border-hairline/30 flex items-center justify-around shadow-sm">
+<!-- 1. Découvrir (ACTIVE) -->
+<a class="h-11 min-w-[64px] px-3 flex flex-col items-center justify-center gap-0.5 rounded-full text-cream relative" href="#">
+<span class="material-symbols-outlined text-xl text-soft-gold" data-icon="explore">explore</span>
+<span class="text-[10px] font-semibold tracking-tight text-soft-gold">Découvrir</span>
+<span class="absolute bottom-1 w-1 h-1 rounded-full bg-soft-gold"></span>
+</a>
+<!-- 2. Invitations -->
+<a class="h-11 min-w-[64px] px-3 flex flex-col items-center justify-center gap-0.5 rounded-full text-cream/70 hover:text-cream transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="mark_email_unread">mark_email_unread</span>
+<span class="text-[10px] font-normal tracking-tight">Invitations</span>
+</a>
+<!-- 3. Discussions -->
+<a class="h-11 min-w-[64px] px-3 flex flex-col items-center justify-center gap-0.5 rounded-full text-cream/70 hover:text-cream transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+<span class="text-[10px] font-normal tracking-tight">Discussions</span>
+</a>
+<!-- 4. Profil -->
+<a class="h-11 min-w-[64px] px-3 flex flex-col items-center justify-center gap-0.5 rounded-full text-cream/70 hover:text-cream transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] font-normal tracking-tight">Profil</span>
+</a>
+</div>
+</nav>
+<!-- PUBLIC FOOTER -->
+<footer class="w-full border-t border-hairline/60 mt-auto bg-cream">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Brand & Legal Notice -->
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-display text-xl text-deep-navy font-normal">AnKanu</span>
+<p class="text-xs font-normal text-deep-navy/60 text-center md:text-left">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Quiet Links -->
+<div class="flex flex-wrap items-center justify-center gap-6">
+<a class="text-xs text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="text-xs text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="text-xs text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">Protection des Données</a>
+<a class="text-xs text-deep-navy/70 hover:text-deep-navy transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+</div>
+</div>
+</footer>
+<div aria-hidden="true" data-snapdom-sandbox="true" id="snapdom-sandbox" style="position: absolute; left: -9999px; top: -9999px; width: 0px; height: 0px; overflow: hidden;"></div>
+
+</body></html>

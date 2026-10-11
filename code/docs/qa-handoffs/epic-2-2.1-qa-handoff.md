@@ -1,10 +1,12 @@
 # Epic 2 Story 2.1 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 `POST /v1/accounts` creates an `account` and a password `credential`. Gender is `sister` or `brother`. `roles` is `member`. `status` is `Active`. `age_attested` is `false`. `coc_version` stores the submitted Code of conduct version. The password is stored only as an argon2id hash on `credential.secret_hash`. No profile row is created. A skipped pledge or a missing conduct version creates nothing. A taken email or pseudonym creates nothing and names that field.
 
-`GET /auth` serves `code/design-stitch/11-auth/screen.html`. Captcha, Google, and the 19+ notice stay on the screen and do not call Stories 2.2, 2.5, or 2.6. The form posts `/v1/accounts`. The web app rewrites `/v1/*` to `http://api:3000`.
+`GET /auth` serves `code/design-stitch/ankanu-v2/02-auth/screen.html`. Captcha, Google, and the 19+ notice stay on the screen and do not call Stories 2.2, 2.5, or 2.6. The form posts `/v1/accounts`. The web app rewrites `/v1/*` to `http://api:3000`.
 
 ## Where
 
@@ -75,7 +77,7 @@ QA fail on this ticket, then:
 
 1. HTTP: create, skipped pledge, missing `coc_version`, email conflict, pseudonym conflict, the three rejected passwords, `brother`, and a rejected gender. `GET /auth` on the production build returns the stitch page.
 2. Migration: `coc_version` text not null and `age_attested` boolean not null are in `0001_account_credential.sql`. The SQL does not create `profile`. Migrate on empty Postgres 17 applies two migrations, then one insert and one duplicate email.
-3. Static and image: `npm run typecheck`, `npm run lint`, and `npx next build`. The web image includes `design-stitch/11-auth/screen.html`. Compose fetches auth and health through `web:3000`.
+3. Static and image: `npm run typecheck`, `npm run lint`, and `npx next build`. The web image includes `design-stitch/ankanu-v2/02-auth/screen.html`. Compose fetches auth and health through `web:3000`.
 
 ## Solution-design sections
 
@@ -86,15 +88,15 @@ QA fail on this ticket, then:
 
 ## Stitch files
 
-- `code/design-stitch/11-auth/screen.html`
-- `code/design-stitch/11-auth/screen.png`
+- `code/design-stitch/ankanu-v2/02-auth/screen.html`
+- `code/design-stitch/ankanu-v2/02-auth/screen.png`
 
 ## Known gaps
 
 - The stitch password box still reads “Minimum 10 caractères”, “1 chiffre requis”, “1 lettre majuscule”, and “1 symbole déontologique”. The server and the submit button use the founder rules, not those four lines.
 - The page sends `coc_version` `FR-089` because that token is the charter mark printed on the pledge checkbox. The founder named the column and said a version must be submitted. The founder did not name a different token.
 - Splash “Continuer” stays `href="#prochaine-etape"` because Story 1.4 locked that href. Auth is `GET /auth`.
-- No session cookie, no captcha check, no Google call, no date of birth, and no navigation to `12-age-gate`.
+- No session cookie, no captcha check, no Google call, no date of birth, and no navigation to `03-age-gate`.
 - The downloaded auth footer still contains the Scaleway Paris sentence. This story serves that file.
 - I did not pixel-diff `screen.png` in a browser. The initial document is the stitch HTML plus a script before `</body>`.
 - This commit stays local until QA passes. Do not treat it as pushed.

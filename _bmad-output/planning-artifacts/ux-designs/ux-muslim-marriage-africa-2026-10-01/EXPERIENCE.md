@@ -14,7 +14,7 @@ sources:
 
 The product name is **AnKanu**. Domain **ankanu.com** was purchased on Hostinger (Maitchibi Fayçal via Harris, 2026-10-03). The repo slug `muslim-marriage-africa` is the repo name, not the product name. A1–A3 and PRD §16 questions 1, 3–8, and 11–12 stay open. Questions 9 and 10 are closed for naming: AnKanu is locked.
 
-Visual tokens live in `DESIGN.md`. Component pairing uses those names. Spines win on conflict with `mockups/`.
+Visual tokens live in `DESIGN.md` (this UX folder — planning tokens only). Shipping layout is Google Stitch **AnKanu v2**: `code/design-stitch/ankanu-v2/` (`MANIFEST.md`, each `NN-slug/screen.html` + `screen.png`, `DESIGN.md` tokens). Matching this folder's `DESIGN.md` tone without the Stitch PNG is a fail. Spines win on conflict with `mockups/`. Do not use `mockups/` as the shipping layout.
 
 ## Foundation
 

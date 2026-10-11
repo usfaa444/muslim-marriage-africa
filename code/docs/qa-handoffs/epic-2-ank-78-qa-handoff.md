@@ -1,5 +1,7 @@
 # Epic 2 ANK-78 QA handoff
 
+Note (2026-10-11): the original old-Stitch file was removed. Design reference is now the AnKanu v2 path in this file (`code/design-stitch/ankanu-v2/...`). Epic 1–2 routes/tests that still load old filenames are out of scope for this swap.
+
 ## What was built
 
 `/otp` no longer opens on the six code boxes. The first paint is the phone field, default `+226`, with the button "Envoyer le code par SMS". The sent paragraph, the "Code expédié" banner, the boxes, the timer, and "Renvoyer" stay hidden until a real send or a live status read.
@@ -75,7 +77,7 @@ This heartbeat did not deploy. `http://72.61.0.79:4012` still serves the previou
 
 1. Solution-design / API: FR-002 still sends an OTP for a number that has not been granted, and a correct code grants the phone level. `verification_record` is unchanged (`phone_e164` remains the only Member phone column). The new read matches the `GET /v1/verifications/id` and `liveness` precedent: session required, `{ "status": "none" }` or the row status. No new table or column. Log-only SMS is unchanged.
 2. Logic: unit tests cover the status read, phone-only first paint, invalid number, send `201`, send error, reload pending, reload expired, verify `400`, verify `200`, `GET granted`, and a deep link that cannot show boxes without the matching read. Headless Chrome walked the same states. The ANK-74 strips still hold: no state switcher, no `840192`, no "Accéder à l'étape Wali", no native dialog.
-3. Visual: pre-send uses the 14-otp card header, the phone chip styling, the Stitch error banner, and the indigo `#submit-btn`. After send, the page uses the sent paragraph, the "Code expédié" banner, the boxes, and the resend row from `code/design-stitch/14-otp/screen.html` and `screen.png`. The specimen number and specimen timestamp are not used as live values.
+3. Visual: pre-send uses the 06-otp card header, the phone chip styling, the Stitch error banner, and the indigo `#submit-btn`. After send, the page uses the sent paragraph, the "Code expédié" banner, the boxes, and the resend row from `code/design-stitch/ankanu-v2/06-otp/screen.html` and `screen.png`. The specimen number and specimen timestamp are not used as live values.
 
 ## Solution-design sections followed
 
@@ -87,8 +89,8 @@ This heartbeat did not deploy. `http://72.61.0.79:4012` still serves the previou
 
 ## Stitch files matched
 
-- `code/design-stitch/14-otp/screen.html`
-- `code/design-stitch/14-otp/screen.png`
+- `code/design-stitch/ankanu-v2/06-otp/screen.html`
+- `code/design-stitch/ankanu-v2/06-otp/screen.png`
 
 The pre-send view reuses that card. It does not add a new screen. State tabs and the audit switcher are not served.
 

@@ -1,0 +1,394 @@
+<!DOCTYPE html><html class="h-full" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu • Surveillance T&amp;S Déontologique</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8'
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            md: "8px",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px"
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="bg-cream text-deep-navy font-body antialiased min-h-full flex flex-col selection:bg-soft-gold/30 selection:text-deep-navy">
+<!-- Shell Staff Header Obligatoire -->
+<header class="w-full bg-deep-navy text-cream sticky top-0 z-50 shadow-sm border-b border-soft-gold/20">
+<div class="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Gauche : Marque + Identification Staff -->
+<div class="flex items-center gap-4">
+<span class="font-display text-2xl tracking-wide font-normal text-cream">AnKanu</span>
+<span class="text-hairline/40 hidden sm:inline">|</span>
+<div class="flex items-center gap-3">
+<span class="text-xs uppercase tracking-widest font-semibold text-soft-gold hidden md:inline">STAFF &amp; MÉDIATION ÉTHIQUE</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-soft-gold/15 text-gold-soft border border-soft-gold/30">
+<span class="w-1.5 h-1.5 rounded-full bg-soft-gold"></span>
+            Espace Modération (Confidentiel)
+          </span>
+</div>
+</div>
+<!-- Droite : Médiateur Référent, Session & Sécurité -->
+<div class="flex items-center gap-6 text-sm">
+<div class="text-right hidden sm:block">
+<p class="font-medium text-cream text-xs md:text-sm">Médiateur Référent • Ouagadougou</p>
+<p class="font-mono text-[11px] text-hairline/60">ID: MED-OUAGA-7704 • Sécurisé</p>
+</div>
+<div class="w-9 h-9 rounded-md bg-cream/10 border border-hairline/20 flex items-center justify-center text-soft-gold" title="Session chiffrée de bout en bout">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Sous-barre navigation & horodatage légal -->
+<div class="w-full border-b border-hairline/60 bg-cream/80 backdrop-blur-sm">
+<div class="max-w-7xl mx-auto px-6 md:px-12 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+<a class="inline-flex items-center gap-2 text-deep-navy/80 hover:text-deep-navy font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span class="">Retour à la console de modération</span>
+</a>
+<div class="flex items-center gap-2 text-deep-navy/60 font-mono text-[11px]">
+<span class="material-symbols-outlined text-sm text-soft-gold">schedule</span>
+<span class="">Horodatage officiel : 24 Mai 2026 • 15:42:19 GMT (Ouagadougou)</span>
+</div>
+</div>
+</div>
+<!-- Conteneur Principal -->
+<main class="flex-1 max-w-7xl w-full mx-auto px-6 md:px-12 py-8">
+<!-- En-tête de page Déontologique -->
+<div class="mb-8 border-b border-hairline/60 pb-6">
+<div class="flex items-start justify-between flex-wrap gap-4">
+<div>
+<div class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-soft-gold mb-2">
+<span class="material-symbols-outlined text-base">visibility_lock</span>
+            Trust &amp; Safety Déontologique
+          </div>
+<h1 class="font-headline text-2xl md:text-3xl font-medium text-deep-navy">
+            Surveillance T&amp;S • Détection de Consultation Intensive
+          </h1>
+<p class="mt-2 max-w-3xl text-sm leading-relaxed text-deep-navy/80">
+            Contrôle sobre des comportements atypiques de consultation sans intention d'engagement. Signalement automatique des profils dépassant le seuil de bienveillance de 50 profils consultés en 24h sans aucune transmission d'invitation Ta'aruf.
+          </p>
+</div>
+<div class="p-3 bg-cream rounded-md border border-hairline/80 max-w-xs self-start text-xs">
+<div class="flex items-center gap-2 text-deep-navy font-semibold mb-1">
+<span class="material-symbols-outlined text-sm text-soft-gold">rule</span>
+            Cadre de vigilance éthique
+          </div>
+<p class="text-deep-navy/70 leading-snug">
+            Le mariage honorable exclut le catalogage récréatif. L'arbitre veille au respect mutuel de la dignité et de la retenue.
+          </p>
+</div>
+</div>
+</div>
+<!-- Layout Asymétrique / Bento Staff Dédié -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- VOLET GAUCHE : File des profils sous signal T&S (7 colonnes) -->
+<section class="lg:col-span-7 space-y-4">
+<!-- En-tête du volet avec métrique sobre -->
+<div class="flex items-center justify-between bg-deep-navy/5 px-4 py-3 rounded-md border border-hairline/70">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-soft-gold animate-pulse"></span>
+<span class="text-xs font-semibold uppercase tracking-wide text-deep-navy">Cas sous seuil de bienveillance</span>
+</div>
+<span class="px-2 py-0.5 rounded text-xs font-semibold bg-deep-navy text-cream">
+            3 cas actifs
+          </span>
+</div>
+<!-- Règle de retenue explicite rappelée -->
+<div class="bg-cream border border-hairline rounded-md p-3.5 flex items-start gap-3">
+<span class="material-symbols-outlined text-soft-gold text-lg mt-0.5 shrink-0">shield_lock</span>
+<p class="text-xs text-deep-navy/80 leading-relaxed">
+<strong class="font-semibold text-deep-navy">Règle d'or de retenue AnKanu :</strong> Aucun profil public de visiteurs n'est jamais accessible aux membres (inviolabilité stricte de la pudeur et du recueillement). Les métriques ci-dessous sont réservées à l'arbitrage déontologique.
+          </p>
+</div>
+<!-- Liste des Fiches Détectées -->
+<div class="space-y-3">
+<!-- Carte 1 : Active (Sélectionnée pour examen) -->
+<div class="rounded-md border-2 border-deep-navy p-5 shadow-sm relative transition-all" style="background-color: #FBF8F1;">
+<div class="absolute -top-2.5 right-4 bg-deep-navy text-cream text-[10px] uppercase font-semibold px-2 py-0.5 rounded tracking-wider">
+              En cours d'examen
+            </div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2.5">
+<h2 class="font-display text-lg font-semibold text-deep-navy">Souleymane_T</h2>
+<span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-deep-navy/5 text-deep-navy border border-hairline/80 font-medium">
+<span class="material-symbols-outlined text-xs text-soft-gold" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    CNIB Vérifiée (BF)
+                  </span>
+</div>
+<p class="text-xs text-deep-navy/60 font-mono mt-0.5">Membre depuis Novembre 2025 • Région Centre</p>
+</div>
+<div class="flex items-center gap-6">
+<!-- Métrique : Vues 24h -->
+<div class="text-left sm:text-right">
+<div class="text-[11px] uppercase tracking-wider text-deep-navy/60 font-semibold">Consultations 24h</div>
+<div class="font-headline text-xl font-bold text-deep-navy flex items-center sm:justify-end gap-1">
+<span class="">64 fiches</span>
+<span class="text-xs font-normal text-soft-gold font-body">(+14/seuil)</span>
+</div>
+</div>
+<!-- Métrique : Invitations -->
+<div class="text-left sm:text-right border-l border-hairline/80 pl-4">
+<div class="text-[11px] uppercase tracking-wider text-deep-navy/60 font-semibold">Invitations Ta'aruf</div>
+<div class="font-headline text-xl font-medium text-deep-navy/50">
+                    0 transmise
+                  </div>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-hairline/70 flex items-center justify-between text-xs">
+<span class="text-deep-navy/70 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-soft-gold">crisis_alert</span>
+                Dépassement enregistré il y a 42 min
+              </span>
+<button class="inline-flex items-center gap-1 text-deep-navy font-semibold hover:text-soft-gold transition-colors" type="button">
+<span class="">Fiche active</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Carte 2 : En attente -->
+<div class="bg-cream rounded-md border border-hairline p-5 hover:border-deep-navy/40 transition-colors" style="background-color: rgb(251, 248, 241);">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2.5">
+<h2 class="font-display text-lg font-semibold text-deep-navy">Al-Hassan_BF</h2>
+<span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-deep-navy/5 text-deep-navy border border-hairline/80 font-medium">
+<span class="material-symbols-outlined text-xs text-soft-gold" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    CNIB Vérifiée (BF)
+                  </span>
+</div>
+<p class="text-xs text-deep-navy/60 font-mono mt-0.5">Membre depuis Janvier 2026 • Bobo-Dioulasso</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-left sm:text-right">
+<div class="text-[11px] uppercase tracking-wider text-deep-navy/60 font-semibold">Consultations 24h</div>
+<div class="font-headline text-xl font-bold text-deep-navy flex items-center sm:justify-end gap-1">
+<span class="">52 fiches</span>
+<span class="text-xs font-normal text-soft-gold font-body">(+2/seuil)</span>
+</div>
+</div>
+<div class="text-left sm:text-right border-l border-hairline/80 pl-4">
+<div class="text-[11px] uppercase tracking-wider text-deep-navy/60 font-semibold">Invitations Ta'aruf</div>
+<div class="font-headline text-xl font-medium text-deep-navy/50">
+                    0 transmise
+                  </div>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-hairline/60 flex items-center justify-between text-xs">
+<span class="text-deep-navy/70 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-deep-navy/40">schedule</span>
+                Dépassement enregistré il y a 2h 15min
+              </span>
+<button class="text-deep-navy hover:text-soft-gold font-medium underline underline-offset-4 decoration-soft-gold transition-colors" type="button">
+                Examiner la fiche
+              </button>
+</div>
+</div>
+<!-- Carte 3 : En attente -->
+<div class="bg-cream rounded-md border border-hairline p-5 hover:border-deep-navy/40 transition-colors" style="background-color: rgb(251, 248, 241);">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2.5">
+<h2 class="font-display text-lg font-semibold text-deep-navy">Oumar_K</h2>
+<span class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded bg-deep-navy/5 text-deep-navy border border-hairline/80 font-medium">
+<span class="material-symbols-outlined text-xs text-soft-gold" style="font-variation-settings: 'FILL' 1;">verified</span>
+                    CNIB Vérifiée (BF)
+                  </span>
+</div>
+<p class="text-xs text-deep-navy/60 font-mono mt-0.5">Membre depuis Mars 2026 • Koudougou</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-left sm:text-right">
+<div class="text-[11px] uppercase tracking-wider text-deep-navy/60 font-semibold">Consultations 24h</div>
+<div class="font-headline text-xl font-bold text-deep-navy flex items-center sm:justify-end gap-1">
+<span class="">58 fiches</span>
+<span class="text-xs font-normal text-soft-gold font-body">(+8/seuil)</span>
+</div>
+</div>
+<div class="text-left sm:text-right border-l border-hairline/80 pl-4">
+<div class="text-[11px] uppercase tracking-wider text-deep-navy/60 font-semibold">Invitations Ta'aruf</div>
+<div class="font-headline text-xl font-medium text-deep-navy/50">
+                    0 transmise
+                  </div>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-hairline/60 flex items-center justify-between text-xs">
+<span class="text-deep-navy/70 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm text-deep-navy/40">schedule</span>
+                Dépassement enregistré il y a 3h 40min
+              </span>
+<button class="text-deep-navy hover:text-soft-gold font-medium underline underline-offset-4 decoration-soft-gold transition-colors" type="button">
+                Examiner la fiche
+              </button>
+</div>
+</div>
+</div>
+</section>
+<!-- VOLET DROIT : Fiche d'instruction & Conduite à tenir par l'arbitre (5 colonnes) -->
+<section class="lg:col-span-5 space-y-5">
+<div class="rounded-md border border-hairline p-6 shadow-sm" style="background-color: #FBF8F1;">
+<!-- En-tête Instruction -->
+<div class="flex items-center justify-between border-b border-hairline/70 pb-4 mb-4">
+<div>
+<span class="text-[10px] font-mono uppercase tracking-wider text-deep-navy/60">Dossier d'Arbitrage</span>
+<h2 class="font-headline text-xl font-semibold text-deep-navy">Instruction du dossier</h2>
+</div>
+<span class="font-mono text-xs text-soft-gold px-2 py-1 bg-deep-navy rounded">
+              REF-TS-2026-0884
+            </span>
+</div>
+<!-- Métriques & Synthèse du Cas -->
+<div class="bg-deep-navy/5 rounded-md p-4 space-y-3 mb-5 border border-hairline/50">
+<div class="flex justify-between text-xs">
+<span class="text-deep-navy/70">Membre ciblé :</span>
+<span class="font-semibold text-deep-navy">Souleymane_T (M / 31 ans)</span>
+</div>
+<div class="flex justify-between text-xs" style="background-color: rgb(251, 248, 241);">
+<span class="text-deep-navy/70">Ratio Consultations / Invitations :</span>
+<span class="font-semibold font-mono text-deep-navy">0 / 64 (24h)</span>
+</div>
+<div class="flex justify-between text-xs" style="background-color: rgb(251, 248, 241);">
+<span class="text-deep-navy/70">Moyenne de séjour par profil :</span>
+<span class="font-semibold font-mono text-deep-navy">14 secondes</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-deep-navy/70">Antécédents d'avertissement :</span>
+<span class="font-semibold text-deep-navy">Aucun (Premier constat)</span>
+</div>
+</div>
+<!-- Rappel du Seuil Paramétré -->
+<div class="border-l-2 border-soft-gold pl-3 py-1 mb-5">
+<p class="text-xs font-semibold text-deep-navy">Seuil de bienveillance configuré :</p>
+<p class="text-xs text-deep-navy/70 mt-0.5">50 fiches consultées en 24h consécutives sans ouverture de démarche Ta'aruf.</p>
+</div>
+<!-- Analyse Déontologique du Motif -->
+<div class="space-y-2 mb-6">
+<h3 class="text-xs font-semibold uppercase tracking-wider text-deep-navy">
+              Qualification déontologique
+            </h3>
+<div class="p-3 bg-cream rounded border border-hairline/80 text-xs text-deep-navy/80 leading-relaxed space-y-2">
+<p class="">
+<strong class="text-deep-navy">Constat :</strong> Comportement d'exploration exhaustive ou risque de catalogage contraire à la sincérité du Ta'aruf.
+              </p>
+<p class="">
+                La consultation en rafale dénature la démarche noble en créant une impression de choix illimité et de superficialité, portant atteinte à la sacralité du projet d'union.
+              </p>
+</div>
+</div>
+<!-- Actions de Modération Déontologique -->
+<div class="space-y-3 pt-2 border-t border-hairline/70">
+<p class="text-xs font-semibold uppercase tracking-wider text-deep-navy">Décision de l'arbitre référent</p>
+<!-- Action 1 : Rappel sobre -->
+<button class="w-full text-left p-3.5 rounded-md bg-deep-navy text-cream hover:bg-deep-navy/90 transition-all flex items-start gap-3" type="button">
+<span class="material-symbols-outlined text-soft-gold text-lg shrink-0 mt-0.5">mail</span>
+<div>
+<div class="text-xs font-semibold">Adresser un rappel de bienveillance et de retenue</div>
+<div class="text-[11px] text-hairline/70 mt-0.5">Notification privée sans blâme rappelant les règles de sincérité et de pondération.</div>
+</div>
+</button>
+<!-- Action 2 : Pause temporaire -->
+<button class="w-full text-left p-3.5 rounded-md border border-deep-navy/30 bg-cream hover:bg-deep-navy/5 text-deep-navy transition-all flex items-start gap-3" type="button">
+<span class="material-symbols-outlined text-deep-navy text-lg shrink-0 mt-0.5">pause_circle</span>
+<div>
+<div class="text-xs font-semibold">Mettre en pause temporaire de consultation (24h)</div>
+<div class="text-[11px] text-deep-navy/70 mt-0.5">Suspension temporaire de l'accès aux fiches pour inviter à la méditation.</div>
+</div>
+</button>
+<!-- Action 3 : Classement sans suite -->
+<button class="w-full py-2.5 px-3 rounded-md text-xs font-medium text-deep-navy/70 hover:text-deep-navy hover:bg-cream border border-transparent hover:border-hairline transition-all flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-sm">rule_folder</span>
+<span class="">Classer sans suite (Examen motivé)</span>
+</button>
+</div>
+<!-- Empreinte SHA-256 scellée de traçabilité -->
+<div class="mt-6 pt-4 border-t border-hairline/70 bg-deep-navy/[0.02] -mx-6 -mb-6 p-4 rounded-b-md">
+<div class="flex items-center gap-1.5 text-[10px] font-mono text-deep-navy/70 mb-1">
+<span class="material-symbols-outlined text-xs text-soft-gold">lock</span>
+<span class="">Registre d'audit chiffré &amp; infalsifiable</span>
+</div>
+<div class="font-mono text-[9px] text-deep-navy/50 break-all leading-tight">
+              SHA256: 8a4f91b2c55e97120db0c812d483fb3948a27d2bf5f6e8d1a1068ce20b9854d0
+            </div>
+<div class="flex justify-between items-center text-[10px] text-deep-navy/60 mt-2 font-mono">
+<span class="">Opérateur : MED-OUAGA-7704</span>
+<span class="">Protocole Ta'aruf v4.2</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Footer Institutionnel Staff AnKanu (Issu des Shared Components) -->
+<footer class="w-full border-t border-hairline/60 dark:border-hairline/20 mt-auto bg-cream dark:bg-deep-navy">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-12 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Logo et Copyright légal -->
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="font-display text-xl text-deep-navy dark:text-cream">AnKanu</span>
+<p class="font-body text-xs font-normal text-deep-navy/60 dark:text-cream/60 text-center md:text-left">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </p>
+</div>
+<!-- Liens Déontologiques & Cadre Staff -->
+<nav class="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
+<a class="text-deep-navy/70 dark:text-cream/70 hover:text-deep-navy dark:hover:text-cream text-xs transition-colors duration-150" href="#">
+          Charte d'Honneur
+        </a>
+<a class="text-deep-navy/70 dark:text-cream/70 hover:text-deep-navy dark:hover:text-cream text-xs transition-colors duration-150" href="#">
+          Rôle du Tuteur (Wali)
+        </a>
+<a class="text-deep-navy/70 dark:text-cream/70 hover:text-deep-navy dark:hover:text-cream text-xs transition-colors duration-150" href="#">
+          Protection des Données
+        </a>
+<a class="text-deep-navy/70 dark:text-cream/70 hover:text-deep-navy dark:hover:text-cream text-xs transition-colors duration-150" href="#">
+          Démarche Ta'aruf
+        </a>
+<a class="text-deep-navy/70 dark:text-cream/70 hover:text-deep-navy dark:hover:text-cream text-xs transition-colors duration-150" href="#">
+          Contact Serein
+        </a>
+</nav>
+</div>
+</footer>
+
+
+</body></html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style="width: 1280px; height: 1427px; overflow: hidden; position: relative;"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu — Échange direct de coordonnées (Ta'aruf)</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8",
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-[#F7F1E3] text-[#0B1D36] font-body antialiased selection:bg-[#E6D5A8] selection:text-[#0B1D36]">
+<!-- EN-TÊTE FIXE (Public/Identity Chrome standardisé AnKanu) -->
+<header class="w-full top-0 sticky z-50 bg-[#F7F1E3] border-b border-[#E2D4B8]/60">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+<!-- Identité de marque -->
+<div class="flex items-center gap-4">
+<a class="font-display text-2xl tracking-wide font-normal text-[#0B1D36] hover:text-[#C9A86C] transition-colors duration-200" href="#">
+          AnKanu
+        </a>
+<div class="h-4 w-[1px] bg-[#E2D4B8]"></div>
+<span class="text-xs font-normal text-[#0B1D36]/70 tracking-wide hidden sm:inline">
+          Burkina Faso • Ta'aruf &amp; Mariage Noble
+        </span>
+</div>
+<!-- Badge de protection et pudeur -->
+<div class="flex items-center">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-[#F7F1E3] border border-[#E2D4B8] text-[#0B1D36]/80 text-xs font-medium">
+<span class="material-symbols-outlined text-base text-[#C9A86C]" data-icon="shield">shield</span>
+<span class="">Cadre Protégé &amp; Pudeur</span>
+</div>
+</div>
+</div>
+</header>
+<!-- CORPS DE PAGE (Interstitiel centré à carte unique sobre) -->
+<main class="flex-1 w-full max-w-4xl mx-auto px-6 py-10 md:py-14 flex flex-col justify-center items-center">
+<!-- Lien de retour discret -->
+<div class="w-full max-w-2xl mb-6">
+<a class="inline-flex items-center gap-2 text-sm text-[#0B1D36]/70 hover:text-[#0B1D36] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-base" data-icon="arrow_back">arrow_back</span>
+<span class="">Retour à la discussion</span>
+</a>
+</div>
+<!-- Carte unique noble et aérée -->
+<div class="w-full max-w-2xl bg-[#F7F1E3] border border-[#E2D4B8] rounded-md p-8 md:p-12" style="background-color: rgb(251, 248, 241);">
+<!-- En-tête de carte : Icône et Surtitre -->
+<div class="flex flex-col items-center text-center mb-8">
+<div class="w-12 h-12 rounded-full border border-[#E2D4B8] bg-[#F7F1E3] flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-2xl text-[#C9A86C]" data-icon="lock">lock</span>
+</div>
+
+<h1 class="font-display text-2xl md:text-3xl font-normal text-[#0B1D36] tracking-tight mb-3">
+          Échange direct de coordonnées
+        </h1>
+<!-- Statut d'interception sobre -->
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#E2D4B8]/30 border border-[#E2D4B8]/60 text-xs text-[#0B1D36]/80">
+<span class="w-1.5 h-1.5 rounded-full bg-[#C9A86C]"></span>
+<span class="">Envoi suspendu : consentement préalable requis</span>
+</div>
+</div>
+<!-- Phrase obligatoire mise en exergue -->
+<div class="py-5 px-6 my-6 border-y border-[#E2D4B8]/70 text-center">
+<p class="font-display italic text-lg md:text-xl text-[#0B1D36] leading-relaxed">
+          « Les numéros et WhatsApp attendent l’accord des deux. »
+        </p>
+</div>
+<!-- Explications posées -->
+<div class="space-y-4 text-sm text-[#0B1D36]/80 leading-relaxed mb-8">
+<p class="">
+          Afin de préserver la solennité des démarches et la pudeur de chacun, la communication directe (téléphone, WhatsApp ou liens) n'est déverrouillée que lorsque les deux membres ont expressément formulé leur consentement mutuel, sous le regard bienveillant du tuteur (Wali).
+        </p>
+<p class="text-xs text-[#0B1D36]/60 bg-[#E2D4B8]/20 p-3 rounded-md border border-[#E2D4B8]/40">
+          Précision : Ceci n'est pas un blocage algorithmique automatisé ni une demande financière, mais une règle de convenance mutuelle acceptée par les deux parties.
+        </p>
+</div>
+<!-- État des consentements actuels -->
+<div class="border border-[#E2D4B8] rounded-md p-5 bg-[#F7F1E3] mb-8 space-y-4">
+<div class="text-xs font-semibold tracking-wider text-[#0B1D36]/50 uppercase mb-2">
+          État des approbations
+        </div>
+<!-- Consentement Utilisateur -->
+<label class="flex items-start gap-3.5 cursor-pointer group select-none">
+<div class="pt-0.5">
+<input class="w-4 h-4 rounded text-[#0B1D36] bg-[#F7F1E3] border-[#C9A86C] focus:ring-[#C9A86C] focus:ring-offset-0 transition duration-150" id="consent-check" type="checkbox">
+</div>
+<div class="flex-1 text-sm text-[#0B1D36] font-medium leading-snug">
+            J'accepte l'échange de mes coordonnées directes avec <span class="font-semibold text-[#0B1D36]">Al-Hassan_BF</span>
+</div>
+</label>
+<div class="h-[1px] bg-[#E2D4B8]/60 my-2"></div>
+<!-- Consentement Interlocuteur -->
+<div class="flex items-center justify-between text-sm pt-1">
+<div class="flex items-center gap-2">
+<span class="text-[#0B1D36]/80">Al-Hassan_BF :</span>
+</div>
+<div class="inline-flex items-center gap-1.5 text-xs text-[#0B1D36]/70">
+<span class="material-symbols-outlined text-sm text-[#C9A86C]" data-icon="hourglass_empty">hourglass_empty</span>
+<span class="">En attente de son accord réciproque</span>
+</div>
+</div>
+</div>
+<!-- Boutons d'action -->
+<div class="flex flex-col gap-3">
+<button class="w-full py-3.5 px-6 rounded-md bg-[#0B1D36] text-[#F7F1E3] text-sm font-medium text-center hover:bg-[#0B1D36]/90 transition-colors duration-150 active:opacity-90" type="button">
+          Confirmer mon consentement
+        </button>
+<a class="w-full py-2.5 px-6 rounded-md text-center text-xs text-[#0B1D36]/70 hover:text-[#0B1D36] transition-colors duration-150" href="#">
+          Poursuivre l'échange sur AnKanu
+        </a>
+</div>
+<!-- Note d'accompagnement tutélaire -->
+<div class="mt-8 pt-6 border-t border-[#E2D4B8]/50 flex items-start gap-2.5 text-xs text-[#0B1D36]/60 leading-normal">
+<span class="material-symbols-outlined text-sm text-[#C9A86C] mt-0.5 shrink-0" data-icon="verified_user">verified_user</span>
+<span class="">
+          Conformément à la charte d'honneur, toute transmission de coordonnées fait l'objet d'une notification concomitante au tuteur légal (Wali).
+        </span>
+</div>
+</div>
+</main>
+<!-- MEMBER NAV (Barre flottante inférieure à 4 onglets 44px) -->
+<nav class="sticky bottom-6 z-40 mx-auto w-fit px-2 py-1 bg-[#F7F1E3] border border-[#E2D4B8] rounded-full shadow-sm flex items-center gap-1">
+<!-- Découvrir -->
+<a class="h-11 px-4 flex items-center gap-2 rounded-full text-xs font-medium text-[#0B1D36]/70 hover:text-[#0B1D36] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="explore">explore</span>
+<span class="">Découvrir</span>
+</a>
+<!-- Invitations -->
+<a class="h-11 px-4 flex items-center gap-2 rounded-full text-xs font-medium text-[#0B1D36]/70 hover:text-[#0B1D36] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="mail">mail</span>
+<span class="">Invitations</span>
+</a>
+<!-- Discussions (SÉLECTIONNÉ / ACTIF) -->
+<a class="h-11 px-4 flex items-center gap-2 rounded-full text-xs font-semibold bg-[#0B1D36] text-[#F7F1E3] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-lg fill" data-icon="chat" style="font-variation-settings: &quot;FILL&quot; 1;">chat</span>
+<span class="">Discussions</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#C9A86C]"></span>
+</a>
+<!-- Profil -->
+<a class="h-11 px-4 flex items-center gap-2 rounded-full text-xs font-medium text-[#0B1D36]/70 hover:text-[#0B1D36] transition-colors duration-150" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="person">person</span>
+<span class="">Profil</span>
+</a>
+</nav>
+<!-- PIED DE PAGE (Footer AnKanu standard) -->
+<footer class="w-full border-t border-[#E2D4B8]/60 mt-12 bg-[#F7F1E3]">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row justify-between items-center gap-6">
+<!-- Mention légale et d'honneur à gauche -->
+<div class="flex flex-col sm:flex-row items-center sm:items-baseline gap-2 text-center md:text-left">
+<span class="font-display text-lg text-[#0B1D36]">AnKanu</span>
+<span class="text-xs text-[#0B1D36]/60">
+          © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+        </span>
+</div>
+<!-- Liens discrets à droite -->
+<div class="flex flex-wrap items-center justify-center gap-y-2 gap-x-6 text-xs text-[#0B1D36]/70">
+<a class="hover:text-[#C9A86C] transition-colors duration-150" href="#">Charte d'Honneur</a>
+<a class="hover:text-[#C9A86C] transition-colors duration-150" href="#">Rôle du Tuteur (Wali)</a>
+<a class="hover:text-[#C9A86C] transition-colors duration-150" href="#">Protection des Données</a>
+<a class="hover:text-[#C9A86C] transition-colors duration-150" href="#">Démarche Ta'aruf</a>
+<a class="hover:text-[#C9A86C] transition-colors duration-150" href="#">Contact Serein</a>
+</div>
+</div>
+</footer>
+<div id="snapdom-sandbox" data-snapdom-sandbox="true" aria-hidden="true" style="position: absolute; left: -9999px; top: -9999px; width: 0px; height: 0px; overflow: hidden;"></div>
+
+
+
+</body></html>
