@@ -124,6 +124,8 @@ export type ExportFile = {
     status: string
     age_attested: boolean
     coc_version: string
+    civil_given_name: string
+    civil_family_name: string
   }
   credential: CredentialExport[]
   profile: ProfileExport | null
@@ -280,6 +282,8 @@ async function memoryDelete(bundle: MemoryBundle, accountId: string): Promise<De
     }
     row.status = PENDING_DELETION_STATUS
   }
+  row.civil_given_name = ''
+  row.civil_family_name = ''
   const ticket = await memoryOpen(bundle, accountId, 'erase')
   return { ok: true, account_status: PENDING_DELETION_STATUS, ticket }
 }
@@ -403,6 +407,8 @@ export function buildExportFile(input: {
       status: input.account.status,
       age_attested: input.account.age_attested,
       coc_version: input.account.coc_version,
+      civil_given_name: input.account.civil_given_name,
+      civil_family_name: input.account.civil_family_name,
     },
     credential: input.credentials.map((item) => ({
       kind: item.kind,
@@ -460,9 +466,13 @@ async function postgresDelete(accountId: string): Promise<DeleteOutcome> {
       }
       await tx
         .update(account)
-        .set({ status: PENDING_DELETION_STATUS })
+        .set({ status: PENDING_DELETION_STATUS, civil_given_name: '', civil_family_name: '' })
         .where(and(eq(account.id, accountId), inArray(account.status, [...DELETE_FROM])))
     }
+    await tx
+      .update(account)
+      .set({ civil_given_name: '', civil_family_name: '' })
+      .where(eq(account.id, accountId))
     const opened = await operator.openCilTicket(tx, { subjectAccountId: accountId, kind: 'erase' })
     return { ok: true, account_status: PENDING_DELETION_STATUS, ticket: memberView(opened, accountId) }
   })
@@ -535,6 +545,8 @@ async function postgresExport(accountId: string): Promise<ExportFile> {
           status: owner.status as CreatedAccount['status'],
           age_attested: owner.age_attested,
           coc_version: owner.coc_version,
+          civil_given_name: owner.civil_given_name,
+          civil_family_name: owner.civil_family_name,
         },
         credentials: secrets,
         profile: person,

@@ -54,7 +54,9 @@ function accountBody(email: string, pseudonym: string): Record<string, unknown> 
     pseudonym,
     gender: 'sister',
     pledge_accepted: true,
-    human_verified: true,
+    civil_given_name: 'Fatim',
+    civil_family_name: 'Sawadogo',
+    recaptcha_token: 'test-ok',
     coc_version: 'FR-089',
     dob: '1990-01-15',
   }
@@ -253,6 +255,7 @@ describe('POST /v1/password-resets', () => {
         identifier: 'fatim@example.bf',
         password: 'phrase avec espaces',
         remember_me: false,
+        recaptcha_token: 'test-ok',
       }),
     })
     expect(signed.status).toBe(201)
@@ -293,6 +296,7 @@ describe('POST /v1/password-resets', () => {
         identifier: 'fatim@example.bf',
         password: 'phrase avec espaces',
         remember_me: false,
+        recaptcha_token: 'test-ok',
       }),
     })
     expect(oldPassword.status).toBe(401)
@@ -303,6 +307,7 @@ describe('POST /v1/password-resets', () => {
         identifier: 'fatim@example.bf',
         password: 'une phrase plus longue',
         remember_me: false,
+      recaptcha_token: 'test-ok',
       }),
     })
     expect(nextPassword.status).toBe(201)

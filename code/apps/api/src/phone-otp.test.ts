@@ -40,7 +40,9 @@ function accountBody(overrides: Record<string, unknown> = {}): Record<string, un
     pseudonym: 'Aminata_Ouaga',
     gender: 'sister',
     pledge_accepted: true,
-    human_verified: true,
+    civil_given_name: 'Fatim',
+    civil_family_name: 'Sawadogo',
+    recaptcha_token: 'test-ok',
     coc_version: 'FR-089',
     dob: '1990-01-15',
     ...overrides,
@@ -84,6 +86,7 @@ describe('POST /v1/verifications/otp', () => {
         identifier: 'aminata@example.bf',
         password: 'phrase avec espaces',
         remember_me: false,
+        recaptcha_token: 'test-ok',
       }),
     })
     expect(signed.status).toBe(201)

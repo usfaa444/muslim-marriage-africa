@@ -2,6 +2,7 @@ import { Body, Controller, Delete, HttpCode, HttpException, Post, Req, Res } fro
 import { authNow } from './auth-clock.js'
 import { clientIp, rejectIfAuthRateLimited, type IpRequest } from './auth-guard.js'
 import { createWebSession } from './create-session.js'
+import { recaptchaPasses } from './recaptcha.js'
 import { notePinUnlocked } from './pin-lock-state.js'
 import { endWebSession } from './pin-session.js'
 import { clearSessionCookieHeader, readCookie, SESSION_COOKIE } from './session-cookie.js'
@@ -14,6 +15,23 @@ type CookieRequest = IpRequest & {
 type CookieResponse = {
   appendHeader?: (name: string, value: string) => void
   setHeader: (name: string, value: string) => void
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
+function sessionBodyReady(body: unknown): boolean {
+  if (!isRecord(body)) {
+    return false
+  }
+  return (
+    typeof body.identifier === 'string' &&
+    body.identifier.trim().length > 0 &&
+    typeof body.password === 'string' &&
+    body.password.length > 0 &&
+    typeof body.remember_me === 'boolean'
+  )
 }
 
 function appendSetCookie(response: CookieResponse, value: string): void {
@@ -34,6 +52,20 @@ export class SessionsController {
     @Body() body: unknown,
   ): Promise<unknown> {
     await rejectIfAuthRateLimited(clientIp(request))
+    if (sessionBodyReady(body)) {
+      const token = isRecord(body) ? body.recaptcha_token : undefined
+      if (!(await recaptchaPasses(token, clientIp(request)))) {
+        throw new HttpException(
+          {
+            code: 'CAPTCHA_FAILED',
+            message: 'Échec de validation de la vérification humaine.',
+            details: { field: 'recaptcha_token' },
+            retryable: false,
+          },
+          400,
+        )
+      }
+    }
     const result = await createWebSession(body, {
       store: getSessionStore(),
       now: authNow(),

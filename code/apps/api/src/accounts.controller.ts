@@ -1,9 +1,14 @@
-import { Body, Controller, HttpCode, HttpException, Post, Req, Res } from '@nestjs/common'
+import { Body, Controller, Get, HttpCode, HttpException, Post, Req, Res } from '@nestjs/common'
+import { precheckAccount } from './account-precheck.js'
 import { authNow } from './auth-clock.js'
 import { getAccountStore } from './account-store.js'
 import { clientIp, rejectIfAuthRateLimited, type IpRequest } from './auth-guard.js'
-import { createMemberAccount } from './create-account.js'
-import { resolveWebSession } from './create-session.js'
+import { createMemberAccount, publicAccount } from './create-account.js'
+import { createWebSession, resolveWebSession } from './create-session.js'
+import { recaptchaPasses } from './recaptcha.js'
+import { readSignupStep } from './signup-gate.js'
+import { notePinUnlocked } from './pin-lock-state.js'
+import { getSessionStore } from './session-store.js'
 import { getEmailPort } from './email-port.js'
 import {
   consumeEmailVerification,
@@ -17,10 +22,55 @@ import { readCookie, SESSION_COOKIE } from './session-cookie.js'
 
 @Controller('accounts')
 export class AccountsController {
+  @Post('precheck')
+  @HttpCode(200)
+  async precheck(@Req() request: IpRequest, @Body() body: unknown): Promise<unknown> {
+    await rejectIfAuthRateLimited(clientIp(request))
+    const result = await precheckAccount(body, { store: getAccountStore(), today: authNow() })
+    if (!result.ok) {
+      throw new HttpException(
+        {
+          code: result.code,
+          message: result.message,
+          details: result.details,
+          retryable: result.retryable,
+        },
+        result.status,
+      )
+    }
+    return result.body
+  }
+
+  @Get('gate')
+  async gate(@Req() request: IpRequest & { headers?: { cookie?: string | string[] } }): Promise<{ step: string }> {
+    const sessionId = readCookie(headerText(request.headers?.cookie), SESSION_COOKIE)
+    const session = sessionId ? await resolveWebSession(sessionId, authNow()) : null
+    if (!session) {
+      throw new HttpException(
+        {
+          code: 'UNAUTHENTICATED',
+          message: 'Authentification requise.',
+          details: null,
+          retryable: false,
+        },
+        401,
+      )
+    }
+    return { step: await readSignupStep(session.accountId) }
+  }
+
   @Post()
   @HttpCode(201)
-  async create(@Req() request: IpRequest, @Body() body: unknown): Promise<unknown> {
+  async create(
+    @Req() request: IpRequest,
+    @Res({ passthrough: true }) response: HeaderResponse,
+    @Body() body: unknown,
+  ): Promise<unknown> {
     await rejectIfAuthRateLimited(clientIp(request))
+    const token = isRecord(body) ? body.recaptcha_token : undefined
+    if (!(await recaptchaPasses(token, clientIp(request)))) {
+      throw captchaFailed()
+    }
     const result = await createMemberAccount(body, {
       store: getAccountStore(),
       hashPassword,
@@ -36,7 +86,23 @@ export class AccountsController {
         result.status,
       )
     }
-    return result.account
+    try {
+      const opened = await createWebSession(
+        {
+          identifier: result.account.email,
+          password: isRecord(body) && typeof body.password === 'string' ? body.password : '',
+          remember_me: false,
+        },
+        { store: getSessionStore(), now: authNow() },
+      )
+      if (opened.ok) {
+        notePinUnlocked(opened.session.id, authNow())
+        appendSetCookie(response, opened.cookie)
+      }
+    } catch {
+      // The account row is already stored. Sign-in can open the session.
+    }
+    return publicAccount(result.account)
   }
 
   @Post('email-verifications')
@@ -90,6 +156,27 @@ export class AccountsController {
 type HeaderResponse = {
   status: (code: number) => void
   setHeader: (name: string, value: string) => void
+  appendHeader?: (name: string, value: string) => void
+}
+
+function appendSetCookie(response: HeaderResponse, value: string): void {
+  if (typeof response.appendHeader === 'function') {
+    response.appendHeader('Set-Cookie', value)
+    return
+  }
+  response.setHeader('Set-Cookie', value)
+}
+
+function captchaFailed(): HttpException {
+  return new HttpException(
+    {
+      code: 'CAPTCHA_FAILED',
+      message: 'Échec de validation de la vérification humaine.',
+      details: { field: 'recaptcha_token' },
+      retryable: false,
+    },
+    400,
+  )
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

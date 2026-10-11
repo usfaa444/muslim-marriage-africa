@@ -9,6 +9,7 @@ export default defineConfig({
     },
   },
   test: {
+    setupFiles: ['./apps/api/src/test-recaptcha.ts'],
     include: [
       'apps/api/src/compose.test.ts',
       'apps/api/src/substrate.test.ts',

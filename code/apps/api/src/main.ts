@@ -1,6 +1,8 @@
 import { installScanMetrics } from './otel-contract.js'
+import { assertRecaptchaBoot } from './recaptcha.js'
 import { processRole, runWorkerProcess } from './worker-shell.js'
 
+assertRecaptchaBoot(process.env)
 installScanMetrics(process.env)
 
 if (processRole() === 'worker') {

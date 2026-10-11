@@ -19,6 +19,15 @@ export type CreatedAccount = {
     | typeof PENDING_DELETION_STATUS
   age_attested: boolean
   coc_version: string
+  /** Owner-only civil name. Never returned on the create response. */
+  civil_given_name: string
+  civil_family_name: string
+}
+
+/** Create response omits civil names. They stay on the account row and the owner export. */
+export function publicAccount(row: CreatedAccount): Omit<CreatedAccount, 'civil_given_name' | 'civil_family_name'> {
+  const { civil_given_name: _given, civil_family_name: _family, ...rest } = row
+  return rest
 }
 
 /** The create insert writes `account_id` and `dob`. `visibility` is set to `held` only when the account is held. */
@@ -111,16 +120,20 @@ export async function createMemberAccount(
     hashPassword: (password: string) => Promise<string>
   },
 ): Promise<AccountSuccess | AccountFailure> {
-  if (!isRecord(body) || body.human_verified !== true) {
-    return {
-      ok: false,
-      status: 400,
-      code: 'CAPTCHA_FAILED',
-      message: 'Échec de validation de la vérification humaine.',
-      details: { field: 'human_verified' },
-      retryable: false,
-    }
+  if (!isRecord(body)) {
+    return fail(400, 'email', 'email : une adresse inutilisée est requise.')
   }
+
+  const givenRaw = readString(body, 'civil_given_name')
+  const familyRaw = readString(body, 'civil_family_name')
+  if (givenRaw === undefined || givenRaw.trim().length === 0 || givenRaw.trim().length > 80) {
+    return fail(400, 'civil_given_name', 'civil_given_name : le prénom est requis.')
+  }
+  if (familyRaw === undefined || familyRaw.trim().length === 0 || familyRaw.trim().length > 80) {
+    return fail(400, 'civil_family_name', 'civil_family_name : le nom est requis.')
+  }
+  const civil_given_name = givenRaw.trim()
+  const civil_family_name = familyRaw.trim()
 
   if (body.pledge_accepted !== true) {
     return fail(400, 'pledge', 'pledge : le serment et la charte sont requis.')
@@ -196,6 +209,8 @@ export async function createMemberAccount(
     status: held ? HELD_STATUS : ACTIVE_STATUS,
     age_attested: !held,
     coc_version: coc.trim(),
+    civil_given_name,
+    civil_family_name,
   }
   const credential: PasswordCredential = {
     id: newId(),

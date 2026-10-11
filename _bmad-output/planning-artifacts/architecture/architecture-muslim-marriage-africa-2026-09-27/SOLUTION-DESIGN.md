@@ -152,6 +152,8 @@ Owner module: identity
 | roles | text[] | NO | `member\|mahram\|moderator\|operator\|system`. Not gender |
 | status | text | NO | Active / deactivated / held. No public listing until verification+review (`profile.visibility` is the browse gate) |
 | age_attested | boolean | NO | Product age gate is 19+ (`operator_config.min_age` defaults to 19) |
+| civil_given_name | text | NO | Owner-only given name collected at signup. Empty string on rows created before the column. Never in Discover, profile, search, chat, notifications, logs, or analytics |
+| civil_family_name | text | NO | Owner-only family name. Same visibility rules as `civil_given_name`. Included in the owner export and cleared when deletion is scheduled |
 
 - credential 1:N account via `credential.account_id`
 - session N:1 account via `session.account_id`
@@ -1024,7 +1026,7 @@ Invariants: INSERT/SELECT-only DB role. Nightly chain-verify. Retain ≥12 month
 
 Style: JSON REST `/v1` + Socket.IO `/v1/realtime` (AD-7, AD-15).
 
-Auth: session cookie `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF (web/PWA); Bearer in platform secure storage (Capacitor). Socket.IO handshake carries the same `AuthContext`. Staff MFA. Captcha on signup/login (FR-007). RBAC per AD-8.
+Auth: session cookie `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF (web/PWA); Bearer in platform secure storage (Capacitor). Socket.IO handshake carries the same `AuthContext`. Staff MFA. Captcha on signup/login (FR-007). `POST /v1/accounts` and `POST /v1/sessions` require `recaptcha_token`, verified with Google siteverify. Missing or failed token is `400 CAPTCHA_FAILED` and writes nothing. `POST /v1/accounts/precheck` `{ pseudonym, dob }` returns `{ pseudonym_available, age_eligible }` or `400` naming the field. It writes nothing. `GET /v1/accounts/gate` returns the first unfinished step (`email`, `phone`, `otp`, `identity`, `account`) for the session. RBAC per AD-8.
 
 Idempotency: `Idempotency-Key` on `POST /v1/payments` and all `POST /v1/webhooks/*`.
 

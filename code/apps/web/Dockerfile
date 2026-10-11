@@ -21,11 +21,20 @@ COPY --from=build /app/packages/kernel/dist packages/kernel/dist
 COPY --from=build /app/apps/web/.next apps/web/.next
 COPY --from=build /app/apps/web/app apps/web/app
 COPY --from=build /app/apps/web/next.config.ts apps/web/next.config.ts
-COPY --from=build /app/design-stitch/11-auth/screen.html design-stitch/11-auth/screen.html
-COPY --from=build /app/design-stitch/12-age-gate/screen.html design-stitch/12-age-gate/screen.html
-COPY --from=build /app/design-stitch/13-email-verification/screen.html design-stitch/13-email-verification/screen.html
-COPY --from=build /app/design-stitch/14-otp/screen.html design-stitch/14-otp/screen.html
-COPY --from=build /app/design-stitch/17-id-liveness/screen.html design-stitch/17-id-liveness/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/02-auth/screen.html design-stitch/ankanu-v2/02-auth/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/03-age-gate/screen.html design-stitch/ankanu-v2/03-age-gate/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/04-email-verification/screen.html design-stitch/ankanu-v2/04-email-verification/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/05-password-reset/screen.html design-stitch/ankanu-v2/05-password-reset/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/06-otp/screen.html design-stitch/ankanu-v2/06-otp/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/07-id-liveness/screen.html design-stitch/ankanu-v2/07-id-liveness/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/08-onboarding/screen.html design-stitch/ankanu-v2/08-onboarding/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/09-photo-rules/screen.html design-stitch/ankanu-v2/09-photo-rules/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/10-pin-lock/screen.html design-stitch/ankanu-v2/10-pin-lock/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/11-profile-edit/screen.html design-stitch/ankanu-v2/11-profile-edit/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/27-settings/screen.html design-stitch/ankanu-v2/27-settings/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/28-delete-export-status/screen.html design-stitch/ankanu-v2/28-delete-export-status/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/54-pseudonym-dob/screen.html design-stitch/ankanu-v2/54-pseudonym-dob/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/56-otp-alt/screen.html design-stitch/ankanu-v2/56-otp-alt/screen.html
 ENV NODE_ENV=production
 WORKDIR /app/apps/web
 CMD ["node", "/app/node_modules/next/dist/bin/next", "start", "--hostname", "0.0.0.0", "--port", "3000"]

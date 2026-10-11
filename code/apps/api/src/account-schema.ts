@@ -13,6 +13,8 @@ export const account = pgTable(
     status: text('status').notNull(),
     age_attested: boolean('age_attested').notNull(),
     coc_version: text('coc_version').notNull(),
+    civil_given_name: text('civil_given_name').notNull(),
+    civil_family_name: text('civil_family_name').notNull(),
   },
   (table) => [
     check('account_gender_check', sql`${table.gender} in ('sister', 'brother')`),

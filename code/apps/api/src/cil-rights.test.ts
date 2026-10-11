@@ -50,7 +50,9 @@ function accountBody(): Record<string, unknown> {
     pseudonym: `Cil_${serial}`,
     gender: 'sister',
     pledge_accepted: true,
-    human_verified: true,
+    civil_given_name: 'Fatim',
+    civil_family_name: 'Sawadogo',
+    recaptcha_token: 'test-ok',
     coc_version: 'FR-089',
     dob: '1990-01-15',
   }
@@ -111,7 +113,7 @@ describe('self-serve delete and export', () => {
     const response = await fetch(`${base}/v1/sessions`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ identifier: email, password: 'phrase avec espaces', remember_me: false }),
+      body: JSON.stringify({ identifier: email, password: 'phrase avec espaces', remember_me: false , recaptcha_token: 'test-ok' }),
     })
     expect(response.status).toBe(201)
     const cookie = response.headers.getSetCookie().join('\n')

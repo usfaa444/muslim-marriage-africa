@@ -34,11 +34,11 @@ export function LandingPage() {
       
       <div className="flex flex-col items-end justify-center gap-1 shrink-0">
         <nav aria-label="Compte">
-          <a href="/auth?mode=login" className="block max-w-[11rem] text-right text-[13px] leading-tight font-medium text-ink-secondary hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1 py-0.5">
+          <a href="/auth" className="block max-w-[11rem] text-right text-[13px] leading-tight font-medium text-ink-secondary hover:text-indigo focus:outline-none focus:ring-2 focus:ring-focus-ring rounded px-1 py-0.5">
             Déjà inscrit·e ? Se connecter
           </a>
         </nav>
-        <a href="#auth-inscription" className="inline-flex items-center justify-center min-h-[48px] px-5 rounded-md bg-indigo text-ink-on-indigo font-sans font-semibold text-[15px] hover:bg-indigo-deep focus:outline-none focus:ring-2 focus:ring-gold-soft transition-colors shadow-xs">
+        <a href="/signup" className="inline-flex items-center justify-center min-h-[48px] px-5 rounded-md bg-indigo text-ink-on-indigo font-sans font-semibold text-[15px] hover:bg-indigo-deep focus:outline-none focus:ring-2 focus:ring-gold-soft transition-colors shadow-xs">
           Commencer l'inscription
         </a>
       </div>
@@ -70,7 +70,7 @@ export function LandingPage() {
 
         
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-          <a href="#auth-inscription" className="w-full sm:w-auto inline-flex items-center justify-center min-h-[48px] px-8 rounded-md bg-indigo text-ink-on-indigo font-sans font-semibold text-base hover:bg-indigo-deep focus:outline-none focus:ring-2 focus:ring-gold-soft transition-colors shadow-sm">
+          <a href="/signup" className="w-full sm:w-auto inline-flex items-center justify-center min-h-[48px] px-8 rounded-md bg-indigo text-ink-on-indigo font-sans font-semibold text-base hover:bg-indigo-deep focus:outline-none focus:ring-2 focus:ring-gold-soft transition-colors shadow-sm">
             Déposer une demande de ta'aruf
           </a>
           <a href="#vision" className="w-full sm:w-auto inline-flex items-center justify-center min-h-[48px] px-6 rounded-md bg-raised text-indigo border border-border-strong font-sans font-medium text-base hover:bg-sand focus:outline-none focus:ring-2 focus:ring-focus-ring transition-colors">
@@ -185,7 +185,7 @@ export function LandingPage() {
                 <span>Rôle protecteur du tuteur et clarté patrimoniale préalable.</span>
               </li>
             </ul>
-            <a href="#auth-inscription" className="inline-flex items-center justify-center min-h-[48px] px-6 rounded-md bg-indigo text-ink-on-indigo font-sans font-semibold text-sm hover:bg-indigo-deep focus:outline-none focus:ring-2 focus:ring-gold-soft transition-colors">
+            <a href="/signup" className="inline-flex items-center justify-center min-h-[48px] px-6 rounded-md bg-indigo text-ink-on-indigo font-sans font-semibold text-sm hover:bg-indigo-deep focus:outline-none focus:ring-2 focus:ring-gold-soft transition-colors">
               Découvrir les modules de l'Académie
             </a>
           </div>
@@ -407,12 +407,12 @@ export function LandingPage() {
         </p>
         <div className="flex flex-col items-center gap-4">
           <div className="inline-flex flex-col sm:flex-row items-center gap-4">
-            <a href="/auth?mode=signup" className="inline-flex items-center justify-center min-h-[48px] px-8 rounded-md bg-gold-soft text-indigo-deep font-sans font-semibold text-base hover:bg-gold focus:outline-none focus:ring-2 focus:ring-focus-ring transition-colors shadow-sm">
+            <a href="/signup" className="inline-flex items-center justify-center min-h-[48px] px-8 rounded-md bg-gold-soft text-indigo-deep font-sans font-semibold text-base hover:bg-gold focus:outline-none focus:ring-2 focus:ring-focus-ring transition-colors shadow-sm">
               Déposer mon dossier de ta'aruf
             </a>
             <span className="text-xs text-sand/60">Réservé aux personnes majeures de 19 ans et plus.</span>
           </div>
-          <a href="/auth?mode=login" className="text-sm font-medium text-sand underline underline-offset-4 hover:text-gold-soft focus:outline-none focus:ring-2 focus:ring-gold-soft rounded px-1.5 py-1">
+          <a href="/auth" className="text-sm font-medium text-sand underline underline-offset-4 hover:text-gold-soft focus:outline-none focus:ring-2 focus:ring-gold-soft rounded px-1.5 py-1">
             Déjà inscrit·e ? Se connecter
           </a>
         </div>

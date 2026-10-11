@@ -26,7 +26,9 @@ function accountBody(overrides: Record<string, unknown> = {}): Record<string, un
     pseudonym: 'Fatim_Ouaga',
     gender: 'sister',
     pledge_accepted: true,
-    human_verified: true,
+    civil_given_name: 'Fatim',
+    civil_family_name: 'Sawadogo',
+    recaptcha_token: 'test-ok',
     coc_version: 'FR-089',
     dob: '1990-01-15',
     ...overrides,
@@ -87,6 +89,7 @@ describe('POST /v1/sessions', () => {
         identifier: 'Fatim@example.bf',
         password: 'phrase avec espaces',
         remember_me: false,
+        recaptcha_token: 'test-ok',
       }),
     })
     const body = (await response.json()) as Record<string, unknown>
@@ -121,6 +124,7 @@ describe('POST /v1/sessions', () => {
         identifier: 'Fatim_Ouaga',
         password: 'phrase avec espaces',
         remember_me: true,
+        recaptcha_token: 'test-ok',
       }),
     })
     const rememberedBody = (await remembered.json()) as { id: string; expires_at: string }
@@ -136,6 +140,7 @@ describe('POST /v1/sessions', () => {
         identifier: 'fatim_ouaga',
         password: 'phrase avec espaces',
         remember_me: true,
+        recaptcha_token: 'test-ok',
       }),
     })
     expect(missedCase.status).toBe(401)
@@ -147,6 +152,7 @@ describe('POST /v1/sessions', () => {
         identifier: '  Fatim@example.bf  ',
         password: 'phrase avec espaces',
         remember_me: false,
+      recaptcha_token: 'test-ok',
       }),
     })
     expect(padded.status).toBe(201)
@@ -158,6 +164,7 @@ describe('POST /v1/sessions', () => {
         identifier: 'fatim@example.bf',
         password: 'x'.repeat(129),
         remember_me: false,
+        recaptcha_token: 'test-ok',
       }),
     })
     const oversizedBody = (await oversized.json()) as { error: { code: string } }
@@ -187,17 +194,35 @@ describe('POST /v1/sessions', () => {
     now = started
   })
 
+  it('does not open a session when the captcha token is missing', async () => {
+    const before = sessions.sessions.length
+    const response = await fetch(`${base}/v1/sessions`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        identifier: 'fatim@example.bf',
+        password: 'phrase avec espaces',
+        remember_me: false,
+      }),
+    })
+    const payload = (await response.json()) as { error: { code: string; details: { field: string } } }
+    expect(response.status).toBe(400)
+    expect(payload.error.code).toBe('CAPTCHA_FAILED')
+    expect(payload.error.details.field).toBe('recaptcha_token')
+    expect(sessions.sessions).toHaveLength(before)
+  })
+
   it('uses one code for an unknown identifier and a bad password, and stores nothing', async () => {
     const before = sessions.sessions.length
     const unknown = await fetch(`${base}/v1/sessions`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ identifier: 'absent@example.bf', password: 'phrase avec espaces', remember_me: false }),
+      body: JSON.stringify({ identifier: 'absent@example.bf', password: 'phrase avec espaces', remember_me: false , recaptcha_token: 'test-ok' }),
     })
     const bad = await fetch(`${base}/v1/sessions`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ identifier: 'fatim@example.bf', password: 'pas le bon mot', remember_me: false }),
+      body: JSON.stringify({ identifier: 'fatim@example.bf', password: 'pas le bon mot', remember_me: false, recaptcha_token: 'test-ok' }),
     })
     const unknownBody = (await unknown.json()) as { error: { code: string; message: string } }
     const badBody = (await bad.json()) as { error: { code: string; message: string } }
@@ -219,6 +244,7 @@ describe('POST /v1/sessions', () => {
         identifier: 'fatim@example.bf',
         password: 'phrase avec espaces',
         remember_me: false,
+        recaptcha_token: 'test-ok',
       }),
     })
     const body = (await response.json()) as { error: { code: string } }
@@ -249,6 +275,7 @@ describe('POST /v1/sessions', () => {
         identifier: 'Fatim_Ouaga',
         password: 'phrase avec espaces',
         remember_me: true,
+        recaptcha_token: 'test-ok',
       }),
     })
     const fourth = await fetch(`${base}/v1/accounts`, {
@@ -284,6 +311,7 @@ describe('POST /v1/sessions', () => {
         identifier: 'Fatim_Ouaga',
         password: 'phrase avec espaces',
         remember_me: false,
+        recaptcha_token: 'test-ok',
       }),
     })
     const body = (await response.json()) as { error: { code: string } }

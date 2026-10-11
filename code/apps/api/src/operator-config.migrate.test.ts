@@ -312,7 +312,9 @@ describe('operator_config migration', () => {
         pseudonym: 'Fatim_Ouaga',
         gender: 'brother',
         pledge_accepted: true,
-        human_verified: true,
+        civil_given_name: 'Fatim',
+        civil_family_name: 'Sawadogo',
+        recaptcha_token: 'test-ok',
         coc_version: 'FR-089',
         dob: '1990-01-15',
       }
@@ -355,6 +357,7 @@ describe('operator_config migration', () => {
           identifier: 'Fatim@example.bf',
           password: 'phrase avec espaces',
           remember_me: false,
+          recaptcha_token: 'test-ok',
         }),
       })
       const signedBody = (await signedIn.json()) as { id: string; kind: string }
@@ -395,6 +398,7 @@ describe('operator_config migration', () => {
           identifier: 'Fatim_Ouaga',
           password: 'phrase avec espaces',
           remember_me: true,
+          recaptcha_token: 'test-ok',
         }),
       })
       const rememberedBody = (await remembered.json()) as { id: string }
@@ -421,18 +425,18 @@ describe('operator_config migration', () => {
       const limitA = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ identifier: 'nobody@example.bf', password: 'phrase avec espaces', remember_me: false }),
+        body: JSON.stringify({ identifier: 'nobody@example.bf', password: 'phrase avec espaces', remember_me: false, recaptcha_token: 'test-ok' }),
       })
       const limitB = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ identifier: 'nobody@example.bf', password: 'phrase avec espaces', remember_me: false }),
+        body: JSON.stringify({ identifier: 'nobody@example.bf', password: 'phrase avec espaces', remember_me: false, recaptcha_token: 'test-ok' }),
       })
       const sessionsBeforeLimit = await db().query<{ count: string }>(`select count(*)::text as count from "session"`)
       const limitC = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ identifier: 'Fatim_Ouaga', password: 'phrase avec espaces', remember_me: false }),
+        body: JSON.stringify({ identifier: 'Fatim_Ouaga', password: 'phrase avec espaces', remember_me: false, recaptcha_token: 'test-ok' }),
       })
       const limitBody = (await limitC.json()) as { error: { code: string } }
       const sessionsAfterLimit = await db().query<{ count: string }>(`select count(*)::text as count from "session"`)
@@ -447,7 +451,7 @@ describe('operator_config migration', () => {
       const badLimit = await fetch(`http://127.0.0.1:${address.port}/v1/sessions`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ identifier: 'Fatim_Ouaga', password: 'phrase avec espaces', remember_me: false }),
+        body: JSON.stringify({ identifier: 'Fatim_Ouaga', password: 'phrase avec espaces', remember_me: false, recaptcha_token: 'test-ok' }),
       })
       const badLimitBody = (await badLimit.json()) as { error: { code: string } }
       const sessionsAfterBad = await db().query<{ count: string }>(`select count(*)::text as count from "session"`)
@@ -514,7 +518,9 @@ describe('operator_config migration', () => {
           pseudonym: 'Aminata_Bobo',
           gender: 'sister',
           pledge_accepted: true,
-          human_verified: true,
+          civil_given_name: 'Fatim',
+          civil_family_name: 'Sawadogo',
+          recaptcha_token: 'test-ok',
           coc_version: 'FR-089',
           dob: '1990-01-15',
         }),
@@ -527,6 +533,7 @@ describe('operator_config migration', () => {
           identifier: 'Aminata_Bobo',
           password: 'phrase avec espaces',
           remember_me: false,
+          recaptcha_token: 'test-ok',
         }),
       })
       expect(signed.status).toBe(201)
@@ -611,7 +618,9 @@ describe('operator_config migration', () => {
           pseudonym: 'Salimata_Ouaga',
           gender: 'sister',
           pledge_accepted: true,
-          human_verified: true,
+          civil_given_name: 'Fatim',
+          civil_family_name: 'Sawadogo',
+          recaptcha_token: 'test-ok',
           coc_version: 'FR-089',
           dob: '1990-01-15',
         }),
@@ -624,6 +633,7 @@ describe('operator_config migration', () => {
           identifier: 'salimata@example.bf',
           password: 'phrase avec espaces',
           remember_me: false,
+          recaptcha_token: 'test-ok',
         }),
       })
       expect(signed.status).toBe(201)
@@ -676,6 +686,7 @@ describe('operator_config migration', () => {
           identifier: 'salimata@example.bf',
           password: 'phrase avec espaces',
           remember_me: false,
+          recaptcha_token: 'test-ok',
         }),
       })
       expect(oldPassword.status).toBe(401)
@@ -686,6 +697,7 @@ describe('operator_config migration', () => {
           identifier: 'salimata@example.bf',
           password: 'une phrase plus longue',
           remember_me: false,
+          recaptcha_token: 'test-ok',
         }),
       })
       expect(nextPassword.status).toBe(201)

@@ -19,7 +19,9 @@ function body(overrides: Record<string, unknown> = {}): Record<string, unknown> 
     pseudonym: 'Fatim_Ouaga',
     gender: 'sister',
     pledge_accepted: true,
-    human_verified: true,
+    civil_given_name: 'Fatim',
+    civil_family_name: 'Sawadogo',
+    recaptcha_token: 'test-ok',
     coc_version: 'FR-089',
     dob: '1990-01-15',
     ...overrides,
@@ -66,6 +68,10 @@ describe('POST /v1/accounts', () => {
     expect(created.status).toBe('Active')
     expect(created.age_attested).toBe(true)
     expect(created).not.toHaveProperty('dob')
+    expect(created).not.toHaveProperty('civil_given_name')
+    expect(created).not.toHaveProperty('civil_family_name')
+    expect(memory.accounts[0]?.civil_given_name).toBe('Fatim')
+    expect(memory.accounts[0]?.civil_family_name).toBe('Sawadogo')
     expect(created.coc_version).toBe('FR-089')
     expect(created.roles).toEqual(['member'])
     expect(created.email).toBe('fatim@example.bf')
@@ -191,14 +197,14 @@ describe('POST /v1/accounts', () => {
     expect(memory.credentials).toHaveLength(before + 1)
   })
 
-  it('rejects a missing or untrue human_verified and stores nothing', async () => {
+  it('rejects a missing or invalid recaptcha token and stores nothing', async () => {
     const before = memory.accounts.length
     const cases = [
-      body({ human_verified: false, email: 'bot@example.bf', pseudonym: 'Bot_Un' }),
-      body({ human_verified: 'true', email: 'bot2@example.bf', pseudonym: 'Bot_Deux' }),
+      body({ recaptcha_token: '', email: 'bot@example.bf', pseudonym: 'Bot_Un' }),
+      body({ recaptcha_token: 'nope', email: 'bot2@example.bf', pseudonym: 'Bot_Deux' }),
       (() => {
         const fields = body({ email: 'bot3@example.bf', pseudonym: 'Bot_Trois' })
-        delete fields.human_verified
+        delete fields.recaptcha_token
         return fields
       })(),
     ]
@@ -211,7 +217,7 @@ describe('POST /v1/accounts', () => {
       const result = (await response.json()) as { error: { code: string; details: { field: string } } }
       expect(response.status).toBe(400)
       expect(result.error.code).toBe('CAPTCHA_FAILED')
-      expect(result.error.details.field).toBe('human_verified')
+      expect(result.error.details.field).toBe('recaptcha_token')
     }
     expect(memory.accounts).toHaveLength(before)
     expect(memory.credentials).toHaveLength(before)

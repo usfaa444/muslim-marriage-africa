@@ -28,7 +28,9 @@ function accountBody(overrides: Record<string, unknown> = {}): Record<string, un
     pseudonym: 'Fatim_Ouaga',
     gender: 'sister',
     pledge_accepted: true,
-    human_verified: true,
+    civil_given_name: 'Fatim',
+    civil_family_name: 'Sawadogo',
+    recaptcha_token: 'test-ok',
     coc_version: 'FR-089',
     dob: '1990-01-15',
     ...overrides,
@@ -87,6 +89,7 @@ describe('shared-device PIN', () => {
         identifier,
         password: 'phrase avec espaces',
         remember_me: rememberMe,
+        recaptcha_token: 'test-ok',
       }),
     })
     expect(response.status).toBe(201)

@@ -125,6 +125,8 @@ async function insertAccount(row: CreatedAccount, secret: PasswordCredential, cr
         status: row.status,
         age_attested: row.age_attested,
         coc_version: row.coc_version,
+        civil_given_name: row.civil_given_name,
+        civil_family_name: row.civil_family_name,
       })
       await tx.insert(credential).values({
         id: secret.id,

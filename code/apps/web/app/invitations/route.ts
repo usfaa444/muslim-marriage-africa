@@ -1,5 +1,5 @@
-import { memberRouteResponse } from '../../src/member-route'
+import { memberGuarded } from '../../src/v2-serve'
 
-export function GET(request: Request): Response {
-  return memberRouteResponse(request.headers.get('cookie'), '/invitations')
+export function GET(request: Request): Promise<Response> {
+  return memberGuarded(request, '/invitations')
 }

@@ -1,0 +1,203 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { describe, expect, it } from 'vitest'
+import { GET as getDecouvrir } from '../app/decouvrir/route.js'
+import { entryLocation, entryRedirect } from './entry-guard.js'
+import { LandingPage } from './landing.js'
+import {
+  authHtml,
+  emailHtml,
+  idHtml,
+  identityHtml,
+  otpHtml,
+  phoneHtml,
+  pinHtml,
+  pseudonymHtml,
+  resetHtml,
+  splashHtml,
+  statusHtml,
+} from './v2-pages.js'
+
+function stitch(folder: string): string {
+  return readFileSync(
+    fileURLToPath(new URL(`../../../design-stitch/ankanu-v2/${folder}/screen.html`, import.meta.url)),
+    'utf8',
+  )
+}
+
+const SITE = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+
+describe('v2 signup and sign-in screens', () => {
+  it('builds step 0 from the splash mark, not the broken stitch HTML', () => {
+    const page = splashHtml()
+    const broken = stitch('01-splash')
+    expect(page).toContain('AnKanu')
+    expect(page).toContain('Continuer')
+    expect(page).toContain('href="/signup/identity"')
+    expect(page).toContain('ankanu-responsive')
+    expect(page).not.toContain('accounts.google.com')
+    expect(broken).toContain('accounts.google.com')
+    expect(page).not.toContain(broken.slice(0, 80))
+  })
+
+  it('creates the account once from the signup panel with a captcha token', () => {
+    const page = authHtml(stitch('02-auth'), 'signup', SITE)
+    expect(page).toContain('Créer mon compte')
+    expect(page).toContain('Engagement Solennel de Ta')
+    expect(page).toContain('id="signup-recaptcha"')
+    expect(page).toContain('recaptcha_token')
+    expect(page).toContain("fetch('/v1/accounts'")
+    expect(page).toContain('pledge_accepted: true')
+    expect(page).toContain('civil_given_name')
+    expect(page).not.toContain('human_verified')
+    expect(page).not.toContain('Continuer avec Google')
+    expect(page).not.toContain('id="signup-pseudonym"')
+    expect(page).not.toContain('alert(')
+    expect(page).not.toContain('confirm(')
+    expect(page).toContain('ankanu.signup.v2')
+    expect(page).toContain("location.assign('/auth')")
+  })
+
+  it('signs in from the connexion panel and returns to step 0 from the other tab', () => {
+    const page = authHtml(stitch('02-auth'), 'login', SITE)
+    expect(page).toContain('id="login-recaptcha"')
+    expect(page).not.toContain('id="login-captcha"')
+    expect(page).toContain("fetch('/v1/sessions'")
+    expect(page).toContain('recaptcha_token')
+    expect(page).toContain('href="/password-reset"')
+    expect(page).toContain("location.assign('/signup')")
+    expect(page).toContain('class="hidden space-y-6" id="panel-signup"')
+    expect(page).toContain('class="space-y-6" id="panel-login"')
+    expect(page).not.toContain('Continuer avec Google')
+  })
+
+  it('keeps steps 1 and 2 on the client until precheck passes', () => {
+    const identity = identityHtml(stitch('03-age-gate'))
+    expect(identity).toContain('id="first-name"')
+    expect(identity).toContain("gender.value === 'frere' ? 'brother' : 'sister'")
+    expect(identity).toContain("location.assign('/signup/pseudonym')")
+    expect(identity).not.toContain("fetch('/v1/accounts'")
+    const step = pseudonymHtml(stitch('54-pseudonym-dob'))
+    expect(step).toContain('Accès réservé aux personnes majeures de 19 ans et plus.')
+    expect(step).toContain("fetch('/v1/accounts/precheck'")
+    expect(step).toContain('pseudonym_available')
+    expect(step).toContain('age_eligible')
+  })
+
+  it('verifies email, phone, and the code only after a real send', () => {
+    const email = emailHtml(stitch('04-email-verification'))
+    expect(email).toContain("fetch('/v1/accounts/email-verifications'")
+    expect(email).toContain('/v1/accounts/email-verifications/consume')
+    expect(email).not.toContain("fetch('/v1/accounts/email'")
+    const phone = phoneHtml(stitch('06-otp'))
+    expect(phone).not.toContain('70 24 58 19')
+    expect(phone).toContain("action: 'send'")
+    expect(phone).toContain("location.assign('/otp')")
+    const otp = otpHtml(stitch('56-otp-alt'))
+    expect(otp).toContain('otp-digit')
+    expect(otp).toContain("action: 'verify'")
+    expect(otp).toContain('href="/phone"')
+    expect(otp).not.toContain('setInterval')
+  })
+
+  it('hides the specimen identity state until a capture is stored', () => {
+    const page = idHtml(stitch('07-id-liveness'))
+    expect(page).not.toContain('CNIB_recto_verso.pdf')
+    expect(page).toContain("fetch('/v1/verifications/id'")
+    expect(page).toContain("fetch('/v1/verifications/liveness'")
+    expect(page).toContain("location.assign('/onboarding')")
+  })
+
+  it('asks for a reset link and unlocks a four-digit PIN', () => {
+    const reset = resetHtml(stitch('05-password-reset'))
+    expect(reset).toContain("fetch('/v1/password-resets'")
+    expect(reset).toContain('href="/auth"')
+    const pin = pinHtml(stitch('10-pin-lock'))
+    expect(pin).toContain("fetch('/v1/pin/unlock'")
+    expect(pin).toContain('digits.length === 4')
+    expect(pin).toContain('pin-dot')
+  })
+
+  it('clears the specimen status until the ticket is read', () => {
+    const page = statusHtml(stitch('28-delete-export-status'))
+    expect(page).not.toContain('exp-84092-bf')
+    expect(page).not.toContain('47:55:56')
+    expect(page).toContain("fetch('/v1/me/export-status'")
+  })
+})
+
+describe('server entry guard', () => {
+  it('sends each account to the first unfinished step', () => {
+    expect(entryLocation('/signup', 'anon')).toBeNull()
+    expect(entryLocation('/signup/account', 'anon')).toBeNull()
+    expect(entryLocation('/auth', 'anon')).toBeNull()
+    expect(entryLocation('/password-reset', 'email')).toBeNull()
+    expect(entryLocation('/age-gate', 'anon')).toBe('/signup/identity')
+    expect(entryLocation('/email-verification', 'anon')).toBe('/auth')
+    expect(entryLocation('/decouvrir', 'anon')).toBe('/auth')
+    expect(entryLocation('/signup', 'email')).toBe('/email-verification')
+    expect(entryLocation('/auth', 'phone')).toBe('/phone')
+    expect(entryLocation('/otp', 'phone')).toBe('/phone')
+    expect(entryLocation('/otp', 'otp')).toBeNull()
+    expect(entryLocation('/id-liveness', 'identity')).toBeNull()
+    expect(entryLocation('/onboarding', 'identity')).toBe('/id-liveness')
+    expect(entryLocation('/pin', 'account')).toBeNull()
+    expect(entryLocation('/privacy/status/ticket-1', 'account')).toBeNull()
+    expect(entryLocation('/settings', 'email')).toBe('/email-verification')
+  })
+
+  it('redirects a signed-out member route and leaves stub cookies on the JSON envelope', async () => {
+    const anon = await getDecouvrir(new Request('http://localhost/decouvrir'))
+    expect(anon.status).toBe(303)
+    expect(anon.headers.get('location')).toBe('http://localhost/auth')
+    const staff = await getDecouvrir(
+      new Request('http://localhost/decouvrir', { headers: { cookie: 'ankanu_session=staff' } }),
+    )
+    expect(staff.status).toBe(403)
+    const held = await entryRedirect(
+      new Request('http://localhost/signup', { headers: { cookie: 'ankanu_session=real-session' } }),
+      '/signup',
+      async () => 'identity',
+    )
+    expect(held?.status).toBe(303)
+    expect(held?.headers.get('location')).toBe('http://localhost/id-liveness')
+  })
+})
+
+describe('route files', () => {
+  it('reads the v2 screens when the process cwd is the web package', async () => {
+    const webRoot = fileURLToPath(new URL('../', import.meta.url))
+    const previous = process.cwd()
+    process.chdir(webRoot)
+    try {
+      const { authResponse, signupResponse } = await import('./v2-serve.js')
+      const splash = await signupResponse(new Request('http://127.0.0.1/signup'))
+      expect(splash.status).toBe(200)
+      expect(await splash.text()).toContain('Continuer')
+      const signIn = await authResponse(new Request('http://127.0.0.1/auth'))
+      expect(signIn.status).toBe(200)
+      const body = await signIn.text()
+      expect(body).toContain('Se connecter')
+      expect(body).not.toContain('Continuer avec Google')
+      const restart = await authResponse(new Request('http://127.0.0.1/auth?mode=signup'))
+      expect(restart.status).toBe(303)
+      expect(restart.headers.get('location')).toBe('http://127.0.0.1/signup')
+    } finally {
+      process.chdir(previous)
+    }
+  })
+})
+
+describe('landing calls', () => {
+  it('keeps the landing visual and points signup and login at the v2 screens', () => {
+    const html = renderToStaticMarkup(createElement(LandingPage))
+    expect(html.match(/href="\/signup"/g)?.length).toBe(4)
+    expect(html.match(/href="\/auth"/g)?.length).toBe(2)
+    expect(html).not.toContain('href="#auth-inscription"')
+    expect(html).not.toContain('mode=signup')
+    expect(html).not.toContain('mode=login')
+    expect(html).toContain('Commencer')
+  })
+})
