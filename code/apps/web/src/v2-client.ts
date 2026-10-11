@@ -60,16 +60,23 @@ const HELPERS = `
     text.textContent = ' ' + message
   }
   async function goToGate() {
+    var moved = false
     try {
       var response = await fetch('/v1/accounts/gate', { credentials: 'same-origin' })
       var payload = await readJson(response)
       var step = payload && payload.step
       var path = STEP[step]
       if (response.ok && typeof path === 'string') {
+        moved = true
         window.location.assign(path)
         return true
       }
     } catch (error) {}
+    if (!moved) {
+      try {
+        await fetch('/v1/sessions/current', { method: 'DELETE', credentials: 'same-origin' })
+      } catch (error) {}
+    }
     return false
   }
 `

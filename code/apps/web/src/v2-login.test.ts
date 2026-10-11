@@ -237,6 +237,7 @@ describe('sign-in routing and inline errors', () => {
     await submit(dropped)
     expectKeptFields(dropped, "La session n'a pas été conservée.")
     expect(dropped.assigned).not.toContain('/onboarding')
+    expect(missing.calls).toEqual(['/v1/sessions', '/v1/accounts/gate', '/v1/sessions/current'])
   })
 
   it('stays on auth when the gate read is 401 or fails after 201', async () => {
@@ -244,6 +245,7 @@ describe('sign-in routing and inline errors', () => {
     const page = mount(denied.fetchImpl)
     await submit(page)
     expectKeptFields(page, "La session n'a pas été conservée.")
+    expect(denied.calls).toEqual(['/v1/sessions', '/v1/accounts/gate', '/v1/sessions/current'])
 
     const failed = fetchQueue([{ status: 201, body: { kind: 'web' } }, 'throw'])
     const again = mount(failed.fetchImpl)
@@ -275,7 +277,7 @@ describe('sign-in routing and inline errors', () => {
     })
     await submit(unreadable)
     expectKeptFields(unreadable, "La session n'a pas été conservée.")
-    expect(calls).toEqual(['/v1/sessions', '/v1/accounts/gate'])
+    expect(calls).toEqual(['/v1/sessions', '/v1/accounts/gate', '/v1/sessions/current'])
   })
 
   it('shows each server message and a network failure without clearing the email', async () => {

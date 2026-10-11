@@ -16,7 +16,9 @@ Verification, change-email, and password-reset links are built only from `ANKANU
 
 `X-Forwarded-Proto`, `X-Forwarded-Host`, `X-Forwarded-For`, `x-ankanu-edge-proto`, and `x-ankanu-edge-host` are trusted only from loopback or `172.16.0.0/12`. The web middleware copies the last hop onto the two `x-ankanu-edge-*` headers before the `/v1` rewrite. Gate redirects use `https://staging.ankanu.com` when that host is the allowed edge host, and `http://72.61.0.79:4012` on the raw IP. A host outside the allow list falls back to the public origin. Rate limits still use the socket address.
 
-Sign-in routing from the previous commit is unchanged. After `POST /v1/sessions` returns 201, the browser reads `GET /v1/accounts/gate` and goes only to that step. There is no `/onboarding` fallback. A dropped session stays on `/auth` and shows `La session n'a pas été conservée.`
+Sign-in routing from the previous commit is unchanged. After `POST /v1/sessions` returns 201, the browser reads `GET /v1/accounts/gate` and goes only to that step. There is no `/onboarding` fallback. If that gate read is not OK, or the read throws, the browser calls `DELETE /v1/sessions/current` before showing `La session n'a pas été conservée.` Reload then stays on `/auth`.
+
+On the published raw-IP host (`72.61.0.79:4012`), the web process does not copy a client `X-Forwarded-Proto` or `X-Forwarded-Host` into `x-ankanu-edge-*`. A POST to that host with `X-Forwarded-Proto: https` still omits `Secure`. A request whose host is `staging.ankanu.com` still uses the forwarded https hop.
 
 ## Where
 
@@ -24,7 +26,8 @@ Sign-in routing from the previous commit is unchanged. After `POST /v1/sessions`
 - `code/apps/api/src/edge-request.ts` — trusted edge and the 403
 - `code/apps/api/src/session-cookie.ts` — Secure from the request scheme
 - `code/apps/api/src/main.ts` — boot asserts
-- `code/apps/web/middleware.ts` — edge headers for the rewrite
+- `code/apps/web/middleware.ts` and `code/apps/web/src/edge-headers.ts` — edge headers for the rewrite; the raw IP ignores client forwarded headers
+- `code/apps/web/src/v2-client.ts` — `goToGate` clears the session when the gate read is not OK
 - `code/apps/web/src/entry-guard.ts` — redirect origin
 - `code/compose.yaml` — origin env on web, api, and worker
 - `code/docs/api-host-env.md` and `code/docs/staging-edge.md` — settings and the edge
@@ -55,13 +58,15 @@ Primary host: `https://staging.ankanu.com`. Fallback: `http://72.61.0.79:4012`. 
 | Verification link | Signed-in POST `/v1/accounts/email-verifications` from the raw IP, including a forged `Origin` that is still allowed | `docker logs ankanu-api-1` line path is `https://staging.ankanu.com/email-verification`. The query token is not in this handoff. |
 | Reset link | POST `/v1/password-resets` for a verified account | Path is `https://staging.ankanu.com/password-reset`. An unverified account returns 201 and sends nothing. |
 | IP cookie | POST `/v1/sessions` or `/v1/accounts` on `http://72.61.0.79:4012` | `Set-Cookie` is `HttpOnly; SameSite=Lax; Path=/`, no `Secure`, no `Domain`. A browser reload stays signed in. |
+| Spoofed proto on the IP | Same POST with `X-Forwarded-Proto: https` and `X-Forwarded-Host: staging.ankanu.com` | `Secure` is still absent. |
+| Dropped gate | 201, then gate 401, non-OK, or a failed read | `DELETE /v1/sessions/current` runs, then the inline message. Reload stays on `/auth`. No `/onboarding`. |
 | HTTPS cookie | Sign in on `https://staging.ankanu.com` in a browser, not loopback | `ankanu_session` is `Secure; HttpOnly; SameSite=Lax`, host-only on `staging.ankanu.com`. Reload stays signed in. |
 | IP redirect | Anonymous GET `/onboarding` on the raw IP | `303` to `http://72.61.0.79:4012/auth`. |
 | Spoofed host | GET with `X-Forwarded-Host: evil.example` | Location is `https://staging.ankanu.com/...`, not the spoofed host. |
 | Edge redirect | GET through the loaded https site | Location is `https://staging.ankanu.com/...`. |
 | Sign-in email step | 201, then gate `email` | Lands on `/email-verification`. Reload stays there. |
 | Other gate steps | Gate returns `phone`, `otp`, `identity`, or `account` | `/phone`, `/otp`, `/id-liveness`, `/onboarding`. |
-| Dropped session | 201, then gate 401 or a failed read | Stay on `/auth` with `La session n'a pas été conservée.` No `/onboarding` fallback. |
+| Dropped session | 201, then gate 401 or a failed read | `DELETE /v1/sessions/current`, stay on `/auth` with `La session n'a pas été conservée.` Reload stays on `/auth`. No `/onboarding` fallback. |
 | Wrong password, captcha, rate limit | The existing French messages | Shown inline on `#login-error`. Password cleared, email kept, captcha reset. |
 | Layout | Error line visible | No horizontal scroll at 360, 390, 768, 1024, 1280, and 1440. `document.documentElement.scrollWidth <= window.innerWidth`. |
 
@@ -85,6 +90,7 @@ Do not reuse a member password from a real person. This check created one dispos
 - A signed-in verification and, after consume, a password reset wrote `https://staging.ankanu.com/email-verification` and `https://staging.ankanu.com/password-reset`. The same reset with `Origin: https://evil.example` returned 403.
 - `https://sarati.net`, `https://choupi.sarati.net`, and `https://paperclip.sotigi.com` stayed 200 after the restart that loaded the site. `https://staging.sotigi.com` stayed 502. The edge note is `code/docs/staging-edge.md`.
 - The auth error markup was not changed. The earlier six-width pass of `04b-sign-in-error` still applies.
+- `v2-login.test.ts`, `edge-headers.test.ts`, and `v2-flow.test.ts`: 19 passed. `tsc` for `apps/web` exited 0. A failed gate now records `DELETE /v1/sessions/current`. The raw-IP header decision stays `http` when the client sends `X-Forwarded-Proto: https`.
 
 ## Three validation passes
 
