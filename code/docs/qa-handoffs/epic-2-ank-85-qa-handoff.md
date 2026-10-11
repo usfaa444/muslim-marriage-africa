@@ -156,27 +156,6 @@ Checked on `http://127.0.0.1:4012`. Cells are `document.documentElement.scrollWi
 
 A later check on the same web, after `document.fonts.ready`, measured `scrollWidth` equal to `innerWidth` at 768 and 1024 on `/`. Before the webfonts load, the 1024 header can report a wider fallback and is not the pass measurement.
 
-## Log mail and evidence (2026-10-11)
-
-Founder-approved staging mail is log-only. The host file `/var/lib/ankanu/api.env` (mode `600`, outside the repo and the image) supplies `SMTP_URL`, `EVIDENCE_KEY`, and `EVIDENCE_KID` through `env_file` on the api service only. The worker does not read it. Path note: `code/docs/api-host-env.md`. Values are not in git and are not printed here.
-
-`SMTP_URL` uses the `log:` scheme. Each send writes one API stdout line: `email <recipient> AnKanu <full link>`. Read it with `docker logs ankanu-api-1`. The same guards still refuse empty text, angle brackets, and control characters. The api image sets `NODE_ENV=production`, so log mail is allowed only when `RECAPTCHA_ALLOW_TEST_KEYS=1`. Any other boot with a `log:` URL exits at startup.
-
-Phone OTP lines stay `otp <six digits>` in the same logs.
-
-Only `ankanu-api-1` was recreated for this step (`2026-10-11T07:18:09Z`). Web, worker, postgres, redis, and bucket were left running. Lengths on the running process: `SMTP_URL` 6, scheme `log`; `EVIDENCE_KEY` 44; `EVIDENCE_KID` 25. S3 lengths unchanged: access key 16, secret 36.
-
-Smoke on `http://127.0.0.1:4012`, statuses only:
-
-- `POST /v1/accounts` 201, then `POST /v1/accounts/email-verifications` 201, log line contained `email-verification`, consume 200.
-- `POST /v1/password-resets` 201, log line contained `password-reset`.
-- `POST /v1/verifications/otp` send 201, verify 200 `granted`.
-- `POST /v1/verifications/id` 201 `pending`. No `EVIDENCE_KEY` line and no production log-mail refusal in that log window.
-
-`npx vitest run --config vitest.unit.config.ts apps/api/src/email-port.test.ts`: 1 file, 8 tests passed.
-
-QA still retests change-email (old link dies, new link verifies), a real reset link plus a reused link, and Step 7 upload/liveness in the browser. Links and the OTP code come from `docker logs ankanu-api-1`. This is not a full ANK-84 pass. Do not push yet.
-
 ## Log mail and evidence key (2026-10-11)
 
 Founder decision: log-only email on this host, and a fresh evidence key. The two width fixes already passed and were not redone.
@@ -193,7 +172,7 @@ The same refusal rules as SMTP still apply (empty text, angle brackets, control 
 
 Read links with `docker logs ankanu-api-1`. A verification send contains `/email-verification?token=`. A reset send contains `/password-reset?token=`. Phone OTP is still the existing line `otp <six digits>`. Do not paste those lines into tickets.
 
-`ankanu-api-1` was recreated at `2026-10-11T07:15:27Z` and is healthy. Web, worker, postgres, redis, bucket, and every other project were left running. Inside the process: `SMTP_URL` scheme `log` length 6, evidence key 32 bytes, kid length 25, `RECAPTCHA_ALLOW_TEST_KEYS=1`. S3 credentials still match the bucket process (lengths 16 and 36). The `ankanu` bucket was missing (`NoSuchBucket`), so it was created with the existing private-bucket call and versioning enabled. That is why an earlier upload returned 503 `Request failed` even with the key present.
+`ankanu-api-1` was recreated at `2026-10-11T07:18:09Z` and is healthy. Web, worker, postgres, redis, bucket, and every other project were left running. Inside the process: `SMTP_URL` scheme `log` length 6, evidence key 32 bytes, kid length 25, `RECAPTCHA_ALLOW_TEST_KEYS=1`. S3 credentials still match the bucket process (lengths 16 and 36). The `ankanu` bucket was missing (`NoSuchBucket`), so it was created with the existing private-bucket call and versioning enabled. That is why an earlier upload returned 503 `Request failed` even with the key present.
 
 Smoke on `http://127.0.0.1:4012`, no secret values printed:
 
@@ -205,3 +184,5 @@ Smoke on `http://127.0.0.1:4012`, no secret values printed:
 `npx vitest run --config vitest.unit.config.ts apps/api/src/email-port.test.ts apps/api/src/self-managed-environment.test.ts apps/api/src/secrets-baked.test.ts`: 3 files, 11 tests passed.
 
 Remaining for QA on ANK-84, using `docker logs ankanu-api-1` for the links: change email (old link dies, new link verifies), a real reset link plus a reused link, and the Step 7 upload/liveness screens. Push still waits for that pass.
+
+Local commit for this change: `672d6f5810475a239e6599ddb89493080366af42`. Not pushed.
