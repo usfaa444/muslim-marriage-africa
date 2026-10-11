@@ -1,103 +1,103 @@
 # Epic 2 ANK-88 QA handoff
 
-Sign-in on plain-http staging was returning to a cleared `/auth` because the session cookie was always `Secure`. Staging is `http://72.61.0.79:4012`. This is a fix on the open epic. Do not open Epic 3. Do not push from QA. Do not call the board webhook.
+This replaces the earlier handoff. [ANK-89](/ANK/issues/ANK-89) is the only QA ticket. [ANK-90](/ANK/issues/ANK-90) is cancelled. Its withdrawn pass is void. Do not push that result. Do not open Epic 3. Do not call the board webhook.
 
-Local code commit, not on GitHub yet: `3627ad7f7eefa83bd28c16f64140c1708295eed8`. The handoff commit follows it. Push waits until this QA pass.
+Local code commit, not on GitHub yet: `8286f9bd614ca4d221bff9d0a1b10fb6706cba45`. The handoff commit follows it. Push waits until ANK-89 passes.
+
+`https://staging.ankanu.com` is not serving yet. Caddy validated the site block and then refused `caddy reload` because `admin off` leaves port 2019 closed. The live file was restored from the backup. Do not treat a TLS failure on that host as an app failure, and do not pass the https cases until `GET /` and `GET /v1/health` return 200 with a valid certificate. The raw IP cases below can be run now.
 
 ## What was built
 
-`ANKANU_COOKIE_SECURE` defaults to `true`. Only the exact string `false` omits `Secure`. Any other value refuses to boot. `ANKANU_COOKIE_SECURE=false` together with an `ANKANU_PUBLIC_ORIGIN` whose protocol is `https:` (or a value that starts with `https:` when it is not a URL) refuses to boot. An unset origin is not https. Every `ankanu_session` set and clear goes through `code/apps/api/src/session-cookie.ts`: `HttpOnly`, `SameSite=Lax`, `Path=/`, no `Domain`.
+Verification, change-email, and password-reset links are built only from `ANKANU_PUBLIC_ORIGIN`. The request `Origin` and `Host` are not used. Staging sets `https://staging.ankanu.com`. A missing or invalid value refuses to boot when `NODE_ENV=production`, which is how the api image always starts, including the worker.
 
-The ankanu api service sets `ANKANU_COOKIE_SECURE=false` in `code/compose.yaml`. Production stays Secure by leaving the flag unset or `true`.
+`ANKANU_ALLOWED_ORIGINS` on staging is `https://staging.ankanu.com,http://72.61.0.79:4012`. A POST, PATCH, PUT, or DELETE under `/v1` that sends an `Origin` outside that list gets `403` `FORBIDDEN` and message `Origine refusée.` There is no `Access-Control-Allow-Origin`. A request with no `Origin` is not rejected for this reason.
 
-After `POST /v1/sessions` returns 201, the browser reads `GET /v1/accounts/gate` and goes only to:
+`ankanu_session` stays `HttpOnly`, `SameSite=Lax`, `Path=/`, no `Domain`. It includes `Secure` when the trusted scheme is https. It omits `Secure` only for plain http whose origin is an allowed http origin (the raw IP). `ANKANU_COOKIE_SECURE=false` together with an https public origin still refuses to boot. Staging compose does not set that flag.
 
-| `step` | path |
-| --- | --- |
-| `email` | `/email-verification` |
-| `phone` | `/phone` |
-| `otp` | `/otp` |
-| `identity` | `/id-liveness` |
-| `account` | `/onboarding` |
+`X-Forwarded-Proto`, `X-Forwarded-Host`, `X-Forwarded-For`, `x-ankanu-edge-proto`, and `x-ankanu-edge-host` are trusted only from loopback or `172.16.0.0/12`. The web middleware copies the last hop onto the two `x-ankanu-edge-*` headers before the `/v1` rewrite. Gate redirects use `https://staging.ankanu.com` when that host is the allowed edge host, and `http://72.61.0.79:4012` on the raw IP. A host outside the allow list falls back to the public origin. Rate limits still use the socket address.
 
-A 401, any other non-ok gate, or a failed read stays on `/auth` and shows `La session n'a pas été conservée.` There is no `|| '/onboarding'` fallback.
-
-Other non-201 responses show `error.message` from the server on `#login-error`. A thrown fetch shows `La connexion a échoué.` The email and "Se souvenir de moi" stay. The password is cleared. The login reCAPTCHA widget is reset. The button enables again only after a new solve and a password. The error is hidden until a real failure. Both auth forms use `method="post"` and no `action`, so a missing script cannot put the password in the query string.
+Sign-in routing from the previous commit is unchanged. After `POST /v1/sessions` returns 201, the browser reads `GET /v1/accounts/gate` and goes only to that step. There is no `/onboarding` fallback. A dropped session stays on `/auth` and shows `La session n'a pas été conservée.`
 
 ## Where
 
-- `code/apps/api/src/session-cookie.ts` — cookie builder and boot assert
-- `code/apps/api/src/main.ts` — calls the boot assert before the worker/api split
-- `code/compose.yaml` — api only: `ANKANU_COOKIE_SECURE=false`
-- `code/docs/api-host-env.md` — the flag and `ANKANU_PUBLIC_ORIGIN`
-- `code/apps/web/src/v2-client.ts` — gate routing and `#login-error`
-- `code/apps/web/src/v2-document.ts` — hidden error markup and `method="post"`
-- `code/apps/web/src/v2-pages.ts` — wires those into `/auth`
+- `code/apps/api/src/public-origin.ts` — configured origin and allow list
+- `code/apps/api/src/edge-request.ts` — trusted edge and the 403
+- `code/apps/api/src/session-cookie.ts` — Secure from the request scheme
+- `code/apps/api/src/main.ts` — boot asserts
+- `code/apps/web/middleware.ts` — edge headers for the rewrite
+- `code/apps/web/src/entry-guard.ts` — redirect origin
+- `code/compose.yaml` — origin env on web, api, and worker
+- `code/docs/api-host-env.md` and `code/docs/staging-edge.md` — settings and the edge
 
 ## How to run
 
-Unit checks from `code/`:
+From `code/`:
 
 ```bash
-npx vitest run --config vitest.unit.config.ts apps/api/src/session-cookie.test.ts apps/web/src/v2-login.test.ts apps/web/src/v2-flow.test.ts
-npx vitest run --config vitest.unit.config.ts apps/web/src/v2-responsive.test.ts
+npx vitest run --config vitest.unit.config.ts apps/api/src/session-cookie.test.ts apps/api/src/edge-request.test.ts apps/api/src/email-verification.test.ts apps/api/src/password-reset.test.ts apps/api/src/change-email.test.ts apps/web/src/v2-flow.test.ts apps/web/src/v2-login.test.ts
+npx tsc -p apps/api/tsconfig.json --noEmit
+npx tsc -p apps/web/tsconfig.json --noEmit
 ```
 
-Do not run `apps/api/src/compose.test.ts` against project `ankanu`. Its teardown is `docker compose -p ankanu down` and that removes this staging stack.
+Do not run `apps/api/src/compose.test.ts` against project `ankanu`. Its teardown is `docker compose -p ankanu down`.
 
-Staging is already this build. Only `ankanu-web-1` and `ankanu-api-1` were recreated. Postgres, redis, bucket, worker, and every other compose project were left up.
+Staging web, api, and worker were recreated with `code/compose.yaml` and `/root/ankanu-epic2/compose.ports.yml`. Port `4012` is still published. Postgres, redis, and the bucket were left up. Other compose projects were not restarted.
 
-Open `http://72.61.0.79:4012/auth` in a normal browser, not `127.0.0.1`. `127.0.0.1` is exempt from the `Secure` cookie rule and will hide this bug.
+Primary host, once the edge is loaded: `https://staging.ankanu.com`. Fallback: `http://72.61.0.79:4012`. Do not use `127.0.0.1` for the cookie check. Loopback is exempt from the browser `Secure` rule.
 
 ## Test cases
 
 | Case | Action | Expected |
 | --- | --- | --- |
-| Secure default | Unset or `true` | Set and clear include `Secure`. Boot succeeds even if the origin is https. |
-| Staging cookie | Flag `false`, origin unset or http | Set and clear omit `Secure`. Boot succeeds. |
-| Https refusal | Flag `false` and origin `https://…` | Process exits. `FALSE`, `yes`, and other strings also refuse to boot. |
-| Sign-in email step | 201, then gate `email` | Browser stores `ankanu_session` and lands on `/email-verification`. Reload stays there. |
-| Sign-in phone / otp / identity / account | Gate returns that step | `/phone`, `/otp`, `/id-liveness`, `/onboarding`. |
-| Gate dropped | 201, then gate 401, non-ok, or a failed read | Stay on `/auth`. Inline `La session n'a pas été conservée.` Password cleared, email and remember-me kept, captcha reset. No navigation to `/onboarding`. |
-| Wrong password | `401` `UNAUTHENTICATED` | Inline `Identifiant ou mot de passe incorrect.` Same field and captcha reset. |
-| Captcha | `400` `CAPTCHA_FAILED` | Inline `Échec de validation de la vérification humaine.` |
-| Rate limit | `429` | Inline `Cadence de requêtes régulée.` |
-| Locked or held | non-201 with the server French message | That message inline. Same field and captcha reset. |
-| Network | sign-in fetch throws | Inline `La connexion a échoué.` |
-| Signup | `POST /v1/accounts` 201 on this http host | `Set-Cookie` has no `Secure`. The browser keeps it. |
-| Form | Script missing | Password is not placed in the query string. |
+| Foreign origin | POST `/v1/sessions` with `Origin: https://evil.example` | `403`, body code `FORBIDDEN`, no CORS header. No mail is sent. |
+| Listed origin | Same POST with `Origin: http://72.61.0.79:4012` or `https://staging.ankanu.com` | Not 403. |
+| No origin | Same POST with no `Origin` | Not 403. |
+| Verification link | Signed-in POST `/v1/accounts/email-verifications` from the raw IP, including a forged `Origin` that is still allowed | `docker logs ankanu-api-1` line path is `https://staging.ankanu.com/email-verification`. The query token is not in this handoff. |
+| Reset link | POST `/v1/password-resets` for a verified account | Path is `https://staging.ankanu.com/password-reset`. An unverified account returns 201 and sends nothing. |
+| IP cookie | POST `/v1/sessions` or `/v1/accounts` on `http://72.61.0.79:4012` | `Set-Cookie` is `HttpOnly; SameSite=Lax; Path=/`, no `Secure`, no `Domain`. A browser reload stays signed in. |
+| HTTPS cookie | Sign in on `https://staging.ankanu.com` in a browser, not loopback | `ankanu_session` is `Secure; HttpOnly; SameSite=Lax`, host-only on `staging.ankanu.com`. Reload stays signed in. |
+| IP redirect | Anonymous GET `/onboarding` on the raw IP | `303` to `http://72.61.0.79:4012/auth`. |
+| Spoofed host | GET with `X-Forwarded-Host: evil.example` | Location is `https://staging.ankanu.com/...`, not the spoofed host. |
+| Edge redirect | GET through the loaded https site | Location is `https://staging.ankanu.com/...`. |
+| Sign-in email step | 201, then gate `email` | Lands on `/email-verification`. Reload stays there. |
+| Other gate steps | Gate returns `phone`, `otp`, `identity`, or `account` | `/phone`, `/otp`, `/id-liveness`, `/onboarding`. |
+| Dropped session | 201, then gate 401 or a failed read | Stay on `/auth` with `La session n'a pas été conservée.` No `/onboarding` fallback. |
+| Wrong password, captcha, rate limit | The existing French messages | Shown inline on `#login-error`. Password cleared, email kept, captcha reset. |
 | Layout | Error line visible | No horizontal scroll at 360, 390, 768, 1024, 1280, and 1440. `document.documentElement.scrollWidth <= window.innerWidth`. |
 
 ## Test data
 
-Staging uses the reCAPTCHA test keys (`RECAPTCHA_ALLOW_TEST_KEYS=1`). A new member needs a unique email and pseudonym, gender, the pledge, civil names, `coc_version` `FR-089`, a DOB that is at least 19, and a password that meets the published rule (the unit fixtures use `phrase avec espaces`). A brand-new account's gate step is `email`.
+Staging uses the reCAPTCHA test keys (`RECAPTCHA_ALLOW_TEST_KEYS=1`). A new member needs a unique email and pseudonym, gender, the pledge, civil names, `coc_version` `FR-089`, a DOB that is at least 19, and a password that meets the published rule. A brand-new account's gate step is `email`. Mail is `log:`, so the link is one stdout line: `email <recipient> AnKanu <full link>`.
 
-Do not reuse a member password from a real person. The headless check created disposable `ank88-…@example.bf` accounts. Those passwords were not written down.
+Do not reuse a member password from a real person. This check created one disposable `@example.bf` account. The password was not written down.
 
 ## My results
 
-- `session-cookie.test.ts`, `v2-login.test.ts`, and `v2-flow.test.ts`: 20 passed, then 8 passed again after the compose assertion was added to the cookie file.
-- `v2-responsive.test.ts`: 1 passed. `04b-sign-in-error` was visible at all six widths and `scrollWidth` stayed within the viewport. Shots saved at 360 and 1440: `code/docs/qa-handoffs/ank-88-widths/04b-sign-in-error-360.png` and `04b-sign-in-error-1440.png`. The harness still records images only at those two widths. The assertion ran at all six.
-- `POST /v1/accounts` on `http://72.61.0.79:4012` returned 201. `Set-Cookie` flags were `Path`, `HttpOnly`, `SameSite`. `Secure` was absent.
-- Headless Chrome on `http://72.61.0.79:4012/auth` (not loopback): sign-in stored `ankanu_session` for domain `72.61.0.79`, `Path=/`, `HttpOnly`, `SameSite=Lax`, `secure: false`. Reload stayed on `/email-verification` and the cookie was still present.
-- Live `/auth` HTML contains hidden `#login-error`, `id="login-form" method="post"`, and does not contain `|| '/onboarding'`.
-- Api container env includes `ANKANU_COOKIE_SECURE=false`. `GET /v1/health` returned `200` `role: api`.
-- `ankanu-postgres-1`, `ankanu-redis-1`, `ankanu-bucket-1`, and `ankanu-worker-1` were still up from 5 days earlier after the recreate. Other projects were not restarted.
+- Unit files listed above: 7 files, 52 passed.
+- `tsc` for `apps/api` and `apps/web`: exit 0.
+- `GET http://127.0.0.1:4012/v1/health` returned 200 `role: api`. Web, api, and worker are healthy. `4012` is still bound. Compose env is `ANKANU_PUBLIC_ORIGIN=https://staging.ankanu.com` and the two-origin allow list. `ANKANU_COOKIE_SECURE` is unset.
+- POST `/v1/sessions` with `Origin: https://evil.example` returned 403 `FORBIDDEN` and no CORS header. The listed IP origin and a missing origin returned 400 (empty body), not 403.
+- `POST /v1/accounts` and `POST /v1/sessions` on `http://72.61.0.79:4012` set `ankanu_session` with flags `Path=/`, `HttpOnly`, `SameSite=Lax`. `Secure` and `Domain` were absent. The cookie jar host was `72.61.0.79`.
+- Anonymous `GET /onboarding` on that IP returned 303 to `http://72.61.0.79:4012/auth`. After sign-in, `GET /onboarding` and `GET /auth` both returned 303 to `http://72.61.0.79:4012/email-verification`.
+- `X-Forwarded-Host: evil.example` redirected to `https://staging.ankanu.com/auth`.
+- After the account was verified, the log paths were `https://staging.ankanu.com/email-verification` and `https://staging.ankanu.com/password-reset`. The same reset with `Origin: https://evil.example` returned 403 and added no log line.
+- Inside `sotigi-staging-edge-1`, `GET http://172.24.0.1:4012/` and `/v1/health` returned 200. Caddy validate passed. Caddy reload failed on `localhost:2019` because admin is off. The Caddyfile was restored. `https://sarati.net`, `https://choupi.sarati.net`, and `https://paperclip.sotigi.com` stayed 200. `https://staging.sotigi.com` stayed 502. `https://sotigi.com` and `https://staging.ankanu.com` stayed a TLS alert.
+- The auth error markup was not changed. The earlier six-width pass of `04b-sign-in-error` still applies.
 
 ## Three validation passes
 
-1. API and cookie: boot flag, set/clear attributes, https refusal, and the compose file line. Passed.
-2. Client routing: each gate step, gate 401 and failed reads, each error code, password cleared, email kept, captcha reset, no `/onboarding` fallback. Passed.
-3. Frontend fidelity and responsiveness: hidden v2 error pattern, post method, and the six widths with the error line shown. Passed.
+1. Origin, allow list, cookie scheme, and link host. Unit tests passed, and the live IP returned 403 for a foreign origin with links on `https://staging.ankanu.com`.
+2. Sign-in routing and redirects. The IP session stayed on `/email-verification`. A spoofed host did not leave the public origin.
+3. Typecheck, health, and the existing auth error line. `tsc` passed. The error line was not restyled. The https browser cookie and the six-width shots on `https://staging.ankanu.com` are not done, because that host is not loaded.
 
 ## Solution design and Stitch
 
-Board decision on this ticket: `Secure` follows the deployment; sign-in routing uses the gate step only; errors use the v2 `#email-error` pattern. `SOLUTION-DESIGN.md` still says the web session cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF (auth paragraph near the identity routes). This change does not add CSRF. No other auth rule was changed.
+Board comment on this ticket: public origin `https://staging.ankanu.com`, allow list of that origin plus `http://72.61.0.79:4012`, `Secure` on https and omitted only for the raw http IP, forwarded headers trusted only from loopback or the docker bridge. `SOLUTION-DESIGN.md` still says the web session cookie is `Secure` + `HttpOnly` + `SameSite=Lax` plus CSRF. This change does not add CSRF. No new table, field, or endpoint was added.
 
-Stitch matched for the error line: `code/design-stitch/ankanu-v2/02-auth/screen.html` (`#email-error`: `text-xs text-[#9B2C2C]`, `error` icon). The line is inserted before `<!-- Se souvenir de moi -->` and starts hidden. The Stitch file was not edited. No state switcher, demo error, or all-states gallery was added.
+Stitch for the error line is unchanged: `code/design-stitch/ankanu-v2/02-auth/screen.html`. No state switcher was added.
 
 ## Known gaps
 
-- The running-container assertion in `code/apps/api/src/compose.test.ts` was not executed. That file's suite tears down project `ankanu`.
-- A failed gate on the password-reset "enter" button no longer falls through to `/onboarding`. The button stays on the reset page. A successful reset still follows the gate step.
-- Image proof of the error line is at 360 and 1440. The other four widths were measured, not saved.
+- `https://staging.ankanu.com` is not in the running Caddy config. The https cookie, the https redirect, and the certificate check are blocked on a founder decision to restart `sotigi-staging-edge-1` once. The procedure forbids that restart while `admin off` makes `caddy reload` impossible.
+- The running-container assertion in `compose.test.ts` was not executed.
+- Image proof of the error line remains the earlier 360 and 1440 shots. This change did not touch that markup.
