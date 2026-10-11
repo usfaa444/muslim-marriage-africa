@@ -26,7 +26,7 @@ On the published raw-IP host (`72.61.0.79:4012`), the web process does not copy 
 - `code/apps/api/src/edge-request.ts` — trusted edge and the 403
 - `code/apps/api/src/session-cookie.ts` — Secure from the request scheme
 - `code/apps/api/src/main.ts` — boot asserts
-- `code/apps/web/middleware.ts` and `code/apps/web/src/edge-headers.ts` — edge headers for the rewrite; the raw IP ignores client forwarded headers
+- `code/apps/web/middleware.ts` — edge headers for the rewrite; the raw IP ignores client forwarded headers
 - `code/apps/web/src/v2-client.ts` — `goToGate` clears the session when the gate read is not OK
 - `code/apps/web/src/entry-guard.ts` — redirect origin
 - `code/compose.yaml` — origin env on web, api, and worker

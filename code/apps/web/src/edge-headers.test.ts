@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { edgeHeaderDecision } from './edge-headers.js'
+import { edgeHeaderDecision } from '../middleware.js'
 
 const allowed = 'https://staging.ankanu.com,http://72.61.0.79:4012'
 
