@@ -18,7 +18,7 @@ Verification, change-email, and password-reset links are built only from `ANKANU
 
 Sign-in routing from the previous commit is unchanged. After `POST /v1/sessions` returns 201, the browser reads `GET /v1/accounts/gate` and goes only to that step. There is no `/onboarding` fallback. If that gate read is not OK, or the read throws, the browser calls `DELETE /v1/sessions/current` before showing `La session n'a pas été conservée.` Reload then stays on `/auth`.
 
-On the published raw-IP host (`72.61.0.79:4012`), the web process does not copy a client `X-Forwarded-Proto` or `X-Forwarded-Host` into `x-ankanu-edge-*`. A POST to that host with `X-Forwarded-Proto: https` still omits `Secure`. A request whose host is `staging.ankanu.com` still uses the forwarded https hop.
+On the published raw-IP host (`72.61.0.79:4012`), the web process does not copy a client `X-Forwarded-Proto` or `X-Forwarded-Host` into `x-ankanu-edge-*`. Any IPv4 host is treated as that raw listener, because Next inlines `ANKANU_ALLOWED_ORIGINS` at image build and the build does not have the list. A POST to that host with `X-Forwarded-Proto: https` still omits `Secure`. A request whose host is `staging.ankanu.com` still uses the forwarded https hop.
 
 ## Where
 

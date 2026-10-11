@@ -9,6 +9,16 @@ function lastHop(value: string | null): string {
   return parts.length > 0 ? (parts[parts.length - 1] ?? '') : ''
 }
 
+/** Next inlines `process.env.*` at image build, when this allow list is empty. An IPv4 host is still the raw listener. */
+function isIpv4Host(host: string): boolean {
+  const name = host.trim().toLowerCase().replace(/:\d+$/, '')
+  const parts = name.split('.')
+  if (parts.length !== 4) {
+    return false
+  }
+  return parts.every((part) => /^\d{1,3}$/.test(part) && Number(part) <= 255)
+}
+
 function httpListenerHosts(allowedOrigins: string | undefined): Set<string> {
   const hosts = new Set<string>()
   if (!allowedOrigins) {
@@ -47,7 +57,8 @@ export function edgeHeaderDecision(input: {
 }): EdgeHeaderDecision {
   const requestHost = input.host.trim()
   const requestProto = input.protocol.replace(':', '') || 'http'
-  const rawListener = httpListenerHosts(input.allowedOrigins).has(requestHost.toLowerCase())
+  const rawListener =
+    httpListenerHosts(input.allowedOrigins).has(requestHost.toLowerCase()) || isIpv4Host(requestHost)
   if (rawListener) {
     return { proto: requestProto, host: requestHost, rawListener: true }
   }
