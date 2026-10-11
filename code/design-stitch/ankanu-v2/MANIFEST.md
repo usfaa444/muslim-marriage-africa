@@ -4,17 +4,21 @@
 - Project: https://stitch.withgoogle.com/project/6717808880062298165
 - Design system: `DESIGN.md` (tokens only; layout is each PNG)
 - Old Stitch project on Google was **not** deleted.
+- Refresh: founder-edited project re-downloaded 2026-10-11 (replaces [`23a7151`](https://github.com/usfaa444/muslim-marriage-africa/commit/23a7151)).
 
 ## Completeness proof
 
-- Command: `StitchToolClient.callTool('list_screens', { projectId: '6717808880062298165' }); HTTP GET htmlCode.downloadUrl; screenshot.downloadUrl with FIFE suffix =s2048-rp; python PNG signature \x89PNG and HTML size > 0; compare API ids to MANIFEST and folders`
-- API count: **57**
-- Downloaded count: **57**
-- HTML count: **57**
-- PNG count: **57**
+- Command: `stitch-mcp tool list_screens -d '{"projectId":"6717808880062298165"}'`; HTTP GET htmlCode.downloadUrl; screenshot.downloadUrl with FIFE suffix `=s2048-rp`; python PNG signature `\x89PNG` and HTML size > 0; compare API ids to MANIFEST and folders; no folder whose id is absent from the live list
+- API count: **56**
+- Downloaded count: **56**
+- HTML count: **56**
+- PNG count: **56**
 - Missing: **0**
+- Stale extras (folder/id not in live `list_screens`): **0**
 
-Zero missing is the only pass. Verified 2026-10-11 against live `list_screens` for project `6717808880062298165`.
+Zero missing and zero stale extras is the only pass. Verified 2026-10-11 against a fresh `list_screens` for project `6717808880062298165`.
+
+Note: `55-pwa-manifest` is a JSON asset. Stitch returned no screenshot URL. The PNG is a raster of the downloaded `manifest.json` bytes (cream/navy tokens). Do not treat it as a Stitch canvas.
 
 ## Screens
 
@@ -72,11 +76,10 @@ Zero missing is the only pass. Verified 2026-10-11 against live `list_screens` f
 | 50 | AnKanu - File des Requêtes CIL & Effacement (Staff) | `a7c0d7374f3d407396edb4e90149a74d` | `50-operator-cil-tickets/screen.html` | `50-operator-cil-tickets/screen.png` | Operator CIL / deletion tickets |
 | 51 | AnKanu - Académie & Publications Éthiques (Staff) | `e3ecb4ac01da4061bbd31e0643dc9548` | `51-operator-board-academie/screen.html` | `51-operator-board-academie/screen.png` | Operator Board / Académie publish |
 | 52 | AnKanu - Signaux de visite T&S & Modération (Staff) | `44fc9a9f8432478fb034f7576da37bd8` | `52-ts-visit-signals/screen.html` | `52-ts-visit-signals/screen.png` | T&S visit signals |
-| 53 | Favicon and PWA app icon for AnKanu, a noble Muslim matrimonial and Ta'aruf platform in Burkina Faso. Elegant, minimalist, refined brand emblem: a stylized teardrop / arch / subtle crescent and palm leaf motif in soft gold (#C9A86C) centered on a solid deep navy (#0B1D36) full-bleed square background. Continuous solid navy background filling edge to edge, no squircle, no rounded corners, no white border, no container box, flat luxury noble aesthetic. | `9bd0940e47f74cd894bd07dda450f45d` | `53-pwa-app-icon/screen.html` | `53-pwa-app-icon/screen.png` | — (extra / not in inventory numbering) |
+| 53 | AnKanu - Barre de navigation | `83017ec45eb44fc6b7f70657afbe823e` | `53-barre-de-navigation/screen.html` | `53-barre-de-navigation/screen.png` | — (extra / not in inventory numbering; member-shell bottom nav chrome) |
 | 54 | AnKanu - Pseudonyme & Date de naissance | `fd15ec6c6d854ee79cb1be8e5e910bc5` | `54-pseudonym-dob/screen.html` | `54-pseudonym-dob/screen.png` | — (extra / not in inventory numbering) |
 | 55 | manifest.json (AnKanu PWA) | `2259e9895a48410b82b4fd63a8dcab94` | `55-pwa-manifest/screen.html` | `55-pwa-manifest/screen.png` | — (extra / not in inventory numbering) |
-| 56 | Apple Touch Icon for iOS home screen for AnKanu app. Elegant noble motif: fine geometric gold line art emblem combining an archway and subtle seed/drop symbol in warm soft gold (#C9A86C) centered on a solid, deep navy (#0B1D36) full-bleed square background. Edge-to-edge full bleed solid deep navy texture, no inner squircle, no border, no artificial frame, clean luxury finish. | `d95f8a4752d44600b32bdf1202cd8918` | `56-apple-touch-icon/screen.html` | `56-apple-touch-icon/screen.png` | — (extra / not in inventory numbering) |
-| 57 | AnKanu - Vérification Téléphone (OTP) | `9d8deea75c154a04bf26e4eb8938cec7` | `57-otp-alt/screen.html` | `57-otp-alt/screen.png` | — (extra / not in inventory numbering) |
+| 56 | AnKanu - Vérification Téléphone (OTP) | `9d8deea75c154a04bf26e4eb8938cec7` | `56-otp-alt/screen.html` | `56-otp-alt/screen.png` | — (extra / not in inventory numbering) |
 
 ## v2 coverage gaps
 

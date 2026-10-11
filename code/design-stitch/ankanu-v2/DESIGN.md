@@ -39,4 +39,3 @@ Dating-app chrome. Hearts. Online-now. Story rings. GIF picker. Apple sign-in. T
 - Google Stitch project **AnKanu v2** `6717808880062298165`
 - Design system `assets/15271169988088235601`
 - This file is **tokens only**. Layout is each `screen.html` and `screen.png` under `code/design-stitch/ankanu-v2/`.
-

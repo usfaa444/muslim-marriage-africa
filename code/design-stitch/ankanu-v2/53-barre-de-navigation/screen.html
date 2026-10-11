@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnKanu - Barre de Navigation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'gold-soft': '#E6D5A8',
+            'cream': '#F7F1E3',
+            'hairline': '#E2D4B8'
+          },
+          fontFamily: {
+            display: ['Cinzel', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#F7F1E3] text-[#0B1D36] min-h-screen flex items-center justify-center p-6 antialiased font-sans">
+
+  <!-- Isolated Navigation Bar component exactly as requested -->
+  <nav class="inline-flex items-center bg-[#0B1D36] text-[#F7F1E3] rounded-full px-3 py-2 shadow-xl border border-[#C9A86C]/25" aria-label="Navigation principale">
+    
+    <!-- Découvrir -->
+    <a href="#decouvrir" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-[#F7F1E3]/80 hover:text-[#F7F1E3] transition-colors">
+      <svg class="w-4 h-4 text-[#C9A86C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"></polygon>
+      </svg>
+      <span>Découvrir</span>
+    </a>
+
+    <!-- Invitations -->
+    <a href="#invitations" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-[#F7F1E3]/80 hover:text-[#F7F1E3] transition-colors">
+      <svg class="w-4 h-4 text-[#C9A86C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+        <polyline points="3 7 12 13 21 7"></polyline>
+      </svg>
+      <span>Invitations</span>
+    </a>
+
+    <!-- Discussions -->
+    <a href="#discussions" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-[#F7F1E3]/80 hover:text-[#F7F1E3] transition-colors">
+      <svg class="w-4 h-4 text-[#C9A86C]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span>Discussions</span>
+    </a>
+
+    <!-- Profil (Actif / Sélectionné dans l'écran d'origine) -->
+    <a href="#profil" class="flex items-center gap-2 px-5 py-2 rounded-full text-xs sm:text-sm font-medium bg-[#C9A86C] text-[#0B1D36] shadow-sm transition-all" aria-current="page">
+      <svg class="w-4 h-4 text-[#0B1D36]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span class="font-semibold">Profil</span>
+    </a>
+
+  </nav>
+
+</body>
+</html>

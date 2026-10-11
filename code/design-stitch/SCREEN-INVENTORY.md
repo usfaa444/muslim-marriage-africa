@@ -2512,7 +2512,7 @@ Founder-approved AnKanu v2 HTML and PNG are on disk under `code/design-stitch/an
 
 Old numbered folders (`01-public-landing` … `66-ts-visit-signals`) and the old `MANIFEST.md` were removed on 2026-10-11. The Google Stitch v1 project was not deleted.
 
-Each v2 screen is `ankanu-v2/NN-slug/screen.html` and `screen.png` (57 / 57). Screens outside inventory numbering (PWA icons, manifest, duplicate OTP, pseudonym/DOB) were still downloaded. Inventory gaps and the skipped public landing are listed in MANIFEST **v2 coverage gaps** — do not invent them.
+Each v2 screen is `ankanu-v2/NN-slug/screen.html` and `screen.png` (56 / 56 after the 2026-10-11 founder edit). Screens outside inventory numbering (`53-barre-de-navigation`, `54-pseudonym-dob`, `55-pwa-manifest`, `56-otp-alt`) were still downloaded. PWA app icon and Apple Touch Icon were removed from the Stitch project; they are not on disk. Inventory gaps and the skipped public landing are listed in MANIFEST **v2 coverage gaps** — do not invent them.
 
 | Inventory screen | v2 folder | v2 Stitch name |
 |---|---|---|
@@ -2568,6 +2568,10 @@ Each v2 screen is `ankanu-v2/NN-slug/screen.html` and `screen.png` (57 / 57). Sc
 | Operator CIL / deletion tickets | `50-operator-cil-tickets` | AnKanu - File des Requêtes CIL & Effacement (Staff) |
 | Operator Board / Académie publish | `51-operator-board-academie` | AnKanu - Académie & Publications Éthiques (Staff) |
 | T&S visit signals | `52-ts-visit-signals` | AnKanu - Signaux de visite T&S & Modération (Staff) |
+| — (extra / not in inventory numbering) | `53-barre-de-navigation` | AnKanu - Barre de navigation |
+| — (extra / not in inventory numbering) | `54-pseudonym-dob` | AnKanu - Pseudonyme & Date de naissance |
+| — (extra / not in inventory numbering) | `55-pwa-manifest` | manifest.json (AnKanu PWA) |
+| — (extra / not in inventory numbering) | `56-otp-alt` | AnKanu - Vérification Téléphone (OTP) |
 | Public landing | — | **v2 coverage gap** (skipped on founder order) |
 | Legal hub | — | **v2 coverage gap** |
 | Public pricing | — | **v2 coverage gap** |
