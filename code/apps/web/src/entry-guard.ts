@@ -148,6 +148,10 @@ export async function entryRedirect(
   if (value) {
     const loaded = await load(header ?? '')
     if (loaded === 'error') {
+      const normalized = pathnameOf(path)
+      if (normalized === '/auth' || normalized === '/password-reset') {
+        return null
+      }
       return Response.redirect(new URL('/auth', request.url), 303)
     }
     step = loaded

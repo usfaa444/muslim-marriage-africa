@@ -11,11 +11,14 @@ import {
   emailHtml,
   idHtml,
   identityHtml,
+  onboardingHtml,
   otpHtml,
   phoneHtml,
+  photoHtml,
   pinHtml,
   pseudonymHtml,
   resetHtml,
+  settingsHtml,
   splashHtml,
   statusHtml,
 } from './v2-pages.js'
@@ -36,6 +39,8 @@ describe('v2 signup and sign-in screens', () => {
     expect(page).toContain('AnKanu')
     expect(page).toContain('Continuer')
     expect(page).toContain('href="/signup/identity"')
+    expect(page).toContain('<rect ')
+    expect(page).toContain('stroke-dasharray')
     expect(page).toContain('ankanu-responsive')
     expect(page).not.toContain('accounts.google.com')
     expect(broken).toContain('accounts.google.com')
@@ -56,6 +61,8 @@ describe('v2 signup and sign-in screens', () => {
     expect(page).not.toContain('id="signup-pseudonym"')
     expect(page).not.toContain('alert(')
     expect(page).not.toContain('confirm(')
+    expect(page).toContain('grecaptcha.reset')
+    expect(page).toContain('finally')
     expect(page).toContain('ankanu.signup.v2')
     expect(page).toContain("location.assign('/auth')")
   })
@@ -91,6 +98,8 @@ describe('v2 signup and sign-in screens', () => {
     expect(email).toContain("fetch('/v1/accounts/email-verifications'")
     expect(email).toContain('/v1/accounts/email-verifications/consume')
     expect(email).not.toContain("fetch('/v1/accounts/email'")
+    expect(email).not.toContain('editEmailBtn')
+    expect(email).not.toContain('editEmailForm')
     const phone = phoneHtml(stitch('06-otp'))
     expect(phone).not.toContain('70 24 58 19')
     expect(phone).toContain("action: 'send'")
@@ -118,6 +127,16 @@ describe('v2 signup and sign-in screens', () => {
     expect(pin).toContain("fetch('/v1/pin/unlock'")
     expect(pin).toContain('digits.length === 4')
     expect(pin).toContain('pin-dot')
+    expect(pin).toContain("next.charAt(0) !== '/'")
+    expect(pin).toContain("next.charAt(1) === '/'")
+    const settings = settingsHtml(stitch('27-settings'))
+    expect(settings).toContain('confirm: true')
+    const onboarding = onboardingHtml(stitch('08-onboarding'))
+    const photo = photoHtml(stitch('09-photo-rules'))
+    expect(onboarding).toContain('toggleAudio')
+    expect(photo).toContain('toggleAudio')
+    expect(onboarding).not.toContain('.mp3')
+    expect(photo).not.toContain('.mp3')
     expect(pin).not.toContain('width: 1280px')
     expect(statusHtml(stitch('28-delete-export-status'))).not.toContain('width: 1280px')
   })
@@ -165,6 +184,28 @@ describe('server entry guard', () => {
     )
     expect(held?.status).toBe(303)
     expect(held?.headers.get('location')).toBe('http://localhost/id-liveness')
+  })
+
+  it('keeps a gate error off auth and password reset', async () => {
+    const auth = await entryRedirect(
+      new Request('http://localhost/auth', { headers: { cookie: 'ankanu_session=real-session' } }),
+      '/auth',
+      async () => 'error',
+    )
+    expect(auth).toBeNull()
+    const reset = await entryRedirect(
+      new Request('http://localhost/password-reset', { headers: { cookie: 'ankanu_session=real-session' } }),
+      '/password-reset',
+      async () => 'error',
+    )
+    expect(reset).toBeNull()
+    const onward = await entryRedirect(
+      new Request('http://localhost/onboarding', { headers: { cookie: 'ankanu_session=real-session' } }),
+      '/onboarding',
+      async () => 'error',
+    )
+    expect(onward?.status).toBe(303)
+    expect(onward?.headers.get('location')).toBe('http://localhost/auth')
   })
 })
 

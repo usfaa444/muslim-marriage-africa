@@ -108,7 +108,7 @@ Unit tests accept captcha token `test-ok` only. Compose uses the public Google t
 
 ## My results
 
-- `v2-flow.test.ts`: 12 passed.
+- `v2-flow.test.ts`: 13 passed after the ANK-84 fixes. `native-dialog.test.ts` passed with it.
 - `v2-responsive.test.ts`: 1 passed (16 screens × 6 widths). Screenshots written under `code/docs/qa-handoffs/ank-83-widths/`.
 - `landing-auth-links.test.ts`, `native-dialog.test.ts`, `self-managed-environment.test.ts`, `account-precheck.test.ts`, `create-account.test.ts`, `create-session.test.ts`: 6 files, 38 passed.
 - `drizzle-kit check` was clean on the migration commit `5da8f94`.
@@ -142,9 +142,21 @@ Unit tests accept captcha token `test-ok` only. Compose uses the public Google t
 - `27-settings/screen.html`
 - `28-delete-export-status/screen.html`
 
+## QA fail ANK-84
+
+Fixed on this ticket, still not pushed:
+
+- Step 0 is redrawn from `01-splash/screen.png`: faint circle, square frame, dotted ring, teardrop, center dot. `01-splash/screen.html` is still not served.
+- PIN `next` is used only when it starts with `/` and the second character is not `/` or `\`. Anything else goes to `/onboarding`.
+- Settings delete posts `{ "confirm": true }`.
+- A failed create or sign-in calls `grecaptcha.reset` for that panel and re-enables the button in `finally`.
+- Onboarding and photo rules include `audioPromptScript` with no audio files.
+- A gate error does not redirect `/auth` or `/password-reset`.
+- The change-email button and form are removed from the served email page. There is still no change-email endpoint.
+
 ## Known gaps
 
-- Step 4 can show another email. There is no change-email endpoint, so that control does not claim success.
+- There is no change-email endpoint. The control is hidden. Do not add a route.
 - The v2 helper says 8 characters. The API accepts 12–128. The button enables at length 12. The helper text is unchanged.
 - The PIN art shows 6 slots. `PIN_PATTERN` is 4 digits, and the keypad submits at 4.
 - Password-reset v2 is the request form only. There is no v2 screen for `POST /v1/password-resets/consume`.

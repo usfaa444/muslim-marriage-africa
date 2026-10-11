@@ -192,6 +192,10 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
       if (!window.grecaptcha || widgets[name] === undefined) return ''
       return window.grecaptcha.getResponse(widgets[name]) || ''
     }
+    function resetCaptcha(name) {
+      if (!window.grecaptcha || widgets[name] === undefined) return
+      window.grecaptcha.reset(widgets[name])
+    }
     function paintSignup() {
       var button = document.getElementById('signup-submit')
       var email = document.getElementById('signup-email')
@@ -254,36 +258,45 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
         var button = document.getElementById('signup-submit')
         if (!email || !password || !button || button.disabled) return
         button.disabled = true
-        var response = await fetch('/v1/accounts', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            email: email.value.trim(),
-            password: password.value,
-            pseudonym: draft.pseudonym,
-            gender: draft.gender,
-            pledge_accepted: true,
-            civil_given_name: draft.civil_given_name,
-            civil_family_name: draft.civil_family_name,
-            recaptcha_token: token('signup'),
-            coc_version: ${JSON.stringify(COC_VERSION_ON_SCREEN)},
-            dob: draft.dob
+        var moved = false
+        try {
+          var response = await fetch('/v1/accounts', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              email: email.value.trim(),
+              password: password.value,
+              pseudonym: draft.pseudonym,
+              gender: draft.gender,
+              pledge_accepted: true,
+              civil_given_name: draft.civil_given_name,
+              civil_family_name: draft.civil_family_name,
+              recaptcha_token: token('signup'),
+              coc_version: ${JSON.stringify(COC_VERSION_ON_SCREEN)},
+              dob: draft.dob
+            })
           })
-        })
-        if (response.status === 201) {
-          sessionStorage.setItem(EMAIL_KEY, email.value.trim())
-          sessionStorage.removeItem(DRAFT)
-          sessionStorage.removeItem('ankanu.signup')
-          window.location.assign('/email-verification')
-          return
-        }
-        button.disabled = false
-        var payload = await readJson(response)
-        var emailError = document.getElementById('email-error')
-        if (emailError) {
-          emailError.classList.remove('hidden')
-          emailError.lastChild && (emailError.lastChild.textContent = ' ' + (errorMessage(payload) || 'Création refusée.'))
+          if (response.status === 201) {
+            moved = true
+            sessionStorage.setItem(EMAIL_KEY, email.value.trim())
+            sessionStorage.removeItem(DRAFT)
+            sessionStorage.removeItem('ankanu.signup')
+            window.location.assign('/email-verification')
+            return
+          }
+          resetCaptcha('signup')
+          var payload = await readJson(response)
+          var emailError = document.getElementById('email-error')
+          if (emailError) {
+            emailError.classList.remove('hidden')
+            emailError.lastChild && (emailError.lastChild.textContent = ' ' + (errorMessage(payload) || 'Création refusée.'))
+          }
+        } finally {
+          if (!moved) {
+            button.disabled = false
+            paintSignup()
+          }
         }
       })
     }
@@ -297,22 +310,31 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
         var button = document.getElementById('login-submit')
         if (!email || !password || !button || button.disabled) return
         button.disabled = true
-        var response = await fetch('/v1/sessions', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            identifier: email.value.trim(),
-            password: password.value,
-            remember_me: Boolean(remember && remember.checked),
-            recaptcha_token: token('login')
+        var moved = false
+        try {
+          var response = await fetch('/v1/sessions', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({
+              identifier: email.value.trim(),
+              password: password.value,
+              remember_me: Boolean(remember && remember.checked),
+              recaptcha_token: token('login')
+            })
           })
-        })
-        if (response.status === 201) {
-          await goToGate()
-          return
+          if (response.status === 201) {
+            moved = true
+            await goToGate()
+            return
+          }
+          resetCaptcha('login')
+        } finally {
+          if (!moved) {
+            button.disabled = false
+            paintLogin()
+          }
         }
-        button.disabled = false
       })
     }
   `
@@ -324,19 +346,6 @@ export function emailScript(): string {
     var stored = ''
     try { stored = sessionStorage.getItem(EMAIL_KEY) || '' } catch (error) { stored = '' }
     if (shown && stored) shown.textContent = stored
-    var editButton = document.getElementById('editEmailBtn')
-    var editForm = document.getElementById('editEmailForm')
-    if (editButton && editForm) {
-      editButton.addEventListener('click', function () {
-        editForm.classList.toggle('hidden')
-      })
-    }
-    var save = editForm && editForm.querySelector('button')
-    if (save) {
-      save.addEventListener('click', function (event) {
-        event.preventDefault()
-      })
-    }
     var params = new URLSearchParams(window.location.search)
     var token = params.get('token')
     if (token) {
@@ -603,7 +612,9 @@ export function pinScript(): string {
       }
       if (response.ok) {
         var params = new URLSearchParams(window.location.search)
-        window.location.assign(params.get('next') || '/onboarding')
+        var next = params.get('next') || ''
+        if (next.charAt(0) !== '/' || next.charAt(1) === '/' || next.charAt(1) === '\\\\') next = '/onboarding'
+        window.location.assign(next)
       } else {
         digits = ''
         paint()
@@ -638,7 +649,12 @@ export function settingsScript(): string {
       }
       if (label.indexOf('Supprimer') !== -1) {
         button.addEventListener('click', async function () {
-          var response = await fetch('/v1/me/delete', { method: 'POST', credentials: 'same-origin' })
+          var response = await fetch('/v1/me/delete', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ confirm: true })
+          })
           var payload = await response.json().catch(function () { return null })
           var url = payload && payload.ticket && payload.ticket.status_url
           if (response.ok && url) window.location.assign(url)
