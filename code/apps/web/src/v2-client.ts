@@ -48,11 +48,29 @@ const HELPERS = `
     identity: '/id-liveness',
     account: '/onboarding'
   }
+  function showLoginError(message) {
+    var node = document.getElementById('login-error')
+    if (!node) return
+    node.classList.remove('hidden')
+    var text = node.lastChild
+    if (!text || text.nodeType === 1) {
+      text = document.createTextNode('')
+      node.appendChild(text)
+    }
+    text.textContent = ' ' + message
+  }
   async function goToGate() {
-    var response = await fetch('/v1/accounts/gate', { credentials: 'same-origin' })
-    var payload = await readJson(response)
-    var step = payload && payload.step
-    window.location.assign(STEP[step] || '/onboarding')
+    try {
+      var response = await fetch('/v1/accounts/gate', { credentials: 'same-origin' })
+      var payload = await readJson(response)
+      var step = payload && payload.step
+      var path = STEP[step]
+      if (response.ok && typeof path === 'string') {
+        window.location.assign(path)
+        return true
+      }
+    } catch (error) {}
+    return false
   }
 `
 
@@ -324,14 +342,21 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
             })
           })
           if (response.status === 201) {
-            await goToGate()
-            moved = true
+            if (await goToGate()) {
+              moved = true
+              return
+            }
+            showLoginError("La session n'a pas été conservée.")
             return
           }
+          var payload = await readJson(response)
+          showLoginError(errorMessage(payload) || 'Connexion refusée.')
+        } catch (error) {
+          showLoginError('La connexion a échoué.')
         } finally {
           if (!moved) {
             resetCaptcha('login')
-            button.disabled = false
+            password.value = ''
             paintLogin()
           }
         }

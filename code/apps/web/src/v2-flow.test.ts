@@ -78,6 +78,10 @@ describe('v2 signup and sign-in screens', () => {
     expect(page).toContain("location.assign('/signup')")
     expect(page).toContain('class="hidden space-y-6" id="panel-signup"')
     expect(page).toContain('class="space-y-6" id="panel-login"')
+    expect(page).toContain('id="login-form" method="post"')
+    expect(page).toContain('id="login-error"')
+    expect(page).toContain('class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="login-error"')
+    expect(page).not.toContain("STEP[step] || '/onboarding'")
     expect(page).not.toContain('Continuer avec Google')
   })
 

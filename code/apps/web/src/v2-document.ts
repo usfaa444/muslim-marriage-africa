@@ -100,3 +100,21 @@ export function showAuthPanel(html: string, panel: 'signup' | 'login'): string {
 export function pointAuthLinks(html: string): string {
   return html.replace('href="#">Mot de passe oublié ?', 'href="/password-reset">Mot de passe oublié ?')
 }
+
+const LOGIN_ERROR = `<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="login-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span> </p>`
+
+/** Same pattern as `#email-error`, hidden until a real sign-in failure. */
+export function insertLoginError(html: string): string {
+  const marker = '<!-- Se souvenir de moi -->'
+  if (!html.includes(marker) || html.includes('id="login-error"')) {
+    return html
+  }
+  return html.replace(marker, `${LOGIN_ERROR}${marker}`)
+}
+
+/** A missing script must not GET the password into the query string. */
+export function guardAuthPost(html: string): string {
+  return html
+    .replace('id="login-form"', 'id="login-form" method="post"')
+    .replace('id="signup-form"', 'id="signup-form" method="post"')
+}

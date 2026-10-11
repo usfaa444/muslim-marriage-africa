@@ -9,3 +9,7 @@ The ankanu `api` service reads `/var/lib/ankanu/api.env` from `env_file` in `cod
 The api image sets `NODE_ENV=production` on every boot, so that variable cannot by itself separate this host from a production boot. Log mail is allowed only when `RECAPTCHA_ALLOW_TEST_KEYS=1`, the same opt-in as the reCAPTCHA test keys. Any other boot with a `log:` URL exits at startup.
 
 Bucket credentials stay in the compose process environment (`S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`). They are not in the host env file.
+
+`ANKANU_COOKIE_SECURE` defaults to `true` when unset or empty. The only other accepted value is `false`. Any other string refuses to start. `false` omits `Secure` on every `ankanu_session` set and clear (`HttpOnly`, `SameSite=Lax`, `Path=/`, no `Domain`). The ankanu staging compose sets `false` on the api service because staging is plain http. Production stays `true`.
+
+`ANKANU_PUBLIC_ORIGIN` is the configured public origin. When `ANKANU_COOKIE_SECURE=false` and that origin is `https` (or the value starts with `https:`), the api refuses to start. An unset origin is not https, so http staging does not set it. A production https origin must be set so a `false` cookie flag cannot boot.

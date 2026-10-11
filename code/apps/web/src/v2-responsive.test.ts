@@ -57,6 +57,18 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '02-pseudonym', html: pseudonymHtml(stitch('54-pseudonym-dob')) },
     { name: '03-account', html: authHtml(auth, 'signup', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI') },
     { name: '04-sign-in', html: authHtml(auth, 'login', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI') },
+    {
+      name: '04b-sign-in-error',
+      html: authHtml(auth, 'login', '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI')
+        .replace(
+          'class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="login-error"',
+          'class="text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="login-error"',
+        )
+        .replace(
+          'id="login-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span> ',
+          'id="login-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span> Identifiant ou mot de passe incorrect.',
+        ),
+    },
     { name: '05-email', html: emailHtml(stitch('04-email-verification')) },
     { name: '06-phone', html: phoneHtml(stitch('06-otp')) },
     { name: '07-otp', html: otpHtml(stitch('56-otp-alt')) },
@@ -236,6 +248,34 @@ describe('v2 screens fit the required widths', () => {
           )
           const value = (measured.result as { value?: { width: number; scrollWidth: number; bad: string[] } } | undefined)
             ?.value
+          if (page.name === '04b-sign-in-error') {
+            const shown = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `(() => {
+                  const el = document.getElementById('login-error')
+                  if (!el) return { ok: false, reason: 'missing' }
+                  const style = getComputedStyle(el)
+                  const rect = el.getBoundingClientRect()
+                  const text = el.textContent || ''
+                  return {
+                    ok: style.display !== 'none' && style.visibility !== 'hidden' && rect.height > 1 && text.includes('Identifiant ou mot de passe incorrect.'),
+                    display: style.display,
+                    height: Math.round(rect.height),
+                  }
+                })()`,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const errorLine = (shown.result as { value?: { ok?: boolean; display?: string; height?: number; reason?: string } } | undefined)
+              ?.value
+            if (!errorLine?.ok) {
+              failures.push(
+                `${page.name}@${width} error line not visible display=${errorLine?.display ?? '?'} height=${errorLine?.height ?? '?'} ${errorLine?.reason ?? ''}`,
+              )
+            }
+          }
           if (!value || value.scrollWidth > value.width || value.bad.length > 0) {
             failures.push(
               `${page.name}@${width} scroll ${value?.scrollWidth ?? '?'} > ${value?.width ?? width} ${value?.bad.join(' | ') ?? ''}`,

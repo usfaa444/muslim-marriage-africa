@@ -18,7 +18,9 @@ import {
 } from './v2-client'
 import {
   dropSignupPseudonym,
+  guardAuthPost,
   hideGoogleAuth,
+  insertLoginError,
   insertSignupRecaptcha,
   pointAuthLinks,
   prepareV2,
@@ -85,7 +87,9 @@ export function pseudonymHtml(stitch: string): string {
 }
 
 export function authHtml(stitch: string, panel: 'signup' | 'login', siteKey: string): string {
-  let html = pointAuthLinks(replaceLoginCaptcha(insertSignupRecaptcha(dropSignupPseudonym(hideGoogleAuth(stitch)))))
+  let html = pointAuthLinks(
+    guardAuthPost(insertLoginError(replaceLoginCaptcha(insertSignupRecaptcha(dropSignupPseudonym(hideGoogleAuth(stitch)))))),
+  )
   html = showAuthPanel(html, panel)
   return mount(html, accountScript(siteKey, panel), recaptchaTag(siteKey))
 }

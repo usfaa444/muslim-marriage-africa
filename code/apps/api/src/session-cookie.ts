@@ -3,13 +3,63 @@ export const SESSION_COOKIE = 'ankanu_session'
 export const TWELVE_HOURS_MS = 12 * 60 * 60 * 1000
 export const FOURTEEN_DAYS_MS = 14 * 24 * 60 * 60 * 1000
 
-/** Clears the browser session. Empty value, same attributes, Max-Age=0. */
-export function clearSessionCookieHeader(): string {
-  return `${SESSION_COOKIE}=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
+const COOKIE_SECURE = 'ANKANU_COOKIE_SECURE'
+const PUBLIC_ORIGIN = 'ANKANU_PUBLIC_ORIGIN'
+
+/** Unset or `true` stays Secure. Only the exact string `false` turns it off. */
+export function cookieSecure(env: NodeJS.ProcessEnv = process.env): boolean {
+  const raw = env[COOKIE_SECURE]
+  if (raw === undefined || raw === '') {
+    return true
+  }
+  if (raw === 'true') {
+    return true
+  }
+  if (raw === 'false') {
+    return false
+  }
+  throw new Error('ANKANU_COOKIE_SECURE must be true or false')
 }
 
-export function sessionCookieHeader(sessionId: string, maxAgeSeconds: number | null): string {
-  const parts = [`${SESSION_COOKIE}=${sessionId}`, 'Path=/', 'HttpOnly', 'Secure', 'SameSite=Lax']
+function originIsHttps(origin: string): boolean {
+  const trimmed = origin.trim()
+  try {
+    return new URL(trimmed).protocol === 'https:'
+  } catch {
+    return trimmed.toLowerCase().startsWith('https:')
+  }
+}
+
+/** Refuse an insecure cookie when the configured public origin is https. Unset is not https. */
+export function assertCookieSecureBoot(env: NodeJS.ProcessEnv = process.env): void {
+  if (cookieSecure(env)) {
+    return
+  }
+  const origin = env[PUBLIC_ORIGIN]
+  if (origin === undefined || origin === '') {
+    return
+  }
+  if (originIsHttps(origin)) {
+    throw new Error('ANKANU_COOKIE_SECURE=false is refused when ANKANU_PUBLIC_ORIGIN is https')
+  }
+}
+
+/** Clears the browser session. Empty value, same attributes, Max-Age=0. */
+export function clearSessionCookieHeader(env: NodeJS.ProcessEnv = process.env): string {
+  const secure = cookieSecure(env) ? '; Secure' : ''
+  return `${SESSION_COOKIE}=; Path=/; HttpOnly${secure}; SameSite=Lax; Max-Age=0`
+}
+
+export function sessionCookieHeader(
+  sessionId: string,
+  maxAgeSeconds: number | null,
+  env: NodeJS.ProcessEnv = process.env,
+): string {
+  const parts = [`${SESSION_COOKIE}=${sessionId}`, 'Path=/', 'HttpOnly']
+  if (cookieSecure(env)) {
+    parts.push('Secure')
+  }
+  parts.push('SameSite=Lax')
   if (maxAgeSeconds !== null) {
     parts.push(`Max-Age=${maxAgeSeconds}`)
   }
