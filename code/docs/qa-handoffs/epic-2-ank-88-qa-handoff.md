@@ -2,9 +2,9 @@
 
 This replaces the earlier handoff. [ANK-89](/ANK/issues/ANK-89) is the only QA ticket. [ANK-90](/ANK/issues/ANK-90) is cancelled. Its withdrawn pass is void. Do not push that result. Do not open Epic 3. Do not call the board webhook.
 
-Local code commit, not on GitHub yet: `8286f9bd614ca4d221bff9d0a1b10fb6706cba45`. The handoff commit follows it. Push waits until ANK-89 passes.
+Local code commit, not on GitHub yet: `8286f9bd614ca4d221bff9d0a1b10fb6706cba45`. Handoff commit `02f5ac1223423b1cfab60e3815fb9063526f058d`. The edge note in this file is a later commit. Push waits until ANK-89 passes.
 
-`https://staging.ankanu.com` is not serving yet. Caddy validated the site block and then refused `caddy reload` because `admin off` leaves port 2019 closed. The live file was restored from the backup. Do not treat a TLS failure on that host as an app failure, and do not pass the https cases until `GET /` and `GET /v1/health` return 200 with a valid certificate. The raw IP cases below can be run now.
+`https://staging.ankanu.com` is the primary host. `GET /` and `GET /v1/health` return 200. The certificate is Let's Encrypt, `CN=staging.ankanu.com`, notAfter 9 Jan 2027. `http://72.61.0.79:4012` is only the non-Secure fallback. Do not use `127.0.0.1` for the cookie check.
 
 ## What was built
 
@@ -43,7 +43,7 @@ Do not run `apps/api/src/compose.test.ts` against project `ankanu`. Its teardown
 
 Staging web, api, and worker were recreated with `code/compose.yaml` and `/root/ankanu-epic2/compose.ports.yml`. Port `4012` is still published. Postgres, redis, and the bucket were left up. Other compose projects were not restarted.
 
-Primary host, once the edge is loaded: `https://staging.ankanu.com`. Fallback: `http://72.61.0.79:4012`. Do not use `127.0.0.1` for the cookie check. Loopback is exempt from the browser `Secure` rule.
+Primary host: `https://staging.ankanu.com`. Fallback: `http://72.61.0.79:4012`. Do not use `127.0.0.1` for the cookie check. Loopback is exempt from the browser `Secure` rule.
 
 ## Test cases
 
@@ -81,14 +81,16 @@ Do not reuse a member password from a real person. This check created one dispos
 - Anonymous `GET /onboarding` on that IP returned 303 to `http://72.61.0.79:4012/auth`. After sign-in, `GET /onboarding` and `GET /auth` both returned 303 to `http://72.61.0.79:4012/email-verification`.
 - `X-Forwarded-Host: evil.example` redirected to `https://staging.ankanu.com/auth`.
 - After the account was verified, the log paths were `https://staging.ankanu.com/email-verification` and `https://staging.ankanu.com/password-reset`. The same reset with `Origin: https://evil.example` returned 403 and added no log line.
-- Inside `sotigi-staging-edge-1`, `GET http://172.24.0.1:4012/` and `/v1/health` returned 200. Caddy validate passed. Caddy reload failed on `localhost:2019` because admin is off. The Caddyfile was restored. `https://sarati.net`, `https://choupi.sarati.net`, and `https://paperclip.sotigi.com` stayed 200. `https://staging.sotigi.com` stayed 502. `https://sotigi.com` and `https://staging.ankanu.com` stayed a TLS alert.
+- Headless Chrome on `https://staging.ankanu.com/auth` (not loopback): sign-in landed on `/email-verification`. `ankanu_session` was host `staging.ankanu.com`, `Path=/`, `Secure`, `HttpOnly`, `SameSite=Lax`. Reload stayed on `/email-verification` and the cookie was still present. `POST /v1/accounts` on that host set the same flags, with no `Domain`.
+- A signed-in verification and, after consume, a password reset wrote `https://staging.ankanu.com/email-verification` and `https://staging.ankanu.com/password-reset`. The same reset with `Origin: https://evil.example` returned 403.
+- `https://sarati.net`, `https://choupi.sarati.net`, and `https://paperclip.sotigi.com` stayed 200 after the restart that loaded the site. `https://staging.sotigi.com` stayed 502. The edge note is `code/docs/staging-edge.md`.
 - The auth error markup was not changed. The earlier six-width pass of `04b-sign-in-error` still applies.
 
 ## Three validation passes
 
 1. Origin, allow list, cookie scheme, and link host. Unit tests passed, and the live IP returned 403 for a foreign origin with links on `https://staging.ankanu.com`.
 2. Sign-in routing and redirects. The IP session stayed on `/email-verification`. A spoofed host did not leave the public origin.
-3. Typecheck, health, and the existing auth error line. `tsc` passed. The error line was not restyled. The https browser cookie and the six-width shots on `https://staging.ankanu.com` are not done, because that host is not loaded.
+3. Typecheck, health, and the https browser cookie. `tsc` passed. Headless Chrome on `https://staging.ankanu.com` kept a Secure host-only session across reload. The auth error line was not restyled; the earlier six-width pass still applies. QA still takes the six widths on this host.
 
 ## Solution design and Stitch
 
@@ -98,6 +100,6 @@ Stitch for the error line is unchanged: `code/design-stitch/ankanu-v2/02-auth/sc
 
 ## Known gaps
 
-- `https://staging.ankanu.com` is not in the running Caddy config. The https cookie, the https redirect, and the certificate check are blocked on a founder decision to restart `sotigi-staging-edge-1` once. The procedure forbids that restart while `admin off` makes `caddy reload` impossible.
 - The running-container assertion in `compose.test.ts` was not executed.
-- Image proof of the error line remains the earlier 360 and 1440 shots. This change did not touch that markup.
+- Image proof of the error line remains the earlier 360 and 1440 shots. This change did not touch that markup. QA still checks the six widths on `https://staging.ankanu.com`.
+- `paperclip-https` rebuilds the Caddyfile from `site.caddy.template`. The staging block is in that template. A later edit of only the live file will be removed on the next container start.

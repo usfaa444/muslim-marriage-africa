@@ -20,26 +20,20 @@ The upstream for this app is `http://172.24.0.1:4012`. `172.24.0.1` is the gatew
 
 ## Site block
 
-The block to append, and nothing else, is:
-
 ```
 staging.ankanu.com {
 	reverse_proxy 172.24.0.1:4012
 }
 ```
 
-Backup taken before the append: `/var/lib/docker/volumes/sotigi-staging_edge_state/_data/Caddyfile.bak-20261011-204734`.
+`admin off` means `caddy reload` cannot reach port 2019. A file change is loaded by `docker restart sotigi-staging-edge-1` only. Do not recreate the container, and do not change other blocks, global options, ports, or the firewall.
 
-`docker exec sotigi-staging-edge-1 caddy validate --config /data/Caddyfile --adapter caddyfile` returned `Valid configuration`.
+`paperclip-https.service` runs `/root/paperclip-https/apply.sh` on every start of this container. That script rebuilds `/data/Caddyfile` from the image Caddyfile plus `/root/paperclip-https/site.caddy.template`, then restarts the container if the live file differs. An append that exists only on the live file is removed by the next apply. The staging block is in that template as `reverse_proxy __GATEWAY__:4012`, which renders to `172.24.0.1:4012`.
 
-`docker exec sotigi-staging-edge-1 caddy reload --config /data/Caddyfile --adapter caddyfile` failed: `Post "http://localhost:2019/load": dial tcp [::1]:2019: connect: connection refused`. Nothing is listening on port 2019 because the file sets `admin off`. The backup was copied back over the live file. The running process was not restarted.
+Backups:
 
-Before and after that restore, with `curl -k` and no redirect follow: `https://sarati.net` 200, `https://choupi.sarati.net` 200, `https://paperclip.sotigi.com` 200, `https://staging.sotigi.com` 502, `https://sotigi.com` TLS alert (that name is not the edge hostname). `https://staging.ankanu.com` is the same TLS alert because the site is not loaded.
+- `/var/lib/docker/volumes/sotigi-staging_edge_state/_data/Caddyfile.bak-20261011-204734` — before the first append. Reload failed, so this copy was restored and the container was not restarted.
+- `/var/lib/docker/volumes/sotigi-staging_edge_state/_data/Caddyfile.bak-20261011-211534` — before the approved restart. The first restart loaded the site, then `apply.sh` wrote the old desired file and restarted again, which dropped the site.
+- `/root/paperclip-https/site.caddy.template.bak-20261011-211810` — template before the staging block.
 
-Reload command, once the admin endpoint can accept it:
-
-```bash
-docker exec sotigi-staging-edge-1 caddy reload --config /data/Caddyfile --adapter caddyfile
-```
-
-Do not restart, recreate, or stop `sotigi-staging-edge-1` unless the founder allows that one container. Do not edit any other block, the global options, the published ports, or the firewall.
+After the template and the live file matched, one restart at `2026-10-11T21:18:21Z` loaded the site. The follow-up apply saw the same file and did not restart again. Let's Encrypt issued `CN=staging.ankanu.com` (issuer `YE2`, notAfter `Jan 9 2027`). `https://staging.ankanu.com/` and `/v1/health` returned 200. `https://sarati.net`, `https://choupi.sarati.net`, and `https://paperclip.sotigi.com` stayed 200. `https://staging.sotigi.com` stayed 502. `https://sotigi.com` is not this edge's hostname.
