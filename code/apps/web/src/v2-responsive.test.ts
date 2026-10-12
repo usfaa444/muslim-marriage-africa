@@ -97,6 +97,18 @@ function screens(): Array<{ name: string; html: string }> {
       ),
     },
     { name: '08-id', html: idHtml(stitch('07-id-liveness')) },
+    {
+      name: '08b-id-error',
+      html: idHtml(stitch('07-id-liveness'))
+        .replace(
+          'class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-[#9B2C2C] flex items-start gap-1 font-medium" id="id-error"',
+          'class="w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-[#9B2C2C] flex items-start gap-1 font-medium" id="id-error"',
+        )
+        .replace(
+          'id="id-error-text"></span>',
+          'id="id-error-text">La pièce d\'identité et la photo de présence sont manquantes.</span>',
+        ),
+    },
     { name: '09-reset', html: resetHtml(stitch('05-password-reset')) },
     { name: '09b-reset-renew', html: resetHtml(stitch('05-password-reset'), 'renew') },
     { name: '09c-reset-invalid', html: resetHtml(stitch('05-password-reset'), 'invalid') },
@@ -198,6 +210,132 @@ function launch(binary: string, profile: string): Promise<{ proc: ChildProcessWi
     proc.stderr.on('data', take)
     proc.on('exit', (code) => reject(new Error(`chrome exited ${code ?? 0}: ${buf.slice(-400)}`)))
   })
+}
+
+const CREAM = 'rgb(247, 241, 227)'
+const NAVY = 'rgb(11, 29, 54)'
+const CREAM_90 = 'rgba(247, 241, 227, 0.9)'
+const CARD_90 = 'rgba(251, 248, 241, 0.9)'
+const BORDER = 'rgb(226, 212, 184)'
+const BORDER_90 = 'rgba(226, 212, 184, 0.9)'
+const MUTED_90 = 'rgba(122, 117, 105, 0.9)'
+
+type ColorExpect = {
+  control: string
+  controlBg: string
+  controlColor: string
+  input?: string
+  inputBg?: string
+  inputBorder?: string
+  inputOnParent?: boolean
+  pseudonym?: boolean
+}
+
+const COLOR_EXPECT: Record<string, ColorExpect> = {
+  '00-splash': { control: 'a.continue', controlBg: NAVY, controlColor: CREAM },
+  '01-identity': {
+    control: '#submitBtn',
+    controlBg: NAVY,
+    controlColor: CREAM,
+    input: '#first-name',
+    inputBg: CREAM_90,
+    inputBorder: BORDER,
+  },
+  '02-pseudonym': {
+    control: 'button[type="submit"]',
+    controlBg: NAVY,
+    controlColor: CREAM,
+    pseudonym: true,
+  },
+  '03-account': {
+    control: '#signup-submit',
+    controlBg: NAVY,
+    controlColor: CREAM,
+    input: '#signup-email',
+    inputBg: CREAM,
+    inputBorder: BORDER,
+  },
+  '04-sign-in': {
+    control: '#login-submit',
+    controlBg: NAVY,
+    controlColor: CREAM,
+    input: '#login-email',
+    inputBg: CREAM,
+    inputBorder: BORDER,
+  },
+  '05-email': { control: '#resendBtn', controlBg: NAVY, controlColor: CREAM },
+  '06-phone': {
+    control: '#send-code-btn',
+    controlBg: NAVY,
+    controlColor: CREAM,
+    input: '#phone-input',
+    inputBg: CREAM,
+    inputBorder: BORDER,
+    inputOnParent: true,
+  },
+  '07-otp': {
+    control: '#submit-btn',
+    controlBg: NAVY,
+    controlColor: CREAM,
+    input: 'input[aria-label="Chiffre 2"]',
+    inputBg: CREAM,
+    inputBorder: BORDER,
+  },
+  '08-id': { control: 'confirm', controlBg: NAVY, controlColor: CREAM },
+  '08b-id-error': { control: 'confirm', controlBg: NAVY, controlColor: CREAM },
+  '09-reset': {
+    control: 'button[type="submit"]',
+    controlBg: NAVY,
+    controlColor: CREAM,
+    input: '#email',
+    inputBg: CREAM,
+    inputBorder: BORDER,
+    inputOnParent: true,
+  },
+  '10-pin': { control: '#btn-submit', controlBg: NAVY, controlColor: CREAM },
+  '11-onboarding': { control: 'a[href="#consultation"]', controlBg: NAVY, controlColor: CREAM },
+}
+
+function colorExpression(spec: ColorExpect): string {
+  return `(() => {
+    const norm = (value) => (value || '').replace(/\\s+/g, '')
+    const pageBg = (el) => {
+      const bg = getComputedStyle(el).backgroundColor
+      const flat = norm(bg)
+      if (!flat || flat === 'transparent' || flat === 'rgba(0,0,0,0)') {
+        return getComputedStyle(document.documentElement).backgroundColor
+      }
+      return bg
+    }
+    const marker = ${JSON.stringify(spec.control)}
+    const control = marker === 'confirm'
+      ? Array.from(document.querySelectorAll('button')).find((el) => (el.textContent || '').indexOf('Confirmer et transmettre') !== -1)
+      : document.querySelector(marker)
+    const controlStyle = control ? getComputedStyle(control) : null
+    let input = ${spec.input ? `document.querySelector(${JSON.stringify(spec.input)})` : 'null'}
+    if (input && ${spec.inputOnParent ? 'true' : 'false'} && input.parentElement) input = input.parentElement
+    const inputStyle = input ? getComputedStyle(input) : null
+    const card = document.querySelector('[data-purpose="identification-container"] > div')
+    const field = document.querySelector('[data-purpose="field-pseudonym"] .form-input-custom')
+    const muted = document.querySelector('[data-purpose="field-pseudonym"] p')
+    const error = document.getElementById('id-error-text')
+    return {
+      pageBg: norm(pageBg(document.body)),
+      bodyColor: norm(getComputedStyle(document.body).color),
+      controlBg: controlStyle ? norm(controlStyle.backgroundColor) : '',
+      controlColor: controlStyle ? norm(controlStyle.color) : '',
+      inputBg: inputStyle ? norm(inputStyle.backgroundColor) : '',
+      inputBorder: inputStyle ? norm(inputStyle.borderTopColor) : '',
+      cardBg: card ? norm(getComputedStyle(card).backgroundColor) : '',
+      fieldBorder: field ? norm(getComputedStyle(field).borderTopColor) : '',
+      muted: muted ? norm(getComputedStyle(muted).color) : '',
+      errorColor: error ? norm(getComputedStyle(error).color) : '',
+    }
+  })()`
+}
+
+function sameColor(actual: string, expected: string): boolean {
+  return actual.replace(/\s+/g, '') === expected.replace(/\s+/g, '')
 }
 
 const FIT = `(() => {
@@ -368,7 +506,7 @@ describe('v2 screens fit the required widths', () => {
               )
             }
           }
-          if (['05-email', '05b-email-long', '05c-email-expired', '06-phone', '07-otp', '08-id'].includes(page.name)) {
+          if (['05-email', '05b-email-long', '05c-email-expired', '06-phone', '07-otp', '08-id', '08b-id-error'].includes(page.name)) {
             const link = await cdp.send(
               'Runtime.evaluate',
               {
@@ -395,6 +533,87 @@ describe('v2 screens fit the required widths', () => {
               failures.push(
                 `${page.name}@${width} switch-account ${shown?.text ?? shown?.reason ?? 'missing'} ${shown?.left ?? '?'}..${shown?.right ?? '?'}`,
               )
+            }
+          }
+          const colors = COLOR_EXPECT[page.name]
+          if (colors && width === 1440) {
+            const painted = await cdp.send(
+              'Runtime.evaluate',
+              { expression: colorExpression(colors), returnByValue: true },
+              sessionId,
+            )
+            const sample = (
+              painted.result as {
+                value?: {
+                  pageBg: string
+                  bodyColor: string
+                  controlBg: string
+                  controlColor: string
+                  inputBg: string
+                  inputBorder: string
+                  cardBg: string
+                  fieldBorder: string
+                  muted: string
+                  errorColor: string
+                }
+              }
+            )?.value
+            const problems: string[] = []
+            if (!sample) {
+              problems.push('no sample')
+            } else {
+              if (!sameColor(sample.pageBg, CREAM)) problems.push(`page ${sample.pageBg}`)
+              if (!sameColor(sample.bodyColor, NAVY)) problems.push(`text ${sample.bodyColor}`)
+              if (!sameColor(sample.controlBg, colors.controlBg)) problems.push(`button ${sample.controlBg}`)
+              if (!sameColor(sample.controlColor, colors.controlColor)) problems.push(`buttonText ${sample.controlColor}`)
+              if (colors.inputBg && !sameColor(sample.inputBg, colors.inputBg)) problems.push(`input ${sample.inputBg}`)
+              if (colors.inputBorder && !sameColor(sample.inputBorder, colors.inputBorder)) problems.push(`border ${sample.inputBorder}`)
+              if (colors.pseudonym) {
+                if (!sameColor(sample.cardBg, CARD_90)) problems.push(`card ${sample.cardBg}`)
+                if (!sameColor(sample.fieldBorder, BORDER_90)) problems.push(`field ${sample.fieldBorder}`)
+                if (!sameColor(sample.muted, MUTED_90)) problems.push(`muted ${sample.muted}`)
+              }
+              if (page.name === '08b-id-error' && !sameColor(sample.errorColor, 'rgb(155, 44, 44)')) {
+                problems.push(`error ${sample.errorColor}`)
+              }
+            }
+            if (problems.length > 0) {
+              failures.push(`${page.name}@${width} colors ${problems.join('; ')}`)
+            }
+          }
+          if ((page.name === '08-id' || page.name === '08b-id-error') && width === 1440) {
+            const row = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `(() => {
+                  const button = Array.from(document.querySelectorAll('button')).find((el) => (el.textContent || '').indexOf('Remplacer') !== -1)
+                  const rect = button ? button.getBoundingClientRect() : null
+                  const style = button ? getComputedStyle(button) : null
+                  const badge = document.querySelector('[data-id-badge]')
+                  const error = document.getElementById('id-error')
+                  const errorStyle = error ? getComputedStyle(error) : null
+                  const errorRect = error ? error.getBoundingClientRect() : null
+                  return {
+                    replace: !!(button && style && style.display !== 'none' && rect && rect.height > 1 && rect.left >= -1 && rect.right <= window.innerWidth + 1),
+                    badgeChip: !!(badge && !badge.querySelector('div') && getComputedStyle(badge).display === 'none'),
+                    errorHeight: errorRect ? Math.round(errorRect.height) : 0,
+                    errorDisplay: errorStyle ? errorStyle.display : '',
+                  }
+                })()`,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const idRow = (
+              row.result as {
+                value?: { replace?: boolean; badgeChip?: boolean; errorHeight?: number; errorDisplay?: string }
+              }
+            )?.value
+            if (!idRow?.replace || !idRow.badgeChip) {
+              failures.push(`${page.name}@${width} id row replace=${idRow?.replace ?? false} badge=${idRow?.badgeChip ?? false}`)
+            }
+            if (page.name === '08b-id-error' && (idRow?.errorDisplay === 'none' || (idRow?.errorHeight ?? 0) < 1)) {
+              failures.push(`${page.name}@${width} error line display=${idRow?.errorDisplay ?? '?'} height=${idRow?.errorHeight ?? 0}`)
             }
           }
           if (!value || value.scrollWidth > value.width || value.bad.length > 0) {

@@ -119,6 +119,7 @@ const OTP_SWITCH = switchAccountLink(
 const ID_SWITCH = switchAccountLink(
   'inline-block max-w-full text-center whitespace-normal text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors',
 )
+const ID_ERROR = `<p class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-[#9B2C2C] flex items-start gap-1 font-medium" id="id-error"><span class="material-symbols-outlined text-[14px] shrink-0" data-icon="error">error</span><span class="min-w-0 break-words" id="id-error-text"></span></p>`
 
 const EMAIL_CHANGE_FIT = `<style>
 #editEmailForm .flex { flex-wrap: wrap; }
@@ -191,6 +192,10 @@ export function otpHtml(stitch: string): string {
 
 export function idHtml(stitch: string): string {
   let html = stitch.replace('Document téléversé : CNIB_recto_verso.pdf', '')
+  html = html.replace(
+    '<div class="pt-2 flex flex-col gap-3">',
+    `<div class="pt-2 flex flex-col gap-3">\n${ID_ERROR}`,
+  )
   html = html.replace(
     'strictement réservées à la validation du compte.\n          </span>\n</div>',
     `strictement réservées à la validation du compte.\n          </span>\n</div>\n${ID_SWITCH}`,

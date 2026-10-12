@@ -18,8 +18,11 @@ main, section, form, header, footer { min-width: 0; max-width: 100%; }
 </style>`
 
 export function stripDemoScripts(html: string): string {
-  return html.replace(/<script\b([^>]*)>[\s\S]*?<\/script>/gi, (full, attrs: string) => {
+  return html.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi, (full, attrs: string, body: string) => {
     if (/\bsrc\s*=/i.test(attrs) || /\bid\s*=\s*["']tailwind-config["']/i.test(attrs)) {
+      return full
+    }
+    if (/^\s*tailwind\.config\s*=/.test(body)) {
       return full
     }
     return ''

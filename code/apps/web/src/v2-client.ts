@@ -631,10 +631,20 @@ export function idScript(): string {
       title.textContent = ''
       title.classList.add('hidden')
     }
+    function hideNode(node) {
+      if (!node) return
+      node.classList.add('hidden')
+      if (node.style) node.style.display = 'none'
+    }
+    function showNode(node) {
+      if (!node) return
+      node.classList.remove('hidden')
+      if (node.style) node.style.display = ''
+    }
     document.querySelectorAll('div').forEach(function (node) {
-      if ((node.textContent || '').indexOf('Document conforme') !== -1 && node.children.length < 4) {
-        node.classList.add('hidden')
+      if ((node.textContent || '').indexOf('Document conforme') !== -1 && !node.querySelector('div')) {
         node.setAttribute('data-id-badge', '1')
+        hideNode(node)
       }
     })
     var idFile = document.createElement('input')
@@ -642,82 +652,237 @@ export function idScript(): string {
     idFile.accept = 'image/jpeg,image/png'
     idFile.className = 'hidden'
     document.body.appendChild(idFile)
-    var idDone = false
-    var liveDone = false
-    function showId(name) {
-      idDone = true
-      if (title) {
-        title.textContent = name
-        title.classList.remove('hidden')
-      }
-      var badge = document.querySelector('[data-id-badge]')
-      if (badge) badge.classList.remove('hidden')
+    var chosenId = null
+    var idSent = false
+    var chosenLive = null
+    var liveSent = false
+    var busy = false
+    var capturing = false
+    function showName(name) {
+      if (!title) return
+      title.textContent = name
+      title.classList.remove('hidden')
     }
-    function maybeEnter() {
-      if (idDone && liveDone) window.location.assign('/onboarding')
+    function showBadge() {
+      showNode(document.querySelector('[data-id-badge]'))
+    }
+    function hideBadge() {
+      hideNode(document.querySelector('[data-id-badge]'))
+    }
+    function capturePassed(row) {
+      return !!(row && (row.status === 'pending' || row.status === 'granted'))
+    }
+    function showCaptureError(message) {
+      var node = document.getElementById('id-error')
+      var text = document.getElementById('id-error-text')
+      if (text) text.textContent = message
+      if (node) node.classList.remove('hidden')
+    }
+    function clearCaptureError() {
+      var node = document.getElementById('id-error')
+      var text = document.getElementById('id-error-text')
+      if (text) text.textContent = ''
+      if (node) node.classList.add('hidden')
+    }
+    function missingMessage(idOk, liveOk) {
+      if (!idOk && !liveOk) return "La pièce d'identité et la photo de présence sont manquantes."
+      if (!idOk) return "La pièce d'identité est manquante."
+      return "La photo de présence est manquante."
     }
     async function postImage(path, file) {
-      var bytes = await file.arrayBuffer()
-      var binary = ''
-      var view = new Uint8Array(bytes)
-      for (var i = 0; i < view.length; i += 1) binary += String.fromCharCode(view[i])
-      var response = await fetch(path, {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ image: btoa(binary) })
-      })
-      return response.status === 201
+      try {
+        var bytes = await file.arrayBuffer()
+        var binary = ''
+        var view = new Uint8Array(bytes)
+        for (var i = 0; i < view.length; i += 1) binary += String.fromCharCode(view[i])
+        var response = await fetch(path, {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ image: btoa(binary) })
+        })
+        var payload = await readJson(response)
+        if (response.status === 201) return { ok: true, message: '' }
+        return { ok: false, message: errorMessage(payload) || "L'envoi a échoué." }
+      } catch (error) {
+        return { ok: false, message: "La connexion a échoué." }
+      }
+    }
+    function missingStatus(status) {
+      return status === 'none' || !status
+    }
+    async function readCapture(path) {
+      var response = await fetch(path, { credentials: 'same-origin', cache: 'no-store' })
+      var payload = await readJson(response)
+      if (!response.ok) return { ok: false, passed: false, status: '', message: errorMessage(payload) || "La connexion a échoué." }
+      var status = payload && payload.status
+      return { ok: true, passed: capturePassed(payload), status: status || 'none', message: '' }
+    }
+    async function gatePath() {
+      var gate = await fetch('/v1/accounts/gate', { credentials: 'same-origin', cache: 'no-store' })
+      var gateBody = await readJson(gate)
+      var step = gateBody && gateBody.step
+      var path = STEP[step]
+      if (!gate.ok || typeof path !== 'string') {
+        return { ok: false, path: '', message: errorMessage(gateBody) || "La connexion a échoué." }
+      }
+      return { ok: true, path: path, message: '' }
     }
     document.querySelectorAll('button').forEach(function (button) {
       if ((button.textContent || '').indexOf('Remplacer') !== -1) {
-        button.addEventListener('click', function () { idFile.click() })
+        button.addEventListener('click', function () {
+          if (busy) return
+          idFile.click()
+        })
       }
     })
-    idFile.addEventListener('change', async function () {
+    idFile.addEventListener('change', function () {
+      if (busy) {
+        idFile.value = ''
+        return
+      }
       var file = idFile.files && idFile.files[0]
       if (!file) return
-      if (await postImage('/v1/verifications/id', file)) showId(file.name)
-      maybeEnter()
+      chosenId = file
+      idSent = false
+      showName(file.name)
+      hideBadge()
+      clearCaptureError()
     })
     var camera = document.getElementById('trigger-cam-btn')
     if (camera) {
       camera.addEventListener('click', async function () {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return
-        var stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
-        var video = document.createElement('video')
-        video.srcObject = stream
-        await video.play()
-        var canvas = document.createElement('canvas')
-        canvas.width = video.videoWidth || 640
-        canvas.height = video.videoHeight || 480
-        var context = canvas.getContext('2d')
-        if (context) context.drawImage(video, 0, 0)
-        stream.getTracks().forEach(function (track) { track.stop() })
-        var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/jpeg', 0.92) })
-        if (!blob) return
-        var file = new File([blob], 'liveness.jpg', { type: 'image/jpeg' })
-        if (await postImage('/v1/verifications/liveness', file)) liveDone = true
-        maybeEnter()
+        if (busy || capturing) return
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showCaptureError("La caméra est indisponible.")
+          return
+        }
+        capturing = true
+        var stream = null
+        var video = null
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+          video = document.createElement('video')
+          video.className = 'hidden'
+          video.muted = true
+          video.playsInline = true
+          video.setAttribute('playsinline', '')
+          video.srcObject = stream
+          document.body.appendChild(video)
+          await video.play()
+          var canvas = document.createElement('canvas')
+          canvas.width = video.videoWidth || 640
+          canvas.height = video.videoHeight || 480
+          var context = canvas.getContext('2d')
+          if (context) context.drawImage(video, 0, 0)
+          var blob = await new Promise(function (resolve) { canvas.toBlob(resolve, 'image/jpeg', 0.92) })
+          if (!blob) {
+            showCaptureError("La capture a échoué.")
+            return
+          }
+          chosenLive = new File([blob], 'liveness.jpg', { type: 'image/jpeg' })
+          liveSent = false
+          if (!busy) clearCaptureError()
+        } catch (error) {
+          var name = error && error.name
+          if (name === 'NotAllowedError' || name === 'PermissionDeniedError' || name === 'SecurityError') {
+            showCaptureError("La caméra a été refusée.")
+          } else {
+            showCaptureError("La capture a échoué.")
+          }
+        } finally {
+          if (stream) stream.getTracks().forEach(function (track) { track.stop() })
+          if (video && video.remove) video.remove()
+          capturing = false
+        }
       })
     }
     document.querySelectorAll('button').forEach(function (button) {
       if ((button.textContent || '').indexOf('Confirmer et transmettre') !== -1) {
-        button.addEventListener('click', function (event) {
-          event.preventDefault()
-          maybeEnter()
+        button.addEventListener('click', async function (event) {
+          if (event && event.preventDefault) event.preventDefault()
+          if (busy) return
+          busy = true
+          button.disabled = true
+          clearCaptureError()
+          var leaving = false
+          try {
+            if (chosenId && !idSent) {
+              var postedId = await postImage('/v1/verifications/id', chosenId)
+              if (!postedId.ok) {
+                showCaptureError(postedId.message)
+                return
+              }
+              idSent = true
+            }
+            if (chosenLive && !liveSent) {
+              var postedLive = await postImage('/v1/verifications/liveness', chosenLive)
+              if (!postedLive.ok) {
+                showCaptureError(postedLive.message)
+                return
+              }
+              liveSent = true
+            }
+            var idRow = await readCapture('/v1/verifications/id')
+            if (!idRow.ok) {
+              showCaptureError(idRow.message)
+              return
+            }
+            var liveRow = await readCapture('/v1/verifications/liveness')
+            if (!liveRow.ok) {
+              showCaptureError(liveRow.message)
+              return
+            }
+            if (idRow.passed) {
+              showName(chosenId ? chosenId.name : 'Pièce enregistrée')
+              showBadge()
+            }
+            if (missingStatus(idRow.status) || missingStatus(liveRow.status)) {
+              showCaptureError(missingMessage(!missingStatus(idRow.status), !missingStatus(liveRow.status)))
+              return
+            }
+            if (!idRow.passed || !liveRow.passed) {
+              var retry = await gatePath()
+              if (!retry.ok) {
+                showCaptureError(retry.message)
+                return
+              }
+              if (retry.path === '/id-liveness') {
+                showCaptureError('Reprenez la capture.')
+                return
+              }
+              leaving = true
+              window.location.assign(retry.path)
+              return
+            }
+            var next = await gatePath()
+            if (!next.ok || next.path === '/id-liveness') {
+              showCaptureError(next.message || 'Reprenez la capture.')
+              return
+            }
+            leaving = true
+            window.location.assign(next.path)
+          } catch (error) {
+            showCaptureError("La connexion a échoué.")
+          } finally {
+            if (!leaving) {
+              busy = false
+              button.disabled = false
+            }
+          }
         })
       }
     })
     Promise.all([
-      fetch('/v1/verifications/id', { credentials: 'same-origin' }).then(readJson),
-      fetch('/v1/verifications/liveness', { credentials: 'same-origin' }).then(readJson)
+      fetch('/v1/verifications/id', { credentials: 'same-origin', cache: 'no-store' }).then(readJson),
+      fetch('/v1/verifications/liveness', { credentials: 'same-origin', cache: 'no-store' }).then(readJson)
     ]).then(function (rows) {
-      var idRow = rows[0]
-      var liveRow = rows[1]
-      if (idRow && (idRow.status === 'pending' || idRow.status === 'granted')) showId('Pièce enregistrée')
-      if (liveRow && (liveRow.status === 'pending' || liveRow.status === 'granted')) liveDone = true
-    })
+      if (capturePassed(rows[0]) && !chosenId) {
+        showName('Pièce enregistrée')
+        showBadge()
+      }
+    }).catch(function () {})
   `
 }
 

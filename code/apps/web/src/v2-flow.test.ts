@@ -212,7 +212,9 @@ describe('v2 signup and sign-in screens', () => {
     expect(page).not.toContain('CNIB_recto_verso.pdf')
     expect(page).toContain("fetch('/v1/verifications/id'")
     expect(page).toContain("fetch('/v1/verifications/liveness'")
-    expect(page).toContain("location.assign('/onboarding')")
+    expect(page).toContain("fetch('/v1/accounts/gate'")
+    expect(page).toContain("account: '/onboarding'")
+    expect(page).toContain('window.location.assign(path)')
   })
 
   it('asks for a reset link and unlocks a four-digit PIN', () => {
