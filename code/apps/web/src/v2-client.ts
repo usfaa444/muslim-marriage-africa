@@ -378,23 +378,67 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
   `
 }
 
-export function emailScript(): string {
+export function emailScript(copy: { invalidTitle: string; invalidFallback: string }): string {
   return `${HELPERS}
+    var COPY = ${JSON.stringify(copy)}
     var shown = document.getElementById('currentEmail')
-    var stored = ''
-    try { stored = sessionStorage.getItem(EMAIL_KEY) || '' } catch (error) { stored = '' }
-    if (shown && stored) shown.textContent = stored
+    if (shown) shown.textContent = ''
     var params = new URLSearchParams(window.location.search)
-    var token = params.get('token')
+    var token = (params.get('token') || '').trim()
+    function showLine(message) {
+      var line = document.getElementById('email-link-error')
+      var lineText = document.getElementById('email-link-error-text')
+      if (lineText) lineText.textContent = message
+      if (line) line.classList.remove('hidden')
+    }
+    function showLinkFailure(message, signedIn) {
+      if (shown) shown.textContent = ''
+      var heading = document.querySelector('h1')
+      var text = message || COPY.invalidFallback
+      if (heading) heading.textContent = COPY.invalidTitle
+      var intro = document.getElementById('email-intro')
+      if (intro) intro.textContent = text
+      showLine(text)
+      var btnText = document.getElementById('btnText')
+      var resend = document.getElementById('resendBtn')
+      if (signedIn) {
+        if (btnText) btnText.textContent = 'Renvoyer un lien'
+        return
+      }
+      var editBtn = document.getElementById('editEmailBtn')
+      if (editBtn) editBtn.classList.add('hidden')
+      if (resend && resend.parentNode) {
+        var link = document.createElement('a')
+        link.href = '/auth'
+        link.id = 'email-signin'
+        link.className = resend.className
+        link.textContent = 'Se connecter'
+        resend.parentNode.replaceChild(link, resend)
+      }
+    }
     if (token) {
       fetch('/v1/accounts/email-verifications/consume', {
         method: 'POST',
         credentials: 'same-origin',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ token: token })
-      }).then(function (response) {
-        if (response.status === 200) window.location.assign('/phone')
+      }).then(async function (response) {
+        if (response.status === 200) {
+          window.location.assign('/phone')
+          return
+        }
+        var payload = await readJson(response)
+        var session = await fetch('/v1/accounts/email-verifications', { credentials: 'same-origin' })
+        showLinkFailure(errorMessage(payload), session.status === 200)
+      }).catch(function () {
+        showLinkFailure('', false)
       })
+    } else {
+      fetch('/v1/accounts/email-verifications', { credentials: 'same-origin' }).then(async function (response) {
+        if (response.status !== 200) return
+        var payload = await readJson(response)
+        if (shown && payload && typeof payload.email === 'string') shown.textContent = payload.email
+      }).catch(function () {})
     }
     var editBtn = document.getElementById('editEmailBtn')
     var editForm = document.getElementById('editEmailForm')
@@ -424,7 +468,6 @@ export function emailScript(): string {
         var payload = await readJson(response)
         if (response.status === 200 && payload && typeof payload.email === 'string') {
           if (shown) shown.textContent = payload.email
-          try { sessionStorage.setItem(EMAIL_KEY, payload.email) } catch (error) {}
           editForm.classList.add('hidden')
           if (changeError) {
             changeError.classList.add('hidden')
@@ -447,7 +490,14 @@ export function emailScript(): string {
           method: 'POST',
           credentials: 'same-origin'
         })
-        if (response.status === 201 && banner) banner.classList.remove('hidden')
+        var payload = await readJson(response)
+        if (response.status === 201 && banner) {
+          banner.classList.remove('hidden')
+          var line = document.getElementById('email-link-error')
+          if (line) line.classList.add('hidden')
+        } else if (response.status !== 200) {
+          showLine(errorMessage(payload) || "L'envoi du lien a échoué.")
+        }
         resend.disabled = false
       })
     }
@@ -486,6 +536,14 @@ export function phoneScript(): string {
 
 export function otpScript(): string {
   return `${HELPERS}
+    var phoneDisplay = document.getElementById('phone-display')
+    if (phoneDisplay) phoneDisplay.textContent = ''
+    fetch('/v1/verifications/otp', { credentials: 'same-origin' }).then(readJson).then(function (payload) {
+      if (!phoneDisplay || !payload) return
+      if ((payload.status === 'pending' || payload.status === 'granted') && typeof payload.phone_masked === 'string') {
+        phoneDisplay.textContent = payload.phone_masked
+      }
+    }).catch(function () {})
     var boxes = Array.from(document.querySelectorAll('.otp-digit'))
     boxes.forEach(function (input, index) {
       input.addEventListener('input', function () {

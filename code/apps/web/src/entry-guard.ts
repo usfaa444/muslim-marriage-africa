@@ -195,11 +195,25 @@ export function redirectTo(request: Request, path: string, env: NodeJS.ProcessEn
   return Response.redirect(new URL(path, `${base}/`), 303)
 }
 
+function emailLinkToken(request: Request, path: string): string {
+  if (pathnameOf(path) !== '/email-verification') {
+    return ''
+  }
+  try {
+    return (new URL(request.url).searchParams.get('token') ?? '').trim()
+  } catch {
+    return ''
+  }
+}
+
 export async function entryRedirect(
   request: Request,
   path: string,
   load: (cookieHeader: string) => Promise<GateStep | 'error'> = fetchGateStep,
 ): Promise<Response | null> {
+  if (emailLinkToken(request, path).length > 0) {
+    return null
+  }
   const header = request.headers.get('cookie')
   const value = readSessionCookie(header)
   if (isStubSession(value)) {

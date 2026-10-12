@@ -16,6 +16,7 @@ import {
   phoneHtml,
   photoHtml,
   pinHtml,
+  profileHtml,
   pseudonymHtml,
   resetHtml,
   settingsHtml,
@@ -154,7 +155,18 @@ describe('v2 signup and sign-in screens', () => {
   it('verifies email, phone, and the code only after a real send', () => {
     const email = emailHtml(stitch('04-email-verification'))
     expect(email).toContain("fetch('/v1/accounts/email-verifications'")
+    expect(email).toContain("fetch('/v1/accounts/email-verifications', { credentials: 'same-origin' })")
     expect(email).toContain('/v1/accounts/email-verifications/consume')
+    expect(email).not.toContain('ibrahim.sawadogo@exemple.bf')
+    expect(email).not.toContain('sessionStorage.getItem(EMAIL_KEY)')
+    expect(email).not.toContain('sessionStorage.setItem(EMAIL_KEY')
+    expect(email).toContain('placeholder="votre.nom@exemple.bf"')
+    expect(email).toContain('id="email-link-error"')
+    expect(email).toContain('data-icon="error"')
+    expect(email).toContain('Renvoyer un lien')
+    expect(email).toContain('Se connecter')
+    expect(email).toContain("href = '/auth'")
+    expect(email).toContain('Lien expiré ou adresse inconnue')
     expect(email).toContain("fetch('/v1/accounts/email'")
     expect(email).toContain('editEmailBtn')
     expect(email).toContain('editEmailForm')
@@ -167,6 +179,11 @@ describe('v2 signup and sign-in screens', () => {
     expect(otp).toContain('otp-digit')
     expect(otp).toContain("action: 'verify'")
     expect(otp).toContain('href="/phone"')
+    expect(otp).toContain("fetch('/v1/verifications/otp'")
+    expect(otp).toContain('phone_masked')
+    expect(otp).toContain('id="phone-display"')
+    expect(otp).not.toContain('70 24 58 19')
+    expect(otp).not.toContain('+226 70 •• ••')
     expect(otp).not.toContain('setInterval')
   })
 
@@ -231,7 +248,269 @@ describe('v2 signup and sign-in screens', () => {
     const page = statusHtml(stitch('28-delete-export-status'))
     expect(page).not.toContain('exp-84092-bf')
     expect(page).not.toContain('47:55:56')
+    expect(page).not.toContain('00:00:00')
     expect(page).toContain("fetch('/v1/me/export-status'")
+  })
+
+  it('serves no specimen strings on the built v2 screens', () => {
+    const specimens = [
+      'ibrahim.sawadogo@exemple.bf',
+      '70 24 58 19',
+      '+226 70 24 58 19',
+      'CNIB_recto_verso.pdf',
+      '29 ans',
+      '1996-09-14',
+      'Région du Centre, Plateau-Central',
+      'Je suis une personne calme',
+      'exp-84092-bf',
+      '47:55:56',
+      '00:00:00',
+      '+226 70 •• •• 84',
+      '•• •• 42',
+      'Al-Hassan_BF',
+      '70% complété',
+    ]
+    const pages = [
+      splashHtml(),
+      identityHtml(stitch('03-age-gate')),
+      pseudonymHtml(stitch('54-pseudonym-dob')),
+      authHtml(stitch('02-auth'), 'login', SITE),
+      authHtml(stitch('02-auth'), 'signup', SITE),
+      emailHtml(stitch('04-email-verification')),
+      phoneHtml(stitch('06-otp')),
+      otpHtml(stitch('56-otp-alt')),
+      idHtml(stitch('07-id-liveness')),
+      resetHtml(stitch('05-password-reset')),
+      resetHtml(stitch('05-password-reset'), 'renew'),
+      resetHtml(stitch('05-password-reset'), 'invalid'),
+      pinHtml(stitch('10-pin-lock')),
+      onboardingHtml(stitch('08-onboarding')),
+      photoHtml(stitch('09-photo-rules')),
+      profileHtml(stitch('11-profile-edit')),
+      settingsHtml(stitch('27-settings')),
+      statusHtml(stitch('28-delete-export-status')),
+    ]
+    for (const page of pages) {
+      for (const specimen of specimens) {
+        expect(page).not.toContain(specimen)
+      }
+    }
+    const profile = profileHtml(stitch('11-profile-edit'))
+    expect(profile).not.toContain('selected="" value="ouagadougou"')
+    expect(profile).not.toContain('selected="" value="master_eco"')
+    expect(profile).not.toContain('checked="" value="celibataire"')
+    expect(profile).toContain('<option selected="" value=""></option>')
+    expect(phoneHtml(stitch('06-otp'))).toContain('placeholder="70 00 00 00"')
+    expect(authHtml(stitch('02-auth'), 'login', SITE)).toContain('placeholder="nom@exemple.bf"')
+  })
+})
+
+type FakeNode = {
+  id: string
+  className: string
+  textContent: string
+  value: string
+  disabled: boolean
+  href: string
+  parentNode: FakeNode | null
+  children: FakeNode[]
+  listener: ((event?: { preventDefault?: () => void }) => void | Promise<void>) | null
+  classList: {
+    contains: (name: string) => boolean
+    add: (name: string) => void
+    remove: (name: string) => void
+    toggle: (name: string, force?: boolean) => void
+  }
+  addEventListener: (type: string, fn: (event?: { preventDefault?: () => void }) => void | Promise<void>) => void
+  querySelector: (selector: string) => FakeNode | null
+  replaceChild: (next: FakeNode, prev: FakeNode) => void
+  focus: () => void
+}
+
+function fakeNode(id = ''): FakeNode {
+  const node = {
+    id,
+    className: '',
+    textContent: '',
+    value: '',
+    disabled: false,
+    href: '',
+    parentNode: null,
+    children: [],
+    listener: null,
+  } as FakeNode
+  node.classList = {
+    contains(name: string) {
+      return node.className.split(/\s+/).includes(name)
+    },
+    add(name: string) {
+      if (!node.classList.contains(name)) node.className = `${node.className} ${name}`.trim()
+    },
+    remove(name: string) {
+      node.className = node.className
+        .split(/\s+/)
+        .filter((item) => item && item !== name)
+        .join(' ')
+    },
+    toggle(name: string, force?: boolean) {
+      const on = force === undefined ? !node.classList.contains(name) : force
+      if (on) node.classList.add(name)
+      else node.classList.remove(name)
+    },
+  }
+  node.addEventListener = (_type, fn) => {
+    node.listener = fn
+  }
+  node.querySelector = (selector) => node.children.find((child) => selector === 'button' || child.id === selector) ?? null
+  node.replaceChild = (next, prev) => {
+    const index = node.children.indexOf(prev)
+    if (index >= 0) node.children[index] = next
+    next.parentNode = node
+    prev.parentNode = null
+  }
+  node.focus = () => {}
+  return node
+}
+
+function emailPage() {
+  const nodes = new Map<string, FakeNode>()
+  function add(id: string, parent?: FakeNode): FakeNode {
+    const node = fakeNode(id)
+    nodes.set(id, node)
+    if (parent) {
+      parent.children.push(node)
+      node.parentNode = parent
+    }
+    return node
+  }
+  const heading = add('h1')
+  heading.textContent = 'Vérification de votre adresse email'
+  const intro = add('email-intro')
+  intro.textContent = 'Un lien sécurisé de confirmation a été envoyé.'
+  const shown = add('currentEmail')
+  const editBtn = add('editEmailBtn')
+  const editForm = add('editEmailForm')
+  editForm.className = 'hidden'
+  const save = fakeNode('save-email')
+  editForm.children.push(save)
+  save.parentNode = editForm
+  add('newEmailInput')
+  const changeError = add('email-change-error')
+  changeError.className = 'hidden'
+  const banner = add('resendSuccessBanner')
+  banner.className = 'hidden'
+  const line = add('email-link-error')
+  line.className = 'hidden'
+  const lineText = add('email-link-error-text', line)
+  const actions = add('actions')
+  const resend = add('resendBtn', actions)
+  const btnText = add('btnText', resend)
+  btnText.textContent = 'Renvoyer le lien de confirmation'
+  const documentRef = {
+    getElementById(id: string) {
+      return nodes.get(id) ?? null
+    },
+    querySelector(selector: string) {
+      return selector === 'h1' ? heading : null
+    },
+    createElement() {
+      const node = fakeNode('email-signin')
+      nodes.set(node.id, node)
+      return node
+    },
+  }
+  return { documentRef, nodes, heading, intro, shown, line, lineText, btnText, resend, save, banner }
+}
+
+async function runEmail(search: string, fetchImpl: (url: string, init?: { method?: string }) => Promise<{ status: number; json: () => Promise<unknown> }>) {
+  const page = emailPage()
+  const moves: string[] = []
+  const stored: string[] = []
+  const scripts = [...emailHtml(stitch('04-email-verification')).matchAll(/<script>([\s\S]*?)<\/script>/g)]
+  const script = scripts.find((match) => match[1]?.includes('email-verifications'))?.[1] ?? ''
+  const windowRef = { location: { search, assign(url: string) { moves.push(url) } } }
+  new Function('document', 'window', 'fetch', 'sessionStorage', script)(
+    page.documentRef,
+    windowRef,
+    fetchImpl,
+    { setItem(key: string) { stored.push(key) }, getItem() { return '' }, removeItem() {} },
+  )
+  await new Promise((resolve) => setTimeout(resolve, 0))
+  return { page, moves, stored }
+}
+
+describe('email link result', () => {
+  it('shows the real address from the read and not from session storage', async () => {
+    const { page, stored } = await runEmail('', async (url) => {
+      expect(url).toBe('/v1/accounts/email-verifications')
+      return { status: 200, json: async () => ({ email: 'fatim@example.bf', email_verified_at: null }) }
+    })
+    expect(page.shown.textContent).toBe('fatim@example.bf')
+    expect(stored).toEqual([])
+    expect(page.heading.textContent).toBe('Vérification de votre adresse email')
+  })
+
+  it('moves on only when consume succeeds', async () => {
+    const { moves, page } = await runEmail('?token=live', async (url, init) => {
+      expect(url).toBe('/v1/accounts/email-verifications/consume')
+      expect(init?.method).toBe('POST')
+      return { status: 200, json: async () => ({ email_verified_at: '2026-10-12T00:00:00.000Z' }) }
+    })
+    expect(moves).toEqual(['/phone'])
+    expect(page.heading.textContent).toBe('Vérification de votre adresse email')
+  })
+
+  it('shows the expired state and a resend when the member is signed in', async () => {
+    const { page, moves } = await runEmail('?token=old', async (url, init) => {
+      if (init?.method === 'POST') {
+        return { status: 400, json: async () => ({ error: { code: 'EMAIL_LINK_INVALID', message: 'Lien expiré ou caduc.' } }) }
+      }
+      return { status: 200, json: async () => ({ email: 'fatim@example.bf', email_verified_at: null }) }
+    })
+    expect(moves).toEqual([])
+    expect(page.shown.textContent).toBe('')
+    expect(page.heading.textContent).toBe('Lien expiré ou adresse inconnue')
+    expect(page.intro.textContent).toBe('Lien expiré ou caduc.')
+    expect(page.lineText.textContent).toBe('Lien expiré ou caduc.')
+    expect(page.line.classList.contains('hidden')).toBe(false)
+    expect(page.btnText.textContent).toBe('Renvoyer un lien')
+    expect(page.nodes.has('email-signin')).toBe(false)
+  })
+
+  it('sends a signed-out member to sign in after a dead link', async () => {
+    const { page } = await runEmail('?token=dead', async (_url, init) => {
+      if (init?.method === 'POST') {
+        return { status: 400, json: async () => ({ error: { code: 'EMAIL_LINK_INVALID', message: 'Lien expiré ou caduc.' } }) }
+      }
+      return { status: 401, json: async () => ({ error: { code: 'UNAUTHENTICATED', message: 'Authentification requise.' } }) }
+    })
+    expect(page.shown.textContent).toBe('')
+    const link = page.nodes.get('email-signin')
+    expect(link?.href).toBe('/auth')
+    expect(link?.textContent).toBe('Se connecter')
+    expect(page.resend.parentNode).toBeNull()
+  })
+
+  it('updates the shown address from the change-email response', async () => {
+    const page = emailPage()
+    const scripts = [...emailHtml(stitch('04-email-verification')).matchAll(/<script>([\s\S]*?)<\/script>/g)]
+  const script = scripts.find((match) => match[1]?.includes('email-verifications'))?.[1] ?? ''
+    new Function('document', 'window', 'fetch', 'sessionStorage', script)(
+      page.documentRef,
+      { location: { search: '', assign() {} } },
+      async (url: string) => {
+        if (url === '/v1/accounts/email') {
+          return { status: 200, json: async () => ({ email: 'nouvelle@example.bf', expires_at: '2026-10-12T00:30:00.000Z' }) }
+        }
+        return { status: 200, json: async () => ({ email: 'fatim@example.bf', email_verified_at: null }) }
+      },
+      { setItem() {}, getItem() { return '' }, removeItem() {} },
+    )
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(page.shown.textContent).toBe('fatim@example.bf')
+    page.nodes.get('newEmailInput')!.value = 'nouvelle@example.bf'
+    await page.save.listener?.({ preventDefault() {} })
+    expect(page.shown.textContent).toBe('nouvelle@example.bf')
   })
 })
 
@@ -253,6 +532,31 @@ describe('server entry guard', () => {
     expect(entryLocation('/pin', 'account')).toBeNull()
     expect(entryLocation('/privacy/status/ticket-1', 'account')).toBeNull()
     expect(entryLocation('/settings', 'email')).toBe('/email-verification')
+  })
+
+  it('keeps an email link on the page until consume finishes', async () => {
+    let loads = 0
+    const later = await entryRedirect(
+      new Request('http://localhost/email-verification?token=old-link', {
+        headers: { cookie: 'ankanu_session=real-session' },
+      }),
+      '/email-verification',
+      async () => {
+        loads += 1
+        return 'phone'
+      },
+    )
+    expect(later).toBeNull()
+    expect(loads).toBe(0)
+    const anon = await entryRedirect(
+      new Request('http://localhost/email-verification?token=old-link'),
+      '/email-verification',
+      async () => 'anon',
+    )
+    expect(anon).toBeNull()
+    const blank = await entryRedirect(new Request('http://localhost/email-verification?token='), '/email-verification', async () => 'anon')
+    expect(blank?.status).toBe(303)
+    expect(blank?.headers.get('location')).toBe('http://localhost/auth')
   })
 
   it('redirects a signed-out member route and leaves stub cookies on the JSON envelope', async () => {

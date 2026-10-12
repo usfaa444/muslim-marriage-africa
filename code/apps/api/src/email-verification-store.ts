@@ -13,8 +13,15 @@ export type EmailVerificationRow = {
   created_at: Date
 }
 
+export type AccountEmailRead = {
+  email: string | null
+  email_verified_at: string | null
+}
+
 export type EmailVerificationStore = {
   accountEmail(accountId: string): Promise<string | null>
+  /** Session-scoped address and verification stamp. No other account fields. */
+  readAccountEmail(accountId: string): Promise<AccountEmailRead>
   passwordVerified(accountId: string): Promise<boolean>
   findByHash(tokenHash: string): Promise<EmailVerificationRow | null>
   supersedeAndInsert(accountId: string, row: EmailVerificationRow): Promise<'inserted' | 'already_verified'>
@@ -56,6 +63,20 @@ function postgresEmailVerificationStore(): EmailVerificationStore {
         .where(eq(account.id, accountId))
         .limit(1)
       return rows[0]?.email ?? null
+    },
+    async readAccountEmail(accountId) {
+      const database = getIdentityDatabase()
+      const owners = await database
+        .select({ email: account.email })
+        .from(account)
+        .where(eq(account.id, accountId))
+        .limit(1)
+      const passwords = await database
+        .select({ email_verified_at: credential.email_verified_at })
+        .from(credential)
+        .where(and(eq(credential.account_id, accountId), eq(credential.kind, 'password')))
+      const stamp = passwords.find((row) => row.email_verified_at)?.email_verified_at ?? null
+      return { email: owners[0]?.email ?? null, email_verified_at: stamp }
     },
     async passwordVerified(accountId) {
       const rows = await getIdentityDatabase()
@@ -219,6 +240,12 @@ export function memoryEmailVerificationStore(source: {
     rows,
     async accountEmail(accountId) {
       return source.accounts.find((row) => row.id === accountId)?.email ?? null
+    },
+    async readAccountEmail(accountId) {
+      const email = source.accounts.find((row) => row.id === accountId)?.email ?? null
+      const passwords = source.credentials.filter((row) => row.account_id === accountId && row.kind === 'password')
+      const stamp = passwords.find((row) => row.email_verified_at)?.email_verified_at ?? null
+      return { email, email_verified_at: stamp }
     },
     async passwordVerified(accountId) {
       return source.credentials.some(

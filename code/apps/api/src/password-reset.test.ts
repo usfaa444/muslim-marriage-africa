@@ -338,7 +338,10 @@ describe('POST /v1/password-resets', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token: tokenFrom(first), password: 'encore une phrase longue' }),
     })
+    const staleBody = (await stale.json()) as { error: { code: string; message: string } }
     expect(stale.status).toBe(400)
+    expect(staleBody.error.code).toBe('PASSWORD_RESET_INVALID')
+    expect(staleBody.error.message).toBe('Lien expiré ou adresse inconnue.')
     const fresh = await fetch(`${base}/v1/password-resets/consume`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -396,6 +399,7 @@ describe('POST /v1/password-resets', () => {
     expect(unknown.ok).toBe(false)
     if (!unknown.ok) {
       expect(unknown.code).toBe('PASSWORD_RESET_INVALID')
+      expect(unknown.message).toBe('Lien expiré ou adresse inconnue.')
     }
     const owner = memory.accounts.find((row) => row.email === 'fatim@example.bf')
     resets.rows.push({
@@ -416,6 +420,7 @@ describe('POST /v1/password-resets', () => {
     expect(expired.ok).toBe(false)
     if (!expired.ok) {
       expect(expired.code).toBe('PASSWORD_RESET_INVALID')
+      expect(expired.message).toBe('Lien expiré ou adresse inconnue.')
     }
     expect(hashed).toBe(0)
   })

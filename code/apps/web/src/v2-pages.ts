@@ -101,10 +101,17 @@ export function authHtml(stitch: string, panel: 'signup' | 'login', siteKey: str
   return mount(html, accountScript(siteKey, panel), recaptchaTag(siteKey))
 }
 
+const EMAIL_LINK_ERROR = `<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="email-link-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span><span id="email-link-error-text"></span></p>`
+
 const EMAIL_CHANGE_FIT = `<style>
 #editEmailForm .flex { flex-wrap: wrap; }
 #newEmailInput { min-width: 0; flex: 1 1 10rem; }
+#currentEmail { min-width: 0; max-width: 100%; overflow-wrap: anywhere; word-break: break-word; white-space: normal; }
 </style>`
+
+const RESET_INVALID_TITLE = 'Lien expiré ou adresse inconnue'
+const RESET_INVALID_TEXT =
+  "Par mesure de discrétion et de protection de la pudeur, aucun indice public sur l'existence du compte n'est divulgué."
 
 export function emailHtml(stitch: string): string {
   const helper = `<p class="text-[11px] text-deep-navy/60">
@@ -113,8 +120,28 @@ export function emailHtml(stitch: string): string {
   const error = `<p class="hidden text-xs text-[#9B2C2C] font-medium" id="email-change-error"></p>
 ${helper}`
   let html = stitch.includes(helper) ? stitch.replace(helper, error) : stitch
+  html = html.replaceAll('ibrahim.sawadogo@exemple.bf', '')
+  html = html.replace(
+    'class="text-sm font-semibold text-deep-navy truncate" id="currentEmail"',
+    'class="text-sm font-semibold text-deep-navy min-w-0 break-all" id="currentEmail"',
+  )
+  html = html.replace(
+    'class="flex items-center gap-2.5 overflow-hidden w-full sm:w-auto"',
+    'class="flex items-center gap-2.5 overflow-hidden w-full min-w-0 max-w-full"',
+  )
+  html = html.replace(
+    '<p class="text-deep-navy/85 text-sm md:text-base leading-relaxed font-normal">',
+    '<p class="text-deep-navy/85 text-sm md:text-base leading-relaxed font-normal" id="email-intro">',
+  )
+  html = html.replace('<!-- Adresse de référence', `${EMAIL_LINK_ERROR}<!-- Adresse de référence`)
   html = html.includes('</head>') ? html.replace('</head>', `${EMAIL_CHANGE_FIT}</head>`) : html
-  return mount(html, emailScript())
+  return mount(
+    html,
+    emailScript({
+      invalidTitle: RESET_INVALID_TITLE,
+      invalidFallback: RESET_INVALID_TEXT,
+    }),
+  )
 }
 
 export function phoneHtml(stitch: string): string {
@@ -122,11 +149,17 @@ export function phoneHtml(stitch: string): string {
   return mount(html, phoneScript())
 }
 
+const OTP_NUMBER = `<div class="inline-flex flex-wrap items-center justify-center gap-2.5 px-3.5 py-1.5 rounded-full border border-hairline bg-[#FAF6EC]/80 mb-7 text-xs font-body max-w-full" id="otp-phone"><span class="text-deep-navy/60">Numéro renseigné :</span><span class="font-medium text-deep-navy tracking-wide break-all" id="phone-display"></span></div>`
+
 export function otpHtml(stitch: string): string {
-  const html = stitch.replace(
+  let html = stitch.replace(
     /<a href="#"([^>]*)>([\s\S]*?Modifier le numéro[\s\S]*?)<\/a>/,
     '<a href="/phone"$1>$2</a>',
   )
+  html = html.replace('+226 70 24 58 19', '').replace('value="70 24 58 19"', 'value=""')
+  if (!html.includes('id="phone-display"')) {
+    html = html.replace('<!-- OTP Form -->', `${OTP_NUMBER}<!-- OTP Form -->`)
+  }
   return mount(html, otpScript())
 }
 
@@ -145,9 +178,6 @@ const RESET_BACK = `<div class="text-center pt-2">
 </a>
 </div>`
 
-const RESET_INVALID_TITLE = 'Lien expiré ou adresse inconnue'
-const RESET_INVALID_TEXT =
-  "Par mesure de discrétion et de protection de la pudeur, aucun indice public sur l'existence du compte n'est divulgué."
 const RESET_DONE_TITLE = 'Mot de passe renouvelé · Anciennes sessions révoquées'
 const RESET_DONE_TEXT = 'Session locale active et reconnue pour 30 jours.'
 
@@ -228,10 +258,14 @@ export function pinHtml(stitch: string): string {
 }
 
 export function onboardingHtml(stitch: string): string {
-  const html = stitch.replace(
-    'class="text-xs font-semibold uppercase tracking-wider text-deep-navy flex items-center gap-1.5"',
-    'id="audio-guide-heading" class="text-xs font-semibold uppercase tracking-wider text-deep-navy flex items-center gap-1.5"',
-  )
+  const html = stitch
+    .replace(
+      'class="text-xs font-semibold uppercase tracking-wider text-deep-navy flex items-center gap-1.5"',
+      'id="audio-guide-heading" class="text-xs font-semibold uppercase tracking-wider text-deep-navy flex items-center gap-1.5"',
+    )
+    .replace('>70% complété<', '><')
+    .replace('style="width: 70%"', 'style="width: 0%"')
+    .replace('Il manque : madhhab', '')
   return mount(html, '', audioPromptScript() + pinGuardScript())
 }
 
@@ -244,7 +278,17 @@ export function photoHtml(stitch: string): string {
 }
 
 export function profileHtml(stitch: string): string {
-  return guarded(stitch, profileScript())
+  let html = stitch
+    .replace('<span class="">29 ans</span>', '<span class=""></span>')
+    .replace('value="1996-09-14"', 'value=""')
+    .replace('value="Région du Centre, Plateau-Central"', 'value=""')
+    .replace('>70% complété<', '><')
+    .replace('style="width: 70%;"', 'style="width: 0%;"')
+    .replaceAll(' checked=""', '')
+    .replaceAll(' selected=""', '')
+  html = html.replace(/(<textarea\b[^>]*\bid="bio"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
+  html = html.replace(/<select\b([^>]*)>/g, '<select$1><option selected="" value=""></option>')
+  return guarded(html, profileScript())
 }
 
 export function settingsHtml(stitch: string): string {
@@ -255,5 +299,6 @@ export function statusHtml(stitch: string): string {
   const html = stitch
     .replace('value="https://ankanu.bf/securite/demande/exp-84092-bf"', 'value=""')
     .replace('>47:55:56<', '><')
+    .replaceAll('00:00:00', '')
   return guarded(html, statusScript())
 }

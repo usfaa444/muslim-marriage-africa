@@ -188,9 +188,10 @@ describe('POST /v1/accounts/email', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token: oldToken }),
     })
-    const oldBody = (await old.json()) as { error: { code: string } }
+    const oldBody = (await old.json()) as { error: { code: string; message: string } }
     expect(old.status).toBe(400)
     expect(oldBody.error.code).toBe('EMAIL_LINK_INVALID')
+    expect(oldBody.error.message).toBe('Lien expiré ou caduc.')
     expect(memory.credentials[0]?.email_verified_at).toBeNull()
     const opened = await fetch(`${base}/v1/accounts/email-verifications/consume`, {
       method: 'POST',

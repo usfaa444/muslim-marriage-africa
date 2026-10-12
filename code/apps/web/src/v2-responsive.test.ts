@@ -70,8 +70,32 @@ function screens(): Array<{ name: string; html: string }> {
         ),
     },
     { name: '05-email', html: emailHtml(stitch('04-email-verification')) },
+    {
+      name: '05b-email-long',
+      html: emailHtml(stitch('04-email-verification')).replace(
+        'id="currentEmail">',
+        'id="currentEmail">prenom.tres.long.ibrahim.sawadogo.ouagadougou@exemple-domaine.bf',
+      ),
+    },
+    {
+      name: '05c-email-expired',
+      html: emailHtml(stitch('04-email-verification'))
+        .replace('Vérification de votre adresse email', 'Lien expiré ou adresse inconnue')
+        .replace(
+          'class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="email-link-error"',
+          'class="text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="email-link-error"',
+        )
+        .replace('id="email-link-error-text"></span>', 'id="email-link-error-text">Lien expiré ou caduc.</span>')
+        .replace('>Renvoyer le lien de confirmation<', '>Renvoyer un lien<'),
+    },
     { name: '06-phone', html: phoneHtml(stitch('06-otp')) },
-    { name: '07-otp', html: otpHtml(stitch('56-otp-alt')) },
+    {
+      name: '07-otp',
+      html: otpHtml(stitch('56-otp-alt')).replace(
+        'id="phone-display"></span>',
+        'id="phone-display">+226 70 •• •• 19</span>',
+      ),
+    },
     { name: '08-id', html: idHtml(stitch('07-id-liveness')) },
     { name: '09-reset', html: resetHtml(stitch('05-password-reset')) },
     { name: '09b-reset-renew', html: resetHtml(stitch('05-password-reset'), 'renew') },

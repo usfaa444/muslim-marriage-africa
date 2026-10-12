@@ -143,6 +143,20 @@ export class AccountsController {
     return { email: result.email, expires_at: result.expires_at }
   }
 
+  @Get('email-verifications')
+  async readEmail(
+    @Req() request: IpRequest & { headers?: { cookie?: string | string[] } },
+    @Res({ passthrough: true }) response: HeaderResponse,
+  ): Promise<{ email: string | null; email_verified_at: string | null }> {
+    response.setHeader('cache-control', 'no-store')
+    const sessionId = readCookie(headerText(request.headers?.cookie), SESSION_COOKIE)
+    const session = sessionId ? await resolveWebSession(sessionId, authNow()) : null
+    if (!session) {
+      throw issueError(unauthenticatedIssue())
+    }
+    return getEmailVerificationStore().readAccountEmail(session.accountId)
+  }
+
   @Post('email-verifications')
   async issue(
     @Req() request: IpRequest & { headers?: { cookie?: string | string[]; origin?: string | string[] } },

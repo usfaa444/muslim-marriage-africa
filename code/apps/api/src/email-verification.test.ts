@@ -114,6 +114,45 @@ describe('POST /v1/accounts/email-verifications', () => {
     }
   })
 
+  it('reads only the signed-in address', async () => {
+    const anon = await fetch(`${base}/v1/accounts/email-verifications`)
+    const anonBody = (await anon.json()) as { error: { code: string } }
+    expect(anon.status).toBe(401)
+    expect(anonBody.error.code).toBe('UNAUTHENTICATED')
+
+    const mine = await fetch(`${base}/v1/accounts/email-verifications`, { headers: { cookie } })
+    const mineBody = (await mine.json()) as { email: string | null; email_verified_at: string | null }
+    expect(mine.status).toBe(200)
+    expect(Object.keys(mineBody).sort()).toEqual(['email', 'email_verified_at'])
+    expect(mineBody).toEqual({ email: 'fatim@example.bf', email_verified_at: null })
+    expect(mine.headers.get('cache-control')).toBe('no-store')
+
+    const created = await fetch(`${base}/v1/accounts`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(accountBody({ email: 'awa.read@example.bf', pseudonym: 'Awa_Read_94' })),
+    })
+    expect(created.status).toBe(201)
+    const signed = await fetch(`${base}/v1/sessions`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        identifier: 'awa.read@example.bf',
+        password: 'phrase avec espaces',
+        remember_me: false,
+        recaptcha_token: 'test-ok',
+      }),
+    })
+    expect(signed.status).toBe(201)
+    const other = await fetch(`${base}/v1/accounts/email-verifications`, {
+      headers: { cookie: signed.headers.getSetCookie().join('; ') },
+    })
+    const otherBody = (await other.json()) as { email: string }
+    expect(other.status).toBe(200)
+    expect(otherBody.email).toBe('awa.read@example.bf')
+    expect(JSON.stringify(otherBody)).not.toContain('fatim@example.bf')
+  })
+
   it('issues a link after send, stores only the hash, and does not put the token in JSON', async () => {
     const before = messages.length
     const response = await fetch(`${base}/v1/accounts/email-verifications`, {
@@ -156,6 +195,10 @@ describe('POST /v1/accounts/email-verifications', () => {
     expect(memory.credentials[0]?.email_verified_at).toBe(now.toISOString())
     expect(links.rows.at(-1)?.consumed_at?.toISOString()).toBe(now.toISOString())
     expect(memory.accounts[0]).not.toHaveProperty('email_verified_at')
+    const read = await fetch(`${base}/v1/accounts/email-verifications`, { headers: { cookie } })
+    const readBody = (await read.json()) as { email: string; email_verified_at: string }
+    expect(read.status).toBe(200)
+    expect(readBody).toEqual({ email: 'fatim@example.bf', email_verified_at: now.toISOString() })
   })
 
   it('rejects the consumed link and does not send again once the inbox is verified', async () => {
@@ -165,7 +208,7 @@ describe('POST /v1/accounts/email-verifications', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token }),
     })
-    const againBody = (await again.json()) as { error: { code: string; retryable: boolean } }
+    const againBody = (await again.json()) as { error: { code: string; message: string; retryable: boolean } }
     const sent = messages.length
     const issued = await fetch(`${base}/v1/accounts/email-verifications`, {
       method: 'POST',
@@ -175,6 +218,7 @@ describe('POST /v1/accounts/email-verifications', () => {
 
     expect(again.status).toBe(400)
     expect(againBody.error.code).toBe('EMAIL_LINK_INVALID')
+    expect(againBody.error.message).toBe('Lien expiré ou caduc.')
     expect(againBody.error.retryable).toBe(false)
     expect(issued.status).toBe(200)
     expect(issuedBody).toEqual({})
@@ -302,10 +346,11 @@ describe('email link expiry and resend', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token: firstToken }),
     })
-    const expiredBody = (await expired.json()) as { error: { code: string } }
+    const expiredBody = (await expired.json()) as { error: { code: string; message: string } }
 
     expect(expired.status).toBe(400)
     expect(expiredBody.error.code).toBe('EMAIL_LINK_INVALID')
+    expect(expiredBody.error.message).toBe('Lien expiré ou caduc.')
     expect(firstRow?.consumed_at).toBeNull()
     expect(await links.markConsumed(firstRow!.id, firstRow!.account_id, now)).toBe(false)
     expect(memory.credentials[0]?.email_verified_at).toBeNull()
@@ -328,7 +373,10 @@ describe('email link expiry and resend', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token: firstToken }),
     })
+    const oldBody = (await old.json()) as { error: { code: string; message: string } }
     expect(old.status).toBe(400)
+    expect(oldBody.error.code).toBe('EMAIL_LINK_INVALID')
+    expect(oldBody.error.message).toBe('Lien expiré ou caduc.')
     expect(memory.credentials[0]?.email_verified_at).toBeNull()
 
     const opened = await fetch(`${base}/v1/accounts/email-verifications/consume`, {
@@ -367,7 +415,10 @@ describe('email link expiry and resend', () => {
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ token: 'not-the-live-token' }),
     })
+    const stillBody = (await still.json()) as { error: { code: string; message: string } }
     expect(still.status).toBe(400)
+    expect(stillBody.error.code).toBe('EMAIL_LINK_INVALID')
+    expect(stillBody.error.message).toBe('Lien expiré ou caduc.')
     expect(links.rows[0]?.consumed_at).toBeNull()
 
     const anonymous = await fetch(`${base}/v1/accounts/email-verifications`, {
