@@ -2,7 +2,7 @@
 
 Founder request, 11 Oct 2026: the splash needs a sign-in path that skips name, date of birth, and gender. This is a deviation from `01-splash` in the button slot only. Everything else on that screen stays as built.
 
-Handoff for [ANK-92](/ANK/issues/ANK-92). Staging: `https://staging.ankanu.com`. Do not use `127.0.0.1` for the browser pass. Do not open Epic 3. Push waits until this QA pass is on GitHub.
+Handoff for [ANK-92](/ANK/issues/ANK-92). Staging: `https://staging.ankanu.com`. Do not use `127.0.0.1` for the browser pass. Do not open Epic 3. This pass is on `main` as `ca47bd9217dfa0842fa7be3b90e131d9dab3eb80`.
 
 ## What was built
 
@@ -60,7 +60,7 @@ Browser pass: `https://staging.ankanu.com` (web container only was recreated; ap
 
 - `v2-flow.test.ts`: 14 passed. `native-dialog.test.ts`: 1 passed in the run before the last assertion (15 tests across both files).
 - `v2-responsive.test.ts`: 1 passed. Splash buttons measured at all six widths. Shots rewritten at 360 and 1440.
-- Web image `sha256:620c2469e5f8d214d4de36a40c38a4d8fe503679f7400ae644ac637b9ce1ccaf`, container recreated `2026-10-12T00:06:14Z`, healthy. Api `2026-10-11T20:49:39Z`, worker same minute, postgres and redis and bucket still 5 October. `0.0.0.0:4012->3000` still bound.
+- QA pass ran on web image `sha256:620c2469e5f8d214d4de36a40c38a4d8fe503679f7400ae644ac637b9ce1ccaf`, container recreated `2026-10-12T00:06:14Z`. Founder asked for a staging deploy after that pass. Web-only rebuild from `main` `ca47bd9217dfa0842fa7be3b90e131d9dab3eb80` at `2026-10-12T01:09:19Z`, image `sha256:9a3a4c7cab2b06a58c303fd25c25cfdbd22754c2dc6c9554aad1240440d202a2`, healthy. Api still `2026-10-11T20:49:27Z`, worker the same, postgres and redis and bucket still 5 October. Edge container was not restarted. `0.0.0.0:4012->3000` still bound.
 - `GET https://staging.ankanu.com/signup` 200 with both anchors and no « Continuer ». `GET /auth` and `GET /auth?mode=login` 200 on the Connexion panel. `GET /auth?mode=signup` 303 to `/signup`. Landing has four `/signup` links and two `/auth` links.
 - Headless Chrome on `https://staging.ankanu.com`: « Se connecter » landed on `/auth` with email, password, and the login captcha slot, and left `ankanu.signup.v2` in place. « Créer un compte » landed on `/signup/identity` with `#first-name` and the draft removed. The « Créer un compte » tab on `/auth` returned to `/signup`. At 390px both buttons were 48px tall. At 360 and 1440, `scrollWidth` stayed within the viewport and the buttons stayed stacked.
 
@@ -83,4 +83,4 @@ Browser pass: `https://staging.ankanu.com` (web container only was recreated; ap
 ## Known gaps
 
 - « Créer un compte » still does not clear `ankanu.signup.email` or `ankanu.signup.phone`. The splash clear never did. Email and phone screens can still show a previous address or number.
-- Push to `main` waits for the QA pass on [ANK-92](/ANK/issues/ANK-92).
+- Pushed to `main` as `ca47bd9217dfa0842fa7be3b90e131d9dab3eb80`. Staging redeployed from that commit at `2026-10-12T01:09:19Z`.
