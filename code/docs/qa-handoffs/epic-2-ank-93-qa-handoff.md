@@ -10,6 +10,12 @@ Handoff for [ANK-94](/ANK/issues/ANK-94). Staging target: `https://staging.ankan
 
 `/email-verification` no longer contains `ibrahim.sawadogo@exemple.bf`. The address span starts empty. The page then fills it from that GET. `sessionStorage` (`ankanu.signup.email`) is not the source. A change of address (`POST /v1/accounts/email` `200`) replaces the span with `email` from that response. A failed read leaves the span empty. The grey placeholder `votre.nom@exemple.bf` on the empty change field stays.
 
+« Se connecter avec un autre compte » sits under the resend note on `/email-verification`, using the « Modifier l'adresse » text-link classes plus wrapping so the line stays inside the card. The click calls `DELETE /v1/sessions/current`, then opens `/auth?leave=1` even when that DELETE fails or never returns. `/auth?leave=1` clears the cookie even when the API delete fails, then `303`s to `/auth`. A reload of `/auth` stays on the sign-in panel.
+
+`/phone`: the control is added in the existing trust footnote under the phone form. `/otp`: the control is added in the existing resend area, immediately after « Modifier le numéro ». `/id-liveness`: the control is added after the existing confidentiality note under « Confirmer et transmettre ».
+
+`resetScript()` no longer returns at the top level of the served script. The submit listener is attached only when a form is present, so the page parses in the browser. Submitting the renew form calls `POST /v1/password-resets/consume`. A headless Chrome test loads that served HTML and submits it. It does not use `new Function`.
+
 A `?token=` on `/email-verification` is not redirected by the step guard, signed in or not, including when the gate step is later than email. `POST /v1/accounts/email-verifications/consume` still moves to `/phone` on `200`. Any other status shows the error in the same card: title `Lien expiré ou adresse inconnue` (the password-reset invalid title), intro and error line set to the server message `Lien expiré ou caduc.` The error line is the `02-auth` style: `text-[#9B2C2C]` and the `error` icon. The address stays empty. Signed in, the button reads « Renvoyer un lien » and POSTs `/v1/accounts/email-verifications` (banner on `201`, server message on a real error). Signed out, that control becomes « Se connecter » to `/auth`. The state is not in the HTML until the consume response is a non-200.
 
 Expired, already used, superseded, and unknown verification tokens, including a change-email link that was superseded, all return `400 EMAIL_LINK_INVALID` / `Lien expiré ou caduc.` One shared code. No new code.
@@ -48,7 +54,7 @@ Unbuilt screens (invites, discussions, mahram, admin, operator) are not served. 
 - `code/apps/api/src/email-verification-store.ts` — `readAccountEmail`
 - `code/apps/api/src/email-verification.test.ts`, `change-email.test.ts`, `password-reset.test.ts`
 - `code/apps/web/src/v2-pages.ts` — strip samples, error line, OTP pill, profile and onboarding empties
-- `code/apps/web/src/v2-client.ts` — email read, consume error, OTP mask
+- `code/apps/web/src/v2-client.ts` — email read, consume error, OTP mask, switch-account click, reset submit bound inside the form check
 - `code/apps/web/src/entry-guard.ts` — do not redirect `/email-verification?token=…`
 - `code/apps/web/src/v2-flow.test.ts`, `v2-responsive.test.ts`
 - Width shots: `code/docs/qa-handoffs/ank-83-widths/05-email-360.png`, `05-email-1440.png`, `05b-email-long-360.png`, `05b-email-long-1440.png`, `05c-email-expired-360.png`, `05c-email-expired-1440.png`, `07-otp-360.png`, `07-otp-1440.png`, `11-onboarding-360.png`, `11-onboarding-1440.png`, `13-profile-360.png`, `13-profile-1440.png`, `15-status-1440.png`
@@ -69,7 +75,7 @@ npx vitest run --config vitest.unit.config.ts apps/web/src/v2-responsive.test.ts
 
 The width file needs Chrome. It fails if `scrollWidth > innerWidth` or a visible box leaves the viewport at 360, 390, 768, 1024, 1280, or 1440.
 
-Browser pass: `https://staging.ankanu.com`. Sign in as a member still at the email step. The card must show that member's address, not `ibrahim.sawadogo@exemple.bf`. Open an old verification link while signed in and while signed out. Open a used reset link and submit a new password.
+Browser pass: `https://staging.ankanu.com`. Sign in as a member still at the email step. The card must show that member's address, not `ibrahim.sawadogo@exemple.bf`. « Se connecter avec un autre compte » deletes the session and opens the sign-in panel; a reload stays on `/auth`. Open an old verification link while signed in and while signed out. Open a used reset link and submit a new password. The renew form must call consume and then show « Reprendre la demande ». A short password on a live token stays on the renew form.
 
 ## Test cases
 
@@ -88,6 +94,9 @@ Browser pass: `https://staging.ankanu.com`. Sign in as a member still at the ema
 | Expired, used, superseded, or unknown reset token on consume | `400 PASSWORD_RESET_INVALID`, message `Lien expiré ou adresse inconnue.`, then « Reprendre la demande » |
 | Valid reset consume | `200`, password changed, invalid view not shown |
 | Bad password on a live reset token | `UNHANDLED` on the field, form stays |
+| « Se connecter avec un autre compte » on `/email-verification` | `DELETE /v1/sessions/current`, then the `/auth` sign-in panel. A failed DELETE still leaves. Reload stays on `/auth`. |
+| `/phone`, `/otp`, `/id-liveness` | Same control, in the trust footnote, after « Modifier le numéro », and after the confidentiality note. |
+| Expired, used, superseded, or unknown reset token, submitted on the renew form | Consume is called. Title `Lien expiré ou adresse inconnue`. « Reprendre la demande » → `/password-reset`. |
 | `/otp` after sign-in at that step | Masked number from `GET /v1/verifications/otp`, or empty if `status` is `none` |
 | Served HTML for each screen in the sweep | None of the specimen strings in the table |
 
@@ -95,14 +104,14 @@ Test data already in the API tests: `fatim@example.bf` / `phrase avec espaces`, 
 
 ## My results
 
-- `email-verification.test.ts`, `change-email.test.ts`, `password-reset.test.ts`, and `v2-login.test.ts`: 4 files, 28 tests passed.
-- `v2-flow.test.ts`, `native-dialog.test.ts`, and `v2-responsive.test.ts`: 3 files, 23 tests passed. Widths include the empty email card, a 40+ character address, the expired card, and the OTP pill.
+- `v2-flow.test.ts`: 25 tests passed, including a `node:vm` `Script` compile of every served inline script. A top-level `return` fails that compile.
+- `v2-responsive.test.ts`: 2 tests passed. Widths 360, 390, 768, 1024, 1280, and 1440 include the switch-account control on email, phone, OTP, and id. Headless Chrome loaded the served renew HTML, submitted an expired token, a short password, and a valid token, and saw the invalid card, the `UNHANDLED` field error, and the renewed state. No `Illegal return statement`.
 
 ## Three validation passes
 
-1. Reads and links: own email only, `401` without a session, consume codes shared as above, valid consume still `200`, step guard holds a token URL, signed-in resend vs signed-out sign-in.
-2. Screen: one state from the real response. No specimen string, no Stitch script, no expired card until consume is not `200`. Placeholders on empty inputs stay.
-3. Widths: Chrome at 360, 390, 768, 1024, 1280, and 1440. `scrollWidth <= innerWidth` and no box outside the viewport, including the long address and the expired line. Shots at 360 and 1440 for the email, long email, expired email, OTP, onboarding, and profile.
+1. Reads and links: own email only, `401` without a session, consume codes shared as above, valid consume still `200`, step guard holds a token URL, signed-in resend vs signed-out sign-in. Switch-account calls DELETE then `/auth?leave=1`, including when DELETE throws. The served reset script compiles as a classic script and the browser submit calls consume.
+2. Screen: one state from the real response. No specimen string, no Stitch script, no expired card until consume is not `200`. Placeholders on empty inputs stay. Chrome showed the invalid reset card, the short-password field error, and the renewed state from the served script.
+3. Widths: Chrome at 360, 390, 768, 1024, 1280, and 1440. `scrollWidth <= innerWidth` and no box outside the viewport, including the long address, the expired line, and « Se connecter avec un autre compte » on email, phone, OTP, and id. Shots at 360 and 1440 for the email, long email, expired email, OTP, onboarding, and profile.
 
 ## Solution-design sections
 

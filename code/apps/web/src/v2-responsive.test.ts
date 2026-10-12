@@ -112,7 +112,10 @@ function screens(): Array<{ name: string; html: string }> {
 
 type CdpResult = Record<string, unknown>
 
-function connect(wsUrl: string): Promise<{
+function connect(
+  wsUrl: string,
+  onEvent?: (message: { method?: string; params?: { exceptionDetails?: { text?: string } } }) => void,
+): Promise<{
   send: (method: string, params?: object, sessionId?: string) => Promise<CdpResult>
   wait: (method: string, sessionId?: string) => Promise<void>
   close: () => void
@@ -126,6 +129,7 @@ function connect(wsUrl: string): Promise<{
       id?: number
       method?: string
       sessionId?: string
+      params?: { exceptionDetails?: { text?: string } }
       result?: CdpResult
       error?: { message?: string }
     }
@@ -142,6 +146,7 @@ function connect(wsUrl: string): Promise<{
     if (!message.method) {
       return
     }
+    onEvent?.(message)
     for (let index = waits.length - 1; index >= 0; index -= 1) {
       const waiter = waits[index]
       if (waiter && waiter.method === message.method && (!waiter.sessionId || waiter.sessionId === message.sessionId)) {
@@ -363,6 +368,35 @@ describe('v2 screens fit the required widths', () => {
               )
             }
           }
+          if (['05-email', '05b-email-long', '05c-email-expired', '06-phone', '07-otp', '08-id'].includes(page.name)) {
+            const link = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `(() => {
+                  const el = document.getElementById('switch-account')
+                  if (!el) return { ok: false, reason: 'missing' }
+                  const rect = el.getBoundingClientRect()
+                  const text = (el.textContent || '').trim()
+                  return {
+                    ok: text === 'Se connecter avec un autre compte' && rect.left >= -1 && rect.right <= ${width} + 1 && rect.width > 1 && rect.height > 1,
+                    left: Math.round(rect.left),
+                    right: Math.round(rect.right),
+                    text,
+                  }
+                })()`,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const shown = (
+              link.result as { value?: { ok?: boolean; left?: number; right?: number; text?: string; reason?: string } } | undefined
+            )?.value
+            if (!shown?.ok) {
+              failures.push(
+                `${page.name}@${width} switch-account ${shown?.text ?? shown?.reason ?? 'missing'} ${shown?.left ?? '?'}..${shown?.right ?? '?'}`,
+              )
+            }
+          }
           if (!value || value.scrollWidth > value.width || value.bad.length > 0) {
             failures.push(
               `${page.name}@${width} scroll ${value?.scrollWidth ?? '?'} > ${value?.width ?? width} ${value?.bad.join(' | ') ?? ''}`,
@@ -384,4 +418,149 @@ describe('v2 screens fit the required widths', () => {
     }
     expect(failures).toEqual([])
   }, 180_000)
+
+  it.skipIf(!binary)('binds the served reset submit handler in a real browser', async () => {
+    const html = resetHtml(stitch('05-password-reset'), 'renew')
+    const posts: string[] = []
+    const server: Server = createServer((request, response) => {
+      const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (request.method === 'POST' && url.pathname === '/v1/password-resets/consume') {
+        const chunks: Buffer[] = []
+        request.on('data', (chunk: Buffer) => chunks.push(chunk))
+        request.on('end', () => {
+          const raw = Buffer.concat(chunks).toString('utf8')
+          posts.push(raw)
+          const token = (JSON.parse(raw) as { token?: string }).token
+          response.setHeader('content-type', 'application/json; charset=utf-8')
+          if (token === 'live-ok') {
+            response.statusCode = 200
+            response.end(JSON.stringify({ id: 'session', kind: 'web', expires_at: '2026-11-11T00:00:00.000Z' }))
+            return
+          }
+          if (token === 'live-short') {
+            response.statusCode = 400
+            response.end(
+              JSON.stringify({
+                error: { code: 'UNHANDLED', message: "password : la règle publiée n'est pas respectée." },
+              }),
+            )
+            return
+          }
+          response.statusCode = 400
+          response.end(
+            JSON.stringify({
+              error: { code: 'PASSWORD_RESET_INVALID', message: 'Lien expiré ou adresse inconnue.' },
+            }),
+          )
+        })
+        return
+      }
+      response.setHeader('content-type', 'text/html; charset=utf-8')
+      response.end(html)
+    })
+    await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', () => resolve()))
+    const address = server.address()
+    if (!address || typeof address === 'string') {
+      throw new Error('test server has no port')
+    }
+    const origin = `http://127.0.0.1:${address.port}`
+    const profile = mkdtempSync(join(tmpdir(), 'ankanu-reset-'))
+    const errors: string[] = []
+    const chrome = await launch(binary as string, profile)
+    const cdp = await connect(chrome.ws, (message) => {
+      if (message.method === 'Runtime.exceptionThrown') {
+        errors.push(message.params?.exceptionDetails?.text ?? 'exception')
+      }
+    })
+    try {
+      const created = await cdp.send('Target.createTarget', { url: 'about:blank' })
+      const attached = await cdp.send('Target.attachToTarget', { targetId: String(created.targetId), flatten: true })
+      const sessionId = String(attached.sessionId)
+      await cdp.send('Page.enable', {}, sessionId)
+      await cdp.send('Runtime.enable', {}, sessionId)
+      const read = async () => {
+        const measured = await cdp.send(
+          'Runtime.evaluate',
+          {
+            expression: `(() => ({
+              title: ((document.querySelector('h1') && document.querySelector('h1').textContent) || '').trim(),
+              error: ((document.getElementById('reset-error') && document.getElementById('reset-error').textContent) || '').trim(),
+              resume: ((document.querySelector('a[href="/password-reset"]') && document.querySelector('a[href="/password-reset"]').textContent) || '').trim(),
+              renew: Boolean(document.getElementById('reset-password')),
+              done: ((document.getElementById('reset-enter') && document.getElementById('reset-enter').textContent) || '').trim()
+            }))()`,
+            returnByValue: true,
+          },
+          sessionId,
+        )
+        return (
+          measured.result as {
+            value?: { title: string; error: string; resume: string; renew: boolean; done: string }
+          }
+        )?.value
+      }
+      const open = async (token: string) => {
+        const loaded = cdp.wait('Page.loadEventFired', sessionId)
+        await cdp.send('Page.navigate', { url: `${origin}/password-reset?token=${token}` }, sessionId)
+        await loaded
+      }
+      const submit = async (password: string) => {
+        const sent = await cdp.send(
+          'Runtime.evaluate',
+          {
+            expression: `(() => {
+              const password = document.getElementById('reset-password')
+              const confirm = document.getElementById('reset-confirm')
+              const form = document.querySelector('form')
+              if (!password || !confirm || !form || typeof form.requestSubmit !== 'function') return 'unbound'
+              password.value = ${JSON.stringify(password)}
+              confirm.value = ${JSON.stringify(password)}
+              form.requestSubmit()
+              return 'sent'
+            })()`,
+            returnByValue: true,
+          },
+          sessionId,
+        )
+        return (sent.result as { value?: string } | undefined)?.value
+      }
+      const until = async (ready: (state: { title: string; error: string; resume: string; renew: boolean; done: string }) => boolean) => {
+        const start = Date.now()
+        let last: { title: string; error: string; resume: string; renew: boolean; done: string } | undefined
+        while (Date.now() - start < 3000) {
+          last = await read()
+          if (last && ready(last)) return last
+          await new Promise((resolve) => setTimeout(resolve, 50))
+        }
+        throw new Error(`reset page did not update: ${JSON.stringify(last)} posts=${posts.join(' | ')} errors=${errors.join(' | ')}`)
+      }
+
+      await open('expired-token')
+      expect(await submit('phrase avec espaces')).toBe('sent')
+      const invalid = await until((state) => state.resume.includes('Reprendre la demande'))
+      expect(invalid.title).toBe('Lien expiré ou adresse inconnue')
+      expect(invalid.resume).toContain('Reprendre la demande')
+      expect(posts.at(-1)).toContain('"token":"expired-token"')
+
+      await open('live-short')
+      expect(await submit('court')).toBe('sent')
+      const held = await until((state) => state.error.includes("la règle publiée n'est pas respectée."))
+      expect(held.renew).toBe(true)
+      expect(held.title).not.toBe('Lien expiré ou adresse inconnue')
+      expect(held.resume).toBe('')
+      expect(posts.at(-1)).toContain('"token":"live-short"')
+
+      await open('live-ok')
+      expect(await submit('phrase avec espaces')).toBe('sent')
+      const done = await until((state) => state.done.includes("Accéder à mon espace Ta'aruf"))
+      expect(done.title).toBe('Mot de passe renouvelé · Anciennes sessions révoquées')
+      expect(done.renew).toBe(false)
+      expect(posts.at(-1)).toContain('"token":"live-ok"')
+      expect(errors.join('\n')).not.toContain('Illegal return')
+    } finally {
+      cdp.close()
+      chrome.proc.kill('SIGKILL')
+      await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
+    }
+  }, 60_000)
 })

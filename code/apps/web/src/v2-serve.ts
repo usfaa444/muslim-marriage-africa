@@ -71,9 +71,54 @@ export function signupAccountResponse(request: Request): Promise<Response> {
   return send(request, '/signup/account', authHtml(stitchFile('02-auth'), 'signup', siteKey()))
 }
 
+function sessionClearCookie(): string {
+  const secure = process.env.ANKANU_COOKIE_SECURE === 'false' ? '' : '; Secure'
+  return `ankanu_session=; Path=/; HttpOnly${secure}; SameSite=Lax; Max-Age=0`
+}
+
+function clearedSessionCookie(response: Response): string | null {
+  const headers = response.headers as Headers & { getSetCookie?: () => string[] }
+  const listed = headers.getSetCookie?.() ?? []
+  const found = listed.find((value) => value.toLowerCase().includes('ankanu_session='))
+  if (found) {
+    return found
+  }
+  const single = response.headers.get('set-cookie')
+  if (single && single.toLowerCase().includes('ankanu_session=')) {
+    return single
+  }
+  return null
+}
+
+async function destroySession(cookie: string): Promise<string | null> {
+  const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
+  try {
+    const response = await fetch(`${origin}/v1/sessions/current`, {
+      method: 'DELETE',
+      headers: cookie ? { cookie } : {},
+      cache: 'no-store',
+    })
+    return clearedSessionCookie(response)
+  } catch {
+    return null
+  }
+}
+
+/** Ends the session, then sends the browser to the sign-in panel with the cookie cleared. */
+export async function leaveAccount(request: Request, destroy: (cookie: string) => Promise<string | null> = destroySession): Promise<Response> {
+  const cleared = (await destroy(request.headers.get('cookie') ?? '')) ?? sessionClearCookie()
+  const redirect = redirectTo(request, '/auth')
+  const headers = new Headers(redirect.headers)
+  headers.append('set-cookie', cleared)
+  return new Response(null, { status: redirect.status, headers })
+}
+
 export async function authResponse(request: Request): Promise<Response> {
-  const mode = new URL(request.url).searchParams.get('mode')
-  if (mode === 'signup') {
+  const url = new URL(request.url)
+  if (url.searchParams.get('leave') === '1') {
+    return leaveAccount(request)
+  }
+  if (url.searchParams.get('mode') === 'signup') {
     return redirectTo(request, '/signup')
   }
   return send(request, '/auth', authHtml(stitchFile('02-auth'), 'login', siteKey()))

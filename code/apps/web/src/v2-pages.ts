@@ -103,6 +103,23 @@ export function authHtml(stitch: string, panel: 'signup' | 'login', siteKey: str
 
 const EMAIL_LINK_ERROR = `<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="email-link-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span><span id="email-link-error-text"></span></p>`
 
+function switchAccountLink(className: string): string {
+  return `<a class="${className}" href="/auth?leave=1" id="switch-account">Se connecter avec un autre compte</a>`
+}
+
+const EMAIL_SWITCH = switchAccountLink(
+  'inline-block max-w-full text-center whitespace-normal text-xs text-deep-navy/70 hover:text-deep-navy underline underline-offset-4 decoration-hairline transition-colors',
+)
+const PHONE_SWITCH = switchAccountLink(
+  'inline-block max-w-full text-center whitespace-normal text-xs font-medium text-deep-navy hover:text-soft-gold transition-colors duration-150 underline underline-offset-4 decoration-hairline',
+)
+const OTP_SWITCH = switchAccountLink(
+  'inline-block max-w-full text-center whitespace-normal font-body text-xs text-deep-navy/70 hover:text-soft-gold underline underline-offset-4 decoration-hairline transition-colors duration-150',
+)
+const ID_SWITCH = switchAccountLink(
+  'inline-block max-w-full text-center whitespace-normal text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors',
+)
+
 const EMAIL_CHANGE_FIT = `<style>
 #editEmailForm .flex { flex-wrap: wrap; }
 #newEmailInput { min-width: 0; flex: 1 1 10rem; }
@@ -134,6 +151,10 @@ ${helper}`
     '<p class="text-deep-navy/85 text-sm md:text-base leading-relaxed font-normal" id="email-intro">',
   )
   html = html.replace('<!-- Adresse de référence', `${EMAIL_LINK_ERROR}<!-- Adresse de référence`)
+  html = html.replace(
+    'Tout nouvel envoi désactivera immédiatement le lien précédent pour garantir la sécurité absolue de votre compte.\n        </p>',
+    `Tout nouvel envoi désactivera immédiatement le lien précédent pour garantir la sécurité absolue de votre compte.\n        </p>\n${EMAIL_SWITCH}`,
+  )
   html = html.includes('</head>') ? html.replace('</head>', `${EMAIL_CHANGE_FIT}</head>`) : html
   return mount(
     html,
@@ -145,7 +166,11 @@ ${helper}`
 }
 
 export function phoneHtml(stitch: string): string {
-  const html = stitch.replace('value="70 24 58 19"', 'value=""').replace('+226 70 24 58 19', '')
+  let html = stitch.replace('value="70 24 58 19"', 'value=""').replace('+226 70 24 58 19', '')
+  html = html.replace(
+    '<!-- Trust / Security Footnote -->\n<div class="mt-8 pt-6 border-t border-hairline/60 w-full flex flex-col items-center">',
+    `<!-- Trust / Security Footnote -->\n<div class="mt-8 pt-6 border-t border-hairline/60 w-full flex flex-col items-center gap-3">\n${PHONE_SWITCH}`,
+  )
   return mount(html, phoneScript())
 }
 
@@ -157,6 +182,7 @@ export function otpHtml(stitch: string): string {
     '<a href="/phone"$1>$2</a>',
   )
   html = html.replace('+226 70 24 58 19', '').replace('value="70 24 58 19"', 'value=""')
+  html = html.replace('<span class="">Modifier le numéro</span></a>', `<span class="">Modifier le numéro</span></a>\n${OTP_SWITCH}`)
   if (!html.includes('id="phone-display"')) {
     html = html.replace('<!-- OTP Form -->', `${OTP_NUMBER}<!-- OTP Form -->`)
   }
@@ -164,7 +190,11 @@ export function otpHtml(stitch: string): string {
 }
 
 export function idHtml(stitch: string): string {
-  const html = stitch.replace('Document téléversé : CNIB_recto_verso.pdf', '')
+  let html = stitch.replace('Document téléversé : CNIB_recto_verso.pdf', '')
+  html = html.replace(
+    'strictement réservées à la validation du compte.\n          </span>\n</div>',
+    `strictement réservées à la validation du compte.\n          </span>\n</div>\n${ID_SWITCH}`,
+  )
   return mount(html, idScript())
 }
 

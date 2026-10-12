@@ -79,6 +79,27 @@ const HELPERS = `
     }
     return false
   }
+  function bindSwitchAccount() {
+    var link = document.getElementById('switch-account')
+    if (!link) return
+    link.addEventListener('click', function (event) {
+      if (event && event.button !== undefined && event.button !== 0) return
+      if (event && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return
+      if (event && event.preventDefault) event.preventDefault()
+      var gone = false
+      function go() {
+        if (gone) return
+        gone = true
+        try { clearDraft() } catch (error) {}
+        window.location.assign('/auth?leave=1')
+      }
+      try {
+        var pending = fetch('/v1/sessions/current', { method: 'DELETE', credentials: 'same-origin', keepalive: true })
+        if (pending && typeof pending.catch === 'function') pending.catch(function () {})
+      } catch (error) {}
+      go()
+    })
+  }
 `
 
 export function splashScript(): string {
@@ -380,6 +401,7 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
 
 export function emailScript(copy: { invalidTitle: string; invalidFallback: string }): string {
   return `${HELPERS}
+    bindSwitchAccount()
     var COPY = ${JSON.stringify(copy)}
     var shown = document.getElementById('currentEmail')
     if (shown) shown.textContent = ''
@@ -506,6 +528,7 @@ export function emailScript(copy: { invalidTitle: string; invalidFallback: strin
 
 export function phoneScript(): string {
   return `${HELPERS}
+    bindSwitchAccount()
     var input = document.getElementById('phone-input')
     if (input) input.value = ''
     var display = document.getElementById('phone-display')
@@ -536,6 +559,7 @@ export function phoneScript(): string {
 
 export function otpScript(): string {
   return `${HELPERS}
+    bindSwitchAccount()
     var phoneDisplay = document.getElementById('phone-display')
     if (phoneDisplay) phoneDisplay.textContent = ''
     fetch('/v1/verifications/otp', { credentials: 'same-origin' }).then(readJson).then(function (payload) {
@@ -601,6 +625,7 @@ export function otpScript(): string {
 
 export function idScript(): string {
   return `${HELPERS}
+    bindSwitchAccount()
     var title = document.getElementById('doc-title')
     if (title) {
       title.textContent = ''
@@ -735,9 +760,10 @@ export function resetScript(copy: {
       })
     }
     var form = document.querySelector('form')
-    if (!form) return
-    form.addEventListener('submit', async function (event) {
+    var resetBusy = false
+    if (form) form.addEventListener('submit', async function (event) {
       event.preventDefault()
+      if (resetBusy) return
       var email = document.getElementById('email')
       if (email) {
         if (!email.value.trim()) return
@@ -762,33 +788,39 @@ export function resetScript(copy: {
         return
       }
       if (!token) return
-      var response = await fetch('/v1/password-resets/consume', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ token: token, password: password.value })
-      })
-      var payload = await readJson(response)
-      if (response.status === 200) {
-        window.history.replaceState(null, '', '/password-reset')
-        showState(COPY.doneTitle, COPY.doneText, COPY.doneForm)
-        var next = document.getElementById('reset-enter')
-        if (next) {
-          next.addEventListener('click', function (click) {
-            click.preventDefault()
-            goToGate()
-          })
+      resetBusy = true
+      try {
+        var response = await fetch('/v1/password-resets/consume', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ token: token, password: password.value })
+        })
+        var payload = await readJson(response)
+        if (response.status === 200) {
+          window.history.replaceState(null, '', '/password-reset')
+          showState(COPY.doneTitle, COPY.doneText, COPY.doneForm)
+          var next = document.getElementById('reset-enter')
+          if (next) {
+            next.addEventListener('click', function (click) {
+              click.preventDefault()
+              goToGate()
+            })
+          }
+          return
         }
-        return
-      }
-      var code = payload && payload.error && payload.error.code
-      if (code === 'PASSWORD_RESET_INVALID') {
-        showState(COPY.invalidTitle, COPY.invalidText, COPY.invalidForm)
-        return
-      }
-      if (error) {
-        error.classList.remove('hidden')
-        error.textContent = errorMessage(payload)
+        var code = payload && payload.error && payload.error.code
+        if (code === 'PASSWORD_RESET_INVALID') {
+          showState(COPY.invalidTitle, COPY.invalidText, COPY.invalidForm)
+          return
+        }
+        resetBusy = false
+        if (error) {
+          error.classList.remove('hidden')
+          error.textContent = errorMessage(payload)
+        }
+      } catch (failure) {
+        resetBusy = false
       }
     })
   `

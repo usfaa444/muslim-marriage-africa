@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { Script } from 'node:vm'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
@@ -187,6 +188,25 @@ describe('v2 signup and sign-in screens', () => {
     expect(otp).not.toContain('setInterval')
   })
 
+  it('offers another account on the in-progress steps that already have a text link', () => {
+    const pages = [
+      emailHtml(stitch('04-email-verification')),
+      phoneHtml(stitch('06-otp')),
+      otpHtml(stitch('56-otp-alt')),
+      idHtml(stitch('07-id-liveness')),
+    ]
+    for (const page of pages) {
+      expect(page.match(/id="switch-account"/g)?.length).toBe(1)
+      expect(page).toContain('>Se connecter avec un autre compte</a>')
+      expect(page).toContain('href="/auth?leave=1"')
+      expect(page).toContain("fetch('/v1/sessions/current', { method: 'DELETE', credentials: 'same-origin' })")
+      expect(page).toContain("location.assign('/auth?leave=1')")
+    }
+    expect(phoneHtml(stitch('06-otp'))).toContain('hover:text-soft-gold')
+    expect(otpHtml(stitch('56-otp-alt'))).toContain('href="/phone"')
+    expect(idHtml(stitch('07-id-liveness'))).toContain('hover:text-soft-gold')
+  })
+
   it('hides the specimen identity state until a capture is stored', () => {
     const page = idHtml(stitch('07-id-liveness'))
     expect(page).not.toContain('CNIB_recto_verso.pdf')
@@ -303,6 +323,39 @@ describe('v2 signup and sign-in screens', () => {
     expect(phoneHtml(stitch('06-otp'))).toContain('placeholder="70 00 00 00"')
     expect(authHtml(stitch('02-auth'), 'login', SITE)).toContain('placeholder="nom@exemple.bf"')
   })
+
+  it('compiles every served inline script as a classic script', () => {
+    const auth = stitch('02-auth')
+    const pages = [
+      splashHtml(),
+      identityHtml(stitch('03-age-gate')),
+      pseudonymHtml(stitch('54-pseudonym-dob')),
+      authHtml(auth, 'login', SITE),
+      authHtml(auth, 'signup', SITE),
+      emailHtml(stitch('04-email-verification')),
+      phoneHtml(stitch('06-otp')),
+      otpHtml(stitch('56-otp-alt')),
+      idHtml(stitch('07-id-liveness')),
+      resetHtml(stitch('05-password-reset')),
+      resetHtml(stitch('05-password-reset'), 'renew'),
+      resetHtml(stitch('05-password-reset'), 'invalid'),
+      resetHtml(stitch('05-password-reset'), 'done'),
+      pinHtml(stitch('10-pin-lock')),
+      onboardingHtml(stitch('08-onboarding')),
+      photoHtml(stitch('09-photo-rules')),
+      profileHtml(stitch('11-profile-edit')),
+      settingsHtml(stitch('27-settings')),
+      statusHtml(stitch('28-delete-export-status')),
+    ]
+    for (const page of pages) {
+      const scripts = [...page.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1] ?? '')
+      expect(scripts.length).toBeGreaterThan(0)
+      for (const source of scripts) {
+        expect(() => new Script(source)).not.toThrow()
+      }
+    }
+    expect(resetHtml(stitch('05-password-reset'), 'renew')).not.toContain('if (!form) return')
+  })
 })
 
 type FakeNode = {
@@ -314,14 +367,33 @@ type FakeNode = {
   href: string
   parentNode: FakeNode | null
   children: FakeNode[]
-  listener: ((event?: { preventDefault?: () => void }) => void | Promise<void>) | null
+  listener: ((
+    event?: {
+      button?: number
+      metaKey?: boolean
+      ctrlKey?: boolean
+      shiftKey?: boolean
+      altKey?: boolean
+      preventDefault?: () => void
+    },
+  ) => void | Promise<void>) | null
   classList: {
     contains: (name: string) => boolean
     add: (name: string) => void
     remove: (name: string) => void
     toggle: (name: string, force?: boolean) => void
   }
-  addEventListener: (type: string, fn: (event?: { preventDefault?: () => void }) => void | Promise<void>) => void
+  addEventListener: (
+    type: string,
+    fn: (event?: {
+      button?: number
+      metaKey?: boolean
+      ctrlKey?: boolean
+      shiftKey?: boolean
+      altKey?: boolean
+      preventDefault?: () => void
+    }) => void | Promise<void>,
+  ) => void
   querySelector: (selector: string) => FakeNode | null
   replaceChild: (next: FakeNode, prev: FakeNode) => void
   focus: () => void
@@ -512,6 +584,48 @@ describe('email link result', () => {
     await page.save.listener?.({ preventDefault() {} })
     expect(page.shown.textContent).toBe('nouvelle@example.bf')
   })
+
+  it('deletes the session and opens sign-in, including when logout fails', async () => {
+    const page = emailPage()
+    const link = fakeNode('switch-account')
+    page.nodes.set('switch-account', link)
+    const calls: Array<{ url: string; method?: string }> = []
+    const removed: string[] = []
+    const moves: string[] = []
+    const scripts = [...emailHtml(stitch('04-email-verification')).matchAll(/<script>([\s\S]*?)<\/script>/g)]
+    const script = scripts.find((match) => match[1]?.includes('switch-account'))?.[1] ?? ''
+    new Function('document', 'window', 'fetch', 'sessionStorage', script)(
+      page.documentRef,
+      { location: { search: '', assign(url: string) { moves.push(url) } } },
+      async (url: string, init?: { method?: string }) => {
+        calls.push({ url, method: init?.method })
+        if (init?.method === 'DELETE') {
+          throw new Error('down')
+        }
+        return { status: 200, json: async () => ({ email: 'fatim@example.bf', email_verified_at: null }) }
+      },
+      { setItem() {}, getItem() { return 'kept' }, removeItem(key: string) { removed.push(key) } },
+    )
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(page.shown.textContent).toBe('fatim@example.bf')
+    let prevented = false
+    await link.listener?.({
+      button: 0,
+      preventDefault() {
+        prevented = true
+      },
+    })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(prevented).toBe(true)
+    expect(calls).toContainEqual({ url: '/v1/sessions/current', method: 'DELETE' })
+    expect(moves).toEqual(['/auth?leave=1'])
+    expect(removed).toContain('ankanu.signup.email')
+    moves.length = 0
+    calls.length = 0
+    await link.listener?.({ button: 1, preventDefault() {} })
+    expect(moves).toEqual([])
+    expect(calls).toEqual([])
+  })
 })
 
 describe('server entry guard', () => {
@@ -672,6 +786,52 @@ describe('route files', () => {
       expect(renewBody).not.toContain('id="email"')
       expect(renewBody).not.toContain("Renseignez l'adresse email")
     } finally {
+      process.chdir(previous)
+    }
+  })
+
+  it('clears the cookie on leave and the next /auth stays on the sign-in panel', async () => {
+    const webRoot = fileURLToPath(new URL('../', import.meta.url))
+    const previous = process.cwd()
+    process.chdir(webRoot)
+    const original = globalThis.fetch
+    try {
+      const { authResponse } = await import('./v2-serve.js')
+      const sent: string[] = []
+      globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+        sent.push(`${init?.method ?? 'GET'} ${String(input)}`)
+        const headers = new Headers()
+        if (init?.method === 'DELETE') {
+          headers.append('set-cookie', 'ankanu_session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0')
+        }
+        return new Response(null, { status: 204, headers })
+      }) as typeof fetch
+      const left = await authResponse(
+        new Request('http://127.0.0.1/auth?leave=1', { headers: { cookie: 'ankanu_session=real-session' } }),
+      )
+      expect(left.status).toBe(303)
+      expect(left.headers.get('location')).toBe('http://127.0.0.1/auth')
+      expect(left.headers.get('set-cookie')).toContain('Max-Age=0')
+      expect(sent).toHaveLength(1)
+      expect(sent[0]).toMatch(/^DELETE .+\/v1\/sessions\/current$/)
+      const signIn = await authResponse(new Request('http://127.0.0.1/auth'))
+      expect(signIn.status).toBe(200)
+      expect(await signIn.text()).toContain('class="space-y-6" id="panel-login"')
+      sent.length = 0
+      globalThis.fetch = (async () => {
+        throw new Error('down')
+      }) as typeof fetch
+      const failed = await authResponse(
+        new Request('http://127.0.0.1/auth?leave=1', { headers: { cookie: 'ankanu_session=real-session' } }),
+      )
+      expect(failed.status).toBe(303)
+      expect(failed.headers.get('location')).toBe('http://127.0.0.1/auth')
+      expect(failed.headers.get('set-cookie')).toContain('ankanu_session=')
+      expect(failed.headers.get('set-cookie')).toContain('Max-Age=0')
+      const again = await entryRedirect(new Request('https://staging.ankanu.com/auth'), '/auth', async () => 'anon')
+      expect(again).toBeNull()
+    } finally {
+      globalThis.fetch = original
       process.chdir(previous)
     }
   })
