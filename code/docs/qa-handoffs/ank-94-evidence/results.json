@@ -1,0 +1,224 @@
+[
+  {
+    "id": "served HTML sweep",
+    "expected": "no specimen text or value, placeholders only, no demo switcher",
+    "actual": "checked 17 paths",
+    "pass": true
+  },
+  {
+    "id": "GET email no cookie",
+    "expected": "401 UNAUTHENTICATED",
+    "actual": "401 UNAUTHENTICATED",
+    "pass": true
+  },
+  {
+    "id": "create account A",
+    "expected": "201 and session cookie",
+    "actual": "201",
+    "pass": true
+  },
+  {
+    "id": "create account B",
+    "expected": "201 and session cookie",
+    "actual": "201",
+    "pass": true
+  },
+  {
+    "id": "GET own email",
+    "expected": "200 email + email_verified_at only, each account sees itself",
+    "actual": "A 200 email,email_verified_at match=true verified=null; B match=true",
+    "pass": true
+  },
+  {
+    "id": "email page signed out no token",
+    "expected": "303 /auth",
+    "actual": "303 https://staging.ankanu.com/auth",
+    "pass": true
+  },
+  {
+    "id": "sign-in email step shows own address",
+    "expected": "own address, no specimen",
+    "actual": "own address",
+    "pass": true
+  },
+  {
+    "id": "Se connecter avec un autre compte",
+    "expected": "control on /email-verification ends the server session and opens /auth",
+    "actual": "Modifier l'adresse | Enregistrer | refresh Renvoyer le lien de confirmation",
+    "pass": false
+  },
+  {
+    "id": "widths email-real",
+    "expected": "scrollWidth <= innerWidth and no box outside at 360 390 768 1024 1280 1440",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "landing Créer un compte returns real email",
+    "expected": "a Créer un compte link",
+    "actual": "link missing",
+    "pass": false
+  },
+  {
+    "id": "issue first verification link",
+    "expected": "201 and a log line",
+    "actual": "201",
+    "pass": true
+  },
+  {
+    "id": "change email updates the span",
+    "expected": "200 and span is the 56-character address",
+    "actual": "200 length=56 match=true",
+    "pass": true
+  },
+  {
+    "id": "widths email-long",
+    "expected": "scrollWidth <= innerWidth and no box outside at 360 390 768 1024 1280 1440",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "superseded verification link signed in",
+    "expected": "400 EMAIL_LINK_INVALID, title Lien expiré ou adresse inconnue, empty address, stays on the page",
+    "actual": "400 EMAIL_LINK_INVALID title=Lien expiré ou adresse inconnue line=Lien expiré ou caduc. path=/email-verification?token=redacted shownEmpty=true",
+    "pass": true
+  },
+  {
+    "id": "expire verification token in DB",
+    "expected": "UPDATE 1",
+    "actual": "UPDATE 1",
+    "pass": true
+  },
+  {
+    "id": "expired verification signed in + Renvoyer un lien",
+    "expected": "error state, POST 201, new log line, banner",
+    "actual": "400 EMAIL_LINK_INVALID button=Renvoyer un lien resend=201 logged=true bannerHidden=false",
+    "pass": true
+  },
+  {
+    "id": "widths email-expired-in",
+    "expected": "scrollWidth <= innerWidth and no box outside at 360 390 768 1024 1280 1440",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "unknown verification token signed in",
+    "expected": "400 EMAIL_LINK_INVALID and the error card",
+    "actual": "400 EMAIL_LINK_INVALID title=Lien expiré ou adresse inconnue",
+    "pass": true
+  },
+  {
+    "id": "email loading shows no sample",
+    "expected": "empty span, or the real address if the probe lost the race; never a specimen",
+    "actual": "real address before the probe",
+    "pass": true
+  },
+  {
+    "id": "failed email read shows no sample",
+    "expected": "empty span, no specimen",
+    "actual": "empty",
+    "pass": true
+  },
+  {
+    "id": "expired link signed out then Se connecter",
+    "expected": "error card, /auth sign-in panel, reload stays",
+    "actual": "400 EMAIL_LINK_INVALID control=Se connecter href=/auth path=/auth login=true",
+    "pass": true
+  },
+  {
+    "id": "widths email-expired-out",
+    "expected": "scrollWidth <= innerWidth and no box outside at 360 390 768 1024 1280 1440",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "UI sign-in from /auth",
+    "expected": "fresh context lands on /email-verification",
+    "actual": "captcha or submit did not finish",
+    "pass": false
+  },
+  {
+    "id": "valid verification link",
+    "expected": "200 then /phone, no sample number",
+    "actual": "200 path=/phone valueEmpty=true displayEmpty=true",
+    "pass": true
+  },
+  {
+    "id": "GET after consume",
+    "expected": "email_verified_at set",
+    "actual": "set",
+    "pass": true
+  },
+  {
+    "id": "used verification link",
+    "expected": "400 EMAIL_LINK_INVALID, no silent redirect",
+    "actual": "400 EMAIL_LINK_INVALID path=/email-verification?token=redacted title=Lien expiré ou adresse inconnue",
+    "pass": true
+  },
+  {
+    "id": "phone page autre-compte control",
+    "expected": "recorded; the handoff must say why it is or is not there",
+    "actual": "absent",
+    "pass": true
+  },
+  {
+    "id": "widths phone",
+    "expected": "scrollWidth <= innerWidth and no box outside at 360 390 768 1024 1280 1440",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "otp shows masked number from GET",
+    "expected": "pending mask from the API, not the specimen",
+    "actual": "200 pending same=true specimen=false",
+    "pass": true
+  },
+  {
+    "id": "widths otp",
+    "expected": "scrollWidth <= innerWidth and no box outside at 360 390 768 1024 1280 1440",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "otp page autre-compte control",
+    "expected": "recorded; the handoff must say why it is or is not there",
+    "actual": "absent",
+    "pass": true
+  },
+  {
+    "id": "fresh sign-in at otp step",
+    "expected": "lands on /otp with the mask and no signup sessionStorage",
+    "actual": "/otp storage=true mask=true",
+    "pass": true
+  },
+  {
+    "id": "id-liveness after otp has no sample filename",
+    "expected": "no CNIB_ sample",
+    "actual": "/id-liveness",
+    "pass": true
+  },
+  {
+    "id": "widths id-liveness",
+    "expected": "scrollWidth <= innerWidth and no box outside at 360 390 768 1024 1280 1440",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "id-liveness autre-compte control",
+    "expected": "recorded; the handoff must say why it is or is not there",
+    "actual": "absent",
+    "pass": true
+  },
+  {
+    "id": "request two reset links",
+    "expected": "201 and two log lines",
+    "actual": "201/201 count=2",
+    "pass": true
+  },
+  {
+    "id": "run",
+    "expected": "complete",
+    "actual": "page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\"",
+    "pass": false
+  }
+]

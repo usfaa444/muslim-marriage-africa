@@ -1,0 +1,152 @@
+[
+  {
+    "id": "served reset script parses",
+    "expected": "consume present, no top-level return",
+    "actual": "consume=true illegal=false",
+    "pass": true
+  },
+  {
+    "id": "create email-step account",
+    "expected": "201",
+    "actual": "201",
+    "pass": true
+  },
+  {
+    "id": "email page own address and switch link",
+    "expected": "own address and Se connecter avec un autre compte",
+    "actual": "link shown, no specimen",
+    "pass": true
+  },
+  {
+    "id": "widths switch-email",
+    "expected": "fit at six widths",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "failed DELETE still leaves",
+    "expected": "/auth, cookie gone, reload stays",
+    "actual": "path=/auth cookie=gone login=true",
+    "pass": true
+  },
+  {
+    "id": "sign in again",
+    "expected": "201",
+    "actual": "201",
+    "pass": true
+  },
+  {
+    "id": "verification link issued",
+    "expected": "201 and a link",
+    "actual": "201 link=yes",
+    "pass": true
+  },
+  {
+    "id": "phone switch in trust footnote",
+    "expected": "control under the phone form footnote",
+    "actual": "Se connecter avec un autre compte",
+    "pass": true
+  },
+  {
+    "id": "widths switch-phone",
+    "expected": "switch link inside all six widths",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "otp switch after Modifier le numéro",
+    "expected": "control immediately after that link",
+    "actual": "Se connecter avec un autre compte",
+    "pass": true
+  },
+  {
+    "id": "widths switch-otp",
+    "expected": "switch link inside all six widths",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "otp dispatched",
+    "expected": "a new code in the api log",
+    "actual": "yes",
+    "pass": true
+  },
+  {
+    "id": "id switch after confidentiality note",
+    "expected": "control after the note under Confirmer et transmettre",
+    "actual": "/id-liveness Se connecter avec un autre compte",
+    "pass": true
+  },
+  {
+    "id": "widths switch-id",
+    "expected": "switch link inside all six widths",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "two reset links",
+    "expected": "201",
+    "actual": "201/201 count=2",
+    "pass": true
+  },
+  {
+    "id": "superseded reset submit",
+    "expected": "400 PASSWORD_RESET_INVALID and Reprendre la demande",
+    "actual": "400 PASSWORD_RESET_INVALID reprise=1 href=/password-reset illegal=false title=Lien expiré ou adresse inconnue",
+    "pass": true
+  },
+  {
+    "id": "short password on live reset",
+    "expected": "UNHANDLED, renew form stays",
+    "actual": "400 UNHANDLED title=Réinitialisation du mot de passe same=true reprise=0 illegal=false",
+    "pass": true
+  },
+  {
+    "id": "expire live reset",
+    "expected": "UPDATE 1",
+    "actual": "UPDATE 1",
+    "pass": true
+  },
+  {
+    "id": "expired reset submit",
+    "expected": "400 and Reprendre la demande",
+    "actual": "400 PASSWORD_RESET_INVALID reprise=1 illegal=false",
+    "pass": true
+  },
+  {
+    "id": "widths reset-invalid-retest",
+    "expected": "invalid card fits all six widths; this page has no switch link",
+    "actual": "scrollWidth equals innerWidth at 360, 390, 768, 1024, 1280, 1440; no box outside; no switch link on this page",
+    "pass": true
+  },
+  {
+    "id": "valid reset submit",
+    "expected": "200 and renewed title",
+    "actual": "200 title=Mot de passe renouvelé · Anciennes sessions révoquées illegal=false",
+    "pass": true
+  },
+  {
+    "id": "used reset submit",
+    "expected": "400 and Reprendre la demande",
+    "actual": "400 PASSWORD_RESET_INVALID reprise=1",
+    "pass": true
+  },
+  {
+    "id": "unknown reset submit",
+    "expected": "400 and Reprendre la demande",
+    "actual": "400 PASSWORD_RESET_INVALID reprise=1",
+    "pass": true
+  },
+  {
+    "id": "id switch deletes session",
+    "expected": "DELETE then /auth, reload stays",
+    "actual": "delete=204 path=/auth login=true",
+    "pass": true
+  },
+  {
+    "id": "sign in after switch and renew",
+    "expected": "201",
+    "actual": "201",
+    "pass": true
+  }
+]

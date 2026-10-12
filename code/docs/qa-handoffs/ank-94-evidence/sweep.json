@@ -1,0 +1,121 @@
+[
+  {
+    "path": "/",
+    "anon": 200,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/signup",
+    "anon": 200,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/signup/identity",
+    "anon": 200,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/signup/pseudonym",
+    "anon": 200,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/signup/account",
+    "anon": 200,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/auth",
+    "anon": 200,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/email-verification",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/phone",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/otp",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/id-liveness",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/password-reset",
+    "anon": 200,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/pin",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/onboarding",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/photo-rules",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/profile-edit",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/settings",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  },
+  {
+    "path": "/privacy/status/qa-sweep",
+    "anon": 303,
+    "stub": 200,
+    "hits": [],
+    "demo": false
+  }
+]

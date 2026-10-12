@@ -1,0 +1,50 @@
+[
+  {
+    "id": "sign in changed address",
+    "expected": "201",
+    "actual": "201 cookie=true",
+    "pass": true
+  },
+  {
+    "id": "landing Commencer l inscription returns real email",
+    "expected": "/email-verification with the saved address",
+    "actual": "/email-verification match=true",
+    "pass": true
+  },
+  {
+    "id": "widths landing return",
+    "expected": "six widths fit",
+    "actual": "fit",
+    "pass": true
+  },
+  {
+    "id": "UI sign-in retry",
+    "expected": "panel submit reaches the gate",
+    "actual": "disabled-before=true frames=8 Error",
+    "pass": false
+  },
+  {
+    "id": "sign in account B",
+    "expected": "201",
+    "actual": "201",
+    "pass": true
+  },
+  {
+    "id": "two reset links",
+    "expected": "201 and two new lines",
+    "actual": "201/201 added=2",
+    "pass": true
+  },
+  {
+    "id": "reset renew form shape",
+    "expected": "token present, password fields, submit button, no email field",
+    "actual": "{\"hasToken\":true,\"hasEmail\":false,\"hasPassword\":true,\"submit\":true,\"formCount\":1}",
+    "pass": true
+  },
+  {
+    "id": "follow-up",
+    "expected": "complete",
+    "actual": "page.waitForResponse: Timeout 12000ms exceeded while waiting for event \"response\"",
+    "pass": false
+  }
+]
