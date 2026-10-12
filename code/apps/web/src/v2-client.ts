@@ -83,8 +83,14 @@ const HELPERS = `
 
 export function splashScript(): string {
   return `
-    try { sessionStorage.removeItem(${JSON.stringify(SIGNUP_DRAFT_KEY)}) } catch (error) {}
-    try { sessionStorage.removeItem('ankanu.signup') } catch (error) {}
+    var start = document.querySelector('a.continue')
+    if (start) {
+      start.addEventListener('click', function (event) {
+        if (event && (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return
+        try { sessionStorage.removeItem(${JSON.stringify(SIGNUP_DRAFT_KEY)}) } catch (error) {}
+        try { sessionStorage.removeItem('ankanu.signup') } catch (error) {}
+      })
+    }
   `
 }
 

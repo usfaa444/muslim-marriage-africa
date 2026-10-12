@@ -248,6 +248,69 @@ describe('v2 screens fit the required widths', () => {
           )
           const value = (measured.result as { value?: { width: number; scrollWidth: number; bad: string[] } } | undefined)
             ?.value
+          if (page.name === '00-splash') {
+            const buttons = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `(() => {
+                  const links = Array.from(document.querySelectorAll('a.continue, a.signin'))
+                  return links.map((el) => {
+                    const rect = el.getBoundingClientRect()
+                    const style = getComputedStyle(el)
+                    return {
+                      text: (el.textContent || '').trim(),
+                      href: el.getAttribute('href'),
+                      height: rect.height,
+                      top: rect.top,
+                      bottom: rect.bottom,
+                      left: rect.left,
+                      right: rect.right,
+                      display: style.display,
+                    }
+                  })
+                })()`,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const links = (
+              buttons.result as {
+                value?: Array<{
+                  text: string
+                  href: string
+                  height: number
+                  top: number
+                  bottom: number
+                  left: number
+                  right: number
+                }>
+              }
+            )?.value
+            const signup = links?.find((link) => link.href === '/signup/identity')
+            const signin = links?.find((link) => link.href === '/auth')
+            const signupWidth = signup ? signup.right - signup.left : 0
+            const signinWidth = signin ? signin.right - signin.left : 0
+            if (
+              !signup ||
+              !signin ||
+              signup.text !== 'Créer un compte' ||
+              signin.text !== 'Se connecter' ||
+              signup.height < 44 ||
+              signin.height < 44 ||
+              signup.top < 0 ||
+              signin.bottom > 900 ||
+              signup.bottom > signin.top + 1 ||
+              Math.abs(signupWidth - signinWidth) > 1 ||
+              signup.left < -1 ||
+              signin.left < -1 ||
+              signup.right > width + 1 ||
+              signin.right > width + 1
+            ) {
+              failures.push(
+                `00-splash@${width} buttons ${JSON.stringify(links ?? [])}`,
+              )
+            }
+          }
           if (page.name === '04b-sign-in-error') {
             const shown = await cdp.send(
               'Runtime.evaluate',

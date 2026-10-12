@@ -37,8 +37,16 @@ describe('v2 signup and sign-in screens', () => {
     const page = splashHtml()
     const broken = stitch('01-splash')
     expect(page).toContain('AnKanu')
-    expect(page).toContain('Continuer')
-    expect(page).toContain('href="/signup/identity"')
+    expect(page).toContain('<a class="continue" href="/signup/identity">Créer un compte</a>')
+    expect(page).toContain('<a class="signin" href="/auth">Se connecter</a>')
+    expect(page).toContain('a.continue { background: #0B1D36; color: #F7F1E3; font-size: 0.875rem; }')
+    expect(page).toContain(
+      'a.signin { background: #F7F1E3; color: #0B1D36; border: 1px solid #E2D4B8; font-size: 0.75rem; font-weight: 500; padding: 0 1rem; }',
+    )
+    expect(page).toContain('min-height: 3rem')
+    expect(page).toContain('border-radius: 8px')
+    expect(page).toContain('a.signin:hover { background: rgba(226, 212, 184, 0.2); }')
+    expect(page).not.toContain('Continuer')
     expect(page).toContain('<rect ')
     expect(page).toContain('stroke-dasharray')
     expect(page).not.toContain('rotate(')
@@ -46,6 +54,51 @@ describe('v2 signup and sign-in screens', () => {
     expect(page).not.toContain('accounts.google.com')
     expect(broken).toContain('accounts.google.com')
     expect(page).not.toContain(broken.slice(0, 80))
+  })
+
+  it('opens sign-in from the splash without writing the signup draft', () => {
+    const page = splashHtml()
+    const script = page.match(/<script>([\s\S]*?)<\/script>/)?.[1] ?? ''
+    const store = new Map<string, string>([
+      ['ankanu.signup.v2', '{"pseudonym":"awa"}'],
+      ['ankanu.signup', 'old'],
+    ])
+    const clicks: Record<string, Array<(event?: { button?: number; metaKey?: boolean; ctrlKey?: boolean }) => void>> = {
+      continue: [],
+      signin: [],
+    }
+    const document = {
+      querySelector(selector: string) {
+        const key = selector === 'a.continue' ? 'continue' : selector === 'a.signin' ? 'signin' : ''
+        if (!key) return null
+        return {
+          addEventListener(_type: string, listener: (event?: { button?: number }) => void) {
+            clicks[key]?.push(listener)
+          },
+        }
+      },
+    }
+    const sessionStorage = {
+      removeItem(key: string) {
+        store.delete(key)
+      },
+    }
+    new Function('document', 'sessionStorage', script)(document, sessionStorage)
+    expect(store.get('ankanu.signup.v2')).toBe('{"pseudonym":"awa"}')
+    expect(clicks.signin).toHaveLength(0)
+    clicks.continue[0]?.({ button: 0, ctrlKey: true })
+    expect(store.get('ankanu.signup.v2')).toBe('{"pseudonym":"awa"}')
+    clicks.continue[0]?.({ button: 0 })
+    expect(store.has('ankanu.signup.v2')).toBe(false)
+    expect(store.has('ankanu.signup')).toBe(false)
+    const login = authHtml(stitch('02-auth'), 'login', SITE)
+    const submit = login.slice(login.indexOf("var loginForm = document.getElementById('login-form')"))
+    expect(submit).toContain("fetch('/v1/sessions'")
+    expect(submit).not.toContain('writeDraft')
+    expect(submit).not.toContain('clearDraft')
+    expect(submit).not.toContain('removeItem')
+    expect(submit).not.toContain('civil_given_name')
+    expect(login).toContain("if (PANEL === 'login') window.location.assign('/signup')")
   })
 
   it('creates the account once from the signup panel with a captcha token', () => {
@@ -291,11 +344,16 @@ describe('route files', () => {
       const { authResponse, resetResponse, signupResponse } = await import('./v2-serve.js')
       const splash = await signupResponse(new Request('http://127.0.0.1/signup'))
       expect(splash.status).toBe(200)
-      expect(await splash.text()).toContain('Continuer')
+      const splashBody = await splash.text()
+      expect(splashBody).toContain('<a class="continue" href="/signup/identity">Créer un compte</a>')
+      expect(splashBody).toContain('<a class="signin" href="/auth">Se connecter</a>')
       const signIn = await authResponse(new Request('http://127.0.0.1/auth'))
       expect(signIn.status).toBe(200)
       const body = await signIn.text()
       expect(body).toContain('Se connecter')
+      const loginMode = await authResponse(new Request('http://127.0.0.1/auth?mode=login'))
+      expect(loginMode.status).toBe(200)
+      expect(await loginMode.text()).toContain('class="space-y-6" id="panel-login"')
       expect(body).not.toContain('Continuer avec Google')
       const restart = await authResponse(new Request('http://127.0.0.1/auth?mode=signup'))
       expect(restart.status).toBe(303)

@@ -55,7 +55,11 @@ export function splashHtml(): string {
   .top-rule { position: absolute; top: 0; left: 0; right: 0; height: 1px; background: #C9A86C; opacity: 0.55; }
   h1 { font-family: Newsreader, Georgia, serif; font-weight: 500; font-size: clamp(2.4rem, 8vw, 3rem); letter-spacing: -0.02em; margin: 0; }
   .rule { width: 2.25rem; height: 1px; background: #C9A86C; margin: 1.35rem auto 1.6rem; }
-  a.continue { display: flex; align-items: center; justify-content: center; width: min(100%, 17.5rem); margin: 0 auto; min-height: 3rem; background: #0B1D36; color: #F7F1E3; text-decoration: none; border-radius: 8px; font-family: "Plus Jakarta Sans", system-ui, sans-serif; font-size: 0.875rem; }
+  .actions { width: min(100%, 17.5rem); margin: 0 auto; display: flex; flex-direction: column; gap: 0.5rem; }
+  a.continue, a.signin { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 3rem; text-decoration: none; border-radius: 8px; font-family: "Plus Jakarta Sans", system-ui, sans-serif; }
+  a.continue { background: #0B1D36; color: #F7F1E3; font-size: 0.875rem; }
+  a.signin { background: #F7F1E3; color: #0B1D36; border: 1px solid #E2D4B8; font-size: 0.75rem; font-weight: 500; padding: 0 1rem; }
+  a.signin:hover { background: rgba(226, 212, 184, 0.2); }
   .dots { margin-top: 2.25rem; display: flex; gap: 0.5rem; justify-content: center; }
   .dots i { width: 0.38rem; height: 0.38rem; border-radius: 50%; background: #C9A86C; display: block; }
 </style>
@@ -71,7 +75,10 @@ export function splashHtml(): string {
 </svg>
 <h1>AnKanu</h1>
 <div class="rule"></div>
-<a class="continue" href="/signup/identity">Continuer</a>
+<div class="actions">
+<a class="continue" href="/signup/identity">Créer un compte</a>
+<a class="signin" href="/auth">Se connecter</a>
+</div>
 <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
 </main>
 </body></html>`
