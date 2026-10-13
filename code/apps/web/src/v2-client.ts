@@ -1302,27 +1302,59 @@ export function profileScript(): string {
       paintMeter(body.completeness)
     }
 
+    function photoText(value) {
+      return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
+    }
+
+    function photoList(body) {
+      if (body && Array.isArray(body.photos)) return body.photos
+      var list = []
+      if (body && body.photo) list.push(body.photo)
+      if (body && body.pending_photo) list.push(body.pending_photo)
+      return list
+    }
+
     function paintPhoto(body) {
-      var note = document.getElementById('profile-photo-note')
-      var slot = document.getElementById('profile-photo-review')
-      if (note && body && body.photo && body.photo.moderation_state === 'pending' && body.photo.caption) {
-        note.textContent = body.photo.caption
+      var grid = document.getElementById('profile-photo-grid')
+      var cap = document.getElementById('profile-photo-cap')
+      var blur = document.getElementById('profile-photo-blur')
+      if (blur && !touched['profile-photo-blur']) blur.checked = !body || body.photo_blur !== false
+      if (!grid) return
+      var photos = photoList(body).filter(function (photo) {
+        return photo && (photo.moderation_state === 'pending' || photo.moderation_state === 'live')
+      })
+      var mainId = ''
+      for (var i = 0; i < photos.length; i += 1) {
+        if (photos[i].moderation_state === 'live' && photos[i].is_main === true) mainId = photos[i].id || String(i)
       }
-      if (!slot) return
-      var live = body && body.photo && body.photo.moderation_state === 'live'
-      var waiting = body && body.pending_photo && body.pending_photo.moderation_state === 'pending'
-      if (!live || !waiting) {
-        slot.innerHTML = ''
-        slot.classList.add('hidden')
-        return
+      if (!mainId) {
+        for (var j = 0; j < photos.length; j += 1) {
+          if (photos[j].moderation_state === 'live') {
+            mainId = photos[j].id || String(j)
+            break
+          }
+        }
       }
-      var hours = body.review_sla_hours
-      var line = ''
-      if (typeof hours === 'number' && hours >= 1 && Math.floor(hours) === hours) {
-        line = '<p class="text-xs text-deep-navy/50">Délai habituel de modération : ' + hours + ' heures.</p>'
+      var html = ''
+      for (var index = 0; index < photos.length; index += 1) {
+        var photo = photos[index]
+        var id = photoText(photo.id || String(index))
+        if (photo.moderation_state === 'pending') {
+          html += '<div class="relative aspect-[4/5] rounded-lg border border-hairline bg-[#FBF8F1] p-3 flex flex-col items-center justify-center text-center gap-2"><div class="w-10 h-10 rounded-full bg-hairline/40 border border-hairline flex items-center justify-center text-deep-navy/60"><span class="material-symbols-outlined text-xl">photo_camera</span></div><span class="text-xs font-medium text-deep-navy/80">Photographie de profil</span><span class="mt-1 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold text-deep-navy bg-cream border border-hairline text-soft-gold">En revue</span></div>'
+          continue
+        }
+        var src = photoText(photo.url || photo.blur_url || '')
+        if ((photo.id || String(index)) === mainId) {
+          html += '<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-end group"><img alt="Photo principale de profil" class="absolute inset-0 w-full h-full object-cover" src="' + src + '"><div class="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-deep-navy/80 via-deep-navy/40 to-transparent flex items-center justify-between"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-deep-navy text-gold-soft border border-soft-gold/40 shadow-sm">Principale</span></div></div>'
+          continue
+        }
+        html += '<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-between p-2 group"><img alt="Photo secondaire de profil" class="absolute inset-0 w-full h-full object-cover" src="' + src + '"><div class="relative flex justify-end z-10"><button aria-label="Retirer la photo" class="w-7 h-7 rounded-full bg-deep-navy/80 hover:bg-deep-navy text-cream flex items-center justify-center transition-colors" type="button" data-photo-remove="' + id + '"><span class="material-symbols-outlined text-base leading-none">close</span></button></div><div class="relative z-10 mt-auto pt-2"><button class="w-full py-1.5 px-2 rounded bg-cream/95 backdrop-blur-sm text-deep-navy text-[11px] font-medium border border-hairline/80 hover:bg-deep-navy hover:text-cream transition-colors text-center shadow-sm" type="button" data-photo-main="' + id + '">Définir comme principale</button></div></div>'
       }
-      slot.innerHTML = ${JSON.stringify(REPLACEMENT_REVIEW_ROW)} + line
-      slot.classList.remove('hidden')
+      if (photos.length < 6) {
+        html += '<button id="profile-photo-add" class="aspect-[4/5] rounded-lg border-2 border-dashed border-[#E2D4B8] bg-[#FBF8F1]/50 hover:bg-[#FBF8F1] hover:border-soft-gold/70 transition-all p-3 flex flex-col items-center justify-center text-center gap-2 text-deep-navy/70 hover:text-deep-navy group" type="button"><div class="w-10 h-10 rounded-full bg-hairline/40 group-hover:bg-deep-navy group-hover:text-cream border border-hairline flex items-center justify-center transition-colors text-deep-navy"><span class="material-symbols-outlined text-xl">add</span></div><span class="text-xs font-medium">Ajouter une photo</span></button>'
+      }
+      grid.innerHTML = html
+      if (cap) cap.classList.toggle('hidden', photos.length < 6)
     }
 
     function payload() {
@@ -1430,13 +1462,50 @@ export function profileScript(): string {
       })
     }
 
+    var photoGrid = document.getElementById('profile-photo-grid')
+    if (photoGrid) {
+      photoGrid.addEventListener('click', function (event) {
+        var target = event.target
+        if (!target || !target.closest) return
+        if (target.closest('#profile-photo-add')) {
+          if (photoFile) photoFile.click()
+          return
+        }
+        var mainButton = target.closest('[data-photo-main]')
+        var removeButton = target.closest('[data-photo-remove]')
+        var photoId = mainButton ? mainButton.getAttribute('data-photo-main') : removeButton ? removeButton.getAttribute('data-photo-remove') : ''
+        if (!photoId) return
+        var path = '/v1/media/' + encodeURIComponent(photoId) + (mainButton ? '/main' : '')
+        var method = mainButton ? 'PUT' : 'DELETE'
+        fetch(path, { method: method, credentials: 'same-origin' }).then(function (response) {
+          return response.json().then(function (body) {
+            return { ok: response.ok, body: body }
+          }, function () {
+            return { ok: false, body: null }
+          })
+        }).then(function (result) {
+          if (!result.ok) {
+            var message = result.body && result.body.error && result.body.error.message
+            showStatus(message || 'Modification de la photo impossible.')
+            return
+          }
+          return fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (profileResponse) {
+            return profileResponse.json().then(function (profile) {
+              return { ok: profileResponse.ok, body: profile }
+            }, function () {
+              return { ok: false, body: null }
+            })
+          }).then(function (read) {
+            if (read.ok && read.body) applyProfile(read.body, true)
+          })
+        }).catch(function () {
+          showStatus('Modification de la photo impossible.')
+        })
+      })
+    }
+
     document.querySelectorAll('button').forEach(function (button) {
       var label = button.textContent || ''
-      if (label.indexOf('Mettre à jour la photo') !== -1) {
-        button.addEventListener('click', function () {
-          if (photoFile) photoFile.click()
-        })
-      }
       if (label.indexOf('Mettre en pause') !== -1) {
         button.addEventListener('click', function () {
           var picked = document.querySelector('input[name="pause_reason"]:checked')
@@ -1477,21 +1546,38 @@ export function profileScript(): string {
       })
     })
 
-    var pinInput = document.querySelector('input[type="checkbox"]')
-    var pinEnabled = false
-    fetch('/v1/pin', { credentials: 'same-origin' }).then(function (response) {
-      return response.json()
-    }).then(function (body) {
-      pinEnabled = !!(body && body.enabled)
-      if (pinInput) pinInput.checked = pinEnabled
-    }).catch(function () {})
-    if (pinInput) {
-      pinInput.addEventListener('change', function () {
-        if (pinInput.checked && !pinEnabled) {
-          window.location.href = '/pin'
+    var blurInput = document.getElementById('profile-photo-blur')
+    if (blurInput) {
+      blurInput.addEventListener('change', function () {
+        if (!profileLoaded) {
+          blurInput.checked = !blurInput.checked
           return
         }
-        pinInput.checked = pinEnabled
+        var next = blurInput.checked
+        fetch('/v1/me/profile', {
+          method: 'PATCH',
+          credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ photo_blur: next })
+        }).then(function (response) {
+          return response.json().then(function (body) {
+            return { ok: response.ok, body: body }
+          }, function () {
+            return { ok: false, body: null }
+          })
+        }).then(function (result) {
+          if (!result.ok) {
+            blurInput.checked = !next
+            var message = result.body && result.body.error && result.body.error.message
+            showStatus(message || 'Modification du flou impossible.')
+            return
+          }
+          delete touched['profile-photo-blur']
+          applyProfile(result.body, true)
+        }).catch(function () {
+          blurInput.checked = !next
+          showStatus('Modification du flou impossible.')
+        })
       })
     }
   `

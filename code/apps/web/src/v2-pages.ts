@@ -358,16 +358,16 @@ export function profileHtml(stitch: string): string {
       '<p id="profile-meter-note" class="hidden text-xs text-deep-navy/70 mt-1 leading-relaxed">',
     )
     .replace(
-      '<p class="text-xs text-deep-navy/80 leading-normal">',
-      '<p id="profile-photo-note" class="text-xs text-deep-navy/80 leading-normal">',
+      '<p class="text-xs text-deep-navy/80 leading-normal pt-1">',
+      '<p id="profile-photo-note" class="text-xs text-deep-navy/80 leading-normal pt-1">',
     )
     .replace(
-      '<div class="flex flex-wrap gap-2 justify-center sm:justify-start pt-1">',
-      '<div id="profile-photo-review" class="hidden space-y-2"></div><div class="flex flex-wrap gap-2 justify-center sm:justify-start pt-1">',
+      '<!-- Protective Blur Control Toggle (Identical to PIN toggle row) -->',
+      '<p id="profile-photo-cap" class="hidden text-xs text-deep-navy/70 leading-normal">6 photos maximum. Retirez une photo pour en ajouter une autre.</p>\n<!-- Protective Blur Control Toggle (Identical to PIN toggle row) -->',
     )
     .replace(
-      '</button>\n<button class="px-3 py-1.5 rounded-md border border-hairline text-deep-navy/70 text-xs font-medium hover:border-deep-navy/40 transition-colors" type="button">',
-      '</button>\n<input id="profile-photo-file" hidden accept="image/jpeg,image/png" type="file">\n<button class="px-3 py-1.5 rounded-md border border-hairline text-deep-navy/70 text-xs font-medium hover:border-deep-navy/40 transition-colors" type="button">',
+      '<input checked="" class="sr-only peer" type="checkbox"/>',
+      '<input id="profile-photo-blur" class="sr-only peer" type="checkbox"/>',
     )
     .replace(
       '<div class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
@@ -383,6 +383,13 @@ export function profileHtml(stitch: string): string {
     )
     .replaceAll(' checked=""', '')
     .replaceAll(' selected=""', '')
+  html = html.replace(
+    /<!-- 5-Slot Photo Grid -->[\s\S]*?<!-- Privacy Note -->/,
+    `<!-- 5-Slot Photo Grid -->
+<div id="profile-photo-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
+<input id="profile-photo-file" hidden accept="image/jpeg,image/png" type="file">
+<!-- Privacy Note -->`,
+  )
   html = html.replace(/(<textarea\b[^>]*\bid="bio"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
   html = html.replace(/(<textarea\b[^>]*\bid="intentions"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
   html = html.replace(/<select\b([^>]*)>/g, '<select$1><option selected="" value=""></option>')

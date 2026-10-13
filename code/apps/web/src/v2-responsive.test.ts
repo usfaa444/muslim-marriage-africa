@@ -5,7 +5,6 @@ import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { replacementReviewMarkup } from './v2-client.js'
 import {
   authHtml,
   emailHtml,
@@ -126,13 +125,8 @@ function screens(): Array<{ name: string; html: string }> {
         '<p id="profile-save-status" class="w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="status">Envoi de photos suspendu jusqu\'au 14/10 à 02:00 : 3 photos ont été refusées.</p>',
       ),
     },
-    {
-      name: '13b-profile-replacement',
-      html: profileHtml(stitch('11-profile-edit')).replace(
-        '<div id="profile-photo-review" class="hidden space-y-2"></div>',
-        `<div id="profile-photo-review" class="space-y-2">${replacementReviewMarkup(24)}</div>`,
-      ),
-    },
+    { name: '13b-profile-replacement', html: profileHtml(stitch('11-profile-edit')) },
+    { name: '13e-profile-cap', html: profileHtml(stitch('11-profile-edit')) },
     { name: '13b-profile-review', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }) },
     { name: '13c-profile-review-no-bio', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 48, bioPending: false }) },
     { name: '14-settings', html: settingsHtml(stitch('27-settings')) },
@@ -378,12 +372,31 @@ describe('v2 screens fit the required widths', () => {
     const server: Server = createServer((request, response) => {
       const url = new URL(request.url || '/', 'http://127.0.0.1')
       if (url.pathname === '/v1/me/profile') {
+        const referer = request.headers.referer ?? ''
+        const live = (id: string, main: boolean) => ({
+          id,
+          moderation_state: 'live',
+          is_main: main,
+          caption: null,
+          url: `/v1/media/get?token=${id}`,
+        })
+        const pending = {
+          id: 'pending',
+          moderation_state: 'pending',
+          is_main: false,
+          caption: 'Photo en revue — pas encore publique.',
+          url: '/v1/media/get?token=pending',
+        }
+        let photos = [pending]
+        if (referer.includes('13b-profile-replacement')) {
+          photos = [live('main', true), live('other', false), pending]
+        }
+        if (referer.includes('13e-profile-cap')) {
+          photos = [live('p0', true), live('p1', false), live('p2', false), live('p3', false), live('p4', false), pending]
+        }
         response.setHeader('content-type', 'application/json; charset=utf-8')
-        response.end(
-          JSON.stringify({
-            photo: { moderation_state: 'pending', caption: 'Photo en revue — pas encore publique.' },
-          }),
-        )
+        response.setHeader('cache-control', 'no-store')
+        response.end(JSON.stringify({ dob: '1990-01-15', photo_blur: true, photo: photos[0], photos }))
         return
       }
       const name = url.pathname.slice(1)
@@ -431,7 +444,7 @@ describe('v2 screens fit the required widths', () => {
           await cdp.send(
             'Runtime.evaluate',
             {
-              expression: `new Promise((resolve) => { const start = Date.now(); const tick = () => { const body = document.body; const color = body ? getComputedStyle(body).backgroundColor : ''; const slot = document.querySelector('#login-recaptcha, #signup-recaptcha'); const widget = slot && slot.querySelector('iframe'); const styled = color && color !== 'rgba(0, 0, 0, 0)'; const captchaReady = !slot || widget || Date.now() - start > 6000; if ((styled && captchaReady) || Date.now() - start > 8000) resolve(true); else setTimeout(tick, 100) }; tick() })`,
+              expression: `new Promise((resolve) => { const start = Date.now(); const tick = () => { const body = document.body; const color = body ? getComputedStyle(body).backgroundColor : ''; const slot = document.querySelector('#login-recaptcha, #signup-recaptcha'); const widget = slot && slot.querySelector('iframe'); const grid = document.getElementById('profile-photo-grid'); const gridReady = !grid || grid.childElementCount > 0 || Date.now() - start > 2000; const styled = color && color !== 'rgba(0, 0, 0, 0)'; const captchaReady = !slot || widget || Date.now() - start > 6000; if ((styled && captchaReady && gridReady) || Date.now() - start > 8000) resolve(true); else setTimeout(tick, 100) }; tick() })`,
               awaitPromise: true,
             },
             sessionId,
@@ -511,29 +524,52 @@ describe('v2 screens fit the required widths', () => {
               'Runtime.evaluate',
               {
                 expression: `(() => {
-                  const slot = document.getElementById('profile-photo-review')
+                  const slot = document.getElementById('profile-photo-grid')
+                  const cap = document.getElementById('profile-photo-cap')
                   if (!slot) return { ok: false, reason: 'missing' }
-                  const style = getComputedStyle(slot)
                   const rect = slot.getBoundingClientRect()
                   const text = slot.textContent || ''
                   const chip = slot.querySelector('span.inline-flex')
                   const chipRect = chip ? chip.getBoundingClientRect() : null
+                  const capHidden = !cap || getComputedStyle(cap).display === 'none'
                   return {
-                    ok: style.display !== 'none' && rect.height > 1 && rect.right <= ${width} + 1 && rect.left >= -1 && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Délai habituel de modération : 24 heures.') && !text.includes('pas encore publique') && !text.includes('en cours de revue') && chipRect && chipRect.right <= ${width} + 1 && chipRect.left >= -1,
+                    ok: rect.height > 1 && rect.right <= ${width} + 1 && rect.left >= -1 && text.includes('Principale') && text.includes('Définir comme principale') && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Ajouter une photo') && !text.includes('pas encore publique') && !text.includes('en cours de revue') && capHidden && chipRect && chipRect.right <= ${width} + 1 && chipRect.left >= -1,
                     right: Math.round(rect.right),
                     chipRight: chipRect ? Math.round(chipRect.right) : -1,
+                    text: text.replace(/\\s+/g, ' ').slice(0, 160),
                   }
                 })()`,
                 returnByValue: true,
               },
               sessionId,
             )
-            const shown = (row.result as { value?: { ok?: boolean; right?: number; chipRight?: number; reason?: string } } | undefined)?.value
+            const shown = (row.result as { value?: { ok?: boolean; right?: number; chipRight?: number; reason?: string; text?: string } } | undefined)?.value
             if (!shown?.ok) {
               failures.push(
-                `${page.name}@${width} review row not inside the viewport right=${shown?.right ?? '?'} chip=${shown?.chipRight ?? '?'} ${shown?.reason ?? ''}`,
+                `${page.name}@${width} gallery not inside the viewport right=${shown?.right ?? '?'} chip=${shown?.chipRight ?? '?'} ${shown?.reason ?? ''} ${shown?.text ?? ''}`,
               )
             }
+          }
+          if (page.name === '13e-profile-cap') {
+            const row = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `(() => {
+                  const slot = document.getElementById('profile-photo-grid')
+                  const cap = document.getElementById('profile-photo-cap')
+                  if (!slot || !cap) return { ok: false, reason: 'missing' }
+                  const text = (slot.textContent || '') + (cap.textContent || '')
+                  const capStyle = getComputedStyle(cap)
+                  return {
+                    ok: capStyle.display !== 'none' && text.includes('6 photos maximum') && text.includes('Principale') && text.includes('En revue') && !text.includes('Ajouter une photo'),
+                  }
+                })()`,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const shown = (row.result as { value?: { ok?: boolean } } | undefined)?.value
+            if (!shown?.ok) failures.push(`${page.name}@${width} cap state missing`)
           }
           if (page.name === '04b-sign-in-error') {
             const shown = await cdp.send(
@@ -693,7 +729,7 @@ describe('v2 screens fit the required widths', () => {
       await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
     }
     expect(failures).toEqual([])
-  }, 180_000)
+  }, 360_000)
 
   it.skipIf(!binary)('binds the served reset submit handler in a real browser', async () => {
     const html = resetHtml(stitch('05-password-reset'), 'renew')

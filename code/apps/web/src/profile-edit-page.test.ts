@@ -10,7 +10,13 @@ function stitch(): string {
   )
 }
 
-type Listener = (event?: { target?: { id?: string; name?: string } }) => void
+type Listener = (event?: {
+  target?: {
+    id?: string
+    name?: string
+    closest?: (selector: string) => { getAttribute: (name: string) => string | null } | null
+  }
+}) => void
 
 type Control = {
   id: string
@@ -116,9 +122,13 @@ function mount() {
   const byId = new Map<string, Control>(ids.map((id) => [id, control(id)]))
   const banner = control('profile-meter-banner', { className: 'hidden flex items-start gap-3 pt-2' })
   const note = control('profile-meter-note', { className: 'hidden text-xs' })
-  const photoNote = control('profile-photo-note', { textContent: 'Aucun affichage public.' })
-  const photoReview = control('profile-photo-review', { className: 'hidden space-y-2' }) as Control & { innerHTML: string }
-  photoReview.innerHTML = ''
+  const photoNote = control('profile-photo-note', {
+    textContent: "Aucun affichage public. Votre image n'est jamais exposée aux regards ouverts ni aux moteurs de recherche.",
+  })
+  const photoGrid = control('profile-photo-grid') as Control & { innerHTML: string }
+  photoGrid.innerHTML = ''
+  const photoCap = control('profile-photo-cap', { className: 'hidden text-xs text-deep-navy/70 leading-normal' })
+  const photoBlur = control('profile-photo-blur', { type: 'checkbox' })
   const photoFile = control('profile-photo-file') as Control & { files: Array<{ name: string }>; click: () => void }
   photoFile.files = []
   photoFile.click = () => {
@@ -127,7 +137,9 @@ function mount() {
   byId.set(banner.id, banner)
   byId.set(note.id, note)
   byId.set(photoNote.id, photoNote)
-  byId.set(photoReview.id, photoReview)
+  byId.set(photoGrid.id, photoGrid)
+  byId.set(photoCap.id, photoCap)
+  byId.set(photoBlur.id, photoBlur)
   byId.set(photoFile.id, photoFile)
   const inputs = [
     control('', { name: 'madhhab', value: 'maliki', type: 'radio' }),
@@ -157,11 +169,18 @@ function mount() {
     if (url === '/v1/me/profile' && method === 'GET') {
       return gate.then((body) => ({ ok: true, json: async () => body }))
     }
+    if ((method === 'PUT' || method === 'DELETE') && url.indexOf('/v1/media/') === 0) {
+      return Promise.resolve({ ok: true, json: async () => ({ photos: [] }) })
+    }
     if (method === 'PUT') {
       return Promise.resolve({
         ok: true,
         json: async () => ({ ...JSON.parse(init?.body ?? '{}'), bio_live: null, completeness }),
       })
+    }
+    if (url === '/v1/me/profile' && method === 'PATCH') {
+      const sent = JSON.parse(init?.body ?? '{}') as { photo_blur?: boolean }
+      return Promise.resolve({ ok: true, json: async () => ({ ...stored, photo_blur: sent.photo_blur }) })
     }
     if (url === '/v1/media' && method === 'POST') {
       if (strike) {
@@ -217,7 +236,9 @@ function mount() {
     banner,
     note,
     photoNote,
-    photoReview,
+    photoGrid,
+    photoCap,
+    photoBlur,
     photoFile,
     inputs,
     save,
@@ -338,27 +359,40 @@ describe('profile edit load and meter', () => {
     expect(page.byId.get('profile-meter-missing')?.textContent).toBe('« Il manque : pratique »')
   })
 
-  it('uploads a profile photo and shows the pending caption without blurring the original in css', async () => {
+  it('uploads a profile photo and shows the pending tile without sample faces', async () => {
     const html = profileHtml(stitch())
     expect(html).toContain('id="profile-photo-file"')
+    expect(html).toContain('id="profile-photo-grid"')
+    expect(html).toContain('id="profile-photo-blur"')
     expect(html).toContain("fetch('/v1/media'")
-    expect(html).toContain('Mettre à jour la photo')
+    expect(html).toContain('Ajouter une photo')
+    expect(html).toContain('Activer le flou protecteur')
     expect(html).toContain('Consignes de pudeur')
+    expect(html).toContain('Aucun affichage public')
+    expect(html).not.toContain('Mettre à jour la photo')
+    expect(html).not.toContain('googleusercontent')
     expect(html).not.toContain('original_key')
     expect(html).not.toContain('filter:blur')
     expect(html).not.toContain('filter: blur')
 
     const page = mount()
-    expect(page.photoNote.textContent).toBe('Aucun affichage public.')
+    expect(page.photoNote.textContent).toContain('Aucun affichage public')
     page.release({
       ...stored,
-      photo: { moderation_state: 'pending', caption: 'Photo en revue — pas encore publique.' },
+      photo_blur: true,
+      photo: { id: 'pend', moderation_state: 'pending', caption: 'Photo en revue — pas encore publique.' },
     })
     await flush()
-    expect(page.photoNote.textContent).toBe('Photo en revue — pas encore publique.')
+    expect(page.photoNote.textContent).toContain('Aucun affichage public')
+    expect(page.photoGrid.innerHTML).toContain('En revue')
+    expect(page.photoGrid.innerHTML).toContain('Photographie de profil')
+    expect(page.photoGrid.innerHTML).not.toContain('pas encore publique')
+    expect(page.photoBlur.checked).toBe(true)
     expect(page.photoNote.style.backgroundColor).toBe('')
 
-    await page.upload.listeners.click?.[0]?.()
+    await page.photoGrid.listeners.click?.[0]?.({
+      target: { closest: (selector: string) => (selector === '#profile-photo-add' ? { getAttribute: () => null } : null) },
+    })
     expect(page.photoFile.files).toEqual([{ name: 'face.png' }])
     page.photoFile.value = 'C:\\fakepath\\face.png'
     const previousReader = globalThis.FileReader
@@ -381,31 +415,36 @@ describe('profile edit load and meter', () => {
     expect(JSON.parse(post?.body ?? '{}')).toEqual({ kind: 'profile_photo', image: 'QUJD' })
     expect(page.location.href).toBe('/profile-review')
     expect(page.photoFile.value).toBe('')
-    expect(page.photoReview.classList.contains('hidden')).toBe(true)
+    expect(page.photoCap.classList.contains('hidden')).toBe(true)
   })
 
   it('stays on screen 11 when a live photo has a pending replacement', async () => {
     const html = profileHtml(stitch())
-    expect(html).toContain('id="profile-photo-review" class="hidden space-y-2"></div>')
+    expect(html).toContain('id="profile-photo-grid"')
+    expect(html).not.toContain('id="profile-photo-review"')
     const page = mount()
     page.release({
       ...stored,
       review_sla_hours: 24,
-      photo: { moderation_state: 'live' },
-      pending_photo: { moderation_state: 'pending' },
+      photo: { id: 'live', moderation_state: 'live', is_main: true, url: '/v1/media/get?token=live' },
+      pending_photo: { id: 'pend', moderation_state: 'pending' },
     })
     await flush()
-    expect(page.photoNote.textContent).toBe('Aucun affichage public.')
-    expect(page.photoReview.classList.contains('hidden')).toBe(false)
-    expect(page.photoReview.innerHTML).toContain('Photographie de profil')
-    expect(page.photoReview.innerHTML).toContain('En revue')
-    expect(page.photoReview.innerHTML).toContain('photo_camera')
-    expect(page.photoReview.innerHTML).toContain('Délai habituel de modération : 24 heures.')
-    expect(page.photoReview.innerHTML).not.toContain('pas encore publique')
-    expect(page.photoReview.innerHTML).not.toContain('en cours de revue')
+    expect(page.photoNote.textContent).toContain('Aucun affichage public')
+    expect(page.photoGrid.innerHTML).toContain('Principale')
+    expect(page.photoGrid.innerHTML).toContain('Photographie de profil')
+    expect(page.photoGrid.innerHTML).toContain('En revue')
+    expect(page.photoGrid.innerHTML).toContain('photo_camera')
+    expect(page.photoGrid.innerHTML).toContain('Ajouter une photo')
+    expect(page.photoGrid.innerHTML).not.toContain('Délai habituel de modération')
+    expect(page.photoGrid.innerHTML).not.toContain('pas encore publique')
+    expect(page.photoGrid.innerHTML).not.toContain('en cours de revue')
+    expect(page.photoGrid.innerHTML).not.toContain('data-photo-remove="pend"')
     expect(page.location.href).toBe('')
 
-    await page.upload.listeners.click?.[0]?.()
+    await page.photoGrid.listeners.click?.[0]?.({
+      target: { closest: (selector: string) => (selector === '#profile-photo-add' ? { getAttribute: () => null } : null) },
+    })
     page.photoFile.value = 'C:\\fakepath\\face.png'
     const previousReader = globalThis.FileReader
     class FakeReader {
@@ -423,8 +462,8 @@ describe('profile edit load and meter', () => {
       globalThis.FileReader = previousReader
     }
     expect(page.location.href).toBe('')
-    expect(page.photoReview.classList.contains('hidden')).toBe(false)
-    expect(page.photoNote.textContent).toBe('Aucun affichage public.')
+    expect(page.photoGrid.innerHTML).toContain('En revue')
+    expect(page.photoNote.textContent).toContain('Aucun affichage public')
   })
 
   it('clears the file input when the upload is rejected or the reader fails', async () => {
@@ -475,7 +514,7 @@ describe('profile edit load and meter', () => {
 
   it('shows the photo-strike sentence on the existing status line after a refused upload', async () => {
     const page = profileHtml(stitch())
-    expect(page).toContain('Mettre à jour la photo')
+    expect(page).toContain('Ajouter une photo')
     expect(page).not.toContain('photo-strike')
     expect(page).toContain('id="profile-save-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy"')
     expect(profileScript()).toContain('match(/(\\d+)/)')
@@ -506,7 +545,7 @@ describe('profile edit load and meter', () => {
     expect(struck.photoFile.value).toBe('')
     expect(struck.location.href).toBe('')
     expect(struck.byId.get('profile-save-status')?.textContent).toBe(sentence)
-    expect(struck.upload.textContent).toContain('Mettre à jour la photo')
+    expect(profileScript()).toContain('Ajouter une photo')
 
     const raw = mount()
     raw.strikeMedia('Envoi de photos suspendu : 3 photos ont été refusées.', 'pas-une-date')
@@ -520,5 +559,69 @@ describe('profile edit load and meter', () => {
       globalThis.FileReader = previousReader
     }
     expect(raw.byId.get('profile-save-status')?.textContent).toBe('Envoi de photos suspendu : 3 photos ont été refusées.')
+  })
+
+  it('switches the main photo, removes a live photo, and saves the one blur setting', async () => {
+    const page = mount()
+    const photos = [
+      { id: 'main', moderation_state: 'live', is_main: true, url: '/v1/media/get?token=main' },
+      { id: 'other', moderation_state: 'live', is_main: false, url: '/v1/media/get?token=other' },
+    ]
+    page.release({ ...stored, photo_blur: true, photos, photo: photos[0] })
+    await flush()
+    expect(page.photoGrid.innerHTML).toContain('Principale')
+    expect(page.photoGrid.innerHTML).toContain('Définir comme principale')
+    expect(page.photoGrid.innerHTML).toContain('data-photo-remove="other"')
+    expect(page.photoGrid.innerHTML).not.toContain('data-photo-remove="main"')
+    expect(page.photoCap.classList.contains('hidden')).toBe(true)
+
+    await page.photoGrid.listeners.click?.[0]?.({
+      target: {
+        closest(selector: string) {
+          if (selector === '[data-photo-main]') return { getAttribute: () => 'other' }
+          return null
+        },
+      },
+    })
+    await flush()
+    expect(page.calls.some((call) => call.method === 'PUT' && call.url === '/v1/media/other/main')).toBe(true)
+
+    await page.photoGrid.listeners.click?.[0]?.({
+      target: {
+        closest(selector: string) {
+          if (selector === '[data-photo-remove]') return { getAttribute: () => 'other' }
+          return null
+        },
+      },
+    })
+    await flush()
+    expect(page.calls.some((call) => call.method === 'DELETE' && call.url === '/v1/media/other')).toBe(true)
+
+    page.photoBlur.checked = false
+    await page.photoBlur.listeners.change?.[0]?.()
+    await flush()
+    const patch = page.calls.find((call) => call.method === 'PATCH')
+    expect(JSON.parse(patch?.body ?? '{}')).toEqual({ photo_blur: false })
+    expect(page.photoBlur.checked).toBe(false)
+  })
+
+  it('hides the add tile and shows the six-photo line when the cap is reached', async () => {
+    const html = profileHtml(stitch())
+    expect(html).toContain('id="profile-photo-cap" class="hidden text-xs text-deep-navy/70 leading-normal"')
+    expect(html).toContain('6 photos maximum. Retirez une photo pour en ajouter une autre.')
+    const page = mount()
+    const photos = Array.from({ length: 6 }, (_, index) => ({
+      id: `p${index}`,
+      moderation_state: index === 5 ? 'pending' : 'live',
+      is_main: index === 0,
+      url: `/v1/media/get?token=${index}`,
+    }))
+    page.release({ ...stored, photos, photo: photos[0] })
+    await flush()
+    expect(page.photoGrid.innerHTML).not.toContain('Ajouter une photo')
+    expect(page.photoGrid.innerHTML).not.toContain('data-photo-remove="p0"')
+    expect(page.photoGrid.innerHTML).toContain('data-photo-remove="p1"')
+    expect(page.photoGrid.innerHTML).toContain('En revue')
+    expect(page.photoCap.classList.contains('hidden')).toBe(false)
   })
 })
