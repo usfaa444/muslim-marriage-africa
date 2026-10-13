@@ -216,11 +216,19 @@ export async function ownerGallery(
   ownerId: string,
 ): Promise<{ ok: true; photos: GalleryPhoto[] } | MediaFailure> {
   const photos = await store.openProfilePhotos(ownerId)
-  const blurred = await profilePhotoBlur(ownerId)
   const listed: GalleryPhoto[] = []
   for (const asset of photos) {
-    const clear = !blurred && asset.moderation_state === 'live'
-    const signed = await signMedia(store, asset.id, clear ? 'md' : 'blur', ownerId, clear ? { clearForMember: true } : undefined)
+    const live = asset.moderation_state === 'live'
+    let signed = await signMedia(
+      store,
+      asset.id,
+      live ? 'md' : 'blur',
+      ownerId,
+      live ? { clearForMember: true, ownerPreview: true } : undefined,
+    )
+    if (!signed.ok && live) {
+      signed = await signMedia(store, asset.id, 'blur', ownerId)
+    }
     if (!signed.ok) {
       return signed
     }
@@ -303,7 +311,7 @@ export async function signMedia(
   assetId: string,
   derivative: string,
   viewerId: string,
-  options?: { staffReview?: boolean; clearForMember?: boolean },
+  options?: { staffReview?: boolean; clearForMember?: boolean; ownerPreview?: boolean },
 ): Promise<{ ok: true; url: string; expires_at: string } | MediaFailure> {
   if (derivative === 'original' || derivative === 'xs') {
     return revealDenied()
@@ -326,10 +334,14 @@ export async function signMedia(
     if (asset.kind !== 'profile_photo' || asset.moderation_state !== 'live') {
       return revealDenied()
     }
-    if (await profilePhotoBlur(asset.owner_id)) {
+    const ownerPreview = options?.ownerPreview === true && viewerId === asset.owner_id
+    if (!ownerPreview && (await profilePhotoBlur(asset.owner_id))) {
       return revealDenied()
     }
-    const row = await store.derivative(asset.id, derivative)
+    let row = await store.derivative(asset.id, derivative)
+    if (!row && ownerPreview && derivative === 'md') {
+      row = await backfillClearDerivative(store, asset)
+    }
     if (!row) {
       return revealDenied()
     }
@@ -362,7 +374,7 @@ export async function readGrantedMedia(
   store: MediaStore,
   token: string,
   viewerId: string,
-): Promise<{ ok: true; bytes: Uint8Array } | MediaFailure> {
+): Promise<{ ok: true; bytes: Uint8Array; contentType: string } | MediaFailure> {
   const grant = await store.grant(token)
   if (!grant || grant.viewer_id !== viewerId || grant.revoked_at !== null) {
     return grantDenied()
@@ -382,7 +394,10 @@ export async function readGrantedMedia(
     return omitted()
   }
   if (clear) {
-    if (asset.kind !== 'profile_photo' || asset.moderation_state !== 'live' || (await profilePhotoBlur(asset.owner_id))) {
+    if (asset.kind !== 'profile_photo' || asset.moderation_state !== 'live') {
+      return revealDenied()
+    }
+    if (viewerId !== asset.owner_id && (await profilePhotoBlur(asset.owner_id))) {
       return revealDenied()
     }
   }
@@ -407,7 +422,41 @@ export async function readGrantedMedia(
   if (!bytes) {
     return storageFailure()
   }
-  return { ok: true, bytes }
+  return { ok: true, bytes, contentType: imageContentType(bytes) }
+}
+
+async function backfillClearDerivative(store: MediaStore, asset: StoredAsset): Promise<StoredDerivative | null> {
+  const original = await store.bytes(asset.original_key)
+  if (!original) {
+    return null
+  }
+  const key = `profile-photo/${asset.id}/md`
+  const row: StoredDerivative = {
+    id: newId(clock()),
+    photo_asset_id: asset.id,
+    size: 'md',
+    object_key: key,
+  }
+  try {
+    await store.saveDerivative(row, { key, bytes: original })
+  } catch (error) {
+    if (error instanceof MediaStorageError) {
+      return null
+    }
+    throw error
+  }
+  return (await store.derivative(asset.id, 'md')) ?? row
+}
+
+function imageContentType(bytes: Uint8Array): string {
+  const buffer = Buffer.from(bytes)
+  if (isPng(buffer)) {
+    return 'image/png'
+  }
+  if (isJpeg(buffer)) {
+    return 'image/jpeg'
+  }
+  return 'application/octet-stream'
 }
 
 function card(asset: StoredAsset, blurUrl: string): OwnerPhotoCard {

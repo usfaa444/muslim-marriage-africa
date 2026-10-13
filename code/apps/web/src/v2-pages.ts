@@ -374,6 +374,10 @@ export function profileHtml(stitch: string): string {
       '<input id="profile-photo-blur" class="sr-only peer" type="checkbox"/>',
     )
     .replace(
+      '<input checked="" class="sr-only peer" type="checkbox"/>',
+      '<input id="profile-pin" class="sr-only peer" type="checkbox"/>',
+    )
+    .replace(
       '<div class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
       '<div id="madhhab-block" class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
     )

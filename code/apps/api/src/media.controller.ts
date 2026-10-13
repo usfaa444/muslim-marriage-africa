@@ -94,7 +94,7 @@ export class MediaController {
     if (!read.ok) {
       fail(read)
     }
-    return new StreamableFile(Buffer.from(read.bytes), { type: 'image/jpeg' })
+    return new StreamableFile(Buffer.from(read.bytes), { type: read.contentType })
   }
 
   @Put(':id/main')

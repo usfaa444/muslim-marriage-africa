@@ -322,4 +322,42 @@ describe('profile photo gallery, main, and one blur', () => {
     const originalSign = await signMedia(media, String(uploaded.json.id), 'original', viewer.id, { clearForMember: true })
     expect(originalSign.ok).toBe(false)
   })
+
+  it('shows the owner a clear photo while blur stays on, and restores a missing clear file', async () => {
+    const owner = await createAccount()
+    const ownerCookie = await signIn(owner.email)
+    const viewer = await createAccount()
+    const viewerCookie = await signIn(viewer.email)
+    const uploaded = await upload(ownerCookie)
+    expect(await media.allowProfilePhoto(String(uploaded.json.id))).toBe(true)
+    const asset = media.assets.find((row) => row.id === uploaded.json.id)
+    const original = Buffer.from(media.blobs.get(asset?.original_key ?? '') ?? [])
+    const blur = Buffer.from(media.blobs.get(asset?.blur_key ?? '') ?? [])
+    const md = media.derivatives.find((row) => row.photo_asset_id === uploaded.json.id && row.size === 'md')
+    expect(md).toBeTruthy()
+    media.derivatives.splice(media.derivatives.indexOf(md!), 1)
+    media.blobs.delete(md?.object_key ?? '')
+
+    const profile = await fetch(`${base}/v1/me/profile`, { headers: { cookie: ownerCookie } })
+    expect(profile.status).toBe(200)
+    const body = (await profile.json()) as { photo_blur: boolean; photos: Array<{ url: string }> }
+    expect(body.photo_blur).toBe(true)
+    const token = body.photos[0]?.url.split('token=')[1] ?? ''
+    const clear = await fetch(`${base}/v1/media/get?token=${token}`, { headers: { cookie: ownerCookie } })
+    expect(clear.status).toBe(200)
+    expect(clear.headers.get('content-type')).toContain('image/png')
+    expect(Buffer.from(await clear.arrayBuffer()).equals(original)).toBe(true)
+    expect(media.derivatives.some((row) => row.photo_asset_id === uploaded.json.id && row.size === 'md')).toBe(true)
+
+    const listed = await livePhotosForMember(media, owner.id, viewer.id, 'md')
+    expect(listed.ok).toBe(true)
+    if (!listed.ok) {
+      return
+    }
+    const memberToken = listed.photos[0]?.url.split('token=')[1] ?? ''
+    const hidden = await fetch(`${base}/v1/media/get?token=${memberToken}`, { headers: { cookie: viewerCookie } })
+    expect(hidden.status).toBe(200)
+    expect(hidden.headers.get('content-type')).toContain('image/jpeg')
+    expect(Buffer.from(await hidden.arrayBuffer()).equals(blur)).toBe(true)
+  })
 })

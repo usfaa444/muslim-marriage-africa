@@ -130,6 +130,7 @@ function mount() {
   const photoCap = control('profile-photo-cap', { className: 'hidden text-xs text-deep-navy/70 leading-normal' })
   const photoBlur = control('profile-photo-blur', { type: 'checkbox' })
   const photoRules = control('profile-photo-rules')
+  const pin = control('profile-pin', { type: 'checkbox' })
   const photoFile = control('profile-photo-file') as Control & { files: Array<{ name: string }>; click: () => void }
   photoFile.files = []
   photoFile.click = () => {
@@ -142,6 +143,7 @@ function mount() {
   byId.set(photoCap.id, photoCap)
   byId.set(photoBlur.id, photoBlur)
   byId.set(photoRules.id, photoRules)
+  byId.set(pin.id, pin)
   byId.set(photoFile.id, photoFile)
   const inputs = [
     control('', { name: 'madhhab', value: 'maliki', type: 'radio' }),
@@ -247,6 +249,7 @@ function mount() {
     photoCap,
     photoBlur,
     photoRules,
+    pin,
     photoFile,
     inputs,
     save,
@@ -633,6 +636,20 @@ describe('profile edit load and meter', () => {
     expect(page.photoGrid.innerHTML).toContain('data-photo-remove="p1"')
     expect(page.photoGrid.innerHTML).toContain('En revue')
     expect(page.photoCap.classList.contains('hidden')).toBe(false)
+  })
+
+  it('opens pin setup when the access code is turned on', async () => {
+    const html = profileHtml(stitch())
+    expect(html).toContain('id="profile-pin"')
+    expect(html).toContain("Activer le code PIN d'accès")
+    const page = mount()
+    await flush()
+    expect(page.calls.some((call) => call.method === 'GET' && call.url === '/v1/pin')).toBe(true)
+    expect(page.pin.checked).toBe(false)
+    page.pin.checked = true
+    page.pin.listeners.change?.[0]?.()
+    expect(page.location.href).toBe('/pin')
+    expect(page.calls.some((call) => call.method === 'PATCH')).toBe(false)
   })
 
   it('opens the photo rules page from consignes de pudeur', () => {

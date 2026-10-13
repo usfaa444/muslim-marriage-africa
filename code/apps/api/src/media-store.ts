@@ -70,6 +70,7 @@ export type MediaStore = {
   setModerationState(id: string, state: ModerationState, db?: Pick<NodePgDatabase, 'update'>): Promise<boolean>
   asset(id: string): Promise<StoredAsset | null>
   derivative(assetId: string, size: DerivativeSize): Promise<StoredDerivative | null>
+  saveDerivative(derivative: StoredDerivative, file: PhotoFile): Promise<void>
   bytes(key: string): Promise<Uint8Array | null>
   saveGrant(grant: StoredGrant): Promise<void>
   grant(id: string): Promise<StoredGrant | null>
@@ -256,6 +257,12 @@ export function memoryMediaStore(): MediaStore & {
     async derivative(assetId, size) {
       return derivatives.find((row) => row.photo_asset_id === assetId && row.size === size) ?? null
     },
+    async saveDerivative(derivative, file) {
+      blobs.set(file.key, file.bytes)
+      if (!derivatives.some((row) => row.photo_asset_id === derivative.photo_asset_id && row.size === derivative.size)) {
+        derivatives.push(derivative)
+      }
+    },
     async asset(id) {
       return assets.find((row) => row.id === id) ?? null
     },
@@ -294,6 +301,7 @@ function postgresMediaStore(): MediaStore {
     setModerationState: setModerationState,
     asset: readAsset,
     derivative: readDerivative,
+    saveDerivative: writeDerivative,
     bytes: readBytes,
     saveGrant: saveGrant,
     grant: readGrant,
@@ -608,6 +616,24 @@ async function readDerivative(assetId: string, size: DerivativeSize): Promise<St
     size: row.size,
     object_key: row.object_key,
   }
+}
+
+async function writeDerivative(derivative: StoredDerivative, file: PhotoFile): Promise<void> {
+  const writer = getEvidenceWriter()
+  if (!writer) {
+    throw new MediaStorageError()
+  }
+  await writer.writeObject(file.key, file.bytes)
+  const existing = await readDerivative(derivative.photo_asset_id, derivative.size)
+  if (existing) {
+    return
+  }
+  await mediaDatabase().insert(photoDerivative).values({
+    id: derivative.id,
+    photo_asset_id: derivative.photo_asset_id,
+    size: derivative.size,
+    object_key: derivative.object_key,
+  })
 }
 
 async function readBytes(key: string): Promise<Uint8Array | null> {

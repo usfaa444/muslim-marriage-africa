@@ -48,6 +48,8 @@ On a running API and web app, sign in as a member and open `/profile-edit`.
 | Strike | A strike refusal on upload | The existing `#profile-save-status` sentence. The add tile stays |
 | Widths | Add-tile gallery and the six-photo cap | 360, 390, 768, 1024, 1280, 1440. `scrollWidth <= innerWidth` |
 | Rules | « Consignes de pudeur » | Opens `GET /photo-rules` (Story 3.5). Same copy and classes. No new route |
+| PIN | « Activer le code PIN d'accès », id `profile-pin` | `GET /v1/pin` sets the box from `enabled`. Turning it on while it was off assigns `/pin`. Unchecking does not turn a PIN off. The blur checkbox is a different control |
+| Owner preview | `photo_blur` true, the owner on `/profile-edit` | Live tiles are the clear image. A PNG upload is `image/png`. Other members still receive the blur JPEG. A missing `md` file is restored from the original and does not fail `GET /v1/me/profile`. If the profile read after MAIN or remove fails, the status line shows the error |
 | Screen 15 | Open a member profile | Not in this story. Do not look for the Stitch hero on `/profil` |
 
 ## Test data
@@ -56,10 +58,10 @@ Memory accounts from the API tests. Password `phrase avec espaces`. Owner galler
 
 ## My results
 
-- `profile-photos.test.ts`: 3 passed. Seventh upload is 409 and keeps six rows. One of two parallel uploads wins. MAIN switches without review. Remove refuses MAIN, pending, and not-live. Clear `sm`/`md` match the original bytes only while `photo_blur` is false, then the gateway stops. Staff review is refused.
-- `profile-edit-page.test.ts` and `v2-flow.test.ts`: 37 passed. The served HTML has no `googleusercontent` sample face. The first pending photo still opens `/profile-review`. A later pending photo stays on screen 11. « Consignes de pudeur » assigns `/photo-rules`.
-- `v2-responsive.test.ts` width check: passed. `13b-profile-replacement` shows Principale, Définir comme principale, En revue, and Ajouter une photo inside the viewport. `13e-profile-cap` shows the six-photo line and no add tile.
-- `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
+- `profile-photos.test.ts` and `media.test.ts`: passed with `profile-edit-page.test.ts` (21 tests). Seventh upload is 409 and keeps six rows. One of two parallel uploads wins. MAIN switches without review. Remove refuses MAIN, pending, and not-live. Clear `sm`/`md` match the original bytes only while `photo_blur` is false for another member, then the gateway stops. Staff review is refused. With blur still on, the owner receives the original PNG (`image/png`) after a missing `md` file is restored. Another member still receives the blur JPEG.
+- `profile-edit-page.test.ts` and `v2-flow.test.ts`: 38 passed. The served HTML has no `googleusercontent` sample face. The first pending photo still opens `/profile-review`. A later pending photo stays on screen 11. « Consignes de pudeur » assigns `/photo-rules`. Turning on « Activer le code PIN d'accès » assigns `/pin` and does not patch the profile.
+- `v2-responsive.test.ts` width check: passed before this fix. This fix does not change layout.
+- `tsc -p apps/api/tsconfig.json --noEmit` and `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
 
 ## Three validation passes
 

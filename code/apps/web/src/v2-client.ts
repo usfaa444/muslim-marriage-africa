@@ -1503,7 +1503,12 @@ export function profileScript(): string {
               return { ok: false, body: null }
             })
           }).then(function (read) {
-            if (read.ok && read.body) applyProfile(read.body, true)
+            if (!read.ok || !read.body) {
+              var message = read.body && read.body.error && read.body.error.message
+              showStatus(message || 'Modification de la photo impossible.')
+              return
+            }
+            applyProfile(read.body, true)
           })
         }).catch(function () {
           showStatus('Modification de la photo impossible.')
@@ -1552,6 +1557,24 @@ export function profileScript(): string {
         })
       })
     })
+
+    var pinInput = document.getElementById('profile-pin')
+    var pinEnabled = false
+    fetch('/v1/pin', { credentials: 'same-origin' }).then(function (response) {
+      return response.json()
+    }).then(function (body) {
+      pinEnabled = !!(body && body.enabled)
+      if (pinInput) pinInput.checked = pinEnabled
+    }).catch(function () {})
+    if (pinInput) {
+      pinInput.addEventListener('change', function () {
+        if (pinInput.checked && !pinEnabled) {
+          window.location.assign('/pin')
+          return
+        }
+        pinInput.checked = pinEnabled
+      })
+    }
 
     var blurInput = document.getElementById('profile-photo-blur')
     if (blurInput) {

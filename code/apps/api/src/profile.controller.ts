@@ -136,10 +136,17 @@ export class ProfileController {
     if ('field' in accepted) {
       reject(400, accepted)
     }
+    const current = await getProfileStore().read(member.accountId)
+    const previousBlur = current?.photo_blur !== false
     const saved = await getProfileStore().setPhotoBlur(member.accountId, accepted.photo_blur)
     if (!saved) {
       unauthenticated()
     }
-    return { ...(await withSla(saved)), ...(await memberPhotos(member.accountId)) }
+    try {
+      return { ...(await withSla(saved)), ...(await memberPhotos(member.accountId)) }
+    } catch (error) {
+      await getProfileStore().setPhotoBlur(member.accountId, previousBlur)
+      throw error
+    }
   }
 }
