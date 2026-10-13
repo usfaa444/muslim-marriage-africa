@@ -367,11 +367,18 @@ describe('human review before anyone else sees a profile', () => {
       }),
     })
     expect(allowed.status).toBe(200)
-    const decision = (await allowed.json()) as { visibility: string | null; bio_live: string | null; bio_pending: string | null; review_queued_at: string | null }
+    const decision = (await allowed.json()) as {
+      visibility: string | null
+      bio_live: string | null
+      bio_pending: string | null
+      review_queued_at: string | null
+      photos: Array<{ asset_id: string; moderation_state: string }>
+    }
     expect(decision.bio_live).toBe('Bio en attente.')
     expect(decision.bio_pending).toBeNull()
     expect(decision.review_queued_at).toBeNull()
     expect(decision.visibility).toBe('unpublished')
+    expect(decision.photos).toEqual([{ asset_id: photo.id, moderation_state: 'live' }])
     expect(media.assets.find((row) => row.id === photo.id)?.moderation_state).toBe('live')
     expect(isListableProfile(decision.visibility, 'Active')).toBe(false)
     expect(audits.some((row) => row.action === 'moderator_profile_review_decision' && row.actor_id === moderator.id)).toBe(true)
@@ -432,6 +439,9 @@ describe('human review before anyone else sees a profile', () => {
       }),
     })
     expect(blocked.status).toBe(200)
+    expect(((await blocked.json()) as { photos: Array<{ asset_id: string; moderation_state: string }> }).photos).toEqual([
+      { asset_id: photo.id, moderation_state: 'blocked' },
+    ])
     expect(media.assets.find((row) => row.id === photo.id)?.moderation_state).toBe('blocked')
     expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('held')
     expect(isListableProfile('held', 'Active')).toBe(false)

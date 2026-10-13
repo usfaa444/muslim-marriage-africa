@@ -294,7 +294,6 @@ export async function decideProfileReview(
       if (!after) {
         throw new StaleWrite()
       }
-      const states = await Promise.all(parsed.photos.map(async (photo) => getMediaStore().asset(photo.asset_id)))
       await appendAudit(tx, {
         actorId: staffId,
         action: 'moderator_profile_review_decision',
@@ -318,12 +317,9 @@ export async function decideProfileReview(
           bio: parsed.bio,
           bio_live: after.bio_live,
           bio_pending: after.bio_pending,
-          photos: parsed.photos.map((photo, index) => ({
+          photos: parsed.photos.map((photo) => ({
             asset_id: photo.asset_id,
-            moderation_state:
-              states[index]?.moderation_state === 'live' || states[index]?.moderation_state === 'blocked'
-                ? states[index].moderation_state
-                : 'pending',
+            moderation_state: photo.decision === 'allow' ? ('live' as const) : ('blocked' as const),
           })),
         },
       }
