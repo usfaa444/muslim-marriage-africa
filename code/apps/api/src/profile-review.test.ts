@@ -8,6 +8,7 @@ import { memoryAccountStore, setAccountStore } from './account-store.js'
 import { memoryAuditPort, setAuditPort, type AuditRow } from './audit-port.js'
 import { setAuthClock } from './auth-clock.js'
 import { setAuthLimitReader } from './auth-limit.js'
+import { setOtpLimitReader } from './otp-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
 import { setBillingPort } from './billing-port.js'
 import { createApp } from './create-app.js'
@@ -20,6 +21,7 @@ import { memoryPhoneOtpStore, setPhoneOtpStore, type PhoneOtpRow } from './phone
 import { isListableProfile, publishIfEligible, setFreeReviewSlaReader } from './profile-review.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
+import { setSmsPort } from './sms-port.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 
 const require = createRequire(import.meta.url)
@@ -48,9 +50,16 @@ let billingCalls = 0
 const premium = new Set<string>()
 let serial = 0
 
+function requireCallerTx(tx: unknown): void {
+  if (typeof tx !== 'object' || tx === null || !('insert' in tx) || !('select' in tx) || !('execute' in tx)) {
+    throw new Error('AuditPort.append requires the caller transaction')
+  }
+}
+
 function installAudit(port: { append(tx: unknown, input: AuditAppend): Promise<void> } = memoryAuditPort(audits)): void {
   setAuditPort({
     async append(tx, input) {
+      requireCallerTx(tx)
       auditTxs.push(tx)
       await port.append(tx, input)
     },
@@ -485,6 +494,7 @@ describe('human review before anyone else sees a profile', () => {
     const inner = memoryAuditPort(audits)
     setAuditPort({
       async append(tx, input) {
+        requireCallerTx(tx)
         if (input.action === 'moderator_profile_review_decision') {
           throw new Error('audit down')
         }
@@ -515,5 +525,68 @@ describe('human review before anyone else sees a profile', () => {
     const moderatorAgain = await fetch(`${base}/v1/staff/cases?kind=profile_review`, { headers: { cookie: moderatorCookie } })
     const listed = (await moderatorAgain.json()) as { rows: Array<{ account_id: string }> }
     expect(listed.rows.some((row) => row.account_id === member.id)).toBe(true)
+  })
+
+  it('publishes from the decision when the gates already pass, and from a later OTP verify when they do not', async () => {
+    now = new Date('2026-10-18T00:00:00.000Z')
+    const ready = await createAccount()
+    const readyCookie = await signIn(ready.email)
+    expect((await saveProfile(readyCookie)).status).toBe(200)
+    insertVerification(ready.id, 'phone_otp', 'granted')
+    now = new Date('2026-10-18T00:00:01.000Z')
+    insertVerification(ready.id, 'id_document', 'pending')
+    now = new Date('2026-10-18T00:00:02.000Z')
+    insertVerification(ready.id, 'liveness', 'pending')
+    const moderator = await createAccount()
+    const moderatorCookie = await signIn(moderator.email)
+    asStaff(moderator.id, 'moderator')
+    const published = await fetch(`${base}/v1/staff/cases`, {
+      method: 'POST',
+      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'profile_review', account_id: ready.id, profile: 'allow', photos: [] }),
+    })
+    expect(published.status).toBe(200)
+    expect(((await published.json()) as { visibility: string | null }).visibility).toBe('public')
+
+    now = new Date('2026-10-18T01:00:00.000Z')
+    const waiting = await createAccount()
+    const waitingCookie = await signIn(waiting.email)
+    expect((await saveProfile(waitingCookie)).status).toBe(200)
+    insertVerification(waiting.id, 'id_document', 'pending')
+    now = new Date('2026-10-18T01:00:01.000Z')
+    insertVerification(waiting.id, 'liveness', 'pending')
+    const heldBack = await fetch(`${base}/v1/staff/cases`, {
+      method: 'POST',
+      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'profile_review', account_id: waiting.id, profile: 'allow', photos: [] }),
+    })
+    expect(heldBack.status).toBe(200)
+    expect(((await heldBack.json()) as { visibility: string | null }).visibility).toBe('unpublished')
+
+    const codes: string[] = []
+    setOtpLimitReader(async () => 100)
+    setSmsPort({
+      async sendOtp(message) {
+        codes.push(message.code)
+      },
+    })
+    try {
+      const sent = await fetch(`${base}/v1/verifications/otp`, {
+        method: 'POST',
+        headers: { cookie: waitingCookie, 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'send', phone_e164: '+22670999001' }),
+      })
+      expect(sent.status).toBe(201)
+      const verified = await fetch(`${base}/v1/verifications/otp`, {
+        method: 'POST',
+        headers: { cookie: waitingCookie, 'content-type': 'application/json' },
+        body: JSON.stringify({ action: 'verify', code: codes[0] }),
+      })
+      expect(verified.status).toBe(200)
+    } finally {
+      setSmsPort(undefined)
+      setOtpLimitReader(undefined)
+    }
+    expect(memory.profiles.find((row) => row.account_id === waiting.id)?.visibility).toBe('public')
   })
 })

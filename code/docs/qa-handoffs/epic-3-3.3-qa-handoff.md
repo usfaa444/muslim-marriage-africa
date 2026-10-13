@@ -101,6 +101,8 @@ Sign in as a member, save a profile, upload a profile photo, and open `/profile-
 | Allow before grants | Profile, bio, and photo `allow`, verification gates closed | `200`. Photo `live`. Bio copied to `bio_live`. `review_queued_at` null. Visibility stays `unpublished` |
 | Phone still pending | Latest `phone_otp` is `pending`, ID and liveness `granted` | Visibility stays `unpublished` |
 | Later grant | Latest `phone_otp` `granted`, ID and liveness `pending` | `publishIfEligible` sets visibility `public`. `isListableProfile` true |
+| Decision with gates already open | Phone `granted`, ID and liveness `pending` before `POST /v1/staff/cases` | The decision response itself has `visibility` `public` |
+| OTP verify after allow | Profile already allowed, still `unpublished`, ID and liveness `pending` | `POST /v1/verifications/otp` `verify` sets visibility `public` |
 | Quiet save | Allowed profile, no new `bio_pending` | Stays out of the queue |
 | Held | Visibility `held` before the save, then block photo and profile with a reason | Visibility stays `held`. Photo `blocked`. Not listable |
 | Held allow | Visibility `held`, phone `granted`, ID `pending`, liveness `granted`, profile and photo `allow` | Visibility stays `held` |
@@ -118,6 +120,7 @@ Sign in as a member, save a profile, upload a profile photo, and open `/profile-
 ## My results
 
 - QA fail fix: `profile-review.test.ts`, `profile.test.ts`, `media.test.ts`, and `phone-otp.test.ts` with `--fileParallelism false`: 4 files, 27 tests passed. That includes inserted verification rows, a pending phone that does not publish, pending ID and liveness that do publish once phone is `granted`, `held` and `emergency_hidden` staying in place, a caller transaction on both audit writes, and a decision that rolls back when the audit append throws.
+- Follow-up on the same fail: `profile-review.test.ts` with `--fileParallelism false`: 6 tests passed. The audit double throws unless the caller transaction has `insert`, `select`, and `execute`. `POST /v1/staff/cases` itself returns `public` when phone is already `granted` and ID and liveness are `pending`. A later `POST /v1/verifications/otp` verify publishes an already-allowed profile.
 - Earlier story run, still current for screen 12: `profile-review.test.ts`, `profile.test.ts`, `media.test.ts`, `v2-flow.test.ts`, `v2-responsive.test.ts`, `native-dialog.test.ts` with `--fileParallelism false`: 6 files, 45 tests passed. Screen 12 was not part of the QA fail.
 - `tsc -p apps/api/tsconfig.json --noEmit` and `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
 - Width proof includes `13b-profile-review` and `13c-profile-review-no-bio` at 360 and 1440. Shots: `code/docs/qa-handoffs/ank-83-widths/13b-profile-review-360.png`, `13b-profile-review-1440.png`, `13c-profile-review-no-bio-360.png`, `13c-profile-review-no-bio-1440.png`. The run checks all six widths.
