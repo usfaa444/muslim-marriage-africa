@@ -57,6 +57,43 @@ describe('profile fields and completeness', () => {
       message: "polygamy_intent : l'intention de polygamie doit être oui lorsque le frère est marié.",
     })
     expect(JSON.stringify(married)).not.toContain('profil faible')
+    const stored = {
+      dob: '1990-01-15',
+      city: 'ouagadougou',
+      country: 'BF',
+      origin: 'Plateau-Central',
+      marital_status: 'married' as const,
+      polygamy_intent: 'yes' as const,
+      education: 'licence',
+      profession: 'enseignement',
+      madhhab: 'maliki',
+      practice: 'assidue',
+      life_plans: 'tf:6months\nUnion stable',
+      bio_pending: 'Une présentation sobre.',
+    }
+    expect(acceptProfileWrite({ dob: '1991-02-02' }, 'brother', stored)).toMatchObject({
+      dob: '1991-02-02',
+      city: 'ouagadougou',
+      madhhab: 'maliki',
+      marital_status: 'married',
+      polygamy_intent: 'yes',
+      life_plans: 'tf:6months\nUnion stable',
+    })
+    expect(acceptProfileWrite({ dob: '1990-01-15', city: '', madhhab: null }, 'sister', stored)).toMatchObject({
+      city: null,
+      madhhab: null,
+      practice: 'assidue',
+      country: 'BF',
+    })
+    expect(
+      acceptProfileWrite({ dob: '1990-01-15', marital_status: 'married' }, 'brother', {
+        ...stored,
+        polygamy_intent: 'no',
+      }),
+    ).toEqual({
+      field: 'polygamy_intent',
+      message: "polygamy_intent : l'intention de polygamie doit être oui lorsque le frère est marié.",
+    })
   })
 
   let app: INestApplication | undefined
@@ -134,6 +171,12 @@ describe('profile fields and completeness', () => {
     return { status: response.status, json: (await response.json()) as Record<string, unknown> }
   }
 
+  async function read(cookie: string): Promise<Record<string, unknown>> {
+    const response = await fetch(`${base}/v1/me/profile`, { headers: { cookie } })
+    expect(response.status).toBe(200)
+    return (await response.json()) as Record<string, unknown>
+  }
+
   it('requires a session and saves sister fields without a shame label', async () => {
     const missing = await fetch(`${base}/v1/me/profile`)
     expect(missing.status).toBe(401)
@@ -195,6 +238,7 @@ describe('profile fields and completeness', () => {
       },
     })
     expect(JSON.stringify(denied.json)).not.toContain('profil faible')
+    expect(await read(cookie)).toMatchObject({ dob: '1990-01-15', marital_status: null, madhhab: null })
 
     const young = await put(cookie, {
       dob: '2010-01-01',
@@ -203,6 +247,7 @@ describe('profile fields and completeness', () => {
     })
     expect(young.status).toBe(400)
     expect(young.json).toMatchObject({ error: { details: { field: 'dob' } } })
+    expect((await read(cookie)).dob).toBe('1990-01-15')
 
     const saved = await put(cookie, {
       dob: '1990-01-15',
@@ -219,5 +264,170 @@ describe('profile fields and completeness', () => {
     })
     const again = await fetch(`${base}/v1/me/profile`, { headers: { cookie } })
     expect(await again.json()).toMatchObject({ polygamy_intent: 'yes', madhhab: 'maliki' })
+
+    const onlyDob = await put(cookie, { dob: '1992-03-04' })
+    expect(onlyDob.status).toBe(200)
+    expect(onlyDob.json).toMatchObject({
+      dob: '1992-03-04',
+      marital_status: 'married',
+      polygamy_intent: 'yes',
+      madhhab: 'maliki',
+      practice: 'assidue',
+      life_plans: 'tf:6months\nUnion stable',
+    })
+  })
+
+  it('keeps stored sister columns when the body omits them and clears only blank values', async () => {
+    const created = await createAccount('sister')
+    const cookie = await signIn(created.email)
+    const saved = await put(cookie, {
+      dob: '1990-01-15',
+      city: 'ouagadougou',
+      country: 'BF',
+      origin: 'Plateau-Central',
+      education: 'licence',
+      profession: 'enseignement',
+      bio_pending: 'Une présentation sobre.',
+      ...readyIslamic,
+    })
+    expect(saved.status).toBe(200)
+
+    const partial = await put(cookie, { dob: '1991-02-02' })
+    expect(partial.status).toBe(200)
+    expect(partial.json).toMatchObject({
+      dob: '1991-02-02',
+      city: 'ouagadougou',
+      country: 'BF',
+      origin: 'Plateau-Central',
+      education: 'licence',
+      profession: 'enseignement',
+      madhhab: 'maliki',
+      practice: 'assidue',
+      life_plans: 'tf:6months\nUnion stable',
+      bio_pending: 'Une présentation sobre.',
+      completeness: { percent: 100, missing: [], ready: true },
+    })
+
+    const cleared = await put(cookie, { dob: '1991-02-02', city: '', madhhab: null })
+    expect(cleared.status).toBe(200)
+    expect(cleared.json).toMatchObject({
+      city: null,
+      madhhab: null,
+      country: 'BF',
+      practice: 'assidue',
+      life_plans: 'tf:6months\nUnion stable',
+      bio_pending: 'Une présentation sobre.',
+      completeness: { percent: 67, missing: ['madhhab'], ready: false },
+    })
+
+    const clearedText = await put(cookie, {
+      dob: '1991-02-02',
+      origin: '',
+      bio_pending: null,
+      life_plans: '',
+    })
+    expect(clearedText.status).toBe(200)
+    expect(clearedText.json).toMatchObject({
+      origin: null,
+      bio_pending: null,
+      life_plans: null,
+      country: 'BF',
+      practice: 'assidue',
+      city: null,
+    })
+    expect(await read(cookie)).toMatchObject({ origin: null, life_plans: null, practice: 'assidue' })
+  })
+
+  it('rejects a screen token, a bad delay, and an unreadable min age without writing', async () => {
+    const created = await createAccount('sister')
+    const cookie = await signIn(created.email)
+    const saved = await put(cookie, {
+      dob: '1990-01-15',
+      city: 'ouagadougou',
+      ...readyIslamic,
+    })
+    expect(saved.status).toBe(200)
+
+    const screenToken = await put(cookie, { dob: '1990-01-15', marital_status: 'celibataire' })
+    expect(screenToken.status).toBe(400)
+    expect(screenToken.json).toMatchObject({ error: { details: { field: 'marital_status' } } })
+    expect(await read(cookie)).toMatchObject({ city: 'ouagadougou', madhhab: 'maliki', marital_status: null })
+
+    const badDelay = await put(cookie, { dob: '1990-01-15', life_plans: 'tf:nope' })
+    expect(badDelay.status).toBe(400)
+    expect(badDelay.json).toMatchObject({ error: { details: { field: 'life_plans' } } })
+    expect(await read(cookie)).toMatchObject({ life_plans: 'tf:6months\nUnion stable', city: 'ouagadougou' })
+
+    memory.minAgeValue = null
+    try {
+      const unread = await put(cookie, { dob: '1990-01-15' })
+      expect(unread.status).toBe(503)
+      expect(unread.json).toMatchObject({
+        error: {
+          message: 'min_age : la configuration est illisible.',
+          retryable: true,
+          details: { field: 'min_age' },
+        },
+      })
+      expect(await read(cookie)).toMatchObject({ dob: '1990-01-15', madhhab: 'maliki', city: 'ouagadougou' })
+    } finally {
+      memory.minAgeValue = 19
+    }
+  })
+
+  it('lists every brother gap and rejects a save that still has no marital status', async () => {
+    const created = await createAccount('brother')
+    const cookie = await signIn(created.email)
+    const open = await read(cookie)
+    expect(open.completeness).toEqual({
+      percent: 0,
+      missing: ['madhhab', 'pratique', 'intentions', 'situation matrimoniale', 'intention de polygamie'],
+      ready: false,
+    })
+
+    const denied = await put(cookie, {
+      dob: '1990-01-15',
+      polygamy_intent: 'yes',
+      ...readyIslamic,
+    })
+    expect(denied.status).toBe(400)
+    expect(denied.json).toMatchObject({
+      error: {
+        details: { field: 'marital_status' },
+        message: 'marital_status : la situation matrimoniale est requise.',
+      },
+    })
+    expect(await read(cookie)).toMatchObject({
+      dob: '1990-01-15',
+      marital_status: null,
+      polygamy_intent: null,
+      madhhab: null,
+    })
+  })
+
+  it('rejects a married status when the stored polygamy intent is no and the key is omitted', async () => {
+    const created = await createAccount('brother')
+    const cookie = await signIn(created.email)
+    const saved = await put(cookie, {
+      dob: '1990-01-15',
+      marital_status: 'single',
+      polygamy_intent: 'no',
+      ...readyIslamic,
+    })
+    expect(saved.status).toBe(200)
+    const denied = await put(cookie, { dob: '1990-01-15', marital_status: 'married' })
+    expect(denied.status).toBe(400)
+    expect(denied.json).toMatchObject({
+      error: {
+        details: { field: 'polygamy_intent' },
+        message: "polygamy_intent : l'intention de polygamie doit être oui lorsque le frère est marié.",
+      },
+    })
+    expect(await read(cookie)).toMatchObject({
+      marital_status: 'single',
+      polygamy_intent: 'no',
+      madhhab: 'maliki',
+      life_plans: 'tf:6months\nUnion stable',
+    })
   })
 })

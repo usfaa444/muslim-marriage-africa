@@ -326,6 +326,10 @@ export function profileHtml(stitch: string): string {
       '<div id="profile-meter-fill" class="h-full bg-deep-navy rounded-full" style="width: 0%;"></div>',
     )
     .replace(
+      '<div class="flex items-start gap-3 pt-2">',
+      '<div id="profile-meter-banner" class="hidden flex items-start gap-3 pt-2">',
+    )
+    .replace(
       '<p class="text-sm font-semibold text-deep-navy">« Il manque : madhhab »</p>',
       '<p id="profile-meter-missing" class="text-sm font-semibold text-deep-navy"></p>',
     )

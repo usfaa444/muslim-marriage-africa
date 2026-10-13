@@ -62,16 +62,24 @@ function oneOf(value: string, allowed: readonly string[]): boolean {
   return allowed.includes(value)
 }
 
-function isFieldError(value: string | null | ProfileFieldError): value is ProfileFieldError {
-  return value !== null && typeof value === 'object'
+function isFieldError(value: string | null | undefined | ProfileFieldError): value is ProfileFieldError {
+  return typeof value === 'object' && value !== null
+}
+
+/** Absent stays absent (`undefined`). Null and a blank string clear the column. */
+function kept(next: string | null | undefined, previous: string | null | undefined): string | null {
+  return next === undefined ? (previous ?? null) : next
 }
 
 function optionalToken(
   body: Record<string, unknown>,
   key: keyof ProfileWrite,
   allowed: readonly string[],
-): string | null | ProfileFieldError {
-  if (!(key in body) || body[key] === null) {
+): string | null | undefined | ProfileFieldError {
+  if (!(key in body)) {
+    return undefined
+  }
+  if (body[key] === null) {
     return null
   }
   if (typeof body[key] !== 'string') {
@@ -90,8 +98,11 @@ function optionalToken(
 function optionalText(
   body: Record<string, unknown>,
   key: 'origin' | 'bio_pending' | 'life_plans',
-): string | null | ProfileFieldError {
-  if (!(key in body) || body[key] === null) {
+): string | null | undefined | ProfileFieldError {
+  if (!(key in body)) {
+    return undefined
+  }
+  if (body[key] === null) {
     return null
   }
   if (typeof body[key] !== 'string') {
@@ -111,7 +122,11 @@ export function lifePlansAreValid(value: string): boolean {
   return oneOf(head.slice(3), LIFE_PLAN_TIMEFRAME)
 }
 
-export function acceptProfileWrite(body: unknown, gender: Gender): ProfileWrite | ProfileFieldError {
+export function acceptProfileWrite(
+  body: unknown,
+  gender: Gender,
+  current?: ProfileWrite,
+): ProfileWrite | ProfileFieldError {
   if (!isRecord(body) || typeof body.dob !== 'string' || body.dob.trim().length === 0) {
     return { field: 'dob', message: 'dob : une date de naissance est requise.' }
   }
@@ -164,31 +179,33 @@ export function acceptProfileWrite(body: unknown, gender: Gender): ProfileWrite 
     return bio
   }
 
+  const maritalStatus = kept(marital, current?.marital_status)
+  const polygamyIntent = kept(polygamy, current?.polygamy_intent)
   if (gender === 'brother') {
-    if (marital === null) {
+    if (maritalStatus === null) {
       return { field: 'marital_status', message: MARITAL_REQUIRED }
     }
-    if (polygamy === null) {
+    if (polygamyIntent === null) {
       return { field: 'polygamy_intent', message: POLYGYNY_REQUIRED }
     }
-    if (marital === 'married' && polygamy !== 'yes') {
+    if (maritalStatus === 'married' && polygamyIntent !== 'yes') {
       return { field: 'polygamy_intent', message: MARRIED_POLYGYNY }
     }
   }
 
   return {
     dob: body.dob.trim(),
-    city,
-    country,
-    origin,
-    marital_status: marital,
-    polygamy_intent: polygamy,
-    education,
-    profession,
-    madhhab,
-    practice,
-    life_plans: lifePlans,
-    bio_pending: bio,
+    city: kept(city, current?.city),
+    country: kept(country, current?.country),
+    origin: kept(origin, current?.origin),
+    marital_status: maritalStatus,
+    polygamy_intent: polygamyIntent,
+    education: kept(education, current?.education),
+    profession: kept(profession, current?.profession),
+    madhhab: kept(madhhab, current?.madhhab),
+    practice: kept(practice, current?.practice),
+    life_plans: kept(lifePlans, current?.life_plans),
+    bio_pending: kept(bio, current?.bio_pending),
   }
 }
 

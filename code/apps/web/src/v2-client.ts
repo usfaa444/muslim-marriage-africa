@@ -1159,7 +1159,7 @@ export function profileScript(): string {
       return text
     }
 
-    function applyLifePlans(value) {
+    function applyLifePlans(value, keepEdits) {
       var raw = value || ''
       var token = ''
       var text = raw
@@ -1169,9 +1169,9 @@ export function profileScript(): string {
         token = head.slice(3)
         text = nl === -1 ? '' : raw.slice(nl + 1)
       }
-      setRadio('marriage_timeframe', timeframes[token] ? token : '')
+      if (!keepEdits || !touched.marriage_timeframe) setRadio('marriage_timeframe', timeframes[token] ? token : '')
       var area = document.getElementById('intentions')
-      if (area) area.value = text
+      if (area && (!keepEdits || !touched.intentions)) area.value = text
     }
 
     function paintAge(dob) {
@@ -1190,21 +1190,34 @@ export function profileScript(): string {
       el.textContent = age >= 0 && !isNaN(born.getTime()) ? age + ' ans' : ''
     }
 
+    var touched = {}
+    var profileLoaded = false
+
+    function markTouched(event) {
+      var el = event && event.target
+      if (!el) return
+      var key = el.id || el.name
+      if (key) touched[key] = true
+    }
+
     function paintMeter(completeness) {
       if (!completeness) return
       var percent = document.getElementById('profile-meter-percent')
       var fill = document.getElementById('profile-meter-fill')
       var missing = document.getElementById('profile-meter-missing')
       var note = document.getElementById('profile-meter-note')
+      var banner = document.getElementById('profile-meter-banner')
       var block = document.getElementById('madhhab-block')
       var names = Array.isArray(completeness.missing) ? completeness.missing : []
       var ready = completeness.ready === true
+      var gap = names.length > 0
       if (percent) percent.textContent = (completeness.percent || 0) + '% complété'
       if (fill) {
         fill.style.width = (completeness.percent || 0) + '%'
         fill.style.backgroundColor = ready ? '#C9A86C' : ''
       }
-      if (missing) missing.textContent = ready ? '' : '« Il manque : ' + names.join(', ') + ' »'
+      if (banner) banner.classList.toggle('hidden', !gap)
+      if (missing) missing.textContent = gap ? '« Il manque : ' + names.join(', ') + ' »' : ''
       var madhhabMissing = names.indexOf('madhhab') !== -1
       if (note) note.classList.toggle('hidden', !madhhabMissing)
       if (block) {
@@ -1221,25 +1234,28 @@ export function profileScript(): string {
       el.classList.toggle('hidden', !text)
     }
 
-    function applyProfile(body) {
+    function applyProfile(body, keepEdits) {
       if (!body) return
+      function open(key) {
+        return !keepEdits || !touched[key]
+      }
       var dob = document.getElementById('dob')
-      if (dob) dob.value = body.dob || ''
-      paintAge(body.dob || '')
+      if (dob && open('dob')) dob.value = body.dob || ''
+      paintAge(dob ? dob.value : '')
       var origin = document.getElementById('origin')
-      if (origin) origin.value = body.origin || ''
-      writeSelect('country_residence', body.country)
-      writeSelect('city_residence', body.city)
-      writeSelect('education', body.education)
-      writeSelect('job', body.profession)
-      setRadio('marital_status', maritalToUi[body.marital_status] || '')
+      if (origin && open('origin')) origin.value = body.origin || ''
+      if (open('country_residence')) writeSelect('country_residence', body.country)
+      if (open('city_residence')) writeSelect('city_residence', body.city)
+      if (open('education')) writeSelect('education', body.education)
+      if (open('job')) writeSelect('job', body.profession)
+      if (open('marital_status')) setRadio('marital_status', maritalToUi[body.marital_status] || '')
       paintMarital()
-      setRadio('polygyny_intent', polyToUi[body.polygamy_intent] || '')
-      setRadio('madhhab', body.madhhab || '')
-      setRadio('religious_practice', body.practice || '')
-      applyLifePlans(body.life_plans || '')
+      if (open('polygyny_intent')) setRadio('polygyny_intent', polyToUi[body.polygamy_intent] || '')
+      if (open('madhhab')) setRadio('madhhab', body.madhhab || '')
+      if (open('religious_practice')) setRadio('religious_practice', body.practice || '')
+      applyLifePlans(body.life_plans || '', keepEdits)
       var bio = document.getElementById('bio')
-      if (bio) bio.value = body.bio_pending || body.bio_live || ''
+      if (bio && open('bio')) bio.value = body.bio_pending || body.bio_live || ''
       paintMeter(body.completeness)
     }
 
@@ -1269,10 +1285,23 @@ export function profileScript(): string {
     })
     var dobInput = document.getElementById('dob')
     if (dobInput) dobInput.addEventListener('change', function () { paintAge(dobInput.value) })
+    var form = document.querySelector('form')
+    if (form) {
+      form.addEventListener('input', markTouched)
+      form.addEventListener('change', markTouched)
+    }
 
     fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
-      return response.json()
-    }).then(applyProfile).catch(function () {})
+      return response.json().then(function (body) {
+        return { ok: response.ok, body: body }
+      }, function () {
+        return { ok: false, body: null }
+      })
+    }).then(function (result) {
+      if (!result.ok || !result.body || typeof result.body.dob !== 'string') return
+      applyProfile(result.body, true)
+      profileLoaded = true
+    }).catch(function () {})
 
     document.querySelectorAll('button').forEach(function (button) {
       var label = button.textContent || ''
@@ -1291,6 +1320,7 @@ export function profileScript(): string {
       }
       if (label.indexOf('Enregistrer les modifications') === -1) return
       button.addEventListener('click', function () {
+        if (!profileLoaded) return
         showStatus('')
         fetch('/v1/me/profile', {
           method: 'PUT',

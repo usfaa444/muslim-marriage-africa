@@ -81,7 +81,7 @@ export class ProfileController {
     if (!current) {
       unauthenticated()
     }
-    const accepted = acceptProfileWrite(body, member.gender)
+    const accepted = acceptProfileWrite(body, member.gender, current)
     if (isProfileFieldError(accepted)) {
       reject(400, accepted)
     }

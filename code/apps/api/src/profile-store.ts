@@ -159,6 +159,7 @@ async function readProfile(accountId: string): Promise<StoredProfile | null> {
   }
 }
 
+/** `patch` is the merged row. A null column was cleared on purpose; an omitted key never reaches here. */
 async function updateProfile(accountId: string, patch: ProfileWrite): Promise<StoredProfile | null> {
   const updated = await getIdentityDatabase()
     .update(profile)
