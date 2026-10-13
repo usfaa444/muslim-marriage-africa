@@ -1,5 +1,5 @@
 import type { Gender } from '@ankanu/kernel'
-import { and, eq, isNotNull, isNull, or, sql } from 'drizzle-orm'
+import { and, desc, eq, isNotNull, isNull, or, sql } from 'drizzle-orm'
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { account, profile } from './account-schema.js'
 import { getIdentityDatabase } from './account-store.js'
@@ -34,6 +34,26 @@ export type ProfileDb = Pick<NodePgDatabase, 'select' | 'update' | 'insert' | 'e
 /** `queued` writes only while this profile is still in the queue. `unpublished` writes public only from `unpublished`. */
 export type ReviewWriteScope = 'queued' | 'unpublished'
 
+/** One browse page of opposite-gender listable members. `limit` includes the look-ahead row. */
+export type BrowseGridRow = {
+  id: string
+  pseudonym: string
+  dob: string
+  city: string | null
+  marital_status: string | null
+  polygamy_intent: string | null
+  madhhab: string | null
+  practice: string | null
+  photo_blur: boolean
+}
+
+export type BrowseGridQuery = {
+  viewerId: string
+  oppositeGender: Gender
+  cursor: string | null
+  limit: number
+}
+
 export type ProfileStore = {
   read(accountId: string, db?: ProfileDb): Promise<StoredProfile | null>
   update(accountId: string, patch: ProfileWrite): Promise<StoredProfile | null>
@@ -41,9 +61,10 @@ export type ProfileStore = {
   noteQueued(accountId: string, at: string): Promise<StoredProfile | null>
   patchReview(accountId: string, patch: ReviewPatch, scope?: ReviewWriteScope, db?: ProfileDb): Promise<StoredProfile | null>
   queued(): Promise<QueuedProfile[]>
+  browseGrid(query: BrowseGridQuery): Promise<BrowseGridRow[]>
 }
 
-type AccountGender = { id: string; gender: string }
+type AccountGender = { id: string; gender: string; roles?: readonly string[]; pseudonym?: string; status?: string }
 
 let override: ProfileStore | undefined
 
@@ -94,7 +115,7 @@ type ProfileSnap = {
 }
 
 export function memoryProfileStore(
-  accounts: Array<AccountGender & { pseudonym?: string; status?: string }>,
+  accounts: AccountGender[],
   profiles: CreatedProfile[],
 ): ProfileStore & { snapshot(): ProfileSnap; restore(snap: ProfileSnap): void } {
   const extra = new Map<string, ProfileWrite>()
@@ -216,7 +237,51 @@ export function memoryProfileStore(
       }
       return rows
     },
+    async browseGrid(query) {
+      return memoryBrowseGrid(accounts, profiles, extra, review, blur, query)
+    },
   }
+}
+
+function memoryBrowseGrid(
+  accounts: AccountGender[],
+  profiles: CreatedProfile[],
+  extra: Map<string, ProfileWrite>,
+  review: Map<string, ReviewMemory>,
+  blur: Map<string, boolean>,
+  query: BrowseGridQuery,
+): BrowseGridRow[] {
+  const cursor = query.cursor?.toLowerCase() ?? null
+  const rows: BrowseGridRow[] = []
+  for (const owner of accounts) {
+    if (owner.id === query.viewerId || owner.gender !== query.oppositeGender) {
+      continue
+    }
+    const roles = owner.roles ?? []
+    if (!roles.includes('member') || roles.includes('moderator') || roles.includes('operator')) {
+      continue
+    }
+    if (cursor && owner.id.toLowerCase() >= cursor) {
+      continue
+    }
+    const stored = compose(accounts, profiles, extra, review, blur, owner.id)
+    if (!stored || stored.visibility !== 'public' || (owner.status ?? '') !== 'Active') {
+      continue
+    }
+    rows.push({
+      id: owner.id,
+      pseudonym: owner.pseudonym ?? '',
+      dob: stored.dob,
+      city: stored.city,
+      marital_status: stored.marital_status,
+      polygamy_intent: stored.polygamy_intent,
+      madhhab: stored.madhhab,
+      practice: stored.practice,
+      photo_blur: stored.photo_blur,
+    })
+  }
+  rows.sort((left, right) => (left.id < right.id ? 1 : left.id > right.id ? -1 : 0))
+  return rows.slice(0, query.limit)
 }
 
 function compose(
@@ -266,7 +331,50 @@ function postgresProfileStore(): ProfileStore {
     noteQueued: noteQueued,
     patchReview: (accountId, patch, scope, db) => patchReview(accountId, patch, scope, db),
     queued: queuedProfiles,
+    browseGrid: browseGridRows,
   }
+}
+
+async function browseGridRows(query: BrowseGridQuery): Promise<BrowseGridRow[]> {
+  const cursor = query.cursor ? sql`${account.id} < ${query.cursor}::uuid` : sql`true`
+  const rows = await getIdentityDatabase()
+    .select({
+      id: account.id,
+      pseudonym: account.pseudonym,
+      dob: profile.dob,
+      city: profile.city,
+      marital_status: profile.marital_status,
+      polygamy_intent: profile.polygamy_intent,
+      madhhab: profile.madhhab,
+      practice: profile.practice,
+      photo_blur: profile.photo_blur,
+    })
+    .from(profile)
+    .innerJoin(account, eq(account.id, profile.account_id))
+    .where(
+      and(
+        sql`${account.id} <> ${query.viewerId}::uuid`,
+        eq(account.gender, query.oppositeGender),
+        eq(account.status, 'Active'),
+        eq(profile.visibility, 'public'),
+        sql`${account.roles} @> ARRAY['member']::text[]`,
+        sql`NOT (${account.roles} && ARRAY['moderator', 'operator']::text[])`,
+        cursor,
+      ),
+    )
+    .orderBy(desc(account.id))
+    .limit(query.limit)
+  return rows.map((row) => ({
+    id: row.id,
+    pseudonym: row.pseudonym,
+    dob: asDob(row.dob),
+    city: row.city,
+    marital_status: row.marital_status,
+    polygamy_intent: row.polygamy_intent,
+    madhhab: row.madhhab,
+    practice: row.practice,
+    photo_blur: row.photo_blur,
+  }))
 }
 
 async function readProfile(accountId: string, db?: ProfileDb): Promise<StoredProfile | null> {

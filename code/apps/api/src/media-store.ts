@@ -61,6 +61,7 @@ export type MediaStore = {
   openProfilePhotos(ownerId: string): Promise<StoredAsset[]>
   latestProfilePhoto(ownerId: string): Promise<StoredAsset | null>
   liveProfilePhoto(ownerId: string): Promise<StoredAsset | null>
+  liveMainProfilePhotos(ownerIds: readonly string[]): Promise<StoredAsset[]>
   pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]>
   allowProfilePhoto(id: string, db?: MediaDb): Promise<boolean>
   setProfileMain(ownerId: string, assetId: string): Promise<MainResult>
@@ -135,6 +136,16 @@ export function memoryMediaStore(): MediaStore & {
     },
     async liveProfilePhoto(ownerId) {
       return sortOpenPhotos(openRows(assets, ownerId)).find((row) => row.moderation_state === 'live') ?? null
+    },
+    async liveMainProfilePhotos(ownerIds) {
+      const wanted = new Set(ownerIds)
+      return assets.filter(
+        (row) =>
+          wanted.has(row.owner_id) &&
+          row.kind === 'profile_photo' &&
+          row.moderation_state === 'live' &&
+          row.is_main === true,
+      )
     },
     async pendingProfilePhotos(ownerId) {
       return assets
@@ -292,6 +303,7 @@ function postgresMediaStore(): MediaStore {
     openProfilePhotos: openProfilePhotos,
     latestProfilePhoto: latestProfilePhoto,
     liveProfilePhoto: liveProfilePhoto,
+    liveMainProfilePhotos: liveMainProfilePhotos,
     pendingProfilePhotos: pendingProfilePhotos,
     allowProfilePhoto: allowProfilePhoto,
     setProfileMain: setProfileMain,
@@ -433,6 +445,24 @@ async function latestProfilePhoto(ownerId: string): Promise<StoredAsset | null> 
     .orderBy(desc(photoAsset.id))
     .limit(1)
   return rows[0] ? asAsset(rows[0]) : null
+}
+
+async function liveMainProfilePhotos(ownerIds: readonly string[]): Promise<StoredAsset[]> {
+  if (ownerIds.length === 0) {
+    return []
+  }
+  const rows = await mediaDatabase()
+    .select()
+    .from(photoAsset)
+    .where(
+      and(
+        inArray(photoAsset.owner_id, [...ownerIds]),
+        eq(photoAsset.kind, 'profile_photo'),
+        eq(photoAsset.moderation_state, 'live'),
+        eq(photoAsset.is_main, true),
+      ),
+    )
+  return rows.map(asAsset)
 }
 
 async function liveProfilePhoto(ownerId: string): Promise<StoredAsset | null> {

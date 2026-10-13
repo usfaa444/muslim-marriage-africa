@@ -16,7 +16,9 @@ import type { ResolvedSession } from './session-store.js'
 
 export const PROFILE_UNAVAILABLE = "Ce profil n'est pas disponible."
 export const VIEWER_NOT_LISTABLE = "Votre profil doit être validé avant de consulter d'autres profils."
-const RATE_MESSAGE = 'Cadence de requêtes régulée.'
+export const BROWSE_RATE_MESSAGE = 'Cadence de requêtes régulée.'
+export const STAFF_MEMBER_MESSAGE = "Cette session d'équipe ne peut pas ouvrir un espace membre."
+export const MAHRAM_MEMBER_MESSAGE = 'Une session mahram ne peut pas ouvrir cet espace.'
 const STAFF_ROLES = new Set(['moderator', 'operator'])
 
 export type PublicPhoto = {
@@ -57,10 +59,10 @@ export type PublicProfileFailure = {
   retryable: boolean
 }
 
-type AccountRow = {
+export type BrowseViewer = {
   id: string
   pseudonym: string
-  gender: string
+  gender: Gender
   roles: readonly string[]
   status: string
 }
@@ -83,7 +85,7 @@ function isGender(value: string): value is Gender {
   return value === 'sister' || value === 'brother'
 }
 
-async function loadAccount(id: string): Promise<AccountRow | null> {
+async function loadAccount(id: string): Promise<BrowseViewer | null> {
   if (accountStoreIsMemory()) {
     const store = getAccountStore() as { accounts?: CreatedAccount[] }
     const row = store.accounts?.find((item) => item.id === id)
@@ -113,7 +115,13 @@ async function loadAccount(id: string): Promise<AccountRow | null> {
   if (!row || !isGender(row.gender)) {
     return null
   }
-  return row
+  return {
+    id: row.id,
+    pseudonym: row.pseudonym,
+    gender: row.gender,
+    roles: row.roles,
+    status: row.status,
+  }
 }
 
 async function latestStatuses(accountId: string): Promise<Map<string, string>> {
@@ -166,7 +174,7 @@ async function verificationFlags(accountId: string, gender: Gender): Promise<Pub
   }
 }
 
-function presentProfile(row: StoredProfile, owner: AccountRow): PublicProfileBody['profile'] {
+function presentProfile(row: StoredProfile, owner: BrowseViewer): PublicProfileBody['profile'] {
   return {
     id: owner.id,
     pseudonym: owner.pseudonym,
@@ -182,6 +190,25 @@ function presentProfile(row: StoredProfile, owner: AccountRow): PublicProfileBod
   }
 }
 
+/** Session, staff/mahram, then the viewer's own listable profile. Does not take a browse slot. */
+export async function assertBrowseViewer(
+  viewer: ResolvedSession,
+): Promise<{ ok: true; account: BrowseViewer } | PublicProfileFailure> {
+  if (viewer.roles.some((role) => STAFF_ROLES.has(role))) {
+    return failure(403, 'FORBIDDEN', STAFF_MEMBER_MESSAGE, { reason: 'staff_session' }, false)
+  }
+  if (!viewer.roles.includes('member')) {
+    return failure(403, 'FORBIDDEN', MAHRAM_MEMBER_MESSAGE, { reason: 'mahram_session' }, false)
+  }
+
+  const viewerAccount = await loadAccount(viewer.account_id)
+  const viewerProfile = await getProfileStore().read(viewer.account_id)
+  if (!viewerAccount || !isListableProfile(viewerProfile?.visibility ?? null, viewerAccount.status)) {
+    return failure(403, 'FORBIDDEN', VIEWER_NOT_LISTABLE, { reason: 'viewer_not_listable' }, false)
+  }
+  return { ok: true, account: viewerAccount }
+}
+
 /**
  * Other-member profile read. Writes nothing. Does not call BillingPort.
  * One 404 body covers every hidden target.
@@ -190,17 +217,9 @@ export async function readPublicProfile(
   viewer: ResolvedSession,
   targetId: string,
 ): Promise<{ ok: true; body: PublicProfileBody } | PublicProfileFailure> {
-  if (viewer.roles.some((role) => STAFF_ROLES.has(role))) {
-    return failure(403, 'FORBIDDEN', "Cette session d'équipe ne peut pas ouvrir un espace membre.", { reason: 'staff_session' }, false)
-  }
-  if (!viewer.roles.includes('member')) {
-    return failure(403, 'FORBIDDEN', 'Une session mahram ne peut pas ouvrir cet espace.', { reason: 'mahram_session' }, false)
-  }
-
-  const viewerAccount = await loadAccount(viewer.account_id)
-  const viewerProfile = await getProfileStore().read(viewer.account_id)
-  if (!viewerAccount || !isListableProfile(viewerProfile?.visibility ?? null, viewerAccount.status)) {
-    return failure(403, 'FORBIDDEN', VIEWER_NOT_LISTABLE, { reason: 'viewer_not_listable' }, false)
+  const gate = await assertBrowseViewer(viewer)
+  if (!gate.ok) {
+    return gate
   }
 
   const limit = await readRlBrowsePerMin()
@@ -208,7 +227,7 @@ export async function readPublicProfile(
     return failure(500, 'UNHANDLED', 'Request failed', null, false)
   }
   if (!takeBrowseSlot(viewer.account_id, limit)) {
-    return failure(429, 'RATE_LIMITED', RATE_MESSAGE, null, true)
+    return failure(429, 'RATE_LIMITED', BROWSE_RATE_MESSAGE, null, true)
   }
 
   if (!isUuidV7(targetId) || targetId === viewer.account_id) {
