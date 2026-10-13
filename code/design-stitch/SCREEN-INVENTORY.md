@@ -2581,7 +2581,7 @@ Each v2 screen is `ankanu-v2/NN-slug/screen.html` and `screen.png` (56 / 56 afte
 | Showcase | — | **v2 coverage gap** |
 | Cookie consent | — | **v2 coverage gap** |
 | SEO pages | — | **v2 coverage gap** |
-| Discover | — | **v2 coverage gap** |
+| Discover | `57-discover` | AnKanu - Découvrir (focused card `screen.html` / `screen.png`; grid state `grid.html` / `grid.png`) |
 | Sister invite quota wall | — | **v2 coverage gap** |
 | Message quota wall | — | **v2 coverage gap** |
 | Consent story | — | **v2 coverage gap** |

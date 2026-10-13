@@ -1,0 +1,224 @@
+<!DOCTYPE html><html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>AnKanu - Découvrir</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            'deep-navy': '#0B1D36',
+            'soft-gold': '#C9A86C',
+            'cream': '#F7F1E3',
+            'on-navy': '#F7F1E3',
+            'on-cream': '#0B1D36',
+            'gold-soft': '#E6D5A8',
+            'hairline': '#E2D4B8',
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-cream text-deep-navy font-body flex flex-col antialiased selection:bg-gold-soft selection:text-deep-navy pb-20 md:pb-8">
+<!-- 1. HEADER: Slim top header, ONLY wordmark AnKanu -->
+<header class="w-full top-0 sticky z-30 bg-[#F7F1E3] border-b border-[#E2D4B8]">
+
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-8 w-full flex flex-col">
+<!-- 2. SUB-HEADER / DISCOVER TOOLBAR -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4">
+<!-- Left side: Filters + Active chips -->
+<div class="flex flex-wrap items-center gap-2">
+<button class="inline-flex items-center gap-2 bg-cream border border-[#E2D4B8] rounded-lg px-3.5 py-1.5 text-xs sm:text-sm font-medium text-deep-navy hover:border-soft-gold transition-colors shadow-none shrink-0">
+<span class="material-symbols-outlined text-soft-gold text-lg" data-icon="tune">tune</span>
+<span class="">Filtres</span>
+</button>
+<span class="inline-flex items-center gap-1.5 bg-[#FBF8F1] border border-[#E2D4B8] px-3 py-1.5 rounded-lg text-xs text-deep-navy">
+          Ville : Ouagadougou
+        </span>
+<span class="inline-flex items-center gap-1.5 bg-[#FBF8F1] border border-[#E2D4B8] px-3 py-1.5 rounded-lg text-xs text-deep-navy">
+          Tranche d'âge : 26–32 ans
+        </span>
+<span class="inline-flex items-center gap-1 bg-[#FBF8F1] border border-[#E2D4B8] px-3 py-1.5 rounded-lg text-xs text-deep-navy font-medium">
+<span class="material-symbols-outlined text-soft-gold text-sm" data-icon="check">check</span>
+<span class="">Pratique assidue</span>
+</span>
+</div>
+<!-- Right side: Quiet notice + View toggle -->
+<div class="flex items-center justify-between sm:justify-end gap-4 shrink-0">
+<span class="text-xs text-deep-navy/70 font-normal tracking-wide">
+          Découverte respectueuse
+        </span>
+<div class="border border-[#E2D4B8] rounded-lg p-0.5 inline-flex bg-cream items-center">
+<button aria-label="Affichage unitaire soigné" class="bg-deep-navy text-cream rounded-md p-1.5 flex items-center justify-center transition-colors" title="Affichage unitaire soigné">
+<span class="material-symbols-outlined text-lg" data-icon="crop_portrait">crop_portrait</span>
+</button>
+<button aria-label="Grille panoramique" class="text-deep-navy/60 hover:text-deep-navy p-1.5 flex items-center justify-center transition-colors" title="Grille panoramique">
+<span class="material-symbols-outlined text-lg" data-icon="grid_view">grid_view</span>
+</button>
+</div>
+</div>
+</div>
+<!-- 3. FOCUSED PROFILE CARD -->
+<article class="max-w-2xl mx-auto w-full bg-[#FBF8F1] border border-[#E2D4B8] rounded-xl p-6 sm:p-8 flex flex-col gap-6 shadow-none mt-2">
+<!-- Profile Header Row -->
+<header class="flex items-start justify-between gap-4">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center flex-wrap gap-2.5">
+<h1 class="font-display text-2xl sm:text-3xl font-normal text-deep-navy leading-tight">
+              Al-Hassan_BF, 29 ans
+            </h1>
+<span class="inline-flex items-center uppercase tracking-wider font-semibold border border-[#C9A86C]/60 bg-[#E6D5A8]/30 text-[#C9A86C] text-[11px] px-2 py-0.5 rounded">
+              VÉRIFIÉ
+            </span>
+</div>
+<p class="text-sm text-deep-navy/70 flex items-center gap-1 font-normal m-0">
+<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="location_on">location_on</span>
+<span class="">Ouagadougou</span>
+</p>
+</div>
+<!-- Trailing Bookmark action -->
+<button aria-label="Enregistrer en toute discrétion" class="border border-[#E2D4B8] rounded-lg p-2 text-deep-navy/70 hover:text-deep-navy transition-colors bg-cream shrink-0" title="Enregistrer en toute discrétion">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark">bookmark</span>
+</button>
+</header>
+<!-- Photo Area: Reserved -->
+<div class="h-72 sm:h-80 w-full rounded-lg bg-[#0B1D36] relative flex flex-col items-center justify-center p-6 text-center overflow-hidden select-none">
+<!-- Geometric dot pattern backdrop -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#C9A86C 1px, transparent 1px); background-size: 18px 18px;"></div>
+<!-- Center icon -->
+<div class="relative z-10 w-14 h-14 rounded-full bg-[#0B1D36]/80 border border-soft-gold/30 flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-soft-gold text-2xl" data-icon="visibility_off">visibility_off</span>
+</div>
+<!-- Title -->
+<h2 class="relative z-10 font-display italic text-xl sm:text-2xl text-[#F7F1E3] mt-3 font-normal">
+          Photographie réservée
+        </h2>
+<!-- Subtitle -->
+<p class="relative z-10 text-xs sm:text-sm text-[#F7F1E3]/70 max-w-md mt-1.5 leading-relaxed">
+          Visible à l'acceptation mutuelle de la démarche et après accord de la personne.
+        </p>
+<!-- Verified Identity Pill -->
+<div class="relative z-10 inline-flex items-center gap-1.5 text-xs text-[#E6D5A8] bg-[#0B1D36]/80 border border-[#C9A86C]/40 px-3 py-1 rounded-full mt-3">
+<span class="material-symbols-outlined text-soft-gold text-sm" data-icon="verified_user">verified_user</span>
+<span class="">Identité vérifiée</span>
+</div>
+</div>
+<!-- Shared-trait section -->
+<section class="flex flex-col gap-3">
+<h3 class="text-xs uppercase tracking-wider font-semibold text-deep-navy/70 m-0">
+          POINTS COMMUNS &amp; PRINCIPES DÉCLARÉS
+        </h3>
+<div class="flex flex-wrap gap-2">
+<div class="inline-flex items-center gap-1.5 bg-cream border border-[#E2D4B8] rounded-lg px-3 py-1.5 text-xs text-deep-navy">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="location_on">location_on</span>
+<span class="">Même ville (Ouagadougou)</span>
+</div>
+<div class="inline-flex items-center gap-1.5 bg-cream border border-[#E2D4B8] rounded-lg px-3 py-1.5 text-xs text-deep-navy">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="menu_book">menu_book</span>
+<span class="">Madhhab : Maliki</span>
+</div>
+<div class="inline-flex items-center gap-1.5 bg-cream border border-[#E2D4B8] rounded-lg px-3 py-1.5 text-xs text-deep-navy">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="schedule">schedule</span>
+<span class="">Pratique assidue</span>
+</div>
+<div class="inline-flex items-center gap-1.5 bg-cream border border-[#E2D4B8] rounded-lg px-3 py-1.5 text-xs text-deep-navy">
+<span class="material-symbols-outlined text-soft-gold text-base" data-icon="handshake">handshake</span>
+<span class="">Projet monogame exclusif</span>
+</div>
+</div>
+</section>
+<!-- Intention de mariage quote -->
+<section class="border-l-2 border-[#C9A86C] pl-4 py-1 flex flex-col gap-1">
+<span class="text-xs uppercase tracking-wider text-[#C9A86C] font-semibold">
+          INTENTION DE MARIAGE
+        </span>
+<blockquote class="font-display italic text-base sm:text-lg text-deep-navy/90 leading-relaxed m-0">
+          « Projet d'édification d'un foyer dans la droiture, l'écoute mutuelle et le respect des préceptes éthiques. »
+        </blockquote>
+</section>
+<!-- Actions row -->
+<div class="flex flex-col sm:flex-row gap-3 pt-2">
+<button class="border border-[#E2D4B8] text-deep-navy bg-cream/50 hover:bg-cream rounded-lg px-4 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors" title="Passer avec égards">
+<span class="material-symbols-outlined text-base text-deep-navy/70" data-icon="close">close</span>
+<span class="">Passer avec égards</span>
+</button>
+<button class="border border-[#E2D4B8] text-deep-navy bg-cream/50 hover:bg-cream rounded-lg px-4 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors" title="Message d'introduction">
+<span class="material-symbols-outlined text-base text-deep-navy/70" data-icon="mail">mail</span>
+<span class="">Message d'introduction</span>
+</button>
+<button class="bg-[#0B1D36] text-[#F7F1E3] hover:bg-[#0B1D36]/90 rounded-lg px-5 py-2.5 text-sm font-medium flex items-center justify-center gap-2 transition-colors sm:flex-1 shadow-none" title="Envoyer une invitation Ta'aruf">
+<span class="">Envoyer une invitation Ta'aruf</span>
+<span class="material-symbols-outlined text-base text-soft-gold" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- 4. UNDER-CARD WALI NOTIFICATION SENTENCE -->
+<div class="max-w-xl mx-auto text-center mt-4 flex items-center justify-center gap-2 text-xs text-deep-navy/70 leading-normal px-2">
+
+
+</div>
+<!-- 5. MEMBER NAVIGATION (DESKTOP: In normal document flow, NOT fixed, NO overlay) -->
+
+</main>
+<!-- 5. MEMBER NAVIGATION (MOBILE: Fixed bottom bar, md:hidden) -->
+<nav aria-label="Navigation mobile" class="md:hidden fixed bottom-0 left-0 right-0 bg-cream border-t border-[#E2D4B8] py-2 px-3 flex justify-around items-center z-40">
+<!-- Découvrir (Selected with gold indicator) -->
+<a aria-current="page" class="flex flex-col items-center gap-1 text-deep-navy font-semibold relative pb-1 border-b-2 border-soft-gold" href="#">
+<span class="material-symbols-outlined text-xl text-deep-navy" data-icon="search">search</span>
+<span class="text-[11px] leading-none">Découvrir</span>
+</a>
+<!-- Invitations -->
+<a class="flex flex-col items-center gap-1 text-deep-navy/70 hover:text-deep-navy pb-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="send">send</span>
+<span class="text-[11px] leading-none">Invitations</span>
+</a>
+<!-- Discussions -->
+<a class="flex flex-col items-center gap-1 text-deep-navy/70 hover:text-deep-navy pb-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="chat_bubble_outline">chat_bubble_outline</span>
+<span class="text-[11px] leading-none">Discussions</span>
+</a>
+<!-- Profil -->
+<a class="flex flex-col items-center gap-1 text-deep-navy/70 hover:text-deep-navy pb-1" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="person">person</span>
+<span class="text-[11px] leading-none">Profil</span>
+</a>
+</nav>
+<!-- 6. FOOTER: Minimal & Clean (No public footer links) -->
+<footer class="w-full border-t border-[#E2D4B8] bg-cream mt-auto">
+
+</footer>
+
+
+</body></html>

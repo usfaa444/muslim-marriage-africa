@@ -4,20 +4,21 @@
 - Project: https://stitch.withgoogle.com/project/6717808880062298165
 - Design system: `DESIGN.md` (tokens only; layout is each PNG)
 - Old Stitch project on Google was **not** deleted.
-- Refresh: founder-edited project re-downloaded 2026-10-11 (replaces [`23a7151`](https://github.com/usfaa444/muslim-marriage-africa/commit/23a7151)). Screen 49 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-106 (Indicateur 07 — free-review SLA-breach). New Stitch id `b03cdd4e2f4b43c3a50d9014b6df6f31`; previous id `c143ef4636044f509dc2d307b65437ca` is no longer in live `list_screens`. Screens 11 and 15 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-117 (six-photo gallery, MAIN picker, one blur). New ids: screen 11 `5df2f4c5a2c04b10942463422648ebf7`, screen 15 `82b3f033e3004a65ad72dfe1fdc2e2d4`. Cap-reached state of screen 11 is extra files `11-profile-edit/cap-reached.html` + `cap-reached.png` (Stitch id `a7549136b40d4da4a88920f6f46e210a`), not a new inventory number. Previous ids `00b3c545d70c406491fd2ae959c17978` and `6e0fc9ebb2e14daf90cd53b0b09f4a4c` remain in live `list_screens` but are not the gallery designs.
+- Refresh: founder-edited project re-downloaded 2026-10-11 (replaces [`23a7151`](https://github.com/usfaa444/muslim-marriage-africa/commit/23a7151)). Screen 49 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-106 (Indicateur 07 — free-review SLA-breach). New Stitch id `b03cdd4e2f4b43c3a50d9014b6df6f31`; previous id `c143ef4636044f509dc2d307b65437ca` is no longer in live `list_screens`. Screens 11 and 15 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-117 (six-photo gallery, MAIN picker, one blur). New ids: screen 11 `5df2f4c5a2c04b10942463422648ebf7`, screen 15 `82b3f033e3004a65ad72dfe1fdc2e2d4`. Cap-reached state of screen 11 is extra files `11-profile-edit/cap-reached.html` + `cap-reached.png` (Stitch id `a7549136b40d4da4a88920f6f46e210a`), not a new inventory number. Previous ids `00b3c545d70c406491fd2ae959c17978` and `6e0fc9ebb2e14daf90cd53b0b09f4a4c` remain in live `list_screens` but are not the gallery designs. Discover focused-card and separate grid-state HTML/PNG added 2026-10-13 after founder Accept on ANK-127. Discover id `46688f1db34d426cbff3376743fe8a7e`. Grid id `a4d448713bcb4ca2829cc8b7f1235d6f` (extra files `57-discover/grid.html` + `grid.png`, not a new inventory number). Do not bind `13-search` as Discover. Probe id `b6f2d6c6618a4a70afbce5b480b0b02c` remains in live `list_screens` as « AnKanu - Découvrir (grille) » and is not the accepted grid.
 
 ## Completeness proof
 
 - Command: `stitch-mcp tool list_screens -d '{"projectId":"6717808880062298165"}'`; HTTP GET htmlCode.downloadUrl; screenshot.downloadUrl with FIFE suffix `=s2048-rp`; python PNG signature `\x89PNG` and HTML size > 0; compare API ids to MANIFEST and folders; no folder whose id is absent from the live list
-- API count: **60** (`list_screens` 2026-10-13 after ANK-117 generate; includes old 11/15 plus new gallery frames and unused IMAGE assets)
-- Downloaded inventory folders: **56**
-- HTML count: **56** inventory `screen.html` files, plus `11-profile-edit/cap-reached.html`
-- PNG count: **56** inventory `screen.png` files, plus `11-profile-edit/cap-reached.png`
+- API count: **62** (`list_screens` 2026-10-13 after ANK-127 download; includes old 11/15, probe grid `b6f2d6c6618a4a70afbce5b480b0b02c`, accepted Discover, and unused IMAGE assets)
+- Downloaded inventory folders: **57**
+- HTML count: **57** inventory `screen.html` files, plus `11-profile-edit/cap-reached.html`, plus `57-discover/grid.html`
+- PNG count: **57** inventory `screen.png` files, plus `11-profile-edit/cap-reached.png`, plus `57-discover/grid.png`
 - Missing inventory folders: **0**
 - Screen 11 add-tile id `5df2f4c5a2c04b10942463422648ebf7`: `get_screen` HTML/PNG verified after founder Accept; not returned by this `list_screens` snapshot (old id `00b3c545d70c406491fd2ae959c17978` still listed as « AnKanu - Édition du profil »)
 - Screen 15 new id `82b3f033e3004a65ad72dfe1fdc2e2d4` and cap id `a7549136b40d4da4a88920f6f46e210a` are in live `list_screens`
+- Discover id `46688f1db34d426cbff3376743fe8a7e` is in live `list_screens`. Grid id `a4d448713bcb4ca2829cc8b7f1235d6f`: `get_screen` HTML/PNG verified after founder Accept; not returned by this `list_screens` snapshot (probe id `b6f2d6c6618a4a70afbce5b480b0b02c` still listed as « AnKanu - Découvrir (grille) »)
 
-Verified 2026-10-13 against `list_screens` for project `6717808880062298165` after ANK-117 founder Accept (live count **60**, inventory folders **56**). PNG proof: `\x89PNG` signature and FIFE `=s2048-rp`. HTML size > 0.
+Verified 2026-10-13 against `list_screens` for project `6717808880062298165` after ANK-127 founder Accept (live count **62**, inventory folders **57**). PNG proof: `\x89PNG` signature and FIFE `=s2048-rp`. HTML size > 0. Discover + grid `document.documentElement.scrollWidth <= window.innerWidth` at 360, 390, 768, 1024, 1280, 1440.
 
 Note: `55-pwa-manifest` is a JSON asset. Stitch returned no screenshot URL. The PNG is a raster of the downloaded `manifest.json` bytes (cream/navy tokens). Do not treat it as a Stitch canvas.
 
@@ -81,6 +82,7 @@ Note: `55-pwa-manifest` is a JSON asset. Stitch returned no screenshot URL. The 
 | 54 | AnKanu - Pseudonyme & Date de naissance | `fd15ec6c6d854ee79cb1be8e5e910bc5` | `54-pseudonym-dob/screen.html` | `54-pseudonym-dob/screen.png` | — (extra / not in inventory numbering) |
 | 55 | manifest.json (AnKanu PWA) | `2259e9895a48410b82b4fd63a8dcab94` | `55-pwa-manifest/screen.html` | `55-pwa-manifest/screen.png` | — (extra / not in inventory numbering) |
 | 56 | AnKanu - Vérification Téléphone (OTP) | `9d8deea75c154a04bf26e4eb8938cec7` | `56-otp-alt/screen.html` | `56-otp-alt/screen.png` | — (extra / not in inventory numbering) |
+| 57 | AnKanu - Découvrir | `46688f1db34d426cbff3376743fe8a7e` | `57-discover/screen.html` | `57-discover/screen.png` | Discover (focused card). Grid state: `57-discover/grid.html` + `grid.png`, Stitch id `a4d448713bcb4ca2829cc8b7f1235d6f`. Not `13-search`. |
 
 ## v2 coverage gaps
 
@@ -95,7 +97,6 @@ Information only. Do not invent designs.
 - Showcase
 - Cookie consent
 - SEO pages — Ouagadougou, Bobo-Dioulasso, Burkina Faso
-- Discover
 - Sister invite quota wall
 - Message quota wall
 - Consent story

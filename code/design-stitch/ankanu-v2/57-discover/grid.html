@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#F7F1E3]" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu - Découvrir (grille)</title>
+<!-- Google Fonts: Newsreader (display/serif) & Plus Jakarta Sans (body) -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8",
+            "card-bg": "#FBF8F1"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "8px",
+            "xl": "12px",
+            "full": "9999px"
+          },
+          fontFamily: {
+            headline: ["Newsreader", "Georgia", "serif"],
+            display: ["Newsreader", "Georgia", "serif"],
+            body: ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            label: ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    /* Subtle geometric dotted texture for dignified reserved photograph well */
+    .bg-dot-pattern {
+      background-image: radial-gradient(rgba(201, 168, 108, 0.18) 1px, transparent 1px);
+      background-size: 16px 16px;
+    }
+  </style>
+</head>
+<body class="min-h-full bg-cream text-deep-navy font-body antialiased flex flex-col selection:bg-gold-soft selection:text-deep-navy">
+<!-- =========================================================================
+       1. TOP BAR / HEADER (Minimal AnKanu brand logo on cream background)
+  ========================================================================= -->
+<header class="w-full top-0 sticky z-30 bg-cream border-b border-hairline/60">
+<div class="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 h-16 sm:h-20 flex items-center justify-start">
+<a aria-label="Accueil AnKanu" class="font-display text-2xl sm:text-3xl tracking-wide font-normal text-deep-navy hover:text-soft-gold transition-colors duration-200" href="#">
+        AnKanu
+      </a>
+</div>
+</header>
+<!-- =========================================================================
+       2. MAIN CANVAS
+  ========================================================================= -->
+<main class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 flex flex-col gap-6 pb-8">
+<!-- Screen Intent Headline -->
+<div class="flex flex-col gap-1 border-b border-hairline/60 pb-4">
+<div class="flex items-center gap-2 text-xs font-semibold text-soft-gold tracking-widest uppercase">
+<span class="w-2 h-2 rounded-full bg-soft-gold"></span>
+<span>ESPACE DE CONVENANCE MATRIMONIALE</span>
+</div>
+<h1 class="font-display text-2xl sm:text-3xl text-deep-navy font-normal tracking-tight">
+        Découvrir selon vos affinités éthiques
+      </h1>
+<p class="text-xs sm:text-sm text-deep-navy/70 font-normal">
+        Consultation sobre des profils engagés dans une démarche de mariage honorifique au Burkina Faso.
+      </p>
+</div>
+<!-- 3. HEADER ROW (DISCOVERY TOOLBAR) -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#FBF8F1] border border-hairline/80 rounded-lg p-3.5 sm:p-4">
+<!-- Left side: Filter trigger & Active Filter chips -->
+<div class="flex flex-wrap items-center gap-2">
+<button aria-label="Ouvrir les filtres de recherche" class="inline-flex items-center gap-2 px-3.5 py-1.5 bg-cream border border-hairline rounded-lg text-deep-navy text-sm font-medium hover:border-soft-gold transition-colors focus:outline-none focus:ring-1 focus:ring-soft-gold" type="button">
+<span class="material-symbols-outlined text-soft-gold text-lg" data-icon="tune">tune</span>
+<span>Filtres</span>
+</button>
+<!-- Active chips -->
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cream border border-hairline text-deep-navy text-xs font-medium">
+<span>Ville : Ouagadougou</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cream border border-hairline text-deep-navy text-xs font-medium">
+<span>Tranche d'âge : 26–32 ans</span>
+</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cream border border-hairline text-deep-navy text-xs font-medium">
+<span class="material-symbols-outlined text-soft-gold text-sm" data-icon="check">check</span>
+<span>Pratique assidue</span>
+</span>
+</div>
+</div>
+<!-- Right side: Quiet Status Line & View Toggle (Strictly NO counters or numbers) -->
+<div class="flex items-center justify-between md:justify-end gap-4 self-end md:self-auto w-full md:w-auto pt-2 md:pt-0 border-t md:border-t-0 border-hairline/40">
+<span class="font-display italic text-deep-navy/80 text-sm tracking-wide">
+          Découverte respectueuse
+        </span>
+<!-- View Switcher -->
+<div aria-label="Mode d'affichage" class="inline-flex items-center rounded-lg border border-hairline p-0.5 bg-cream" role="group">
+<!-- crop_portrait: UNSELECTED (navy/60, no solid background) -->
+<button aria-label="Affichage unitaire" class="p-1.5 rounded text-deep-navy/60 hover:text-deep-navy transition-colors" title="Affichage unitaire" type="button">
+<span class="material-symbols-outlined text-lg" data-icon="crop_portrait">crop_portrait</span>
+</button>
+<!-- grid_view: SELECTED (navy fill #0B1D36, cream icon #F7F1E3) -->
+<button aria-current="page" aria-label="Grille panoramique" class="p-1.5 rounded bg-deep-navy text-cream shadow-sm" title="Grille panoramique" type="button">
+<span class="material-symbols-outlined text-lg text-cream" data-icon="grid_view">grid_view</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 4. GRID BODY: 2-COLUMN CARDS GRID (12 TILES BURKINA-FIRST) -->
+<section aria-label="Profils en découverte" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- ================= TILE 1: Al-Hassan_BF ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block: Navy block bg-[#0B1D36], rounded-md, h-52 sm:h-56 -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="visibility_off">visibility_off</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Al-Hassan_BF, 29 ans</h2>
+<span class="bg-gold-soft/20 border border-soft-gold text-deep-navy text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded">VÉRIFIÉ</span>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Ouagadougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 2: Ibrahim_S ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="lock">lock</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Ibrahim_S, 32 ans</h2>
+<span class="bg-gold-soft/20 border border-soft-gold text-deep-navy text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded">VÉRIFIÉ</span>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Bobo-Dioulasso</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 3: Aminata_K ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="visibility_off">visibility_off</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Aminata_K, 27 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Ouagadougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 4: Yusuf_BF ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="lock">lock</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Yusuf_BF, 31 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Koudougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 5: Fatim_B ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="visibility_off">visibility_off</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Fatim_B, 26 ans</h2>
+<span class="bg-gold-soft/20 border border-soft-gold text-deep-navy text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded">VÉRIFIÉ</span>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Ouagadougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 6: Oumar_T ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="lock">lock</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Oumar_T, 34 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Banfora</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 7: Aisha_W ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="visibility_off">visibility_off</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Aisha_W, 28 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Ouagadougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 8: Issa_M ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="lock">lock</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Issa_M, 30 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Bobo-Dioulasso</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 9: Mariam_Z ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="visibility_off">visibility_off</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Mariam_Z, 29 ans</h2>
+<span class="bg-gold-soft/20 border border-soft-gold text-deep-navy text-[10px] font-semibold tracking-wider uppercase px-2 py-0.5 rounded">VÉRIFIÉ</span>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Ouagadougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 10: Souleymane_D ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="lock">lock</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Souleymane_D, 33 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Kaya</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 11: Khadija_L ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] bg-dot-pattern relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-hairline/30 group-hover:border-soft-gold/40 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="visibility_off">visibility_off</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie réservée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Visible à l'acceptation mutuelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Khadija_L, 25 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Ouagadougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame exclusif</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+<!-- ================= TILE 12: Abdoul_N (Photographie non publiée) ================= -->
+<article class="bg-[#FBF8F1] border border-hairline/80 rounded-lg p-5 sm:p-6 flex flex-col gap-4 hover:border-soft-gold transition-colors duration-200 cursor-pointer group" tabindex="0">
+<div>
+<!-- Photo block: "Photographie non publiée" per requirements -->
+<div class="h-52 sm:h-56 rounded-md bg-[#0B1D36] relative overflow-hidden flex flex-col items-center justify-center p-4 text-center mb-3.5 border border-dashed border-hairline/50 group-hover:border-soft-gold/50 transition-colors">
+<span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="lock">lock</span>
+<span class="font-display italic text-cream text-base tracking-wide">Photographie non publiée</span>
+<span class="text-xs text-cream/70 font-normal mt-0.5">Choix de discrétion personnelle</span>
+</div>
+<!-- Identity Row -->
+<div class="flex items-start justify-between gap-2 mb-1">
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-display text-lg sm:text-xl font-semibold text-deep-navy">Abdoul_N, 36 ans</h2>
+</div>
+<button aria-label="Enregistrer en toute discrétion" class="p-1 text-deep-navy/40 hover:text-soft-gold transition-colors focus:outline-none" title="Enregistrer" type="button">
+<span class="material-symbols-outlined text-xl" data-icon="bookmark_border">bookmark_border</span>
+</button>
+</div>
+<!-- City Line -->
+<p class="text-xs text-deep-navy/70">Ouagadougou</p>
+</div>
+<!-- Badges Chips List -->
+<div class="flex flex-wrap gap-1.5 text-xs pt-2 border-t border-hairline/40">
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Célibataire</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Projet monogame</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Maliki</span>
+<span class="px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy">Pratique assidue</span>
+</div>
+</article>
+</section><div class="mt-10 mb-8 w-fit mx-auto hidden md:flex">
+<nav aria-label="Navigation membre" class="bg-[#0B1D36] text-cream px-3 py-2 rounded-full border border-soft-gold/40 shadow-xl flex items-center gap-1.5">
+<a aria-current="page" class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-soft-gold/20 text-soft-gold text-xs font-semibold tracking-wide border border-soft-gold/40" href="#">
+<span class="material-symbols-outlined text-base" data-icon="grid_view">grid_view</span>
+<span>Découvrir</span>
+</a>
+<a class="flex items-center gap-2 px-4 py-1.5 rounded-full text-cream/80 hover:text-cream text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="mail">mail</span>
+<span>Invitations</span>
+</a>
+<a class="flex items-center gap-2 px-4 py-1.5 rounded-full text-cream/80 hover:text-cream text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="forum">forum</span>
+<span>Discussions</span>
+</a>
+<a class="flex items-center gap-2 px-4 py-1.5 rounded-full text-cream/80 hover:text-cream text-xs font-medium transition-colors" href="#">
+<span class="material-symbols-outlined text-base" data-icon="account_circle">account_circle</span>
+<span>Profil</span>
+</a>
+</nav>
+</div>
+<!-- Subdued spiritual proverb banner -->
+<div class="flex flex-col items-center justify-center py-6 gap-2 text-center border-t border-hairline/40 mt-4">
+<p class="font-display italic text-sm text-deep-navy/80">
+        « La bienséance précède toute démarche de rencontre. »
+      </p>
+<p class="text-xs text-deep-navy/60 max-w-md">
+        Chaque profil a préalablement consenti aux règles de convenance islamique et au suivi par le tiers de confiance ou le Wali.
+      </p>
+</div>
+</main>
+<!-- =========================================================================
+       5. MEMBER BOTTOM NAVIGATION (Desktop Floating Pill & Mobile Bar)
+       Rendered ONCE at the fixed bottom of the viewport
+  ========================================================================= -->
+<!-- Responsive Mobile Nav Bar for 360px reflow -->
+<nav aria-label="Navigation mobile" class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0B1D36] text-cream border-t border-soft-gold/30 px-3 py-2 flex items-center justify-around shadow-lg">
+<a aria-current="page" class="flex flex-col items-center gap-0.5 text-soft-gold" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="grid_view">grid_view</span>
+<span class="text-[10px] font-semibold">Découvrir</span>
+</a>
+<a class="flex flex-col items-center gap-0.5 text-cream/70 hover:text-cream transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="mail">mail</span>
+<span class="text-[10px] font-medium">Invitations</span>
+</a>
+<a class="flex flex-col items-center gap-0.5 text-cream/70 hover:text-cream transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="forum">forum</span>
+<span class="text-[10px] font-medium">Discussions</span>
+</a>
+<a class="flex flex-col items-center gap-0.5 text-cream/70 hover:text-cream transition-colors" href="#">
+<span class="material-symbols-outlined text-xl" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] font-medium">Profil</span>
+</a>
+</nav>
+<!-- =========================================================================
+       6. MINIMAL FOOTER
+  ========================================================================= -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
+<div class="w-full max-w-7xl mx-auto px-6 md:px-12 py-8 flex flex-col items-center text-center gap-1.5">
+<span class="font-display text-xl text-deep-navy">AnKanu</span>
+<p class="font-body text-xs font-normal text-deep-navy/60 max-w-md">
+        © 2026 AnKanu. Cadre d'union noble et conforme selon les principes éthiques. Ouagadougou, Burkina Faso.
+      </p>
+</div>
+</footer>
+</body></html>
