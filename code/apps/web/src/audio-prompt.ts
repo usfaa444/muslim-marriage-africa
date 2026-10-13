@@ -99,7 +99,26 @@ export function audioPromptScript(files: AudioPromptFiles = {}): string {
     }
     return ''
   }
+  function hasClass(element, token) {
+    return (' ' + String(element.className || '') + ' ').indexOf(' ' + token + ' ') !== -1
+  }
   function fit(button) {
+    if (hasClass(button, 'w-8') && hasClass(button, 'h-8')) {
+      button.style.position = 'relative'
+      if (!button.querySelector('[data-hit="44"]')) {
+        const hit = document.createElement('span')
+        hit.setAttribute('data-hit', '44')
+        hit.setAttribute('aria-hidden', 'true')
+        hit.style.position = 'absolute'
+        hit.style.left = '50%'
+        hit.style.top = '50%'
+        hit.style.width = '44px'
+        hit.style.height = '44px'
+        hit.style.transform = 'translate(-50%, -50%)'
+        button.appendChild(hit)
+      }
+      return
+    }
     button.style.minHeight = '44px'
     button.style.minWidth = '44px'
   }
@@ -151,7 +170,7 @@ export function audioPromptScript(files: AudioPromptFiles = {}): string {
         continue
       }
       const parent = icon.parentElement
-      if (parent && String(parent.className || '').indexOf('w-9') !== -1) {
+      if (parent && parent.tagName === 'BUTTON' && hasClass(parent, 'w-9')) {
         parent.style.minWidth = '44px'
         parent.style.minHeight = '44px'
       }

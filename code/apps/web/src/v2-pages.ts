@@ -305,12 +305,31 @@ export function onboardingHtml(stitch: string): string {
   return mount(html, '', audioPromptScript() + pinGuardScript())
 }
 
+/** Board card 09459686: client navigation only. No acknowledgement request. */
+function photoRulesScript(): string {
+  return `
+<script>
+(function () {
+  const buttons = document.getElementsByTagName('button')
+  for (let index = 0; index < buttons.length; index += 1) {
+    const button = buttons[index]
+    if ((button.textContent || '').indexOf("J'ai pris connaissance des règles") === -1) {
+      continue
+    }
+    button.addEventListener('click', function () {
+      window.location.assign('/profile-edit')
+    })
+  }
+})()
+</script>`
+}
+
 export function photoHtml(stitch: string): string {
   const html = stitch.replace(
     '<section aria-labelledby="audio-guidance-title"',
     '<section id="audio-guide-heading" aria-labelledby="audio-guidance-title"',
   )
-  return mount(html, '', audioPromptScript() + pinGuardScript())
+  return mount(html, '', audioPromptScript() + photoRulesScript() + pinGuardScript())
 }
 
 export function profileHtml(stitch: string): string {
