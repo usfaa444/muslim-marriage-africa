@@ -587,4 +587,42 @@ describe('browse grid', () => {
     expect(await anon.json()).toMatchObject({ error: { code: 'UNAUTHENTICATED', retryable: false } })
     expect(billingCalls).toBe(0)
   })
+
+  it('does not spend a browse slot on a bad view or a bad cursor', async () => {
+    const sister = await createAccount('sister')
+    const sisterCookie = await signIn(sister.email)
+    await publish(sister.id, sisterCookie)
+    setBrowseLimitReader(async () => 1)
+    const badView = await browse(sisterCookie, '?view=list')
+    const card = await browse(sisterCookie, '?view=card')
+    const badCursor = await browse(sisterCookie, '?view=grid&cursor=not-a-cursor')
+    expect(badView.status).toBe(400)
+    expect(card.status).toBe(404)
+    expect(badCursor.status).toBe(400)
+    const grid = await browse(sisterCookie, '?view=grid')
+    expect(grid.status).toBe(200)
+  })
+
+  it('hides an unreadable signed-url ttl behind Request failed', async () => {
+    const sister = await createAccount('sister')
+    const brother = await createAccount('brother')
+    const sisterCookie = await signIn(sister.email)
+    const brotherCookie = await signIn(brother.email)
+    await publish(sister.id, sisterCookie)
+    await publish(brother.id, brotherCookie)
+    await liveMain(brotherCookie)
+    setSignedTtlReader(async () => Number.NaN)
+    try {
+      const response = await browse(sisterCookie, '?view=grid')
+      expect(response.status).toBe(503)
+      const json = await response.json()
+      expect(json).toMatchObject({
+        error: { code: 'UNHANDLED', message: 'Request failed', retryable: true },
+      })
+      expect(JSON.stringify(json)).not.toContain('signed_url_ttl_seconds')
+      expect(JSON.stringify(json)).not.toContain('illisible')
+    } finally {
+      setSignedTtlReader(async () => 60)
+    }
+  })
 })

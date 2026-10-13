@@ -129,16 +129,12 @@ function oneValue(value: unknown): string | undefined | null {
 }
 
 function photoFailure(photos: MediaFailure): BrowseGridFailure {
-  if (photos.code === 'REVEAL_DENIED' || photos.code === 'FORBIDDEN' || photos.code === 'PHOTO_LIMIT_REACHED') {
-    return fail(503, 'UNHANDLED', 'Request failed', null, true)
+  if (photos.status === 429) {
+    return fail(429, 'RATE_LIMITED', photos.message, null, true)
   }
-  return fail(
-    photos.status === 429 ? 429 : 503,
-    photos.code === 'RATE_LIMITED' ? 'RATE_LIMITED' : 'UNHANDLED',
-    photos.message,
-    null,
-    photos.retryable,
-  )
+  const forced =
+    photos.code === 'REVEAL_DENIED' || photos.code === 'FORBIDDEN' || photos.code === 'PHOTO_LIMIT_REACHED'
+  return fail(503, 'UNHANDLED', 'Request failed', null, forced ? true : photos.retryable)
 }
 
 async function verifiedAccountIds(accountIds: readonly string[]): Promise<Set<string>> {

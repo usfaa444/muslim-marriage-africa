@@ -4,7 +4,11 @@
 
 `GET /v1/browse?view=grid` returns a page of opposite-gender listable profiles. `view=card` and a missing `view` return 404 until Story 3.13. No web page calls them.
 
-`/decouvrir` opens on the card chrome from the founder-accepted Discover frame. The grid is behind the `grid_view` toggle and is not the home. The choice is not stored. A tile opens `/profil/:id`. Text is painted before any thumbnail request. Grid text for the session is kept in `sessionStorage` under `ankanu_browse_grid_text` (no photo URL). Photo URLs stay in memory for that document, so toggling card/grid does not refetch. Coming back from a profile paints the cached text first, then one fresh read re-signs URLs.
+`/decouvrir` opens on the card chrome from the founder-accepted Discover frame. The grid is behind the `grid_view` toggle and is not the home. The choice is not stored. A tile opens `/profil/:id`. Enter on the bookmark stays on Découvrir. Text is painted before any thumbnail request. The thumbnail `src` is set on a second animation frame.
+
+Grid text is kept in `sessionStorage` under `ankanu_browse_grid_text:<account_id>` as `{ account, items }` with no photo URL. The account id is `account_id` from `GET /v1/me/profile`, written on the document as `data-discover-account`. A missing id, or a stored account that does not match, is not painted. Photo URLs stay in memory for 60 seconds, so an immediate card/grid toggle does not refetch. After that, memory is dropped and the next toggle fetches again. A second document for the same account paints the cached name before the fresh read. A late browse response is ignored. An error clears the tiles.
+
+A 401 `PIN_REQUIRED` does not go to `/auth`; the pin guard opens `/pin`. A signed-out 401 still goes to `/auth`. Sample filter chips, including the outer chip shell, are not in the HTML. Réessayer stays hidden until an error. The empty sentence, the error, and Réessayer sit outside the profile grid. A signing failure, including an unreadable `signed_url_ttl_seconds`, is `Request failed`. A 429 stays `Cadence de requêtes régulée.`
 
 The catalogue is board comment [63acb586](/ANK/issues/ANK-124#comment-63acb586-9c85-4b61-ba25-e9196517a472). `_bmad-output/` was not rewritten.
 
@@ -53,6 +57,8 @@ Sign in as a listable member and open `/decouvrir`. The card toggle is selected.
 | Blur | Live main photo, `photo_blur` true | `photo.url` is a signed blur derivative. Pending photo id is absent |
 | Clear | `photo_blur` false and an `sm` derivative exists | Signed `sm` url. Not `md`, `xs`, or `original` |
 | Missing clear file | `photo_blur` false and no `sm` derivative | 503 `UNHANDLED`, message `Request failed`, `retryable` true. Body is not a partial page. Code is not `REVEAL_DENIED` |
+| Unreadable TTL | Live main photo and `signed_url_ttl_seconds` is not a positive integer | 503 `UNHANDLED`, message `Request failed`. The body does not contain `signed_url_ttl_seconds` or `illisible` |
+| Slot | `rl_browse_per_min` is 1. Bad `view`, `view=card`, and a bad `cursor`, then `view=grid` | 400, 404, and 400. The grid read is still 200 |
 | Page | 25 opposite-gender public profiles | Pages of 12, 12, and 1. `next_cursor` is the 12th id when a 13th row exists, else null. No duplicate, no gap. Order is `account_id` descending |
 | Unknown cursor | Well-formed UUID below every id | 200 empty page |
 | Rate limit | Second grid read when `rl_browse_per_min` is 1 | 429 `RATE_LIMITED`, message `Cadence de requêtes régulée.`, `details` null, `retryable` true |
@@ -64,19 +70,26 @@ Sign in as a listable member and open `/decouvrir`. The card toggle is selected.
 | Case | Input | Expected |
 | --- | --- | --- |
 | Home | Open `/decouvrir` | Card chrome. `crop_portrait` selected. No grid tiles. No call to `/v1/browse` |
-| Sample | Page source | No `Al-Hassan`, no `Ville : Ouagadougou`, no age-range chip, no Pass / Invite / quick message |
-| Grid | Click `Grille panoramique` | `GET /v1/browse?view=grid`. Tiles use the API strings. Null chips are absent |
-| Blur photo | `photo_blur` true and a url | « Photographie réservée ». The image `src` is set on the next frame, not in the first paint |
+| Sample | Page source | No `Al-Hassan`, no `Ville : Ouagadougou`, no age-range chip, no Pass / Invite / quick message. No `span` whose class contains `inline-flex` |
+| Grid | Click `Grille panoramique` | `GET /v1/browse?view=grid`. Tiles use the API strings. Null chips are absent. `#discover-retry` computed display is `none` |
+| Blur photo | `photo_blur` true and a url | « Photographie réservée ». The image `src` is set on the second animation frame |
+| Clear photo | `photo_blur` false and a url | « VÉRIFIÉ » when `verified` is true. Both photo wells stay hidden. The image `src` is the clear url |
 | No photo | `photo` null | « Photographie non publiée ». No image |
 | Empty | `items: []` | « Aucun profil pour ces filtres. » No invented tile |
 | Tile | Click the tile, not the bookmark | `/profil/:id` |
-| Bookmark | Click « Enregistrer en toute discrétion » | Stays on Découvrir. No favourites request. Story 3.10 |
+| Bookmark | Click or press Enter on « Enregistrer en toute discrétion » | Stays on Découvrir. No favourites request. Story 3.10 |
 | Filtres | The button is visible | No filters request. Story 3.9 |
-| Toggle back | Card, then grid again in the same document | No second browse request. Text comes from memory |
-| Return | Leave to a profile and open `/decouvrir` again | Card is the home again. The grid toggle paints cached text before the fresh read. Cached JSON has no `url` |
+| Toggle back | Card, then grid again within 60 seconds | No second browse request. Text comes from memory |
+| Expired memory | The same toggle after 60 seconds | One new browse request |
+| Return | A second document for the same account opens the grid before the fresh read returns | The cached pseudonym is painted. Stored JSON has `account` and no `url` |
+| Other account | A document whose `data-discover-account` does not match the stored account | The previous pseudonym is not painted |
+| Stale read | Réessayer while a browse request is still in flight, then the older response is 429 and the newer one is 200 | The newer tile stays. The 429 message does not replace it |
 | Not listable | Grid read 403 `viewer_not_listable` | `/profile-edit` |
-| Signed out on the read | 401 | `/auth` |
-| Other error | 429 or 503 | The API message and « Réessayer ». No sample tile |
+| PIN lock | 401 `PIN_REQUIRED` | `/pin`, not `/auth` |
+| Signed out on the read | 401 without `PIN_REQUIRED` | `/auth` |
+| Other error | 429 or 503 | The API message and « Réessayer ». Tiles are cleared. `#discover-retry` is shown |
+| Live cookie | A non-stub `ankanu_session` whose gate step is `account` | HTML, with `data-discover-account` from `GET /v1/me/profile` `account_id` |
+| Stub cookie | `ankanu_session=web` or `capacitor` | JSON 401, not this HTML |
 | Staff / mahram cookie | `ankanu_session=staff` or `mahram` | JSON 403, not this HTML |
 | Widths | Card and grid at 360, 390, 768, 1024, 1280, 1440 | `document.documentElement.scrollWidth <= window.innerWidth` |
 
@@ -84,13 +97,12 @@ Sign in as a listable member and open `/decouvrir`. The card toggle is selected.
 
 API memory accounts. Password `phrase avec espaces`. Date of birth `1990-01-15`. Clock `2026-10-13` gives age 36. Publish by saving the profile, then set `visibility` to `public` while `account.status` is `Active`.
 
-Browser fixture in `discover-page.test.ts`: one blurred tile with a long pseudonym and one tile with no photo.
+Browser fixture in `discover-page.test.ts`: one blurred tile with a long pseudonym and one tile with no photo, then a second page that covers a clear verified photo, the account-scoped cache, an empty page, pin, signed-out, not-listable, 429, 503, a stale 429, and the 60-second refetch.
 
 ## My results
 
-- `browse-grid.test.ts`: 8 passed.
-- `public-profile.test.ts`: 5 passed.
-- `discover-page.test.ts`: 3 passed, including the browser toggle, the session cache without a photo URL, one browse request across two toggles, tile navigation, and the six widths for card and grid.
+- `browse-grid.test.ts`: 10 passed, including a bad view and a bad cursor that do not spend the one browse slot, and an unreadable signed-url TTL that returns `Request failed`.
+- `discover-page.test.ts`: 4 passed. That includes the six widths, no empty chip shell, `#discover-retry` display `none` before an error, the account-scoped cache with no `url`, a clear photo with `VÉRIFIÉ`, Enter on the bookmark, pin versus `/auth`, `viewer_not_listable`, 429 and 503 with Réessayer, a stale 429 dropped after a newer success, and a refetch after 60 seconds.
 - `member-route.test.ts`: 6 passed.
 - `tsc -p apps/api/tsconfig.json --noEmit`: exit 0.
 - `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.

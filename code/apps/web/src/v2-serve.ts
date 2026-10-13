@@ -192,7 +192,9 @@ export async function profileReviewResponse(request: Request): Promise<Response>
   return htmlResponse(reviewHtml(stitchFile('12-profile-not-yet-public'), { slaHours: hours, bioPending }))
 }
 
-async function memberProfile(request: Request): Promise<{ review_sla_hours?: unknown; bio_pending?: unknown; photo?: unknown } | null> {
+async function memberProfile(
+  request: Request,
+): Promise<{ account_id?: unknown; review_sla_hours?: unknown; bio_pending?: unknown; photo?: unknown } | null> {
   const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
   try {
     const response = await fetch(`${origin}/v1/me/profile`, {
@@ -202,7 +204,12 @@ async function memberProfile(request: Request): Promise<{ review_sla_hours?: unk
     if (!response.ok) {
       return null
     }
-    return (await response.json()) as { review_sla_hours?: unknown; bio_pending?: unknown; photo?: unknown }
+    return (await response.json()) as {
+      account_id?: unknown
+      review_sla_hours?: unknown
+      bio_pending?: unknown
+      photo?: unknown
+    }
   } catch {
     return null
   }
@@ -234,7 +241,9 @@ export async function discoverResponse(request: Request): Promise<Response> {
   if (sessionKind(cookie) !== null || readSessionCookie(cookie) === null) {
     return memberRouteResponse(cookie, '/decouvrir')
   }
-  return htmlResponse(discoverHtml(stitchFile('57-discover'), stitchFile('57-discover', 'grid.html')))
+  const profile = await memberProfile(request)
+  const accountId = typeof profile?.account_id === 'string' ? profile.account_id : null
+  return htmlResponse(discoverHtml(stitchFile('57-discover'), stitchFile('57-discover', 'grid.html'), accountId))
 }
 
 function jsonResponse(status: number, body: unknown): Response {

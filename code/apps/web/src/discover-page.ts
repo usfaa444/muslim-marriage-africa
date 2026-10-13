@@ -6,6 +6,12 @@ const DOT_PATTERN = `<style id="discover-grid-pattern">
   background-image: radial-gradient(rgba(201, 168, 108, 0.18) 1px, transparent 1px);
   background-size: 16px 16px;
 }
+#discover-empty[hidden],
+#discover-error[hidden],
+#discover-retry[hidden],
+[data-reserved][hidden],
+[data-missing][hidden],
+[data-verified][hidden] { display: none !important; }
 </style>`
 
 const TILE = `<template id="discover-tile">
@@ -54,9 +60,15 @@ const SCRIPT = `document.addEventListener('click', function (event) {
   grid.hidden = mode !== 'grid'
   if (mode === 'grid') loadGrid()
 })
-var CACHE = 'ankanu_browse_grid_text'
+var account = document.body.getAttribute('data-discover-account') || ''
 var memory = null
-var pending = null
+var memoryAt = 0
+var pending = 0
+var generation = 0
+var URL_TTL = 60000
+function cacheKey() {
+  return account ? 'ankanu_browse_grid_text:' + account : ''
+}
 function textRow(item) {
   return {
     id: item.id,
@@ -73,18 +85,23 @@ function textRow(item) {
   }
 }
 function readCache() {
+  var key = cacheKey()
+  if (!key) return null
   try {
-    var raw = sessionStorage.getItem(CACHE)
+    var raw = sessionStorage.getItem(key)
     if (!raw) return null
     var parsed = JSON.parse(raw)
-    return Array.isArray(parsed) ? parsed : null
+    if (!parsed || parsed.account !== account || !Array.isArray(parsed.items)) return null
+    return parsed.items
   } catch (error) {
     return null
   }
 }
 function writeCache(items) {
+  var key = cacheKey()
+  if (!key) return
   try {
-    sessionStorage.setItem(CACHE, JSON.stringify(items.map(textRow)))
+    sessionStorage.setItem(key, JSON.stringify({ account: account, items: items.map(textRow) }))
   } catch (error) {}
 }
 function chip(text) {
@@ -145,24 +162,33 @@ function paint(items) {
         window.location.assign('/profil/' + item.id)
       })
       article.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') window.location.assign('/profil/' + item.id)
+        if (event.key !== 'Enter') return
+        var bookmark = event.target && event.target.closest ? event.target.closest('[data-bookmark]') : null
+        if (bookmark) return
+        window.location.assign('/profil/' + item.id)
       })
     }
     tiles.appendChild(node)
   })
   requestAnimationFrame(function () {
-    deferred.forEach(function (entry) {
-      var image = document.createElement('img')
-      image.alt = ''
-      image.className = 'absolute inset-0 h-full w-full object-cover'
-      entry.photo.insertBefore(image, entry.photo.firstChild)
-      image.src = entry.url
+    requestAnimationFrame(function () {
+      deferred.forEach(function (entry) {
+        var image = document.createElement('img')
+        image.alt = ''
+        image.className = 'absolute inset-0 h-full w-full object-cover'
+        entry.photo.insertBefore(image, entry.photo.firstChild)
+        image.src = entry.url
+      })
     })
   })
 }
 function showError(message) {
+  var tiles = document.getElementById('discover-tiles')
+  var empty = document.getElementById('discover-empty')
   var error = document.getElementById('discover-error')
   var retry = document.getElementById('discover-retry')
+  if (tiles) tiles.textContent = ''
+  if (empty) empty.hidden = true
   if (error) {
     error.hidden = false
     error.textContent = message
@@ -170,26 +196,30 @@ function showError(message) {
   if (retry) retry.hidden = false
 }
 function loadGrid() {
-  if (memory) {
+  if (memory && Date.now() - memoryAt < URL_TTL) {
     paint(memory)
     return
   }
+  memory = null
   var cached = readCache()
   if (cached) paint(cached)
   if (pending) return
-  pending = window.fetch('/v1/browse?view=grid', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+  var ticket = ++generation
+  pending = ticket
+  window.fetch('/v1/browse?view=grid', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
     return response.json().then(function (body) {
       return { status: response.status, body: body }
     })
   }).then(function (result) {
-    pending = null
+    if (ticket !== generation) return
+    pending = 0
     var body = result.body || {}
     var error = body.error
+    if (error && error.code === 'PIN_REQUIRED') return
     if (result.status === 401) {
       window.location.assign('/auth')
       return
     }
-    if (error && error.code === 'PIN_REQUIRED') return
     if (result.status === 403 && error && error.details && error.details.reason === 'viewer_not_listable') {
       window.location.assign('/profile-edit')
       return
@@ -203,17 +233,20 @@ function loadGrid() {
     if (errorNode) errorNode.hidden = true
     if (retry) retry.hidden = true
     memory = body.items
+    memoryAt = Date.now()
     writeCache(body.items)
     paint(body.items)
   }, function () {
-    pending = null
+    if (ticket !== generation) return
+    pending = 0
     showError('Request failed')
   })
 }
 var retry = document.getElementById('discover-retry')
 if (retry) retry.addEventListener('click', function () {
   memory = null
-  pending = null
+  memoryAt = 0
+  pending = 0
   var error = document.getElementById('discover-error')
   if (error) error.hidden = true
   retry.hidden = true
@@ -234,15 +267,7 @@ function innerBody(html: string): string {
   return html.slice(start + 1, end)
 }
 
-function dropSpanContaining(html: string, needle: string): string {
-  const at = html.indexOf(needle)
-  if (at < 0) {
-    return html
-  }
-  const start = html.lastIndexOf('<span', at)
-  if (start < 0) {
-    return html
-  }
+function removeSpanAt(html: string, start: number): string {
   let depth = 0
   const token = /<\/?span\b[^>]*>/gi
   token.lastIndex = start
@@ -257,6 +282,27 @@ function dropSpanContaining(html: string, needle: string): string {
       depth += 1
     }
     match = token.exec(html)
+  }
+  return html
+}
+
+/** Drops the outer chip, not only the label nested inside it. */
+function dropChipContaining(html: string, needle: string): string {
+  const at = html.indexOf(needle)
+  if (at < 0) {
+    return html
+  }
+  let from = at
+  while (from >= 0) {
+    const start = html.lastIndexOf('<span', from)
+    if (start < 0) {
+      return html
+    }
+    const openEnd = html.indexOf('>', start)
+    if (openEnd >= 0 && openEnd < at && html.slice(start, openEnd).includes('inline-flex')) {
+      return removeSpanAt(html, start)
+    }
+    from = start - 1
   }
   return html
 }
@@ -288,9 +334,9 @@ function stripCard(html: string): string {
   const start = html.indexOf('<!-- 3. FOCUSED PROFILE CARD -->')
   const end = html.indexOf('<!-- 4. UNDER-CARD')
   let next = start >= 0 && end > start ? html.slice(0, start) + html.slice(end) : html
-  next = dropSpanContaining(next, 'Ville : Ouagadougou')
-  next = dropSpanContaining(next, "Tranche d'âge")
-  next = dropSpanContaining(next, 'Pratique assidue')
+  next = dropChipContaining(next, 'Ville : Ouagadougou')
+  next = dropChipContaining(next, "Tranche d'âge")
+  next = dropChipContaining(next, 'Pratique assidue')
   next = markToggle(next, 'Affichage unitaire soigné', 'card')
   next = markToggle(next, 'Grille panoramique', 'grid')
   next = next.replace(
@@ -307,14 +353,17 @@ function stripGrid(html: string): string {
   const close = open < 0 ? -1 : html.indexOf('</section>', open)
   let next = html
   if (open >= 0 && close > open) {
+    const sectionEnd = close + '</section>'.length
     next =
       html.slice(0, open + 1) +
-      `<div id="discover-tiles" class="contents"></div>${GRID_STATUS}` +
-      html.slice(close)
+      `<div id="discover-tiles" class="contents"></div>` +
+      html.slice(close, sectionEnd) +
+      GRID_STATUS +
+      html.slice(sectionEnd)
   }
-  next = dropSpanContaining(next, 'Ville : Ouagadougou')
-  next = dropSpanContaining(next, "Tranche d'âge")
-  next = dropSpanContaining(next, 'Pratique assidue')
+  next = dropChipContaining(next, 'Ville : Ouagadougou')
+  next = dropChipContaining(next, "Tranche d'âge")
+  next = dropChipContaining(next, 'Pratique assidue')
   next = markToggle(next, 'Affichage unitaire', 'card')
   next = markToggle(next, 'Grille panoramique', 'grid')
   next = next.replace(
@@ -329,11 +378,15 @@ function stripGrid(html: string): string {
 }
 
 /** Card chrome from screen 57, grid from grid.html. Sample profiles never stay. */
-export function discoverHtml(card: string, grid: string): string {
+export function discoverHtml(card: string, grid: string, accountId: string | null = null): string {
+  const account =
+    accountId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(accountId)
+      ? accountId
+      : ''
   const headEnd = card.indexOf('</head>')
   const head = headEnd < 0 ? card : card.slice(0, headEnd)
   const document = `${head}${DOT_PATTERN}</head>
-<body class="min-h-full bg-cream text-deep-navy font-body flex flex-col antialiased selection:bg-gold-soft selection:text-deep-navy pb-20 md:pb-8">
+<body data-discover-account="${account}" class="min-h-full bg-cream text-deep-navy font-body flex flex-col antialiased selection:bg-gold-soft selection:text-deep-navy pb-20 md:pb-8">
 <div id="discover-card" style="min-width:0;max-width:100%">${innerBody(stripCard(card))}</div>
 <div id="discover-grid" hidden style="min-width:0;max-width:100%">${innerBody(stripGrid(grid))}${TILE}</div>
 </body></html>`
