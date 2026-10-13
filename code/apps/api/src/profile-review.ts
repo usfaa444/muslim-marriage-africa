@@ -275,9 +275,14 @@ export async function decideProfileReview(
     patch.review_passed_at = authNow().toISOString()
   }
   try {
+    const decidedAt = authNow().toISOString()
     return await inCallerUnit(async (tx) => {
       const db = sqlHandle(tx)
       for (const photo of parsed.photos) {
+        if (photo.decision === 'allow') {
+          const replaced = await getMediaStore().replaceLiveProfilePhotos(row.account_id, db)
+          await getMediaStore().revokeUnrevokedGrants(replaced, decidedAt, db)
+        }
         const changed = await applyPhotoModeration(getMediaStore(), photo.asset_id, photo.decision, db)
         if (!changed) {
           throw new StaleWrite()

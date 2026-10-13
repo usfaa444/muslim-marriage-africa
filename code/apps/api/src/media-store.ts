@@ -1,4 +1,4 @@
-import { and, desc, eq } from 'drizzle-orm'
+import { and, desc, eq, inArray, isNull } from 'drizzle-orm'
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { isUuidV7 } from '@ankanu/kernel'
 import { getIdentityDatabase } from './account-store.js'
@@ -6,7 +6,7 @@ import { photoAsset, photoDerivative, signedGrant } from './account-schema.js'
 import { getEvidenceWriter } from './evidence-writer.js'
 
 export type PhotoKind = 'profile_photo' | 'chat_photo' | 'voice_note'
-export type ModerationState = 'pending' | 'live' | 'blocked'
+export type ModerationState = 'pending' | 'live' | 'blocked' | 'replaced'
 export type DerivativeSize = 'xs' | 'sm' | 'md' | 'blur'
 
 export type StoredAsset = {
@@ -49,7 +49,10 @@ export type MediaStore = {
     blur: Uint8Array,
   ): Promise<void>
   latestProfilePhoto(ownerId: string): Promise<StoredAsset | null>
+  liveProfilePhoto(ownerId: string): Promise<StoredAsset | null>
   pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]>
+  replaceLiveProfilePhotos(ownerId: string, db?: Pick<NodePgDatabase, 'update'>): Promise<string[]>
+  revokeUnrevokedGrants(assetIds: string[], at: string, db?: Pick<NodePgDatabase, 'update'>): Promise<void>
   setModerationState(id: string, state: ModerationState, db?: Pick<NodePgDatabase, 'update'>): Promise<boolean>
   asset(id: string): Promise<StoredAsset | null>
   bytes(key: string): Promise<Uint8Array | null>
@@ -76,8 +79,14 @@ export function memoryMediaStore(): MediaStore & {
   derivatives: StoredDerivative[]
   grants: StoredGrant[]
   blobs: Map<string, Uint8Array>
-  snapshot(): Array<{ id: string; moderation_state: ModerationState | null }>
-  restore(rows: Array<{ id: string; moderation_state: ModerationState | null }>): void
+  snapshot(): {
+    states: Array<{ id: string; moderation_state: ModerationState | null }>
+    grants: Array<{ id: string; revoked_at: string | null }>
+  }
+  restore(saved: {
+    states: Array<{ id: string; moderation_state: ModerationState | null }>
+    grants: Array<{ id: string; revoked_at: string | null }>
+  }): void
 } {
   const assets: StoredAsset[] = []
   const derivatives: StoredDerivative[] = []
@@ -98,25 +107,74 @@ export function memoryMediaStore(): MediaStore & {
       const rows = assets.filter((row) => row.owner_id === ownerId && row.kind === 'profile_photo')
       return rows[rows.length - 1] ?? null
     },
+    async liveProfilePhoto(ownerId) {
+      return (
+        assets.find(
+          (row) => row.owner_id === ownerId && row.kind === 'profile_photo' && row.moderation_state === 'live',
+        ) ?? null
+      )
+    },
     async pendingProfilePhotos(ownerId) {
       return assets.filter(
         (row) => row.owner_id === ownerId && row.kind === 'profile_photo' && row.moderation_state === 'pending',
       )
     },
-    snapshot() {
-      return assets.map((row) => ({ id: row.id, moderation_state: row.moderation_state }))
+    async replaceLiveProfilePhotos(ownerId) {
+      const replaced: string[] = []
+      for (const row of assets) {
+        if (row.owner_id === ownerId && row.kind === 'profile_photo' && row.moderation_state === 'live') {
+          row.moderation_state = 'replaced'
+          replaced.push(row.id)
+        }
+      }
+      return replaced
     },
-    restore(rows: Array<{ id: string; moderation_state: ModerationState | null }>) {
-      for (const item of rows) {
+    async revokeUnrevokedGrants(assetIds, at) {
+      if (assetIds.length === 0) {
+        return
+      }
+      const ids = new Set(assetIds)
+      for (const grant of grants) {
+        if (ids.has(grant.photo_asset_id) && grant.revoked_at === null) {
+          grant.revoked_at = at
+        }
+      }
+    },
+    snapshot() {
+      return {
+        states: assets.map((row) => ({ id: row.id, moderation_state: row.moderation_state })),
+        grants: grants.map((row) => ({ id: row.id, revoked_at: row.revoked_at })),
+      }
+    },
+    restore(saved) {
+      for (const item of saved.states) {
         const row = assets.find((asset) => asset.id === item.id)
         if (row) {
           row.moderation_state = item.moderation_state
+        }
+      }
+      for (const item of saved.grants) {
+        const grant = grants.find((row) => row.id === item.id)
+        if (grant) {
+          grant.revoked_at = item.revoked_at
         }
       }
     },
     async setModerationState(id, state) {
       const row = assets.find((item) => item.id === id)
       if (!row || row.moderation_state !== 'pending') {
+        return false
+      }
+      if (
+        state === 'live' &&
+        assets.some(
+          (item) =>
+            item.id !== row.id &&
+            item.owner_id === row.owner_id &&
+            item.kind === 'profile_photo' &&
+            item.moderation_state === 'live',
+        )
+      ) {
         return false
       }
       row.moderation_state = state
@@ -147,7 +205,10 @@ function postgresMediaStore(): MediaStore {
   return {
     saveAsset: saveAsset,
     latestProfilePhoto: latestProfilePhoto,
+    liveProfilePhoto: liveProfilePhoto,
     pendingProfilePhotos: pendingProfilePhotos,
+    replaceLiveProfilePhotos: replaceLiveProfilePhotos,
+    revokeUnrevokedGrants: revokeUnrevokedGrants,
     setModerationState: setModerationState,
     asset: readAsset,
     bytes: readBytes,
@@ -196,6 +257,17 @@ async function latestProfilePhoto(ownerId: string): Promise<StoredAsset | null> 
   return rows[0] ? asAsset(rows[0]) : null
 }
 
+async function liveProfilePhoto(ownerId: string): Promise<StoredAsset | null> {
+  const rows = await getIdentityDatabase()
+    .select()
+    .from(photoAsset)
+    .where(
+      and(eq(photoAsset.owner_id, ownerId), eq(photoAsset.kind, 'profile_photo'), eq(photoAsset.moderation_state, 'live')),
+    )
+    .limit(1)
+  return rows[0] ? asAsset(rows[0]) : null
+}
+
 async function pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]> {
   const rows = await getIdentityDatabase()
     .select()
@@ -205,6 +277,34 @@ async function pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]> {
     )
     .orderBy(photoAsset.id)
   return rows.map(asAsset)
+}
+
+async function replaceLiveProfilePhotos(
+  ownerId: string,
+  db?: Pick<NodePgDatabase, 'update'>,
+): Promise<string[]> {
+  const updated = await (db ?? getIdentityDatabase())
+    .update(photoAsset)
+    .set({ moderation_state: 'replaced' })
+    .where(
+      and(eq(photoAsset.owner_id, ownerId), eq(photoAsset.kind, 'profile_photo'), eq(photoAsset.moderation_state, 'live')),
+    )
+    .returning({ id: photoAsset.id })
+  return updated.map((row) => row.id)
+}
+
+async function revokeUnrevokedGrants(
+  assetIds: string[],
+  at: string,
+  db?: Pick<NodePgDatabase, 'update'>,
+): Promise<void> {
+  if (assetIds.length === 0) {
+    return
+  }
+  await (db ?? getIdentityDatabase())
+    .update(signedGrant)
+    .set({ revoked_at: at })
+    .where(and(inArray(signedGrant.photo_asset_id, assetIds), isNull(signedGrant.revoked_at)))
 }
 
 async function setModerationState(
@@ -279,7 +379,10 @@ function asAsset(row: typeof photoAsset.$inferSelect): StoredAsset {
     original_key: row.original_key,
     blur_key: row.blur_key,
     moderation_state:
-      row.moderation_state === 'pending' || row.moderation_state === 'live' || row.moderation_state === 'blocked'
+      row.moderation_state === 'pending' ||
+      row.moderation_state === 'live' ||
+      row.moderation_state === 'blocked' ||
+      row.moderation_state === 'replaced'
         ? row.moderation_state
         : null,
   }

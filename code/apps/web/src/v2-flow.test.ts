@@ -20,6 +20,7 @@ import {
   profileHtml,
   pseudonymHtml,
   resetHtml,
+  pendingProfilePhoto,
   reviewHtml,
   settingsHtml,
   splashHtml,
@@ -654,6 +655,9 @@ describe('screen 12 review timing', () => {
     expect(shown).toContain('Présentation &amp; Bio')
     expect(shown).not.toContain('12 à')
     expect(shown).not.toContain('ouvrées')
+    expect(pendingProfilePhoto({ photo: { moderation_state: 'pending' } })).toBe(true)
+    expect(pendingProfilePhoto({ photo: { moderation_state: 'live' }, pending_photo: { moderation_state: 'pending' } })).toBe(true)
+    expect(pendingProfilePhoto({ photo: { moderation_state: 'live' } })).toBe(false)
   })
 })
 

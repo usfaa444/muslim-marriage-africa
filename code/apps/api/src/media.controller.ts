@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpException, Post, Query, Req, StreamableFile } from '@nestjs/common'
 import { NON_MEMBER_PAUSE_MESSAGE } from './life-pause.js'
 import {
+  ownerPendingPhotoCard,
   ownerPhotoCard,
   readGrantedMedia,
   uploadProfilePhoto,
@@ -94,6 +95,14 @@ export class MediaController {
 
 export async function photoForMember(accountId: string): Promise<OwnerPhotoCard | null> {
   const read = await ownerPhotoCard(getMediaStore(), accountId)
+  if (!read.ok) {
+    fail(read)
+  }
+  return read.photo
+}
+
+export async function pendingPhotoForMember(accountId: string): Promise<OwnerPhotoCard | null> {
+  const read = await ownerPendingPhotoCard(getMediaStore(), accountId)
   if (!read.ok) {
     fail(read)
   }

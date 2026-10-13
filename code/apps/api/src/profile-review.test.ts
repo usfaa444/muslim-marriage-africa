@@ -12,14 +12,14 @@ import { setOtpLimitReader } from './otp-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
 import { setBillingPort } from './billing-port.js'
 import { createApp } from './create-app.js'
-import { setMediaClock, setSignedTtlReader } from './media.js'
+import { setMediaClock, setSignedTtlReader, signMedia } from './media.js'
 import { memoryMediaStore, setMediaStore } from './media-store.js'
 import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
 import { memoryCaptureStore, setCaptureStore } from './id-liveness-store.js'
 import { memoryPhoneOtpStore, setPhoneOtpStore, type PhoneOtpRow } from './phone-otp-store.js'
 import { isListableProfile, publishIfEligible, setFreeReviewSlaReader } from './profile-review.js'
-import { memoryProfileStore, setProfileStore } from './profile-store.js'
+import { getProfileStore, memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { setSmsPort } from './sms-port.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
@@ -598,5 +598,138 @@ describe('human review before anyone else sees a profile', () => {
       setOtpLimitReader(undefined)
     }
     expect(memory.profiles.find((row) => row.account_id === waiting.id)?.visibility).toBe('public')
+  })
+
+  it('keeps the previous live photo until a replacement is allowed, then marks that photo replaced', async () => {
+    now = new Date('2026-10-19T00:00:00.000Z')
+    const member = await createAccount()
+    const cookie = await signIn(member.email)
+    expect((await saveProfile(cookie, { bio_pending: 'Première bio.' })).status).toBe(200)
+    const firstUpload = await fetch(`${base}/v1/media`, {
+      method: 'POST',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'profile_photo', image: png.toString('base64') }),
+    })
+    expect(firstUpload.status).toBe(201)
+    const first = (await firstUpload.json()) as { id: string; blur_url: string }
+    const firstToken = first.blur_url.split('token=')[1] ?? ''
+    const moderator = await createAccount()
+    const moderatorCookie = await signIn(moderator.email)
+    asStaff(moderator.id, 'moderator')
+    const allowed = await fetch(`${base}/v1/staff/cases`, {
+      method: 'POST',
+      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        kind: 'profile_review',
+        account_id: member.id,
+        profile: 'allow',
+        bio: 'allow',
+        photos: [{ asset_id: first.id, decision: 'allow' }],
+      }),
+    })
+    expect(allowed.status).toBe(200)
+    const passedAt = (await getProfileStore().read(member.id))?.review_passed_at
+    expect(passedAt).toBeTruthy()
+    insertVerification(member.id, 'phone_otp', 'granted')
+    insertVerification(member.id, 'id_document', 'pending')
+    insertVerification(member.id, 'liveness', 'pending')
+    await publishIfEligible(member.id)
+    expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('public')
+
+    now = new Date('2026-10-19T00:00:02.000Z')
+    const secondUpload = await fetch(`${base}/v1/media`, {
+      method: 'POST',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'profile_photo', image: png.toString('base64') }),
+    })
+    expect(secondUpload.status).toBe(201)
+    const second = (await secondUpload.json()) as { id: string }
+    expect(media.assets.find((row) => row.id === first.id)?.moderation_state).toBe('live')
+    expect(media.assets.find((row) => row.id === second.id)?.moderation_state).toBe('pending')
+    const whilePending = await fetch(`${base}/v1/me/profile`, { headers: { cookie } })
+    const pendingBody = (await whilePending.json()) as {
+      photo: { id: string; moderation_state: string }
+      pending_photo: { id: string; moderation_state: string }
+      bio_live: string | null
+    }
+    expect(pendingBody.photo).toMatchObject({ id: first.id, moderation_state: 'live' })
+    expect(pendingBody.pending_photo).toMatchObject({ id: second.id, moderation_state: 'pending' })
+    expect(pendingBody.bio_live).toBe('Première bio.')
+
+    const replaced = await fetch(`${base}/v1/staff/cases`, {
+      method: 'POST',
+      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        kind: 'profile_review',
+        account_id: member.id,
+        photos: [{ asset_id: second.id, decision: 'allow' }],
+      }),
+    })
+    expect(replaced.status).toBe(200)
+    const replacedBody = (await replaced.json()) as {
+      photos: Array<{ asset_id: string; moderation_state: string }>
+      review_passed_at: string | null
+      visibility: string | null
+    }
+    expect(replacedBody.photos).toEqual([{ asset_id: second.id, moderation_state: 'live' }])
+    expect(media.assets.find((row) => row.id === first.id)?.moderation_state).toBe('replaced')
+    expect(media.assets.find((row) => row.id === second.id)?.moderation_state).toBe('live')
+    expect(media.assets.filter((row) => row.owner_id === member.id && row.moderation_state === 'live')).toHaveLength(1)
+    expect(replacedBody.review_passed_at).toBe(passedAt)
+    expect(replacedBody.visibility).toBe('public')
+    expect(media.grants.filter((row) => row.photo_asset_id === first.id).every((row) => row.revoked_at !== null)).toBe(true)
+    const oldBytes = await fetch(`${base}/v1/media/get?token=${firstToken}`, { headers: { cookie } })
+    expect(oldBytes.status).toBe(403)
+    const refused = await signMedia(media, first.id, 'blur', member.id)
+    expect(refused.ok).toBe(false)
+    const liveSigned = await signMedia(media, second.id, 'blur', member.id)
+    expect(liveSigned.ok).toBe(true)
+
+    now = new Date('2026-10-19T00:00:04.000Z')
+    const thirdUpload = await fetch(`${base}/v1/media`, {
+      method: 'POST',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'profile_photo', image: png.toString('base64') }),
+    })
+    const third = (await thirdUpload.json()) as { id: string }
+    const blocked = await fetch(`${base}/v1/staff/cases`, {
+      method: 'POST',
+      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        kind: 'profile_review',
+        account_id: member.id,
+        photos: [{ asset_id: third.id, decision: 'block' }],
+        reason: 'La photo ne respecte pas les règles publiées.',
+      }),
+    })
+    expect(blocked.status).toBe(200)
+    expect(media.assets.find((row) => row.id === second.id)?.moderation_state).toBe('live')
+    expect(media.assets.find((row) => row.id === third.id)?.moderation_state).toBe('blocked')
+    expect(media.assets.find((row) => row.id === first.id)?.moderation_state).toBe('replaced')
+    const afterBlock = (await (await fetch(`${base}/v1/me/profile`, { headers: { cookie } })).json()) as {
+      photo: { id: string }
+      pending_photo?: { id: string }
+    }
+    expect(afterBlock.photo.id).toBe(second.id)
+    expect(afterBlock.pending_photo).toBeUndefined()
+
+    now = new Date('2026-10-19T00:00:06.000Z')
+    expect((await saveProfile(cookie, { bio_pending: 'Nouvelle bio.' })).status).toBe(200)
+    const bioBlocked = await fetch(`${base}/v1/staff/cases`, {
+      method: 'POST',
+      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        kind: 'profile_review',
+        account_id: member.id,
+        bio: 'block',
+        photos: [],
+        reason: 'La présentation ne peut pas être publiée.',
+      }),
+    })
+    expect(bioBlocked.status).toBe(200)
+    const bioBody = (await bioBlocked.json()) as { bio_live: string | null; bio_pending: string | null }
+    expect(bioBody.bio_live).toBe('Première bio.')
+    expect(bioBody.bio_pending).toBeNull()
+    expect((await getProfileStore().read(member.id))?.review_passed_at).toBe(passedAt)
   })
 })

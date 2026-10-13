@@ -212,8 +212,11 @@ export const photoAsset = pgTable(
     ),
     check(
       'photo_asset_moderation_state_check',
-      sql`${table.moderation_state} is null or ${table.moderation_state} in ('pending', 'live', 'blocked')`,
+      sql`${table.moderation_state} is null or ${table.moderation_state} in ('pending', 'live', 'blocked', 'replaced')`,
     ),
+    uniqueIndex('photo_asset_one_live_profile_photo')
+      .on(table.owner_id)
+      .where(sql`${table.kind} = 'profile_photo' and ${table.moderation_state} = 'live'`),
   ],
 )
 

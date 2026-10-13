@@ -165,6 +165,7 @@ function migrationSql(): string {
     '0010_account_civil_name.sql',
     '0011_photo_asset.sql',
     '0012_profile_review.sql',
+    '0013_photo_replaced.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -186,7 +187,10 @@ describe('operator_config migration', () => {
     return client
   }
 
+  const previousPublicOrigin = process.env['ANKANU_PUBLIC_ORIGIN']
+
   beforeAll(async () => {
+    process.env['ANKANU_PUBLIC_ORIGIN'] = 'http://ankanu.test'
     container = `ankanu-oc-${randomBytes(4).toString('hex')}`
     await run('docker', [
       'run',
@@ -224,6 +228,11 @@ describe('operator_config migration', () => {
   }, 120_000)
 
   afterAll(async () => {
+    if (previousPublicOrigin === undefined) {
+      delete process.env['ANKANU_PUBLIC_ORIGIN']
+    } else {
+      process.env['ANKANU_PUBLIC_ORIGIN'] = previousPublicOrigin
+    }
     if (client) {
       await client.end()
     }
@@ -288,7 +297,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('12')
+    expect(applied.rows[0]?.count).toBe('14')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -378,7 +387,10 @@ describe('operator_config migration', () => {
       const storedSession = await db().query<{ kind: string; column_name: string }>(
         `select "kind", '' as column_name from "session"`,
       )
-      expect(storedSession.rows).toEqual([{ kind: 'web', column_name: '' }])
+      expect(storedSession.rows).toEqual([
+        { kind: 'web', column_name: '' },
+        { kind: 'web', column_name: '' },
+      ])
       const sessionColumns = await db().query<{ column_name: string }>(
         `select column_name from information_schema.columns
          where table_schema = 'public' and table_name = 'session'
@@ -887,5 +899,72 @@ describe('operator_config migration', () => {
     await db().query(`update "operator_config" set "value" = $1 where "key" = 'sister_reach_mode'`, [
       free_unlimited,
     ])
+  })
+
+  it('rejects a second live profile photo and the migration marks every older live row replaced', async () => {
+    expect(migrated).toBe(true)
+    const sql = readFileSync(join(apiRoot, 'drizzle/0013_photo_replaced.sql'), 'utf8')
+    const statements = sql
+      .split('--> statement-breakpoint')
+      .map((statement) => statement.trim())
+      .filter((statement) => statement.length > 0)
+    const update = statements.find((statement) => statement.startsWith('UPDATE'))
+    const createIndex = statements.find((statement) => statement.startsWith('CREATE UNIQUE INDEX'))
+    expect(update).toBeTruthy()
+    expect(createIndex).toBeTruthy()
+    expect(sql.indexOf('CREATE UNIQUE INDEX')).toBeGreaterThan(sql.indexOf("SET \"moderation_state\" = 'replaced'"))
+
+    const owner = '018f3a40-7c2a-7000-8000-0000000000a1'
+    const older = '018f3a40-7c2a-7000-8000-0000000000a2'
+    const newer = '018f3a40-7c2a-7000-8000-0000000000a3'
+    await db().query(
+      `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, 'replaced-probe@example.bf', 'ReplacedProbe', 'sister', '{member}', 'Active', true, 'FR-089', 'Amina', 'Sawadogo')`,
+      [owner],
+    )
+    await db().query(
+      `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'older', 'live')`,
+      [older, owner],
+    )
+    let duplicate = false
+    try {
+      await db().query(
+        `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'newer', 'live')`,
+        [newer, owner],
+      )
+    } catch (error) {
+      duplicate = true
+      expect(postgresCode(error)).toBe('23505')
+    }
+    expect(duplicate).toBe(true)
+
+    await db().query('drop index "photo_asset_one_live_profile_photo"')
+    await db().query(
+      `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'newer', 'live')`,
+      [newer, owner],
+    )
+    await db().query(update ?? '')
+    const rows = await db().query<{ id: string; moderation_state: string }>(
+      `select "id", "moderation_state" from "photo_asset" where "owner_id" = $1 order by "id"`,
+      [owner],
+    )
+    expect(rows.rows).toEqual([
+      { id: older, moderation_state: 'replaced' },
+      { id: newer, moderation_state: 'live' },
+    ])
+    await db().query(createIndex ?? '')
+    let again = false
+    try {
+      await db().query(
+        `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'third', 'live')`,
+        ['018f3a40-7c2a-7000-8000-0000000000a4', owner],
+      )
+    } catch (error) {
+      again = true
+      expect(postgresCode(error)).toBe('23505')
+    }
+    expect(again).toBe(true)
+    await db().query(`delete from "photo_asset" where "owner_id" = $1`, [owner])
+    await db().query(`delete from "account" where "id" = $1`, [owner])
   })
 })

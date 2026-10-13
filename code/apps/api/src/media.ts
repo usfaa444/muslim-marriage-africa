@@ -125,7 +125,29 @@ export async function ownerPhotoCard(
   store: MediaStore,
   ownerId: string,
 ): Promise<{ ok: true; photo: OwnerPhotoCard | null } | MediaFailure> {
-  const asset = await store.latestProfilePhoto(ownerId)
+  const live = await store.liveProfilePhoto(ownerId)
+  const asset = live ?? (await store.latestProfilePhoto(ownerId))
+  if (!asset || asset.moderation_state === 'replaced') {
+    return { ok: true, photo: null }
+  }
+  const signed = await signMedia(store, asset.id, 'blur', ownerId)
+  if (!signed.ok) {
+    return signed
+  }
+  return { ok: true, photo: card(asset, signed.url) }
+}
+
+/** Pending replacement shown beside the live photo. Absent when the only photo is still the pending one. */
+export async function ownerPendingPhotoCard(
+  store: MediaStore,
+  ownerId: string,
+): Promise<{ ok: true; photo: OwnerPhotoCard | null } | MediaFailure> {
+  const live = await store.liveProfilePhoto(ownerId)
+  if (!live) {
+    return { ok: true, photo: null }
+  }
+  const pending = await store.pendingProfilePhotos(ownerId)
+  const asset = pending[pending.length - 1]
   if (!asset) {
     return { ok: true, photo: null }
   }
@@ -162,6 +184,9 @@ export async function signMedia(
   const asset = await store.asset(assetId)
   if (!asset || !asset.blur_key) {
     return grantDenied()
+  }
+  if (asset.kind === 'profile_photo' && asset.moderation_state === 'replaced') {
+    return omitted()
   }
   const staffPending = options?.staffReview === true && asset.moderation_state === 'pending'
   if (asset.kind === 'profile_photo' && asset.moderation_state !== 'live' && viewerId !== asset.owner_id && !staffPending) {
@@ -205,6 +230,9 @@ export async function readGrantedMedia(
   const asset = await store.asset(grant.photo_asset_id)
   if (!asset || !asset.blur_key) {
     return grantDenied()
+  }
+  if (asset.kind === 'profile_photo' && asset.moderation_state === 'replaced') {
+    return omitted()
   }
   const pendingGrant = asset.moderation_state === 'pending' && grant.derivative === 'blur'
   if (asset.kind === 'profile_photo' && asset.moderation_state !== 'live' && viewerId !== asset.owner_id && !pendingGrant) {

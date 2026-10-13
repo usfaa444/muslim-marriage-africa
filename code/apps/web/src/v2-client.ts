@@ -1112,7 +1112,9 @@ export function reviewScript(): string {
     fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
       return response.json().then(function (body) {
         var photo = body && body.photo
-        if (!response.ok || !photo || photo.moderation_state !== 'pending') {
+        var pendingPhoto = body && body.pending_photo
+        var pending = (photo && photo.moderation_state === 'pending') || (pendingPhoto && pendingPhoto.moderation_state === 'pending')
+        if (!response.ok || !pending) {
           window.location.replace('/profile-edit')
         }
       }, function () {

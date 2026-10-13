@@ -366,12 +366,16 @@ export function profileHtml(stitch: string): string {
   return guarded(html, profileScript())
 }
 
+function photoIsPending(photo: unknown): boolean {
+  return typeof photo === 'object' && photo !== null && (photo as { moderation_state?: unknown }).moderation_state === 'pending'
+}
+
 export function pendingProfilePhoto(body: unknown): boolean {
   if (typeof body !== 'object' || body === null) {
     return false
   }
-  const photo = (body as { photo?: { moderation_state?: unknown } }).photo
-  return photo?.moderation_state === 'pending'
+  const record = body as { photo?: unknown; pending_photo?: unknown }
+  return photoIsPending(record.photo) || photoIsPending(record.pending_photo)
 }
 
 const REVIEW_SLA_SENTENCE = 'Délai habituel de modération : 12 à 24 heures ouvrées.'

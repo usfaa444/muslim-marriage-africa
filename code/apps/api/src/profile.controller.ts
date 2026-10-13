@@ -5,7 +5,7 @@ import { getAccountStore } from './account-store.js'
 import { NON_MEMBER_PAUSE_MESSAGE } from './life-pause.js'
 import { requireLiveSession, unauthenticated } from './pin-session.js'
 import { acceptProfileWrite, completenessFor, isProfileFieldError } from './profile-fields.js'
-import { photoForMember } from './media.controller.js'
+import { pendingPhotoForMember, photoForMember } from './media.controller.js'
 import { queueAfterProfileSave, readFreeReviewSlaHours } from './profile-review.js'
 import { getProfileStore, type StoredProfile } from './profile-store.js'
 
@@ -64,6 +64,15 @@ function present(row: StoredProfile) {
   }
 }
 
+async function memberPhotos(accountId: string): Promise<{ photo: Awaited<ReturnType<typeof photoForMember>>; pending_photo?: NonNullable<Awaited<ReturnType<typeof pendingPhotoForMember>>> }> {
+  const photo = await photoForMember(accountId)
+  const pending = await pendingPhotoForMember(accountId)
+  if (!pending) {
+    return { photo }
+  }
+  return { photo, pending_photo: pending }
+}
+
 async function memberAccount(request: CookieRequest): Promise<{ accountId: string; gender: StoredProfile['gender'] }> {
   const session = await requireLiveSession(request.headers?.cookie)
   if (!session.roles.includes('member')) {
@@ -81,7 +90,7 @@ export class ProfileController {
     if (!row) {
       unauthenticated()
     }
-    return { ...(await withSla(row)), photo: await photoForMember(member.accountId) }
+    return { ...(await withSla(row)), ...(await memberPhotos(member.accountId)) }
   }
 
   @Put('profile')
@@ -111,6 +120,6 @@ export class ProfileController {
       unauthenticated()
     }
     const queued = await queueAfterProfileSave(saved, authNow().toISOString())
-    return { ...(await withSla(queued ?? saved)), photo: await photoForMember(member.accountId) }
+    return { ...(await withSla(queued ?? saved)), ...(await memberPhotos(member.accountId)) }
   }
 }
