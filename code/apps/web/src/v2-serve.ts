@@ -1,7 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
-import { entryRedirect, redirectTo } from './entry-guard'
+import { discoverHtml } from './discover-page'
+import { entryRedirect, readSessionCookie, redirectTo } from './entry-guard'
 import { memberRouteResponse, sessionKind, type MemberPath } from './member-route'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail'
 import {
@@ -24,16 +25,16 @@ import {
   statusHtml,
 } from './v2-pages'
 
-function stitchFile(folder: string): string {
+function stitchFile(folder: string, name = 'screen.html'): string {
   const candidates = [
-    resolve(process.cwd(), `../design-stitch/ankanu-v2/${folder}/screen.html`),
-    resolve(process.cwd(), `../../design-stitch/ankanu-v2/${folder}/screen.html`),
-    resolve(process.cwd(), `design-stitch/ankanu-v2/${folder}/screen.html`),
-    `/app/design-stitch/ankanu-v2/${folder}/screen.html`,
+    resolve(process.cwd(), `../design-stitch/ankanu-v2/${folder}/${name}`),
+    resolve(process.cwd(), `../../design-stitch/ankanu-v2/${folder}/${name}`),
+    resolve(process.cwd(), `design-stitch/ankanu-v2/${folder}/${name}`),
+    `/app/design-stitch/ankanu-v2/${folder}/${name}`,
   ]
   const found = candidates.find((path) => existsSync(path))
   if (!found) {
-    throw new Error(`code/design-stitch/ankanu-v2/${folder}/screen.html is not on disk`)
+    throw new Error(`code/design-stitch/ankanu-v2/${folder}/${name} is not on disk`)
   }
   return readFileSync(found, 'utf8')
 }
@@ -221,6 +222,19 @@ export async function memberGuarded(request: Request, path: MemberPath): Promise
     return redirect
   }
   return memberRouteResponse(request.headers.get('cookie'), path)
+}
+
+/** Screen 57. Stub cookies stay on the JSON envelope. A live session gets the card chrome. */
+export async function discoverResponse(request: Request): Promise<Response> {
+  const redirect = await entryRedirect(request, '/decouvrir')
+  if (redirect) {
+    return redirect
+  }
+  const cookie = request.headers.get('cookie')
+  if (sessionKind(cookie) !== null || readSessionCookie(cookie) === null) {
+    return memberRouteResponse(cookie, '/decouvrir')
+  }
+  return htmlResponse(discoverHtml(stitchFile('57-discover'), stitchFile('57-discover', 'grid.html')))
 }
 
 function jsonResponse(status: number, body: unknown): Response {

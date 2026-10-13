@@ -23,6 +23,7 @@ import {
   splashHtml,
   statusHtml,
 } from './v2-pages.js'
+import { discoverHtml } from './discover-page.js'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail.js'
 
 const WIDTHS = [360, 390, 768, 1024, 1280, 1440] as const
@@ -134,6 +135,16 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '15-status', html: statusHtml(stitch('28-delete-export-status')) },
     { name: '16-profile-detail', html: profileDetailHtml(stitch('15-profile-detail'), profileDetailView(true)) },
     { name: '16b-profile-phone', html: profileDetailHtml(stitch('15-profile-detail'), profileDetailView(false)) },
+    {
+      name: '17-discover',
+      html: discoverHtml(
+        stitch('57-discover'),
+        readFileSync(
+          fileURLToPath(new URL('../../../design-stitch/ankanu-v2/57-discover/grid.html', import.meta.url)),
+          'utf8',
+        ),
+      ),
+    },
   ]
 }
 
