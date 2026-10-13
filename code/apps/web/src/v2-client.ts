@@ -1109,21 +1109,229 @@ export function statusScript(): string {
 
 export function profileScript(): string {
   return `
-    var map = { ramadan: 'ramadan', examens: 'exams', voyage: 'travel', deuil: 'mourning' }
+    var pauseMap = { ramadan: 'ramadan', examens: 'exams', voyage: 'travel', deuil: 'mourning' }
+    var maritalToUi = { single: 'celibataire', married: 'marie', divorced: 'divorce', widowed: 'veuf' }
+    var uiToMarital = { celibataire: 'single', marie: 'married', divorce: 'divorced', veuf: 'widowed' }
+    var polyToUi = { no: 'non', yes: 'oui' }
+    var uiToPoly = { non: 'no', oui: 'yes' }
+    var timeframes = { immediate: 1, '6months': 1, '1year': 1, serene: 1 }
+    var selectedMarital = 'flex items-center justify-center p-3 rounded-md border border-deep-navy bg-deep-navy text-cream cursor-pointer text-xs font-medium text-center'
+    var idleMarital = 'flex items-center justify-center p-3 rounded-md border border-hairline bg-cream text-deep-navy hover:border-soft-gold cursor-pointer text-xs font-medium text-center'
+
+    function checkedValue(name) {
+      var picked = document.querySelector('input[name="' + name + '"]:checked')
+      return picked ? picked.value : ''
+    }
+
+    function setRadio(name, value) {
+      document.querySelectorAll('input[name="' + name + '"]').forEach(function (input) {
+        input.checked = value !== '' && input.value === value
+      })
+    }
+
+    function paintMarital() {
+      document.querySelectorAll('input[name="marital_status"]').forEach(function (input) {
+        var label = input.closest('label')
+        if (!label) return
+        label.className = input.checked ? selectedMarital : idleMarital
+      })
+    }
+
+    function readSelect(id) {
+      var el = document.getElementById(id)
+      if (!el) return null
+      var value = (el.value || '').trim()
+      return value.length ? value : null
+    }
+
+    function writeSelect(id, value) {
+      var el = document.getElementById(id)
+      if (el) el.value = value || ''
+    }
+
+    function lifePlansValue() {
+      var token = checkedValue('marriage_timeframe')
+      var area = document.getElementById('intentions')
+      var text = area ? area.value.trim() : ''
+      if (token && timeframes[token]) {
+        return text ? 'tf:' + token + '\\n' + text : 'tf:' + token
+      }
+      return text
+    }
+
+    function applyLifePlans(value) {
+      var raw = value || ''
+      var token = ''
+      var text = raw
+      if (raw.indexOf('tf:') === 0) {
+        var nl = raw.indexOf('\\n')
+        var head = nl === -1 ? raw : raw.slice(0, nl)
+        token = head.slice(3)
+        text = nl === -1 ? '' : raw.slice(nl + 1)
+      }
+      setRadio('marriage_timeframe', timeframes[token] ? token : '')
+      var area = document.getElementById('intentions')
+      if (area) area.value = text
+    }
+
+    function paintAge(dob) {
+      var el = document.getElementById('profile-age')
+      if (!el) return
+      var parts = (dob || '').split('-')
+      if (parts.length !== 3) {
+        el.textContent = ''
+        return
+      }
+      var born = new Date(Date.UTC(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2])))
+      var today = new Date()
+      var age = today.getUTCFullYear() - born.getUTCFullYear()
+      var monthGap = today.getUTCMonth() - born.getUTCMonth()
+      if (monthGap < 0 || (monthGap === 0 && today.getUTCDate() < born.getUTCDate())) age -= 1
+      el.textContent = age >= 0 && !isNaN(born.getTime()) ? age + ' ans' : ''
+    }
+
+    function paintMeter(completeness) {
+      if (!completeness) return
+      var percent = document.getElementById('profile-meter-percent')
+      var fill = document.getElementById('profile-meter-fill')
+      var missing = document.getElementById('profile-meter-missing')
+      var note = document.getElementById('profile-meter-note')
+      var block = document.getElementById('madhhab-block')
+      var names = Array.isArray(completeness.missing) ? completeness.missing : []
+      var ready = completeness.ready === true
+      if (percent) percent.textContent = (completeness.percent || 0) + '% complété'
+      if (fill) {
+        fill.style.width = (completeness.percent || 0) + '%'
+        fill.style.backgroundColor = ready ? '#C9A86C' : ''
+      }
+      if (missing) missing.textContent = ready ? '' : '« Il manque : ' + names.join(', ') + ' »'
+      var madhhabMissing = names.indexOf('madhhab') !== -1
+      if (note) note.classList.toggle('hidden', !madhhabMissing)
+      if (block) {
+        block.className = madhhabMissing
+          ? 'p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3'
+          : 'p-4 rounded-md border border-hairline bg-cream space-y-3'
+      }
+    }
+
+    function showStatus(text) {
+      var el = document.getElementById('profile-save-status')
+      if (!el) return
+      el.textContent = text || ''
+      el.classList.toggle('hidden', !text)
+    }
+
+    function applyProfile(body) {
+      if (!body) return
+      var dob = document.getElementById('dob')
+      if (dob) dob.value = body.dob || ''
+      paintAge(body.dob || '')
+      var origin = document.getElementById('origin')
+      if (origin) origin.value = body.origin || ''
+      writeSelect('country_residence', body.country)
+      writeSelect('city_residence', body.city)
+      writeSelect('education', body.education)
+      writeSelect('job', body.profession)
+      setRadio('marital_status', maritalToUi[body.marital_status] || '')
+      paintMarital()
+      setRadio('polygyny_intent', polyToUi[body.polygamy_intent] || '')
+      setRadio('madhhab', body.madhhab || '')
+      setRadio('religious_practice', body.practice || '')
+      applyLifePlans(body.life_plans || '')
+      var bio = document.getElementById('bio')
+      if (bio) bio.value = body.bio_pending || body.bio_live || ''
+      paintMeter(body.completeness)
+    }
+
+    function payload() {
+      var dob = document.getElementById('dob')
+      var origin = document.getElementById('origin')
+      var bio = document.getElementById('bio')
+      var plans = lifePlansValue()
+      return {
+        dob: dob ? dob.value : '',
+        city: readSelect('city_residence'),
+        country: readSelect('country_residence'),
+        origin: origin && origin.value.trim() ? origin.value.trim() : null,
+        marital_status: uiToMarital[checkedValue('marital_status')] || null,
+        polygamy_intent: uiToPoly[checkedValue('polygyny_intent')] || null,
+        education: readSelect('education'),
+        profession: readSelect('job'),
+        madhhab: checkedValue('madhhab') || null,
+        practice: checkedValue('religious_practice') || null,
+        life_plans: plans || null,
+        bio_pending: bio && bio.value.trim() ? bio.value.trim() : null
+      }
+    }
+
+    document.querySelectorAll('input[name="marital_status"]').forEach(function (input) {
+      input.addEventListener('change', paintMarital)
+    })
+    var dobInput = document.getElementById('dob')
+    if (dobInput) dobInput.addEventListener('change', function () { paintAge(dobInput.value) })
+
+    fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
+      return response.json()
+    }).then(applyProfile).catch(function () {})
+
     document.querySelectorAll('button').forEach(function (button) {
-      if ((button.textContent || '').indexOf('Mettre en pause') === -1) return
+      var label = button.textContent || ''
+      if (label.indexOf('Mettre en pause') !== -1) {
+        button.addEventListener('click', function () {
+          var picked = document.querySelector('input[name="pause_reason"]:checked')
+          var reason = picked ? pauseMap[picked.value] : ''
+          if (!reason) return
+          fetch('/v1/me/deactivate', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ reason: reason })
+          })
+        })
+      }
+      if (label.indexOf('Enregistrer les modifications') === -1) return
       button.addEventListener('click', function () {
-        var picked = document.querySelector('input[name="pause_reason"]:checked')
-        var reason = picked ? map[picked.value] : ''
-        if (!reason) return
-        fetch('/v1/me/deactivate', {
-          method: 'POST',
+        showStatus('')
+        fetch('/v1/me/profile', {
+          method: 'PUT',
           credentials: 'same-origin',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ reason: reason })
+          body: JSON.stringify(payload())
+        }).then(function (response) {
+          return response.json().then(function (body) {
+            return { ok: response.ok, body: body }
+          })
+        }).then(function (result) {
+          if (!result.ok) {
+            var message = result.body && result.body.error && result.body.error.message
+            showStatus(message || 'Enregistrement impossible.')
+            return
+          }
+          applyProfile(result.body)
+          showStatus('Enregistré.')
+        }).catch(function () {
+          showStatus('Enregistrement impossible.')
         })
       })
     })
+
+    var pinInput = document.querySelector('input[type="checkbox"]')
+    var pinEnabled = false
+    fetch('/v1/pin', { credentials: 'same-origin' }).then(function (response) {
+      return response.json()
+    }).then(function (body) {
+      pinEnabled = !!(body && body.enabled)
+      if (pinInput) pinInput.checked = pinEnabled
+    }).catch(function () {})
+    if (pinInput) {
+      pinInput.addEventListener('change', function () {
+        if (pinInput.checked && !pinEnabled) {
+          window.location.href = '/pin'
+          return
+        }
+        pinInput.checked = pinEnabled
+      })
+    }
   `
 }
 

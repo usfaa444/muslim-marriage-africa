@@ -314,14 +314,41 @@ export function photoHtml(stitch: string): string {
 
 export function profileHtml(stitch: string): string {
   let html = stitch
-    .replace('<span class="">29 ans</span>', '<span class=""></span>')
+    .replace('<span class="">29 ans</span>', '<span id="profile-age" class=""></span>')
     .replace('value="1996-09-14"', 'value=""')
     .replace('value="Région du Centre, Plateau-Central"', 'value=""')
-    .replace('>70% complété<', '><')
-    .replace('style="width: 70%;"', 'style="width: 0%;"')
+    .replace(
+      '<span class="text-xs font-semibold text-deep-navy font-mono">70% complété</span>',
+      '<span id="profile-meter-percent" class="text-xs font-semibold text-deep-navy font-mono">0% complété</span>',
+    )
+    .replace(
+      '<div class="h-full bg-deep-navy rounded-full" style="width: 70%;"></div>',
+      '<div id="profile-meter-fill" class="h-full bg-deep-navy rounded-full" style="width: 0%;"></div>',
+    )
+    .replace(
+      '<p class="text-sm font-semibold text-deep-navy">« Il manque : madhhab »</p>',
+      '<p id="profile-meter-missing" class="text-sm font-semibold text-deep-navy"></p>',
+    )
+    .replace(
+      '<p class="text-xs text-deep-navy/70 mt-1 leading-relaxed">',
+      '<p id="profile-meter-note" class="hidden text-xs text-deep-navy/70 mt-1 leading-relaxed">',
+    )
+    .replace(
+      '<div class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
+      '<div id="madhhab-block" class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
+    )
+    .replace(
+      'class="flex items-center justify-center p-3 rounded-md border border-deep-navy bg-deep-navy text-cream cursor-pointer text-xs font-medium text-center"',
+      'class="flex items-center justify-center p-3 rounded-md border border-hairline bg-cream text-deep-navy hover:border-soft-gold cursor-pointer text-xs font-medium text-center"',
+    )
+    .replace(
+      '<div class="pt-8 pb-4 flex justify-end">',
+      '<p id="profile-save-status" class="hidden text-xs text-deep-navy" role="status"></p><div class="pt-8 pb-4 flex justify-end">',
+    )
     .replaceAll(' checked=""', '')
     .replaceAll(' selected=""', '')
   html = html.replace(/(<textarea\b[^>]*\bid="bio"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
+  html = html.replace(/(<textarea\b[^>]*\bid="intentions"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
   html = html.replace(/<select\b([^>]*)>/g, '<select$1><option selected="" value=""></option>')
   return guarded(html, profileScript())
 }

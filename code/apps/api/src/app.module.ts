@@ -4,6 +4,7 @@ import { CilController } from './cil.controller.js'
 import { HealthController } from './health.controller.js'
 import { MeController } from './me.controller.js'
 import { PasswordResetsController } from './password-resets.controller.js'
+import { ProfileController } from './profile.controller.js'
 import { PinController } from './pin.controller.js'
 import { SessionsController } from './sessions.controller.js'
 import { VerificationsController } from './verifications.controller.js'
@@ -17,6 +18,7 @@ import { VerificationsController } from './verifications.controller.js'
     VerificationsController,
     PinController,
     MeController,
+    ProfileController,
     CilController,
   ],
 })
