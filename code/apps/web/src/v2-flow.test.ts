@@ -310,7 +310,7 @@ describe('v2 signup and sign-in screens', () => {
       onboardingHtml(stitch('08-onboarding')),
       photoHtml(stitch('09-photo-rules')),
       profileHtml(stitch('11-profile-edit')),
-      reviewHtml(stitch('12-profile-not-yet-public')),
+      reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }),
       settingsHtml(stitch('27-settings')),
       statusHtml(stitch('28-delete-export-status')),
     ]
@@ -355,7 +355,7 @@ describe('v2 signup and sign-in screens', () => {
       onboardingHtml(stitch('08-onboarding')),
       photoHtml(stitch('09-photo-rules')),
       profileHtml(stitch('11-profile-edit')),
-      reviewHtml(stitch('12-profile-not-yet-public')),
+      reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }),
       settingsHtml(stitch('27-settings')),
       statusHtml(stitch('28-delete-export-status')),
     ]
@@ -637,6 +637,23 @@ describe('email link result', () => {
     await link.listener?.({ button: 1, preventDefault() {} })
     expect(moves).toEqual([])
     expect(calls).toEqual([])
+  })
+})
+
+describe('screen 12 review timing', () => {
+  it('prints one configured SLA and omits a bio row that is not pending', () => {
+    const hidden = reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: false })
+    expect(hidden).toContain('Délai habituel de modération : 24 heures.')
+    expect(hidden).not.toContain('12 à')
+    expect(hidden).not.toContain('ouvrées')
+    expect(hidden).not.toContain('Présentation &amp; Bio')
+    expect(hidden).toContain('Photographie de profil')
+    expect(hidden).toContain("Conformité aux règles de pudeur")
+    const shown = reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 48, bioPending: true })
+    expect(shown).toContain('Délai habituel de modération : 48 heures.')
+    expect(shown).toContain('Présentation &amp; Bio')
+    expect(shown).not.toContain('12 à')
+    expect(shown).not.toContain('ouvrées')
   })
 })
 

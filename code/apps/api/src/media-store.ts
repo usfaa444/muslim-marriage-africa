@@ -48,6 +48,8 @@ export type MediaStore = {
     blur: Uint8Array,
   ): Promise<void>
   latestProfilePhoto(ownerId: string): Promise<StoredAsset | null>
+  pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]>
+  setModerationState(id: string, state: ModerationState): Promise<void>
   asset(id: string): Promise<StoredAsset | null>
   bytes(key: string): Promise<Uint8Array | null>
   saveGrant(grant: StoredGrant): Promise<void>
@@ -93,6 +95,17 @@ export function memoryMediaStore(): MediaStore & {
       const rows = assets.filter((row) => row.owner_id === ownerId && row.kind === 'profile_photo')
       return rows[rows.length - 1] ?? null
     },
+    async pendingProfilePhotos(ownerId) {
+      return assets.filter(
+        (row) => row.owner_id === ownerId && row.kind === 'profile_photo' && row.moderation_state === 'pending',
+      )
+    },
+    async setModerationState(id, state) {
+      const row = assets.find((item) => item.id === id)
+      if (row) {
+        row.moderation_state = state
+      }
+    },
     async asset(id) {
       return assets.find((row) => row.id === id) ?? null
     },
@@ -118,6 +131,8 @@ function postgresMediaStore(): MediaStore {
   return {
     saveAsset: saveAsset,
     latestProfilePhoto: latestProfilePhoto,
+    pendingProfilePhotos: pendingProfilePhotos,
+    setModerationState: setModerationState,
     asset: readAsset,
     bytes: readBytes,
     saveGrant: saveGrant,
@@ -163,6 +178,21 @@ async function latestProfilePhoto(ownerId: string): Promise<StoredAsset | null> 
     .orderBy(desc(photoAsset.id))
     .limit(1)
   return rows[0] ? asAsset(rows[0]) : null
+}
+
+async function pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]> {
+  const rows = await getIdentityDatabase()
+    .select()
+    .from(photoAsset)
+    .where(
+      and(eq(photoAsset.owner_id, ownerId), eq(photoAsset.kind, 'profile_photo'), eq(photoAsset.moderation_state, 'pending')),
+    )
+    .orderBy(photoAsset.id)
+  return rows.map(asAsset)
+}
+
+async function setModerationState(id: string, state: ModerationState): Promise<void> {
+  await getIdentityDatabase().update(photoAsset).set({ moderation_state: state }).where(eq(photoAsset.id, id))
 }
 
 async function readAsset(id: string): Promise<StoredAsset | null> {

@@ -11,6 +11,7 @@ import { resetPinEntries } from './pin-lock-state.js'
 import { acceptProfileWrite, completenessFor } from './profile-fields.js'
 import { memoryMediaStore, setMediaStore } from './media-store.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
+import { setFreeReviewSlaReader } from './profile-review.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 
@@ -102,6 +103,7 @@ describe('profile fields and completeness', () => {
 
   beforeAll(async () => {
     setAuthClock(() => now)
+    setFreeReviewSlaReader(async () => 24)
     setAuthLimitReader(async () => 100)
     resetAuthRateWindow()
     setAccountStore(memory)
@@ -122,6 +124,7 @@ describe('profile fields and completeness', () => {
 
   afterAll(async () => {
     setAuthClock(undefined)
+    setFreeReviewSlaReader(undefined)
     setAuthLimitReader(undefined)
     resetAuthRateWindow()
     setAccountStore(undefined)
@@ -221,7 +224,7 @@ describe('profile fields and completeness', () => {
     expect(saved.json).not.toHaveProperty('visibility')
     expect(saved.json).not.toHaveProperty('confrerie')
     const stored = memory.profiles.find((row) => row.account_id === created.id)
-    expect(stored?.visibility).toBeNull()
+    expect(stored?.visibility).toBe('unpublished')
   })
 
   it('rejects a married brother unless polygamy intent is yes, and keeps bio_live untouched', async () => {

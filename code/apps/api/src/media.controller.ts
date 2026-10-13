@@ -46,6 +46,19 @@ async function memberAccount(request: CookieRequest): Promise<{ accountId: strin
   return { accountId: session.account_id }
 }
 
+/** A signed blur grant is readable by the member who holds it and by staff reviewing that grant. */
+async function grantViewer(request: CookieRequest): Promise<{ accountId: string }> {
+  const session = await requireLiveSession(request.headers?.cookie)
+  if (
+    !session.roles.includes('member') &&
+    !session.roles.includes('moderator') &&
+    !session.roles.includes('operator')
+  ) {
+    forbid()
+  }
+  return { accountId: session.account_id }
+}
+
 @Controller('media')
 export class MediaController {
   @Post()
@@ -60,7 +73,7 @@ export class MediaController {
 
   @Get('get')
   async gateway(@Req() request: CookieRequest, @Query('token') token: unknown): Promise<StreamableFile> {
-    const member = await memberAccount(request)
+    const member = await grantViewer(request)
     if (typeof token !== 'string' || token.trim() === '') {
       fail({
         ok: false,

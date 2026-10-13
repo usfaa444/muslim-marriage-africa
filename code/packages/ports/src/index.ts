@@ -54,3 +54,11 @@ export type AuditAppend = {
 export type AuditPort = {
   append(tx: unknown, input: AuditAppend): Promise<void>
 }
+
+/** `true` is Premium. `false` and `unavailable` both sort as Free. */
+export type BillingAnswer = boolean | 'unavailable'
+
+/** Billing is the only writer of entitlement. Review may read `isEntitled` and must not write it. */
+export type BillingPort = {
+  isEntitled(accountId: string): Promise<BillingAnswer>
+}

@@ -118,7 +118,8 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '11-onboarding', html: onboardingHtml(stitch('08-onboarding')) },
     { name: '12-photo', html: photoHtml(stitch('09-photo-rules')) },
     { name: '13-profile', html: profileHtml(stitch('11-profile-edit')) },
-    { name: '13b-profile-review', html: reviewHtml(stitch('12-profile-not-yet-public')) },
+    { name: '13b-profile-review', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }) },
+    { name: '13c-profile-review-no-bio', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 48, bioPending: false }) },
     { name: '14-settings', html: settingsHtml(stitch('27-settings')) },
     { name: '15-status', html: statusHtml(stitch('28-delete-export-status')) },
   ]

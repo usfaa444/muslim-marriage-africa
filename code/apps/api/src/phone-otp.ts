@@ -215,5 +215,7 @@ async function verifyOtp(
   if (granted !== 'granted') {
     return failure(400, 'OTP_INVALID', INVALID_MESSAGE, null, false)
   }
+  const { publishIfEligible } = await import('./profile-review.js')
+  await publishIfEligible(accountId)
   return { ok: true, status: 200, body: { status: 'granted' } }
 }

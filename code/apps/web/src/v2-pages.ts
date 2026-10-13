@@ -374,8 +374,14 @@ export function pendingProfilePhoto(body: unknown): boolean {
   return photo?.moderation_state === 'pending'
 }
 
-export function reviewHtml(stitch: string): string {
-  return guarded(stitch, reviewScript())
+const REVIEW_SLA_SENTENCE = 'Délai habituel de modération : 12 à 24 heures ouvrées.'
+
+export function reviewHtml(stitch: string, state: { slaHours: number; bioPending: boolean }): string {
+  let html = stitch.replace(REVIEW_SLA_SENTENCE, `Délai habituel de modération : ${state.slaHours} heures.`)
+  if (!state.bioPending) {
+    html = html.replace(/<!-- Element 2 -->[\s\S]*?<!-- Element 3 -->/, '<!-- Element 3 -->')
+  }
+  return guarded(html, reviewScript())
 }
 
 export function settingsHtml(stitch: string): string {

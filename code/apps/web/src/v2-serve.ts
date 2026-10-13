@@ -177,13 +177,19 @@ export async function profileReviewResponse(request: Request): Promise<Response>
   if (redirect) {
     return redirect
   }
-  if (!(await pendingFromApi(request))) {
+  const profile = await memberProfile(request)
+  if (!profile || !pendingProfilePhoto(profile)) {
     return redirectTo(request, '/profile-edit')
   }
-  return htmlResponse(reviewHtml(stitchFile('12-profile-not-yet-public')))
+  const hours = profile.review_sla_hours
+  if (typeof hours !== 'number' || !Number.isInteger(hours) || hours < 1) {
+    return redirectTo(request, '/profile-edit')
+  }
+  const bioPending = typeof profile.bio_pending === 'string' && profile.bio_pending.trim() !== ''
+  return htmlResponse(reviewHtml(stitchFile('12-profile-not-yet-public'), { slaHours: hours, bioPending }))
 }
 
-async function pendingFromApi(request: Request): Promise<boolean> {
+async function memberProfile(request: Request): Promise<{ review_sla_hours?: unknown; bio_pending?: unknown; photo?: unknown } | null> {
   const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
   try {
     const response = await fetch(`${origin}/v1/me/profile`, {
@@ -191,11 +197,11 @@ async function pendingFromApi(request: Request): Promise<boolean> {
       cache: 'no-store',
     })
     if (!response.ok) {
-      return false
+      return null
     }
-    return pendingProfilePhoto(await response.json())
+    return (await response.json()) as { review_sla_hours?: unknown; bio_pending?: unknown; photo?: unknown }
   } catch {
-    return false
+    return null
   }
 }
 

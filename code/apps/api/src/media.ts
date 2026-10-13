@@ -2,6 +2,7 @@ import { eq } from 'drizzle-orm'
 import { newId } from '@ankanu/kernel'
 import { getIdentityDatabase } from './account-store.js'
 import { operatorConfig } from './operator-config.js'
+import { getProfileStore } from './profile-store.js'
 import { PhotoDecodeError, blurProfilePhoto, isJpeg, isPng } from './media-blur.js'
 import {
   MediaStorageError,
@@ -106,6 +107,7 @@ export async function uploadProfilePhoto(
   }
   try {
     await store.saveAsset(asset, derivative, parsed.bytes, blurred.bytes)
+    await getProfileStore().noteQueued(ownerId, clock().toISOString())
   } catch (error) {
     if (error instanceof MediaStorageError) {
       return storageFailure()
@@ -134,11 +136,20 @@ export async function ownerPhotoCard(
   return { ok: true, photo: card(asset, signed.url) }
 }
 
+export async function applyPhotoModeration(
+  store: MediaStore,
+  assetId: string,
+  decision: 'allow' | 'block',
+): Promise<void> {
+  await store.setModerationState(assetId, decision === 'allow' ? 'live' : 'blocked')
+}
+
 export async function signMedia(
   store: MediaStore,
   assetId: string,
   derivative: string,
   viewerId: string,
+  options?: { staffReview?: boolean },
 ): Promise<{ ok: true; url: string; expires_at: string } | MediaFailure> {
   if (derivative !== 'blur') {
     return revealDenied()
@@ -147,7 +158,8 @@ export async function signMedia(
   if (!asset || !asset.blur_key) {
     return grantDenied()
   }
-  if (asset.kind === 'profile_photo' && asset.moderation_state !== 'live' && viewerId !== asset.owner_id) {
+  const staffPending = options?.staffReview === true && asset.moderation_state === 'pending'
+  if (asset.kind === 'profile_photo' && asset.moderation_state !== 'live' && viewerId !== asset.owner_id && !staffPending) {
     return omitted()
   }
   let seconds: number
@@ -189,7 +201,8 @@ export async function readGrantedMedia(
   if (!asset || !asset.blur_key) {
     return grantDenied()
   }
-  if (asset.kind === 'profile_photo' && asset.moderation_state !== 'live' && viewerId !== asset.owner_id) {
+  const pendingGrant = asset.moderation_state === 'pending' && grant.derivative === 'blur'
+  if (asset.kind === 'profile_photo' && asset.moderation_state !== 'live' && viewerId !== asset.owner_id && !pendingGrant) {
     return omitted()
   }
   let bytes: Uint8Array | null

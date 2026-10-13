@@ -4,15 +4,16 @@ import { authNow } from './auth-clock.js'
 import { getAccountStore } from './account-store.js'
 import { NON_MEMBER_PAUSE_MESSAGE } from './life-pause.js'
 import { requireLiveSession, unauthenticated } from './pin-session.js'
-import { acceptProfileWrite, completenessFor, isProfileFieldError, type ProfileFieldError } from './profile-fields.js'
+import { acceptProfileWrite, completenessFor, isProfileFieldError } from './profile-fields.js'
 import { photoForMember } from './media.controller.js'
+import { queueAfterProfileSave, readFreeReviewSlaHours } from './profile-review.js'
 import { getProfileStore, type StoredProfile } from './profile-store.js'
 
 type CookieRequest = {
   headers?: { cookie?: string | string[] }
 }
 
-function reject(status: 400 | 503, error: ProfileFieldError, retryable = false): never {
+function reject(status: 400 | 503, error: { field: string; message: string }, retryable = false): never {
   throw new HttpException(
     {
       code: 'UNHANDLED',
@@ -34,6 +35,14 @@ function forbid(): never {
     },
     403,
   )
+}
+
+async function withSla(row: StoredProfile) {
+  const hours = await readFreeReviewSlaHours()
+  if (hours === null) {
+    reject(503, { field: 'free_review_sla_hours', message: 'free_review_sla_hours : la configuration est illisible.' }, true)
+  }
+  return { ...present(row), review_sla_hours: hours }
 }
 
 function present(row: StoredProfile) {
@@ -72,7 +81,7 @@ export class ProfileController {
     if (!row) {
       unauthenticated()
     }
-    return { ...present(row), photo: await photoForMember(member.accountId) }
+    return { ...(await withSla(row)), photo: await photoForMember(member.accountId) }
   }
 
   @Put('profile')
@@ -101,6 +110,7 @@ export class ProfileController {
     if (!saved) {
       unauthenticated()
     }
-    return { ...present(saved), photo: await photoForMember(member.accountId) }
+    const queued = await queueAfterProfileSave(saved, authNow().toISOString())
+    return { ...(await withSla(queued ?? saved)), photo: await photoForMember(member.accountId) }
   }
 }

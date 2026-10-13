@@ -34,7 +34,7 @@ export function publicAccount(row: CreatedAccount): Omit<CreatedAccount, 'civil_
 export type CreatedProfile = {
   account_id: string
   dob: string
-  visibility: typeof HELD_STATUS | null
+  visibility: string | null
 }
 
 export type PasswordCredential = {

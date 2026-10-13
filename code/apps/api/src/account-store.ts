@@ -29,6 +29,11 @@ export function getAccountStore(): AccountStore {
   return postgresStore()
 }
 
+/** Unit tests install a memory store. Production leaves this false and uses Postgres. */
+export function accountStoreIsMemory(): boolean {
+  return override !== undefined
+}
+
 export async function closeAccountStore(): Promise<void> {
   const current = pool
   pool = undefined

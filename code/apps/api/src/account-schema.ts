@@ -92,6 +92,8 @@ export const profile = pgTable(
     bio_live: text('bio_live'),
     bio_pending: text('bio_pending'),
     visibility: text('visibility'),
+    review_queued_at: timestamp('review_queued_at', { withTimezone: true, mode: 'string' }),
+    review_passed_at: timestamp('review_passed_at', { withTimezone: true, mode: 'string' }),
   },
   (table) => [
     check(

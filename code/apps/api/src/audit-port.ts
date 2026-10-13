@@ -60,6 +60,16 @@ export function memoryAuditPort(audits: AuditRow[]): AuditPort {
   }
 }
 
+let auditOverride: AuditPort | undefined
+
+export function setAuditPort(port: AuditPort | undefined): void {
+  auditOverride = port
+}
+
+export function getAuditPort(): AuditPort {
+  return auditOverride ?? postgresAuditPort()
+}
+
 export function postgresAuditPort(): AuditPort {
   return {
     async append(tx, input) {

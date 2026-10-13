@@ -8,6 +8,7 @@ import { PasswordResetsController } from './password-resets.controller.js'
 import { ProfileController } from './profile.controller.js'
 import { PinController } from './pin.controller.js'
 import { SessionsController } from './sessions.controller.js'
+import { StaffController } from './staff.controller.js'
 import { VerificationsController } from './verifications.controller.js'
 
 @Module({
@@ -21,6 +22,7 @@ import { VerificationsController } from './verifications.controller.js'
     MeController,
     ProfileController,
     MediaController,
+    StaffController,
     CilController,
   ],
 })

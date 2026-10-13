@@ -44,7 +44,7 @@ describe('v2 screens do not open a native dialog', () => {
       photoHtml(stitch('09-photo-rules')),
       pinHtml(stitch('10-pin-lock')),
       profileHtml(stitch('11-profile-edit')),
-      reviewHtml(stitch('12-profile-not-yet-public')),
+      reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }),
       settingsHtml(stitch('27-settings')),
       statusHtml(stitch('28-delete-export-status')),
     ]
