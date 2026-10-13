@@ -20,13 +20,13 @@ Success is `201` with only these fields:
 
 The caption uses the em dash from `code/design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html`. The response never includes `original_key`, `blur_key`, or `object_key`. `GET /v1/me/profile` and `PUT /v1/me/profile` add `photo` with that same card, or `photo: null` when the member has no profile photo. Story 3.1 fields, the meter, and « Mettre en pause » are unchanged.
 
-`blur_url` is a capability token for `GET /v1/media/get`, not a bucket URL. The gateway checks the viewer, `revoked_at`, expiry, and that the derivative is `blur`, then returns the blur JPEG as `image/jpeg`. TTL comes from `signed_url_ttl_seconds` and is capped at 60. Signing `original`, `xs`, `sm`, or `md` is `403` `REVEAL_DENIED` with message `Révélation refusée.` A pending profile photo signed or fetched by anyone except the owner is `403` `FORBIDDEN` with message `Photo non publique.` A missing or foreign token is `403` `Accès au média refusé.` No session is `401`.
+`blur_url` is a capability token for `GET /v1/media/get`, not a bucket URL. The gateway checks the viewer, `revoked_at`, expiry, and that the derivative is `blur`, then returns the blur JPEG as `image/jpeg`. TTL comes from `signed_url_ttl_seconds` and is capped at 60. Signing `original`, `xs`, `sm`, or `md` is `403` `REVEAL_DENIED` with message `Révélation refusée.` A pending profile photo signed or fetched by anyone except the owner is `403` `FORBIDDEN` with message `Photo non publique.` A missing token, a token that is not a UUID, or a token for another viewer is `403` `Accès au média refusé.` A token that is not a UUID v7 returns that `403` before the grant query. No session is `401`.
 
 `discoveryPhoto` returns null unless `kind` is `profile_photo` and `moderation_state` is `live`. There is no discovery HTTP route in this story. A test may set a memory row to `live` to prove the sign rule. That mutation is not an endpoint.
 
 A JPEG or PNG at or under 5,242,880 bytes is accepted, including a 4032×3024 phone JPEG. The decoder reads the PNG IHDR, or the JPEG frame size, before it allocates the bitmap. A header above 100 megapixels is refused before that read. That ceiling is the decoder's own default. It is not an 8 megapixel cap.
 
-The edit screen stays `code/design-stitch/ankanu-v2/11-profile-edit/screen.html`. « Mettre à jour la photo » opens a file input for jpeg or png, posts `/v1/media`, and on `pending` goes to `/profile-review`. If a pending photo is already stored, the photo note on the edit screen becomes the caption. The account-circle placeholder stays. The script does not set an `<img>` src and does not CSS-blur the original. `backdrop-blur-sm` on the review card is the Stitch frame. It is not a blur of the uploaded file.
+The edit screen stays `code/design-stitch/ankanu-v2/11-profile-edit/screen.html`. « Mettre à jour la photo » opens a file input for jpeg or png, posts `/v1/media`, and on `pending` goes to `/profile-review`. The file input is cleared after a successful post, after a rejected post, and when the file reader fails, so the same file can be chosen again. If a pending photo is already stored, the photo note on the edit screen becomes the caption. The account-circle placeholder stays. The script does not set an `<img>` src and does not CSS-blur the original. `backdrop-blur-sm` on the review card is the Stitch frame. It is not a blur of the uploaded file.
 
 `/profile-review` is screen 12. The server asks `GET /v1/me/profile`. It sends the HTML only when `photo.moderation_state` is `pending`. Otherwise it redirects to `/profile-edit`. An anonymous request goes to `/auth`. The inline script repeats that check. The page is the downloaded Stitch frame: photo caption, bio « En revue », pudeur « En cours d'évaluation », and « 12 à 24 heures ouvrées ». Those extra lines are the frame. This story does not decide bio, pudeur, or a review SLA.
 
@@ -78,6 +78,8 @@ Sign in, open `/profile-edit`, choose a jpeg or png with « Mettre à jour la ph
 | Owner profile | `GET /v1/me/profile` | `photo.caption` is the Stitch sentence. JSON has no `original_key` and no original object key |
 | Owner GET | `GET` `photo.blur_url` with the owner cookie | `200` `image/jpeg`. Body equals the blur bytes and not the original |
 | Other member | Sign `blur` for the other account, and GET the owner token with the other cookie | Sign returns `FORBIDDEN` and writes no grant. GET is `403` |
+| Non-uuid token | `GET /v1/media/get?token=not-a-uuid` with a session | `403`. Message `Accès au média refusé.` The grant query does not run |
+| Same file again | Choose a non-image, see the image error, choose that same file again | The input value is cleared after the rejection, after a reader failure, and after a successful post, so `change` fires again |
 | Clear size | Sign `original` or `md` as the owner | `REVEAL_DENIED` |
 | Revoke | Set `revoked_at` on the grant, then GET | `403` |
 | Expiry | Clock plus 61 seconds, then GET | `403` |
@@ -98,7 +100,7 @@ Sign in, open `/profile-edit`, choose a jpeg or png with « Mettre à jour la ph
 
 ## My results
 
-- QA fail on a 4032×3024 JPEG: fixed. `media.test.ts` now has that upload and a 100000×100000 PNG header. Re-ran `media.test.ts`: 4 passed. `tsc -p apps/api/tsconfig.json`: exit 0.
+- QA fails on the same file and on a non-uuid token: fixed. Re-ran `media.test.ts` and `profile-edit-page.test.ts`: 11 passed. That includes the 4032×3024 JPEG, the huge PNG header, `token=not-a-uuid` returning `403` before the grant query, and clearing the file input after a rejection, a reader failure, and a successful post. `tsc` for the API and the web app exited 0.
 - Earlier run of `media.test.ts`, `profile.test.ts`, `profile-edit-page.test.ts`, `v2-flow.test.ts`, and `native-dialog.test.ts`: 40 passed. That run did not include the phone JPEG. The phone JPEG case is the new `media.test.ts` result above.
 - `v2-responsive.test.ts`: 2 passed. Profile review is `13b-profile-review` at 360, 390, 768, 1024, 1280, and 1440. `scrollWidth <= innerWidth`. Shots: `code/docs/qa-handoffs/ank-83-widths/13b-profile-review-360.png` and `13b-profile-review-1440.png`. Profile edit remains `13-profile` in that run.
 - `tsc -p apps/api/tsconfig.json` and `tsc -p apps/web/tsconfig.json`: exit 0.
@@ -107,7 +109,7 @@ Sign in, open `/profile-edit`, choose a jpeg or png with « Mettre à jour la ph
 
 ## Three validation passes
 
-1. Behavior: upload stores original plus blur, response omits `original_key`, pending photos are omitted for other members and for `discoveryPhoto`, the gateway re-checks the grant, clear derivatives are refused, and Story 3.1 save and pause still run.
+1. Behavior: upload stores original plus blur, response omits `original_key`, pending photos are omitted for other members and for `discoveryPhoto`, the gateway re-checks the grant, a non-uuid token is `403` before the query, a rejected file can be chosen again, clear derivatives are refused, and Story 3.1 save and pause still run.
 2. Screen: `/profile-edit` stays screen 11. A pending photo changes the photo note to the caption and does not show the original. `/profile-review` is screen 12 only when the API says the photo is pending. No state tabs, demo toggles, or galleries. Sample Stitch profile text is not used as live data.
 3. Widths: Chrome on the built profile and review HTML at 360, 390, 768, 1024, 1280, and 1440. `document.documentElement.scrollWidth <= window.innerWidth`, and no measured box outside the viewport.
 

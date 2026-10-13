@@ -18,7 +18,7 @@ import {
   setSignedTtlReader,
   signMedia,
 } from './media.js'
-import { memoryMediaStore, setMediaStore } from './media-store.js'
+import { memoryMediaStore, getMediaStore, setMediaStore } from './media-store.js'
 import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
@@ -331,6 +331,22 @@ describe('profile photo upload stays unpublished and blurred', () => {
     data[8] = 8
     const header = Buffer.concat([signature, length, Buffer.from('IHDR'), data, Buffer.alloc(4)])
     expect(() => blurProfilePhoto(header)).toThrow(PhotoDecodeError)
+  })
+
+  it('rejects a token that is not a uuid before querying', async () => {
+    const created = await createAccount()
+    const cookie = await signIn(created.email)
+    const response = await fetch(`${base}/v1/media/get?token=not-a-uuid`, { headers: { cookie } })
+    expect(response.status).toBe(403)
+    expect(await response.json()).toMatchObject({
+      error: { code: 'FORBIDDEN', message: 'Accès au média refusé.' },
+    })
+    setMediaStore(undefined)
+    try {
+      await expect(getMediaStore().grant('not-a-uuid')).resolves.toBeNull()
+    } finally {
+      setMediaStore(media)
+    }
   })
 
   it('caps the gateway token at 60 seconds', async () => {

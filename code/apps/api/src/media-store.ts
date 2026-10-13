@@ -1,4 +1,5 @@
 import { and, desc, eq } from 'drizzle-orm'
+import { isUuidV7 } from '@ankanu/kernel'
 import { getIdentityDatabase } from './account-store.js'
 import { photoAsset, photoDerivative, signedGrant } from './account-schema.js'
 import { getEvidenceWriter } from './evidence-writer.js'
@@ -193,6 +194,9 @@ async function saveGrant(grant: StoredGrant): Promise<void> {
 }
 
 async function readGrant(id: string): Promise<StoredGrant | null> {
+  if (!isUuidV7(id)) {
+    return null
+  }
   const rows = await getIdentityDatabase().select().from(signedGrant).where(eq(signedGrant.id, id)).limit(1)
   const row = rows[0]
   if (!row) {

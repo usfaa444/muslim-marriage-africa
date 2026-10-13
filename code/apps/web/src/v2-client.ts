@@ -1333,6 +1333,10 @@ export function profileScript(): string {
         var file = photoFile.files && photoFile.files[0]
         if (!file) return
         var reader = new FileReader()
+        reader.onerror = function () {
+          photoFile.value = ''
+          showStatus('Envoi de la photo impossible.')
+        }
         reader.onload = function () {
           var text = String(reader.result || '')
           var comma = text.indexOf(',')
@@ -1349,6 +1353,7 @@ export function profileScript(): string {
               return { ok: false, body: null }
             })
           }).then(function (result) {
+            photoFile.value = ''
             if (!result.ok || !result.body || result.body.moderation_state !== 'pending') {
               var message = result.body && result.body.error && result.body.error.message
               showStatus(message || 'Envoi de la photo impossible.')
@@ -1356,10 +1361,16 @@ export function profileScript(): string {
             }
             window.location.href = '/profile-review'
           }).catch(function () {
+            photoFile.value = ''
             showStatus('Envoi de la photo impossible.')
           })
         }
-        reader.readAsDataURL(file)
+        try {
+          reader.readAsDataURL(file)
+        } catch (readError) {
+          photoFile.value = ''
+          showStatus('Envoi de la photo impossible.')
+        }
       })
     }
 

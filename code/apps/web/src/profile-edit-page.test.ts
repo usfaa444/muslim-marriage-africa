@@ -142,6 +142,7 @@ function mount() {
     release = resolve
   })
   let completeness = stored.completeness
+  let rejectMedia = false
 
   function fetchImpl(url: string, init?: { method?: string; body?: string }) {
     const method = init?.method ?? 'GET'
@@ -159,6 +160,12 @@ function mount() {
       })
     }
     if (url === '/v1/media' && method === 'POST') {
+      if (rejectMedia) {
+        return Promise.resolve({
+          ok: false,
+          json: async () => ({ error: { message: 'image : une image JPEG ou PNG est requise.' } }),
+        })
+      }
       return Promise.resolve({
         ok: true,
         json: async () => ({ moderation_state: 'pending', caption: 'Photo en revue — pas encore publique.' }),
@@ -201,6 +208,9 @@ function mount() {
     form,
     calls,
     release,
+    rejectMedia() {
+      rejectMedia = true
+    },
     setCompleteness(next: typeof stored.completeness) {
       completeness = next
     },
@@ -329,6 +339,7 @@ describe('profile edit load and meter', () => {
 
     await page.upload.listeners.click?.[0]?.()
     expect(page.photoFile.files).toEqual([{ name: 'face.png' }])
+    page.photoFile.value = 'C:\\fakepath\\face.png'
     const previousReader = globalThis.FileReader
     class FakeReader {
       result = 'data:image/png;base64,QUJD'
@@ -348,5 +359,52 @@ describe('profile edit load and meter', () => {
     expect(post?.method).toBe('POST')
     expect(JSON.parse(post?.body ?? '{}')).toEqual({ kind: 'profile_photo', image: 'QUJD' })
     expect(page.location.href).toBe('/profile-review')
+    expect(page.photoFile.value).toBe('')
+  })
+
+  it('clears the file input when the upload is rejected or the reader fails', async () => {
+    const rejected = mount()
+    rejected.rejectMedia()
+    rejected.photoFile.value = 'C:\\fakepath\\not-a-photo.png'
+    rejected.photoFile.files = [{ name: 'not-a-photo.png' }]
+    const previousReader = globalThis.FileReader
+    class FakeReader {
+      result = 'data:image/png;base64,QUJD'
+      onload: (() => void) | null = null
+      onerror: (() => void) | null = null
+      readAsDataURL(): void {
+        this.onload?.()
+      }
+    }
+    globalThis.FileReader = FakeReader as unknown as typeof FileReader
+    try {
+      await rejected.photoFile.listeners.change?.[0]?.()
+      await flush()
+    } finally {
+      globalThis.FileReader = previousReader
+    }
+    expect(rejected.photoFile.value).toBe('')
+    expect(rejected.location.href).toBe('')
+    expect(rejected.byId.get('profile-save-status')?.textContent).toBe('image : une image JPEG ou PNG est requise.')
+
+    const failed = mount()
+    failed.photoFile.value = 'C:\\fakepath\\not-a-photo.png'
+    failed.photoFile.files = [{ name: 'not-a-photo.png' }]
+    class ErrorReader {
+      onload: (() => void) | null = null
+      onerror: (() => void) | null = null
+      readAsDataURL(): void {
+        this.onerror?.()
+      }
+    }
+    globalThis.FileReader = ErrorReader as unknown as typeof FileReader
+    try {
+      await failed.photoFile.listeners.change?.[0]?.()
+    } finally {
+      globalThis.FileReader = previousReader
+    }
+    expect(failed.photoFile.value).toBe('')
+    expect(failed.calls.filter((call) => call.url === '/v1/media')).toEqual([])
+    expect(failed.byId.get('profile-save-status')?.textContent).toBe('Envoi de la photo impossible.')
   })
 })
