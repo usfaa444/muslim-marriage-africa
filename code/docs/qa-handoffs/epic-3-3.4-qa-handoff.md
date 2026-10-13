@@ -26,7 +26,9 @@ This story deletes nothing. The replaced row, its original object, and its deriv
 
 Bio allow and bio block stay the Story 3.3 path. A replacement allow does not send `profile`, so `review_passed_at` is not cleared. Visibility stays `public` unless it is `held` or `emergency_hidden`. A new upload is `pending` and does not change the existing live row. Discovery still returns a photo only when that photo is `live`.
 
-`/profile-review` stays on screen 12 when `photo` is pending or when `pending_photo` is pending. A live photo alone redirects to `/profile-edit`. The pending caption on screen 11 is still written only when `photo` itself is pending, so a live photo during a replacement does not pick up the pending note.
+The owner surface for a pending replacement is the founder sentence on card `d81a526e-5d37-4ef8-b3ef-c027d2330244`. Screen 12 (`/profile-review`) renders only when `photo.moderation_state` is `pending`. A live photo plus `pending_photo` redirects to `/profile-edit`, and `reviewScript` leaves for `/profile-edit` in that state. `pendingProfilePhoto` is true only for a pending `photo`.
+
+On screen 11 the photo card stays the Stitch card: the thumbnail is unchanged and the note stays `Aucun affichage public. Votre image n'est jamais exposée aux regards ouverts ni aux moteurs de recherche.` The pending caption is written only when `photo` itself is pending. When `photo` is `live` and `pending_photo` is `pending`, the empty slot between that note and the two buttons is filled with screen 12 Element 1 (`photo_camera`, `Photographie de profil`, the `En revue` chip) and the same SLA line screen 12 serves (`Délai habituel de modération : {n} heures.`). Screen 11 does not show `Photo en revue — pas encore publique.`, `Votre profil est actuellement en cours de revue…`, or the hourglass header while `photo` is live. After upload, a pending `photo` still goes to `/profile-review`. A live `photo` stays on `/profile-edit` and the row is painted. After allow, the next read has one live `photo` and no `pending_photo`, so the row is gone. After block, the live photo stays and the row is gone.
 
 ## Where
 
@@ -44,6 +46,8 @@ Bio allow and bio block stay the Story 3.3 path. A replacement allow does not se
 - `code/apps/web/src/v2-pages.ts`
 - `code/apps/web/src/v2-client.ts`
 - `code/apps/web/src/v2-flow.test.ts`
+- `code/apps/web/src/v2-responsive.test.ts`
+- `code/apps/web/src/profile-edit-page.test.ts`
 
 ## How to run
 
@@ -58,7 +62,7 @@ npx tsc -p apps/web/tsconfig.json --noEmit
 
 The integration file needs Docker and Postgres 17. The unit config excludes it.
 
-Sign in as a member who already has an allowed profile photo. Upload another profile photo. `GET /v1/me/profile` should show the old photo as `photo` with `moderation_state` `live` and the new one as `pending_photo`. Open `/profile-review`. A moderator allow of that pending photo should leave exactly one `live` row, mark the previous row `replaced`, and make the old blur URL return `403`. A block of a later upload should leave the live photo in place.
+Sign in as a member who already has an allowed profile photo. Upload another profile photo. Stay on `/profile-edit`. The thumbnail and the `Aucun affichage public…` note stay. Between that note and the buttons, the card shows `Photographie de profil` with the `En revue` chip and `Délai habituel de modération : {n} heures.` It must not show `Photo en revue — pas encore publique.` or `Votre profil est actuellement en cours de revue…`. Open `/profile-review` directly: it redirects to `/profile-edit`. A first upload, when `photo` itself is `pending`, still lands on screen 12. A moderator allow of the pending photo leaves exactly one `live` row, marks the previous row `replaced`, removes the `En revue` row, and makes the old blur URL return `403`. A block of a later upload leaves the live photo and removes the row.
 
 ## Test cases
 
@@ -73,7 +77,8 @@ Sign in as a member who already has an allowed profile photo. Upload another pro
 | Bio block | `bio_pending` set, staff `bio` `block`, `photos` `[]`, with a reason | `bio_live` stays the previous allowed text. `bio_pending` is null. `review_passed_at` unchanged |
 | First allow | No live photo yet | Only the pending row becomes `live`. No `replaced` row |
 | Not a strike | Allow that replaces a live photo | No strike row. `photo_strike_count` and `photo_strike_block_hours` are not written. States used are only `pending`, `live`, `blocked`, and `replaced` |
-| Screen 12 | `photo` live and `pending_photo` pending | `pendingProfilePhoto` is true, so `/profile-review` stays. A live photo alone is false and the script goes to `/profile-edit` |
+| Screen 11 replacement | `photo` live and `pending_photo` pending | Stay on `/profile-edit`. Note stays `Aucun affichage public…`. The slot shows screen 12 Element 1 (`Photographie de profil` · `En revue`) and the SLA line. No `pas encore publique` and no `en cours de revue` copy. Direct `/profile-review` redirects to `/profile-edit` |
+| Screen 12 | `photo` itself pending | `/profile-review` stays on screen 12. A live photo alone, and a live photo plus `pending_photo`, both leave `/profile-review` |
 | Stories 3.1–3.3 | Existing profile, media, review, and screen tests | Still pass |
 
 ## Test data
@@ -84,17 +89,17 @@ The Postgres case uses account `018f3a40-7c2a-7000-8000-0000000000a1`, email `re
 
 ## My results
 
-- `profile-review.test.ts`, `profile.test.ts`, `media.test.ts`, and `v2-flow.test.ts` with `--fileParallelism false`: 4 files, 45 tests passed. That includes the replacement allow, the revoked old URL, the block that leaves the live photo, the bio block that leaves `bio_live`, and `pendingProfilePhoto` for a live photo plus a pending replacement.
-- `v2-responsive.test.ts`, `native-dialog.test.ts`, and `profile-edit-page.test.ts` with `--fileParallelism false`: 3 files, 9 tests passed.
+- `profile-review.test.ts`, `profile.test.ts`, `media.test.ts`, and `v2-flow.test.ts` with `--fileParallelism false`: the earlier 45 still cover the replacement allow. This pass re-ran `v2-flow.test.ts` with `profile-edit-page.test.ts`: 2 files, 33 tests passed. `pendingProfilePhoto` is false for a live photo plus a pending replacement, and true only when `photo` is pending.
+- `v2-responsive.test.ts`: 2 tests passed, including `13b-profile-replacement` at 360, 390, 768, 1024, 1280, and 1440. The `En revue` row stays inside the viewport and does not show the not-public copy. `profile-edit-page.test.ts` is included in the 33 above.
 - `tsc -p apps/api/tsconfig.json --noEmit` and `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
 - `operator-config.migrate.test.ts`: 8 tests passed on Postgres 17. The new case rejects a second live insert with `23505`, and the `0013` update marks the older live row `replaced` before the unique index is created. Applied migration count is 14 (journal entries `0000` through `0013`).
-- I did not click a signed-in browser session. Screen 12 staying open for `pending_photo` is covered by `pendingProfilePhoto` and by `reviewScript` reading `body.pending_photo`. Width proof is the existing responsive run. Layout was not redesigned, so I did not take new screenshots.
+- I did not click a signed-in browser session. The upload stay-on-screen-11 path is the `profile-edit-page.test.ts` case `stays on screen 11 when a live photo has a pending replacement`. Width proof for that row is `13b-profile-replacement` in `v2-responsive.test.ts`. Screenshots: `code/docs/qa-handoffs/ank-83-widths/13b-profile-replacement-360.png` and `code/docs/qa-handoffs/ank-83-widths/13b-profile-replacement-1440.png`.
 
 ## Three validation passes
 
 1. Behavior: a new upload stays pending beside the live photo; an allow leaves exactly one live row and marks the previous one replaced; the old signed URL stops; a second live row is rejected; a block leaves the live photo; a blocked bio leaves `bio_live`; `review_passed_at` stays; no strike is written.
-2. Screen: screen 11 and screen 12 still match the AnKanu v2 HTML and PNG. `/profile-review` renders only while a real pending photo exists (`photo` or `pending_photo`). A replaced photo is not a screen. No state tabs, demo toggles, or galleries. Sample Stitch names are not live data. The Stitch HTML files are unchanged.
-3. Widths: the existing Chrome checks for screens 11 and 12 at 360, 390, 768, 1024, 1280, and 1440 still pass. `document.documentElement.scrollWidth <= window.innerWidth`. No new layout.
+2. Screen: screen 11 keeps the Stitch photo card. The `En revue` row is screen 12 Element 1 and appears only when `photo` is live and `pending_photo` is pending. Screen 12 renders only when `photo` itself is pending. A replaced photo is not a screen. No state tabs, demo toggles, or galleries. The Stitch HTML files are unchanged.
+3. Widths: Chrome checks for the screens, including the replacement row on screen 11, at 360, 390, 768, 1024, 1280, and 1440. `document.documentElement.scrollWidth <= window.innerWidth`. The chip stays inside the viewport.
 
 ## Solution-design sections
 
@@ -107,7 +112,7 @@ The board comment on ANK-107 is the catalog change. `photo_asset.moderation_stat
 - `code/design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html`
 - `code/design-stitch/ankanu-v2/12-profile-not-yet-public/screen.png`
 
-Screen 11 still shows the live photo. The pending note is not applied to a live photo. Screen 12 is still the pending review only. The served SLA sentence stays `Délai habituel de modération : {n} heures.`
+Screen 11 still shows the Stitch photo card. While a replacement is pending, Element 1 from screen 12 sits between the note and the buttons, with the served SLA sentence `Délai habituel de modération : {n} heures.` Screen 12 is only the case where `photo` itself is pending.
 
 ## Known gaps
 

@@ -343,6 +343,10 @@ export function profileHtml(stitch: string): string {
       '<p id="profile-photo-note" class="text-xs text-deep-navy/80 leading-normal">',
     )
     .replace(
+      '<div class="flex flex-wrap gap-2 justify-center sm:justify-start pt-1">',
+      '<div id="profile-photo-review" class="hidden space-y-2"></div><div class="flex flex-wrap gap-2 justify-center sm:justify-start pt-1">',
+    )
+    .replace(
       '</button>\n<button class="px-3 py-1.5 rounded-md border border-hairline text-deep-navy/70 text-xs font-medium hover:border-deep-navy/40 transition-colors" type="button">',
       '</button>\n<input id="profile-photo-file" hidden accept="image/jpeg,image/png" type="file">\n<button class="px-3 py-1.5 rounded-md border border-hairline text-deep-navy/70 text-xs font-medium hover:border-deep-navy/40 transition-colors" type="button">',
     )
@@ -374,8 +378,7 @@ export function pendingProfilePhoto(body: unknown): boolean {
   if (typeof body !== 'object' || body === null) {
     return false
   }
-  const record = body as { photo?: unknown; pending_photo?: unknown }
-  return photoIsPending(record.photo) || photoIsPending(record.pending_photo)
+  return photoIsPending((body as { photo?: unknown }).photo)
 }
 
 const REVIEW_SLA_SENTENCE = 'Délai habituel de modération : 12 à 24 heures ouvrées.'

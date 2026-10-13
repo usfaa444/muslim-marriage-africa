@@ -5,6 +5,7 @@ import { homedir, tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
+import { replacementReviewMarkup } from './v2-client.js'
 import {
   authHtml,
   emailHtml,
@@ -118,6 +119,13 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '11-onboarding', html: onboardingHtml(stitch('08-onboarding')) },
     { name: '12-photo', html: photoHtml(stitch('09-photo-rules')) },
     { name: '13-profile', html: profileHtml(stitch('11-profile-edit')) },
+    {
+      name: '13b-profile-replacement',
+      html: profileHtml(stitch('11-profile-edit')).replace(
+        '<div id="profile-photo-review" class="hidden space-y-2"></div>',
+        `<div id="profile-photo-review" class="space-y-2">${replacementReviewMarkup(24)}</div>`,
+      ),
+    },
     { name: '13b-profile-review', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }) },
     { name: '13c-profile-review-no-bio', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 48, bioPending: false }) },
     { name: '14-settings', html: settingsHtml(stitch('27-settings')) },
@@ -488,6 +496,35 @@ describe('v2 screens fit the required widths', () => {
             ) {
               failures.push(
                 `00-splash@${width} buttons ${JSON.stringify(links ?? [])}`,
+              )
+            }
+          }
+          if (page.name === '13b-profile-replacement') {
+            const row = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `(() => {
+                  const slot = document.getElementById('profile-photo-review')
+                  if (!slot) return { ok: false, reason: 'missing' }
+                  const style = getComputedStyle(slot)
+                  const rect = slot.getBoundingClientRect()
+                  const text = slot.textContent || ''
+                  const chip = slot.querySelector('span.inline-flex')
+                  const chipRect = chip ? chip.getBoundingClientRect() : null
+                  return {
+                    ok: style.display !== 'none' && rect.height > 1 && rect.right <= ${width} + 1 && rect.left >= -1 && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Délai habituel de modération : 24 heures.') && !text.includes('pas encore publique') && !text.includes('en cours de revue') && chipRect && chipRect.right <= ${width} + 1 && chipRect.left >= -1,
+                    right: Math.round(rect.right),
+                    chipRight: chipRect ? Math.round(chipRect.right) : -1,
+                  }
+                })()`,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const shown = (row.result as { value?: { ok?: boolean; right?: number; chipRight?: number; reason?: string } } | undefined)?.value
+            if (!shown?.ok) {
+              failures.push(
+                `${page.name}@${width} review row not inside the viewport right=${shown?.right ?? '?'} chip=${shown?.chipRight ?? '?'} ${shown?.reason ?? ''}`,
               )
             }
           }

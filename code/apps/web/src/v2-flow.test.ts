@@ -656,8 +656,10 @@ describe('screen 12 review timing', () => {
     expect(shown).not.toContain('12 à')
     expect(shown).not.toContain('ouvrées')
     expect(pendingProfilePhoto({ photo: { moderation_state: 'pending' } })).toBe(true)
-    expect(pendingProfilePhoto({ photo: { moderation_state: 'live' }, pending_photo: { moderation_state: 'pending' } })).toBe(true)
+    expect(pendingProfilePhoto({ photo: { moderation_state: 'live' }, pending_photo: { moderation_state: 'pending' } })).toBe(false)
     expect(pendingProfilePhoto({ photo: { moderation_state: 'live' } })).toBe(false)
+    expect(hidden).toContain("window.location.replace('/profile-edit')")
+    expect(hidden).not.toContain('pending_photo')
   })
 })
 

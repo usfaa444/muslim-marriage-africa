@@ -117,6 +117,8 @@ function mount() {
   const banner = control('profile-meter-banner', { className: 'hidden flex items-start gap-3 pt-2' })
   const note = control('profile-meter-note', { className: 'hidden text-xs' })
   const photoNote = control('profile-photo-note', { textContent: 'Aucun affichage public.' })
+  const photoReview = control('profile-photo-review', { className: 'hidden space-y-2' }) as Control & { innerHTML: string }
+  photoReview.innerHTML = ''
   const photoFile = control('profile-photo-file') as Control & { files: Array<{ name: string }>; click: () => void }
   photoFile.files = []
   photoFile.click = () => {
@@ -125,6 +127,7 @@ function mount() {
   byId.set(banner.id, banner)
   byId.set(note.id, note)
   byId.set(photoNote.id, photoNote)
+  byId.set(photoReview.id, photoReview)
   byId.set(photoFile.id, photoFile)
   const inputs = [
     control('', { name: 'madhhab', value: 'maliki', type: 'radio' }),
@@ -200,6 +203,7 @@ function mount() {
     banner,
     note,
     photoNote,
+    photoReview,
     photoFile,
     inputs,
     save,
@@ -360,6 +364,50 @@ describe('profile edit load and meter', () => {
     expect(JSON.parse(post?.body ?? '{}')).toEqual({ kind: 'profile_photo', image: 'QUJD' })
     expect(page.location.href).toBe('/profile-review')
     expect(page.photoFile.value).toBe('')
+    expect(page.photoReview.classList.contains('hidden')).toBe(true)
+  })
+
+  it('stays on screen 11 when a live photo has a pending replacement', async () => {
+    const html = profileHtml(stitch())
+    expect(html).toContain('id="profile-photo-review" class="hidden space-y-2"></div>')
+    const page = mount()
+    page.release({
+      ...stored,
+      review_sla_hours: 24,
+      photo: { moderation_state: 'live' },
+      pending_photo: { moderation_state: 'pending' },
+    })
+    await flush()
+    expect(page.photoNote.textContent).toBe('Aucun affichage public.')
+    expect(page.photoReview.classList.contains('hidden')).toBe(false)
+    expect(page.photoReview.innerHTML).toContain('Photographie de profil')
+    expect(page.photoReview.innerHTML).toContain('En revue')
+    expect(page.photoReview.innerHTML).toContain('photo_camera')
+    expect(page.photoReview.innerHTML).toContain('Délai habituel de modération : 24 heures.')
+    expect(page.photoReview.innerHTML).not.toContain('pas encore publique')
+    expect(page.photoReview.innerHTML).not.toContain('en cours de revue')
+    expect(page.location.href).toBe('')
+
+    await page.upload.listeners.click?.[0]?.()
+    page.photoFile.value = 'C:\\fakepath\\face.png'
+    const previousReader = globalThis.FileReader
+    class FakeReader {
+      result = 'data:image/png;base64,QUJD'
+      onload: (() => void) | null = null
+      readAsDataURL(): void {
+        this.onload?.()
+      }
+    }
+    globalThis.FileReader = FakeReader as unknown as typeof FileReader
+    try {
+      await page.photoFile.listeners.change?.[0]?.()
+      await flush()
+    } finally {
+      globalThis.FileReader = previousReader
+    }
+    expect(page.location.href).toBe('')
+    expect(page.photoReview.classList.contains('hidden')).toBe(false)
+    expect(page.photoNote.textContent).toBe('Aucun affichage public.')
   })
 
   it('clears the file input when the upload is rejected or the reader fails', async () => {

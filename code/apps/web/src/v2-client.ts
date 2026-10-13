@@ -1,5 +1,13 @@
 /** Browser behavior for the v2 signup and sign-in screens. No password is stored. */
 
+/** Screen 12 Element 1. Narrow widths stack the chip under the label so it stays in the card. */
+export const REPLACEMENT_REVIEW_ROW =
+  '<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm py-1"><div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-deep-navy/50 text-lg" data-icon="photo_camera">photo_camera</span><span class="font-body text-deep-navy/90 font-medium">Photographie de profil</span></div><span class="inline-flex items-center text-xs font-medium text-soft-gold bg-cream px-2.5 py-0.5 rounded border border-hairline/60">En revue</span></div>'
+
+export function replacementReviewMarkup(hours: number): string {
+  return `${REPLACEMENT_REVIEW_ROW}<p class="text-xs text-deep-navy/50">Délai habituel de modération : ${hours} heures.</p>`
+}
+
 export const COC_VERSION_ON_SCREEN = 'FR-089'
 export const SIGNUP_DRAFT_KEY = 'ankanu.signup.v2'
 export const SIGNUP_EMAIL_KEY = 'ankanu.signup.email'
@@ -1112,8 +1120,7 @@ export function reviewScript(): string {
     fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
       return response.json().then(function (body) {
         var photo = body && body.photo
-        var pendingPhoto = body && body.pending_photo
-        var pending = (photo && photo.moderation_state === 'pending') || (pendingPhoto && pendingPhoto.moderation_state === 'pending')
+        var pending = photo && photo.moderation_state === 'pending'
         if (!response.ok || !pending) {
           window.location.replace('/profile-edit')
         }
@@ -1281,8 +1288,25 @@ export function profileScript(): string {
 
     function paintPhoto(body) {
       var note = document.getElementById('profile-photo-note')
-      if (!note || !body || !body.photo || body.photo.moderation_state !== 'pending') return
-      if (body.photo.caption) note.textContent = body.photo.caption
+      var slot = document.getElementById('profile-photo-review')
+      if (note && body && body.photo && body.photo.moderation_state === 'pending' && body.photo.caption) {
+        note.textContent = body.photo.caption
+      }
+      if (!slot) return
+      var live = body && body.photo && body.photo.moderation_state === 'live'
+      var waiting = body && body.pending_photo && body.pending_photo.moderation_state === 'pending'
+      if (!live || !waiting) {
+        slot.innerHTML = ''
+        slot.classList.add('hidden')
+        return
+      }
+      var hours = body.review_sla_hours
+      var line = ''
+      if (typeof hours === 'number' && hours >= 1 && Math.floor(hours) === hours) {
+        line = '<p class="text-xs text-deep-navy/50">Délai habituel de modération : ' + hours + ' heures.</p>'
+      }
+      slot.innerHTML = ${JSON.stringify(REPLACEMENT_REVIEW_ROW)} + line
+      slot.classList.remove('hidden')
     }
 
     function payload() {
@@ -1361,7 +1385,22 @@ export function profileScript(): string {
               showStatus(message || 'Envoi de la photo impossible.')
               return
             }
-            window.location.href = '/profile-review'
+            return fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (profileResponse) {
+              return profileResponse.json().then(function (profile) {
+                return { ok: profileResponse.ok, body: profile }
+              }, function () {
+                return { ok: false, body: null }
+              })
+            }).then(function (read) {
+              var photo = read.ok && read.body && read.body.photo
+              if (photo && photo.moderation_state === 'pending') {
+                window.location.href = '/profile-review'
+                return
+              }
+              if (photo && photo.moderation_state === 'live') {
+                applyProfile(read.body, true)
+              }
+            })
           }).catch(function () {
             photoFile.value = ''
             showStatus('Envoi de la photo impossible.')
