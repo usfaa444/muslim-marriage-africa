@@ -339,11 +339,14 @@ A Profile Photo is required to send an Invite. Sisters may remain Blurred until 
 
 #### FR-017: Edit Profile; Photo changes re-moderated
 
-A Member may edit the Profile any time. Changed Photos are re-moderated before they replace the live Photo.
+A Member may edit the Profile any time. A Member may keep up to 6 Profile Photos, counting live and pending together. One live Photo is MAIN and is the Photo on the discovery card. The other live Photos show on the profile details. Adding a Photo does not take the other live Photos down; the new Photo stays unpublished until review. Switching MAIN among already-approved Photos needs no re-review. One blur setting applies to every Photo. A blocked Photo still counts toward the Photo Strike floor.
 
 **Acceptance criteria:**
-- Given an approved Profile, When the Member uploads a new Photo, Then the old Photo remains live until the new one is approved or rejected.
-- Given rejection of the new Photo, When the Member views the Profile, Then the previous approved Photo remains (subject to Strike rules).
+- Given fewer than 6 Photos (live and pending), When the Member adds a Photo, Then that Photo is unpublished until review and the other live Photos stay live.
+- Given 6 Photos (live and pending), When the Member uploads another, Then the upload is refused.
+- Given more than one live Photo, When the Member selects MAIN among already-approved Photos, Then that Photo is the discovery-card Photo and it is not sent back through review.
+- Given the Member chose blur, When anyone views the card or the details, Then every Photo is blurred. There is not a second per-photo blur switch.
+- Given staff review, When they decide, Then each Photo is allowed or blocked on its own, and a block counts for the Photo Strike floor.
 
 #### FR-018: Deactivate and reactivate with named life-pauses
 

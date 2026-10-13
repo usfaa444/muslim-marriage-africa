@@ -603,7 +603,7 @@ describe('human review before anyone else sees a profile', () => {
     expect(memory.profiles.find((row) => row.account_id === waiting.id)?.visibility).toBe('public')
   })
 
-  it('keeps the previous live photo until a replacement is allowed, then marks that photo replaced', async () => {
+  it('keeps every live photo when a later photo is allowed and leaves the first one main', async () => {
     now = new Date('2026-10-19T00:00:00.000Z')
     const member = await createAccount()
     const cookie = await signIn(member.email)
@@ -675,16 +675,18 @@ describe('human review before anyone else sees a profile', () => {
       visibility: string | null
     }
     expect(replacedBody.photos).toEqual([{ asset_id: second.id, moderation_state: 'live' }])
-    expect(media.assets.find((row) => row.id === first.id)?.moderation_state).toBe('replaced')
+    expect(media.assets.find((row) => row.id === first.id)?.moderation_state).toBe('live')
+    expect(media.assets.find((row) => row.id === first.id)?.is_main).toBe(true)
     expect(media.assets.find((row) => row.id === second.id)?.moderation_state).toBe('live')
-    expect(media.assets.filter((row) => row.owner_id === member.id && row.moderation_state === 'live')).toHaveLength(1)
+    expect(media.assets.find((row) => row.id === second.id)?.is_main).toBe(false)
+    expect(media.assets.filter((row) => row.owner_id === member.id && row.moderation_state === 'live')).toHaveLength(2)
     expect(replacedBody.review_passed_at).toBe(passedAt)
     expect(replacedBody.visibility).toBe('public')
-    expect(media.grants.filter((row) => row.photo_asset_id === first.id).every((row) => row.revoked_at !== null)).toBe(true)
+    expect(media.grants.filter((row) => row.photo_asset_id === first.id).every((row) => row.revoked_at !== null)).toBe(false)
     const oldBytes = await fetch(`${base}/v1/media/get?token=${firstToken}`, { headers: { cookie } })
-    expect(oldBytes.status).toBe(403)
-    const refused = await signMedia(media, first.id, 'blur', member.id)
-    expect(refused.ok).toBe(false)
+    expect(oldBytes.status).toBe(200)
+    const kept = await signMedia(media, first.id, 'blur', member.id)
+    expect(kept.ok).toBe(true)
     const liveSigned = await signMedia(media, second.id, 'blur', member.id)
     expect(liveSigned.ok).toBe(true)
 
@@ -708,12 +710,13 @@ describe('human review before anyone else sees a profile', () => {
     expect(blocked.status).toBe(200)
     expect(media.assets.find((row) => row.id === second.id)?.moderation_state).toBe('live')
     expect(media.assets.find((row) => row.id === third.id)?.moderation_state).toBe('blocked')
-    expect(media.assets.find((row) => row.id === first.id)?.moderation_state).toBe('replaced')
+    expect(media.assets.find((row) => row.id === first.id)?.moderation_state).toBe('live')
+    expect(media.assets.find((row) => row.id === first.id)?.is_main).toBe(true)
     const afterBlock = (await (await fetch(`${base}/v1/me/profile`, { headers: { cookie } })).json()) as {
       photo: { id: string }
       pending_photo?: { id: string }
     }
-    expect(afterBlock.photo.id).toBe(second.id)
+    expect(afterBlock.photo.id).toBe(first.id)
     expect(afterBlock.pending_photo).toBeUndefined()
 
     now = new Date('2026-10-19T00:00:06.000Z')

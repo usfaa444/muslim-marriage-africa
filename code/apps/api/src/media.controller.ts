@@ -1,10 +1,14 @@
-import { Body, Controller, Get, HttpException, Post, Query, Req, StreamableFile } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpException, Param, Post, Put, Query, Req, StreamableFile } from '@nestjs/common'
 import { NON_MEMBER_PAUSE_MESSAGE } from './life-pause.js'
 import {
+  chooseMainPhoto,
+  ownerGallery,
   ownerPendingPhotoCard,
   ownerPhotoCard,
   readGrantedMedia,
+  removeGalleryPhoto,
   uploadProfilePhoto,
+  type GalleryPhoto,
   type MediaFailure,
   type OwnerPhotoCard,
 } from './media.js'
@@ -92,6 +96,26 @@ export class MediaController {
     }
     return new StreamableFile(Buffer.from(read.bytes), { type: 'image/jpeg' })
   }
+
+  @Put(':id/main')
+  async main(@Req() request: CookieRequest, @Param('id') id: string) {
+    const member = await memberAccount(request)
+    const saved = await chooseMainPhoto(getMediaStore(), member.accountId, id)
+    if (!saved.ok) {
+      fail(saved)
+    }
+    return { photos: saved.photos }
+  }
+
+  @Delete(':id')
+  async remove(@Req() request: CookieRequest, @Param('id') id: string) {
+    const member = await memberAccount(request)
+    const saved = await removeGalleryPhoto(getMediaStore(), member.accountId, id)
+    if (!saved.ok) {
+      fail(saved)
+    }
+    return { photos: saved.photos }
+  }
 }
 
 export async function photoForMember(accountId: string): Promise<OwnerPhotoCard | null> {
@@ -100,6 +124,14 @@ export async function photoForMember(accountId: string): Promise<OwnerPhotoCard 
     fail(read)
   }
   return read.photo
+}
+
+export async function galleryForMember(accountId: string): Promise<GalleryPhoto[]> {
+  const read = await ownerGallery(getMediaStore(), accountId)
+  if (!read.ok) {
+    fail(read)
+  }
+  return read.photos
 }
 
 export async function pendingPhotoForMember(accountId: string): Promise<OwnerPhotoCard | null> {

@@ -285,6 +285,7 @@ describe('profile photo upload stays unpublished and blurred', () => {
 
     if (asset) {
       asset.moderation_state = 'live'
+      asset.is_main = true
     }
     expect(discoveryPhoto(asset ?? null)).toEqual({
       id: saved.json.id,

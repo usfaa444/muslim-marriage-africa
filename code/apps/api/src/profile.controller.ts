@@ -1,11 +1,11 @@
-import { Body, Controller, Get, HttpException, Put, Req } from '@nestjs/common'
+import { Body, Controller, Get, HttpException, Patch, Put, Req } from '@nestjs/common'
 import { ageOn } from './create-account.js'
 import { authNow } from './auth-clock.js'
 import { getAccountStore } from './account-store.js'
 import { NON_MEMBER_PAUSE_MESSAGE } from './life-pause.js'
 import { requireLiveSession, unauthenticated } from './pin-session.js'
-import { acceptProfileWrite, completenessFor, isProfileFieldError } from './profile-fields.js'
-import { pendingPhotoForMember, photoForMember } from './media.controller.js'
+import { acceptPhotoBlur, acceptProfileWrite, completenessFor, isProfileFieldError } from './profile-fields.js'
+import { galleryForMember, pendingPhotoForMember, photoForMember } from './media.controller.js'
 import { queueAfterProfileSave, readFreeReviewSlaHours } from './profile-review.js'
 import { getProfileStore, type StoredProfile } from './profile-store.js'
 
@@ -60,17 +60,23 @@ function present(row: StoredProfile) {
     life_plans: row.life_plans,
     bio_pending: row.bio_pending,
     bio_live: row.bio_live,
+    photo_blur: row.photo_blur,
     completeness: completenessFor(row, row.gender),
   }
 }
 
-async function memberPhotos(accountId: string): Promise<{ photo: Awaited<ReturnType<typeof photoForMember>>; pending_photo?: NonNullable<Awaited<ReturnType<typeof pendingPhotoForMember>>> }> {
+async function memberPhotos(accountId: string): Promise<{
+  photo: Awaited<ReturnType<typeof photoForMember>>
+  photos: Awaited<ReturnType<typeof galleryForMember>>
+  pending_photo?: NonNullable<Awaited<ReturnType<typeof pendingPhotoForMember>>>
+}> {
   const photo = await photoForMember(accountId)
   const pending = await pendingPhotoForMember(accountId)
+  const photos = await galleryForMember(accountId)
   if (!pending) {
-    return { photo }
+    return { photo, photos }
   }
-  return { photo, pending_photo: pending }
+  return { photo, photos, pending_photo: pending }
 }
 
 async function memberAccount(request: CookieRequest): Promise<{ accountId: string; gender: StoredProfile['gender'] }> {
@@ -121,5 +127,19 @@ export class ProfileController {
     }
     const queued = await queueAfterProfileSave(saved, authNow().toISOString())
     return { ...(await withSla(queued ?? saved)), ...(await memberPhotos(member.accountId)) }
+  }
+
+  @Patch('profile')
+  async blur(@Req() request: CookieRequest, @Body() body: unknown) {
+    const member = await memberAccount(request)
+    const accepted = acceptPhotoBlur(body)
+    if ('field' in accepted) {
+      reject(400, accepted)
+    }
+    const saved = await getProfileStore().setPhotoBlur(member.accountId, accepted.photo_blur)
+    if (!saved) {
+      unauthenticated()
+    }
+    return { ...(await withSla(saved)), ...(await memberPhotos(member.accountId)) }
   }
 }

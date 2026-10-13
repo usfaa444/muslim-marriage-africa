@@ -94,6 +94,7 @@ export const profile = pgTable(
     visibility: text('visibility'),
     review_queued_at: timestamp('review_queued_at', { withTimezone: true, mode: 'string' }),
     review_passed_at: timestamp('review_passed_at', { withTimezone: true, mode: 'string' }),
+    photo_blur: boolean('photo_blur').notNull().default(true),
   },
   (table) => [
     check(
@@ -204,6 +205,7 @@ export const photoAsset = pgTable(
     original_key: text('original_key').notNull(),
     blur_key: text('blur_key'),
     moderation_state: text('moderation_state'),
+    is_main: boolean('is_main').notNull().default(false),
   },
   (table) => [
     check(
@@ -214,9 +216,13 @@ export const photoAsset = pgTable(
       'photo_asset_moderation_state_check',
       sql`${table.moderation_state} is null or ${table.moderation_state} in ('pending', 'live', 'blocked', 'replaced')`,
     ),
-    uniqueIndex('photo_asset_one_live_profile_photo')
+    check(
+      'photo_asset_is_main_check',
+      sql`not ${table.is_main} or (${table.kind} = 'profile_photo' and ${table.moderation_state} = 'live')`,
+    ),
+    uniqueIndex('photo_asset_one_main_profile_photo')
       .on(table.owner_id)
-      .where(sql`${table.kind} = 'profile_photo' and ${table.moderation_state} = 'live'`),
+      .where(sql`${table.kind} = 'profile_photo' and ${table.moderation_state} = 'live' and ${table.is_main}`),
   ],
 )
 

@@ -34,7 +34,7 @@ export type Completeness = {
 }
 
 export type ProfileFieldError = {
-  field: keyof ProfileWrite | 'min_age'
+  field: keyof ProfileWrite | 'min_age' | 'photo_blur'
   message: string
 }
 
@@ -120,6 +120,16 @@ export function lifePlansAreValid(value: string): boolean {
   const lineEnd = value.indexOf('\n')
   const head = lineEnd === -1 ? value : value.slice(0, lineEnd)
   return oneOf(head.slice(3), LIFE_PLAN_TIMEFRAME)
+}
+
+export function acceptPhotoBlur(body: unknown): { photo_blur: boolean } | ProfileFieldError {
+  if (typeof body !== 'object' || body === null || Array.isArray(body) || !('photo_blur' in body)) {
+    return { field: 'photo_blur', message: 'photo_blur : une valeur booléenne est requise.' }
+  }
+  if (typeof body.photo_blur !== 'boolean') {
+    return { field: 'photo_blur', message: 'photo_blur : une valeur booléenne est requise.' }
+  }
+  return { photo_blur: body.photo_blur }
 }
 
 export function acceptProfileWrite(

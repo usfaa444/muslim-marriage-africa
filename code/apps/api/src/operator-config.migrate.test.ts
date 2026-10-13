@@ -167,6 +167,7 @@ function migrationSql(): string {
     '0012_profile_review.sql',
     '0013_photo_replaced.sql',
     '0014_strike.sql',
+    '0015_profile_photo_gallery.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -300,7 +301,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('15')
+    expect(applied.rows[0]?.count).toBe('16')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -906,18 +907,14 @@ describe('operator_config migration', () => {
     ])
   })
 
-  it('rejects a second live profile photo and the migration marks every older live row replaced', async () => {
+  it('keeps 0013 as history and allows many live photos with one main', async () => {
     expect(migrated).toBe(true)
-    const sql = readFileSync(join(apiRoot, 'drizzle/0013_photo_replaced.sql'), 'utf8')
-    const statements = sql
-      .split('--> statement-breakpoint')
-      .map((statement) => statement.trim())
-      .filter((statement) => statement.length > 0)
-    const update = statements.find((statement) => statement.startsWith('UPDATE'))
-    const createIndex = statements.find((statement) => statement.startsWith('CREATE UNIQUE INDEX'))
-    expect(update).toBeTruthy()
-    expect(createIndex).toBeTruthy()
-    expect(sql.indexOf('CREATE UNIQUE INDEX')).toBeGreaterThan(sql.indexOf("SET \"moderation_state\" = 'replaced'"))
+    const historical = readFileSync(join(apiRoot, 'drizzle/0013_photo_replaced.sql'), 'utf8')
+    expect(historical.indexOf('CREATE UNIQUE INDEX')).toBeGreaterThan(historical.indexOf("SET \"moderation_state\" = 'replaced'"))
+    const gallery = readFileSync(join(apiRoot, 'drizzle/0015_profile_photo_gallery.sql'), 'utf8')
+    expect(gallery).toContain('DROP INDEX "photo_asset_one_live_profile_photo"')
+    expect(gallery).toContain('photo_asset_one_main_profile_photo')
+    expect(gallery).toContain('"photo_blur" boolean DEFAULT true NOT NULL')
 
     const owner = '018f3a40-7c2a-7000-8000-0000000000a1'
     const older = '018f3a40-7c2a-7000-8000-0000000000a2'
@@ -928,48 +925,58 @@ describe('operator_config migration', () => {
       [owner],
     )
     await db().query(
-      `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'older', 'live')`,
+      `insert into "profile" ("account_id", "dob") values ($1, '1990-01-15')`,
+      [owner],
+    )
+    const blur = await db().query<{ photo_blur: boolean }>(
+      `select "photo_blur" from "profile" where "account_id" = $1`,
+      [owner],
+    )
+    expect(blur.rows).toEqual([{ photo_blur: true }])
+    await db().query(
+      `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state", "is_main") values ($1, $2, 'profile_photo', 'older', 'live', true)`,
       [older, owner],
     )
-    let duplicate = false
-    try {
-      await db().query(
-        `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'newer', 'live')`,
-        [newer, owner],
-      )
-    } catch (error) {
-      duplicate = true
-      expect(postgresCode(error)).toBe('23505')
-    }
-    expect(duplicate).toBe(true)
-
-    await db().query('drop index "photo_asset_one_live_profile_photo"')
     await db().query(
       `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'newer', 'live')`,
       [newer, owner],
     )
-    await db().query(update ?? '')
-    const rows = await db().query<{ id: string; moderation_state: string }>(
-      `select "id", "moderation_state" from "photo_asset" where "owner_id" = $1 order by "id"`,
+    const rows = await db().query<{ id: string; moderation_state: string; is_main: boolean }>(
+      `select "id", "moderation_state", "is_main" from "photo_asset" where "owner_id" = $1 order by "id"`,
       [owner],
     )
     expect(rows.rows).toEqual([
-      { id: older, moderation_state: 'replaced' },
-      { id: newer, moderation_state: 'live' },
+      { id: older, moderation_state: 'live', is_main: true },
+      { id: newer, moderation_state: 'live', is_main: false },
     ])
-    await db().query(createIndex ?? '')
-    let again = false
+    let secondMain = false
+    try {
+      await db().query(`update "photo_asset" set "is_main" = true where "id" = $1`, [newer])
+    } catch (error) {
+      secondMain = true
+      expect(postgresCode(error)).toBe('23505')
+    }
+    expect(secondMain).toBe(true)
+    let pendingMain = false
     try {
       await db().query(
-        `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state") values ($1, $2, 'profile_photo', 'third', 'live')`,
+        `insert into "photo_asset" ("id", "owner_id", "kind", "original_key", "moderation_state", "is_main") values ($1, $2, 'profile_photo', 'pending', 'pending', true)`,
         ['018f3a40-7c2a-7000-8000-0000000000a4', owner],
       )
     } catch (error) {
-      again = true
-      expect(postgresCode(error)).toBe('23505')
+      pendingMain = true
+      expect(postgresCode(error)).toBe('23514')
     }
-    expect(again).toBe(true)
+    expect(pendingMain).toBe(true)
+    await db().query('begin')
+    const locked = await db().query<{ locked: string }>(
+      `select pg_advisory_xact_lock(('x' || substr(md5($1), 1, 16))::bit(64)::bigint) as locked`,
+      [owner],
+    )
+    expect(locked.rows).toHaveLength(1)
+    await db().query('commit')
     await db().query(`delete from "photo_asset" where "owner_id" = $1`, [owner])
+    await db().query(`delete from "profile" where "account_id" = $1`, [owner])
     await db().query(`delete from "account" where "id" = $1`, [owner])
   })
 

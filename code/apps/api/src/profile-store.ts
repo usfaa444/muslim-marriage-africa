@@ -13,6 +13,7 @@ export type StoredProfile = ProfileWrite & {
   gender: Gender
   review_queued_at: string | null
   review_passed_at: string | null
+  photo_blur: boolean
 }
 
 export type QueuedProfile = StoredProfile & {
@@ -36,6 +37,7 @@ export type ReviewWriteScope = 'queued' | 'unpublished'
 export type ProfileStore = {
   read(accountId: string, db?: ProfileDb): Promise<StoredProfile | null>
   update(accountId: string, patch: ProfileWrite): Promise<StoredProfile | null>
+  setPhotoBlur(accountId: string, photoBlur: boolean): Promise<StoredProfile | null>
   noteQueued(accountId: string, at: string): Promise<StoredProfile | null>
   patchReview(accountId: string, patch: ReviewPatch, scope?: ReviewWriteScope, db?: ProfileDb): Promise<StoredProfile | null>
   queued(): Promise<QueuedProfile[]>
@@ -88,6 +90,7 @@ type ProfileSnap = {
   visibility: Array<{ account_id: string; visibility: string | null }>
   extra: Array<[string, ProfileWrite]>
   review: Array<[string, ReviewMemory]>
+  blur: Array<[string, boolean]>
 }
 
 export function memoryProfileStore(
@@ -96,22 +99,28 @@ export function memoryProfileStore(
 ): ProfileStore & { snapshot(): ProfileSnap; restore(snap: ProfileSnap): void } {
   const extra = new Map<string, ProfileWrite>()
   const review = new Map<string, ReviewMemory>()
+  const blur = new Map<string, boolean>()
   return {
     snapshot() {
       return structuredClone({
         visibility: profiles.map((row) => ({ account_id: row.account_id, visibility: row.visibility })),
         extra: [...extra.entries()],
         review: [...review.entries()],
+        blur: [...blur.entries()],
       })
     },
     restore(snap) {
       extra.clear()
       review.clear()
+      blur.clear()
       for (const [accountId, patch] of snap.extra) {
         extra.set(accountId, patch)
       }
       for (const [accountId, clock] of snap.review) {
         review.set(accountId, clock)
+      }
+      for (const [accountId, value] of snap.blur ?? []) {
+        blur.set(accountId, value)
       }
       for (const item of snap.visibility) {
         const row = profiles.find((entry) => entry.account_id === item.account_id)
@@ -121,7 +130,7 @@ export function memoryProfileStore(
       }
     },
     async read(accountId) {
-      return compose(accounts, profiles, extra, review, accountId)
+      return compose(accounts, profiles, extra, review, blur, accountId)
     },
     async update(accountId, patch) {
       const row = profiles.find((item) => item.account_id === accountId)
@@ -130,7 +139,15 @@ export function memoryProfileStore(
       }
       row.dob = patch.dob
       extra.set(accountId, patch)
-      return compose(accounts, profiles, extra, review, accountId)
+      return compose(accounts, profiles, extra, review, blur, accountId)
+    },
+    async setPhotoBlur(accountId, photoBlur) {
+      const row = profiles.find((item) => item.account_id === accountId)
+      if (!row) {
+        return null
+      }
+      blur.set(accountId, photoBlur)
+      return compose(accounts, profiles, extra, review, blur, accountId)
     },
     async noteQueued(accountId, at) {
       const row = profiles.find((item) => item.account_id === accountId)
@@ -139,7 +156,7 @@ export function memoryProfileStore(
       }
       const current = review.get(accountId) ?? { review_queued_at: null, review_passed_at: null, bio_live: null }
       if (current.review_queued_at !== null && row.visibility !== null) {
-        return compose(accounts, profiles, extra, review, accountId)
+        return compose(accounts, profiles, extra, review, blur, accountId)
       }
       if (current.review_queued_at === null) {
         current.review_queued_at = at
@@ -148,7 +165,7 @@ export function memoryProfileStore(
       if (row.visibility === null) {
         row.visibility = 'unpublished'
       }
-      return compose(accounts, profiles, extra, review, accountId)
+      return compose(accounts, profiles, extra, review, blur, accountId)
     },
     async patchReview(accountId, patch, scope) {
       const row = profiles.find((item) => item.account_id === accountId)
@@ -160,7 +177,7 @@ export function memoryProfileStore(
         return null
       }
       if (scope === 'unpublished' && row.visibility !== 'unpublished') {
-        return compose(accounts, profiles, extra, review, accountId)
+        return compose(accounts, profiles, extra, review, blur, accountId)
       }
       if ('review_queued_at' in patch) {
         current.review_queued_at = patch.review_queued_at ?? null
@@ -181,12 +198,12 @@ export function memoryProfileStore(
           saved.bio_pending = patch.bio_pending ?? null
         }
       }
-      return compose(accounts, profiles, extra, review, accountId)
+      return compose(accounts, profiles, extra, review, blur, accountId)
     },
     async queued() {
       const rows: QueuedProfile[] = []
       for (const item of profiles) {
-        const stored = compose(accounts, profiles, extra, review, item.account_id)
+        const stored = compose(accounts, profiles, extra, review, blur, item.account_id)
         const owner = accounts.find((entry) => entry.id === item.account_id)
         if (!stored?.review_queued_at || !owner) {
           continue
@@ -207,6 +224,7 @@ function compose(
   profiles: CreatedProfile[],
   extra: Map<string, ProfileWrite>,
   review: Map<string, ReviewMemory>,
+  blur: Map<string, boolean>,
   accountId: string,
 ): StoredProfile | null {
   const base = profiles.find((item) => item.account_id === accountId)
@@ -236,6 +254,7 @@ function compose(
     visibility: base.visibility,
     review_queued_at: clock?.review_queued_at ?? null,
     review_passed_at: clock?.review_passed_at ?? null,
+    photo_blur: blur.get(accountId) ?? true,
   }
 }
 
@@ -243,6 +262,7 @@ function postgresProfileStore(): ProfileStore {
   return {
     read: (accountId, db) => readProfile(accountId, db),
     update: updateProfile,
+    setPhotoBlur: setPhotoBlur,
     noteQueued: noteQueued,
     patchReview: (accountId, patch, scope, db) => patchReview(accountId, patch, scope, db),
     queued: queuedProfiles,
@@ -270,6 +290,7 @@ async function readProfile(accountId: string, db?: ProfileDb): Promise<StoredPro
       gender: account.gender,
       review_queued_at: profile.review_queued_at,
       review_passed_at: profile.review_passed_at,
+      photo_blur: profile.photo_blur,
     })
     .from(profile)
     .innerJoin(account, eq(account.id, profile.account_id))
@@ -302,6 +323,7 @@ async function readProfile(accountId: string, db?: ProfileDb): Promise<StoredPro
     visibility: row.visibility,
     review_queued_at: row.review_queued_at,
     review_passed_at: row.review_passed_at,
+    photo_blur: row.photo_blur,
   }
 }
 
@@ -399,6 +421,7 @@ async function queuedProfiles(): Promise<QueuedProfile[]> {
       gender: account.gender,
       review_queued_at: profile.review_queued_at,
       review_passed_at: profile.review_passed_at,
+      photo_blur: profile.photo_blur,
       pseudonym: account.pseudonym,
       account_status: account.status,
     })
@@ -430,11 +453,24 @@ async function queuedProfiles(): Promise<QueuedProfile[]> {
       visibility: row.visibility,
       review_queued_at: row.review_queued_at,
       review_passed_at: row.review_passed_at,
+      photo_blur: row.photo_blur,
       pseudonym: row.pseudonym,
       account_status: row.account_status,
     })
   }
   return queued
+}
+
+async function setPhotoBlur(accountId: string, photoBlur: boolean): Promise<StoredProfile | null> {
+  const updated = await getIdentityDatabase()
+    .update(profile)
+    .set({ photo_blur: photoBlur })
+    .where(eq(profile.account_id, accountId))
+    .returning({ account_id: profile.account_id })
+  if (updated.length === 0) {
+    return null
+  }
+  return readProfile(accountId)
 }
 
 /** `patch` is the merged row. A null column was cleared on purpose; an omitted key never reaches here. */
