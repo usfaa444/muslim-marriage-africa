@@ -9,6 +9,7 @@ import { setAuthLimitReader } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
 import { setBillingPort } from './billing-port.js'
 import { setBrowseLimitReader } from './browse-rate.js'
+import { citiesWithin } from './city-centroid.js'
 import { createApp } from './create-app.js'
 import { memoryCaptureStore, setCaptureStore } from './id-liveness-store.js'
 import { setMediaClock, setSignedTtlReader } from './media.js'
@@ -625,4 +626,195 @@ describe('browse grid', () => {
       setSignedTtlReader(async () => 60)
     }
   })
+
+  it('names the seven basic filters and ignores the query', async () => {
+    const sister = await createAccount('sister')
+    const brother = await createAccount('brother')
+    const sisterCookie = await signIn(sister.email)
+    const brotherCookie = await signIn(brother.email)
+    await publish(sister.id, sisterCookie)
+    const anon = await fetch(`${base}/v1/filters`)
+    expect(anon.status).toBe(401)
+    expect(anon.headers.get('cache-control')).toBe('no-store')
+    expect(await anon.json()).toMatchObject({ error: { code: 'UNAUTHENTICATED', retryable: false } })
+
+    const read = await fetch(`${base}/v1/filters?age=30&premium=1`, { headers: { cookie: sisterCookie } })
+    expect(read.status).toBe(200)
+    expect(read.headers.get('cache-control')).toBe('no-store')
+    const body = (await read.json()) as { filters: Array<{ key: string; options: Array<{ value: string | null; label: string }> }> }
+    expect(body.filters.map((filter) => filter.key)).toEqual([
+      'city',
+      'radius_km',
+      'marital_status',
+      'polygamy_intent',
+      'practice',
+      'madhhab',
+      'life_plans',
+    ])
+    expect(body.filters[0]?.options.map((option) => option.value)).toEqual(['ouagadougou', 'bobo', 'koudougou', 'autre'])
+    expect(body.filters[1]?.options).toEqual([
+      { value: '10', label: '10 km' },
+      { value: '25', label: '25 km' },
+      { value: '50', label: '50 km' },
+      { value: null, label: 'Toute la ville' },
+    ])
+    expect(body.filters[5]?.options.map((option) => option.value)).toEqual([
+      'maliki',
+      'hanafi',
+      'shafii',
+      'hanbali',
+      'apprentissage',
+    ])
+    const text = JSON.stringify(body)
+    expect(text).not.toContain('premium')
+    expect(text).not.toContain('online')
+    expect(text).not.toContain('language')
+    expect(text).not.toMatch(/profils/)
+    const blocked = await fetch(`${base}/v1/filters`, { headers: { cookie: brotherCookie } })
+    expect(blocked.status).toBe(403)
+    expect(await blocked.json()).toMatchObject({
+      error: { code: 'FORBIDDEN', details: { reason: 'viewer_not_listable' }, retryable: false },
+    })
+    await publish(brother.id, brotherCookie)
+    const again = await fetch(`${base}/v1/filters`, { headers: { cookie: brotherCookie } })
+    expect(again.status).toBe(200)
+    expect(await again.json()).toEqual(body)
+    const posted = await fetch(`${base}/v1/filters`, { method: 'POST', headers: { cookie: sisterCookie } })
+    expect(posted.status).toBe(404)
+    const me = await fetch(`${base}/v1/me/profile`, { headers: { cookie: sisterCookie } })
+    expect(await me.json()).toMatchObject({ account_id: sister.id, gender: 'sister' })
+    expect(billingCalls).toBe(0)
+    expect(citiesWithin('ouagadougou', 25)).toEqual(['ouagadougou'])
+    expect(citiesWithin('bobo', 100)).toContain('banfora')
+    expect(citiesWithin('ouagadougou', 50)).not.toContain('koudougou')
+    expect(citiesWithin('ouagadougou', 50)).not.toContain('autre')
+  })
+
+  it('rejects an unknown filter before a browse slot and keeps view=card at 404', async () => {
+    const sister = await createAccount('sister')
+    const sisterCookie = await signIn(sister.email)
+    await publish(sister.id, sisterCookie)
+    setBrowseLimitReader(async () => 1)
+    const unknown = await browse(sisterCookie, '?view=grid&age=1')
+    expect(unknown.status).toBe(400)
+    expect(await unknown.json()).toMatchObject({
+      error: { code: 'UNHANDLED', message: 'age : filtre non disponible.', details: { field: 'age' }, retryable: false },
+    })
+    const repeated = await browse(sisterCookie, '?view=grid&city=ouagadougou&city=bobo')
+    expect(repeated.status).toBe(400)
+    expect(await repeated.json()).toMatchObject({
+      error: { code: 'UNHANDLED', message: 'city : valeur non reconnue.', details: { field: 'city' }, retryable: false },
+    })
+    const bareRadius = await browse(sisterCookie, '?view=grid&radius_km=10')
+    expect(bareRadius.status).toBe(400)
+    expect(await bareRadius.json()).toMatchObject({
+      error: {
+        code: 'UNHANDLED',
+        message: 'radius_km : choisissez Ouagadougou, Bobo-Dioulasso ou Koudougou.',
+        details: { field: 'radius_km' },
+        retryable: false,
+      },
+    })
+    const diasporaRadius = await browse(sisterCookie, '?view=grid&city=autre&radius_km=25')
+    expect(diasporaRadius.status).toBe(400)
+    expect(await diasporaRadius.json()).toMatchObject({
+      error: { details: { field: 'radius_km' }, retryable: false },
+    })
+    const card = await browse(sisterCookie, '?view=card&age=1')
+    expect(card.status).toBe(404)
+    expect(await card.json()).toMatchObject({ error: { code: 'NOT_FOUND', retryable: false } })
+    const catalogue = await fetch(`${base}/v1/filters`, { headers: { cookie: sisterCookie } })
+    expect(catalogue.status).toBe(200)
+    const grid = await browse(sisterCookie, '?view=grid')
+    expect(grid.status).toBe(200)
+    expect(billingCalls).toBe(0)
+  })
+
+  it('keeps only rows that match every basic filter', async () => {
+    const sister = await createAccount('sister')
+    const brother = await createAccount('brother')
+    const sisterCookie = await signIn(sister.email)
+    const brotherCookie = await signIn(brother.email)
+    await publish(sister.id, sisterCookie, {
+      marital_status: null,
+      polygamy_intent: null,
+      life_plans: null,
+      city: 'ouagadougou',
+      country: 'BF',
+    })
+    const ouaga = await createAccount('brother')
+    const koudougou = await createAccount('brother')
+    const autre = await createAccount('brother')
+    const bobo = await createAccount('brother')
+    await publish(ouaga.id, await signIn(ouaga.email), {
+      city: 'ouagadougou',
+      country: 'BF',
+      marital_status: 'married',
+      polygamy_intent: 'yes',
+      practice: 'assidue',
+      madhhab: 'maliki',
+      life_plans: 'tf:immediate\nFoyer',
+    })
+    await publish(koudougou.id, await signIn(koudougou.email), {
+      city: 'koudougou',
+      country: 'BF',
+      marital_status: 'married',
+      polygamy_intent: 'yes',
+      practice: 'heure',
+      madhhab: 'hanafi',
+      life_plans: 'tf:6months\nPatience',
+    })
+    await publish(autre.id, await signIn(autre.email), {
+      city: 'autre',
+      country: 'FR',
+      marital_status: 'married',
+      polygamy_intent: 'yes',
+      practice: 'cheminement',
+      madhhab: 'shafii',
+      life_plans: 'Texte libre sans jeton',
+    })
+    await publish(bobo.id, await signIn(bobo.email), {
+      city: 'bobo',
+      country: 'FR',
+      marital_status: 'single',
+      polygamy_intent: 'no',
+      practice: 'heure',
+      madhhab: 'hanbali',
+      life_plans: 'tf:1year\nAnnée',
+    })
+
+    const married = await browse(sisterCookie, '?view=grid&marital_status=married&polygamy_intent=yes')
+    expect(married.status).toBe(200)
+    const marriedBody = (await married.json()) as GridBody
+    expect(marriedBody.items.map((item) => item.id).sort()).toEqual([ouaga.id, koudougou.id, autre.id].sort())
+    expect(JSON.stringify(marriedBody)).not.toContain('life_plans')
+    expect(Object.keys(marriedBody).sort()).toEqual(['items', 'next_cursor', 'view'])
+
+    const nearOuaga = await browse(sisterCookie, '?view=grid&city=ouagadougou&radius_km=50')
+    expect(((await nearOuaga.json()) as GridBody).items.map((item) => item.id)).toEqual([ouaga.id])
+    const exactOuaga = await browse(sisterCookie, '?view=grid&city=ouagadougou')
+    expect(((await exactOuaga.json()) as GridBody).items.map((item) => item.id)).toEqual([ouaga.id])
+    const nearBobo = await browse(sisterCookie, '?view=grid&city=bobo&radius_km=50')
+    expect(((await nearBobo.json()) as GridBody).items.map((item) => item.id)).toEqual([bobo.id])
+    const diaspora = await browse(sisterCookie, '?view=grid&city=autre')
+    expect(((await diaspora.json()) as GridBody).items.map((item) => item.id).sort()).toEqual([autre.id, bobo.id].sort())
+    const ready = await browse(sisterCookie, '?view=grid&life_plans=ready_now')
+    expect(((await ready.json()) as GridBody).items.map((item) => item.id)).toEqual([ouaga.id])
+    const within = await browse(sisterCookie, '?view=grid&life_plans=within_year')
+    expect(((await within.json()) as GridBody).items.map((item) => item.id).sort()).toEqual([koudougou.id, bobo.id].sort())
+    const exploring = await browse(sisterCookie, '?view=grid&life_plans=exploring')
+    expect(await exploring.json()).toEqual({ view: 'grid', items: [], next_cursor: null })
+    const practice = await browse(sisterCookie, '?view=grid&practice=assidue')
+    expect(((await practice.json()) as GridBody).items.map((item) => item.id)).toEqual([ouaga.id])
+    const none = await browse(sisterCookie, '?view=grid&city=koudougou&marital_status=single')
+    expect(await none.json()).toEqual({ view: 'grid', items: [], next_cursor: null })
+
+    const nulls = await browse(brotherCookie, '?view=grid&marital_status=married&polygamy_intent=yes')
+    expect(nulls.status).toBe(403)
+    await publish(brother.id, brotherCookie)
+    const sisterNulls = await browse(brotherCookie, '?view=grid&marital_status=married')
+    const nullBody = (await sisterNulls.json()) as GridBody
+    expect(nullBody.items.map((item) => item.id)).not.toContain(sister.id)
+    expect(billingCalls).toBe(0)
+  }, 120000)
 })

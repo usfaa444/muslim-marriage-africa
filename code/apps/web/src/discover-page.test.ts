@@ -19,6 +19,18 @@ const ACCOUNT = '01990000-0000-7000-8000-0000000000aa'
 const OTHER = '01990000-0000-7000-8000-0000000000bb'
 const html = discoverHtml(stitch('screen.html'), stitch('grid.html'), ACCOUNT)
 const otherHtml = discoverHtml(stitch('screen.html'), stitch('grid.html'), OTHER)
+const sisterFiltered = discoverHtml(
+  stitch('screen.html'),
+  stitch('grid.html'),
+  ACCOUNT,
+  'sister',
+  '?marital_status=married&polygamy_intent=yes',
+)
+
+function beforeModal(source: string): string {
+  const at = source.indexOf('id="filters-modal"')
+  return at < 0 ? source : source.slice(0, at)
+}
 
 describe('discover grid page', () => {
   it('opens on the card chrome and hides the grid', () => {
@@ -33,9 +45,9 @@ describe('discover grid page', () => {
     expect(html).not.toContain('Al-Hassan')
     expect(html).not.toContain('Ibrahim_S')
     expect(html).not.toContain('Abdoul_N')
-    expect(html).not.toContain('Ville : Ouagadougou')
-    expect(html).not.toContain("Tranche d'âge")
-    expect(html).not.toContain('Pratique assidue')
+    expect(beforeModal(html)).not.toContain('Ville : Ouagadougou')
+    expect(beforeModal(html)).not.toContain("Tranche d'âge")
+    expect(beforeModal(html)).not.toContain('Pratique assidue')
     expect(html).not.toContain('Passer avec égards')
     expect(html).not.toContain('Envoyer une invitation')
     expect(html).not.toContain('href="#"')
@@ -56,10 +68,29 @@ describe('discover grid page', () => {
     const sectionClose = html.indexOf('</section>', tilesAt)
     expect(html.indexOf('id="discover-empty"')).toBeGreaterThan(sectionClose)
     expect(html.indexOf("error.code === 'PIN_REQUIRED'")).toBeLessThan(html.indexOf("window.location.assign('/auth')"))
-    expect(html.match(/<span[^>]*inline-flex/g)).toBeNull()
+    expect(beforeModal(html).match(/<span[^>]*inline-flex/g)).toBeNull()
+    expect(html).toContain('id="filters-modal" hidden')
+    expect(html).toContain('id="filters-apply" disabled')
+    expect(html).toContain('Indifférent')
+    expect(html).toContain('data-open-filters="true"')
+    expect(html).toContain('name="distance" disabled=""')
+    expect(html.slice(html.indexOf('id="filters-modal"'))).not.toContain('checked=""')
+    expect(html).not.toContain('onsubmit=')
     expect(html).toContain('Filtres')
     expect(html).not.toContain('en ligne')
     expect(html).not.toContain('kids')
+  })
+
+  it('opens a filtered URL on the grid and keeps sample checks off the form', () => {
+    expect(sisterFiltered).toContain('data-viewer-gender="sister"')
+    expect(sisterFiltered).toContain('id="discover-card" hidden')
+    expect(sisterFiltered).not.toContain('id="discover-grid" hidden')
+    expect(sisterFiltered).toContain('polygamy_intent')
+    expect(sisterFiltered).not.toContain('view=card')
+    const modal = sisterFiltered.slice(sisterFiltered.indexOf('id="filters-modal"'))
+    expect(modal).not.toContain('checked=""')
+    expect(modal).toContain('<option value="" selected="">Indifférent</option>')
+    expect(modal).not.toContain('selected="">Maliki')
   })
 
   it('keeps a staff stub on the JSON envelope and sends a signed-out member to auth', async () => {
@@ -91,7 +122,7 @@ describe('discover grid page', () => {
         })
       }
       if (url.endsWith('/v1/me/profile')) {
-        return new Response(JSON.stringify({ account_id: ACCOUNT }), {
+        return new Response(JSON.stringify({ account_id: ACCOUNT, gender: 'sister' }), {
           status: 200,
           headers: { 'content-type': 'application/json' },
         })
@@ -104,7 +135,19 @@ describe('discover grid page', () => {
       )
       expect(live.status).toBe(200)
       expect(live.headers.get('content-type')).toContain('text/html')
-      expect(await live.text()).toContain(`data-discover-account="${ACCOUNT}"`)
+      const liveHtml = await live.text()
+      expect(liveHtml).toContain(`data-discover-account="${ACCOUNT}"`)
+      expect(liveHtml).toContain('data-viewer-gender="sister"')
+      expect(liveHtml).toContain('id="discover-grid" hidden')
+      const filtered = await getDecouvrir(
+        new Request('http://localhost/decouvrir?city=ouagadougou&radius_km=25', {
+          headers: { cookie: 'ankanu_session=live-session-token' },
+        }),
+      )
+      expect(filtered.status).toBe(200)
+      const filteredHtml = await filtered.text()
+      expect(filteredHtml).toContain('id="discover-card" hidden')
+      expect(filteredHtml).not.toContain('id="discover-grid" hidden')
     } finally {
       globalThis.fetch = original
     }
@@ -730,5 +773,248 @@ describe('discover grid in a browser', () => {
       chrome.proc.kill('SIGKILL')
       await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
     }
+  }, 120_000)
+
+  it.skipIf(!binary)('applies catalogue filters without sample checks', async () => {
+    const sisterHome = discoverHtml(stitch('screen.html'), stitch('grid.html'), ACCOUNT, 'sister')
+    const catalogue = {
+      filters: [
+        {
+          key: 'city',
+          options: [
+            { value: 'ouagadougou', label: 'Ouagadougou' },
+            { value: 'bobo', label: 'Bobo-Dioulasso' },
+            { value: 'koudougou', label: 'Koudougou' },
+            { value: 'autre', label: 'Autre ville / Diaspora' },
+          ],
+        },
+        {
+          key: 'radius_km',
+          options: [
+            { value: '10', label: '10 km' },
+            { value: '25', label: '25 km' },
+            { value: '50', label: '50 km' },
+            { value: null, label: 'Toute la ville' },
+          ],
+        },
+        {
+          key: 'marital_status',
+          options: [
+            { value: 'single', label: 'Célibataire' },
+            { value: 'married', label: 'Marié(e)' },
+            { value: 'divorced', label: 'Divorcé(e)' },
+            { value: 'widowed', label: 'Veuf/Veuve' },
+          ],
+        },
+        {
+          key: 'polygamy_intent',
+          options: [
+            { value: 'yes', label: 'Oui' },
+            { value: 'no', label: 'Non' },
+          ],
+        },
+        {
+          key: 'practice',
+          options: [
+            { value: 'assidue', label: 'Pratique assidue' },
+            { value: 'heure', label: "Prières à l'heure" },
+            { value: 'cheminement', label: 'En cheminement sincère' },
+          ],
+        },
+        {
+          key: 'madhhab',
+          options: [
+            { value: 'maliki', label: 'Maliki (courant majoritaire burkinabè)' },
+            { value: 'hanafi', label: 'Hanafi' },
+            { value: 'shafii', label: "Shafi'i" },
+            { value: 'hanbali', label: 'Hanbali' },
+            { value: 'apprentissage', label: 'Sans attachement strict' },
+          ],
+        },
+        {
+          key: 'life_plans',
+          options: [
+            { value: 'ready_now', label: 'Prêt(e) immédiatement' },
+            { value: 'within_year', label: "D'ici un an" },
+            { value: 'exploring', label: "En démarche d'exploration sereine" },
+          ],
+        },
+      ],
+    }
+    let filterFetches = 0
+    const browseUrls: string[] = []
+    const server: Server = createServer((request, response) => {
+      const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (url.pathname === '/v1/filters') {
+        filterFetches += 1
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.setHeader('cache-control', 'no-store')
+        response.end(JSON.stringify(catalogue))
+        return
+      }
+      if (url.pathname === '/v1/browse') {
+        browseUrls.push(url.search)
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.setHeader('cache-control', 'no-store')
+        response.end(JSON.stringify({ view: 'grid', next_cursor: null, items: [] }))
+        return
+      }
+      const filtered = url.searchParams.get('marital_status')
+      response.setHeader('content-type', 'text/html; charset=utf-8')
+      response.end(filtered ? sisterFiltered : sisterHome)
+    })
+    await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', () => resolve()))
+    const address = server.address()
+    if (!address || typeof address === 'string') throw new Error('no port')
+    const origin = `http://127.0.0.1:${address.port}`
+    const profile = join(tmpdir(), `ankanu-filters-${Date.now()}`)
+    const shots = fileURLToPath(new URL('../../../docs/qa-handoffs/epic-3-3.9-widths/', import.meta.url))
+    mkdirSync(shots, { recursive: true })
+    const chrome = await launch(binary as string, profile)
+    const ws = new WebSocket(chrome.ws)
+    let seq = 0
+    const pending = new Map<number, { resolve: (value: { result?: { value?: unknown } }) => void; reject: (error: Error) => void }>()
+    const waits: Array<{ method: string; resolve: () => void }> = []
+    ws.addEventListener('message', (event) => {
+      const message = JSON.parse(String(event.data)) as {
+        id?: number
+        method?: string
+        result?: { result?: { value?: unknown } }
+        error?: { message?: string }
+      }
+      if (message.id && pending.has(message.id)) {
+        const waiter = pending.get(message.id)
+        pending.delete(message.id)
+        if (message.error) waiter?.reject(new Error(message.error.message ?? 'cdp'))
+        else waiter?.resolve(message.result ?? {})
+        return
+      }
+      if (!message.method) return
+      for (let index = waits.length - 1; index >= 0; index -= 1) {
+        const waiter = waits[index]
+        if (waiter && waiter.method === message.method) {
+          waits.splice(index, 1)
+          waiter.resolve()
+        }
+      }
+    })
+    await new Promise<void>((resolve, reject) => {
+      ws.addEventListener('open', () => resolve())
+      ws.addEventListener('error', () => reject(new Error('socket')))
+    })
+    const send = (method: string, params?: object, sessionId?: string) => {
+      const id = ++seq
+      return new Promise<{ result?: { value?: unknown } }>((resolve, reject) => {
+        pending.set(id, { resolve, reject })
+        ws.send(JSON.stringify({ id, method, params, sessionId }))
+      })
+    }
+    const failures: string[] = []
+    try {
+      const created = await send('Target.createTarget', { url: 'about:blank' })
+      const targetId = String((created as { targetId?: string }).targetId)
+      const attached = await send('Target.attachToTarget', { targetId, flatten: true })
+      const sessionId = String((attached as { sessionId?: string }).sessionId)
+      await send('Page.enable', {}, sessionId)
+      await send('Runtime.enable', {}, sessionId)
+      const value = async (expression: string) => {
+        const result = await send(
+          'Runtime.evaluate',
+          { expression, awaitPromise: true, returnByValue: true },
+          sessionId,
+        )
+        return (result.result as { value?: unknown } | undefined)?.value
+      }
+      const measure = async (width: number, state: string) => {
+        await send(
+          'Emulation.setDeviceMetricsOverride',
+          { width, height: 900, deviceScaleFactor: 1, mobile: width < 768 },
+          sessionId,
+        )
+        const sample = await value('({ scrollWidth: document.documentElement.scrollWidth, width: window.innerWidth })')
+        const box = sample as { scrollWidth: number; width: number } | undefined
+        if (!box || box.scrollWidth > box.width) {
+          failures.push(`${state}@${width} scroll ${box?.scrollWidth ?? '?'} > ${box?.width ?? width}`)
+        }
+        if (width === 360 || width === 1440) {
+          const shot = await send('Page.captureScreenshot', { format: 'png' }, sessionId)
+          const data = String((shot as { data?: string }).data ?? '')
+          if (data) writeFileSync(join(shots, `${state}-${width}.png`), Buffer.from(data, 'base64'))
+        }
+      }
+      const go = async (path: string) => {
+        const loaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
+        await send('Page.navigate', { url: `${origin}${path}` }, sessionId)
+        await loaded
+      }
+      await go('/')
+      expect(filterFetches).toBe(0)
+      expect(browseUrls).toEqual([])
+      await value("document.querySelector('[data-open-filters]').click()")
+      const opened = (await value(
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const apply = document.getElementById('filters-apply'); if ((apply && apply.disabled === false) || Date.now() - start > 4000) resolve({ disabled: apply ? apply.disabled : true, checked: document.querySelectorAll('#filters-modal input:checked').length, distance: document.querySelector('#filters-modal input[name=\"distance\"]').disabled, madhhab: document.getElementById('madhhab-select').value, hidden: document.getElementById('filters-modal').hidden }); else setTimeout(tick, 30) }; tick() })",
+      )) as { disabled: boolean; checked: number; distance: boolean; madhhab: string; hidden: boolean }
+      expect(opened.disabled).toBe(false)
+      expect(opened.checked).toBe(0)
+      expect(opened.distance).toBe(true)
+      expect(opened.madhhab).toBe('')
+      expect(opened.hidden).toBe(false)
+      expect(filterFetches).toBe(1)
+      await value("document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))")
+      expect(await value("document.getElementById('filters-modal').hidden")).toBe(true)
+      await value("document.querySelector('[data-open-filters]').click()")
+      await value("document.querySelector('#filters-modal input[name=\"ville\"][value=\"ouagadougou\"]').click()")
+      const named = (await value(`(() => {
+        const citywide = document.querySelector('#filters-modal input[name="distance"][value=""]')
+        const km = document.querySelector('#filters-modal input[name="distance"][value="25"]')
+        return { citywide: citywide ? citywide.checked : false, disabled: km ? km.disabled : true }
+      })()`)) as { citywide: boolean; disabled: boolean }
+      expect(named.citywide).toBe(true)
+      expect(named.disabled).toBe(false)
+      await value("document.getElementById('filters-reset').click()")
+      const cleared = (await value(
+        "new Promise((resolve) => setTimeout(() => resolve({ checked: document.querySelectorAll('#filters-modal input:checked').length, disabled: document.querySelector('#filters-modal input[name=\"distance\"]').disabled, path: location.pathname + location.search }), 30))",
+      )) as { checked: number; disabled: boolean; path: string }
+      expect(cleared.checked).toBe(0)
+      expect(cleared.disabled).toBe(true)
+      expect(cleared.path).toBe('/')
+      for (const width of WIDTHS) await measure(width, 'filters')
+      await value("document.querySelector('#filters-modal input[name=\"situation\"][value=\"married\"]').click()")
+      const nextLoaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
+      await value("document.getElementById('filters-apply').click()")
+      await nextLoaded
+      const landed = String(await value('location.pathname + location.search'))
+      expect(landed).toBe('/decouvrir?marital_status=married&polygamy_intent=yes')
+      const painted = (await value(
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const chip = document.body.innerText || ''; const empty = document.getElementById('discover-empty'); if ((chip.includes('Marié(e)') && empty && empty.hidden === false) || Date.now() - start > 4000) resolve({ text: chip, empty: empty ? empty.hidden : true, grid: document.getElementById('discover-grid').hidden, card: document.getElementById('discover-card').hidden, chips: document.querySelectorAll('#discover-card span.inline-flex, #discover-grid span.inline-flex').length, markup: document.documentElement.innerHTML.indexOf('view=card') }); else setTimeout(tick, 30) }; tick() })",
+      )) as { text: string; empty: boolean; grid: boolean; card: boolean; chips: number; markup: number }
+      expect(painted.empty).toBe(false)
+      expect(painted.grid).toBe(false)
+      expect(painted.card).toBe(true)
+      expect(painted.chips).toBe(2)
+      expect(painted.text).toContain('Marié(e)')
+      expect(painted.text).not.toContain('Oui')
+      expect(painted.text).not.toContain('Al-Hassan')
+      expect(painted.markup).toBe(-1)
+      expect(browseUrls.some((search) => search.includes('marital_status=married') && search.includes('polygamy_intent=yes'))).toBe(true)
+      expect(browseUrls.some((search) => search.includes('view=card'))).toBe(false)
+      const cacheKey = String(await value(`sessionStorage.getItem('ankanu_browse_grid_text:${ACCOUNT}:marital_status=married&polygamy_intent=yes') || ''`))
+      expect(cacheKey).toContain(`"account":"${ACCOUNT}"`)
+      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      const cardEmpty = (await value(`(() => {
+        const node = document.getElementById('discover-card-empty')
+        return { hidden: node ? node.hidden : true, text: node ? node.textContent : '', card: document.getElementById('discover-card').hidden }
+      })()`)) as { hidden: boolean; text: string; card: boolean }
+      expect(cardEmpty.card).toBe(false)
+      expect(cardEmpty.hidden).toBe(false)
+      expect(cardEmpty.text).toBe('Aucun profil pour ces filtres.')
+      for (const width of WIDTHS) await measure(width, 'filtered')
+      expect(filterFetches).toBe(2)
+    } finally {
+      ws.close()
+      chrome.proc.kill('SIGKILL')
+      await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
+    }
+    expect(failures).toEqual([])
   }, 120_000)
 })

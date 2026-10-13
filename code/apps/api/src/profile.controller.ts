@@ -96,7 +96,12 @@ export class ProfileController {
     if (!row) {
       unauthenticated()
     }
-    return { ...(await withSla(row)), ...(await memberPhotos(member.accountId)) }
+    return {
+      ...(await withSla(row)),
+      ...(await memberPhotos(member.accountId)),
+      account_id: member.accountId,
+      gender: member.gender,
+    }
   }
 
   @Put('profile')

@@ -15,14 +15,13 @@ export class BrowseController {
   @Get()
   @Header('Cache-Control', 'no-store')
   async read(
-    @Query('view') view: unknown,
-    @Query('cursor') cursor: unknown,
+    @Query() query: Record<string, unknown>,
     @Req() request: CookieRequest,
     @Res({ passthrough: true }) response: HeaderResponse,
   ) {
     response.setHeader('Cache-Control', 'no-store')
     const session = await requireLiveSession(request.headers?.cookie)
-    const result = await readBrowseGrid(session, view, cursor)
+    const result = await readBrowseGrid(session, query)
     if (!result.ok) {
       throw new HttpException(
         {

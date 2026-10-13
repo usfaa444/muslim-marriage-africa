@@ -1,9 +1,16 @@
 import type { Gender } from '@ankanu/kernel'
-import { and, desc, eq, isNotNull, isNull, or, sql } from 'drizzle-orm'
+import { and, desc, eq, inArray, isNotNull, isNull, or, sql, type SQL } from 'drizzle-orm'
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { account, profile } from './account-schema.js'
 import { getIdentityDatabase } from './account-store.js'
 import type { CreatedProfile } from './create-account.js'
+import {
+  AUTRE_CITY_TOKENS,
+  lifePlanHeads,
+  profileMatchesFilters,
+  radiusCityTokens,
+  type BrowseFilters,
+} from './browse-filters.js'
 import type { ProfileWrite } from './profile-fields.js'
 
 export type StoredProfile = ProfileWrite & {
@@ -52,6 +59,7 @@ export type BrowseGridQuery = {
   oppositeGender: Gender
   cursor: string | null
   limit: number
+  filters?: BrowseFilters
 }
 
 export type ProfileStore = {
@@ -268,6 +276,9 @@ function memoryBrowseGrid(
     if (!stored || stored.visibility !== 'public' || (owner.status ?? '') !== 'Active') {
       continue
     }
+    if (query.filters && !profileMatchesFilters(stored, query.filters)) {
+      continue
+    }
     rows.push({
       id: owner.id,
       pseudonym: owner.pseudonym ?? '',
@@ -335,6 +346,50 @@ function postgresProfileStore(): ProfileStore {
   }
 }
 
+function browseFilterSql(filters: BrowseFilters | undefined): SQL | undefined {
+  if (!filters) {
+    return undefined
+  }
+  const clauses: SQL[] = []
+  const radius = radiusCityTokens(filters)
+  if (radius) {
+    clauses.push(inArray(profile.city, radius))
+  } else if (filters.city === 'autre') {
+    const autre = or(
+      inArray(profile.city, [...AUTRE_CITY_TOKENS]),
+      and(isNotNull(profile.country), sql`${profile.country} <> 'BF'`),
+    )
+    if (autre) {
+      clauses.push(autre)
+    }
+  } else if (filters.city) {
+    clauses.push(eq(profile.city, filters.city))
+  }
+  if (filters.maritalStatus) {
+    clauses.push(eq(profile.marital_status, filters.maritalStatus))
+  }
+  if (filters.polygamyIntent) {
+    clauses.push(eq(profile.polygamy_intent, filters.polygamyIntent))
+  }
+  if (filters.practice) {
+    clauses.push(eq(profile.practice, filters.practice))
+  }
+  if (filters.madhhab) {
+    clauses.push(eq(profile.madhhab, filters.madhhab))
+  }
+  const heads = lifePlanHeads(filters)
+  if (heads && heads.length === 1) {
+    clauses.push(sql`split_part(${profile.life_plans}, chr(10), 1) = ${heads[0]}`)
+  } else if (heads) {
+    const list = sql.join(
+      heads.map((head) => sql`${head}`),
+      sql`, `,
+    )
+    clauses.push(sql`split_part(${profile.life_plans}, chr(10), 1) in (${list})`)
+  }
+  return clauses.length > 0 ? and(...clauses) : undefined
+}
+
 async function browseGridRows(query: BrowseGridQuery): Promise<BrowseGridRow[]> {
   const cursor = query.cursor ? sql`${account.id} < ${query.cursor}::uuid` : sql`true`
   const rows = await getIdentityDatabase()
@@ -360,6 +415,7 @@ async function browseGridRows(query: BrowseGridQuery): Promise<BrowseGridRow[]> 
         sql`${account.roles} @> ARRAY['member']::text[]`,
         sql`NOT (${account.roles} && ARRAY['moderator', 'operator']::text[])`,
         cursor,
+        browseFilterSql(query.filters),
       ),
     )
     .orderBy(desc(account.id))

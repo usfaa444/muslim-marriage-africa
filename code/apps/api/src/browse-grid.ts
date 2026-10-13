@@ -6,6 +6,7 @@ import { readRlBrowsePerMin, takeBrowseSlot } from './browse-rate.js'
 import { getCaptureStore } from './id-liveness-store.js'
 import { discoveryPhoto, signMedia, type MediaFailure } from './media.js'
 import { getMediaStore } from './media-store.js'
+import { parseBrowseFilters } from './browse-filters.js'
 import { profileStoreIsMemory, getProfileStore } from './profile-store.js'
 import { verificationRecord } from './account-schema.js'
 import {
@@ -186,20 +187,19 @@ async function verifiedAccountIds(accountIds: readonly string[]): Promise<Set<st
 
 /**
  * Grid browse read. `view=card` and a missing view stay 404 until Story 3.13.
- * A refused viewer, a bad view, and a bad cursor do not take a browse slot.
+ * A refused viewer, a bad view, a bad cursor, and a bad filter do not take a browse slot.
  * A grid page takes one slot, then one profile query.
  */
 export async function readBrowseGrid(
   viewer: ResolvedSession,
-  view: unknown,
-  cursor: unknown,
+  query: Record<string, unknown>,
 ): Promise<{ ok: true; body: BrowseGridBody } | BrowseGridFailure> {
   const gate = await assertBrowseViewer(viewer)
   if (!gate.ok) {
     return fromViewer(gate)
   }
 
-  const viewText = oneValue(view)
+  const viewText = oneValue(query.view)
   if (viewText === null) {
     return fail(400, 'UNHANDLED', VIEW_MESSAGE, { field: 'view' }, false)
   }
@@ -210,9 +210,14 @@ export async function readBrowseGrid(
     return fail(400, 'UNHANDLED', VIEW_MESSAGE, { field: 'view' }, false)
   }
 
-  const cursorText = oneValue(cursor)
+  const cursorText = oneValue(query.cursor)
   if (cursorText === null || (cursorText !== undefined && !UUID.test(cursorText))) {
     return fail(400, 'UNHANDLED', CURSOR_MESSAGE, { field: 'cursor' }, false)
+  }
+
+  const filters = parseBrowseFilters(query)
+  if (!filters.ok) {
+    return filters
   }
 
   const limit = await readRlBrowsePerMin()
@@ -229,6 +234,7 @@ export async function readBrowseGrid(
     oppositeGender: opposite,
     cursor: cursorText?.toLowerCase() ?? null,
     limit: GRID_PAGE_SIZE + 1,
+    filters: filters.filters,
   })
   const page = fetched.slice(0, GRID_PAGE_SIZE)
   const nextCursor = fetched.length > GRID_PAGE_SIZE ? (page[page.length - 1]?.id ?? null) : null

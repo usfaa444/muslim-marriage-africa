@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { AccountsController } from './accounts.controller.js'
 import { BrowseController } from './browse.controller.js'
+import { FiltersController } from './filters.controller.js'
 import { CilController } from './cil.controller.js'
 import { HealthController } from './health.controller.js'
 import { MediaController } from './media.controller.js'
@@ -25,6 +26,7 @@ import { VerificationsController } from './verifications.controller.js'
     ProfileController,
     ProfilesController,
     BrowseController,
+    FiltersController,
     MediaController,
     StaffController,
     CilController,

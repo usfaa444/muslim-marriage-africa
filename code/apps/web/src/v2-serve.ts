@@ -194,7 +194,13 @@ export async function profileReviewResponse(request: Request): Promise<Response>
 
 async function memberProfile(
   request: Request,
-): Promise<{ account_id?: unknown; review_sla_hours?: unknown; bio_pending?: unknown; photo?: unknown } | null> {
+): Promise<{
+  account_id?: unknown
+  gender?: unknown
+  review_sla_hours?: unknown
+  bio_pending?: unknown
+  photo?: unknown
+} | null> {
   const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
   try {
     const response = await fetch(`${origin}/v1/me/profile`, {
@@ -206,6 +212,7 @@ async function memberProfile(
     }
     return (await response.json()) as {
       account_id?: unknown
+      gender?: unknown
       review_sla_hours?: unknown
       bio_pending?: unknown
       photo?: unknown
@@ -243,7 +250,16 @@ export async function discoverResponse(request: Request): Promise<Response> {
   }
   const profile = await memberProfile(request)
   const accountId = typeof profile?.account_id === 'string' ? profile.account_id : null
-  return htmlResponse(discoverHtml(stitchFile('57-discover'), stitchFile('57-discover', 'grid.html'), accountId))
+  const gender = profile?.gender === 'sister' || profile?.gender === 'brother' ? profile.gender : ''
+  return htmlResponse(
+    discoverHtml(
+      stitchFile('57-discover'),
+      stitchFile('57-discover', 'grid.html'),
+      accountId,
+      gender,
+      new URL(request.url).search,
+    ),
+  )
 }
 
 function jsonResponse(status: number, body: unknown): Response {
