@@ -362,6 +362,10 @@ export function profileHtml(stitch: string): string {
       '<p id="profile-photo-note" class="text-xs text-deep-navy/80 leading-normal pt-1">',
     )
     .replace(
+      '<button class="text-xs font-medium text-deep-navy underline hover:text-soft-gold transition-colors self-start sm:self-auto" type="button">',
+      '<button id="profile-photo-rules" class="text-xs font-medium text-deep-navy underline hover:text-soft-gold transition-colors self-start sm:self-auto" type="button">',
+    )
+    .replace(
       '<!-- Protective Blur Control Toggle (Identical to PIN toggle row) -->',
       '<p id="profile-photo-cap" class="hidden text-xs text-deep-navy/70 leading-normal">6 photos maximum. Retirez une photo pour en ajouter une autre.</p>\n<!-- Protective Blur Control Toggle (Identical to PIN toggle row) -->',
     )

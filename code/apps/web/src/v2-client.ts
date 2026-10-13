@@ -1462,6 +1462,13 @@ export function profileScript(): string {
       })
     }
 
+    var photoRules = document.getElementById('profile-photo-rules')
+    if (photoRules) {
+      photoRules.addEventListener('click', function () {
+        window.location.assign('/photo-rules')
+      })
+    }
+
     var photoGrid = document.getElementById('profile-photo-grid')
     if (photoGrid) {
       photoGrid.addEventListener('click', function (event) {

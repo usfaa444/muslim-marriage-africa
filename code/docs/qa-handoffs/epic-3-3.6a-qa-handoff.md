@@ -47,7 +47,8 @@ On a running API and web app, sign in as a member and open `/profile-edit`.
 | Clear bytes | `photo_blur` false, member viewer, live photo | Gateway may sign `sm` or `md`. `original` is never signed. Pending, blocked, and replaced stay unsigned for other members. Staff review does not get `sm`/`md` just because blur is off |
 | Strike | A strike refusal on upload | The existing `#profile-save-status` sentence. The add tile stays |
 | Widths | Add-tile gallery and the six-photo cap | 360, 390, 768, 1024, 1280, 1440. `scrollWidth <= innerWidth` |
-| Screen 15 | Open a member profile | Not served. Do not look for the Stitch hero on `/profil` |
+| Rules | « Consignes de pudeur » | Opens `GET /photo-rules` (Story 3.5). Same copy and classes. No new route |
+| Screen 15 | Open a member profile | Not in this story. Do not look for the Stitch hero on `/profil` |
 
 ## Test data
 
@@ -56,7 +57,7 @@ Memory accounts from the API tests. Password `phrase avec espaces`. Owner galler
 ## My results
 
 - `profile-photos.test.ts`: 3 passed. Seventh upload is 409 and keeps six rows. One of two parallel uploads wins. MAIN switches without review. Remove refuses MAIN, pending, and not-live. Clear `sm`/`md` match the original bytes only while `photo_blur` is false, then the gateway stops. Staff review is refused.
-- `profile-edit-page.test.ts` and `v2-flow.test.ts`: 36 passed. The served HTML has no `googleusercontent` sample face. The first pending photo still opens `/profile-review`. A later pending photo stays on screen 11.
+- `profile-edit-page.test.ts` and `v2-flow.test.ts`: 37 passed. The served HTML has no `googleusercontent` sample face. The first pending photo still opens `/profile-review`. A later pending photo stays on screen 11. « Consignes de pudeur » assigns `/photo-rules`.
 - `v2-responsive.test.ts` width check: passed. `13b-profile-replacement` shows Principale, Définir comme principale, En revue, and Ajouter une photo inside the viewport. `13e-profile-cap` shows the six-photo line and no add tile.
 - `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
 
@@ -81,8 +82,7 @@ Board card on [ANK-114](/ANK/issues/ANK-114): `profile.photo_blur` boolean, defa
 
 ## Known gaps
 
-- Screen 15 is not served. There is no catalogued public profile route. « Demander l'accès à la photographie » is Epic 6 Stories 6.2–6.4.
-- « Consignes de pudeur » is on the approved screen 11 and has no named destination in the pack. It is not wired. `GET /photo-rules` already exists from Story 3.5.
+- Screen 15 is not in this QA. The board said it waits until a catalogued public-profile route exists. Do not invent `GET /v1/profiles/:id`. « Demander l'accès à la photographie » is Epic 6 Stories 6.2–6.4.
 - Reveal radios `on_accept`, `on_request`, and `never` stay unbuilt until Epic 6 Stories 6.2–6.4.
 - Screen 13 discovery card is unchanged. Browse is not a route. `discoveryPhoto` already requires `is_main`.
 - Local commits are not on GitHub. Push waits until QA passes.

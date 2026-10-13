@@ -129,6 +129,7 @@ function mount() {
   photoGrid.innerHTML = ''
   const photoCap = control('profile-photo-cap', { className: 'hidden text-xs text-deep-navy/70 leading-normal' })
   const photoBlur = control('profile-photo-blur', { type: 'checkbox' })
+  const photoRules = control('profile-photo-rules')
   const photoFile = control('profile-photo-file') as Control & { files: Array<{ name: string }>; click: () => void }
   photoFile.files = []
   photoFile.click = () => {
@@ -140,6 +141,7 @@ function mount() {
   byId.set(photoGrid.id, photoGrid)
   byId.set(photoCap.id, photoCap)
   byId.set(photoBlur.id, photoBlur)
+  byId.set(photoRules.id, photoRules)
   byId.set(photoFile.id, photoFile)
   const inputs = [
     control('', { name: 'madhhab', value: 'maliki', type: 'radio' }),
@@ -150,7 +152,12 @@ function mount() {
   const save = control('', { textContent: 'Enregistrer les modifications' })
   const upload = control('', { textContent: 'Mettre à jour la photo' })
   const form = control('profile-form')
-  const location = { href: '' }
+  const location = {
+    href: '',
+    assign(path: string) {
+      this.href = path
+    },
+  }
   const calls: Array<{ url: string; method: string; body?: string }> = []
   let release: (body: typeof stored) => void = () => {}
   const gate = new Promise<typeof stored>((resolve) => {
@@ -239,6 +246,7 @@ function mount() {
     photoGrid,
     photoCap,
     photoBlur,
+    photoRules,
     photoFile,
     inputs,
     save,
@@ -367,6 +375,8 @@ describe('profile edit load and meter', () => {
     expect(html).toContain("fetch('/v1/media'")
     expect(html).toContain('Ajouter une photo')
     expect(html).toContain('Activer le flou protecteur')
+    expect(html).toContain('id="profile-photo-rules"')
+    expect(html).toContain("location.assign('/photo-rules')")
     expect(html).toContain('Consignes de pudeur')
     expect(html).toContain('Aucun affichage public')
     expect(html).not.toContain('Mettre à jour la photo')
@@ -623,5 +633,11 @@ describe('profile edit load and meter', () => {
     expect(page.photoGrid.innerHTML).toContain('data-photo-remove="p1"')
     expect(page.photoGrid.innerHTML).toContain('En revue')
     expect(page.photoCap.classList.contains('hidden')).toBe(false)
+  })
+
+  it('opens the photo rules page from consignes de pudeur', () => {
+    const page = mount()
+    page.photoRules.listeners.click?.[0]?.()
+    expect(page.location.href).toBe('/photo-rules')
   })
 })
