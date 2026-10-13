@@ -23,6 +23,7 @@ import {
   splashHtml,
   statusHtml,
 } from './v2-pages.js'
+import { profileDetailHtml, type ProfileDetailView } from './profile-detail.js'
 
 const WIDTHS = [360, 390, 768, 1024, 1280, 1440] as const
 const SHOTS = new Set([360, 1440])
@@ -131,7 +132,34 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '13c-profile-review-no-bio', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 48, bioPending: false }) },
     { name: '14-settings', html: settingsHtml(stitch('27-settings')) },
     { name: '15-status', html: statusHtml(stitch('28-delete-export-status')) },
+    { name: '16-profile-detail', html: profileDetailHtml(stitch('15-profile-detail'), profileDetailView(true)) },
+    { name: '16b-profile-phone', html: profileDetailHtml(stitch('15-profile-detail'), profileDetailView(false)) },
   ]
+}
+
+function profileDetailView(identity: boolean): ProfileDetailView {
+  return {
+    profile: {
+      id: '01990000-0000-7000-8000-000000000099',
+      pseudonym: 'Aminata_KDG_long_pseudonym',
+      age: 29,
+      city: 'ouagadougou',
+      country: 'BF',
+      profession: 'ingenierie',
+      marital_status: 'single',
+      polygamy_intent: 'no',
+      madhhab: 'apprentissage',
+      practice: 'assidue',
+      life_plans: 'tf:serene\nUn foyer stable, avec de la patience et le respect du rythme de chacun.',
+    },
+    verification: { phone: true, id: identity, mahram: identity },
+    photo_blur: true,
+    photos: [1, 2, 3, 4].map((index) => ({
+      id: `01990000-0000-7000-8000-00000000010${index}`,
+      is_main: index === 1,
+      url: `/v1/media/get?token=photo-${index}`,
+    })),
+  }
 }
 
 type CdpResult = Record<string, unknown>

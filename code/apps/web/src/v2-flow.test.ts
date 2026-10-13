@@ -684,6 +684,9 @@ describe('server entry guard', () => {
     expect(entryLocation('/pin', 'account')).toBeNull()
     expect(entryLocation('/privacy/status/ticket-1', 'account')).toBeNull()
     expect(entryLocation('/settings', 'email')).toBe('/email-verification')
+    expect(entryLocation('/profil/01990000-0000-7000-8000-000000000001', 'anon')).toBe('/auth')
+    expect(entryLocation('/profil/01990000-0000-7000-8000-000000000001', 'account')).toBeNull()
+    expect(entryLocation('/profil/01990000-0000-7000-8000-000000000001', 'email')).toBe('/email-verification')
   })
 
   it('keeps an email link on the page until consume finishes', async () => {

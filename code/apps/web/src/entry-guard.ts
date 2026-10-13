@@ -70,13 +70,18 @@ export function entryLocation(path: string, step: GateStep): string | null {
     }
     return step === owned ? null : STEP_PATH[step]
   }
-  if (ACCOUNT.has(normalized)) {
+  if (ACCOUNT.has(normalized) || isPublicProfilePath(normalized)) {
     if (step === 'anon') {
       return '/auth'
     }
     return step === 'account' ? null : STEP_PATH[step]
   }
   return null
+}
+
+/** Screen 15. `/profil` with no id stays the member stub. */
+export function isPublicProfilePath(path: string): boolean {
+  return /^\/profil\/[^/]+$/.test(path)
 }
 
 export function readSessionCookie(header: string | null): string | null {
