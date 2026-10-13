@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#F7F1E3]" lang="fr" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AnKanu - Édition du profil</title>
+<!-- Google Fonts: Newsreader & Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "deep-navy": "#0B1D36",
+            "soft-gold": "#C9A86C",
+            "cream": "#F7F1E3",
+            "on-navy": "#F7F1E3",
+            "on-cream": "#0B1D36",
+            "gold-soft": "#E6D5A8",
+            "hairline": "#E2D4B8"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "md": "8px",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          fontFamily: {
+            "headline": ["Newsreader", "Georgia", "serif"],
+            "display": ["Newsreader", "Georgia", "serif"],
+            "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+    }
+    input[type="radio"]:checked {
+      background-color: #0B1D36;
+      border-color: #0B1D36;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col font-body bg-cream text-deep-navy antialiased selection:bg-gold-soft selection:text-deep-navy">
+<!-- TOP APP BAR (Sticky & Minimalist) -->
+<header class="w-full top-0 sticky z-40 bg-cream/95 backdrop-blur-sm border-b border-hairline/60">
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-grow w-full max-w-2xl mx-auto py-10 px-6 pb-28 md:pb-20">
+<!-- PAGE HEADER -->
+<section class="mb-10 text-left">
+<h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal mb-2 tracking-tight">Mon profil &amp; Démarche</h1>
+<p class="text-deep-navy/70 text-sm leading-relaxed max-w-xl">
+        Renseignez vos critères avec sincérité et pudeur pour cheminer sereinement.
+      </p>
+</section>
+<!-- PROFILE COMPLETENESS METER (Noble & Constructive) -->
+<section class="mb-10 p-6 rounded-md border border-hairline bg-cream relative overflow-hidden">
+<div class="flex items-center justify-between mb-3">
+<span class="text-xs font-semibold tracking-wider text-deep-navy uppercase">Progression du profil</span>
+<span class="text-xs font-semibold text-deep-navy font-mono">70% complété</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-1.5 bg-hairline/60 rounded-full overflow-hidden mb-4">
+<div class="h-full bg-deep-navy rounded-full" style="width: 70%;"></div>
+</div>
+<!-- Strict Requirement Banner Copy -->
+<div class="flex items-start gap-3 pt-2">
+<span class="material-symbols-outlined text-soft-gold text-lg mt-0.5" data-icon="info">info</span>
+<div>
+<p class="text-sm font-semibold text-deep-navy">« Il manque : madhhab »</p>
+<p class="text-xs text-deep-navy/70 mt-1 leading-relaxed">
+            La précision de votre école juridique d'attachement permet d'aligner les attentes rituelles et matrimoniales dans une clarté mutuelle.
+          </p>
+</div>
+</div>
+</section>
+<!-- FORM SECTIONS -->
+<form class="space-y-12" onsubmit="event.preventDefault();">
+<!-- SECTION 1: PHOTOGRAPHIES & BIENSÉANCE -->
+<section class="space-y-5 border-t border-hairline/60 pt-8">
+<div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Photographies de profil</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Conformité aux règles de bienséance et décence vestimentaire requise.</p>
+</div>
+<button class="text-xs font-medium text-deep-navy underline hover:text-soft-gold transition-colors self-start sm:self-auto" type="button">
+      Consignes de pudeur
+    </button>
+</div>
+<!-- 5-Slot Photo Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-4"><!-- Tile 1: MAIN live photo -->
+<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-end group">
+<img alt="Photo principale de profil" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UbRY5aV_K6LA4P66i9ox4yFOjFozRZMOCIZZ05uP-Mv8wloKOWP-LvOqqmkJ-kIFHe8eFSXgoExHPZXtD-BtVtLko87WEB59gD5An1V90BHDLVflFdNSSP5nS0dw3Yh3yQl41hwp_jCVWc0fy8DVmHUaAGfDfLa7A-flFibmSDlik19dJezY8d9nf8hKkeLF4REyuF1MCs2StKDjsJROMZ-NZjYRWMdVcqpWFh-PNjxoQqdb0alw3686g"/>
+<div class="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-deep-navy/80 via-deep-navy/40 to-transparent flex items-center justify-between">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-deep-navy text-gold-soft border border-soft-gold/40 shadow-sm">
+      Principale
+    </span>
+</div>
+</div>
+<!-- Tile 2: live non-MAIN photo -->
+<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-between p-2 group">
+<img alt="Photo secondaire de profil" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WQ9Otm01cW2dptvkgFHXujzQwBxGnK-iXRtZNIGQ1qibAJbebBKh5fzzLwGGYMtViBVFqazKLt8f5l7NfP4UNZTCg_Z2JZZAMxEofmAGkCfCEbYaONzxC1r9VFjI3JIEmkpFj54Fg3x7xxI5dhyp97zp4Mne-54-VahIdThsEeKV79J0TQG23ZAicRWSJIvXK7MxXVX3OSdm5CRxSC5P9QkoR0_fah6sLsK_M3KAZrNHy2Vi80xxJRI1c"/>
+<div class="relative flex justify-end z-10">
+<button aria-label="Retirer la photo" class="w-7 h-7 rounded-full bg-deep-navy/80 hover:bg-deep-navy text-cream flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-base leading-none">close</span>
+</button>
+</div>
+<div class="relative z-10 mt-auto pt-2">
+<button class="w-full py-1.5 px-2 rounded bg-cream/95 backdrop-blur-sm text-deep-navy text-[11px] font-medium border border-hairline/80 hover:bg-deep-navy hover:text-cream transition-colors text-center shadow-sm" type="button">
+      Définir comme principale
+    </button>
+</div>
+</div>
+<!-- Tile 3: live non-MAIN photo -->
+<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-between p-2 group">
+<img alt="Photo secondaire de profil" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1U_zrp0TLlmKLk9F2dEanRJ7rrSzmP-xz4BkKeaJ4bv_gcN5i2gFggOMtqxT22nH0uuLwom47vU1LPdyxYVtIqIGXThD2HWBCO6EwKuyp8IPndbAIifbQofYyJd2-0HIeuCbuQeY0x51RsdaRdwwmSVO9ZAOGl9xzbduiL7NBR5VSztsHr_GLcmqr8P0OM3NfU82rN2aVK9j0JBN3p_56DFn_UtoVEswzZxWp3otASFRDzL5y8BYig692E"/>
+<div class="relative flex justify-end z-10">
+<button aria-label="Retirer la photo" class="w-7 h-7 rounded-full bg-deep-navy/80 hover:bg-deep-navy text-cream flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-base leading-none">close</span>
+</button>
+</div>
+<div class="relative z-10 mt-auto pt-2">
+<button class="w-full py-1.5 px-2 rounded bg-cream/95 backdrop-blur-sm text-deep-navy text-[11px] font-medium border border-hairline/80 hover:bg-deep-navy hover:text-cream transition-colors text-center shadow-sm" type="button">
+      Définir comme principale
+    </button>
+</div>
+</div>
+<!-- Tile 4: live non-MAIN photo -->
+<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-between p-2 group">
+<img alt="Photo secondaire de profil" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqIL4nrqEtGUmlwjzlnnQzrdCRKkrCB8rNofIuuR48jDuJ2p95ge7q1iUgfWc0L3PmMwSIpK-vFnCGcYUatcKqfqNrMDM3hOrCR4Q09bvu7vvxt7SVKq_CNwx0DIpJ7fsYkxuORROckBn6C22x6oF5C_ZikhU4CC2Uep7j4ajhox4xTveJFmSc_pqLDU6Y_0PFWDb4VuP0RcWuXSQfdgEpADHWwx_kQqk4b5-38XKdDgrDAoU3bnLrFvCuN4hNvvN_c_VvSqqnyLI"/>
+<div class="relative flex justify-end z-10">
+<button aria-label="Retirer la photo" class="w-7 h-7 rounded-full bg-deep-navy/80 hover:bg-deep-navy text-cream flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-base leading-none">close</span>
+</button>
+</div>
+<div class="relative z-10 mt-auto pt-2">
+<button class="w-full py-1.5 px-2 rounded bg-cream/95 backdrop-blur-sm text-deep-navy text-[11px] font-medium border border-hairline/80 hover:bg-deep-navy hover:text-cream transition-colors text-center shadow-sm" type="button">
+      Définir comme principale
+    </button>
+</div>
+</div>
+<!-- Tile 5: live non-MAIN photo -->
+<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-between p-2 group">
+<img alt="Photo secondaire de profil" class="absolute inset-0 w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WQ9Otm01cW2dptvkgFHXujzQwBxGnK-iXRtZNIGQ1qibAJbebBKh5fzzLwGGYMtViBVFqazKLt8f5l7NfP4UNZTCg_Z2JZZAMxEofmAGkCfCEbYaONzxC1r9VFjI3JIEmkpFj54Fg3x7xxI5dhyp97zp4Mne-54-VahIdThsEeKV79J0TQG23ZAicRWSJIvXK7MxXVX3OSdm5CRxSC5P9QkoR0_fah6sLsK_M3KAZrNHy2Vi80xxJRI1c"/>
+<div class="relative flex justify-end z-10">
+<button aria-label="Retirer la photo" class="w-7 h-7 rounded-full bg-deep-navy/80 hover:bg-deep-navy text-cream flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-base leading-none">close</span>
+</button>
+</div>
+<div class="relative z-10 mt-auto pt-2">
+<button class="w-full py-1.5 px-2 rounded bg-cream/95 backdrop-blur-sm text-deep-navy text-[11px] font-medium border border-hairline/80 hover:bg-deep-navy hover:text-cream transition-colors text-center shadow-sm" type="button">
+      Définir comme principale
+    </button>
+</div>
+</div>
+<!-- Tile 6: pending review photo -->
+<div class="relative aspect-[4/5] rounded-lg border border-hairline bg-[#FBF8F1] p-3 flex flex-col items-center justify-center text-center gap-2">
+<div class="w-10 h-10 rounded-full bg-hairline/40 border border-hairline flex items-center justify-center text-deep-navy/60">
+<span class="material-symbols-outlined text-xl">photo_camera</span>
+</div>
+<span class="text-xs font-medium text-deep-navy/80">Photographie de profil</span>
+<span class="mt-1 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold text-deep-navy bg-cream border border-hairline text-soft-gold">
+    En revue
+  </span>
+</div></div>
+<!-- Privacy Note -->
+<p class="text-xs text-deep-navy/80 leading-normal pt-1">
+    Aucun affichage public. Votre image n'est jamais exposée aux regards ouverts ni aux moteurs de recherche.
+  </p><p class="text-xs text-deep-navy/70 leading-normal">6 photos maximum. Retirez une photo pour en ajouter une autre.</p>
+<!-- Protective Blur Control Toggle (Identical to PIN toggle row) -->
+<div class="p-4 rounded-lg border border-hairline bg-cream flex items-center justify-between gap-4">
+<div>
+<p class="text-xs font-semibold text-deep-navy">Activer le flou protecteur</p>
+<p class="text-[11px] text-deep-navy/70 mt-0.5">Vos photographies restent floutées pour les autres membres.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-hairline peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-deep-navy"></div>
+</label>
+</div>
+</section>
+<!-- SECTION 2: IDENTITÉ & ANCRAGE -->
+<section class="space-y-5 border-t border-hairline/60 pt-8">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Identité &amp; Ancrage</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Données civiles destinées à l'évaluation mutuelle sincère.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<div class="flex items-center justify-between mb-1.5">
+<label class="block text-xs font-semibold text-deep-navy" for="dob">Date de naissance</label>
+<span class="inline-flex items-center gap-1 text-[11px] font-medium text-deep-navy/80 bg-hairline/40 px-2 py-0.5 rounded border border-hairline/60">
+<span class="material-symbols-outlined text-[13px] text-soft-gold">cake</span>
+<span class="">29 ans</span>
+</span>
+</div>
+<div class="relative flex items-center">
+<input class="w-full px-3.5 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy pr-9" id="dob" type="date" value="1996-09-14"/>
+<span class="material-symbols-outlined text-base text-deep-navy/40 absolute right-3 pointer-events-none">calendar_today</span>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-deep-navy mb-1.5" for="origin">Origine / Région d'attache</label>
+<input class="w-full px-3.5 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy" id="origin" type="text" value="Région du Centre, Plateau-Central"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-semibold text-deep-navy mb-1.5">Pays &amp; Ville de résidence</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block text-[11px] font-medium text-deep-navy/70 mb-1" for="country_residence">Pays de résidence</label>
+<div class="relative flex items-center">
+<select class="w-full pl-3.5 pr-8 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy cursor-pointer appearance-none" id="country_residence">
+<option selected="" value="BF">🇧🇫 Burkina Faso</option>
+<option value="CI">🇨🇮 Côte d'Ivoire</option>
+<option value="ML">🇲🇱 Mali</option>
+<option value="SN">🇸🇳 Sénégal</option>
+<option value="NE">🇳🇪 Niger</option>
+<option value="TG">🇹🇬 Togo</option>
+<option value="BJ">🇧🇯 Bénin</option>
+<option value="GN">🇬🇳 Guinée</option>
+<option value="FR">🇫🇷 France</option>
+<option value="CA">🇨🇦 Canada</option>
+<option value="OTHER">Autre pays</option>
+</select>
+<span class="material-symbols-outlined text-base text-deep-navy/50 absolute right-2.5 pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block text-[11px] font-medium text-deep-navy/70 mb-1" for="city_residence">Ville de résidence</label>
+<div class="relative flex items-center">
+<select class="w-full pl-3.5 pr-8 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy cursor-pointer appearance-none" id="city_residence">
+<option selected="" value="ouagadougou">Ouagadougou</option>
+<option value="bobo">Bobo-Dioulasso</option>
+<option value="koudougou">Koudougou</option>
+<option value="ouahigouya">Ouahigouya</option>
+<option value="banfora">Banfora</option>
+<option value="dedougou">Dédougou</option>
+<option value="fada">Fada N'Gourma</option>
+<option value="autre">Autre localité</option>
+</select>
+<span class="material-symbols-outlined text-base text-deep-navy/50 absolute right-2.5 pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: SITUATION MATRIMONIALE -->
+<section class="space-y-5 border-t border-hairline/60 pt-8">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Situation matrimoniale</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Transparence totale quant à votre état civil actuel.</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+<label class="flex items-center justify-center p-3 rounded-md border border-deep-navy bg-deep-navy text-cream cursor-pointer text-xs font-medium text-center">
+<input checked="" class="sr-only" name="marital_status" type="radio" value="celibataire"/>
+<span class="">Célibataire</span>
+</label>
+<label class="flex items-center justify-center p-3 rounded-md border border-hairline bg-cream text-deep-navy hover:border-soft-gold cursor-pointer text-xs font-medium text-center">
+<input class="sr-only" name="marital_status" type="radio" value="marie"/>
+<span class="">Marié(e)</span>
+</label>
+<label class="flex items-center justify-center p-3 rounded-md border border-hairline bg-cream text-deep-navy hover:border-soft-gold cursor-pointer text-xs font-medium text-center">
+<input class="sr-only" name="marital_status" type="radio" value="divorce"/>
+<span class="">Divorcé(e)</span>
+</label>
+<label class="flex items-center justify-center p-3 rounded-md border border-hairline bg-cream text-deep-navy hover:border-soft-gold cursor-pointer text-xs font-medium text-center">
+<input class="sr-only" name="marital_status" type="radio" value="veuf"/>
+<span class="">Veuf(ve)</span>
+</label>
+</div>
+<!-- Conditional polygyny intention (Brother verification) -->
+<div class="p-4 rounded-md border border-hairline bg-cream/70 space-y-2.5">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-deep-navy">Intention de polygamie (si déjà marié)</span>
+<span class="text-[11px] text-deep-navy/60">Condition formelle préalable</span>
+</div>
+<p class="text-xs text-deep-navy/70 leading-relaxed">
+            Pour les frères déjà engagés dans les liens du mariage, la clarté et l'accord moral préalable sont obligatoires au sein du cadre AnKanu.
+          </p>
+<div class="flex gap-4 pt-1">
+<label class="flex items-center gap-2 text-xs text-deep-navy cursor-pointer">
+<input checked="" class="text-deep-navy focus:ring-soft-gold border-hairline" name="polygyny_intent" type="radio" value="non"/>
+<span class="">Non</span>
+</label>
+<label class="flex items-center gap-2 text-xs text-deep-navy cursor-pointer">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="polygyny_intent" type="radio" value="oui"/>
+<span class="">Oui</span>
+</label>
+</div>
+</div>
+</section>
+<!-- SECTION 4: PARCOURS & QUOTIDIEN -->
+<section class="space-y-5 border-t border-hairline/60 pt-8">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Parcours &amp; Quotidien</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Environnement professionnel et socle d'instruction.</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div class=""><label class="block text-xs font-semibold text-deep-navy mb-1.5" for="education">Éducation / Niveau d'études</label><select class="w-full px-3.5 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy cursor-pointer" id="education"><option value="secondaire">Baccalauréat / Secondaire</option><option value="licence">Licence / Bac+3</option><option selected="" value="master_eco">Master en Sciences Économiques</option><option value="master_autre">Master / Bac+5</option><option value="doctorat">Doctorat / Études supérieures approfondies</option><option value="autre">Autre / Formation spécialisée</option></select></div><div class=""><label class="block text-xs font-semibold text-deep-navy mb-1.5" for="job">Profession exercée</label><select class="w-full px-3.5 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy cursor-pointer" id="job"><option selected="" value="finance">Cadre analyste financier</option><option value="enseignement">Enseignant / Chercheur</option><option value="ingenierie">Ingénieur / Technique</option><option value="administration">Fonction publique / Administration</option><option value="commerce">Commerce / Entrepreneuriat</option><option value="sante">Santé / Médical</option><option value="autre">Autre...</option></select></div></div>
+</section>
+<!-- SECTION 5: CRITÈRES ISLAMIQUES & PRATIQUE -->
+<section class="space-y-6 border-t border-hairline/60 pt-8">
+<div class="flex items-start justify-between">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Critères Islamiques &amp; Pratique</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Conformité confessionnelle, constance religieuse et aspirations matrimoniales.</p>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-soft-gold/20 border border-soft-gold/40 text-[11px] font-semibold text-deep-navy">
+            Prioritaire
+          </span>
+</div>
+<!-- MADHHAB (Highlighted as currently missing) -->
+<div class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">
+<div class="flex items-center justify-between">
+<label class="text-xs font-semibold uppercase tracking-wider text-deep-navy flex items-center gap-1.5">
+<span class="">Madhhab (École juridique)</span>
+<span class="text-soft-gold font-bold">*</span>
+</label>
+<span class="text-[11px] text-deep-navy/70 italic">Champ requis pour compléter votre profil</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+<label class="flex items-center gap-2 p-2.5 rounded border border-hairline cursor-pointer hover:border-deep-navy bg-cream">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="madhhab" type="radio" value="maliki"/>
+<span class="text-xs text-deep-navy font-medium">Maliki</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded border border-hairline cursor-pointer hover:border-deep-navy bg-cream">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="madhhab" type="radio" value="hanafi"/>
+<span class="text-xs text-deep-navy font-medium">Hanafi</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded border border-hairline cursor-pointer hover:border-deep-navy bg-cream">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="madhhab" type="radio" value="shafii"/>
+<span class="text-xs text-deep-navy font-medium">Shafi'i</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded border border-hairline cursor-pointer hover:border-deep-navy bg-cream">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="madhhab" type="radio" value="hanbali"/>
+<span class="text-xs text-deep-navy font-medium">Hanbali</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded border border-hairline cursor-pointer hover:border-deep-navy bg-cream sm:col-span-2">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="madhhab" type="radio" value="apprentissage"/>
+<span class="text-xs text-deep-navy font-medium">En apprentissage / Sans attachement strict</span>
+</label>
+</div>
+</div>
+<!-- PRATIQUE RELIGIEUSE -->
+<div class="space-y-2">
+<label class="block text-xs font-semibold text-deep-navy">Pratique religieuse au quotidien</label>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+<label class="flex items-center gap-2.5 p-3 rounded-md border border-hairline cursor-pointer hover:border-soft-gold bg-cream">
+<input checked="" class="text-deep-navy focus:ring-soft-gold border-hairline" name="religious_practice" type="radio" value="assidue"/>
+<span class="text-xs text-deep-navy font-medium">Pratique assidue</span>
+</label>
+<label class="flex items-center gap-2.5 p-3 rounded-md border border-hairline cursor-pointer hover:border-soft-gold bg-cream">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="religious_practice" type="radio" value="heure"/>
+<span class="text-xs text-deep-navy font-medium">Prières à l'heure</span>
+</label>
+<label class="flex items-center gap-2.5 p-3 rounded-md border border-hairline cursor-pointer hover:border-soft-gold bg-cream">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="religious_practice" type="radio" value="cheminement"/>
+<span class="text-xs text-deep-navy font-medium">En cheminement</span>
+</label>
+</div>
+</div>
+<!-- INTENTIONS -->
+<div class="space-y-2"><label class="block text-xs font-semibold text-deep-navy" for="intentions">Intentions &amp; Délais envisagés</label><div class="space-y-1.5"><p class="text-[11px] font-medium text-deep-navy/70">Délai souhaité pour l'union :</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 pb-1"><label class="flex items-center gap-2 p-2 rounded border border-hairline bg-cream cursor-pointer hover:border-soft-gold text-xs text-deep-navy"><input class="text-deep-navy focus:ring-soft-gold border-hairline" name="marriage_timeframe" type="radio" value="immediate"/><span class="">Immédiatement (brefs délais)</span></label><label class="flex items-center gap-2 p-2 rounded border border-hairline bg-cream cursor-pointer hover:border-soft-gold text-xs text-deep-navy"><input checked="" class="text-deep-navy focus:ring-soft-gold border-hairline" name="marriage_timeframe" type="radio" value="6months"/><span class="">D'ici 6 mois</span></label><label class="flex items-center gap-2 p-2 rounded border border-hairline bg-cream cursor-pointer hover:border-soft-gold text-xs text-deep-navy"><input class="text-deep-navy focus:ring-soft-gold border-hairline" name="marriage_timeframe" type="radio" value="1year"/><span class="">D'ici un an</span></label><label class="flex items-center gap-2 p-2 rounded border border-hairline bg-cream cursor-pointer hover:border-soft-gold text-xs text-deep-navy"><input class="text-deep-navy focus:ring-soft-gold border-hairline" name="marriage_timeframe" type="radio" value="serene"/><span class="">Plus d'un an / Selon cheminement</span></label></div></div><textarea class="w-full px-3.5 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy leading-relaxed" id="intentions" placeholder="Ex. Recherche d'une union dans un horizon de 6 à 12 mois avec implication rapide du tuteur..." rows="3">Projet d'édification d'un foyer stable sous les préceptes de la Sunnah, dans la droiture, l'écoute mutuelle et le respect des droits de chacun.</textarea><p class="text-[11px] text-deep-navy/60">Mentionnez vos perspectives de vie commune et les délais convenables à votre situation.</p></div>
+</section>
+<!-- SECTION 6: PRÉSENTATION DE SOI -->
+<section class="space-y-4 border-t border-hairline/60 pt-8">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Présentation de soi et de sa démarche</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Respectueuse, concise, sans étalage mondain ni vanité.</p>
+</div>
+<div>
+<textarea class="w-full px-3.5 py-2.5 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy leading-relaxed" id="bio" placeholder="Décrivez votre tempérament, vos valeurs familiales et votre conception de l'entraide mutuelle..." rows="4">Je suis une personne calme et réfléchie, attachée aux valeurs familiales et au respect mutuel au quotidien. J'apprécie la simplicité, les temps d'étude et le service communautaire. Je souhaite cheminer auprès d'une conjointe sincère, animée par la recherche de la paix intérieure et la construction d'un foyer harmonieux.</textarea>
+</div>
+</section>
+<!-- SECTION 7: SÉCURITÉ LOCALE & DISCRÉTION -->
+<section class="space-y-4 border-t border-hairline/60 pt-8">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Sécurité sur l'appareil</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Préservez la discrétion de vos échanges en cas de consultation sur téléphone partagé.</p>
+</div>
+<span class="material-symbols-outlined text-deep-navy/60 text-xl" data-icon="lock">lock</span>
+</div>
+<div class="p-4 rounded-md border border-hairline bg-cream flex items-center justify-between gap-4">
+<div>
+<p class="text-xs font-semibold text-deep-navy">Activer le code PIN d'accès</p>
+<p class="text-[11px] text-deep-navy/70 mt-0.5">Exige un code à 4 ou 6 chiffres à chaque réouverture de la session.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-hairline peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-deep-navy"></div>
+</label>
+</div>
+</section>
+<!-- SECTION 8: PAUSE DE VIE & DÉSACTIVATION TEMPORAIRE -->
+<section class="space-y-4 border-t border-hairline/60 pt-8">
+<div>
+<h2 class="font-display text-xl text-deep-navy font-normal">Pause temporaire de mon profil</h2>
+<p class="text-xs text-deep-navy/60 mt-1">Suspendez l'apparition de votre profil lors des périodes requérant un recul nécessaire.</p>
+</div>
+<div class="p-5 rounded-md border border-hairline bg-cream space-y-4">
+<p class="text-xs text-deep-navy/80">Motif légitime de la mise en pause :</p>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<label class="flex items-center gap-2 p-2 rounded border border-hairline text-xs cursor-pointer hover:border-soft-gold">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="pause_reason" type="radio" value="ramadan"/>
+<span class="">Ramadan</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded border border-hairline text-xs cursor-pointer hover:border-soft-gold">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="pause_reason" type="radio" value="examens"/>
+<span class="">Examens</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded border border-hairline text-xs cursor-pointer hover:border-soft-gold">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="pause_reason" type="radio" value="voyage"/>
+<span class="">Voyage</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded border border-hairline text-xs cursor-pointer hover:border-soft-gold">
+<input class="text-deep-navy focus:ring-soft-gold border-hairline" name="pause_reason" type="radio" value="deuil"/>
+<span class="">Deuil</span>
+</label>
+</div>
+<div>
+<label class="block text-[11px] font-medium text-deep-navy/70 mb-1" for="other_reason">Autre raison (optionnel)</label>
+<input class="w-full px-3 py-2 rounded-md border border-hairline bg-cream text-xs text-deep-navy focus:border-deep-navy focus:ring-1 focus:ring-deep-navy" id="other_reason" placeholder="Précisez sobrement votre besoin de retrait..." type="text"/>
+</div>
+<div class="pt-2 flex items-center justify-between border-t border-hairline/60"><div class="flex items-center gap-2 text-xs text-deep-navy/70"><span class="material-symbols-outlined text-base text-soft-gold flex-shrink-0" data-icon="check_circle">check_circle</span><span class="leading-normal">Réactivation en un clic (One-tap reactivate) à tout moment.</span></div><button class="text-xs font-semibold text-deep-navy underline hover:text-soft-gold transition-colors flex-shrink-0 ml-4" type="button">Mettre en pause</button></div>
+</div>
+</section>
+<!-- SAVE ACTION BUTTON -->
+<div class="pt-8 pb-4 flex justify-end">
+<button class="w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-md bg-deep-navy text-cream text-sm font-semibold hover:bg-deep-navy/90 active:opacity-90 transition-all shadow-none" type="button"><span class="leading-none">Enregistrer les modifications</span><span class="material-symbols-outlined text-base text-soft-gold inline-flex items-center justify-center" data-icon="progress_activity">progress_activity</span></button>
+</div>
+</form>
+</main>
+<!-- MEMBER BOTTOM NAV (Fixed with strict active state on 'Profil') -->
+<!-- FOOTER -->
+<footer class="w-full border-t border-hairline/60 bg-cream mt-auto mb-16 md:mb-0">
+</footer>
+</body></html>

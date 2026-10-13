@@ -4,19 +4,20 @@
 - Project: https://stitch.withgoogle.com/project/6717808880062298165
 - Design system: `DESIGN.md` (tokens only; layout is each PNG)
 - Old Stitch project on Google was **not** deleted.
-- Refresh: founder-edited project re-downloaded 2026-10-11 (replaces [`23a7151`](https://github.com/usfaa444/muslim-marriage-africa/commit/23a7151)). Screen 49 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-106 (Indicateur 07 — free-review SLA-breach). New Stitch id `b03cdd4e2f4b43c3a50d9014b6df6f31`; previous id `c143ef4636044f509dc2d307b65437ca` is no longer in live `list_screens`.
+- Refresh: founder-edited project re-downloaded 2026-10-11 (replaces [`23a7151`](https://github.com/usfaa444/muslim-marriage-africa/commit/23a7151)). Screen 49 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-106 (Indicateur 07 — free-review SLA-breach). New Stitch id `b03cdd4e2f4b43c3a50d9014b6df6f31`; previous id `c143ef4636044f509dc2d307b65437ca` is no longer in live `list_screens`. Screens 11 and 15 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-117 (six-photo gallery, MAIN picker, one blur). New ids: screen 11 `5df2f4c5a2c04b10942463422648ebf7`, screen 15 `82b3f033e3004a65ad72dfe1fdc2e2d4`. Cap-reached state of screen 11 is extra files `11-profile-edit/cap-reached.html` + `cap-reached.png` (Stitch id `a7549136b40d4da4a88920f6f46e210a`), not a new inventory number. Previous ids `00b3c545d70c406491fd2ae959c17978` and `6e0fc9ebb2e14daf90cd53b0b09f4a4c` remain in live `list_screens` but are not the gallery designs.
 
 ## Completeness proof
 
 - Command: `stitch-mcp tool list_screens -d '{"projectId":"6717808880062298165"}'`; HTTP GET htmlCode.downloadUrl; screenshot.downloadUrl with FIFE suffix `=s2048-rp`; python PNG signature `\x89PNG` and HTML size > 0; compare API ids to MANIFEST and folders; no folder whose id is absent from the live list
-- API count: **56**
-- Downloaded count: **56**
-- HTML count: **56**
-- PNG count: **56**
-- Missing: **0**
-- Stale extras (folder/id not in live `list_screens`): **0**
+- API count: **60** (`list_screens` 2026-10-13 after ANK-117 generate; includes old 11/15 plus new gallery frames and unused IMAGE assets)
+- Downloaded inventory folders: **56**
+- HTML count: **56** inventory `screen.html` files, plus `11-profile-edit/cap-reached.html`
+- PNG count: **56** inventory `screen.png` files, plus `11-profile-edit/cap-reached.png`
+- Missing inventory folders: **0**
+- Screen 11 add-tile id `5df2f4c5a2c04b10942463422648ebf7`: `get_screen` HTML/PNG verified after founder Accept; not returned by this `list_screens` snapshot (old id `00b3c545d70c406491fd2ae959c17978` still listed as « AnKanu - Édition du profil »)
+- Screen 15 new id `82b3f033e3004a65ad72dfe1fdc2e2d4` and cap id `a7549136b40d4da4a88920f6f46e210a` are in live `list_screens`
 
-Zero missing and zero stale extras is the only pass. Verified 2026-10-13 against a fresh `list_screens` for project `6717808880062298165` after the screen 49 replacement (live count **56**, downloaded **56**).
+Verified 2026-10-13 against `list_screens` for project `6717808880062298165` after ANK-117 founder Accept (live count **60**, inventory folders **56**). PNG proof: `\x89PNG` signature and FIFE `=s2048-rp`. HTML size > 0.
 
 Note: `55-pwa-manifest` is a JSON asset. Stitch returned no screenshot URL. The PNG is a raster of the downloaded `manifest.json` bytes (cream/navy tokens). Do not treat it as a Stitch canvas.
 
@@ -34,11 +35,11 @@ Note: `55-pwa-manifest` is a JSON asset. Stitch returned no screenshot URL. The 
 | 08 | AnKanu - Onboarding | `ac4404f16560404baecc2ef8a5f9232b` | `08-onboarding/screen.html` | `08-onboarding/screen.png` | Onboarding |
 | 09 | AnKanu - Règles relatives aux photographies | `e165912a668d4ab1aaa6f91c86d1c4f5` | `09-photo-rules/screen.html` | `09-photo-rules/screen.png` | Photo rules |
 | 10 | AnKanu - Verrouillage PIN | `916e55997d0c42df8f59ba940bff3e53` | `10-pin-lock/screen.html` | `10-pin-lock/screen.png` | PIN lock |
-| 11 | AnKanu - Édition du profil | `00b3c545d70c406491fd2ae959c17978` | `11-profile-edit/screen.html` | `11-profile-edit/screen.png` | Profile edit |
+| 11 | AnKanu - Édition du profil | `5df2f4c5a2c04b10942463422648ebf7` | `11-profile-edit/screen.html` | `11-profile-edit/screen.png` | Profile edit (4 of 6 + add tile). Cap-reached: `11-profile-edit/cap-reached.html` + `cap-reached.png`, Stitch id `a7549136b40d4da4a88920f6f46e210a` |
 | 12 | AnKanu - Profil en revue (Non public) | `a39a94de24584b319c3e04ae2cc1a01a` | `12-profile-not-yet-public/screen.html` | `12-profile-not-yet-public/screen.png` | Profile not-yet-public |
 | 13 | AnKanu - Recherche | `f40af8571a314fdcb351dbf971380715` | `13-search/screen.html` | `13-search/screen.png` | Search |
 | 14 | AnKanu - Filtres | `c1993d0010384d419133db9cf8a99e7e` | `14-filters/screen.html` | `14-filters/screen.png` | Filters |
-| 15 | AnKanu - Profil détaillé | `6e0fc9ebb2e14daf90cd53b0b09f4a4c` | `15-profile-detail/screen.html` | `15-profile-detail/screen.png` | Profile detail |
+| 15 | AnKanu - Profil détaillé (Galerie réservée) | `82b3f033e3004a65ad72dfe1fdc2e2d4` | `15-profile-detail/screen.html` | `15-profile-detail/screen.png` | Profile detail |
 | 16 | AnKanu - Révélation & Révocation de photo | `b3811f89e6d5489593515a49c17032ed` | `16-blur-reveal-revoke/screen.html` | `16-blur-reveal-revoke/screen.png` | Blur / Reveal / Revoke |
 | 17 | AnKanu - Favoris | `e36c2c6ab73346b78ef29931a890ed0e` | `17-favourites/screen.html` | `17-favourites/screen.png` | Favourites |
 | 18 | AnKanu - Envoi d'invitation & Message Flash | `3af8fe91692841b7aa52601ba70da7fd` | `18-invite-compose-flash/screen.html` | `18-invite-compose-flash/screen.png` | Invite compose + Message Flash |
