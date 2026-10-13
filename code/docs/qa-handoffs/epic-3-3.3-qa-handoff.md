@@ -6,9 +6,9 @@ A Profile, a pending profile photo, and a pending bio stay off other members' li
 
 `profile` gains two nullable timestamps: `review_queued_at` and `review_passed_at`. `review_queued_at` is the SLA clock. Null means nothing is waiting. `review_passed_at` is the first human allow of the whole Profile. There is no stored Premium flag.
 
-The clock starts only when it is null and an item appears: a profile save while `review_passed_at` is null, a `bio_pending` write, or a `profile_photo` upload. Media calls `ProfileStore.noteQueued` and does not write `profile`. A null visibility becomes `unpublished` on that first queue. `held`, `emergency_hidden`, and `public` stay as they are. A client cannot send visibility `public`.
+The clock starts only when it is null and an item appears: a profile save while `review_passed_at` is null, a `bio_pending` write, or a `profile_photo` upload. Media calls `ProfileStore.noteQueued` and does not write `profile`. That write is conditional: it updates a row only when `review_queued_at` is null or visibility is null. A null visibility becomes `unpublished` on that first queue. `held`, `emergency_hidden`, and `public` stay as they are. A client cannot send visibility `public`.
 
-`GET /v1/staff/cases?kind=profile_review` is moderator or operator. Any other role is `403`. Any other `kind` is `400` with `details.field` `kind`. Rows are profiles with `review_queued_at` set. `BillingPort.isEntitled === true` sorts first, then `review_queued_at` ascending. `false` and `unavailable` sort as Free and never hide a row. The default adapter returns `unavailable`. Each row has `account_id`, `pseudonym`, `priority` `premium` or `free`, `review_queued_at`, `sla_breach`, the profile fields, `bio_pending`, `bio_live`, and each pending `profile_photo` as `{ asset_id, blur_url }`. The blur URL is signed for that staff viewer. TTL is `signed_url_ttl_seconds`, capped at 60. A queue read that signs photos writes one `audit_event`: actor is the staff id, action `moderator_profile_review_view`, payload `asset_ids` only. The JSON never includes `phone_e164` or `original_key`.
+`GET /v1/staff/cases?kind=profile_review` is moderator or operator. Any other role is `403`. Any other `kind` is `400` with `details.field` `kind`. Rows are profiles with `review_queued_at` set. `BillingPort.isEntitled === true` sorts first, then `review_queued_at` ascending. `false` and `unavailable` sort as Free and never hide a row. The default adapter returns `unavailable`. Each row has `account_id`, `pseudonym`, `priority` `premium` or `free`, `review_queued_at`, `sla_breach`, the profile fields, `bio_pending`, `bio_live`, and each pending `profile_photo` as `{ asset_id, blur_url }`. The blur URL is signed for that staff viewer. TTL is `signed_url_ttl_seconds`, capped at 60. A queue read that signs photos writes one `audit_event` inside a caller transaction: actor is the staff id, action `moderator_profile_review_view`, payload `asset_ids` only. `AuditPort.append` receives that transaction, not an empty object. The JSON never includes `phone_e164` or `original_key`.
 
 `sla_breach` is true only when now minus `review_queued_at` is strictly greater than `free_review_sla_hours`. Equal to the SLA is not a breach. The hours come from `operator_config` key `free_review_sla_hours`. The SQL seed is 24. Product code does not hardcode 24. An unreadable value is `503` with `details.field` `free_review_sla_hours`.
 
@@ -27,9 +27,9 @@ The clock starts only when it is null and an item appears: a profile save while 
 
 `profile` is required only while `review_passed_at` is null. `bio` is required only when `bio_pending` is not null. `photos` must be exactly the current pending `profile_photo` ids. A mismatch is `409` `REVIEW_STALE` and nothing is written. A profile that is not in the queue is `404` `NOT_FOUND`. A bad body is `400`. A block without `reason` is `400` and nothing is written.
 
-One decision applies every item. Allow on a photo sets `moderation_state` `live`. Block sets `blocked`. Bio allow copies `bio_pending` to `bio_live` and clears `bio_pending`. Bio block clears `bio_pending` and leaves `bio_live`. Profile allow sets `review_passed_at` to now. Then `review_queued_at` becomes null. One audit row: action `moderator_profile_review_decision`, payload `account_id`, `profile`, `bio`, `photo_ids`, `photo_decisions`, `reason`, all strings.
+One decision applies every item in one unit of work. The photo updates, the profile update, the publish check, and the audit append share that transaction. A photo update matches only a row that is still `pending`. The profile update matches only a row that is still queued. If the audit append throws, those writes roll back. Allow on a photo sets `moderation_state` `live`. Block sets `blocked`. Bio allow copies `bio_pending` to `bio_live` and clears `bio_pending`. Bio block clears `bio_pending` and leaves `bio_live`. Profile allow sets `review_passed_at` to now. Then `review_queued_at` becomes null. One audit row: action `moderator_profile_review_decision`, payload `account_id`, `profile`, `bio`, `photo_ids`, `photo_decisions`, `reason`, all strings. `AuditPort.append` receives the same caller transaction.
 
-Visibility becomes `public` only when `review_passed_at` is set, visibility is `unpublished`, and the latest `phone_otp`, `liveness`, and `id_document` rows are each `granted`. `held` and `emergency_hidden` are not lifted. Premium does not write visibility. The same check runs again after a later phone OTP grant.
+Visibility becomes `public` only when `review_passed_at` is set, visibility is `unpublished`, the latest `phone_otp` row is `granted`, and the latest `liveness` and `id_document` rows are `pending` or `granted` (`capturePassed`). A pending phone OTP does not publish. `held` and `emergency_hidden` are not lifted. The publish update itself matches only `unpublished` with `review_passed_at` set. Premium does not write visibility. The same check runs again after a later phone OTP grant.
 
 `GET /v1/staff/metrics` uses the same roles. Body:
 
@@ -77,7 +77,7 @@ A staff session can `GET /v1/media/get` for a blur grant it holds. Upload stays 
 From `code/`:
 
 ```bash
-npx vitest run --config vitest.unit.config.ts --fileParallelism false apps/api/src/profile-review.test.ts apps/api/src/profile.test.ts apps/api/src/media.test.ts apps/web/src/v2-flow.test.ts apps/web/src/v2-responsive.test.ts apps/web/src/native-dialog.test.ts
+npx vitest run --config vitest.unit.config.ts --fileParallelism false apps/api/src/profile-review.test.ts apps/api/src/profile.test.ts apps/api/src/media.test.ts apps/api/src/phone-otp.test.ts apps/web/src/v2-flow.test.ts apps/web/src/v2-responsive.test.ts apps/web/src/native-dialog.test.ts
 npx tsc -p apps/api/tsconfig.json --noEmit
 npx tsc -p apps/web/tsconfig.json --noEmit
 ```
@@ -99,20 +99,26 @@ Sign in as a member, save a profile, upload a profile photo, and open `/profile-
 | Stale photos | Photo id set does not match pending ids | `409` `REVIEW_STALE`. Nothing written |
 | Not queued | Unknown account id | `404` `NOT_FOUND` |
 | Allow before grants | Profile, bio, and photo `allow`, verification gates closed | `200`. Photo `live`. Bio copied to `bio_live`. `review_queued_at` null. Visibility stays `unpublished` |
-| Later grant | Same profile, gates then open | `publishIfEligible` sets visibility `public`. `isListableProfile` true |
+| Phone still pending | Latest `phone_otp` is `pending`, ID and liveness `granted` | Visibility stays `unpublished` |
+| Later grant | Latest `phone_otp` `granted`, ID and liveness `pending` | `publishIfEligible` sets visibility `public`. `isListableProfile` true |
 | Quiet save | Allowed profile, no new `bio_pending` | Stays out of the queue |
 | Held | Visibility `held` before the save, then block photo and profile with a reason | Visibility stays `held`. Photo `blocked`. Not listable |
+| Held allow | Visibility `held`, phone `granted`, ID `pending`, liveness `granted`, profile and photo `allow` | Visibility stays `held` |
+| Emergency hidden | After that allow, set `emergency_hidden` and run the publish check again | Visibility stays `emergency_hidden` |
+| Audit failure | Decision audit append throws | HTTP 500. Photo stays `pending`. Bio stays pending. Profile stays in the queue |
+| Audit transaction | Queue view and decision | `AuditPort.append` receives an object with `insert`, `select`, and `execute` |
 | Screen 12 | `slaHours` 24 and no pending bio | Sentence `Délai habituel de modération : 24 heures.` No `12 à`. No `ouvrées`. No « Présentation & Bio ». Photo and pudeur rows remain |
 | Screen 12 bio | `slaHours` 48 and `bio_pending` set | Sentence uses 48. Bio row is present |
 | Widths | 360, 390, 768, 1024, 1280, 1440 on both review states | `scrollWidth <= innerWidth`. No box outside the viewport |
 
 ## Test data
 
-`profile-review.test.ts` creates `revueN@example.bf`, password `phrase avec espaces`, gender sister, dob `1990-01-15`, captcha `test-ok`. Clock starts at `2026-10-13T00:00:00.000Z`. SLA reader returns 24, then 1000 for the calm metrics case. Billing returns `true` only for the premium account and `unavailable` otherwise. Verification gates are a test reader. The image is an 8×8 png. Signed TTL reader returns 60. Staff is the same account with `roles` set to `moderator` or `operator` after sign-in. A staff session does not also have `member`.
+`profile-review.test.ts` creates `revueN@example.bf`, password `phrase avec espaces`, gender sister, dob `1990-01-15`, captcha `test-ok`. Clock starts at `2026-10-13T00:00:00.000Z`. SLA reader returns 24, then 1000 for the calm metrics case. Billing returns `true` only for the premium account and `unavailable` otherwise. Verification rows are inserted into the memory phone OTP store and the memory capture store. Phone `+22670000000` is only on that OTP row. The image is an 8×8 png. Signed TTL reader returns 60. Staff is the same account with `roles` set to `moderator` or `operator` after sign-in. A staff session does not also have `member`.
 
 ## My results
 
-- `profile-review.test.ts`, `profile.test.ts`, `media.test.ts`, `v2-flow.test.ts`, `v2-responsive.test.ts`, `native-dialog.test.ts` with `--fileParallelism false`: 6 files, 45 tests passed.
+- QA fail fix: `profile-review.test.ts`, `profile.test.ts`, `media.test.ts`, and `phone-otp.test.ts` with `--fileParallelism false`: 4 files, 27 tests passed. That includes inserted verification rows, a pending phone that does not publish, pending ID and liveness that do publish once phone is `granted`, `held` and `emergency_hidden` staying in place, a caller transaction on both audit writes, and a decision that rolls back when the audit append throws.
+- Earlier story run, still current for screen 12: `profile-review.test.ts`, `profile.test.ts`, `media.test.ts`, `v2-flow.test.ts`, `v2-responsive.test.ts`, `native-dialog.test.ts` with `--fileParallelism false`: 6 files, 45 tests passed. Screen 12 was not part of the QA fail.
 - `tsc -p apps/api/tsconfig.json --noEmit` and `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
 - Width proof includes `13b-profile-review` and `13c-profile-review-no-bio` at 360 and 1440. Shots: `code/docs/qa-handoffs/ank-83-widths/13b-profile-review-360.png`, `13b-profile-review-1440.png`, `13c-profile-review-no-bio-360.png`, `13c-profile-review-no-bio-1440.png`. The run checks all six widths.
 - `operator-config.migrate.test.ts` now expects `0012_profile_review.sql` in the migration list. The unit config excludes that file. I did not run it. It needs Postgres.
@@ -120,7 +126,7 @@ Sign in as a member, save a profile, upload a profile photo, and open `/profile-
 
 ## Three validation passes
 
-1. Behavior: an unapproved profile is not listable; Premium sorts first and still needs a decision; a breach counts without billing; a mismatched decision writes nothing; publish requires the human allow, `unpublished`, and the three grants; `held` stays held.
+1. Behavior: an unapproved profile is not listable; Premium sorts first and still needs a decision; a breach counts without billing; a mismatched decision writes nothing; the decision and its audit are one unit; publish requires the human allow, `unpublished`, phone `granted`, and ID plus liveness `pending` or `granted`; `held` and `emergency_hidden` stay.
 2. Screen: `/profile-review` is screen 12 only while the API photo is pending. The served sentence is the one configured hour count. The bio row is present only when `bio_pending` is set. No state tabs, demo toggles, or galleries. Sample Stitch names are not live data. The Stitch HTML file itself is unchanged.
 3. Widths: Chrome on both review states at 360, 390, 768, 1024, 1280, and 1440. `document.documentElement.scrollWidth <= window.innerWidth`, and no measured box outside the viewport.
 

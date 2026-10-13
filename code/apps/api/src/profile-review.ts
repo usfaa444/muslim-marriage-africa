@@ -2,13 +2,17 @@ import { isUuidV7 } from '@ankanu/kernel'
 import { eq } from 'drizzle-orm'
 import { verificationRecord } from './account-schema.js'
 import { accountStoreIsMemory, getIdentityDatabase } from './account-store.js'
+import type { AuditAppend } from '@ankanu/ports'
 import { getAuditPort } from './audit-port.js'
 import { authNow } from './auth-clock.js'
 import { getBillingPort } from './billing-port.js'
+import { getCaptureStore } from './id-liveness-store.js'
 import { applyPhotoModeration, signMedia } from './media.js'
 import { getMediaStore, type ModerationState } from './media-store.js'
 import { operatorConfig } from './operator-config.js'
-import { getProfileStore, profileStoreIsMemory, type StoredProfile } from './profile-store.js'
+import { getPhoneOtpStore, type PhoneOtpRow } from './phone-otp-store.js'
+import { getProfileStore, profileStoreIsMemory, type ProfileDb, type StoredProfile } from './profile-store.js'
+import { capturePassed } from './signup-gate.js'
 
 const STAFF_FORBIDDEN = 'Accès réservé au personnel de modération.'
 const NOT_FOUND_MESSAGE = "Ce profil n'est pas dans la file."
@@ -118,18 +122,24 @@ export async function queueAfterProfileSave(row: StoredProfile, at: string): Pro
   return getProfileStore().noteQueued(row.account_id, at)
 }
 
-export async function publishIfEligible(accountId: string): Promise<void> {
+export async function publishIfEligible(accountId: string, tx?: unknown): Promise<void> {
   if (accountStoreIsMemory() && !profileStoreIsMemory()) {
     return
   }
-  const row = await getProfileStore().read(accountId)
+  const db = sqlHandle(tx)
+  const row = db ? await getProfileStore().read(accountId, db) : await getProfileStore().read(accountId)
   if (!row?.review_passed_at || row.visibility !== 'unpublished') {
     return
   }
-  if (!(await gatesPassed(accountId))) {
+  const open = db ? await gatesPassed(accountId, db) : await gatesPassed(accountId)
+  if (!open) {
     return
   }
-  await getProfileStore().patchReview(accountId, { visibility: 'public' })
+  if (db) {
+    await getProfileStore().patchReview(accountId, { visibility: 'public' }, 'unpublished', db)
+    return
+  }
+  await getProfileStore().patchReview(accountId, { visibility: 'public' }, 'unpublished')
 }
 
 export async function listProfileReviews(staffId: string): Promise<{ ok: true; rows: ReviewQueueRow[] } | ReviewFailure> {
@@ -193,14 +203,13 @@ export async function listProfileReviews(staffId: string): Promise<{ ok: true; r
     return left.review_queued_at.localeCompare(right.review_queued_at)
   })
   if (signedIds.length > 0) {
-    await getAuditPort().append(
-      {},
-      {
+    await inCallerUnit(async (tx) => {
+      await appendAudit(tx, {
         actorId: staffId,
         action: 'moderator_profile_review_view',
         payload: { asset_ids: signedIds.join(',') },
-      },
-    )
+      })
+    })
   }
   return { ok: true, rows: ranked.map(({ sort: _sort, ...row }) => row) }
 }
@@ -250,9 +259,6 @@ export async function decideProfileReview(
   if (blocked && parsed.reason === null) {
     return fieldFailure('reason', 'reason : un motif est requis lorsqu’un élément est refusé.')
   }
-  for (const photo of parsed.photos) {
-    await applyPhotoModeration(getMediaStore(), photo.asset_id, photo.decision)
-  }
   const patch: {
     bio_live?: string | null
     bio_pending?: string | null
@@ -268,50 +274,133 @@ export async function decideProfileReview(
   if (parsed.profile === 'allow') {
     patch.review_passed_at = authNow().toISOString()
   }
-  const saved = await getProfileStore().patchReview(row.account_id, patch)
-  if (!saved) {
-    return notFound()
+  try {
+    return await inCallerUnit(async (tx) => {
+      const db = sqlHandle(tx)
+      for (const photo of parsed.photos) {
+        const changed = await applyPhotoModeration(getMediaStore(), photo.asset_id, photo.decision, db)
+        if (!changed) {
+          throw new StaleWrite()
+        }
+      }
+      const saved = db
+        ? await getProfileStore().patchReview(row.account_id, patch, 'queued', db)
+        : await getProfileStore().patchReview(row.account_id, patch, 'queued')
+      if (!saved) {
+        throw new StaleWrite()
+      }
+      await publishIfEligible(row.account_id, db ?? tx)
+      const after = db ? await getProfileStore().read(row.account_id, db) : await getProfileStore().read(row.account_id)
+      if (!after) {
+        throw new StaleWrite()
+      }
+      const states = await Promise.all(parsed.photos.map(async (photo) => getMediaStore().asset(photo.asset_id)))
+      await appendAudit(tx, {
+        actorId: staffId,
+        action: 'moderator_profile_review_decision',
+        payload: {
+          account_id: row.account_id,
+          profile: parsed.profile ?? 'none',
+          bio: parsed.bio ?? 'none',
+          photo_ids: parsed.photos.map((photo) => photo.asset_id).join(','),
+          photo_decisions: parsed.photos.map((photo) => photo.decision).join(','),
+          reason: parsed.reason ?? '',
+        },
+      })
+      return {
+        ok: true as const,
+        result: {
+          account_id: after.account_id,
+          visibility: after.visibility,
+          review_passed_at: after.review_passed_at,
+          review_queued_at: after.review_queued_at,
+          profile: parsed.profile,
+          bio: parsed.bio,
+          bio_live: after.bio_live,
+          bio_pending: after.bio_pending,
+          photos: parsed.photos.map((photo, index) => ({
+            asset_id: photo.asset_id,
+            moderation_state:
+              states[index]?.moderation_state === 'live' || states[index]?.moderation_state === 'blocked'
+                ? states[index].moderation_state
+                : 'pending',
+          })),
+        },
+      }
+    })
+  } catch (error) {
+    if (error instanceof StaleWrite) {
+      return stale()
+    }
+    throw error
   }
-  await publishIfEligible(row.account_id)
-  const after = await getProfileStore().read(row.account_id)
-  if (!after) {
-    return notFound()
+}
+
+const MEMORY_TX = Symbol('memory-review-tx')
+
+class StaleWrite extends Error {
+  constructor() {
+    super('stale')
+    this.name = 'StaleWrite'
   }
-  const states = await Promise.all(parsed.photos.map(async (photo) => getMediaStore().asset(photo.asset_id)))
-  await getAuditPort().append(
-    {},
-    {
-      actorId: staffId,
-      action: 'moderator_profile_review_decision',
-      payload: {
-        account_id: row.account_id,
-        profile: parsed.profile ?? 'none',
-        bio: parsed.bio ?? 'none',
-        photo_ids: parsed.photos.map((photo) => photo.asset_id).join(','),
-        photo_decisions: parsed.photos.map((photo) => photo.decision).join(','),
-        reason: parsed.reason ?? '',
-      },
-    },
+}
+
+function callerTransaction(): object {
+  const unused = (): never => {
+    throw new Error('memory review transaction is not a SQL handle')
+  }
+  return Object.assign(
+    { insert: unused, select: unused, execute: unused, update: unused },
+    { [MEMORY_TX]: true },
   )
-  return {
-    ok: true,
-    result: {
-      account_id: after.account_id,
-      visibility: after.visibility,
-      review_passed_at: after.review_passed_at,
-      review_queued_at: after.review_queued_at,
-      profile: parsed.profile,
-      bio: parsed.bio,
-      bio_live: after.bio_live,
-      bio_pending: after.bio_pending,
-      photos: parsed.photos.map((photo, index) => ({
-        asset_id: photo.asset_id,
-        moderation_state: states[index]?.moderation_state === 'live' || states[index]?.moderation_state === 'blocked'
-          ? states[index].moderation_state
-          : 'pending',
-      })),
-    },
+}
+
+function sqlHandle(tx: unknown): ProfileDb | undefined {
+  if (typeof tx !== 'object' || tx === null || MEMORY_TX in tx) {
+    return undefined
   }
+  if (!('update' in tx) || !('select' in tx) || !('execute' in tx) || !('insert' in tx)) {
+    return undefined
+  }
+  return tx as ProfileDb
+}
+
+async function appendAudit(tx: unknown, input: AuditAppend): Promise<void> {
+  await getAuditPort().append(tx, input)
+}
+
+type Restorable = { snapshot(): unknown; restore(value: unknown): void }
+
+function restorable(value: object): Restorable | null {
+  if (!('snapshot' in value) || !('restore' in value)) {
+    return null
+  }
+  const store = value as { snapshot?: unknown; restore?: unknown }
+  if (typeof store.snapshot !== 'function' || typeof store.restore !== 'function') {
+    return null
+  }
+  return value as Restorable
+}
+
+async function inCallerUnit<T>(work: (tx: unknown) => Promise<T>): Promise<T> {
+  if (profileStoreIsMemory()) {
+    const profiles = restorable(getProfileStore())
+    const media = restorable(getMediaStore())
+    const profileSnap = profiles?.snapshot() ?? null
+    const mediaSnap = media?.snapshot() ?? null
+    try {
+      return await work(callerTransaction())
+    } catch (error) {
+      if (profileSnap !== null) {
+        profiles?.restore(profileSnap)
+      }
+      if (mediaSnap !== null) {
+        media?.restore(mediaSnap)
+      }
+      throw error
+    }
+  }
+  return getIdentityDatabase().transaction(async (tx) => work(tx))
 }
 
 type ParsedDecision = {
@@ -379,14 +468,36 @@ function optionalDecision(value: unknown): 'allow' | 'block' | null | 'bad' {
   return 'bad'
 }
 
-async function gatesPassed(accountId: string): Promise<boolean> {
+async function gatesPassed(accountId: string, db?: ProfileDb): Promise<boolean> {
   if (gateReader) {
     return gateReader(accountId)
   }
-  if (profileStoreIsMemory()) {
-    return false
+  const latest = db ? await latestVerification(accountId, db) : await latestVerification(accountId)
+  return (
+    latest.get('phone_otp') === 'granted' &&
+    capturePassed(latest.get('liveness')) &&
+    capturePassed(latest.get('id_document'))
+  )
+}
+
+async function latestVerification(accountId: string, db?: ProfileDb): Promise<Map<string, string>> {
+  if (profileStoreIsMemory() && !db) {
+    const latest = new Map<string, string>()
+    const idRow = await getCaptureStore().latest(accountId, 'id_document')
+    const liveRow = await getCaptureStore().latest(accountId, 'liveness')
+    if (idRow) {
+      latest.set('id_document', idRow.status)
+    }
+    if (liveRow) {
+      latest.set('liveness', liveRow.status)
+    }
+    const phone = latestPhone(accountId)
+    if (phone) {
+      latest.set('phone_otp', phone)
+    }
+    return latest
   }
-  const rows = await getIdentityDatabase()
+  const rows = await (db ?? getIdentityDatabase())
     .select({ id: verificationRecord.id, kind: verificationRecord.kind, status: verificationRecord.status })
     .from(verificationRecord)
     .where(eq(verificationRecord.account_id, accountId))
@@ -397,12 +508,27 @@ async function gatesPassed(accountId: string): Promise<boolean> {
       latest.set(row.kind, { id: row.id, status: row.status })
     }
   }
-  return (
-    latest.get('phone_otp')?.status === 'granted' &&
-    latest.get('liveness')?.status === 'granted' &&
-    latest.get('id_document')?.status === 'granted'
-  )
+  return new Map([...latest.entries()].map(([kind, row]) => [kind, row.status]))
 }
+
+function latestPhone(accountId: string): string | undefined {
+  const store = getPhoneOtpStore() as PhoneOtpStoreRows
+  if (!store.rows) {
+    return undefined
+  }
+  let chosen: PhoneOtpRow | undefined
+  for (const row of store.rows) {
+    if (row.account_id !== accountId) {
+      continue
+    }
+    if (!chosen || row.id > chosen.id) {
+      chosen = row
+    }
+  }
+  return chosen?.status
+}
+
+type PhoneOtpStoreRows = { rows?: PhoneOtpRow[] }
 
 function fieldFailure(field: string, message: string): ReviewFailure {
   return { ok: false, status: 400, code: 'UNHANDLED', message, details: { field }, retryable: false }

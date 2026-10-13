@@ -2,6 +2,7 @@ import { createRequire } from 'node:module'
 import type { AddressInfo } from 'node:net'
 import type { INestApplication } from '@nestjs/common'
 import { newId } from '@ankanu/kernel'
+import type { AuditAppend } from '@ankanu/ports'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { memoryAccountStore, setAccountStore } from './account-store.js'
 import { memoryAuditPort, setAuditPort, type AuditRow } from './audit-port.js'
@@ -14,7 +15,9 @@ import { setMediaClock, setSignedTtlReader } from './media.js'
 import { memoryMediaStore, setMediaStore } from './media-store.js'
 import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
-import { isListableProfile, publishIfEligible, setFreeReviewSlaReader, setVerificationGateReader } from './profile-review.js'
+import { memoryCaptureStore, setCaptureStore } from './id-liveness-store.js'
+import { memoryPhoneOtpStore, setPhoneOtpStore, type PhoneOtpRow } from './phone-otp-store.js'
+import { isListableProfile, publishIfEligible, setFreeReviewSlaReader } from './profile-review.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
@@ -31,13 +34,62 @@ const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
 const pins = memoryPinLockStore()
 const media = memoryMediaStore()
+const otp = memoryPhoneOtpStore()
+const captures = memoryCaptureStore({
+  accounts: memory.accounts,
+  profiles: memory.profiles,
+  phoneRows: [],
+})
 const audits: AuditRow[] = []
+const auditTxs: unknown[] = []
 let now = new Date('2026-10-13T00:00:00.000Z')
 let slaHours = 24
-let gatesOpen = false
 let billingCalls = 0
 const premium = new Set<string>()
 let serial = 0
+
+function installAudit(port: { append(tx: unknown, input: AuditAppend): Promise<void> } = memoryAuditPort(audits)): void {
+  setAuditPort({
+    async append(tx, input) {
+      auditTxs.push(tx)
+      await port.append(tx, input)
+    },
+  })
+}
+
+function insertVerification(
+  accountId: string,
+  kind: 'phone_otp' | 'liveness' | 'id_document',
+  status: 'pending' | 'granted' | 'rejected',
+): void {
+  const id = newId(now)
+  if (kind === 'phone_otp') {
+    const row: PhoneOtpRow = {
+      id,
+      account_id: accountId,
+      kind: 'phone_otp',
+      status,
+      vendor: null,
+      evidence_uri: null,
+      phone_e164: '+22670000000',
+      hash: null,
+      expires_at: null,
+    }
+    otp.rows.push(row)
+    return
+  }
+  captures.rows.push({
+    id,
+    account_id: accountId,
+    kind,
+    status,
+    vendor: null,
+    evidence_uri: 'memory',
+    phone_e164: null,
+    hash: null,
+    expires_at: null,
+  })
+}
 
 function samplePng(): Buffer {
   const png = new PNG({ width: 8, height: 8 })
@@ -55,14 +107,15 @@ describe('human review before anyone else sees a profile', () => {
     setMediaClock(() => now)
     setSignedTtlReader(async () => 60)
     setFreeReviewSlaReader(async () => slaHours)
-    setVerificationGateReader(async () => gatesOpen)
+    setPhoneOtpStore(otp)
+    setCaptureStore(captures)
     setBillingPort({
       async isEntitled(accountId) {
         billingCalls += 1
         return premium.has(accountId) ? true : 'unavailable'
       },
     })
-    setAuditPort(memoryAuditPort(audits))
+    installAudit()
     setAuthLimitReader(async () => 100)
     resetAuthRateWindow()
     setAccountStore(memory)
@@ -86,7 +139,8 @@ describe('human review before anyone else sees a profile', () => {
     setMediaClock(undefined)
     setSignedTtlReader(undefined)
     setFreeReviewSlaReader(undefined)
-    setVerificationGateReader(undefined)
+    setPhoneOtpStore(undefined)
+    setCaptureStore(undefined)
     setBillingPort(undefined)
     setAuditPort(undefined)
     setAuthLimitReader(undefined)
@@ -231,7 +285,6 @@ describe('human review before anyone else sees a profile', () => {
   it('requires an explicit decision, publishes only when the gates and unpublished visibility allow it, and retries after a later grant', async () => {
     now = new Date('2026-10-15T00:00:00.000Z')
     slaHours = 24
-    gatesOpen = false
     const member = await createAccount()
     const cookie = await signIn(member.email)
     expect((await saveProfile(cookie, { bio_pending: 'Bio en attente.' })).status).toBe(200)
@@ -313,8 +366,19 @@ describe('human review before anyone else sees a profile', () => {
     expect(media.assets.find((row) => row.id === photo.id)?.moderation_state).toBe('live')
     expect(isListableProfile(decision.visibility, 'Active')).toBe(false)
     expect(audits.some((row) => row.action === 'moderator_profile_review_decision' && row.actor_id === moderator.id)).toBe(true)
+    expect(auditTxs.length).toBeGreaterThan(0)
+    expect(auditTxs.every((tx) => typeof tx === 'object' && tx !== null && 'insert' in tx && 'select' in tx && 'execute' in tx)).toBe(true)
 
-    gatesOpen = true
+    insertVerification(member.id, 'phone_otp', 'pending')
+    insertVerification(member.id, 'id_document', 'granted')
+    insertVerification(member.id, 'liveness', 'granted')
+    await publishIfEligible(member.id)
+    expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('unpublished')
+
+    now = new Date('2026-10-15T00:00:01.000Z')
+    insertVerification(member.id, 'phone_otp', 'granted')
+    insertVerification(member.id, 'id_document', 'pending')
+    insertVerification(member.id, 'liveness', 'pending')
     await publishIfEligible(member.id)
     expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('public')
     expect(isListableProfile('public', 'Active')).toBe(true)
@@ -328,7 +392,6 @@ describe('human review before anyone else sees a profile', () => {
 
   it('leaves held in place and blocks a photo without publishing', async () => {
     now = new Date('2026-10-16T00:00:00.000Z')
-    gatesOpen = true
     const member = await createAccount()
     const stored = memory.profiles.find((row) => row.account_id === member.id)
     expect(stored).toBeTruthy()
@@ -363,5 +426,94 @@ describe('human review before anyone else sees a profile', () => {
     expect(media.assets.find((row) => row.id === photo.id)?.moderation_state).toBe('blocked')
     expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('held')
     expect(isListableProfile('held', 'Active')).toBe(false)
+
+    const allowed = await createAccount()
+    const allowedRow = memory.profiles.find((row) => row.account_id === allowed.id)
+    if (allowedRow) {
+      allowedRow.visibility = 'held'
+    }
+    const allowedCookie = await signIn(allowed.email)
+    expect((await saveProfile(allowedCookie)).status).toBe(200)
+    const second = await fetch(`${base}/v1/media`, {
+      method: 'POST',
+      headers: { cookie: allowedCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'profile_photo', image: png.toString('base64') }),
+    })
+    expect(second.status).toBe(201)
+    const secondPhoto = (await second.json()) as { id: string }
+    now = new Date('2026-10-16T00:00:02.000Z')
+    insertVerification(allowed.id, 'phone_otp', 'granted')
+    insertVerification(allowed.id, 'id_document', 'pending')
+    insertVerification(allowed.id, 'liveness', 'granted')
+    const kept = await fetch(`${base}/v1/staff/cases`, {
+      method: 'POST',
+      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        kind: 'profile_review',
+        account_id: allowed.id,
+        profile: 'allow',
+        photos: [{ asset_id: secondPhoto.id, decision: 'allow' }],
+      }),
+    })
+    expect(kept.status).toBe(200)
+    expect(memory.profiles.find((row) => row.account_id === allowed.id)?.visibility).toBe('held')
+    const hidden = memory.profiles.find((row) => row.account_id === allowed.id)
+    if (hidden) {
+      hidden.visibility = 'emergency_hidden'
+    }
+    await publishIfEligible(allowed.id)
+    expect(memory.profiles.find((row) => row.account_id === allowed.id)?.visibility).toBe('emergency_hidden')
+  })
+
+  it('rolls the decision back when the audit write fails', async () => {
+    now = new Date('2026-10-17T00:00:00.000Z')
+    const member = await createAccount()
+    const cookie = await signIn(member.email)
+    expect((await saveProfile(cookie, { bio_pending: 'Toujours en file.' })).status).toBe(200)
+    const queuedAt = memory.profiles.find((row) => row.account_id === member.id)
+    expect(queuedAt?.visibility).toBe('unpublished')
+    const uploaded = await fetch(`${base}/v1/media`, {
+      method: 'POST',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ kind: 'profile_photo', image: png.toString('base64') }),
+    })
+    expect(uploaded.status).toBe(201)
+    const photo = (await uploaded.json()) as { id: string }
+    const moderator = await createAccount()
+    const moderatorCookie = await signIn(moderator.email)
+    asStaff(moderator.id, 'moderator')
+    const inner = memoryAuditPort(audits)
+    setAuditPort({
+      async append(tx, input) {
+        if (input.action === 'moderator_profile_review_decision') {
+          throw new Error('audit down')
+        }
+        await inner.append(tx, input)
+      },
+    })
+    try {
+      const failed = await fetch(`${base}/v1/staff/cases`, {
+        method: 'POST',
+        headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+        body: JSON.stringify({
+          kind: 'profile_review',
+          account_id: member.id,
+          profile: 'allow',
+          bio: 'allow',
+          photos: [{ asset_id: photo.id, decision: 'allow' }],
+        }),
+      })
+      expect(failed.status).toBe(500)
+    } finally {
+      installAudit()
+    }
+    expect(media.assets.find((row) => row.id === photo.id)?.moderation_state).toBe('pending')
+    const profile = await fetch(`${base}/v1/me/profile`, { headers: { cookie } })
+    const body = (await profile.json()) as { bio_pending: string | null; bio_live: string | null }
+    expect(body.bio_pending).toBe('Toujours en file.')
+    expect(body.bio_live).toBeNull()
+    const moderatorAgain = await fetch(`${base}/v1/staff/cases?kind=profile_review`, { headers: { cookie: moderatorCookie } })
+    const listed = (await moderatorAgain.json()) as { rows: Array<{ account_id: string }> }
+    expect(listed.rows.some((row) => row.account_id === member.id)).toBe(true)
   })
 })

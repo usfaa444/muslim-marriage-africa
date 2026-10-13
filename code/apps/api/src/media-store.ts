@@ -1,4 +1,5 @@
 import { and, desc, eq } from 'drizzle-orm'
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { isUuidV7 } from '@ankanu/kernel'
 import { getIdentityDatabase } from './account-store.js'
 import { photoAsset, photoDerivative, signedGrant } from './account-schema.js'
@@ -49,7 +50,7 @@ export type MediaStore = {
   ): Promise<void>
   latestProfilePhoto(ownerId: string): Promise<StoredAsset | null>
   pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]>
-  setModerationState(id: string, state: ModerationState): Promise<void>
+  setModerationState(id: string, state: ModerationState, db?: Pick<NodePgDatabase, 'update'>): Promise<boolean>
   asset(id: string): Promise<StoredAsset | null>
   bytes(key: string): Promise<Uint8Array | null>
   saveGrant(grant: StoredGrant): Promise<void>
@@ -75,6 +76,8 @@ export function memoryMediaStore(): MediaStore & {
   derivatives: StoredDerivative[]
   grants: StoredGrant[]
   blobs: Map<string, Uint8Array>
+  snapshot(): Array<{ id: string; moderation_state: ModerationState | null }>
+  restore(rows: Array<{ id: string; moderation_state: ModerationState | null }>): void
 } {
   const assets: StoredAsset[] = []
   const derivatives: StoredDerivative[] = []
@@ -100,11 +103,24 @@ export function memoryMediaStore(): MediaStore & {
         (row) => row.owner_id === ownerId && row.kind === 'profile_photo' && row.moderation_state === 'pending',
       )
     },
+    snapshot() {
+      return assets.map((row) => ({ id: row.id, moderation_state: row.moderation_state }))
+    },
+    restore(rows: Array<{ id: string; moderation_state: ModerationState | null }>) {
+      for (const item of rows) {
+        const row = assets.find((asset) => asset.id === item.id)
+        if (row) {
+          row.moderation_state = item.moderation_state
+        }
+      }
+    },
     async setModerationState(id, state) {
       const row = assets.find((item) => item.id === id)
-      if (row) {
-        row.moderation_state = state
+      if (!row || row.moderation_state !== 'pending') {
+        return false
       }
+      row.moderation_state = state
+      return true
     },
     async asset(id) {
       return assets.find((row) => row.id === id) ?? null
@@ -191,8 +207,17 @@ async function pendingProfilePhotos(ownerId: string): Promise<StoredAsset[]> {
   return rows.map(asAsset)
 }
 
-async function setModerationState(id: string, state: ModerationState): Promise<void> {
-  await getIdentityDatabase().update(photoAsset).set({ moderation_state: state }).where(eq(photoAsset.id, id))
+async function setModerationState(
+  id: string,
+  state: ModerationState,
+  db?: Pick<NodePgDatabase, 'update'>,
+): Promise<boolean> {
+  const updated = await (db ?? getIdentityDatabase())
+    .update(photoAsset)
+    .set({ moderation_state: state })
+    .where(and(eq(photoAsset.id, id), eq(photoAsset.moderation_state, 'pending')))
+    .returning({ id: photoAsset.id })
+  return updated.length === 1
 }
 
 async function readAsset(id: string): Promise<StoredAsset | null> {

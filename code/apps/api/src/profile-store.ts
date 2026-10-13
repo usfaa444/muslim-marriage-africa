@@ -1,5 +1,6 @@
 import type { Gender } from '@ankanu/kernel'
-import { eq, isNotNull } from 'drizzle-orm'
+import { and, eq, isNotNull, isNull, or, sql } from 'drizzle-orm'
+import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { account, profile } from './account-schema.js'
 import { getIdentityDatabase } from './account-store.js'
 import type { CreatedProfile } from './create-account.js'
@@ -27,11 +28,16 @@ export type ReviewPatch = {
   visibility?: string | null
 }
 
+export type ProfileDb = Pick<NodePgDatabase, 'select' | 'update' | 'insert' | 'execute'>
+
+/** `queued` writes only while this profile is still in the queue. `unpublished` writes public only from `unpublished`. */
+export type ReviewWriteScope = 'queued' | 'unpublished'
+
 export type ProfileStore = {
-  read(accountId: string): Promise<StoredProfile | null>
+  read(accountId: string, db?: ProfileDb): Promise<StoredProfile | null>
   update(accountId: string, patch: ProfileWrite): Promise<StoredProfile | null>
   noteQueued(accountId: string, at: string): Promise<StoredProfile | null>
-  patchReview(accountId: string, patch: ReviewPatch): Promise<StoredProfile | null>
+  patchReview(accountId: string, patch: ReviewPatch, scope?: ReviewWriteScope, db?: ProfileDb): Promise<StoredProfile | null>
   queued(): Promise<QueuedProfile[]>
 }
 
@@ -78,13 +84,42 @@ type ReviewMemory = {
   bio_live: string | null
 }
 
+type ProfileSnap = {
+  visibility: Array<{ account_id: string; visibility: string | null }>
+  extra: Array<[string, ProfileWrite]>
+  review: Array<[string, ReviewMemory]>
+}
+
 export function memoryProfileStore(
   accounts: Array<AccountGender & { pseudonym?: string; status?: string }>,
   profiles: CreatedProfile[],
-): ProfileStore {
+): ProfileStore & { snapshot(): ProfileSnap; restore(snap: ProfileSnap): void } {
   const extra = new Map<string, ProfileWrite>()
   const review = new Map<string, ReviewMemory>()
   return {
+    snapshot() {
+      return structuredClone({
+        visibility: profiles.map((row) => ({ account_id: row.account_id, visibility: row.visibility })),
+        extra: [...extra.entries()],
+        review: [...review.entries()],
+      })
+    },
+    restore(snap) {
+      extra.clear()
+      review.clear()
+      for (const [accountId, patch] of snap.extra) {
+        extra.set(accountId, patch)
+      }
+      for (const [accountId, clock] of snap.review) {
+        review.set(accountId, clock)
+      }
+      for (const item of snap.visibility) {
+        const row = profiles.find((entry) => entry.account_id === item.account_id)
+        if (row) {
+          row.visibility = item.visibility
+        }
+      }
+    },
     async read(accountId) {
       return compose(accounts, profiles, extra, review, accountId)
     },
@@ -103,21 +138,30 @@ export function memoryProfileStore(
         return null
       }
       const current = review.get(accountId) ?? { review_queued_at: null, review_passed_at: null, bio_live: null }
+      if (current.review_queued_at !== null && row.visibility !== null) {
+        return compose(accounts, profiles, extra, review, accountId)
+      }
       if (current.review_queued_at === null) {
         current.review_queued_at = at
+        review.set(accountId, current)
       }
-      review.set(accountId, current)
       if (row.visibility === null) {
         row.visibility = 'unpublished'
       }
       return compose(accounts, profiles, extra, review, accountId)
     },
-    async patchReview(accountId, patch) {
+    async patchReview(accountId, patch, scope) {
       const row = profiles.find((item) => item.account_id === accountId)
       if (!row) {
         return null
       }
       const current = review.get(accountId) ?? { review_queued_at: null, review_passed_at: null, bio_live: null }
+      if (scope === 'queued' && current.review_queued_at === null) {
+        return null
+      }
+      if (scope === 'unpublished' && row.visibility !== 'unpublished') {
+        return compose(accounts, profiles, extra, review, accountId)
+      }
       if ('review_queued_at' in patch) {
         current.review_queued_at = patch.review_queued_at ?? null
       }
@@ -197,16 +241,16 @@ function compose(
 
 function postgresProfileStore(): ProfileStore {
   return {
-    read: readProfile,
+    read: (accountId, db) => readProfile(accountId, db),
     update: updateProfile,
     noteQueued: noteQueued,
-    patchReview: patchReview,
+    patchReview: (accountId, patch, scope, db) => patchReview(accountId, patch, scope, db),
     queued: queuedProfiles,
   }
 }
 
-async function readProfile(accountId: string): Promise<StoredProfile | null> {
-  const rows = await getIdentityDatabase()
+async function readProfile(accountId: string, db?: ProfileDb): Promise<StoredProfile | null> {
+  const rows = await (db ?? getIdentityDatabase())
     .select({
       account_id: profile.account_id,
       dob: profile.dob,
@@ -266,17 +310,27 @@ async function noteQueued(accountId: string, at: string): Promise<StoredProfile 
   if (!current) {
     return null
   }
+  if (current.review_queued_at !== null && current.visibility !== null) {
+    return current
+  }
   await getIdentityDatabase()
     .update(profile)
     .set({
-      review_queued_at: current.review_queued_at ?? at,
-      visibility: current.visibility === null ? 'unpublished' : current.visibility,
+      review_queued_at: sql`coalesce(${profile.review_queued_at}, ${at})`,
+      visibility: sql`case when ${profile.visibility} is null then 'unpublished' else ${profile.visibility} end`,
     })
-    .where(eq(profile.account_id, accountId))
+    .where(
+      and(eq(profile.account_id, accountId), or(isNull(profile.review_queued_at), isNull(profile.visibility))),
+    )
   return readProfile(accountId)
 }
 
-async function patchReview(accountId: string, patch: ReviewPatch): Promise<StoredProfile | null> {
+async function patchReview(
+  accountId: string,
+  patch: ReviewPatch,
+  scope?: ReviewWriteScope,
+  db?: ProfileDb,
+): Promise<StoredProfile | null> {
   const set: {
     review_queued_at?: string | null
     review_passed_at?: string | null
@@ -300,16 +354,28 @@ async function patchReview(accountId: string, patch: ReviewPatch): Promise<Store
     set.visibility = patch.visibility ?? null
   }
   if (Object.keys(set).length > 0) {
-    const updated = await getIdentityDatabase()
+    const database = db ?? getIdentityDatabase()
+    const filters = [eq(profile.account_id, accountId)]
+    if (scope === 'queued') {
+      filters.push(isNotNull(profile.review_queued_at))
+    }
+    if (scope === 'unpublished') {
+      filters.push(eq(profile.visibility, 'unpublished'))
+      filters.push(isNotNull(profile.review_passed_at))
+    }
+    const updated = await database
       .update(profile)
       .set(set)
-      .where(eq(profile.account_id, accountId))
+      .where(and(...filters))
       .returning({ account_id: profile.account_id })
     if (updated.length === 0) {
+      if (scope === 'unpublished') {
+        return readProfile(accountId, db)
+      }
       return null
     }
   }
-  return readProfile(accountId)
+  return readProfile(accountId, db)
 }
 
 async function queuedProfiles(): Promise<QueuedProfile[]> {

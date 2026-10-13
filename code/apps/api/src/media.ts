@@ -140,8 +140,13 @@ export async function applyPhotoModeration(
   store: MediaStore,
   assetId: string,
   decision: 'allow' | 'block',
-): Promise<void> {
-  await store.setModerationState(assetId, decision === 'allow' ? 'live' : 'blocked')
+  db?: Parameters<MediaStore['setModerationState']>[2],
+): Promise<boolean> {
+  const state = decision === 'allow' ? 'live' : 'blocked'
+  if (db) {
+    return store.setModerationState(assetId, state, db)
+  }
+  return store.setModerationState(assetId, state)
 }
 
 export async function signMedia(
