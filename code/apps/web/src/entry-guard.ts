@@ -25,6 +25,7 @@ const ACCOUNT = new Set([
   '/onboarding',
   '/photo-rules',
   '/profile-edit',
+  '/profile-review',
   '/settings',
   '/pin',
   '/decouvrir',

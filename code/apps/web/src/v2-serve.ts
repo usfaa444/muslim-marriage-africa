@@ -10,9 +10,11 @@ import {
   onboardingHtml,
   otpHtml,
   phoneHtml,
+  pendingProfilePhoto,
   photoHtml,
   pinHtml,
   profileHtml,
+  reviewHtml,
   pseudonymHtml,
   resetHtml,
   settingsHtml,
@@ -168,6 +170,33 @@ export function photoResponse(request: Request): Promise<Response> {
 
 export function profileResponse(request: Request): Promise<Response> {
   return send(request, '/profile-edit', profileHtml(stitchFile('11-profile-edit')))
+}
+
+export async function profileReviewResponse(request: Request): Promise<Response> {
+  const redirect = await entryRedirect(request, '/profile-review')
+  if (redirect) {
+    return redirect
+  }
+  if (!(await pendingFromApi(request))) {
+    return redirectTo(request, '/profile-edit')
+  }
+  return htmlResponse(reviewHtml(stitchFile('12-profile-not-yet-public')))
+}
+
+async function pendingFromApi(request: Request): Promise<boolean> {
+  const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
+  try {
+    const response = await fetch(`${origin}/v1/me/profile`, {
+      headers: { cookie: request.headers.get('cookie') ?? '' },
+      cache: 'no-store',
+    })
+    if (!response.ok) {
+      return false
+    }
+    return pendingProfilePhoto(await response.json())
+  } catch {
+    return false
+  }
 }
 
 export function settingsResponse(request: Request): Promise<Response> {

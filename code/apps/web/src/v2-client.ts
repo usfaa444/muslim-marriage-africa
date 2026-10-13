@@ -1107,6 +1107,23 @@ export function statusScript(): string {
   `
 }
 
+export function reviewScript(): string {
+  return `
+    fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
+      return response.json().then(function (body) {
+        var photo = body && body.photo
+        if (!response.ok || !photo || photo.moderation_state !== 'pending') {
+          window.location.replace('/profile-edit')
+        }
+      }, function () {
+        window.location.replace('/profile-edit')
+      })
+    }).catch(function () {
+      window.location.replace('/profile-edit')
+    })
+  `
+}
+
 export function profileScript(): string {
   return `
     var pauseMap = { ramadan: 'ramadan', examens: 'exams', voyage: 'travel', deuil: 'mourning' }
@@ -1256,7 +1273,14 @@ export function profileScript(): string {
       applyLifePlans(body.life_plans || '', keepEdits)
       var bio = document.getElementById('bio')
       if (bio && open('bio')) bio.value = body.bio_pending || body.bio_live || ''
+      paintPhoto(body)
       paintMeter(body.completeness)
+    }
+
+    function paintPhoto(body) {
+      var note = document.getElementById('profile-photo-note')
+      if (!note || !body || !body.photo || body.photo.moderation_state !== 'pending') return
+      if (body.photo.caption) note.textContent = body.photo.caption
     }
 
     function payload() {
@@ -1303,8 +1327,49 @@ export function profileScript(): string {
       profileLoaded = true
     }).catch(function () {})
 
+    var photoFile = document.getElementById('profile-photo-file')
+    if (photoFile) {
+      photoFile.addEventListener('change', function () {
+        var file = photoFile.files && photoFile.files[0]
+        if (!file) return
+        var reader = new FileReader()
+        reader.onload = function () {
+          var text = String(reader.result || '')
+          var comma = text.indexOf(',')
+          var image = comma === -1 ? text : text.slice(comma + 1)
+          fetch('/v1/media', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ kind: 'profile_photo', image: image })
+          }).then(function (response) {
+            return response.json().then(function (body) {
+              return { ok: response.ok, body: body }
+            }, function () {
+              return { ok: false, body: null }
+            })
+          }).then(function (result) {
+            if (!result.ok || !result.body || result.body.moderation_state !== 'pending') {
+              var message = result.body && result.body.error && result.body.error.message
+              showStatus(message || 'Envoi de la photo impossible.')
+              return
+            }
+            window.location.href = '/profile-review'
+          }).catch(function () {
+            showStatus('Envoi de la photo impossible.')
+          })
+        }
+        reader.readAsDataURL(file)
+      })
+    }
+
     document.querySelectorAll('button').forEach(function (button) {
       var label = button.textContent || ''
+      if (label.indexOf('Mettre à jour la photo') !== -1) {
+        button.addEventListener('click', function () {
+          if (photoFile) photoFile.click()
+        })
+      }
       if (label.indexOf('Mettre en pause') !== -1) {
         button.addEventListener('click', function () {
           var picked = document.querySelector('input[name="pause_reason"]:checked')

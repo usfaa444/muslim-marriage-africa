@@ -5,6 +5,7 @@ import { getAccountStore } from './account-store.js'
 import { NON_MEMBER_PAUSE_MESSAGE } from './life-pause.js'
 import { requireLiveSession, unauthenticated } from './pin-session.js'
 import { acceptProfileWrite, completenessFor, isProfileFieldError, type ProfileFieldError } from './profile-fields.js'
+import { photoForMember } from './media.controller.js'
 import { getProfileStore, type StoredProfile } from './profile-store.js'
 
 type CookieRequest = {
@@ -71,7 +72,7 @@ export class ProfileController {
     if (!row) {
       unauthenticated()
     }
-    return present(row)
+    return { ...present(row), photo: await photoForMember(member.accountId) }
   }
 
   @Put('profile')
@@ -100,6 +101,6 @@ export class ProfileController {
     if (!saved) {
       unauthenticated()
     }
-    return present(saved)
+    return { ...present(saved), photo: await photoForMember(member.accountId) }
   }
 }

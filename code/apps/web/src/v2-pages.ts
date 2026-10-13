@@ -10,6 +10,7 @@ import {
   pinScript,
   profileScript,
   pseudonymScript,
+  reviewScript,
   recaptchaTag,
   resetScript,
   settingsScript,
@@ -338,6 +339,14 @@ export function profileHtml(stitch: string): string {
       '<p id="profile-meter-note" class="hidden text-xs text-deep-navy/70 mt-1 leading-relaxed">',
     )
     .replace(
+      '<p class="text-xs text-deep-navy/80 leading-normal">',
+      '<p id="profile-photo-note" class="text-xs text-deep-navy/80 leading-normal">',
+    )
+    .replace(
+      '</button>\n<button class="px-3 py-1.5 rounded-md border border-hairline text-deep-navy/70 text-xs font-medium hover:border-deep-navy/40 transition-colors" type="button">',
+      '</button>\n<input id="profile-photo-file" hidden accept="image/jpeg,image/png" type="file">\n<button class="px-3 py-1.5 rounded-md border border-hairline text-deep-navy/70 text-xs font-medium hover:border-deep-navy/40 transition-colors" type="button">',
+    )
+    .replace(
       '<div class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
       '<div id="madhhab-block" class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
     )
@@ -355,6 +364,18 @@ export function profileHtml(stitch: string): string {
   html = html.replace(/(<textarea\b[^>]*\bid="intentions"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
   html = html.replace(/<select\b([^>]*)>/g, '<select$1><option selected="" value=""></option>')
   return guarded(html, profileScript())
+}
+
+export function pendingProfilePhoto(body: unknown): boolean {
+  if (typeof body !== 'object' || body === null) {
+    return false
+  }
+  const photo = (body as { photo?: { moderation_state?: unknown } }).photo
+  return photo?.moderation_state === 'pending'
+}
+
+export function reviewHtml(stitch: string): string {
+  return guarded(stitch, reviewScript())
 }
 
 export function settingsHtml(stitch: string): string {

@@ -23,7 +23,9 @@
     "bullmq": "6.3.9",
     "drizzle-orm": "0.45.3",
     "ioredis": "5.11.1",
+    "jpeg-js": "0.4.4",
     "pg": "8.23.1",
+    "pngjs": "7.0.0",
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2"
   },

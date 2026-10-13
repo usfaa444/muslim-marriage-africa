@@ -251,12 +251,15 @@ describe('operator_config migration', () => {
       'audit_event',
       'cil_ticket',
       'credential',
+      'derivative',
       'email_verification',
       'operator_config',
       'password_reset',
+      'photo_asset',
       'pin_lock',
       'profile',
       'session',
+      'signed_grant',
       'sms_dispatch',
       'verification_record',
     ])
@@ -266,12 +269,15 @@ describe('operator_config migration', () => {
       'public.audit_event',
       'public.cil_ticket',
       'public.credential',
+      'public.derivative',
       'public.email_verification',
       'public.operator_config',
       'public.password_reset',
+      'public.photo_asset',
       'public.pin_lock',
       'public.profile',
       'public.session',
+      'public.signed_grant',
       'public.sms_dispatch',
       'public.verification_record',
     ])
@@ -279,7 +285,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('10')
+    expect(applied.rows[0]?.count).toBe('12')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -797,12 +803,15 @@ describe('operator_config migration', () => {
       'audit_event',
       'cil_ticket',
       'credential',
+      'derivative',
       'email_verification',
       'operator_config',
       'password_reset',
+      'photo_asset',
       'pin_lock',
       'profile',
       'session',
+      'signed_grant',
       'sms_dispatch',
       'verification_record',
     ])
@@ -812,12 +821,15 @@ describe('operator_config migration', () => {
       'public.audit_event',
       'public.cil_ticket',
       'public.credential',
+      'public.derivative',
       'public.email_verification',
       'public.operator_config',
       'public.password_reset',
+      'public.photo_asset',
       'public.pin_lock',
       'public.profile',
       'public.session',
+      'public.signed_grant',
       'public.sms_dispatch',
       'public.verification_record',
     ])

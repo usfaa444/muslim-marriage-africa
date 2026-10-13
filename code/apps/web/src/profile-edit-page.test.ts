@@ -116,8 +116,16 @@ function mount() {
   const byId = new Map<string, Control>(ids.map((id) => [id, control(id)]))
   const banner = control('profile-meter-banner', { className: 'hidden flex items-start gap-3 pt-2' })
   const note = control('profile-meter-note', { className: 'hidden text-xs' })
+  const photoNote = control('profile-photo-note', { textContent: 'Aucun affichage public.' })
+  const photoFile = control('profile-photo-file') as Control & { files: Array<{ name: string }>; click: () => void }
+  photoFile.files = []
+  photoFile.click = () => {
+    photoFile.files = [{ name: 'face.png' }]
+  }
   byId.set(banner.id, banner)
   byId.set(note.id, note)
+  byId.set(photoNote.id, photoNote)
+  byId.set(photoFile.id, photoFile)
   const inputs = [
     control('', { name: 'madhhab', value: 'maliki', type: 'radio' }),
     control('', { name: 'religious_practice', value: 'assidue', type: 'radio' }),
@@ -125,7 +133,9 @@ function mount() {
     control('', { name: 'pin', type: 'checkbox' }),
   ]
   const save = control('', { textContent: 'Enregistrer les modifications' })
+  const upload = control('', { textContent: 'Mettre à jour la photo' })
   const form = control('profile-form')
+  const location = { href: '' }
   const calls: Array<{ url: string; method: string; body?: string }> = []
   let release: (body: typeof stored) => void = () => {}
   const gate = new Promise<typeof stored>((resolve) => {
@@ -148,6 +158,12 @@ function mount() {
         json: async () => ({ ...JSON.parse(init?.body ?? '{}'), bio_live: null, completeness }),
       })
     }
+    if (url === '/v1/media' && method === 'POST') {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ moderation_state: 'pending', caption: 'Photo en revue — pas encore publique.' }),
+      })
+    }
     return Promise.resolve({ ok: false, json: async () => ({}) })
   }
 
@@ -163,21 +179,25 @@ function mount() {
       return inputs.find((input) => input.name === checked[1] && input.checked) ?? null
     },
     querySelectorAll(selector: string) {
-      if (selector === 'button') return [save]
+      if (selector === 'button') return [save, upload]
       const named = /^input\[name="([^"]+)"\]$/.exec(selector)
       if (!named) return []
       return inputs.filter((input) => input.name === named[1])
     },
   }
 
-  new Function('document', 'window', 'fetch', profileScript())(documentRef, { location: { href: '' } }, fetchImpl)
+  new Function('document', 'window', 'fetch', profileScript())(documentRef, { location }, fetchImpl)
 
   return {
     byId,
     banner,
     note,
+    photoNote,
+    photoFile,
     inputs,
     save,
+    upload,
+    location,
     form,
     calls,
     release,
@@ -285,5 +305,48 @@ describe('profile edit load and meter', () => {
     expect(page.banner.classList.contains('hidden')).toBe(false)
     expect(page.note.classList.contains('hidden')).toBe(true)
     expect(page.byId.get('profile-meter-missing')?.textContent).toBe('« Il manque : pratique »')
+  })
+
+  it('uploads a profile photo and shows the pending caption without blurring the original in css', async () => {
+    const html = profileHtml(stitch())
+    expect(html).toContain('id="profile-photo-file"')
+    expect(html).toContain("fetch('/v1/media'")
+    expect(html).toContain('Mettre à jour la photo')
+    expect(html).toContain('Consignes de pudeur')
+    expect(html).not.toContain('original_key')
+    expect(html).not.toContain('filter:blur')
+    expect(html).not.toContain('filter: blur')
+
+    const page = mount()
+    expect(page.photoNote.textContent).toBe('Aucun affichage public.')
+    page.release({
+      ...stored,
+      photo: { moderation_state: 'pending', caption: 'Photo en revue — pas encore publique.' },
+    })
+    await flush()
+    expect(page.photoNote.textContent).toBe('Photo en revue — pas encore publique.')
+    expect(page.photoNote.style.backgroundColor).toBe('')
+
+    await page.upload.listeners.click?.[0]?.()
+    expect(page.photoFile.files).toEqual([{ name: 'face.png' }])
+    const previousReader = globalThis.FileReader
+    class FakeReader {
+      result = 'data:image/png;base64,QUJD'
+      onload: (() => void) | null = null
+      readAsDataURL(): void {
+        this.onload?.()
+      }
+    }
+    globalThis.FileReader = FakeReader as unknown as typeof FileReader
+    try {
+      await page.photoFile.listeners.change?.[0]?.()
+      await flush()
+    } finally {
+      globalThis.FileReader = previousReader
+    }
+    const post = page.calls.find((call) => call.url === '/v1/media')
+    expect(post?.method).toBe('POST')
+    expect(JSON.parse(post?.body ?? '{}')).toEqual({ kind: 'profile_photo', image: 'QUJD' })
+    expect(page.location.href).toBe('/profile-review')
   })
 })

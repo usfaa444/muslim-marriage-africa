@@ -20,6 +20,7 @@ import {
   profileHtml,
   pseudonymHtml,
   resetHtml,
+  reviewHtml,
   settingsHtml,
   splashHtml,
   statusHtml,
@@ -309,6 +310,7 @@ describe('v2 signup and sign-in screens', () => {
       onboardingHtml(stitch('08-onboarding')),
       photoHtml(stitch('09-photo-rules')),
       profileHtml(stitch('11-profile-edit')),
+      reviewHtml(stitch('12-profile-not-yet-public')),
       settingsHtml(stitch('27-settings')),
       statusHtml(stitch('28-delete-export-status')),
     ]
@@ -353,6 +355,7 @@ describe('v2 signup and sign-in screens', () => {
       onboardingHtml(stitch('08-onboarding')),
       photoHtml(stitch('09-photo-rules')),
       profileHtml(stitch('11-profile-edit')),
+      reviewHtml(stitch('12-profile-not-yet-public')),
       settingsHtml(stitch('27-settings')),
       statusHtml(stitch('28-delete-export-status')),
     ]
@@ -652,6 +655,9 @@ describe('server entry guard', () => {
     expect(entryLocation('/otp', 'otp')).toBeNull()
     expect(entryLocation('/id-liveness', 'identity')).toBeNull()
     expect(entryLocation('/onboarding', 'identity')).toBe('/id-liveness')
+    expect(entryLocation('/profile-edit', 'anon')).toBe('/auth')
+    expect(entryLocation('/profile-review', 'anon')).toBe('/auth')
+    expect(entryLocation('/profile-review', 'account')).toBeNull()
     expect(entryLocation('/pin', 'account')).toBeNull()
     expect(entryLocation('/privacy/status/ticket-1', 'account')).toBeNull()
     expect(entryLocation('/settings', 'email')).toBe('/email-verification')

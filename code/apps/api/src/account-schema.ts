@@ -190,6 +190,61 @@ export const cilTicket = pgTable(
   ],
 )
 
+/** Media-owned profile, chat, or voice object. Serializers never emit `original_key`. */
+export const photoAsset = pgTable(
+  'photo_asset',
+  {
+    id: uuid('id').primaryKey(),
+    owner_id: uuid('owner_id')
+      .notNull()
+      .references(() => account.id),
+    kind: text('kind').notNull(),
+    original_key: text('original_key').notNull(),
+    blur_key: text('blur_key'),
+    moderation_state: text('moderation_state'),
+  },
+  (table) => [
+    check(
+      'photo_asset_kind_check',
+      sql`${table.kind} in ('profile_photo', 'chat_photo', 'voice_note')`,
+    ),
+    check(
+      'photo_asset_moderation_state_check',
+      sql`${table.moderation_state} is null or ${table.moderation_state} in ('pending', 'live', 'blocked')`,
+    ),
+  ],
+)
+
+/** One row per stored size. `size=blur` uses the same object as `photo_asset.blur_key`. */
+export const photoDerivative = pgTable(
+  'derivative',
+  {
+    id: uuid('id').primaryKey(),
+    photo_asset_id: uuid('photo_asset_id')
+      .notNull()
+      .references(() => photoAsset.id),
+    size: text('size').notNull(),
+    object_key: text('object_key').notNull(),
+  },
+  (table) => [
+    check('derivative_size_check', sql`${table.size} in ('xs', 'sm', 'md', 'blur')`),
+  ],
+)
+
+/** Capability for the media GET gateway. Not a bucket pre-sign. */
+export const signedGrant = pgTable('signed_grant', {
+  id: uuid('id').primaryKey(),
+  photo_asset_id: uuid('photo_asset_id')
+    .notNull()
+    .references(() => photoAsset.id),
+  viewer_id: uuid('viewer_id')
+    .notNull()
+    .references(() => account.id),
+  derivative: text('derivative').notNull(),
+  expires_at: timestamp('expires_at', { withTimezone: true, mode: 'string' }).notNull(),
+  revoked_at: timestamp('revoked_at', { withTimezone: true, mode: 'string' }),
+})
+
 /** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */
 export const auditEvent = pgTable('audit_event', {
   id: uuid('id').primaryKey(),

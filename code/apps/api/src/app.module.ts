@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { AccountsController } from './accounts.controller.js'
 import { CilController } from './cil.controller.js'
 import { HealthController } from './health.controller.js'
+import { MediaController } from './media.controller.js'
 import { MeController } from './me.controller.js'
 import { PasswordResetsController } from './password-resets.controller.js'
 import { ProfileController } from './profile.controller.js'
@@ -19,6 +20,7 @@ import { VerificationsController } from './verifications.controller.js'
     PinController,
     MeController,
     ProfileController,
+    MediaController,
     CilController,
   ],
 })

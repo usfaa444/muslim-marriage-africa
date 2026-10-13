@@ -9,6 +9,7 @@ import { createApp } from './create-app.js'
 import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
 import { acceptProfileWrite, completenessFor } from './profile-fields.js'
+import { memoryMediaStore, setMediaStore } from './media-store.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
@@ -106,6 +107,7 @@ describe('profile fields and completeness', () => {
     setAccountStore(memory)
     setSessionStore(sessions)
     setProfileStore(memoryProfileStore(memory.accounts, memory.profiles))
+    setMediaStore(memoryMediaStore())
     pins.rows.length = 0
     resetPinEntries()
     setPinLockStore(pins)
@@ -125,6 +127,7 @@ describe('profile fields and completeness', () => {
     setAccountStore(undefined)
     setSessionStore(undefined)
     setProfileStore(undefined)
+    setMediaStore(undefined)
     setPinLockStore(undefined)
     resetPinEntries()
     if (app) {

@@ -31,6 +31,7 @@ export async function createApp(): Promise<INestApplication> {
   app.use(edgeContext)
   app.use('/v1/verifications/id', express.json({ limit: VERIFICATION_JSON_LIMIT }))
   app.use('/v1/verifications/liveness', express.json({ limit: VERIFICATION_JSON_LIMIT }))
+  app.use('/v1/media', express.json({ limit: VERIFICATION_JSON_LIMIT }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(sessionTouch)

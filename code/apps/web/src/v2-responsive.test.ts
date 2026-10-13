@@ -17,6 +17,7 @@ import {
   pinHtml,
   profileHtml,
   pseudonymHtml,
+  reviewHtml,
   resetHtml,
   settingsHtml,
   splashHtml,
@@ -117,6 +118,7 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '11-onboarding', html: onboardingHtml(stitch('08-onboarding')) },
     { name: '12-photo', html: photoHtml(stitch('09-photo-rules')) },
     { name: '13-profile', html: profileHtml(stitch('11-profile-edit')) },
+    { name: '13b-profile-review', html: reviewHtml(stitch('12-profile-not-yet-public')) },
     { name: '14-settings', html: settingsHtml(stitch('27-settings')) },
     { name: '15-status', html: statusHtml(stitch('28-delete-export-status')) },
   ]
@@ -358,7 +360,17 @@ describe('v2 screens fit the required widths', () => {
   it.skipIf(!binary)('keeps scrollWidth within the viewport at every required width', async () => {
     const pages = screens()
     const server: Server = createServer((request, response) => {
-      const name = new URL(request.url || '/', 'http://127.0.0.1').pathname.slice(1)
+      const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (url.pathname === '/v1/me/profile') {
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.end(
+          JSON.stringify({
+            photo: { moderation_state: 'pending', caption: 'Photo en revue — pas encore publique.' },
+          }),
+        )
+        return
+      }
+      const name = url.pathname.slice(1)
       const page = pages.find((item) => item.name === name)
       response.setHeader('content-type', 'text/html; charset=utf-8')
       response.end(page ? page.html : 'missing')
