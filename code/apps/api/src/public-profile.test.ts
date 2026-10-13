@@ -196,6 +196,7 @@ describe('public profile read', () => {
   }
 
   function grant(accountId: string, kind: 'phone_otp' | 'liveness' | 'id_document', status: 'pending' | 'granted' | 'rejected'): void {
+    now = new Date(now.getTime() + 1)
     const id = newId(now)
     if (kind === 'phone_otp') {
       const row: PhoneOtpRow = {
@@ -373,8 +374,17 @@ describe('public profile read', () => {
     const sisterCookie = await signIn(sister.email)
     const brotherCookie = await signIn(brother.email)
     await publish(brother.id, brotherCookie)
+    setBrowseLimitReader(async () => 1)
+    resetAuthRateWindow()
     const unpublished = await read(sisterCookie, brother.id)
+    const unpublishedAgain = await read(sisterCookie, brother.id)
     expect(unpublished.status).toBe(403)
+    expect(unpublishedAgain.status).toBe(403)
+    expect(await unpublishedAgain.json()).toMatchObject({
+      error: { code: 'FORBIDDEN', details: { reason: 'viewer_not_listable' } },
+    })
+    setBrowseLimitReader(async () => 1000)
+    resetAuthRateWindow()
     expect(await unpublished.json()).toMatchObject({
       error: {
         code: 'FORBIDDEN',

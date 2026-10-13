@@ -328,6 +328,13 @@ export async function profileDetailResponse(request: Request, id: string): Promi
   if (response.status === 200 && isProfileDetailView(payload)) {
     return htmlResponse(profileDetailHtml(stitchFile('15-profile-detail'), payload))
   }
+  const code =
+    typeof payload === 'object' && payload !== null && 'error' in payload
+      ? (payload as { error?: { code?: string } }).error?.code
+      : undefined
+  if (code === 'PIN_REQUIRED') {
+    return redirectTo(request, `/pin?next=${encodeURIComponent(`/profil/${id}`)}`)
+  }
   if (response.status === 404) {
     return redirectTo(request, '/decouvrir')
   }

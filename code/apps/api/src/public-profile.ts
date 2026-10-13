@@ -197,18 +197,18 @@ export async function readPublicProfile(
     return failure(403, 'FORBIDDEN', 'Une session mahram ne peut pas ouvrir cet espace.', { reason: 'mahram_session' }, false)
   }
 
+  const viewerAccount = await loadAccount(viewer.account_id)
+  const viewerProfile = await getProfileStore().read(viewer.account_id)
+  if (!viewerAccount || !isListableProfile(viewerProfile?.visibility ?? null, viewerAccount.status)) {
+    return failure(403, 'FORBIDDEN', VIEWER_NOT_LISTABLE, { reason: 'viewer_not_listable' }, false)
+  }
+
   const limit = await readRlBrowsePerMin()
   if (limit === null) {
     return failure(500, 'UNHANDLED', 'Request failed', null, false)
   }
   if (!takeBrowseSlot(viewer.account_id, limit)) {
     return failure(429, 'RATE_LIMITED', RATE_MESSAGE, null, true)
-  }
-
-  const viewerAccount = await loadAccount(viewer.account_id)
-  const viewerProfile = await getProfileStore().read(viewer.account_id)
-  if (!viewerAccount || !isListableProfile(viewerProfile?.visibility ?? null, viewerAccount.status)) {
-    return failure(403, 'FORBIDDEN', VIEWER_NOT_LISTABLE, { reason: 'viewer_not_listable' }, false)
   }
 
   if (!isUuidV7(targetId) || targetId === viewer.account_id) {

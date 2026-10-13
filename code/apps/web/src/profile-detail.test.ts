@@ -47,7 +47,11 @@ describe('screen 15 public profile', () => {
     expect(html).toContain('>Non<')
     expect(html).toContain("Shafi'i")
     expect(html).toContain("Prières à l'heure")
-    expect(html).toContain('Union stable')
+    expect(html).toContain('« Union stable »')
+    expect(html).toContain('flex flex-wrap')
+    expect(html).toContain('w-12 h-12')
+    expect(html).not.toContain('overflow-x-auto')
+    expect(html).toContain('/v1/pin')
     expect(html).toContain('href="/decouvrir"')
     expect(html).toContain('/v1/media/get?token=main')
     expect(html).toContain("Demander l'accès à la photographie")
@@ -140,5 +144,44 @@ describe('screen 15 public profile', () => {
     })
     expect(web.status).toBe(401)
     expect(await web.json()).toMatchObject({ error: { code: 'UNAUTHENTICATED' } })
+  })
+
+  it('sends a locked sister to the PIN page', async () => {
+    const original = globalThis.fetch
+    globalThis.fetch = (async (input: RequestInfo | URL) => {
+      const url = String(input)
+      if (url.endsWith('/v1/accounts/gate')) {
+        return new Response(JSON.stringify({ step: 'account' }), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        })
+      }
+      return new Response(
+        JSON.stringify({
+          error: {
+            code: 'PIN_REQUIRED',
+            message: 'Code PIN requis.',
+            details: null,
+            request_id: 'pin-test',
+            retryable: false,
+          },
+        }),
+        { status: 401, headers: { 'content-type': 'application/json' } },
+      )
+    }) as typeof fetch
+    try {
+      const response = await GET(
+        new Request('http://127.0.0.1/profil/01990000-0000-7000-8000-000000000099', {
+          headers: { cookie: 'ankanu_session=01990000-0000-7000-8000-000000000010' },
+        }),
+        { params: Promise.resolve({ id: '01990000-0000-7000-8000-000000000099' }) },
+      )
+      expect(response.status).toBe(303)
+      expect(response.headers.get('location')).toBe(
+        'http://127.0.0.1/pin?next=%2Fprofil%2F01990000-0000-7000-8000-000000000099',
+      )
+    } finally {
+      globalThis.fetch = original
+    }
   })
 })

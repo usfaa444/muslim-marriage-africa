@@ -1,3 +1,4 @@
+import { pinGuardScript } from './pin-guard'
 import { prepareV2 } from './v2-document'
 
 export type ProfileDetailPhoto = {
@@ -97,6 +98,7 @@ const TIMEFRAME: Record<string, string> = {
   serene: "Plus d'un an / Selon cheminement",
 }
 
+const THUMB_SIZE = 'relative min-w-0 w-12 h-12 min-[768px]:w-20 min-[768px]:h-20 rounded-md overflow-hidden'
 const GALLERY_SCRIPT = `document.querySelectorAll('[data-photo-src]').forEach(function (button) {
   button.addEventListener('click', function () {
     var hero = document.getElementById('profile-hero')
@@ -104,8 +106,8 @@ const GALLERY_SCRIPT = `document.querySelectorAll('[data-photo-src]').forEach(fu
     if (hero && src) hero.setAttribute('src', src)
     document.querySelectorAll('[data-photo-src]').forEach(function (item) {
       item.className = item === button
-        ? 'relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden border-2 border-soft-gold bg-deep-navy/5 group cursor-pointer focus:outline-none'
-        : 'relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden border border-hairline/80 hover:border-soft-gold bg-deep-navy/5 group cursor-pointer transition-colors focus:outline-none'
+        ? '${THUMB_SIZE} border-2 border-soft-gold bg-deep-navy/5 group cursor-pointer focus:outline-none'
+        : '${THUMB_SIZE} border border-hairline/80 hover:border-soft-gold bg-deep-navy/5 group cursor-pointer transition-colors focus:outline-none'
     })
   })
 })`
@@ -231,7 +233,7 @@ function thumb(photo: ProfileDetailPhoto, index: number, blurred: boolean, curre
     '<button aria-label="Afficher la photographie ' +
     String(index + 1) +
     currentLabel +
-    '" class="relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-md overflow-hidden ' +
+    '" class="' + THUMB_SIZE + ' ' +
     border +
     ' bg-deep-navy/5 group cursor-pointer focus:outline-none" data-photo-src="' +
     escapeHtml(photo.url) +
@@ -268,9 +270,9 @@ function applyPhotos(html: string, view: ProfileDetailView): string {
   }
   const thumbs = view.photos.map((photo, index) => thumb(photo, index, blurred, photo === main)).join('')
   const open = '<div class="px-5 py-3.5 bg-cream/60 border-t border-hairline/50 overflow-x-auto flex gap-3 pb-3 pt-3">'
-  const widened =
-    '<div class="px-5 py-3.5 bg-cream/60 border-t border-hairline/50 overflow-x-auto flex gap-3 pb-3 pt-3 min-w-0 max-w-full">'
-  return replaceDivInner(next, open, thumbs).replace(open, widened)
+  const wrapped =
+    '<div class="px-5 py-3.5 bg-cream/60 border-t border-hairline/50 flex flex-wrap gap-2 min-[768px]:gap-3 pb-3 pt-3 min-w-0 max-w-full">'
+  return replaceDivInner(next, open, thumbs).replace(open, wrapped)
 }
 
 function applyFields(html: string, view: ProfileDetailView): string {
@@ -330,8 +332,9 @@ function applyFields(html: string, view: ProfileDetailView): string {
     next = next.replace(
       /<blockquote class="font-display italic text-base sm:text-lg text-deep-navy leading-relaxed">[\s\S]*?<\/blockquote>/,
       '<blockquote class="font-display italic text-base sm:text-lg text-deep-navy leading-relaxed">' +
+        '« ' +
         escapeHtml(intention) +
-        '</blockquote>',
+        ' »</blockquote>',
     )
   }
   return next
@@ -394,5 +397,7 @@ export function profileDetailHtml(stitch: string, view: ProfileDetailView): stri
   html = applyLevels(html, view)
   html = applyFields(html, view)
   html = applyPhotos(html, view)
-  return prepareV2(html, view.photos.length > 0 ? GALLERY_SCRIPT : '')
+  const page = prepareV2(html, view.photos.length > 0 ? GALLERY_SCRIPT : '')
+  const guard = pinGuardScript()
+  return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`
 }

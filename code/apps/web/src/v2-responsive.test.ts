@@ -384,11 +384,15 @@ const FIT = `(() => {
   const bad = []
   for (const el of document.body.querySelectorAll('*')) {
     const rect = el.getBoundingClientRect()
+    const overflowX = getComputedStyle(el).overflowX
+    if ((overflowX === 'auto' || overflowX === 'scroll') && el.scrollWidth > el.clientWidth + 1) {
+      bad.push((el.id || el.tagName) + ' overflow-x ' + el.scrollWidth + '>' + el.clientWidth)
+    }
     if (rect.width < 1 || rect.height < 1) continue
     if (rect.right > width + 1 || rect.left < -1) {
       bad.push((el.id || el.tagName) + ' ' + Math.round(rect.left) + '..' + Math.round(rect.right))
-      if (bad.length === 8) break
     }
+    if (bad.length >= 8) break
   }
   return { width, scrollWidth, bad }
 })()`
