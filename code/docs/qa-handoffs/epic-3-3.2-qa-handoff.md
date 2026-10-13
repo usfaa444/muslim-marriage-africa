@@ -24,6 +24,8 @@ The caption uses the em dash from `code/design-stitch/ankanu-v2/12-profile-not-y
 
 `discoveryPhoto` returns null unless `kind` is `profile_photo` and `moderation_state` is `live`. There is no discovery HTTP route in this story. A test may set a memory row to `live` to prove the sign rule. That mutation is not an endpoint.
 
+A JPEG or PNG at or under 5,242,880 bytes is accepted, including a 4032×3024 phone JPEG. The decoder reads the PNG IHDR, or the JPEG frame size, before it allocates the bitmap. A header above 100 megapixels is refused before that read. That ceiling is the decoder's own default. It is not an 8 megapixel cap.
+
 The edit screen stays `code/design-stitch/ankanu-v2/11-profile-edit/screen.html`. « Mettre à jour la photo » opens a file input for jpeg or png, posts `/v1/media`, and on `pending` goes to `/profile-review`. If a pending photo is already stored, the photo note on the edit screen becomes the caption. The account-circle placeholder stays. The script does not set an `<img>` src and does not CSS-blur the original. `backdrop-blur-sm` on the review card is the Stitch frame. It is not a blur of the uploaded file.
 
 `/profile-review` is screen 12. The server asks `GET /v1/me/profile`. It sends the HTML only when `photo.moderation_state` is `pending`. Otherwise it redirects to `/profile-edit`. An anonymous request goes to `/auth`. The inline script repeats that check. The page is the downloaded Stitch frame: photo caption, bio « En revue », pudeur « En cours d'évaluation », and « 12 à 24 heures ouvrées ». Those extra lines are the frame. This story does not decide bio, pudeur, or a review SLA.
@@ -70,6 +72,8 @@ Sign in, open `/profile-edit`, choose a jpeg or png with « Mettre à jour la ph
 | Wrong kind | `kind` `chat_photo` | `400`. `details.field` `kind`. No row |
 | Not an image | `image` base64 of plain text | `400`. `details.field` `image`. No row |
 | Png upload | `kind` `profile_photo`, base64 png | `201`. `moderation_state` `pending`. Caption is the Stitch sentence. Keys are only `blur_url`, `caption`, `id`, `kind`, `moderation_state`. JSON has no `original_key` |
+| Phone jpeg | 4032×3024 JPEG, quality 30, file under 5,242,880 bytes | `201`. Same pending card. Keys are only those five |
+| Huge png header | IHDR 100000×100000, no pixel data | `PhotoDecodeError` before the bitmap is read. No row |
 | Stored bytes | That upload | `original_key` and `blur_key` differ. One `derivative` row, `size` `blur`, `object_key` equals `blur_key`. Blur bytes are a different JPEG. A two-tone png's blur has a pixel with both red and blue |
 | Owner profile | `GET /v1/me/profile` | `photo.caption` is the Stitch sentence. JSON has no `original_key` and no original object key |
 | Owner GET | `GET` `photo.blur_url` with the owner cookie | `200` `image/jpeg`. Body equals the blur bytes and not the original |
@@ -94,7 +98,8 @@ Sign in, open `/profile-edit`, choose a jpeg or png with « Mettre à jour la ph
 
 ## My results
 
-- `media.test.ts`, `profile.test.ts`, `profile-edit-page.test.ts`, `v2-flow.test.ts`, and `native-dialog.test.ts`: 40 passed.
+- QA fail on a 4032×3024 JPEG: fixed. `media.test.ts` now has that upload and a 100000×100000 PNG header. Re-ran `media.test.ts`: 4 passed. `tsc -p apps/api/tsconfig.json`: exit 0.
+- Earlier run of `media.test.ts`, `profile.test.ts`, `profile-edit-page.test.ts`, `v2-flow.test.ts`, and `native-dialog.test.ts`: 40 passed. That run did not include the phone JPEG. The phone JPEG case is the new `media.test.ts` result above.
 - `v2-responsive.test.ts`: 2 passed. Profile review is `13b-profile-review` at 360, 390, 768, 1024, 1280, and 1440. `scrollWidth <= innerWidth`. Shots: `code/docs/qa-handoffs/ank-83-widths/13b-profile-review-360.png` and `13b-profile-review-1440.png`. Profile edit remains `13-profile` in that run.
 - `tsc -p apps/api/tsconfig.json` and `tsc -p apps/web/tsconfig.json`: exit 0.
 - `operator-config.migrate.test.ts` lists `photo_asset`, `derivative`, and `signed_grant`, and expects 12 journal rows. The unit config excludes that file. I did not run it. It needs Postgres.

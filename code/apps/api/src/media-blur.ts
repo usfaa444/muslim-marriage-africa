@@ -23,7 +23,9 @@ const { PNG } = require('pngjs') as PngApi
 const MAX_EDGE = 32
 const BLUR_RADIUS = 2
 const JPEG_QUALITY = 40
-const MAX_PIXELS = 8_000_000
+/** Header guard only. The upload byte cap is the product limit. 100 MP matches jpeg-js and accepts a 4032×3024 phone photo. */
+const MAX_PIXELS = 100_000_000
+const JPEG_MAX_RESOLUTION_MP = 100
 
 export class PhotoDecodeError extends Error {
   constructor() {
@@ -52,11 +54,7 @@ export function blurProfilePhoto(bytes: Buffer): Buffer {
 
 function decode(bytes: Buffer): Raster {
   try {
-    const raster = isPng(bytes) ? fromPng(bytes) : fromJpeg(bytes)
-    if (raster.width < 1 || raster.height < 1 || raster.width * raster.height > MAX_PIXELS) {
-      throw new PhotoDecodeError()
-    }
-    return raster
+    return isPng(bytes) ? fromPng(bytes) : fromJpeg(bytes)
   } catch (error) {
     if (error instanceof PhotoDecodeError) {
       throw error
@@ -66,13 +64,68 @@ function decode(bytes: Buffer): Raster {
 }
 
 function fromPng(bytes: Buffer): Raster {
+  const size = pngSize(bytes)
+  if (!size || !fits(size.width, size.height)) {
+    throw new PhotoDecodeError()
+  }
   const png = PNG.sync.read(bytes)
   return { width: png.width, height: png.height, data: Uint8Array.from(png.data) }
 }
 
 function fromJpeg(bytes: Buffer): Raster {
-  const decoded = jpeg.decode(bytes, { useTArray: true, maxResolutionInMP: 8 })
+  const size = jpegSize(bytes)
+  if (!size || !fits(size.width, size.height)) {
+    throw new PhotoDecodeError()
+  }
+  const decoded = jpeg.decode(bytes, { useTArray: true, maxResolutionInMP: JPEG_MAX_RESOLUTION_MP })
   return { width: decoded.width, height: decoded.height, data: decoded.data }
+}
+
+function fits(width: number, height: number): boolean {
+  return width >= 1 && height >= 1 && width <= MAX_PIXELS && height <= MAX_PIXELS && width * height <= MAX_PIXELS
+}
+
+function pngSize(bytes: Buffer): { width: number; height: number } | null {
+  if (bytes.length < 24 || bytes.toString('ascii', 12, 16) !== 'IHDR') {
+    return null
+  }
+  return { width: bytes.readUInt32BE(16), height: bytes.readUInt32BE(20) }
+}
+
+function jpegSize(bytes: Buffer): { width: number; height: number } | null {
+  let offset = 2
+  while (offset + 3 < bytes.length) {
+    if (bytes[offset] !== 0xff) {
+      return null
+    }
+    while (offset < bytes.length && bytes[offset] === 0xff) {
+      offset += 1
+    }
+    const marker = bytes[offset]
+    offset += 1
+    if (marker === undefined) {
+      return null
+    }
+    if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
+      continue
+    }
+    if (marker === 0xd9 || marker === 0xda || offset + 2 > bytes.length) {
+      return null
+    }
+    const length = bytes.readUInt16BE(offset)
+    if (length < 2 || offset + length > bytes.length) {
+      return null
+    }
+    const sof = marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc
+    if (sof) {
+      if (length < 7) {
+        return null
+      }
+      return { height: bytes.readUInt16BE(offset + 3), width: bytes.readUInt16BE(offset + 5) }
+    }
+    offset += length
+  }
+  return null
 }
 
 function downscale(source: Raster, maxEdge: number): Raster {

@@ -9,6 +9,7 @@ import { setAuthClock } from './auth-clock.js'
 import { setAuthLimitReader } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
 import { createApp } from './create-app.js'
+import { PhotoDecodeError, blurProfilePhoto } from './media-blur.js'
 import {
   PHOTO_CAPTION,
   applyModerationAllowed,
@@ -33,6 +34,7 @@ const { PNG } = require('pngjs') as {
 }
 const jpeg = require('jpeg-js') as {
   decode(buffer: Buffer, options?: { useTArray?: boolean }): { width: number; height: number; data: Uint8Array }
+  encode(image: { width: number; height: number; data: Uint8Array }, quality: number): { data: Uint8Array }
 }
 
 const memory = memoryAccountStore()
@@ -298,6 +300,37 @@ describe('profile photo upload stays unpublished and blurred', () => {
     if (asset) {
       asset.moderation_state = 'pending'
     }
+  })
+
+  it('accepts a 4032 by 3024 jpeg under the byte cap', async () => {
+    const width = 4032
+    const height = 3024
+    const raster = { width, height, data: Buffer.alloc(width * height * 4, 255) }
+    const image = Buffer.from(jpeg.encode(raster, 30).data)
+    expect(image.length).toBeLessThanOrEqual(5_242_880)
+    expect(image.length).toBeGreaterThan(100)
+    const created = await createAccount()
+    const cookie = await signIn(created.email)
+    const saved = await upload(cookie, { kind: 'profile_photo', image: image.toString('base64') })
+    expect(saved.status).toBe(201)
+    expect(saved.json).toMatchObject({
+      kind: 'profile_photo',
+      moderation_state: 'pending',
+      caption: PHOTO_CAPTION,
+    })
+    expect(Object.keys(saved.json).sort()).toEqual(['blur_url', 'caption', 'id', 'kind', 'moderation_state'])
+  }, 60_000)
+
+  it('refuses a png header that would allocate a huge bitmap', () => {
+    const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+    const length = Buffer.alloc(4)
+    length.writeUInt32BE(13, 0)
+    const data = Buffer.alloc(13)
+    data.writeUInt32BE(100_000, 0)
+    data.writeUInt32BE(100_000, 4)
+    data[8] = 8
+    const header = Buffer.concat([signature, length, Buffer.from('IHDR'), data, Buffer.alloc(4)])
+    expect(() => blurProfilePhoto(header)).toThrow(PhotoDecodeError)
   })
 
   it('caps the gateway token at 60 seconds', async () => {
