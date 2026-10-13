@@ -4,7 +4,7 @@
 - Project: https://stitch.withgoogle.com/project/6717808880062298165
 - Design system: `DESIGN.md` (tokens only; layout is each PNG)
 - Old Stitch project on Google was **not** deleted.
-- Refresh: founder-edited project re-downloaded 2026-10-11 (replaces [`23a7151`](https://github.com/usfaa444/muslim-marriage-africa/commit/23a7151)).
+- Refresh: founder-edited project re-downloaded 2026-10-11 (replaces [`23a7151`](https://github.com/usfaa444/muslim-marriage-africa/commit/23a7151)). Screen 49 HTML/PNG replaced 2026-10-13 after founder Accept on ANK-106 (Indicateur 07 — free-review SLA-breach). New Stitch id `b03cdd4e2f4b43c3a50d9014b6df6f31`; previous id `c143ef4636044f509dc2d307b65437ca` is no longer in live `list_screens`.
 
 ## Completeness proof
 
@@ -16,7 +16,7 @@
 - Missing: **0**
 - Stale extras (folder/id not in live `list_screens`): **0**
 
-Zero missing and zero stale extras is the only pass. Verified 2026-10-11 against a fresh `list_screens` for project `6717808880062298165`.
+Zero missing and zero stale extras is the only pass. Verified 2026-10-13 against a fresh `list_screens` for project `6717808880062298165` after the screen 49 replacement (live count **56**, downloaded **56**).
 
 Note: `55-pwa-manifest` is a JSON asset. Stitch returned no screenshot URL. The PNG is a raster of the downloaded `manifest.json` bytes (cream/navy tokens). Do not treat it as a Stitch canvas.
 
@@ -72,7 +72,7 @@ Note: `55-pwa-manifest` is a JSON asset. Stitch returned no screenshot URL. The 
 | 46 | AnKanu - Tarification & Packs Opérateur (Staff) | `89a27e641a534aac8056807204501e46` | `46-operator-pricing/screen.html` | `46-operator-pricing/screen.png` | Operator pricing |
 | 47 | AnKanu - Accès Sœurs & Plafonds Opérateur (Staff) | `59e9958e8b1041c68f428c2f900e1633` | `47-operator-sister-reach/screen.html` | `47-operator-sister-reach/screen.png` | Operator sister-reach mode |
 | 48 | AnKanu - Plafond Journalier de Messages & Accès Sœurs (Staff) | `46021cb225104767b72a9c56e4ed012b` | `48-operator-message-cap/screen.html` | `48-operator-message-cap/screen.png` | Operator daily message cap |
-| 49 | AnKanu - Métriques Opérateur (Staff) | `c143ef4636044f509dc2d307b65437ca` | `49-operator-metrics/screen.html` | `49-operator-metrics/screen.png` | Operator metrics |
+| 49 | AnKanu - Métriques Opérateur (Staff) | `b03cdd4e2f4b43c3a50d9014b6df6f31` | `49-operator-metrics/screen.html` | `49-operator-metrics/screen.png` | Operator metrics |
 | 50 | AnKanu - File des Requêtes CIL & Effacement (Staff) | `a7c0d7374f3d407396edb4e90149a74d` | `50-operator-cil-tickets/screen.html` | `50-operator-cil-tickets/screen.png` | Operator CIL / deletion tickets |
 | 51 | AnKanu - Académie & Publications Éthiques (Staff) | `e3ecb4ac01da4061bbd31e0643dc9548` | `51-operator-board-academie/screen.html` | `51-operator-board-academie/screen.png` | Operator Board / Académie publish |
 | 52 | AnKanu - Signaux de visite T&S & Modération (Staff) | `44fc9a9f8432478fb034f7576da37bd8` | `52-ts-visit-signals/screen.html` | `52-ts-visit-signals/screen.png` | T&S visit signals |
