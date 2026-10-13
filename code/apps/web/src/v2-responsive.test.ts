@@ -120,6 +120,13 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '12-photo', html: photoHtml(stitch('09-photo-rules')) },
     { name: '13-profile', html: profileHtml(stitch('11-profile-edit')) },
     {
+      name: '13d-profile-strike',
+      html: profileHtml(stitch('11-profile-edit')).replace(
+        '<p id="profile-save-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="status"></p>',
+        '<p id="profile-save-status" class="w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="status">Envoi de photos suspendu jusqu\'au 14/10 à 02:00 : 3 photos ont été refusées.</p>',
+      ),
+    },
+    {
       name: '13b-profile-replacement',
       html: profileHtml(stitch('11-profile-edit')).replace(
         '<div id="profile-photo-review" class="hidden space-y-2"></div>',

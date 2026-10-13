@@ -8,6 +8,7 @@ import { authNow } from './auth-clock.js'
 import { getBillingPort } from './billing-port.js'
 import { getCaptureStore } from './id-liveness-store.js'
 import { applyPhotoModeration, signMedia } from './media.js'
+import { getStrikeStore, recordPhotoFloorStrike } from './photo-strike.js'
 import { getMediaStore, type ModerationState } from './media-store.js'
 import { operatorConfig } from './operator-config.js'
 import { getPhoneOtpStore, type PhoneOtpRow } from './phone-otp-store.js'
@@ -287,6 +288,14 @@ export async function decideProfileReview(
         if (!changed) {
           throw new StaleWrite()
         }
+        if (photo.decision === 'block') {
+          await recordPhotoFloorStrike({
+            accountId: row.account_id,
+            assetId: photo.asset_id,
+            at: authNow(),
+            ...(db ? { db } : {}),
+          })
+        }
       }
       const saved = db
         ? await getProfileStore().patchReview(row.account_id, patch, 'queued', db)
@@ -387,8 +396,10 @@ async function inCallerUnit<T>(work: (tx: unknown) => Promise<T>): Promise<T> {
   if (profileStoreIsMemory()) {
     const profiles = restorable(getProfileStore())
     const media = restorable(getMediaStore())
+    const strikes = restorable(getStrikeStore())
     const profileSnap = profiles?.snapshot() ?? null
     const mediaSnap = media?.snapshot() ?? null
+    const strikeSnap = strikes?.snapshot() ?? null
     try {
       return await work(callerTransaction())
     } catch (error) {
@@ -397,6 +408,9 @@ async function inCallerUnit<T>(work: (tx: unknown) => Promise<T>): Promise<T> {
       }
       if (mediaSnap !== null) {
         media?.restore(mediaSnap)
+      }
+      if (strikeSnap !== null) {
+        strikes?.restore(strikeSnap)
       }
       throw error
     }

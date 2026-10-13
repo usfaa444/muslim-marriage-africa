@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { boolean, check, date, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core'
+import { boolean, check, date, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core'
 
 /** Identity-owned account. `coc_version` is the Code of conduct version accepted at signup. */
 export const account = pgTable(
@@ -249,6 +249,26 @@ export const signedGrant = pgTable('signed_grant', {
   expires_at: timestamp('expires_at', { withTimezone: true, mode: 'string' }).notNull(),
   revoked_at: timestamp('revoked_at', { withTimezone: true, mode: 'string' }),
 })
+
+/** Trust-owned strike. Photo-floor time is the UUID v7 in `id`. `case_id` has no foreign key until `moderation_case` exists. */
+export const strike = pgTable(
+  'strike',
+  {
+    id: uuid('id').primaryKey(),
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => account.id),
+    case_id: uuid('case_id'),
+    ladder: text('ladder').notNull(),
+    evidence: text('evidence'),
+  },
+  (table) => [
+    index('strike_account_ladder_id').on(table.account_id, table.ladder, table.id),
+    uniqueIndex('strike_photo_floor_evidence')
+      .on(table.evidence)
+      .where(sql`${table.ladder} = 'photo_floor'`),
+  ],
+)
 
 /** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */
 export const auditEvent = pgTable('audit_event', {

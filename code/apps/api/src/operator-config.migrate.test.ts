@@ -166,6 +166,7 @@ function migrationSql(): string {
     '0011_photo_asset.sql',
     '0012_profile_review.sql',
     '0013_photo_replaced.sql',
+    '0014_strike.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -273,6 +274,7 @@ describe('operator_config migration', () => {
       'session',
       'signed_grant',
       'sms_dispatch',
+      'strike',
       'verification_record',
     ])
     expect(await userTables(db())).toEqual([
@@ -291,13 +293,14 @@ describe('operator_config migration', () => {
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
+      'public.strike',
       'public.verification_record',
     ])
 
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('14')
+    expect(applied.rows[0]?.count).toBe('15')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -828,6 +831,7 @@ describe('operator_config migration', () => {
       'session',
       'signed_grant',
       'sms_dispatch',
+      'strike',
       'verification_record',
     ])
     expect(await userTables(db())).toEqual([
@@ -846,6 +850,7 @@ describe('operator_config migration', () => {
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
+      'public.strike',
       'public.verification_record',
     ])
 
@@ -966,5 +971,30 @@ describe('operator_config migration', () => {
     expect(again).toBe(true)
     await db().query(`delete from "photo_asset" where "owner_id" = $1`, [owner])
     await db().query(`delete from "account" where "id" = $1`, [owner])
+  })
+
+  it('stores one photo_floor strike when the same evidence is inserted twice', async () => {
+    expect(migrated).toBe(true)
+    const accountId = '018f3a40-7c2a-7000-8000-0000000000b1'
+    const first = '018f3a40-7c2a-7000-8000-0000000000b2'
+    const second = '018f3a40-7c2a-7000-8000-0000000000b3'
+    const evidence = 'photo_asset:018f3a40-7c2a-7000-8000-0000000000b4'
+    await db().query(
+      `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, 'strike-floor@example.bf', 'Strike_Floor', 'sister', $2, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`,
+      [accountId, ['member']],
+    )
+    const insert = `insert into "strike" ("id", "account_id", "case_id", "ladder", "evidence")
+       values ($1, $2, null, 'photo_floor', $3)
+       on conflict ("evidence") where "ladder" = 'photo_floor' do nothing`
+    await db().query(insert, [first, accountId, evidence])
+    await db().query(insert, [second, accountId, evidence])
+    const rows = await db().query<{ id: string; case_id: string | null }>(
+      `select "id", "case_id" from "strike" where "account_id" = $1`,
+      [accountId],
+    )
+    expect(rows.rows).toEqual([{ id: first, case_id: null }])
+    await db().query(`delete from "strike" where "account_id" = $1`, [accountId])
+    await db().query(`delete from "account" where "id" = $1`, [accountId])
   })
 })

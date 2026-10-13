@@ -1260,6 +1260,22 @@ export function profileScript(): string {
       el.classList.toggle('hidden', !text)
     }
 
+    function uploadFailure(body) {
+      var error = body && body.error
+      var message = error && typeof error.message === 'string' ? error.message : ''
+      var details = error && error.details
+      if (!error || error.code !== 'RATE_LIMITED' || !details || details.reason !== 'photo_strike') {
+        return message || 'Envoi de la photo impossible.'
+      }
+      if (typeof details.blocked_until !== 'string') return message || 'Envoi de la photo impossible.'
+      var until = new Date(details.blocked_until)
+      if (isNaN(until.getTime())) return message || 'Envoi de la photo impossible.'
+      var count = message.match(/(\\d+)/)
+      if (!count) return message || 'Envoi de la photo impossible.'
+      function two(value) { return value < 10 ? '0' + value : String(value) }
+      return "Envoi de photos suspendu jusqu'au " + two(until.getDate()) + '/' + two(until.getMonth() + 1) + ' à ' + two(until.getHours()) + ':' + two(until.getMinutes()) + ' : ' + count[1] + ' photos ont été refusées.'
+    }
+
     function applyProfile(body, keepEdits) {
       if (!body) return
       function open(key) {
@@ -1381,8 +1397,7 @@ export function profileScript(): string {
           }).then(function (result) {
             photoFile.value = ''
             if (!result.ok || !result.body || result.body.moderation_state !== 'pending') {
-              var message = result.body && result.body.error && result.body.error.message
-              showStatus(message || 'Envoi de la photo impossible.')
+              showStatus(uploadFailure(result.body))
               return
             }
             return fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (profileResponse) {

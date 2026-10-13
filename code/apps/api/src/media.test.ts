@@ -19,6 +19,7 @@ import {
   signMedia,
 } from './media.js'
 import { memoryMediaStore, getMediaStore, setMediaStore } from './media-store.js'
+import { setPhotoStrikeConfigReader } from './photo-strike.js'
 import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
@@ -70,6 +71,7 @@ describe('profile photo upload stays unpublished and blurred', () => {
     setFreeReviewSlaReader(async () => 24)
     setMediaClock(() => now)
     setSignedTtlReader(async () => 60)
+    setPhotoStrikeConfigReader(async () => ({ count: '3', hours: '24' }))
     setAuthLimitReader(async () => 100)
     resetAuthRateWindow()
     setAccountStore(memory)
@@ -93,6 +95,7 @@ describe('profile photo upload stays unpublished and blurred', () => {
     setFreeReviewSlaReader(undefined)
     setMediaClock(undefined)
     setSignedTtlReader(undefined)
+    setPhotoStrikeConfigReader(undefined)
     setAuthLimitReader(undefined)
     resetAuthRateWindow()
     setAccountStore(undefined)

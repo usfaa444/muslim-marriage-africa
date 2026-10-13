@@ -146,6 +146,7 @@ function mount() {
   })
   let completeness = stored.completeness
   let rejectMedia = false
+  let strike: { message: string; blockedUntil: string } | null = null
 
   function fetchImpl(url: string, init?: { method?: string; body?: string }) {
     const method = init?.method ?? 'GET'
@@ -163,6 +164,19 @@ function mount() {
       })
     }
     if (url === '/v1/media' && method === 'POST') {
+      if (strike) {
+        return Promise.resolve({
+          ok: false,
+          json: async () => ({
+            error: {
+              code: 'RATE_LIMITED',
+              message: strike?.message,
+              details: { reason: 'photo_strike', blocked_until: strike?.blockedUntil },
+              retryable: true,
+            },
+          }),
+        })
+      }
       if (rejectMedia) {
         return Promise.resolve({
           ok: false,
@@ -214,6 +228,9 @@ function mount() {
     release,
     rejectMedia() {
       rejectMedia = true
+    },
+    strikeMedia(message: string, blockedUntil: string) {
+      strike = { message, blockedUntil }
     },
     setCompleteness(next: typeof stored.completeness) {
       completeness = next
@@ -454,5 +471,54 @@ describe('profile edit load and meter', () => {
     expect(failed.photoFile.value).toBe('')
     expect(failed.calls.filter((call) => call.url === '/v1/media')).toEqual([])
     expect(failed.byId.get('profile-save-status')?.textContent).toBe('Envoi de la photo impossible.')
+  })
+
+  it('shows the photo-strike sentence on the existing status line after a refused upload', async () => {
+    const page = profileHtml(stitch())
+    expect(page).toContain('Mettre à jour la photo')
+    expect(page).not.toContain('photo-strike')
+    expect(page).toContain('id="profile-save-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy"')
+    expect(profileScript()).toContain('match(/(\\d+)/)')
+
+    const blockedUntil = '2026-10-14T18:05:00.000Z'
+    const until = new Date(blockedUntil)
+    const two = (value: number) => String(value).padStart(2, '0')
+    const sentence = `Envoi de photos suspendu jusqu'au ${two(until.getDate())}/${two(until.getMonth() + 1)} à ${two(until.getHours())}:${two(until.getMinutes())} : 3 photos ont été refusées.`
+    const struck = mount()
+    struck.strikeMedia('Envoi de photos suspendu : 3 photos ont été refusées.', blockedUntil)
+    struck.photoFile.value = 'C:\\fakepath\\face.png'
+    struck.photoFile.files = [{ name: 'face.png' }]
+    const previousReader = globalThis.FileReader
+    class FakeReader {
+      result = 'data:image/png;base64,QUJD'
+      onload: (() => void) | null = null
+      readAsDataURL(): void {
+        this.onload?.()
+      }
+    }
+    globalThis.FileReader = FakeReader as unknown as typeof FileReader
+    try {
+      await struck.photoFile.listeners.change?.[0]?.()
+      await flush()
+    } finally {
+      globalThis.FileReader = previousReader
+    }
+    expect(struck.photoFile.value).toBe('')
+    expect(struck.location.href).toBe('')
+    expect(struck.byId.get('profile-save-status')?.textContent).toBe(sentence)
+    expect(struck.upload.textContent).toContain('Mettre à jour la photo')
+
+    const raw = mount()
+    raw.strikeMedia('Envoi de photos suspendu : 3 photos ont été refusées.', 'pas-une-date')
+    raw.photoFile.value = 'C:\\fakepath\\face.png'
+    raw.photoFile.files = [{ name: 'face.png' }]
+    globalThis.FileReader = FakeReader as unknown as typeof FileReader
+    try {
+      await raw.photoFile.listeners.change?.[0]?.()
+      await flush()
+    } finally {
+      globalThis.FileReader = previousReader
+    }
+    expect(raw.byId.get('profile-save-status')?.textContent).toBe('Envoi de photos suspendu : 3 photos ont été refusées.')
   })
 })

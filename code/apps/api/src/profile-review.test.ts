@@ -14,6 +14,7 @@ import { setBillingPort } from './billing-port.js'
 import { createApp } from './create-app.js'
 import { setMediaClock, setSignedTtlReader, signMedia } from './media.js'
 import { memoryMediaStore, setMediaStore } from './media-store.js'
+import { setPhotoStrikeConfigReader } from './photo-strike.js'
 import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
 import { memoryCaptureStore, setCaptureStore } from './id-liveness-store.js'
@@ -115,6 +116,7 @@ describe('human review before anyone else sees a profile', () => {
     setAuthClock(() => now)
     setMediaClock(() => now)
     setSignedTtlReader(async () => 60)
+    setPhotoStrikeConfigReader(async () => ({ count: '3', hours: '24' }))
     setFreeReviewSlaReader(async () => slaHours)
     setPhoneOtpStore(otp)
     setCaptureStore(captures)
@@ -147,6 +149,7 @@ describe('human review before anyone else sees a profile', () => {
     setAuthClock(undefined)
     setMediaClock(undefined)
     setSignedTtlReader(undefined)
+    setPhotoStrikeConfigReader(undefined)
     setFreeReviewSlaReader(undefined)
     setPhoneOtpStore(undefined)
     setCaptureStore(undefined)

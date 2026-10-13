@@ -2,8 +2,13 @@ import { Catch, type ArgumentsHost, type ExceptionFilter } from '@nestjs/common'
 import { errorEnvelope, newId, type ErrorEnvelope } from '@ankanu/kernel'
 import { mapInboundException } from '@ankanu/ports'
 
+type StatusReply = {
+  setHeader?: (name: string, value: string) => StatusReply
+  json: (body: unknown) => void
+}
+
 type JsonResponse = {
-  status: (code: number) => { json: (body: unknown) => void }
+  status: (code: number) => StatusReply
 }
 
 const BANNED = /dating|rencontre romantique/i
@@ -61,6 +66,30 @@ export function httpStatus(exception: unknown): number {
 export class InboundExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const response = host.switchToHttp().getResponse<JsonResponse>()
-    response.status(httpStatus(exception)).json(toPublicEnvelope(exception))
+    const reply = response.status(httpStatus(exception))
+    const retryAfter = retryAfterHeader(exception)
+    if (retryAfter !== null && typeof reply.setHeader === 'function') {
+      reply.setHeader('Retry-After', String(retryAfter))
+    }
+    reply.json(toPublicEnvelope(exception))
   }
+}
+
+function retryAfterHeader(exception: unknown): number | null {
+  if (typeof exception !== 'object' || exception === null || !('getResponse' in exception)) {
+    return null
+  }
+  const getResponse = exception.getResponse
+  if (typeof getResponse !== 'function') {
+    return null
+  }
+  const body = getResponse.call(exception) as unknown
+  if (typeof body !== 'object' || body === null || !('retryAfter' in body)) {
+    return null
+  }
+  const seconds = (body as { retryAfter?: unknown }).retryAfter
+  if (typeof seconds !== 'number' || !Number.isInteger(seconds) || seconds < 0) {
+    return null
+  }
+  return seconds
 }

@@ -11,6 +11,7 @@ import {
   type StoredAsset,
   type StoredDerivative,
 } from './media-store.js'
+import { photoStrikeBlock } from './photo-strike.js'
 
 /** Stitch screen 12 heading. Pending profile photos use this sentence and no other. */
 export const PHOTO_CAPTION = 'Photo en revue — pas encore publique.'
@@ -29,11 +30,12 @@ const TTL_MESSAGE = 'signed_url_ttl_seconds : la configuration est illisible.'
 
 export type MediaFailure = {
   ok: false
-  status: 400 | 403 | 503
-  code: 'FORBIDDEN' | 'REVEAL_DENIED' | 'UNHANDLED'
+  status: 400 | 403 | 429 | 503
+  code: 'FORBIDDEN' | 'REVEAL_DENIED' | 'UNHANDLED' | 'RATE_LIMITED'
   message: string
-  details: { field?: string } | null
+  details: { field?: string; reason?: string; blocked_until?: string } | null
   retryable: boolean
+  retryAfter?: number
 }
 
 export type OwnerPhotoCard = {
@@ -79,6 +81,10 @@ export async function uploadProfilePhoto(
   ownerId: string,
   body: unknown,
 ): Promise<{ ok: true; photo: OwnerPhotoCard } | MediaFailure> {
+  const gate = await photoUploadGate(ownerId)
+  if (!gate.ok) {
+    return gate
+  }
   const parsed = readBody(body)
   if (!parsed.ok) {
     return parsed.failure
@@ -353,4 +359,31 @@ function storageFailure(): MediaFailure {
 
 function ttlFailure(): MediaFailure {
   return { ok: false, status: 503, code: 'UNHANDLED', message: TTL_MESSAGE, details: { field: 'signed_url_ttl_seconds' }, retryable: true }
+}
+
+/** Strike guard before decode, object write, or a photo_asset row. */
+async function photoUploadGate(ownerId: string): Promise<{ ok: true } | MediaFailure> {
+  const strike = await photoStrikeBlock(ownerId, clock())
+  if (!strike.ok) {
+    return {
+      ok: false,
+      status: 503,
+      code: 'UNHANDLED',
+      message: `${strike.field} : la configuration est illisible.`,
+      details: { field: strike.field },
+      retryable: true,
+    }
+  }
+  if (!strike.block) {
+    return { ok: true }
+  }
+  return {
+    ok: false,
+    status: 429,
+    code: 'RATE_LIMITED',
+    message: `Envoi de photos suspendu : ${strike.count} photos ont été refusées.`,
+    details: { reason: 'photo_strike', blocked_until: strike.block.blocked_until },
+    retryable: true,
+    retryAfter: strike.retryAfter,
+  }
 }

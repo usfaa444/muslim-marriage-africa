@@ -379,7 +379,7 @@ export function profileHtml(stitch: string): string {
     )
     .replace(
       '<div class="pt-8 pb-4 flex justify-end">',
-      '<p id="profile-save-status" class="hidden text-xs text-deep-navy" role="status"></p><div class="pt-8 pb-4 flex justify-end">',
+      '<p id="profile-save-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="status"></p><div class="pt-8 pb-4 flex justify-end">',
     )
     .replaceAll(' checked=""', '')
     .replaceAll(' selected=""', '')

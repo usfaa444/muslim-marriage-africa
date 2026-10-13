@@ -22,6 +22,7 @@ function fail(error: MediaFailure): never {
       message: error.message,
       details: error.details,
       retryable: error.retryable,
+      ...(error.retryAfter !== undefined ? { retryAfter: error.retryAfter } : {}),
     },
     error.status,
   )
