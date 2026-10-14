@@ -1,5 +1,7 @@
 /** Browser behavior for the v2 signup and sign-in screens. No password is stored. */
 
+import { LITE_STORAGE_KEY, liteModeSource } from './lite-mode'
+
 /** Screen 12 Element 1. Narrow widths stack the chip under the label so it stays in the card. */
 export const REPLACEMENT_REVIEW_ROW =
   '<div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between text-sm py-1"><div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-deep-navy/50 text-lg" data-icon="photo_camera">photo_camera</span><span class="font-body text-deep-navy/90 font-medium">Photographie de profil</span></div><span class="inline-flex items-center text-xs font-medium text-soft-gold bg-cream px-2.5 py-0.5 rounded border border-hairline/60">En revue</span></div>'
@@ -1054,6 +1056,29 @@ export function pinScript(): string {
 
 export function settingsScript(): string {
   return `
+    ${liteModeSource}
+    function paintLite(on) {
+      var button = document.getElementById('lite-mode-toggle')
+      var thumb = document.getElementById('lite-mode-thumb')
+      if (!button || !thumb) return
+      button.setAttribute('aria-checked', on ? 'true' : 'false')
+      button.classList.toggle('bg-deep-navy', on)
+      button.classList.toggle('bg-hairline', !on)
+      thumb.classList.toggle('translate-x-5', on)
+      thumb.classList.toggle('translate-x-0.5', !on)
+    }
+    paintLite(liteEnabled())
+    var liteButton = document.getElementById('lite-mode-toggle')
+    if (liteButton) {
+      liteButton.addEventListener('click', function () {
+        var current = liteButton.getAttribute('aria-checked') === 'true'
+        if (setLite(!current)) paintLite(!current)
+      })
+    }
+    window.addEventListener('storage', function (event) {
+      if (!event || event.key !== '${LITE_STORAGE_KEY}') return
+      paintLite(liteEnabled())
+    })
     document.querySelectorAll('button').forEach(function (button) {
       var label = button.textContent || ''
       if (label.indexOf('Télécharger') !== -1) {

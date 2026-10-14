@@ -425,8 +425,35 @@ export function reviewHtml(stitch: string, state: { slaHours: number; bioPending
   return guarded(html, reviewScript())
 }
 
+const LITE_HIT = `<style id="lite-hit">#lite-mode-toggle::before{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}</style>`
+
+/** Stitch ships the switch already on, with a demo onclick. The first paint uses the real device value. */
+function neutralizeLiteToggle(html: string): string {
+  const buttonAt = html.indexOf('id="lite-mode-toggle"')
+  if (buttonAt < 0) return html
+  const start = html.lastIndexOf('<button', buttonAt)
+  const end = html.indexOf('>', buttonAt)
+  if (start < 0 || end < 0) return html
+  const open = html
+    .slice(start, end)
+    .replace('aria-checked="true"', 'aria-checked="false"')
+    .replace(' bg-deep-navy', ' bg-hairline')
+  return (
+    html.slice(0, start) +
+    open +
+    html.slice(end).replace(
+      'h-5 w-5 translate-x-5 transform rounded-full bg-cream shadow-sm ring-0 transition duration-200 ease-in-out mt-0.5" id="lite-mode-thumb"',
+      'h-5 w-5 translate-x-0.5 transform rounded-full bg-cream shadow-sm ring-0 transition duration-200 ease-in-out mt-0.5" id="lite-mode-thumb"',
+    )
+  )
+}
+
 export function settingsHtml(stitch: string): string {
-  return guarded(stitch, settingsScript())
+  const neutral = neutralizeLiteToggle(stitch)
+  const withHit = neutral.includes('</head>')
+    ? neutral.replace('</head>', `${LITE_HIT}</head>`)
+    : `${LITE_HIT}${neutral}`
+  return guarded(withHit, settingsScript())
 }
 
 export function statusHtml(stitch: string): string {

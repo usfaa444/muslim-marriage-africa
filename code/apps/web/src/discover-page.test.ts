@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { GET as getDecouvrir } from '../app/decouvrir/route.js'
 import { discoverHtml } from './discover-page.js'
+import { settingsHtml } from './v2-pages.js'
 
 function stitch(name: string): string {
   return readFileSync(
@@ -65,6 +66,13 @@ describe('discover grid page', () => {
     expect(html).toContain('[data-reserved][hidden]')
     expect(html).toContain('display: none !important')
     expect(html).toContain('requestAnimationFrame(function () {\n    requestAnimationFrame(function () {')
+    expect(html).toContain('function liteEnabled()')
+    expect(html).toContain('function mountLiteThumb(photo, url)')
+    expect(html).toContain("image.loading = 'lazy'")
+    expect(html).toContain("image.decoding = 'async'")
+    expect(html).toContain('IntersectionObserver')
+    expect(html).toContain('item.photo_blur !== true')
+    expect(html).not.toContain('/v1/me/prefs')
     const tilesAt = html.indexOf('id="discover-tiles"')
     const sectionClose = html.indexOf('</section>', tilesAt)
     expect(html.indexOf('id="discover-empty"')).toBeGreaterThan(sectionClose)
@@ -338,6 +346,7 @@ describe('discover grid in a browser', () => {
       )
       expect(fetches).toBe(0)
       for (const width of WIDTHS) await measure(width, 'card')
+      await send('Runtime.evaluate', { expression: "localStorage.setItem('ankanu_lite','0')" }, sessionId)
       await send(
         'Runtime.evaluate',
         {
@@ -625,6 +634,7 @@ describe('discover grid in a browser', () => {
     }
     try {
       await go('/')
+      await value("localStorage.setItem('ankanu_lite','0')")
       await value(`(() => {
         const orig = window.requestAnimationFrame
         let frame = 0
@@ -1042,4 +1052,307 @@ describe('discover grid in a browser', () => {
     }
     expect(failures).toEqual([])
   }, 120_000)
+
+  it.skipIf(!binary)('holds the photo well until a Lite thumbnail loads', async () => {
+    const gif = Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64')
+    const prefs: string[] = []
+    const server: Server = createServer((request, response) => {
+      const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (url.pathname === '/v1/me/prefs') prefs.push(url.pathname)
+      if (url.pathname === '/v1/pin') {
+        response.setHeader('content-type', 'application/json')
+        response.end(JSON.stringify({ locked: false }))
+        return
+      }
+      if (url.pathname === '/media/ok') {
+        response.setHeader('content-type', 'image/gif')
+        response.end(gif)
+        return
+      }
+      if (url.pathname === '/settings') {
+        response.setHeader('content-type', 'text/html; charset=utf-8')
+        response.end(
+          settingsHtml(
+            readFileSync(
+              fileURLToPath(new URL('../../../design-stitch/ankanu-v2/27-settings/screen.html', import.meta.url)),
+              'utf8',
+            ),
+          ),
+        )
+        return
+      }
+      if (url.pathname === '/v1/browse') {
+        response.setHeader('content-type', 'application/json')
+        response.end(
+          JSON.stringify({
+            view: 'grid',
+            next_cursor: null,
+            items: [
+              {
+                id: '01990000-0000-7000-8000-000000000011',
+                pseudonym: 'Amina',
+                age: 29,
+                city: 'Bobo',
+                marital_status: 'Célibataire',
+                polygamy_intent: null,
+                madhhab: null,
+                practice: null,
+                verified: true,
+                photo_blur: false,
+                photo: { id: 'bad', url: '/media/bad' },
+              },
+              {
+                id: '01990000-0000-7000-8000-000000000012',
+                pseudonym: 'Bintou',
+                age: 27,
+                city: 'Ouaga',
+                marital_status: 'Célibataire',
+                polygamy_intent: null,
+                madhhab: null,
+                practice: null,
+                verified: false,
+                photo_blur: false,
+                photo: { id: 'ok', url: '/media/ok' },
+              },
+              {
+                id: '01990000-0000-7000-8000-000000000013',
+                pseudonym: 'Moussa',
+                age: 36,
+                city: 'Kaya',
+                marital_status: null,
+                polygamy_intent: null,
+                madhhab: null,
+                practice: null,
+                verified: false,
+                photo_blur: true,
+                photo: { id: 'blur', url: '/media/bad' },
+              },
+            ],
+          }),
+        )
+        return
+      }
+      response.setHeader('content-type', 'text/html; charset=utf-8')
+      response.end(html)
+    })
+    await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', () => resolve()))
+    const address = server.address()
+    if (!address || typeof address === 'string') throw new Error('no port')
+    const origin = `http://127.0.0.1:${address.port}`
+    const profile = join(tmpdir(), `ankanu-lite-browse-${Date.now()}`)
+    const chrome = await launch(binary as string, profile)
+    const ws = new WebSocket(chrome.ws)
+    let seq = 0
+    const pending = new Map<number, { resolve: (value: { result?: { value?: unknown } }) => void; reject: (error: Error) => void }>()
+    const waits: Array<{ method: string; resolve: () => void }> = []
+    ws.addEventListener('message', (event) => {
+      const message = JSON.parse(String(event.data)) as {
+        id?: number
+        method?: string
+        result?: { result?: { value?: unknown } }
+        error?: { message?: string }
+      }
+      if (message.id && pending.has(message.id)) {
+        const waiter = pending.get(message.id)
+        pending.delete(message.id)
+        if (message.error) waiter?.reject(new Error(message.error.message ?? 'cdp'))
+        else waiter?.resolve(message.result ?? {})
+        return
+      }
+      if (!message.method) return
+      for (let index = waits.length - 1; index >= 0; index -= 1) {
+        const waiter = waits[index]
+        if (waiter && waiter.method === message.method) {
+          waits.splice(index, 1)
+          waiter.resolve()
+        }
+      }
+    })
+    await new Promise<void>((resolve, reject) => {
+      ws.addEventListener('open', () => resolve())
+      ws.addEventListener('error', () => reject(new Error('socket')))
+    })
+    const send = (method: string, params?: object, sessionId?: string) => {
+      const id = ++seq
+      return new Promise<{ result?: { value?: unknown } }>((resolve, reject) => {
+        pending.set(id, { resolve, reject })
+        ws.send(JSON.stringify({ id, method, params, sessionId }))
+      })
+    }
+    try {
+      const created = await send('Target.createTarget', { url: 'about:blank' })
+      const targetId = String((created as { targetId?: string }).targetId)
+      const attached = await send('Target.attachToTarget', { targetId, flatten: true })
+      const sessionId = String((attached as { sessionId?: string }).sessionId)
+      await send('Page.enable', {}, sessionId)
+      await send('Runtime.enable', {}, sessionId)
+      const value = async (expression: string) => {
+        const result = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true }, sessionId)
+        return (result.result as { value?: unknown } | undefined)?.value
+      }
+      const loaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
+      await send('Page.navigate', { url: origin }, sessionId)
+      await loaded
+      await send(
+        'Emulation.setDeviceMetricsOverride',
+        { width: 1280, height: 1400, deviceScaleFactor: 1, mobile: false },
+        sessionId,
+      )
+      await value("localStorage.setItem('ankanu_lite','1')")
+      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      const state = (await value(`new Promise((resolve) => {
+        const start = Date.now()
+        const tick = () => {
+          const tiles = Array.from(document.querySelectorAll('#discover-tiles article'))
+          const ready = tiles.length === 3 && tiles.some((tile) => {
+            const name = tile.querySelector('[data-name]')
+            return name && name.textContent.indexOf('Bintou') === 0 && tile.querySelector('img')
+          })
+          if (ready || Date.now() - start > 4000) {
+            resolve(tiles.map((tile) => {
+              const photo = tile.querySelector('[data-photo]')
+              const image = tile.querySelector('img')
+              const reserved = tile.querySelector('[data-reserved]')
+              return {
+                name: tile.querySelector('[data-name]') ? tile.querySelector('[data-name]').textContent : '',
+                city: tile.querySelector('[data-city]') ? tile.querySelector('[data-city]').textContent : '',
+                chip: tile.querySelector('[data-chips]') ? tile.querySelector('[data-chips]').textContent : '',
+                well: photo ? photo.className : '',
+                reserved: reserved && reserved.hidden === false ? reserved.textContent : '',
+                src: image ? image.getAttribute('src') : '',
+                loading: image ? image.getAttribute('loading') : '',
+                decoding: image ? image.getAttribute('decoding') : '',
+                images: tile.querySelectorAll('img').length,
+              }
+            }))
+            return
+          }
+          setTimeout(tick, 30)
+        }
+        tick()
+      })`)) as Array<{
+        name: string
+        city: string
+        chip: string
+        well: string
+        reserved: string
+        src: string
+        loading: string
+        decoding: string
+        images: number
+      }>
+      const amina = state.find((tile) => tile.name.startsWith('Amina'))
+      const bintou = state.find((tile) => tile.name.startsWith('Bintou'))
+      const moussa = state.find((tile) => tile.name.startsWith('Moussa'))
+      expect(amina?.images).toBe(0)
+      expect(amina?.reserved).toBe('')
+      expect(amina?.well).toContain('h-52')
+      expect(amina?.well).toContain('bg-[#0B1D36]')
+      expect(amina?.well).toContain('bg-dot-pattern')
+      expect(amina?.city).toBe('Bobo')
+      expect(amina?.chip).toContain('Célibataire')
+      expect(bintou?.src).toBe('/media/ok')
+      expect(bintou?.loading).toBe('lazy')
+      expect(bintou?.decoding).toBe('async')
+      expect(bintou?.well).toContain('h-52')
+      expect(bintou?.chip).toContain('Célibataire')
+      expect(moussa?.images).toBe(1)
+      expect(moussa?.src).toBe('/media/bad')
+      expect(moussa?.loading ?? '').toBe('')
+      expect(moussa?.reserved).toContain('Photographie réservée')
+      expect(moussa?.city).toBe('Kaya')
+      expect(prefs).toEqual([])
+      const shots = fileURLToPath(new URL('../../../docs/qa-handoffs/epic-3-3.12-widths/', import.meta.url))
+      mkdirSync(shots, { recursive: true })
+      const failures: string[] = []
+      for (const width of WIDTHS) {
+        await send(
+          'Emulation.setDeviceMetricsOverride',
+          { width, height: 900, deviceScaleFactor: 1, mobile: width < 768 },
+          sessionId,
+        )
+        const fit = (await value(
+          '({ scrollWidth: document.documentElement.scrollWidth, width: window.innerWidth })',
+        )) as { scrollWidth: number; width: number }
+        if (!fit || fit.scrollWidth > fit.width) failures.push(`grid@${width} ${fit?.scrollWidth ?? '?'} > ${fit?.width ?? width}`)
+        if (width === 360 || width === 1440) {
+          const shot = await send('Page.captureScreenshot', { format: 'png' }, sessionId)
+          const data = String((shot as { data?: string }).data ?? '')
+          if (data) writeFileSync(join(shots, `grid-lite-${width}.png`), Buffer.from(data, 'base64'))
+        }
+      }
+      expect(failures).toEqual([])
+      const settingsLoaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
+      await send('Page.navigate', { url: `${origin}/settings` }, sessionId)
+      await settingsLoaded
+      const toggle = (await value(`(() => {
+        const button = document.getElementById('lite-mode-toggle')
+        const thumb = document.getElementById('lite-mode-thumb')
+        return {
+          checked: button ? button.getAttribute('aria-checked') : '',
+          navy: button ? button.classList.contains('bg-deep-navy') : false,
+          hairline: button ? button.classList.contains('bg-hairline') : false,
+          thumbOn: thumb ? thumb.classList.contains('translate-x-5') : false,
+          stored: localStorage.getItem('ankanu_lite'),
+          onclick: button ? button.getAttribute('onclick') : '',
+          copy: document.body.innerText.indexOf('Mode Allégé (Basse consommation)') !== -1,
+        }
+      })()`)) as {
+        checked: string
+        navy: boolean
+        hairline: boolean
+        thumbOn: boolean
+        stored: string
+        onclick: string
+        copy: boolean
+      }
+      expect(toggle.checked).toBe('true')
+      expect(toggle.navy).toBe(true)
+      expect(toggle.hairline).toBe(false)
+      expect(toggle.thumbOn).toBe(true)
+      expect(toggle.stored).toBe('1')
+      expect(toggle.onclick ?? '').toBe('')
+      expect(toggle.copy).toBe(true)
+      await value("document.getElementById('lite-mode-toggle').click()")
+      const off = (await value(`(() => {
+        const button = document.getElementById('lite-mode-toggle')
+        const thumb = document.getElementById('lite-mode-thumb')
+        return {
+          checked: button ? button.getAttribute('aria-checked') : '',
+          hairline: button ? button.classList.contains('bg-hairline') : false,
+          thumbOff: thumb ? thumb.classList.contains('translate-x-0.5') : false,
+          stored: localStorage.getItem('ankanu_lite'),
+        }
+      })()`)) as { checked: string; hairline: boolean; thumbOff: boolean; stored: string }
+      expect(off.checked).toBe('false')
+      expect(off.hairline).toBe(true)
+      expect(off.thumbOff).toBe(true)
+      expect(off.stored).toBe('0')
+      const settingsFit: string[] = []
+      for (const width of WIDTHS) {
+        await send(
+          'Emulation.setDeviceMetricsOverride',
+          { width, height: 900, deviceScaleFactor: 1, mobile: width < 768 },
+          sessionId,
+        )
+        const fit = (await value(
+          '({ scrollWidth: document.documentElement.scrollWidth, width: window.innerWidth })',
+        )) as { scrollWidth: number; width: number }
+        if (!fit || fit.scrollWidth > fit.width) {
+          settingsFit.push(`settings@${width} ${fit?.scrollWidth ?? '?'} > ${fit?.width ?? width}`)
+        }
+        if (width === 360 || width === 1440) {
+          const shot = await send('Page.captureScreenshot', { format: 'png' }, sessionId)
+          const data = String((shot as { data?: string }).data ?? '')
+          if (data) writeFileSync(join(shots, `settings-${width}.png`), Buffer.from(data, 'base64'))
+        }
+      }
+      expect(settingsFit).toEqual([])
+      expect(prefs).toEqual([])
+    } finally {
+      ws.close()
+      chrome.proc.kill('SIGKILL')
+      await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
+    }
+  }, 60_000)
 })

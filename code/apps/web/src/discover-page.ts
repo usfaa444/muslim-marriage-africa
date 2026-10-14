@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { liteModeSource } from './lite-mode'
 import { pinGuardScript } from './pin-guard'
 import { prepareV2, stripInlineHandlers } from './v2-document'
 
@@ -58,7 +59,63 @@ const GRID_STATUS = `<p id="discover-empty" hidden class="text-sm text-deep-navy
 <button id="discover-retry" hidden type="button" class="mt-3 inline-flex items-center border border-[#E2D4B8] text-deep-navy bg-cream rounded-lg px-4 py-2.5 text-sm font-medium">Réessayer</button>`
 
 /** Text paints before any thumbnail request. Photo URLs stay out of sessionStorage. */
-const SCRIPT = `document.addEventListener('click', function (event) {
+const SCRIPT = `${liteModeSource}
+function mountLiteThumb(photo, url) {
+  var image = new Image()
+  image.alt = ''
+  image.decoding = 'async'
+  image.className = 'absolute inset-0 h-full w-full object-cover'
+  var started = false
+  function stopWatch() {
+    document.removeEventListener('scroll', consider, true)
+    window.removeEventListener('resize', consider)
+  }
+  function begin() {
+    if (started || !photo.isConnected) return
+    var grid = document.getElementById('discover-grid')
+    if (grid && grid.hidden) return
+    started = true
+    stopWatch()
+    image.addEventListener('load', function () {
+      image.loading = 'lazy'
+      if (!photo.isConnected) return
+      photo.insertBefore(image, photo.firstChild)
+    })
+    image.addEventListener('error', function () {})
+    image.src = url
+  }
+  function inView() {
+    var rect = photo.getBoundingClientRect()
+    var height = window.innerHeight || document.documentElement.clientHeight
+    return rect.width > 0 && rect.bottom > 0 && rect.top < height
+  }
+  function consider() {
+    if (!photo.isConnected) {
+      stopWatch()
+      return
+    }
+    if (inView()) begin()
+  }
+  if (typeof IntersectionObserver === 'function') {
+    var observer = new IntersectionObserver(function (entries) {
+      if (!photo.isConnected) {
+        observer.disconnect()
+        stopWatch()
+        return
+      }
+      var visible = false
+      for (var i = 0; i < entries.length; i += 1) if (entries[i].isIntersecting) visible = true
+      if (!visible) return
+      begin()
+      if (started) observer.disconnect()
+    })
+    observer.observe(photo)
+  }
+  document.addEventListener('scroll', consider, true)
+  window.addEventListener('resize', consider)
+  requestAnimationFrame(function () { requestAnimationFrame(consider) })
+}
+document.addEventListener('click', function (event) {
   var opener = event.target && event.target.closest ? event.target.closest('[data-open-filters]') : null
   if (opener) {
     event.preventDefault()
@@ -197,6 +254,7 @@ function paint(items) {
   lastError = ''
   syncCardStatus()
   paintChips()
+  var lite = liteEnabled()
   var deferred = []
   items.forEach(function (item) {
     var node = template.content.cloneNode(true)
@@ -230,7 +288,11 @@ function paint(items) {
       reserved.hidden = true
       missing.hidden = true
     }
-    if (url && photo) deferred.push({ photo: photo, url: url })
+    var liteUrl = ''
+    if (url && photo) {
+      if (lite && item.photo_blur !== true) liteUrl = url
+      else deferred.push({ photo: photo, url: url })
+    }
     if (article) {
       article.addEventListener('click', function (event) {
         var bookmark = event.target && event.target.closest ? event.target.closest('[data-bookmark]') : null
@@ -254,6 +316,7 @@ function paint(items) {
       })
     }
     tiles.appendChild(node)
+    if (liteUrl && photo) mountLiteThumb(photo, liteUrl)
   })
   requestAnimationFrame(function () {
     requestAnimationFrame(function () {
