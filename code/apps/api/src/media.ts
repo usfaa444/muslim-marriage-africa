@@ -168,7 +168,7 @@ export async function ownerPhotoCard(
   if (!asset || asset.moderation_state === 'replaced' || asset.moderation_state === 'blocked') {
     return { ok: true, photo: null }
   }
-  const signed = await signMedia(store, asset.id, 'blur', ownerId)
+  const signed = await signOwnerClear(store, asset.id, ownerId)
   if (!signed.ok) {
     return signed
   }
@@ -189,7 +189,7 @@ export async function ownerPendingPhotoCard(
   if (!asset) {
     return { ok: true, photo: null }
   }
-  const signed = await signMedia(store, asset.id, 'blur', ownerId)
+  const signed = await signOwnerClear(store, asset.id, ownerId)
   if (!signed.ok) {
     return signed
   }
@@ -219,13 +219,7 @@ export async function ownerGallery(
   const listed: GalleryPhoto[] = []
   for (const asset of photos) {
     const live = asset.moderation_state === 'live'
-    let signed = await signMedia(
-      store,
-      asset.id,
-      live ? 'md' : 'blur',
-      ownerId,
-      live ? { clearForMember: true, ownerPreview: true } : undefined,
-    )
+    let signed = await signOwnerClear(store, asset.id, ownerId)
     if (!signed.ok && live) {
       signed = await signMedia(store, asset.id, 'blur', ownerId)
     }
@@ -331,10 +325,11 @@ export async function signMedia(
     return omitted()
   }
   if (clear) {
-    if (asset.kind !== 'profile_photo' || asset.moderation_state !== 'live') {
+    const ownerPreview = options?.ownerPreview === true && viewerId === asset.owner_id
+    const ownerPending = ownerPreview && asset.moderation_state === 'pending'
+    if (asset.kind !== 'profile_photo' || (asset.moderation_state !== 'live' && !ownerPending)) {
       return revealDenied()
     }
-    const ownerPreview = options?.ownerPreview === true && viewerId === asset.owner_id
     if (!ownerPreview && (await profilePhotoBlur(asset.owner_id))) {
       return revealDenied()
     }
@@ -394,7 +389,8 @@ export async function readGrantedMedia(
     return omitted()
   }
   if (clear) {
-    if (asset.kind !== 'profile_photo' || asset.moderation_state !== 'live') {
+    const ownerPending = viewerId === asset.owner_id && asset.moderation_state === 'pending'
+    if (asset.kind !== 'profile_photo' || (asset.moderation_state !== 'live' && !ownerPending)) {
       return revealDenied()
     }
     if (viewerId !== asset.owner_id && (await profilePhotoBlur(asset.owner_id))) {
@@ -423,6 +419,15 @@ export async function readGrantedMedia(
     return storageFailure()
   }
   return { ok: true, bytes, contentType: imageContentType(bytes) }
+}
+
+/** Clear `md` for this owner only. `photo_blur` does not apply. Never `original`. */
+async function signOwnerClear(
+  store: MediaStore,
+  assetId: string,
+  ownerId: string,
+): Promise<{ ok: true; url: string; expires_at: string } | MediaFailure> {
+  return signMedia(store, assetId, 'md', ownerId, { clearForMember: true, ownerPreview: true })
 }
 
 async function backfillClearDerivative(store: MediaStore, asset: StoredAsset): Promise<StoredDerivative | null> {

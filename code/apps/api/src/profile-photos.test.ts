@@ -360,4 +360,130 @@ describe('profile photo gallery, main, and one blur', () => {
     expect(hidden.headers.get('content-type')).toContain('image/jpeg')
     expect(Buffer.from(await hidden.arrayBuffer()).equals(blur)).toBe(true)
   })
+
+  it('shows the owner a clear pending photo and refuses that token to another member', async () => {
+    const owner = await createAccount()
+    const ownerCookie = await signIn(owner.email)
+    const viewer = await createAccount()
+    const viewerCookie = await signIn(viewer.email)
+    const uploaded = await upload(ownerCookie)
+    expect(uploaded.status).toBe(201)
+    const asset = media.assets.find((row) => row.id === uploaded.json.id)
+    const original = Buffer.from(media.blobs.get(asset?.original_key ?? '') ?? [])
+    const blur = Buffer.from(media.blobs.get(asset?.blur_key ?? '') ?? [])
+    expect(original.equals(blur)).toBe(false)
+
+    const profile = await fetch(`${base}/v1/me/profile`, { headers: { cookie: ownerCookie } })
+    expect(profile.status).toBe(200)
+    const body = (await profile.json()) as {
+      photo_blur: boolean
+      photo: { blur_url: string; moderation_state: string }
+      photos: Array<{ id: string; moderation_state: string; url: string; caption: string | null }>
+    }
+    expect(body.photo_blur).toBe(true)
+    expect(body.photo).toMatchObject({ moderation_state: 'pending' })
+    expect(body.photos).toEqual([
+      expect.objectContaining({
+        id: uploaded.json.id,
+        moderation_state: 'pending',
+        caption: 'Photo en revue — pas encore publique.',
+      }),
+    ])
+    const galleryToken = body.photos[0]?.url.split('token=')[1] ?? ''
+    const cardToken = body.photo.blur_url.split('token=')[1] ?? ''
+    expect(media.grants.find((row) => row.id === galleryToken)?.derivative).toBe('md')
+    expect(media.grants.find((row) => row.id === galleryToken)?.viewer_id).toBe(owner.id)
+    expect(media.grants.find((row) => row.id === cardToken)?.derivative).toBe('md')
+    expect(JSON.stringify(body)).not.toContain('original_key')
+    expect(JSON.stringify(body)).not.toContain(asset?.original_key ?? 'missing-key')
+
+    const clear = await fetch(`${base}/v1/media/get?token=${galleryToken}`, { headers: { cookie: ownerCookie } })
+    expect(clear.status).toBe(200)
+    expect(Buffer.from(await clear.arrayBuffer()).equals(original)).toBe(true)
+    const cardBytes = await fetch(`${base}/v1/media/get?token=${cardToken}`, { headers: { cookie: ownerCookie } })
+    expect(cardBytes.status).toBe(200)
+    expect(Buffer.from(await cardBytes.arrayBuffer()).equals(original)).toBe(true)
+
+    const stolen = await fetch(`${base}/v1/media/get?token=${galleryToken}`, { headers: { cookie: viewerCookie } })
+    expect(stolen.status).toBe(403)
+    const stolenCard = await fetch(`${base}/v1/media/get?token=${cardToken}`, { headers: { cookie: viewerCookie } })
+    expect(stolenCard.status).toBe(403)
+    const asked = await signMedia(media, String(uploaded.json.id), 'md', viewer.id, { clearForMember: true })
+    expect(asked.ok).toBe(false)
+
+    const listed = await livePhotosForMember(media, owner.id, viewer.id, 'md')
+    expect(listed.ok).toBe(true)
+    if (listed.ok) {
+      expect(listed.photos).toEqual([])
+    }
+
+    expect(await media.allowProfilePhoto(String(uploaded.json.id))).toBe(true)
+    const second = await upload(ownerCookie)
+    expect(second.status).toBe(201)
+    const replaced = await fetch(`${base}/v1/me/profile`, { headers: { cookie: ownerCookie } })
+    const replacedBody = (await replaced.json()) as {
+      photos: Array<{ id: string; moderation_state: string; is_main: boolean; url: string }>
+    }
+    const liveRow = replacedBody.photos.find((row) => row.moderation_state === 'live')
+    const pendingRow = replacedBody.photos.find((row) => row.moderation_state === 'pending')
+    expect(liveRow?.id).toBe(uploaded.json.id)
+    expect(liveRow?.is_main).toBe(true)
+    expect(pendingRow?.id).toBe(second.json.id)
+    const liveToken = liveRow?.url.split('token=')[1] ?? ''
+    const pendingToken = pendingRow?.url.split('token=')[1] ?? ''
+    expect(media.grants.find((row) => row.id === liveToken)?.derivative).toBe('md')
+    expect(media.grants.find((row) => row.id === pendingToken)?.derivative).toBe('md')
+    const ownerLive = await fetch(`${base}/v1/media/get?token=${liveToken}`, { headers: { cookie: ownerCookie } })
+    const ownerPending = await fetch(`${base}/v1/media/get?token=${pendingToken}`, { headers: { cookie: ownerCookie } })
+    expect(ownerLive.status).toBe(200)
+    expect(ownerPending.status).toBe(200)
+    const secondAsset = media.assets.find((row) => row.id === second.json.id)
+    const secondOriginal = Buffer.from(media.blobs.get(secondAsset?.original_key ?? '') ?? [])
+    const secondBlur = Buffer.from(media.blobs.get(secondAsset?.blur_key ?? '') ?? [])
+    expect(Buffer.from(await ownerLive.arrayBuffer()).equals(original)).toBe(true)
+    expect(Buffer.from(await ownerPending.arrayBuffer()).equals(secondOriginal)).toBe(true)
+    expect(secondOriginal.equals(secondBlur)).toBe(false)
+    const deniedPending = await fetch(`${base}/v1/media/get?token=${pendingToken}`, { headers: { cookie: viewerCookie } })
+    expect(deniedPending.status).toBe(403)
+
+    const others = await livePhotosForMember(media, owner.id, viewer.id, 'md')
+    expect(others.ok).toBe(true)
+    if (!others.ok) {
+      return
+    }
+    expect(others.photos.map((row) => row.id)).toEqual([String(uploaded.json.id)])
+    const otherToken = others.photos[0]?.url.split('token=')[1] ?? ''
+    expect(media.grants.find((row) => row.id === otherToken)?.derivative).toBe('blur')
+    const otherBytes = await fetch(`${base}/v1/media/get?token=${otherToken}`, { headers: { cookie: viewerCookie } })
+    expect(otherBytes.status).toBe(200)
+    expect(Buffer.from(await otherBytes.arrayBuffer()).equals(blur)).toBe(true)
+
+    const unblurred = await fetch(`${base}/v1/me/profile`, {
+      method: 'PATCH',
+      headers: { cookie: ownerCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ photo_blur: false }),
+    })
+    expect(unblurred.status).toBe(200)
+    const stillPending = await fetch(`${base}/v1/media/get?token=${pendingToken}`, { headers: { cookie: viewerCookie } })
+    expect(stillPending.status).toBe(403)
+    const clearLive = await livePhotosForMember(media, owner.id, viewer.id, 'md')
+    expect(clearLive.ok).toBe(true)
+    if (clearLive.ok) {
+      expect(clearLive.photos.map((row) => row.id)).toEqual([String(uploaded.json.id)])
+      expect(media.grants.find((row) => row.id === (clearLive.photos[0]?.url.split('token=')[1] ?? ''))?.derivative).toBe('md')
+    }
+
+    const pendingAsset = media.assets.find((row) => row.id === second.json.id)
+    if (pendingAsset) pendingAsset.moderation_state = 'blocked'
+    const afterBlock = (await (await fetch(`${base}/v1/me/profile`, { headers: { cookie: ownerCookie } })).json()) as {
+      photo: { id: string } | null
+      photos: Array<{ id: string }>
+      pending_photo?: { id: string }
+    }
+    expect(afterBlock.photos.map((row) => row.id)).not.toContain(String(second.json.id))
+    expect(afterBlock.pending_photo).toBeUndefined()
+    expect(afterBlock.photo?.id).not.toBe(second.json.id)
+    const blockedToken = await fetch(`${base}/v1/media/get?token=${pendingToken}`, { headers: { cookie: ownerCookie } })
+    expect(blockedToken.status).toBe(403)
+  })
 })

@@ -443,14 +443,17 @@ describe('profile edit load and meter', () => {
       ...stored,
       review_sla_hours: 24,
       photo: { id: 'live', moderation_state: 'live', is_main: true, url: '/v1/media/get?token=live' },
-      pending_photo: { id: 'pend', moderation_state: 'pending' },
+      pending_photo: { id: 'pend', moderation_state: 'pending', url: '/v1/media/get?token=pend' },
     })
     await flush()
     expect(page.photoNote.textContent).toContain('Aucun affichage public')
     expect(page.photoGrid.innerHTML).toContain('Principale')
     expect(page.photoGrid.innerHTML).toContain('Photographie de profil')
     expect(page.photoGrid.innerHTML).toContain('En revue')
-    expect(page.photoGrid.innerHTML).toContain('photo_camera')
+    expect(page.photoGrid.innerHTML).toContain('src="/v1/media/get?token=pend"')
+    expect(page.photoGrid.innerHTML).toContain('Photographie de profil en revue')
+    expect(page.photoGrid.innerHTML).not.toContain('photo_camera')
+    expect(page.photoGrid.innerHTML).not.toContain('filter:blur')
     expect(page.photoGrid.innerHTML).toContain('Ajouter une photo')
     expect(page.photoGrid.innerHTML).not.toContain('Délai habituel de modération')
     expect(page.photoGrid.innerHTML).not.toContain('pas encore publique')

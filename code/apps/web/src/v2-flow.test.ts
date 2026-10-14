@@ -665,6 +665,8 @@ describe('screen 12 review timing', () => {
     expect(pendingProfilePhoto({ photo: { moderation_state: 'live' }, pending_photo: { moderation_state: 'pending' } })).toBe(false)
     expect(pendingProfilePhoto({ photo: { moderation_state: 'live' } })).toBe(false)
     expect(hidden).toContain("window.location.replace('/profile-edit')")
+    expect(hidden).toContain('photo.url || photo.blur_url')
+    expect(hidden).toContain('data-icon="photo_camera"')
     expect(hidden).not.toContain('pending_photo')
   })
 })

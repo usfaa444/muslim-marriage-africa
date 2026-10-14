@@ -1148,7 +1148,18 @@ export function reviewScript(): string {
         var pending = photo && photo.moderation_state === 'pending'
         if (!response.ok || !pending) {
           window.location.replace('/profile-edit')
+          return
         }
+        var src = photo.url || photo.blur_url || ''
+        var icon = document.querySelector('[data-icon="photo_camera"]')
+        if (!src || !icon || !icon.parentNode || !icon.parentNode.parentNode) return
+        var row = icon.parentNode.parentNode
+        var img = document.createElement('img')
+        img.alt = 'Photographie de profil'
+        img.src = src
+        img.setAttribute('style', 'display:block;width:100%;max-width:100%;height:140px;object-fit:cover;border-radius:8px;margin:0 0 8px')
+        if (row.parentNode) row.parentNode.insertBefore(img, row)
+        icon.parentNode.removeChild(icon)
       }, function () {
         window.location.replace('/profile-edit')
       })
@@ -1368,7 +1379,9 @@ export function profileScript(): string {
         var photo = photos[index]
         var id = photoText(photo.id || String(index))
         if (photo.moderation_state === 'pending') {
-          html += '<div class="relative aspect-[4/5] rounded-lg border border-hairline bg-[#FBF8F1] p-3 flex flex-col items-center justify-center text-center gap-2"><div class="w-10 h-10 rounded-full bg-hairline/40 border border-hairline flex items-center justify-center text-deep-navy/60"><span class="material-symbols-outlined text-xl">photo_camera</span></div><span class="text-xs font-medium text-deep-navy/80">Photographie de profil</span><span class="mt-1 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold text-deep-navy bg-cream border border-hairline text-soft-gold">En revue</span></div>'
+          var pendingSrc = photoText(photo.url || photo.blur_url || '')
+          var pendingImage = pendingSrc ? '<img alt="Photographie de profil en revue" class="absolute inset-0 w-full h-full object-cover" src="' + pendingSrc + '">' : ''
+          html += '<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1]">' + pendingImage + '<div class="absolute inset-x-0 bottom-0 p-2 flex flex-col items-center justify-center text-center gap-1 bg-[#FBF8F1]"><span class="w-full min-w-0 whitespace-normal text-xs font-medium text-deep-navy/80 text-center">Photographie de profil</span><span class="mt-1 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold text-deep-navy bg-cream border border-hairline text-soft-gold">En revue</span></div></div>'
           continue
         }
         var src = photoText(photo.url || photo.blur_url || '')

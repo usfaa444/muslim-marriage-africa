@@ -489,15 +489,21 @@ describe('v2 screens fit the required widths', () => {
           url: '/v1/media/get?token=pending',
         }
         let photos = [pending]
+        let photo = photos[0]
+        if (referer.includes('13b-profile-review') || referer.includes('13c-profile-review')) {
+          photo = { id: 'pending', moderation_state: 'pending', blur_url: '/v1/media/get?token=pending' }
+        }
         if (referer.includes('13b-profile-replacement')) {
           photos = [live('main', true), live('other', false), pending]
+          photo = photos[0]
         }
         if (referer.includes('13e-profile-cap')) {
           photos = [live('p0', true), live('p1', false), live('p2', false), live('p3', false), live('p4', false), pending]
+          photo = photos[0]
         }
         response.setHeader('content-type', 'application/json; charset=utf-8')
         response.setHeader('cache-control', 'no-store')
-        response.end(JSON.stringify({ dob: '1990-01-15', photo_blur: true, photo: photos[0], photos }))
+        response.end(JSON.stringify({ dob: '1990-01-15', photo_blur: true, photo, photos }))
         return
       }
       const name = url.pathname.slice(1)
@@ -620,6 +626,25 @@ describe('v2 screens fit the required widths', () => {
               )
             }
           }
+          if (page.name === '13-profile') {
+            const pendingTile = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `(() => {
+                  const slot = document.getElementById('profile-photo-grid')
+                  const img = slot && slot.querySelector('img[alt="Photographie de profil en revue"]')
+                  const text = slot ? slot.textContent || '' : ''
+                  return {
+                    ok: Boolean(img) && img.getAttribute('src') === '/v1/media/get?token=pending' && text.includes('Photographie de profil') && text.includes('En revue') && !text.includes('photo_camera'),
+                  }
+                })()`,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const tile = (pendingTile.result as { value?: { ok?: boolean } } | undefined)?.value
+            if (!tile?.ok) failures.push(`${page.name}@${width} pending tile is not a clear photo`)
+          }
           if (page.name === '13b-profile-replacement') {
             const row = await cdp.send(
               'Runtime.evaluate',
@@ -634,7 +659,7 @@ describe('v2 screens fit the required widths', () => {
                   const chipRect = chip ? chip.getBoundingClientRect() : null
                   const capHidden = !cap || getComputedStyle(cap).display === 'none'
                   return {
-                    ok: rect.height > 1 && rect.right <= ${width} + 1 && rect.left >= -1 && text.includes('Principale') && text.includes('Définir comme principale') && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Ajouter une photo') && !text.includes('pas encore publique') && !text.includes('en cours de revue') && capHidden && chipRect && chipRect.right <= ${width} + 1 && chipRect.left >= -1,
+                    ok: rect.height > 1 && rect.right <= ${width} + 1 && rect.left >= -1 && text.includes('Principale') && text.includes('Définir comme principale') && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Ajouter une photo') && !text.includes('pas encore publique') && !text.includes('en cours de revue') && !text.includes('photo_camera') && Boolean(slot.querySelector('img[alt="Photographie de profil en revue"]')) && capHidden && chipRect && chipRect.right <= ${width} + 1 && chipRect.left >= -1,
                     right: Math.round(rect.right),
                     chipRight: chipRect ? Math.round(chipRect.right) : -1,
                     text: text.replace(/\\s+/g, ' ').slice(0, 160),
@@ -648,6 +673,43 @@ describe('v2 screens fit the required widths', () => {
             if (!shown?.ok) {
               failures.push(
                 `${page.name}@${width} gallery not inside the viewport right=${shown?.right ?? '?'} chip=${shown?.chipRight ?? '?'} ${shown?.reason ?? ''} ${shown?.text ?? ''}`,
+              )
+            }
+          }
+          if (page.name === '13b-profile-review' || page.name === '13c-profile-review-no-bio') {
+            const review = await cdp.send(
+              'Runtime.evaluate',
+              {
+                expression: `new Promise((resolve) => {
+                  const start = Date.now()
+                  const tick = () => {
+                    const img = document.querySelector('img[alt="Photographie de profil"]')
+                    const icon = document.querySelector('[data-icon="photo_camera"]')
+                    const text = document.body ? document.body.textContent || '' : ''
+                    if ((img && !icon) || Date.now() - start > 3000) {
+                      const rect = img ? img.getBoundingClientRect() : null
+                      const row = img && img.nextElementSibling ? img.nextElementSibling.getBoundingClientRect() : null
+                      const scrollWidth = document.documentElement.scrollWidth
+                      resolve({
+                        ok: Boolean(img) && !icon && img.getAttribute('src') === '/v1/media/get?token=pending' && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Photo en revue — pas encore publique.') && scrollWidth <= window.innerWidth && rect && rect.width >= 32 && rect.right <= ${width} + 1 && rect.left >= -1 && row && row.right <= ${width} + 1 && row.left >= -1,
+                        hasImg: Boolean(img),
+                        hasIcon: Boolean(icon),
+                      })
+                      return
+                    }
+                    setTimeout(tick, 50)
+                  }
+                  tick()
+                })`,
+                awaitPromise: true,
+                returnByValue: true,
+              },
+              sessionId,
+            )
+            const painted = (review.result as { value?: { ok?: boolean; hasImg?: boolean; hasIcon?: boolean } } | undefined)?.value
+            if (!painted?.ok) {
+              failures.push(
+                `${page.name}@${width} owner review photo img=${painted?.hasImg ?? '?'} icon=${painted?.hasIcon ?? '?'}`,
               )
             }
           }
