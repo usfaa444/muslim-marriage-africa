@@ -71,6 +71,15 @@ describe('discover grid page', () => {
     expect(html).toContain("image.loading = 'lazy'")
     expect(html).toContain("image.decoding = 'async'")
     expect(html).toContain('IntersectionObserver')
+    expect(html).toContain('var observer = null')
+    expect(html).toContain('if (observer) observer.disconnect()')
+    expect(html).toContain('function releaseLiteThumbs()')
+    const paintAt = html.indexOf('function paint(items)')
+    const paintBody = html.slice(paintAt, html.indexOf('function showError'))
+    expect(paintBody.indexOf('releaseLiteThumbs()')).toBeGreaterThan(-1)
+    expect(paintBody.indexOf('releaseLiteThumbs()')).toBeLessThan(paintBody.indexOf("tiles.textContent = ''"))
+    const errorBody = html.slice(html.indexOf('function showError'), html.indexOf('function loadGrid'))
+    expect(errorBody.indexOf('releaseLiteThumbs()')).toBeLessThan(errorBody.indexOf("tiles.textContent = ''"))
     expect(html).toContain('item.photo_blur !== true')
     expect(html).not.toContain('/v1/me/prefs')
     const tilesAt = html.indexOf('id="discover-tiles"')
@@ -1199,6 +1208,27 @@ describe('discover grid in a browser', () => {
         sessionId,
       )
       await value("localStorage.setItem('ankanu_lite','1')")
+      await value(`(() => {
+        const Native = window.IntersectionObserver
+        let open = 0
+        function Counting(callback, options) {
+          const observer = new Native(callback, options)
+          open += 1
+          const disconnect = observer.disconnect.bind(observer)
+          let closed = false
+          observer.disconnect = function () {
+            if (!closed) {
+              closed = true
+              open -= 1
+            }
+            return disconnect()
+          }
+          return observer
+        }
+        Counting.prototype = Native.prototype
+        window.IntersectionObserver = Counting
+        window.__liteObserversOpen = function () { return open }
+      })()`)
       await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
       const state = (await value(`new Promise((resolve) => {
         const start = Date.now()
@@ -1282,6 +1312,46 @@ describe('discover grid in a browser', () => {
         }
       }
       expect(failures).toEqual([])
+      expect(await value('window.__liteObserversOpen()')).toBe(0)
+      await value("document.getElementById('discover-tiles').style.marginTop = '4000px'")
+      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      const held = (await value(`new Promise((resolve) => {
+        const start = Date.now()
+        const tick = () => {
+          const tiles = document.querySelectorAll('#discover-tiles article').length
+          const clear = Array.from(document.querySelectorAll('#discover-tiles article')).filter((tile) => {
+            const name = tile.querySelector('[data-name]')
+            return name && (name.textContent.indexOf('Amina') === 0 || name.textContent.indexOf('Bintou') === 0)
+          })
+          const waiting = clear.every((tile) => tile.querySelectorAll('img').length === 0)
+          if ((tiles === 3 && waiting) || Date.now() - start > 4000) {
+            resolve({ tiles, waiting, open: window.__liteObserversOpen() })
+            return
+          }
+          setTimeout(tick, 30)
+        }
+        tick()
+      })`)) as { tiles: number; waiting: boolean; open: number }
+      expect(held.tiles).toBe(3)
+      expect(held.waiting).toBe(true)
+      expect(held.open).toBe(2)
+      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      const repainted = (await value(`new Promise((resolve) => {
+        const start = Date.now()
+        const tick = () => {
+          const tiles = document.querySelectorAll('#discover-tiles article').length
+          if (tiles === 3 || Date.now() - start > 4000) {
+            resolve({ tiles, open: window.__liteObserversOpen() })
+            return
+          }
+          setTimeout(tick, 30)
+        }
+        tick()
+      })`)) as { tiles: number; open: number }
+      expect(repainted.tiles).toBe(3)
+      expect(repainted.open).toBe(2)
       const settingsLoaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
       await send('Page.navigate', { url: `${origin}/settings` }, sessionId)
       await settingsLoaded

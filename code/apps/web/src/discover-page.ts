@@ -60,15 +60,22 @@ const GRID_STATUS = `<p id="discover-empty" hidden class="text-sm text-deep-navy
 
 /** Text paints before any thumbnail request. Photo URLs stay out of sessionStorage. */
 const SCRIPT = `${liteModeSource}
+var liteThumbStops = []
+function releaseLiteThumbs() {
+  var stops = liteThumbStops.splice(0)
+  for (var i = 0; i < stops.length; i += 1) stops[i]()
+}
 function mountLiteThumb(photo, url) {
   var image = new Image()
   image.alt = ''
   image.decoding = 'async'
   image.className = 'absolute inset-0 h-full w-full object-cover'
   var started = false
+  var observer = null
   function stopWatch() {
     document.removeEventListener('scroll', consider, true)
     window.removeEventListener('resize', consider)
+    if (observer) observer.disconnect()
   }
   function begin() {
     if (started || !photo.isConnected) return
@@ -97,9 +104,8 @@ function mountLiteThumb(photo, url) {
     if (inView()) begin()
   }
   if (typeof IntersectionObserver === 'function') {
-    var observer = new IntersectionObserver(function (entries) {
+    observer = new IntersectionObserver(function (entries) {
       if (!photo.isConnected) {
-        observer.disconnect()
         stopWatch()
         return
       }
@@ -107,10 +113,11 @@ function mountLiteThumb(photo, url) {
       for (var i = 0; i < entries.length; i += 1) if (entries[i].isIntersecting) visible = true
       if (!visible) return
       begin()
-      if (started) observer.disconnect()
+      if (started && observer) observer.disconnect()
     })
     observer.observe(photo)
   }
+  liteThumbStops.push(stopWatch)
   document.addEventListener('scroll', consider, true)
   window.addEventListener('resize', consider)
   requestAnimationFrame(function () { requestAnimationFrame(consider) })
@@ -244,6 +251,7 @@ function chip(text) {
   return span
 }
 function paint(items) {
+  releaseLiteThumbs()
   var tiles = document.getElementById('discover-tiles')
   var empty = document.getElementById('discover-empty')
   var template = document.getElementById('discover-tile')
@@ -331,6 +339,7 @@ function paint(items) {
   })
 }
 function showError(message) {
+  releaseLiteThumbs()
   var tiles = document.getElementById('discover-tiles')
   var empty = document.getElementById('discover-empty')
   var error = document.getElementById('discover-error')
