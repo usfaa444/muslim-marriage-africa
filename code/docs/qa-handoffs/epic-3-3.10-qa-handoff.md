@@ -88,6 +88,7 @@ API memory accounts. Password `phrase avec espaces`. Date of birth `1990-01-15`.
 
 ## My results
 
+- Epic 3 check fail on `651a1f4`: `18b-favourites-filled@360` painted `H2 49..363`. `[data-name]` now uses `overflow-wrap: anywhere` in the card template and the painted article. `v2-responsive.test.ts`: 2 passed (55s), including that filled card at 360, 390, 768, 1024, 1280, and 1440.
 - QA fail on `d7d36d1` is fixed in this commit. `favourites.test.ts` and `favourites-page.test.ts`: 11 passed. A spaced `bio_live` returns trimmed `Foyer posé.`. The live page hides « Aucun favori. » until GET returns. A 404 DELETE leaves both cards and shows `Ce favori n'existe pas.`
 - `operator-config.migrate.test.ts`: 10 passed on Postgres 17. Applied migration count is 17. A second insert of the same favourite grain is `23505`. The list is `created_at` desc, then `target_id` desc, and DELETE removes that row.
 - Empty and filled `/favoris` still passed all six widths. Shots: `code/docs/qa-handoffs/epic-3-3.10-widths/empty-360.png`, `empty-1440.png`, `filled-360.png`, `filled-1440.png`.
@@ -97,7 +98,7 @@ API memory accounts. Password `phrase avec espaces`. Date of birth `1990-01-15`.
 
 1. Behavior: save, idempotent save, private list, delete, grid bookmark, profile bookmark, empty copy hidden until the live GET returns, a failed remove keeps the other cards, trimmed bio, no sample members, no who-favourited list, no billing call.
 2. Contract: POST, GET, and DELETE bodies and errors from the board comment. `favourite` primary key. AD-7 envelope. No browse slot. API and web typecheck are clean.
-3. Responsive: empty and filled screen 17 passed `scrollWidth <= innerWidth` at 360, 390, 768, 1024, 1280, and 1440.
+3. Responsive: empty and filled screen 17 must pass `scrollWidth <= innerWidth` and keep every element inside the viewport at 360, 390, 768, 1024, 1280, and 1440. Epic check on `651a1f4` failed `18b-favourites-filled@360` because `[data-name]` used `break-words` and `Aminata_KDG_long_pseudonym` painted past 360 (`H2 49..363`). The card template and the painted article now set `overflow-wrap: anywhere` on `[data-name]`.
 
 ## Solution-design sections followed
 
