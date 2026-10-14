@@ -109,6 +109,16 @@ describe('discover grid page', () => {
     expect(html).toContain('Filtres')
     expect(html).not.toContain('en ligne')
     expect(html).not.toContain('kids')
+    expect(html).toContain('data-chip-shell="discover"')
+    expect(html).toContain("if (field === 'city') return 'location_on'")
+    expect(html).toContain("if (field === 'madhhab') return 'menu_book'")
+    expect(html).toContain("if (field === 'practice') return 'schedule'")
+    expect(html).toContain("if (!search && field === 'polygamy_intent') return 'handshake'")
+    expect(html).toContain('cardBookmarkRest')
+    expect(html).toContain("bookmark.removeAttribute('aria-pressed')")
+    expect(html).toContain('if (gridPane && gridPane.hidden === false) loadGrid()')
+    const enterAt = html.indexOf("if (event.key !== 'Enter') return")
+    expect(html.slice(enterAt, enterAt + 420)).toContain('event.preventDefault()')
   })
 
   it('opens a filtered URL on the grid and keeps sample checks off the form', () => {
@@ -128,6 +138,9 @@ describe('discover grid page', () => {
     expect(modal).not.toContain('checked=""')
     expect(modal).toContain('<option value="" selected="">Indifférent</option>')
     expect(modal).not.toContain('selected="">Maliki')
+    expect(sisterFiltered).toContain('data-chip-shell="search"')
+    expect(sisterFiltered).toContain('text-[20px]" data-icon="bookmark">bookmark</span>')
+    expect(sisterFiltered).not.toContain('text-[20px]">bookmark</span>')
   })
 
   it('keeps a staff stub on the JSON envelope and sends a signed-out member to auth', async () => {
@@ -402,6 +415,29 @@ describe('discover grid in a browser', () => {
         sessionId,
       )
       expect(fetches).toBe(1)
+      const traitIcons = await send(
+        'Runtime.evaluate',
+        {
+          expression: `(() => {
+            const host = document.querySelector('#discover-focus [data-card-traits]')
+            return {
+              shell: host ? host.getAttribute('data-chip-shell') : '',
+              icons: Array.from(document.querySelectorAll('#discover-focus [data-card-traits] [data-icon]')).map((node) => node.getAttribute('data-icon')),
+              text: host ? host.textContent : '',
+            }
+          })()`,
+          returnByValue: true,
+        },
+        sessionId,
+      )
+      const traits = (
+        traitIcons.result as { value?: { shell: string; icons: string[]; text: string } } | undefined
+      )?.value
+      expect(traits?.shell).toBe('discover')
+      expect(traits?.icons).toEqual(['location_on', 'menu_book'])
+      expect(traits?.text).toContain('Même ville (Ouagadougou)')
+      expect(traits?.text).toContain('Madhhab : Maliki')
+      expect(traits?.text).not.toContain('Projet monogame')
       for (const width of WIDTHS) await measure(width, 'card')
       await send('Runtime.evaluate', { expression: "localStorage.setItem('ankanu_lite','0')" }, sessionId)
       await send(
@@ -576,6 +612,263 @@ describe('discover grid in a browser', () => {
     }
     expect(failures).toEqual([])
   }, 120_000)
+
+  it.skipIf(!binary)('keeps trait icons, one Enter save, and drops a pass from the visible grid', async () => {
+    const first = {
+      id: '01990000-0000-7000-8000-000000000001',
+      pseudonym: 'Aminata',
+      age: 29,
+      city: 'Ouagadougou',
+      verified: true,
+      photo_blur: true,
+      photo: { id: 'p1', url: '/media/blur-signed' },
+      sharedTraits: [
+        { field: 'city', label: 'Même ville (Ouagadougou)' },
+        { field: 'madhhab', label: 'Madhhab : Maliki' },
+        { field: 'practice', label: 'Pratique assidue' },
+        { field: 'polygamy_intent', label: 'Intention de polygamie : Oui' },
+        { field: 'marital_status', label: 'Célibataire' },
+      ],
+    }
+    const second = {
+      id: '01990000-0000-7000-8000-000000000002',
+      pseudonym: 'Bocar',
+      age: 31,
+      city: 'Ouagadougou',
+      verified: false,
+      photo_blur: true,
+      photo: null,
+      sharedTraits: [{ field: 'city', label: 'Même ville (Ouagadougou)' }],
+    }
+    let passed = false
+    let favouritePosts = 0
+    let releasePass: (() => void) | null = null
+    const server: Server = createServer((request, response) => {
+      const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (request.method === 'POST' && url.pathname === '/v1/favourites') {
+        favouritePosts += 1
+        response.statusCode = 201
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.end(JSON.stringify({ account_id: 'a', target_id: 't', created_at: '2026-10-14T12:00:00.000Z' }))
+        return
+      }
+      if (request.method === 'POST' && url.pathname === '/v1/browse/pass') {
+        releasePass = () => {
+          passed = true
+          response.statusCode = 201
+          response.setHeader('content-type', 'application/json; charset=utf-8')
+          response.end(JSON.stringify({ viewer_id: 'a', target_id: first.id, created_at: '2026-10-14T12:00:00.000Z' }))
+        }
+        return
+      }
+      if (url.pathname === '/v1/browse') {
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.setHeader('cache-control', 'no-store')
+        const grid = url.searchParams.get('view') === 'grid'
+        const item = passed ? second : first
+        const items = passed ? [second] : [first, second]
+        response.end(JSON.stringify(grid ? { view: 'grid', next_cursor: null, items } : { view: 'card', item }))
+        return
+      }
+      response.setHeader('content-type', 'text/html; charset=utf-8')
+      const many = url.searchParams.has('marital_status') && url.searchParams.has('polygamy_intent')
+      response.end(many ? sisterFiltered : html)
+    })
+    await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', () => resolve()))
+    const address = server.address()
+    if (!address || typeof address === 'string') throw new Error('no port')
+    const origin = `http://127.0.0.1:${address.port}`
+    const profile = join(tmpdir(), `ankanu-discover-pass-${Date.now()}`)
+    const chrome = await launch(binary as string, profile)
+    const ws = new WebSocket(chrome.ws)
+    let seq = 0
+    const pending = new Map<number, { resolve: (value: { result?: { value?: unknown } }) => void; reject: (error: Error) => void }>()
+    const waits: Array<{ method: string; resolve: () => void }> = []
+    ws.addEventListener('message', (event) => {
+      const message = JSON.parse(String(event.data)) as {
+        id?: number
+        method?: string
+        result?: { result?: { value?: unknown } }
+        error?: { message?: string }
+      }
+      if (message.id && pending.has(message.id)) {
+        const waiter = pending.get(message.id)
+        pending.delete(message.id)
+        if (message.error) waiter?.reject(new Error(message.error.message ?? 'cdp'))
+        else waiter?.resolve(message.result ?? {})
+        return
+      }
+      if (!message.method) return
+      for (let index = waits.length - 1; index >= 0; index -= 1) {
+        const waiter = waits[index]
+        if (waiter && waiter.method === message.method) {
+          waits.splice(index, 1)
+          waiter.resolve()
+        }
+      }
+    })
+    await new Promise<void>((resolve, reject) => {
+      ws.addEventListener('open', () => resolve())
+      ws.addEventListener('error', () => reject(new Error('socket')))
+    })
+    const send = (method: string, params?: object, sessionId?: string) => {
+      const id = ++seq
+      return new Promise<{ result?: { value?: unknown } }>((resolve, reject) => {
+        pending.set(id, { resolve, reject })
+        ws.send(JSON.stringify({ id, method, params, sessionId }))
+      })
+    }
+    const value = async (sessionId: string, expression: string) => {
+      const result = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true }, sessionId)
+      return (result.result as { value?: unknown } | undefined)?.value
+    }
+    try {
+      const created = await send('Target.createTarget', { url: 'about:blank' })
+      const targetId = String((created as { targetId?: string }).targetId)
+      const attached = await send('Target.attachToTarget', { targetId, flatten: true })
+      const sessionId = String((attached as { sessionId?: string }).sessionId)
+      await send('Page.enable', {}, sessionId)
+      await send('Runtime.enable', {}, sessionId)
+      const loaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
+      await send(
+        'Page.navigate',
+        { url: `${origin}/?marital_status=married&polygamy_intent=yes` },
+        sessionId,
+      )
+      await loaded
+      await value(sessionId, "document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      const searchTraits = (await value(
+        sessionId,
+        `new Promise((resolve) => {
+          const start = Date.now()
+          const tick = () => {
+            const host = document.querySelector('#discover-focus [data-card-traits]')
+            const text = host ? host.textContent : ''
+            if (text.indexOf('Madhhab') >= 0 || Date.now() - start > 4000) {
+              const icons = Array.from(host ? host.querySelectorAll('.material-symbols-outlined') : [])
+              resolve({
+                shell: host ? host.getAttribute('data-chip-shell') : '',
+                names: icons.map((node) => node.textContent),
+                marked: icons.map((node) => node.getAttribute('data-icon')),
+                text,
+                bookmark: document.querySelector('#discover-focus [data-bookmark] [data-icon]') ? document.querySelector('#discover-focus [data-bookmark] [data-icon]').getAttribute('data-icon') : '',
+              })
+              return
+            }
+            setTimeout(tick, 30)
+          }
+          tick()
+        })`,
+      )) as {
+        shell: string
+        names: string[]
+        marked: Array<string | null>
+        text: string
+        bookmark: string
+      }
+      expect(searchTraits.shell).toBe('search')
+      expect(searchTraits.names).toEqual(['location_on', 'menu_book', 'schedule'])
+      expect(searchTraits.marked).toEqual([null, null, null])
+      expect(searchTraits.text).toContain('Intention de polygamie : Oui')
+      expect(searchTraits.text).toContain('Célibataire')
+      expect(searchTraits.text).not.toContain('Projet monogame')
+      expect(searchTraits.bookmark).toBe('bookmark')
+      const home = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
+      await send('Page.navigate', { url: `${origin}/` }, sessionId)
+      await home
+      await value(
+        sessionId,
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.body.innerText || ''; if (text.indexOf('Aminata') >= 0 || Date.now() - start > 4000) resolve(true); else setTimeout(tick, 30) }; tick() })",
+      )
+      const discoverTraits = (await value(
+        sessionId,
+        `(() => {
+          const host = document.querySelector('#discover-focus [data-card-traits]')
+          return {
+            shell: host ? host.getAttribute('data-chip-shell') : '',
+            icons: Array.from(document.querySelectorAll('#discover-focus [data-card-traits] [data-icon]')).map((node) => node.getAttribute('data-icon')),
+            plain: Array.from(host ? host.children : []).filter((node) => !node.querySelector('[data-icon]')).map((node) => node.textContent),
+          }
+        })()`,
+      )) as { shell: string; icons: string[]; plain: string[] }
+      expect(discoverTraits.shell).toBe('discover')
+      expect(discoverTraits.icons).toEqual(['location_on', 'menu_book', 'schedule', 'handshake'])
+      expect(discoverTraits.plain).toEqual(['Célibataire'])
+      await value(sessionId, "document.querySelector('#discover-focus [data-bookmark]').focus()")
+      await send(
+        'Input.dispatchKeyEvent',
+        { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 },
+        sessionId,
+      )
+      await send(
+        'Input.dispatchKeyEvent',
+        { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 },
+        sessionId,
+      )
+      const pressed = await value(
+        sessionId,
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const value = document.querySelector('#discover-focus [data-bookmark]')?.getAttribute('aria-pressed'); if (value === 'true' || Date.now() - start > 2000) resolve(value); else setTimeout(tick, 30) }; tick() })",
+      )
+      expect(pressed).toBe('true')
+      await new Promise((resolve) => setTimeout(resolve, 200))
+      expect(favouritePosts).toBe(1)
+      await value(sessionId, "document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value(
+        sessionId,
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.getElementById('discover-grid')?.innerText || ''; if (text.indexOf('Aminata') >= 0 && text.indexOf('Bocar') >= 0 || Date.now() - start > 4000) resolve(text); else setTimeout(tick, 30) }; tick() })",
+      )
+      await value(sessionId, "document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      await value(sessionId, "document.querySelector('[data-card-pass]').click()")
+      await value(sessionId, "document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      const during = String(
+        await value(sessionId, "document.getElementById('discover-grid') ? document.getElementById('discover-grid').innerText : ''"),
+      )
+      expect(during).toContain('Aminata')
+      expect(releasePass).toBeTypeOf('function')
+      releasePass?.()
+      const after = String(
+        await value(
+          sessionId,
+          "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.getElementById('discover-grid')?.innerText || ''; if ((text.indexOf('Aminata') < 0 && text.indexOf('Bocar') >= 0) || Date.now() - start > 4000) resolve(text); else setTimeout(tick, 30) }; tick() })",
+        ),
+      )
+      expect(after).not.toContain('Aminata')
+      expect(after).toContain('Bocar')
+      await value(sessionId, "document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      const nextCard = (await value(
+        sessionId,
+        `new Promise((resolve) => {
+          const start = Date.now()
+          const tick = () => {
+            const name = document.querySelector('#discover-focus [data-card-name]')
+            const text = name ? name.textContent : ''
+            if (text.indexOf('Bocar') >= 0 || Date.now() - start > 4000) {
+              const button = document.querySelector('#discover-focus [data-bookmark]')
+              const icon = button ? button.querySelector('[data-icon]') : null
+              resolve({
+                text,
+                pressed: button ? button.getAttribute('aria-pressed') : '',
+                icon: icon ? icon.getAttribute('data-icon') : '',
+                glyph: icon ? icon.textContent : '',
+              })
+              return
+            }
+            setTimeout(tick, 30)
+          }
+          tick()
+        })`,
+      )) as { text: string; pressed: string | null; icon: string; glyph: string }
+      expect(nextCard.text).toContain('Bocar')
+      expect(nextCard.pressed).toBeNull()
+      expect(nextCard.icon).toBe('bookmark')
+      expect(nextCard.glyph).toBe('bookmark')
+      expect(favouritePosts).toBe(1)
+    } finally {
+      ws.close()
+      chrome.proc.kill('SIGKILL')
+      await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
+    }
+  }, 60_000)
 
   it.skipIf(!binary)('follows the live session, the cache, and the error paths', async () => {
     const queue: Array<{ status: number; body: unknown }> = []
@@ -1400,9 +1693,10 @@ describe('discover grid in a browser', () => {
       }
       expect(failures).toEqual([])
       expect(await value('window.__liteObserversOpen()')).toBe(0)
-      await value("document.getElementById('discover-tiles').style.marginTop = '4000px'")
+      await value("document.getElementById('discover-grid').style.paddingTop = '4000px'")
       await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
       await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value('new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))')
       const held = (await value(`new Promise((resolve) => {
         const start = Date.now()
         const tick = () => {

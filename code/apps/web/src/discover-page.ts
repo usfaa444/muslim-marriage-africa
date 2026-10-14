@@ -197,6 +197,9 @@ var cardItem = null
 var cardMemory = null
 var cardMemoryAt = 0
 var passPending = false
+var cardBookmarkRest = ''
+var restingBookmark = document.querySelector('#discover-focus [data-bookmark]')
+if (restingBookmark) cardBookmarkRest = restingBookmark.innerHTML
 var catalogue = null
 var cataloguePromise = null
 var URL_TTL = 60000
@@ -461,11 +464,34 @@ function clearBrowseCache() {
     })
   } catch (error) {}
 }
-function traitChip(text) {
-  var span = document.createElement('span')
-  span.className = 'inline-flex items-center gap-1.5 bg-cream border border-[#E2D4B8] rounded-lg px-3 py-1.5 text-xs text-deep-navy break-words'
-  span.textContent = text
-  return span
+function traitIcon(field, search) {
+  if (field === 'city') return 'location_on'
+  if (field === 'madhhab') return 'menu_book'
+  if (field === 'practice') return 'schedule'
+  if (!search && field === 'polygamy_intent') return 'handshake'
+  return ''
+}
+function traitChip(trait, host) {
+  var search = host && host.getAttribute('data-chip-shell') === 'search'
+  var chip = document.createElement(search ? 'span' : 'div')
+  chip.className = search
+    ? 'px-3 py-1.5 text-xs rounded-md border border-hairline bg-cream font-medium text-deep-navy inline-flex items-center gap-1.5'
+    : 'inline-flex items-center gap-1.5 bg-cream border border-[#E2D4B8] rounded-lg px-3 py-1.5 text-xs text-deep-navy'
+  var iconName = traitIcon(trait && trait.field, search)
+  if (iconName) {
+    var icon = document.createElement('span')
+    icon.className = search
+      ? 'material-symbols-outlined text-[15px] text-soft-gold'
+      : 'material-symbols-outlined text-soft-gold text-base'
+    if (!search) icon.setAttribute('data-icon', iconName)
+    icon.textContent = iconName
+    chip.appendChild(icon)
+  }
+  var label = document.createElement('span')
+  label.className = 'min-w-0 break-words'
+  label.textContent = trait && trait.label ? trait.label : ''
+  chip.appendChild(label)
+  return chip
 }
 function showCardError(message) {
   var focus = document.getElementById('discover-focus')
@@ -513,11 +539,15 @@ function paintCard(item) {
   if (traits) traits.textContent = ''
   var list = Array.isArray(item.sharedTraits) ? item.sharedTraits : []
   list.forEach(function (trait) {
-    if (trait && trait.label && traits) traits.appendChild(traitChip(trait.label))
+    if (trait && trait.label && traits) traits.appendChild(traitChip(trait, traits))
   })
   if (section) section.hidden = list.length === 0
   var bookmark = focus.querySelector('[data-bookmark]')
-  if (bookmark) bookmark.setAttribute('data-target-id', item.id)
+  if (bookmark) {
+    if (cardBookmarkRest) bookmark.innerHTML = cardBookmarkRest
+    bookmark.removeAttribute('aria-pressed')
+    bookmark.setAttribute('data-target-id', item.id)
+  }
   var photo = focus.querySelector('[data-card-photo]')
   var missing = focus.querySelector('[data-card-missing]')
   var reserved = focus.querySelectorAll('[data-card-reserved]')
@@ -627,7 +657,11 @@ function passCard() {
       return
     }
     clearBrowseCache()
-    loadCard()
+    pending = 0
+    generation += 1
+    var gridPane = document.getElementById('discover-grid')
+    if (gridPane && gridPane.hidden === false) loadGrid()
+    else loadCard()
   }, function () {
     passPending = false
     showCardError('Request failed')
@@ -975,6 +1009,7 @@ document.addEventListener('keydown', function (event) {
   if (event.key !== 'Enter') return
   var button = event.target && event.target.closest ? event.target.closest('#discover-focus [data-bookmark]') : null
   if (button) {
+    event.preventDefault()
     var saved = button.getAttribute('data-target-id') || (cardItem && cardItem.id)
     if (saved) saveFavourite(saved, button)
     return
@@ -1112,7 +1147,7 @@ function dropBlock(html: string, startMarker: string, endMarker: string): string
   return html.slice(0, start) + html.slice(end)
 }
 
-function emptyChipBox(html: string): string {
+function emptyChipBox(html: string, shell: 'discover' | 'search'): string {
   const needle = '<div class="flex flex-wrap gap-2">'
   const at = html.indexOf(needle)
   if (at < 0) {
@@ -1128,7 +1163,7 @@ function emptyChipBox(html: string): string {
       if (depth === 0) {
         return (
           html.slice(0, at) +
-          '<div data-card-traits class="flex flex-wrap gap-2 min-w-0"></div>' +
+          `<div data-card-traits data-chip-shell="${shell}" class="flex flex-wrap gap-2 min-w-0"></div>` +
           html.slice(match.index + match[0].length)
         )
       }
@@ -1219,7 +1254,12 @@ function prepareFocus(html: string): string {
     '<div class="flex flex-col gap-3">\n<h2 class="text-xs font-semibold uppercase tracking-wider text-deep-navy/60 font-body">',
     '<div data-card-traits-section data-card-open hidden class="flex flex-col gap-3 min-w-0">\n<h2 class="text-xs font-semibold uppercase tracking-wider text-deep-navy/60 font-body">',
   )
-  next = emptyChipBox(next)
+  const searchCard = html.includes('text-[20px]">bookmark</span>')
+  next = emptyChipBox(next, searchCard ? 'search' : 'discover')
+  next = next.replace(
+    '<span class="material-symbols-outlined text-[20px]">bookmark</span>',
+    '<span class="material-symbols-outlined text-[20px]" data-icon="bookmark">bookmark</span>',
+  )
   next = dropBlock(next, '<!-- Intention de mariage quote -->', '<!-- Actions row -->')
   next = dropBlock(next, '<!-- Marriage Intention Statement -->', '<!-- Action Row -->')
   next = next.replace(' • <span class="font-semibold text-deep-navy">1 profil correspondant</span>', '')
