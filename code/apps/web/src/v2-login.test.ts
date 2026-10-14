@@ -20,6 +20,10 @@ type El = {
   classList: { remove: (token: string) => void; toggle: (token: string, force?: boolean) => void }
   addEventListener: (type: string, fn: Listener) => void
   appendChild: (child: TextNode | El) => TextNode | El
+  hidden: string | null
+  setAttribute: (name: string, value: string) => void
+  removeAttribute: (name: string) => void
+  getAttribute: (name: string) => string | null
 }
 
 function textNode(value = ' '): TextNode {
@@ -61,6 +65,16 @@ function element(id: string, className = ''): El {
       node.childNodes.push(child)
       node.lastChild = child
       return child
+    },
+    hidden: null,
+    setAttribute(name, value) {
+      if (name === 'hidden') node.hidden = value
+    },
+    removeAttribute(name) {
+      if (name === 'hidden') node.hidden = null
+    },
+    getAttribute(name) {
+      return name === 'hidden' ? node.hidden : null
     },
   }
   node.childNodes.push(node.lastChild)
@@ -316,5 +330,47 @@ describe('sign-in routing and inline errors', () => {
     )
     expect(page).not.toContain("|| '/onboarding'")
     expect(accountScript('site', 'login')).not.toContain("|| '/onboarding'")
+    expect(accountScript('site', 'login')).toContain("addEventListener('pageshow'")
+    expect(accountScript('site', 'login')).toContain("location.replace('/decouvrir')")
+    expect(accountScript('site', 'login')).toContain("form.setAttribute('hidden', 'hidden')")
+  })
+
+  it('hides the restored login form and sends a signed-in account home', async () => {
+    const form = element('login-form')
+    const assigned: string[] = []
+    let pageshow: ((event: { persisted: boolean }) => void) | null = null
+    const windowRef = {
+      addEventListener(type: string, fn: (event: { persisted: boolean }) => void) {
+        if (type === 'pageshow') pageshow = fn
+      },
+      location: {
+        assign(path: string) {
+          assigned.push(path)
+        },
+        replace(path: string) {
+          assigned.push(path)
+        },
+      },
+    }
+    const documentRef = {
+      getElementById(id: string) {
+        return id === 'login-form' ? form : null
+      },
+      querySelectorAll() {
+        return []
+      },
+    }
+    const sessionStorage = { getItem: () => null, setItem() {}, removeItem() {} }
+    const run = new Function('document', 'window', 'sessionStorage', 'fetch', accountScript('site-key', 'login'))
+    run(documentRef, windowRef, sessionStorage, async () => ({
+      status: 200,
+      ok: true,
+      json: async () => ({ step: 'account' }),
+    }))
+    expect(pageshow).not.toBeNull()
+    pageshow?.({ persisted: true })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(form.getAttribute('hidden')).toBe('hidden')
+    expect(assigned).toEqual(['/decouvrir'])
   })
 })

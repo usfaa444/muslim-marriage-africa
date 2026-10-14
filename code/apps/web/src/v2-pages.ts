@@ -467,11 +467,18 @@ export function pendingProfilePhoto(body: unknown): boolean {
 
 const REVIEW_SLA_SENTENCE = 'Délai habituel de modération : 12 à 24 heures ouvrées.'
 
+const REVIEW_UNDERSTOOD =
+  '<div class="mt-6"><button class="box-border w-full max-w-full inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-8 py-3.5 rounded-md bg-deep-navy text-cream text-sm font-semibold hover:bg-deep-navy/90 active:opacity-90 transition-all shadow-none" id="profile-review-understood" type="button">J\'ai compris</button></div>'
+
 export function reviewHtml(stitch: string, state: { slaHours: number; bioPending: boolean }): string {
   let html = stitch.replace(REVIEW_SLA_SENTENCE, `Délai habituel de modération : ${state.slaHours} heures.`)
   if (!state.bioPending) {
     html = html.replace(/<!-- Element 2 -->[\s\S]*?<!-- Element 3 -->/, '<!-- Element 3 -->')
   }
+  html = html.replace(
+    /(<p class="text-xs text-deep-navy\/50">[\s\S]*?<\/p>\s*<\/div>)/,
+    `$1${REVIEW_UNDERSTOOD}`,
+  )
   return guarded(html, reviewScript())
 }
 

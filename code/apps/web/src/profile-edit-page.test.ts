@@ -382,6 +382,8 @@ describe('profile edit load and meter', () => {
     expect(html).toContain('Activer le flou protecteur')
     expect(html).toContain('id="profile-photo-rules"')
     expect(html).toContain("location.assign('/photo-rules')")
+    expect(html).toContain("sessionStorage.setItem('ankanu.review-return', '/profile-edit')")
+    expect(html).toContain("window.location.href = '/profile-review'")
     expect(html).toContain('Consignes de pudeur')
     expect(html).toContain('Aucun affichage public')
     expect(html).not.toContain('Mettre à jour la photo')

@@ -406,6 +406,36 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
         }
       })
     }
+    function hideLoginForm(hidden) {
+      var form = document.getElementById('login-form')
+      if (!form) return
+      if (hidden) form.setAttribute('hidden', 'hidden')
+      else form.removeAttribute('hidden')
+    }
+    function leaveLoginIfSignedIn(event) {
+      if (event && event.persisted) hideLoginForm(true)
+      fetch('/v1/accounts/gate', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+        return readJson(response).then(function (payload) {
+          var step = payload && payload.step
+          if (response.ok && step === 'account') {
+            hideLoginForm(true)
+            window.location.replace('/decouvrir')
+            return
+          }
+          if (response.ok && STEP[step]) {
+            hideLoginForm(true)
+            window.location.replace(STEP[step])
+            return
+          }
+          hideLoginForm(false)
+        })
+      }).catch(function () {
+        hideLoginForm(false)
+      })
+    }
+    if (PANEL === 'login' && window.addEventListener) {
+      window.addEventListener('pageshow', leaveLoginIfSignedIn)
+    }
   `
 }
 
@@ -1142,6 +1172,20 @@ export function statusScript(): string {
 
 export function reviewScript(): string {
   return `
+    var RETURN_KEY = 'ankanu.review-return'
+    function reviewReturn() {
+      try {
+        var stored = sessionStorage.getItem(RETURN_KEY) || ''
+        if (stored === '/profile-edit') return stored
+      } catch (error) {}
+      return '/profile-edit'
+    }
+    var understood = document.getElementById('profile-review-understood')
+    if (understood) {
+      understood.addEventListener('click', function () {
+        window.location.assign(reviewReturn())
+      })
+    }
     fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
       return response.json().then(function (body) {
         var photo = body && body.photo
@@ -1490,8 +1534,10 @@ export function profileScript(): string {
                 applyProfile(read.body, true)
                 return
               }
+              try { sessionStorage.setItem('ankanu.review-return', '/profile-edit') } catch (error) {}
               window.location.href = '/profile-review'
             }, function () {
+              try { sessionStorage.setItem('ankanu.review-return', '/profile-edit') } catch (error) {}
               window.location.href = '/profile-review'
             })
           }).catch(function () {

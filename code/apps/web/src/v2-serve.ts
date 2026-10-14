@@ -5,7 +5,7 @@ import { discoverHtml } from './discover-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { visitSignalsHtml } from './visit-signals-page'
-import { entryRedirect, readSessionCookie, redirectTo } from './entry-guard'
+import { entryRedirect, readSessionCookie, redirectTo, type GateStep } from './entry-guard'
 import { memberRouteResponse, sessionKind, type MemberPath } from './member-route'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail'
 import {
@@ -152,7 +152,10 @@ export async function leaveAccount(request: Request, destroy: (cookie: string) =
   return new Response(null, { status: redirect.status, headers })
 }
 
-export async function authResponse(request: Request): Promise<Response> {
+export async function authResponse(
+  request: Request,
+  load?: (cookieHeader: string) => Promise<GateStep | 'error'>,
+): Promise<Response> {
   const url = new URL(request.url)
   if (url.searchParams.get('leave') === '1') {
     return leaveAccount(request)
@@ -160,7 +163,11 @@ export async function authResponse(request: Request): Promise<Response> {
   if (url.searchParams.get('mode') === 'signup') {
     return redirectTo(request, '/signup')
   }
-  return send(request, '/auth', authHtml(stitchFile('02-auth'), 'login', siteKey()))
+  const redirect = await entryRedirect(request, '/auth', load)
+  if (redirect) {
+    return redirect
+  }
+  return htmlResponse(authHtml(stitchFile('02-auth'), 'login', siteKey()))
 }
 
 export async function ageGateResponse(request: Request): Promise<Response> {

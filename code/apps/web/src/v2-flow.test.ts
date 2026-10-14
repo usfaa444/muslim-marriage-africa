@@ -6,6 +6,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { GET as getDecouvrir } from '../app/decouvrir/route.js'
 import { entryLocation, entryRedirect } from './entry-guard.js'
+import { authResponse } from './v2-serve.js'
 import { LandingPage } from './landing.js'
 import {
   authHtml,
@@ -668,6 +669,14 @@ describe('screen 12 review timing', () => {
     expect(hidden).toContain('photo.url || photo.blur_url')
     expect(hidden).toContain('data-icon="photo_camera"')
     expect(hidden).not.toContain('pending_photo')
+    expect(hidden).toContain('id="profile-review-understood"')
+    expect(hidden).toContain("J'ai compris")
+    expect(hidden).toContain('min-h-[44px]')
+    expect(hidden).toContain('min-w-[44px]')
+    expect(hidden).toContain('bg-deep-navy text-cream')
+    expect(hidden).toContain("sessionStorage.getItem(RETURN_KEY)")
+    expect(hidden).toContain("window.location.assign(reviewReturn())")
+    expect(hidden).toContain("return '/profile-edit'")
   })
 })
 
@@ -676,6 +685,7 @@ describe('server entry guard', () => {
     expect(entryLocation('/signup', 'anon')).toBeNull()
     expect(entryLocation('/signup/account', 'anon')).toBeNull()
     expect(entryLocation('/auth', 'anon')).toBeNull()
+    expect(entryLocation('/auth', 'account')).toBe('/decouvrir')
     expect(entryLocation('/password-reset', 'email')).toBeNull()
     expect(entryLocation('/age-gate', 'anon')).toBe('/signup/identity')
     expect(entryLocation('/email-verification', 'anon')).toBe('/auth')
@@ -697,6 +707,22 @@ describe('server entry guard', () => {
     expect(entryLocation('/profil/01990000-0000-7000-8000-000000000001', 'anon')).toBe('/auth')
     expect(entryLocation('/profil/01990000-0000-7000-8000-000000000001', 'account')).toBeNull()
     expect(entryLocation('/profil/01990000-0000-7000-8000-000000000001', 'email')).toBe('/email-verification')
+  })
+
+  it('sends a signed-in account away from the login form to in-app home', async () => {
+    const home = await authResponse(
+      new Request('http://127.0.0.1/auth', { headers: { cookie: 'ankanu_session=real-session' } }),
+      async () => 'account',
+    )
+    expect(home.status).toBe(303)
+    expect(home.headers.get('location')).toBe('http://127.0.0.1/decouvrir')
+    expect(await home.text()).not.toContain('login-email')
+    const phone = await authResponse(
+      new Request('http://127.0.0.1/auth', { headers: { cookie: 'ankanu_session=real-session' } }),
+      async () => 'phone',
+    )
+    expect(phone.status).toBe(303)
+    expect(phone.headers.get('location')).toBe('http://127.0.0.1/phone')
   })
 
   it('keeps an email link on the page until consume finishes', async () => {

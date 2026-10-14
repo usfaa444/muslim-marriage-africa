@@ -485,5 +485,11 @@ describe('profile photo gallery, main, and one blur', () => {
     expect(afterBlock.photo?.id).not.toBe(second.json.id)
     const blockedToken = await fetch(`${base}/v1/media/get?token=${pendingToken}`, { headers: { cookie: ownerCookie } })
     expect(blockedToken.status).toBe(403)
+    const uploadBlurToken = String(second.json.blur_url).split('token=')[1] ?? ''
+    expect(media.grants.find((row) => row.id === uploadBlurToken)?.derivative).toBe('blur')
+    const blockedBlur = await fetch(`${base}/v1/media/get?token=${uploadBlurToken}`, { headers: { cookie: ownerCookie } })
+    expect(blockedBlur.status).toBe(403)
+    const resigned = await signMedia(media, String(second.json.id), 'blur', owner.id)
+    expect(resigned.ok).toBe(false)
   })
 })

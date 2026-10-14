@@ -53,7 +53,13 @@ export function entryLocation(path: string, step: GateStep): string | null {
     return step === 'anon' ? '/signup/identity' : STEP_PATH[step]
   }
   if (normalized === '/auth') {
-    return step === 'anon' ? null : STEP_PATH[step]
+    if (step === 'anon') {
+      return null
+    }
+    if (step === 'account') {
+      return '/decouvrir'
+    }
+    return STEP_PATH[step]
   }
   if (OPEN.has(normalized)) {
     return step === 'anon' ? null : STEP_PATH[step]

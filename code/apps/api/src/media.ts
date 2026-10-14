@@ -321,7 +321,7 @@ export async function signMedia(
   if (!asset || !asset.blur_key) {
     return grantDenied()
   }
-  if (asset.kind === 'profile_photo' && asset.moderation_state === 'replaced') {
+  if (asset.kind === 'profile_photo' && (asset.moderation_state === 'replaced' || asset.moderation_state === 'blocked')) {
     return omitted()
   }
   if (clear) {
@@ -398,7 +398,14 @@ export async function readGrantedMedia(
     }
   }
   const pendingGrant = asset.moderation_state === 'pending' && grant.derivative === 'blur'
-  if (asset.kind === 'profile_photo' && asset.moderation_state !== 'live' && viewerId !== asset.owner_id && !pendingGrant) {
+  const ownerBlockedBlur =
+    viewerId === asset.owner_id && asset.moderation_state === 'blocked' && grant.derivative === 'blur'
+  if (
+    asset.kind === 'profile_photo' &&
+    asset.moderation_state !== 'live' &&
+    !pendingGrant &&
+    (viewerId !== asset.owner_id || ownerBlockedBlur)
+  ) {
     return omitted()
   }
   let bytes: Uint8Array | null

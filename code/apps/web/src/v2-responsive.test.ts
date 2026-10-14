@@ -691,9 +691,10 @@ describe('v2 screens fit the required widths', () => {
                       const row = img && img.nextElementSibling ? img.nextElementSibling.getBoundingClientRect() : null
                       const scrollWidth = document.documentElement.scrollWidth
                       resolve({
-                        ok: Boolean(img) && !icon && img.getAttribute('src') === '/v1/media/get?token=pending' && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Photo en revue — pas encore publique.') && scrollWidth <= window.innerWidth && rect && rect.width >= 32 && rect.right <= ${width} + 1 && rect.left >= -1 && row && row.right <= ${width} + 1 && row.left >= -1,
+                        ok: Boolean(img) && !icon && img.getAttribute('src') === '/v1/media/get?token=pending' && text.includes('Photographie de profil') && text.includes('En revue') && text.includes('Photo en revue — pas encore publique.') && text.includes("J'ai compris") && scrollWidth <= window.innerWidth && rect && rect.width >= 32 && rect.right <= ${width} + 1 && rect.left >= -1 && row && row.right <= ${width} + 1 && row.left >= -1 && (() => { const button = document.getElementById('profile-review-understood'); const box = button ? button.getBoundingClientRect() : null; return Boolean(button) && box && box.height >= 44 && box.width >= 44 && box.right <= ${width} + 1 && box.left >= -1 })(),
                         hasImg: Boolean(img),
                         hasIcon: Boolean(icon),
+                        hasButton: Boolean(document.getElementById('profile-review-understood')),
                       })
                       return
                     }
@@ -706,10 +707,10 @@ describe('v2 screens fit the required widths', () => {
               },
               sessionId,
             )
-            const painted = (review.result as { value?: { ok?: boolean; hasImg?: boolean; hasIcon?: boolean } } | undefined)?.value
+            const painted = (review.result as { value?: { ok?: boolean; hasImg?: boolean; hasIcon?: boolean; hasButton?: boolean } } | undefined)?.value
             if (!painted?.ok) {
               failures.push(
-                `${page.name}@${width} owner review photo img=${painted?.hasImg ?? '?'} icon=${painted?.hasIcon ?? '?'}`,
+                `${page.name}@${width} owner review photo img=${painted?.hasImg ?? '?'} icon=${painted?.hasIcon ?? '?'} button=${painted?.hasButton ?? '?'}`,
               )
             }
           }
