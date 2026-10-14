@@ -10,6 +10,8 @@ Three founder bugs on the current `main` behavior.
 2. A member who is not listable no longer leaves `/decouvrir` or `/profil/:id` for `/profile-edit`. Both screens stay put and name the real pending items from server state. The listable gate is unchanged: `visibility === 'public'` and account `Active`. Nothing is published before review and the ID gates. `403` still uses `viewer_not_listable`, and `details.reasons` names the pending items with no phone, name, bio, or evidence URI.
 3. The first profile-photo pick is no longer dropped. The file input stays in the page (screen-reader class, not `hidden`). The add control opens the picker on the next turn and ignores a second click for 1.2 seconds. A failed upload shows the French message on the photo status line. A pending upload with no live photo opens `/profile-review`, including when the profile re-read fails. A live photo with a pending replacement stays on the edit screen.
 
+QA fail on the hold, same story: the empty shell left Tailwind `hidden` on the pill and the delay line, so `display` stayed `none` after the text was written. Showing a line now removes that class. The desktop pill no longer uses `hidden md:flex`. It uses `#discover-desktop-nav`: hidden below 768, flex from 768 up, with Découvrir selected. The mobile bar uses `#discover-mobile-nav` and is hidden from 768 up.
+
 ## Where
 
 - `code/apps/web/src/v2-pages.ts` — onboarding control and photo input
@@ -48,7 +50,8 @@ Signed in, after ID and liveness: on `/onboarding`, use « Accéder à l'espace 
 | Profile, not listable | `GET /v1/profiles/:id` 403 `viewer_not_listable` | HTML hold, not a redirect to `/profile-edit` |
 | Incomplete profile | `profile_incomplete` with `missing` | « Il manque : … » and one link to `/profile-edit` |
 | Complete profile, ID open | No `profile_incomplete` | No `/profile-edit` link. ID and liveness rows use the real state |
-| Review pending | `profile_review` or `photo_review` with `sla_hours` | « En revue » and « Délai habituel de modération : N heures. » |
+| Review pending | `profile_review` or `photo_review` with `sla_hours` | Pill « En revue » and « Délai habituel de modération : N heures. » are visible. Neither node keeps the Tailwind `hidden` class |
+| Discover chrome | Hold at 1440 and at 360 | From 768 up, the screen 53 pill is visible and Découvrir is selected. Below 768 that pill is hidden and the screen 57 bar is visible |
 | Staff or mahram | Existing 403 | `staff_session` or `mahram_session`. No member reason list |
 | Reasons payload | 403 body | `details.reason` stays `viewer_not_listable`. No civil name, email, password, phone, or bio text |
 | Gate | Unpublished or ID pending | Still 403. Visibility is not set to `public` |
@@ -61,12 +64,12 @@ Signed in, after ID and liveness: on `/onboarding`, use « Accéder à l'espace 
 
 `public-profile.test.ts` creates a sister and a brother. Password `phrase avec espaces`. Civil name Awa Sawadogo. The 403 JSON must not contain that name, the email, the password, or a phone. The brother is published. The sister is not. After her profile save, reasons include `profile_review`, `bio_review`, `id_document_pending` (`open` after a pending capture), and `liveness_pending` (`absent`). Her visibility stays off `public`.
 
-The browser hold uses `profile_incomplete` missing `madhhab`, ID `absent`, liveness `open`. The photo file in `ank-148-fix.test.ts` is a 1×1 PNG.
+The browser hold uses `photo_review` and `profile_review` with `sla_hours` 24, `profile_incomplete` missing `madhhab`, ID `absent`, and liveness `open`. The photo file in `ank-148-fix.test.ts` is a 1×1 PNG.
 
 ## My results
 
 - `not-listable.test.ts`, `profile-edit-page.test.ts`, `v2-flow.test.ts`, `public-profile.test.ts`: 47 passed.
-- `ank-148-fix.test.ts`: 1 passed. Onboarding click reached `/photo-rules` and, with step `identity`, `/id-liveness`. Discover stayed on `/decouvrir` and showed the hold, including « La pièce d'identité est manquante. » and « fiche personnelle ». A rejected photo showed `image : une image JPEG ou PNG est requise.` on `#profile-photo-status`. The next pick opened `/profile-review`.
+- `not-listable.test.ts` and `ank-148-fix.test.ts` after the hold-chrome fix: 4 passed. Onboarding click reached `/photo-rules` and, with step `identity`, `/id-liveness`. Discover stayed on `/decouvrir`. The pill « En revue » and « Délai habituel de modération : 24 heures. » had computed `display` other than `none`, and neither kept the `hidden` class. At 1440 `#discover-desktop-nav` was `flex` and the mobile bar was `none`. At 360 the desktop pill was `none` and the mobile bar was shown. The hold also showed « La pièce d'identité est manquante. » and « fiche personnelle ». A rejected photo showed `image : une image JPEG ou PNG est requise.` on `#profile-photo-status`. The next pick opened `/profile-review`.
 - `discover-page.test.ts` filtered to « follows the live session »: 1 passed. The 403 no longer waits for a navigation to `/profile-edit`.
 - `tsc -p apps/api/tsconfig.json --noEmit` and `tsc -p apps/web/tsconfig.json --noEmit`: passed.
 - Widths: onboarding, profile edit, Discover hold, and the profile hold passed `scrollWidth <= innerWidth` at 360, 390, 768, 1024, 1280, and 1440. Shots at 360 and 1440 are in `code/docs/qa-handoffs/epic-3-ank-148-widths/`.
@@ -74,7 +77,7 @@ The browser hold uses `profile_incomplete` missing `madhhab`, ID `absent`, liven
 ## Three validation passes
 
 1. Behavior: the onboarding control follows the gate. Discover and `/profil/:id` stay put and name server reasons. The first photo upload either shows a French failure or opens review when the photo is pending and none is live. Staff, mahram, blur, and the listable gate are unchanged.
-2. Responsive: the four surfaces passed `scrollWidth <= innerWidth` at 360, 390, 768, 1024, 1280, and 1440. Proof shots are the 360 and 1440 files above. `17c-not-listable` is also in the shared width list for the full pass.
+2. Responsive: the four surfaces passed `scrollWidth <= innerWidth` at 360, 390, 768, 1024, 1280, and 1440. At 1440 the screen 53 pill is on the Discover hold with Découvrir selected. At 360 that pill is hidden and the screen 57 bar is visible. Proof shots are the 360 and 1440 files above. `17c-not-listable` is also in the shared width list for the full pass.
 3. Stitch: onboarding keeps screen 08, with the primary control pointed at the real next step. The hold uses the screen 12 card (hourglass, rows, privacy sentence) and Discover chrome from screen 57 and screen 53. Sample names, the sample « Conformité aux règles de pudeur » row, and the sample « 12 à 24 heures ouvrées » line are not rendered. No state tabs or demo toggles.
 
 ## Solution-design sections followed

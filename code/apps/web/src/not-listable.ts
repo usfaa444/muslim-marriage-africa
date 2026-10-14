@@ -153,6 +153,7 @@ function sliceNav(source: string, marker: string): string {
 
 export function mobileDiscoverNav(source: string): string {
   let nav = sliceNav(source, '<nav aria-label="Navigation mobile"')
+  nav = nav.replace('<nav ', '<nav id="discover-mobile-nav" ')
   for (const href of MEMBER_HREFS) {
     nav = nav.replace('href="#"', `href="${href}"`)
   }
@@ -178,7 +179,12 @@ export function desktopDiscoverNav(source: string): string {
     'href="/decouvrir" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-[#F7F1E3]/80 hover:text-[#F7F1E3] transition-colors"',
     'href="/decouvrir" aria-current="page" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium bg-[#C9A86C] text-[#0B1D36] shadow-sm transition-all"',
   )
-  return `<div class="hidden md:flex w-full justify-center px-4 py-4 min-w-0">${nav}</div>`
+  return `<style>
+#discover-desktop-nav{display:none !important;width:100%;justify-content:center;padding:1rem 1rem 0;min-width:0;box-sizing:border-box}
+@media (min-width:768px){#discover-desktop-nav{display:flex !important}}
+#discover-mobile-nav{display:flex}
+@media (min-width:768px){#discover-mobile-nav{display:none !important}}
+</style><div id="discover-desktop-nav">${nav}</div>`
 }
 
 export function discoverHoldShell(discoverSource: string, barSource: string): string {
@@ -205,6 +211,12 @@ ${mobileDiscoverNav(discoverSource)}
 }
 
 export const NOT_LISTABLE_CLIENT = `
+function paintHold(node, show) {
+  if (!node) return
+  node.hidden = !show
+  if (show) node.classList.remove('hidden')
+  else node.classList.add('hidden')
+}
 function showNotListable(message, details) {
   clearBrowseCache()
   cardMemory = null
@@ -244,15 +256,13 @@ function showNotListable(message, details) {
     if (row && list) list.appendChild(row)
   }
   if (title) title.textContent = photo ? ${JSON.stringify(PHOTO_TITLE)} : ${JSON.stringify(HOLD_NOTE)}
-  if (note) note.hidden = !photo
+  paintHold(note, photo)
   var tag = document.getElementById('discover-hold-tag')
   var tagText = document.getElementById('discover-hold-tag-text')
-  if (tag) tag.hidden = !review && !capture
   if (tagText) tagText.textContent = review ? ${JSON.stringify(EN_REVUE)} : ${JSON.stringify(EN_COURS)}
-  if (sla) {
-    sla.hidden = hours < 1
-    sla.textContent = hours > 0 ? 'Délai habituel de modération : ' + hours + ' heures.' : ''
-  }
+  paintHold(tag, review || capture)
+  if (sla) sla.textContent = hours > 0 ? 'Délai habituel de modération : ' + hours + ' heures.' : ''
+  paintHold(sla, hours > 0)
 }
 function holdReasonRow(item) {
   var code = item.code

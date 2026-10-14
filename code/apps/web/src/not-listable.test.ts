@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { discoverHtml } from './discover-page.js'
-import { desktopDiscoverNav, holdCard, mobileDiscoverNav, notListablePage } from './not-listable.js'
+import { NOT_LISTABLE_CLIENT, desktopDiscoverNav, holdCard, mobileDiscoverNav, notListablePage } from './not-listable.js'
 
 function stitch(folder: string, name = 'screen.html'): string {
   return readFileSync(
@@ -57,16 +57,23 @@ describe('not-listable hold', () => {
 
   it('keeps Discover selected on the desktop bar and the mobile bar', () => {
     const desktop = desktopDiscoverNav(stitch('53-barre-de-navigation'))
+    expect(desktop).toContain('id="discover-desktop-nav"')
+    expect(desktop).toContain('@media (min-width:768px){#discover-desktop-nav{display:flex !important}}')
     expect(desktop).toContain('href="/decouvrir" aria-current="page"')
     expect(desktop).toContain('flex-wrap')
+    expect(desktop).not.toContain('hidden md:flex')
     expect(desktop.match(/aria-current="page"/g)).toHaveLength(1)
     expect(desktop).not.toContain('href="#')
     const mobile = mobileDiscoverNav(stitch('57-discover'))
+    expect(mobile).toContain('id="discover-mobile-nav"')
     expect(mobile).toContain('href="/decouvrir"')
     expect(mobile).toContain('aria-current="page"')
     expect(mobile).not.toContain('href="#"')
     const page = discoverHtml(stitch('57-discover'), stitch('57-discover', 'grid.html'))
     expect(page).toContain('id="discover-hold" hidden')
     expect(page).toContain('function showNotListable')
+    expect(page).toContain("classList.remove('hidden')")
+    expect(NOT_LISTABLE_CLIENT).toContain('paintHold(sla, hours > 0)')
+    expect(NOT_LISTABLE_CLIENT).toContain('paintHold(tag, review || capture)')
   })
 })

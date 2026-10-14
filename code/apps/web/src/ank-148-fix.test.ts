@@ -134,6 +134,8 @@ const HOLD = {
   reason: 'viewer_not_listable',
   reasons: [
     { code: 'viewer_not_listable' },
+    { code: 'photo_review', sla_hours: 24 },
+    { code: 'profile_review', sla_hours: 24 },
     { code: 'profile_incomplete', missing: ['madhhab'] },
     { code: 'id_document_pending', state: 'absent' },
     { code: 'liveness_pending', state: 'open' },
@@ -292,9 +294,69 @@ describe('founder staging fixes', () => {
       }
       const fit = async (name: string, path: string, width: number) => {
         await open(path, width)
+        if (name === 'discover-hold') {
+          await read(`new Promise((resolve) => {
+            const start = Date.now()
+            const tick = () => {
+              const sla = document.getElementById('discover-hold-sla')
+              const hold = document.getElementById('discover-hold')
+              const ready = hold && hold.hidden === false && sla && (sla.textContent || '').indexOf('24 heures') !== -1
+              if (ready || Date.now() - start > 4000) resolve(true)
+              else setTimeout(tick, 30)
+            }
+            tick()
+          })`)
+        }
         const value = (await read(FIT)) as { width: number; scrollWidth: number; bad: string[]; path: string }
         if (!value || value.scrollWidth > value.width || value.bad.length > 0) {
           failures.push(`${name}@${width} ${JSON.stringify(value)}`)
+        }
+        if (name === 'discover-hold' && (width === 360 || width === 1440)) {
+          const chrome = (await read(`(() => {
+            const sla = document.getElementById('discover-hold-sla')
+            const tag = document.getElementById('discover-hold-tag')
+            const desk = document.getElementById('discover-desktop-nav')
+            const mobile = document.getElementById('discover-mobile-nav')
+            const link = document.querySelector('#discover-hold a[href="/profile-edit"]')
+            const card = document.querySelector('#discover-hold .max-w-xl')
+            const shown = (node) => node ? getComputedStyle(node).display : ''
+            const lr = link ? link.getBoundingClientRect() : null
+            const cr = card ? card.getBoundingClientRect() : null
+            return {
+              sla: shown(sla),
+              tag: shown(tag),
+              slaHiddenClass: sla ? sla.classList.contains('hidden') : true,
+              tagHiddenClass: tag ? tag.classList.contains('hidden') : true,
+              desk: shown(desk),
+              mobile: shown(mobile),
+              text: document.body.innerText || '',
+              linkText: link ? link.textContent : '',
+              linkInside: !!(lr && cr && lr.width > 20 && lr.left >= cr.left - 1 && lr.right <= cr.right + 1 && link.scrollWidth <= link.clientWidth + 1)
+            }
+          })()`)) as {
+            sla: string
+            tag: string
+            slaHiddenClass: boolean
+            tagHiddenClass: boolean
+            desk: string
+            mobile: string
+            text: string
+            linkText: string
+            linkInside: boolean
+          }
+          if (chrome.sla === 'none' || chrome.tag === 'none' || chrome.slaHiddenClass || chrome.tagHiddenClass) {
+            failures.push(`${name}@${width} hold chrome ${JSON.stringify(chrome)}`)
+          }
+          if (!chrome.text.includes('Délai habituel de modération : 24 heures.') || !chrome.text.includes('En revue')) {
+            failures.push(`${name}@${width} hold copy ${chrome.text.slice(0, 240)}`)
+          }
+          if (chrome.linkText !== 'fiche personnelle' || !chrome.linkInside) {
+            failures.push(`${name}@${width} link ${chrome.linkText} inside=${chrome.linkInside}`)
+          }
+          if (width >= 768 && chrome.desk !== 'flex') failures.push(`${name}@${width} desktop nav ${chrome.desk}`)
+          if (width >= 768 && chrome.mobile !== 'none') failures.push(`${name}@${width} mobile nav ${chrome.mobile}`)
+          if (width < 768 && chrome.desk !== 'none') failures.push(`${name}@${width} desktop nav ${chrome.desk}`)
+          if (width < 768 && chrome.mobile === 'none') failures.push(`${name}@${width} mobile nav ${chrome.mobile}`)
         }
         if (width === 360 || width === 1440) {
           const shot = await cdp.send('Page.captureScreenshot', { format: 'png' }, sessionId)
@@ -318,7 +380,9 @@ describe('founder staging fixes', () => {
         "new Promise((resolve) => { const start = Date.now(); const tick = () => { const hold = document.getElementById('discover-hold'); const title = document.getElementById('discover-hold-title'); if ((hold && hold.hidden === false && title && title.textContent) || Date.now() - start > 4000) resolve({ path: location.pathname, title: title ? title.textContent : '', text: document.body.innerText || '' }); else setTimeout(tick, 30) }; tick() })",
       )) as { path: string; title: string; text: string }
       expect(ready.path).toBe('/decouvrir')
-      expect(ready.title).toContain('validé')
+      expect(ready.title).toContain('Photo en revue')
+      expect(ready.text).toContain('Délai habituel de modération : 24 heures.')
+      expect(ready.text).toContain('En revue')
       expect(ready.text).toContain("La pièce d'identité est manquante.")
       expect(ready.text).toContain('fiche personnelle')
       expect(ready.text).not.toContain('Not listable')
