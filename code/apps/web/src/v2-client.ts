@@ -1279,10 +1279,13 @@ export function profileScript(): string {
     }
 
     function showStatus(text) {
-      var el = document.getElementById('profile-save-status')
-      if (!el) return
-      el.textContent = text || ''
-      el.classList.toggle('hidden', !text)
+      var nodes = [document.getElementById('profile-save-status'), document.getElementById('profile-photo-status')]
+      for (var index = 0; index < nodes.length; index += 1) {
+        var el = nodes[index]
+        if (!el) continue
+        el.textContent = text || ''
+        el.classList.toggle('hidden', !text)
+      }
     }
 
     function uploadFailure(body) {
@@ -1426,6 +1429,7 @@ export function profileScript(): string {
       profileLoaded = true
     }).catch(function () {})
 
+    var photoPickerUntil = 0
     var photoFile = document.getElementById('profile-photo-file')
     if (photoFile) {
       photoFile.addEventListener('change', function () {
@@ -1464,14 +1468,18 @@ export function profileScript(): string {
                 return { ok: false, body: null }
               })
             }).then(function (read) {
-              var photo = read.ok && read.body && read.body.photo
-              if (photo && photo.moderation_state === 'pending') {
-                window.location.href = '/profile-review'
+              var photos = read.ok && read.body ? photoList(read.body) : []
+              var live = false
+              for (var photoIndex = 0; photoIndex < photos.length; photoIndex += 1) {
+                if (photos[photoIndex] && photos[photoIndex].moderation_state === 'live') live = true
+              }
+              if (live && read.ok && read.body) {
+                applyProfile(read.body, true)
                 return
               }
-              if (photo && photo.moderation_state === 'live') {
-                applyProfile(read.body, true)
-              }
+              window.location.href = '/profile-review'
+            }, function () {
+              window.location.href = '/profile-review'
             })
           }).catch(function () {
             photoFile.value = ''
@@ -1500,7 +1508,12 @@ export function profileScript(): string {
         var target = event.target
         if (!target || !target.closest) return
         if (target.closest('#profile-photo-add')) {
-          if (photoFile) photoFile.click()
+          if (event.preventDefault) event.preventDefault()
+          if (event.stopPropagation) event.stopPropagation()
+          if (!photoFile) return
+          if (Date.now() < photoPickerUntil) return
+          photoPickerUntil = Date.now() + 1200
+          setTimeout(function () { photoFile.click() }, 0)
           return
         }
         var mainButton = target.closest('[data-photo-main]')

@@ -293,6 +293,47 @@ export function pinHtml(stitch: string): string {
   return mount(stitch, pinScript())
 }
 
+function onboardingScript(): string {
+  return `
+<script>
+(function () {
+  var STEP = {
+    email: '/email-verification',
+    phone: '/phone',
+    otp: '/otp',
+    identity: '/id-liveness',
+    account: '/photo-rules'
+  }
+  var link = document.getElementById('onboarding-next')
+  if (!link) return
+  link.addEventListener('click', function (event) {
+    if (event && event.preventDefault) event.preventDefault()
+    var status = document.getElementById('onboarding-status')
+    function fail() {
+      if (!status) return
+      status.textContent = 'La connexion a échoué.'
+      status.classList.remove('hidden')
+    }
+    fetch('/v1/accounts/gate', { credentials: 'same-origin' }).then(function (response) {
+      return response.json().then(function (body) {
+        return { ok: response.ok, body: body }
+      }, function () {
+        return { ok: false, body: null }
+      })
+    }).then(function (result) {
+      var step = result.ok && result.body ? result.body.step : ''
+      var path = STEP[step]
+      if (typeof path === 'string') {
+        window.location.assign(path)
+        return
+      }
+      fail()
+    }).catch(fail)
+  })
+})()
+</script>`
+}
+
 export function onboardingHtml(stitch: string): string {
   const html = stitch
     .replace(
@@ -302,7 +343,15 @@ export function onboardingHtml(stitch: string): string {
     .replace('>70% complété<', '><')
     .replace('style="width: 70%"', 'style="width: 0%"')
     .replace('Il manque : madhhab', '')
-  return mount(html, '', audioPromptScript() + pinGuardScript())
+    .replace(
+      'href="#consultation"',
+      'id="onboarding-next" href="/photo-rules"',
+    )
+    .replace(
+      '</a>\n<!-- Secondary Blocked Button: Quiet & Respectful Notice -->',
+      '</a>\n<p id="onboarding-status" class="hidden text-center text-xs text-deep-navy pt-1 break-words" role="status"></p>\n<!-- Secondary Blocked Button: Quiet & Respectful Notice -->',
+    )
+  return mount(html, '', audioPromptScript() + onboardingScript() + pinGuardScript())
 }
 
 /** Board card 09459686: client navigation only. No acknowledgement request. */
@@ -395,7 +444,8 @@ export function profileHtml(stitch: string): string {
     /<!-- 5-Slot Photo Grid -->[\s\S]*?<!-- Privacy Note -->/,
     `<!-- 5-Slot Photo Grid -->
 <div id="profile-photo-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
-<input id="profile-photo-file" hidden accept="image/jpeg,image/png" type="file">
+<p id="profile-photo-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="status"></p>
+<input id="profile-photo-file" class="sr-only" accept="image/jpeg,image/png" type="file">
 <!-- Privacy Note -->`,
   )
   html = html.replace(/(<textarea\b[^>]*\bid="bio"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')

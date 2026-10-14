@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
 import { discoverHtml } from './discover-page'
+import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { visitSignalsHtml } from './visit-signals-page'
 import { entryRedirect, readSessionCookie, redirectTo } from './entry-guard'
@@ -428,7 +429,18 @@ export async function profileDetailResponse(request: Request, id: string): Promi
       ? (payload as { error?: { details?: { reason?: string } | null } }).error?.details?.reason
       : undefined
   if (response.status === 403 && reason === 'viewer_not_listable') {
-    return redirectTo(request, '/profile-edit')
+    const details =
+      typeof payload === 'object' && payload !== null && 'error' in payload
+        ? (payload as { error?: { details?: unknown } }).error?.details ?? null
+        : null
+    return htmlResponse(
+      notListablePage(
+        stitchFile('12-profile-not-yet-public'),
+        stitchFile('57-discover'),
+        stitchFile('53-barre-de-navigation'),
+        details,
+      ),
+    )
   }
   if (payload !== null) {
     return jsonResponse(response.status, payload)

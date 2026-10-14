@@ -425,6 +425,67 @@ describe('public profile read', () => {
     })
   })
 
+  it('names pending items for a viewer who is not listable and keeps the gate', async () => {
+    const sister = await createAccount('sister')
+    const brother = await createAccount('brother')
+    const sisterCookie = await signIn(sister.email)
+    const brotherCookie = await signIn(brother.email)
+    await publish(brother.id, brotherCookie)
+    const refused = await read(sisterCookie, brother.id)
+    expect(refused.status).toBe(403)
+    const body = (await refused.json()) as {
+      error: {
+        details: {
+          reason: string
+          reasons: Array<{ code: string; state?: string; sla_hours?: number; missing?: string[] }>
+        }
+      }
+    }
+    const text = JSON.stringify(body)
+    expect(text).not.toContain('Awa')
+    expect(text).not.toContain('Sawadogo')
+    expect(text).not.toContain('phrase avec espaces')
+    expect(text).not.toContain('Public_')
+    expect(text).not.toContain('@')
+    expect(text).not.toContain('+226')
+    expect(body.error.details.reason).toBe('viewer_not_listable')
+    const codes = body.error.details.reasons.map((item) => item.code)
+    expect(codes[0]).toBe('viewer_not_listable')
+    expect(codes).toEqual(expect.arrayContaining(['profile_incomplete', 'id_document_pending', 'liveness_pending']))
+    expect(codes).not.toContain('photo_review')
+
+    const saved = await fetch(`${base}/v1/me/profile`, {
+      method: 'PUT',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        dob: '1990-01-15',
+        city: 'ouagadougou',
+        country: 'BF',
+        profession: 'enseignement',
+        madhhab: 'maliki',
+        practice: 'assidue',
+        life_plans: 'tf:6months\nUnion stable',
+        bio_pending: 'Une présentation privée qui ne doit pas sortir.',
+      }),
+    })
+    expect(saved.status).toBe(200)
+    grant(sister.id, 'id_document', 'pending')
+    const queued = (await (await read(sisterCookie, brother.id)).json()) as typeof body
+    const queuedText = JSON.stringify(queued)
+    expect(queuedText).not.toContain('Une présentation privée')
+    expect(queuedText).not.toContain('Awa')
+    const queuedCodes = queued.error.details.reasons.map((item) => item.code)
+    expect(queuedCodes).toEqual(expect.arrayContaining(['profile_review', 'bio_review', 'id_document_pending', 'liveness_pending']))
+    expect(queuedCodes).not.toContain('profile_incomplete')
+    expect(queued.error.details.reasons.find((item) => item.code === 'profile_review')?.sla_hours).toBe(24)
+    expect(queued.error.details.reasons.find((item) => item.code === 'id_document_pending')?.state).toBe('open')
+    expect(queued.error.details.reasons.find((item) => item.code === 'liveness_pending')?.state).toBe('absent')
+    const sisterRow = memory.profiles.find((item) => item.account_id === sister.id)
+    expect(sisterRow?.visibility).not.toBe('public')
+    const still = await read(sisterCookie, brother.id)
+    expect(still.status).toBe(403)
+  })
+
   it('limits browse reads and lists only live photos', async () => {
     const sister = await createAccount('sister')
     const brother = await createAccount('brother')

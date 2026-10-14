@@ -5,7 +5,7 @@ import { accountStoreIsMemory, getAccountStore, getIdentityDatabase } from './ac
 import { authNow } from './auth-clock.js'
 import { profileStoreIsMemory, getProfileStore, type StoredProfile } from './profile-store.js'
 import { isListableProfile } from './profile-review.js'
-import { assertBrowseViewer, PROFILE_UNAVAILABLE, type PublicProfileFailure } from './public-profile.js'
+import { assertBrowseViewer, PROFILE_UNAVAILABLE, type PublicDetails, type PublicProfileFailure } from './public-profile.js'
 import type { CreatedAccount } from './create-account.js'
 import type { ResolvedSession } from './session-store.js'
 
@@ -24,7 +24,7 @@ export type ExclusionFailure = {
   status: 400 | 403 | 404 | 500
   code: 'UNHANDLED' | 'FORBIDDEN' | 'NOT_FOUND'
   message: string
-  details: { reason?: string; field?: string } | null
+  details: PublicDetails
   retryable: boolean
 }
 

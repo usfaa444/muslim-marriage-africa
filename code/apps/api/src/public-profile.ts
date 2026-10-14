@@ -10,7 +10,8 @@ import { getMediaStore } from './media-store.js'
 import { livePhotosForMember } from './media.js'
 import { getMahramPort } from './mahram-port.js'
 import { getPhoneOtpStore, type PhoneOtpRow } from './phone-otp-store.js'
-import { isListableProfile } from './profile-review.js'
+import { completenessFor } from './profile-fields.js'
+import { isListableProfile, readFreeReviewSlaHours } from './profile-review.js'
 import { getProfileStore, profileStoreIsMemory, type StoredProfile } from './profile-store.js'
 import type { ResolvedSession } from './session-store.js'
 
@@ -50,12 +51,25 @@ export type PublicProfileBody = {
   photos: PublicPhoto[]
 }
 
+export type HoldReason = {
+  code: string
+  sla_hours?: number
+  missing?: string[]
+  state?: 'absent' | 'open'
+}
+
+export type PublicDetails = {
+  reason?: string
+  field?: string
+  reasons?: HoldReason[]
+} | null
+
 export type PublicProfileFailure = {
   ok: false
   status: 403 | 404 | 429 | 500 | 503
   code: 'FORBIDDEN' | 'NOT_FOUND' | 'RATE_LIMITED' | 'UNHANDLED'
   message: string
-  details: { reason?: string } | null
+  details: PublicDetails
   retryable: boolean
 }
 
@@ -79,6 +93,52 @@ function failure(
 
 function unavailable(): PublicProfileFailure {
   return failure(404, 'NOT_FOUND', PROFILE_UNAVAILABLE, null, false)
+}
+
+function captureState(status: string | undefined): 'absent' | 'open' | 'granted' {
+  if (status === 'granted') {
+    return 'granted'
+  }
+  if (!status) {
+    return 'absent'
+  }
+  return 'open'
+}
+
+/** Named pending items for a viewer who cannot browse. No phone, name, bio, or evidence URI. */
+export async function listabilityReasons(accountId: string): Promise<HoldReason[]> {
+  const reasons: HoldReason[] = [{ code: 'viewer_not_listable' }]
+  const profile = await getProfileStore().read(accountId)
+  const hours = await readFreeReviewSlaHours()
+  const sla = typeof hours === 'number' ? { sla_hours: hours } : {}
+  if (!profile) {
+    reasons.push({ code: 'profile_incomplete' })
+  } else {
+    const completeness = completenessFor(profile, profile.gender)
+    if (!completeness.ready) {
+      reasons.push({ code: 'profile_incomplete', missing: completeness.missing })
+    }
+    if (profile.review_queued_at && !profile.review_passed_at) {
+      reasons.push({ code: 'profile_review', ...sla })
+    }
+    if (typeof profile.bio_pending === 'string' && profile.bio_pending.trim() !== '') {
+      reasons.push({ code: 'bio_review', ...sla })
+    }
+  }
+  const pending = await getMediaStore().pendingProfilePhotos(accountId)
+  if (pending.length > 0) {
+    reasons.push({ code: 'photo_review', ...sla })
+  }
+  const latest = await latestStatuses(accountId)
+  const idState = captureState(latest.get('id_document'))
+  const liveState = captureState(latest.get('liveness'))
+  if (idState !== 'granted') {
+    reasons.push({ code: 'id_document_pending', state: idState })
+  }
+  if (liveState !== 'granted') {
+    reasons.push({ code: 'liveness_pending', state: liveState })
+  }
+  return reasons
 }
 
 function isGender(value: string): value is Gender {
@@ -204,7 +264,8 @@ export async function assertBrowseViewer(
   const viewerAccount = await loadAccount(viewer.account_id)
   const viewerProfile = await getProfileStore().read(viewer.account_id)
   if (!viewerAccount || !isListableProfile(viewerProfile?.visibility ?? null, viewerAccount.status)) {
-    return failure(403, 'FORBIDDEN', VIEWER_NOT_LISTABLE, { reason: 'viewer_not_listable' }, false)
+    const reasons = viewerAccount ? await listabilityReasons(viewerAccount.id) : [{ code: 'viewer_not_listable' }]
+    return failure(403, 'FORBIDDEN', VIEWER_NOT_LISTABLE, { reason: 'viewer_not_listable', reasons }, false)
   }
   return { ok: true, account: viewerAccount }
 }

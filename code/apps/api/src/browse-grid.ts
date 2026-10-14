@@ -14,6 +14,7 @@ import { verificationRecord } from './account-schema.js'
 import {
   assertBrowseViewer,
   BROWSE_RATE_MESSAGE,
+  type PublicDetails,
   type PublicProfileFailure,
 } from './public-profile.js'
 import type { ResolvedSession } from './session-store.js'
@@ -101,7 +102,7 @@ export type BrowseGridFailure = {
   status: 400 | 403 | 404 | 429 | 500 | 503
   code: 'UNHANDLED' | 'FORBIDDEN' | 'NOT_FOUND' | 'RATE_LIMITED'
   message: string
-  details: { reason?: string; field?: string } | null
+  details: PublicDetails
   retryable: boolean
 }
 

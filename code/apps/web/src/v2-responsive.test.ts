@@ -24,6 +24,7 @@ import {
   statusHtml,
 } from './v2-pages.js'
 import { discoverHtml } from './discover-page.js'
+import { notListablePage } from './not-listable.js'
 import { favouritesHtml, type FavouriteCard } from './favourites-page.js'
 import { visitSignalsHtml, type VisitSignalPaint } from './visit-signals-page.js'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail.js'
@@ -158,6 +159,18 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '18b-favourites-filled', html: favouritesHtml(stitch('17-favourites'), [favouriteCard()]) },
     { name: '52-visit-signals-empty', html: visitSignalsHtml(stitch('52-ts-visit-signals'), visitPaint(0)) },
     { name: '52b-visit-signals', html: visitSignalsHtml(stitch('52-ts-visit-signals'), visitPaint(1)) },
+    {
+      name: '17c-not-listable',
+      html: notListablePage(stitch('12-profile-not-yet-public'), stitch('57-discover'), stitch('53-barre-de-navigation'), {
+        reason: 'viewer_not_listable',
+        reasons: [
+          { code: 'viewer_not_listable' },
+          { code: 'profile_incomplete', missing: ['madhhab'] },
+          { code: 'id_document_pending', state: 'absent' },
+          { code: 'liveness_pending', state: 'open' },
+        ],
+      }),
+    },
     {
       name: '17-discover',
       html: discoverHtml(
@@ -389,7 +402,7 @@ const COLOR_EXPECT: Record<string, ColorExpect> = {
     inputOnParent: true,
   },
   '10-pin': { control: '#btn-submit', controlBg: NAVY, controlColor: CREAM },
-  '11-onboarding': { control: 'a[href="#consultation"]', controlBg: NAVY, controlColor: CREAM },
+  '11-onboarding': { control: '#onboarding-next', controlBg: NAVY, controlColor: CREAM },
 }
 
 function colorExpression(spec: ColorExpect): string {

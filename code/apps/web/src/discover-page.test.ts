@@ -36,6 +36,8 @@ function beforeModal(source: string): string {
 describe('discover grid page', () => {
   it('opens on the card chrome and hides the grid', () => {
     expect(html).toContain('id="discover-card"')
+    expect(html).toContain('id="discover-hold" hidden')
+    expect(html).toContain('function showNotListable')
     expect(html).toContain('id="discover-grid" hidden')
     expect(html.match(/data-discover-view="card"/g)).toHaveLength(2)
     expect(html.match(/data-discover-view="grid"/g)).toHaveLength(2)
@@ -1112,12 +1114,31 @@ describe('discover grid in a browser', () => {
 
       await go('/')
       release(403, {
-        error: { code: 'FORBIDDEN', message: 'Not listable', details: { reason: 'viewer_not_listable' }, retryable: false },
+        error: {
+          code: 'FORBIDDEN',
+          message: 'Not listable',
+          details: {
+            reason: 'viewer_not_listable',
+            reasons: [
+              { code: 'viewer_not_listable' },
+              { code: 'id_document_pending', state: 'absent' },
+              { code: 'profile_incomplete', missing: ['madhhab'] },
+            ],
+          },
+          retryable: false,
+        },
       })
-      const editLoaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
       await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
-      await editLoaded
-      expect(await value('location.pathname')).toBe('/profile-edit')
+      const heldBrowse = (await value(
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const title = document.getElementById('discover-hold-title'); const hold = document.getElementById('discover-hold'); if ((title && hold && hold.hidden === false && title.textContent) || Date.now() - start > 4000) resolve({ path: location.pathname, title: title ? title.textContent : '', hidden: hold ? hold.hidden : true, text: document.body.innerText || '', edit: !!document.querySelector('#discover-hold a[href=\"/profile-edit\"]') }); else setTimeout(tick, 30) }; tick() })",
+      )) as { path: string; title: string; hidden: boolean; text: string; edit: boolean }
+      expect(heldBrowse.path).toBe('/')
+      expect(heldBrowse.hidden).toBe(false)
+      expect(heldBrowse.title).toBe("Votre profil doit être validé avant de consulter d'autres profils.")
+      expect(heldBrowse.text).toContain("La pièce d'identité est manquante.")
+      expect(heldBrowse.text).toContain('fiche personnelle')
+      expect(heldBrowse.text).not.toContain('Not listable')
+      expect(heldBrowse.edit).toBe(true)
 
       await go('/')
       release(503, { error: { code: 'UNHANDLED', message: 'Request failed', retryable: true } })

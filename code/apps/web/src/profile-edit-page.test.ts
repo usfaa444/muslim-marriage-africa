@@ -372,7 +372,9 @@ describe('profile edit load and meter', () => {
 
   it('uploads a profile photo and shows the pending tile without sample faces', async () => {
     const html = profileHtml(stitch())
-    expect(html).toContain('id="profile-photo-file"')
+    expect(html).toContain('id="profile-photo-file" class="sr-only"')
+    expect(html).toContain('id="profile-photo-status"')
+    expect(html).not.toContain('id="profile-photo-file" hidden')
     expect(html).toContain('id="profile-photo-grid"')
     expect(html).toContain('id="profile-photo-blur"')
     expect(html).toContain("fetch('/v1/media'")
@@ -406,6 +408,7 @@ describe('profile edit load and meter', () => {
     await page.photoGrid.listeners.click?.[0]?.({
       target: { closest: (selector: string) => (selector === '#profile-photo-add' ? { getAttribute: () => null } : null) },
     })
+    await flush()
     expect(page.photoFile.files).toEqual([{ name: 'face.png' }])
     page.photoFile.value = 'C:\\fakepath\\face.png'
     const previousReader = globalThis.FileReader
@@ -458,6 +461,7 @@ describe('profile edit load and meter', () => {
     await page.photoGrid.listeners.click?.[0]?.({
       target: { closest: (selector: string) => (selector === '#profile-photo-add' ? { getAttribute: () => null } : null) },
     })
+    await flush()
     page.photoFile.value = 'C:\\fakepath\\face.png'
     const previousReader = globalThis.FileReader
     class FakeReader {

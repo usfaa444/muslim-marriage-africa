@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { liteModeSource } from './lite-mode'
+import { NOT_LISTABLE_CLIENT, discoverHoldShell } from './not-listable'
 import { pinGuardScript } from './pin-guard'
 import { prepareV2, stripInlineHandlers } from './v2-document'
 
@@ -22,6 +23,7 @@ const DOT_PATTERN = `<style id="discover-grid-pattern">
 [data-reserved][hidden],
 [data-missing][hidden],
 [data-verified][hidden],
+#discover-hold[hidden],
 #discover-focus[hidden],
 [data-card-missing][hidden],
 [data-card-verified][hidden],
@@ -74,6 +76,7 @@ const GRID_STATUS = `<p id="discover-empty" hidden class="text-sm text-deep-navy
 
 /** Text paints before any thumbnail request. Photo URLs stay out of sessionStorage. */
 const SCRIPT = `${liteModeSource}
+${NOT_LISTABLE_CLIENT}
 var liteThumbStops = []
 function releaseLiteThumbs() {
   var stops = liteThumbStops.splice(0)
@@ -609,7 +612,7 @@ function loadCard() {
       return
     }
     if (result.status === 403 && error && error.details && error.details.reason === 'viewer_not_listable') {
-      window.location.assign('/profile-edit')
+      showNotListable(error.message, error.details)
       return
     }
     if (result.status !== 200 || body.view !== 'card' || !('item' in body)) {
@@ -696,7 +699,7 @@ function loadGrid() {
       return
     }
     if (result.status === 403 && error && error.details && error.details.reason === 'viewer_not_listable') {
-      window.location.assign('/profile-edit')
+      showNotListable(error.message, error.details)
       return
     }
     if (result.status !== 200 || !Array.isArray(body.items)) {
@@ -903,7 +906,7 @@ function ensureCatalogue() {
       return false
     }
     if (result.status === 403 && error && error.details && error.details.reason === 'viewer_not_listable') {
-      window.location.assign('/profile-edit')
+      showNotListable(error.message, error.details)
       return false
     }
     if (result.status !== 200 || !bindCatalogue(body)) {
@@ -1488,6 +1491,7 @@ export function discoverHtml(
   const head = headEnd < 0 ? cardSource : cardSource.slice(0, headEnd)
   const document = `${head}${DOT_PATTERN}</head>
 <body data-discover-account="${account}" data-viewer-gender="${viewer}" class="min-h-full bg-cream text-deep-navy font-body flex flex-col antialiased selection:bg-gold-soft selection:text-deep-navy pb-20 md:pb-8">
+${discoverHoldShell(card, loadStitch('53-barre-de-navigation/screen.html'))}
 <div id="discover-card"${many ? ' hidden' : ''} style="min-width:0;max-width:100%">${innerBody(stripCard(cardSource))}</div>
 <div id="discover-grid"${many ? '' : ' hidden'} style="min-width:0;max-width:100%">${innerBody(stripGrid(grid))}${TILE}</div>
 ${filterModal(loadFiltersSource())}
