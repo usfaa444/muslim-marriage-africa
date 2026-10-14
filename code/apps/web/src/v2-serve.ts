@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
 import { discoverHtml } from './discover-page'
 import { favouritesHtml } from './favourites-page'
+import { visitSignalsHtml } from './visit-signals-page'
 import { entryRedirect, readSessionCookie, redirectTo } from './entry-guard'
 import { memberRouteResponse, sessionKind, type MemberPath } from './member-route'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail'
@@ -59,6 +60,37 @@ async function send(request: Request, path: string, html: string): Promise<Respo
     return redirect
   }
   return htmlResponse(html)
+}
+
+/** Screen 52. Staff sessions only. Members and anonymous visitors leave this path. */
+export async function visitSignalsResponse(request: Request): Promise<Response> {
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  if (kind === 'staff') {
+    return htmlResponse(visitSignalsHtml(stitchFile('52-ts-visit-signals'), null))
+  }
+  if (kind === 'web' || kind === 'capacitor' || kind === 'mahram') {
+    return redirectTo(request, '/decouvrir')
+  }
+  if (!cookie || !readSessionCookie(cookie)) {
+    return redirectTo(request, '/auth')
+  }
+  const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
+  try {
+    const probe = await fetch(`${origin}/v1/staff/signals/visits`, {
+      headers: { cookie },
+      cache: 'no-store',
+    })
+    if (probe.status === 401) {
+      return redirectTo(request, '/auth')
+    }
+    if (probe.status === 403) {
+      return redirectTo(request, '/decouvrir')
+    }
+  } catch {
+    return redirectTo(request, '/auth')
+  }
+  return htmlResponse(visitSignalsHtml(stitchFile('52-ts-visit-signals'), null))
 }
 
 export function signupResponse(request: Request): Promise<Response> {

@@ -288,6 +288,24 @@ export const strike = pgTable(
   ],
 )
 
+/** Discovery-owned append-only profile open. Grain is `(account_id, target_id, created_at)`. Not a like. */
+export const profileVisit = pgTable(
+  'profile_visit',
+  {
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => account.id),
+    target_id: uuid('target_id')
+      .notNull()
+      .references(() => account.id),
+    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.account_id, table.target_id, table.created_at] }),
+    index('profile_visit_account_id_created_at').on(table.account_id, table.created_at),
+  ],
+)
+
 /** Discovery-owned private favourite. Grain is `(account_id, target_id)`. Not a pass and not a like. */
 export const favourite = pgTable(
   'favourite',

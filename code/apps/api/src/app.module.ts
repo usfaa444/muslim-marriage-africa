@@ -13,6 +13,7 @@ import { ProfilesController } from './profiles.controller.js'
 import { PinController } from './pin.controller.js'
 import { SessionsController } from './sessions.controller.js'
 import { StaffController } from './staff.controller.js'
+import { VisitSignalsController } from './visit-signals.controller.js'
 import { VerificationsController } from './verifications.controller.js'
 
 @Module({
@@ -31,6 +32,7 @@ import { VerificationsController } from './verifications.controller.js'
     FiltersController,
     MediaController,
     StaffController,
+    VisitSignalsController,
     CilController,
   ],
 })

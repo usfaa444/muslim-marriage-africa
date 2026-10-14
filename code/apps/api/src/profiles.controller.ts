@@ -1,6 +1,7 @@
 import { Controller, Get, Header, HttpException, Param, Req, Res } from '@nestjs/common'
 import { requireLiveSession, unauthenticated } from './pin-session.js'
 import { readPublicProfile } from './public-profile.js'
+import { recordProfileVisit } from './visit-signals.js'
 
 type CookieRequest = {
   headers?: { cookie?: string | string[] }
@@ -36,6 +37,7 @@ export class ProfilesController {
         result.status,
       )
     }
+    await recordProfileVisit(session.account_id, id)
     return result.body
   }
 }

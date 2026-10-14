@@ -25,6 +25,7 @@ import {
 } from './v2-pages.js'
 import { discoverHtml } from './discover-page.js'
 import { favouritesHtml, type FavouriteCard } from './favourites-page.js'
+import { visitSignalsHtml, type VisitSignalPaint } from './visit-signals-page.js'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail.js'
 
 const WIDTHS = [360, 390, 768, 1024, 1280, 1440] as const
@@ -155,6 +156,8 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '16b-profile-phone', html: profileDetailHtml(stitch('15-profile-detail'), profileDetailView(false)) },
     { name: '18-favourites-empty', html: favouritesHtml(stitch('17-favourites'), []) },
     { name: '18b-favourites-filled', html: favouritesHtml(stitch('17-favourites'), [favouriteCard()]) },
+    { name: '52-visit-signals-empty', html: visitSignalsHtml(stitch('52-ts-visit-signals'), visitPaint(0)) },
+    { name: '52b-visit-signals', html: visitSignalsHtml(stitch('52-ts-visit-signals'), visitPaint(1)) },
     {
       name: '17-discover',
       html: discoverHtml(
@@ -166,6 +169,28 @@ function screens(): Array<{ name: string; html: string }> {
       ),
     },
   ]
+}
+
+function visitPaint(count: number): VisitSignalPaint {
+  const row = {
+    account_id: '01990000-0000-7000-8000-0000000000aa',
+    pseudonym: 'Aminata_KDG_long_pseudonym_that_wraps',
+    gender: 'sister' as const,
+    age: 29,
+    city: 'ouagadougou',
+    member_since: '2026-01-15T12:00:00.000Z',
+    id_verified: true,
+    profiles_viewed_24h: 64,
+    invites_sent_24h: 0,
+    over_threshold_at: '2026-05-24T14:00:00.000Z',
+  }
+  return {
+    threshold: 50,
+    window_hours: 24,
+    generated_at: '2026-05-24T15:42:19.000Z',
+    count,
+    rows: count === 0 ? [] : [row],
+  }
 }
 
 function profileDetailView(identity: boolean): ProfileDetailView {
