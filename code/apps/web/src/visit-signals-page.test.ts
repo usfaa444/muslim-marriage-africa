@@ -90,6 +90,17 @@ describe('screen 52 visit signals', () => {
     expect(html).toContain('0 transmise')
     expect(html).toContain('Aminata_KDG_long_pseudonym_that_wraps (F / 29 ans)')
     expect(html).toContain('64 / 0 (24h)')
+    expect(html).toContain('1h 42min')
+    expect(html).toContain('crisis_alert')
+    expect(html).toContain('text-deep-navy/40')
+    expect(html).toContain('border-hairline/60')
+    expect(html).toContain('animate-pulse')
+    expect(html).toContain("Dossier d'Arbitrage")
+    expect(html).toContain('hover:text-soft-gold transition-colors')
+    expect(html).toContain('hover:border-deep-navy/40 transition-colors')
+    expect(html).toContain('class="ml-auto flex items-center gap-2 text-deep-navy/60 font-mono text-[11px]"')
+    const capped = visitSignalsHtml(source, { ...paint([card]), count: 101 })
+    expect(capped).toContain('101 cas actifs')
     expect(html).toContain('Membre depuis Janvier 2026 • Ouagadougou')
     const noAge = visitSignalsHtml(source, paint([other]))
     expect(noAge).toContain('Moussa_BF_long_pseudonym (M)')
@@ -101,6 +112,15 @@ describe('screen 52 visit signals', () => {
     const live = visitSignalsHtml(source, null)
     expect(live).toContain('data-visit-signals="live"')
     expect(live).toContain("fetch('/v1/staff/signals/visits'")
+    const main = live.slice(live.indexOf('<main'), live.indexOf('</main>'))
+    expect(main).not.toContain('0 cas actif')
+    expect(main).not.toContain("Aucun membre n'a consulté")
+    expect(main).toContain('id="visit-count" hidden')
+    expect(main).toContain('id="visit-empty" hidden')
+    expect(live).not.toContain('addEventListener')
+    expect(live).toContain('visitToken')
+    expect(live).not.toContain('0 cas actif')
+    expect(live).toContain('id="visit-count" hidden')
     const script = [...live.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1] ?? '').find((item) => item.includes('loadVisits'))
     expect(script).toBeTruthy()
     expect(() => new Function(script ?? '')).not.toThrow()
@@ -139,12 +159,65 @@ describe('screen 52 visit signals', () => {
       )
       expect(opaque.status).toBe(303)
       expect(opaque.headers.get('location')).toContain('/auth')
+      const originalFetch = globalThis.fetch
+      const probe = async (status: number) => {
+        globalThis.fetch = async () => new Response('{}', { status })
+        return visitSignalsResponse(
+          new Request('http://127.0.0.1/staff/visit-signals', { headers: { cookie: 'ankanu_session=opaque-token' } }),
+        )
+      }
+      try {
+        const ok = await probe(200)
+        expect(ok.status).toBe(200)
+        expect(await ok.text()).toContain('data-visit-signals="live"')
+        const denied = await probe(401)
+        expect(denied.status).toBe(303)
+        expect(denied.headers.get('location')).toContain('/auth')
+        const forbidden = await probe(403)
+        expect(forbidden.status).toBe(303)
+        expect(forbidden.headers.get('location')).toContain('/decouvrir')
+        const failed = await probe(500)
+        expect(failed.status).toBe(303)
+        expect(failed.headers.get('location')).toContain('/auth')
+      } finally {
+        globalThis.fetch = originalFetch
+      }
     } finally {
       if (previous === undefined) {
         delete process.env.ANKANU_API_ORIGIN
       } else {
         process.env.ANKANU_API_ORIGIN = previous
       }
+    }
+  })
+
+  it('sends every failed opaque probe except 403 to auth', async () => {
+    const original = globalThis.fetch
+    const cases = [
+      { status: 200, auth: false, discover: false },
+      { status: 401, auth: true, discover: false },
+      { status: 403, auth: false, discover: true },
+      { status: 429, auth: true, discover: false },
+      { status: 500, auth: true, discover: false },
+    ]
+    try {
+      for (const item of cases) {
+        globalThis.fetch = (async () => new Response(null, { status: item.status })) as typeof fetch
+        const response = await visitSignalsResponse(
+          new Request('http://127.0.0.1/staff/visit-signals', { headers: { cookie: 'ankanu_session=opaque-token' } }),
+        )
+        const location = response.headers.get('location') ?? ''
+        if (item.status === 200) {
+          expect(response.status).toBe(200)
+          expect(await response.text()).toContain('data-visit-signals="live"')
+        } else {
+          expect(response.status).toBe(303)
+        }
+        expect(location.includes('/auth')).toBe(item.auth)
+        expect(location.includes('/decouvrir')).toBe(item.discover)
+      }
+    } finally {
+      globalThis.fetch = original
     }
   })
 })
@@ -390,6 +463,15 @@ describe('visit signal widths', () => {
         ),
       )
       expect(error).toContain('Les signaux de visite sont indisponibles.')
+      const count = String(
+        await value(
+          "document.getElementById('visit-count') ? document.getElementById('visit-count').textContent : 'missing'",
+          sessionId,
+        ),
+      )
+      expect(count.trim()).toBe('')
+      const countHidden = await value("document.getElementById('visit-count').hidden", sessionId)
+      expect(countHidden).toBe(true)
     } finally {
       ws.close()
       chrome.proc.kill('SIGKILL')

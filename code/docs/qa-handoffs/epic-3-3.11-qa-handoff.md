@@ -16,11 +16,11 @@ Errors use the AD-7 envelope. 401 is `UNAUTHENTICATED`, message `Authentificatio
 
 Migration `0017_profile_visit` has exactly `account_id`, `target_id`, and `created_at`. The primary key is `(account_id, target_id, created_at)`. Both ids reference `account(id)`. The index is `(account_id, created_at)`. There is no `id` column, no update, no delete, and no purge. Repeat opens add rows. Threshold 50 is the code constant `VISIT_THRESHOLD`. There is no `operator_config` key.
 
-`/staff/visit-signals` is screen 52 for staff sessions. A `web`, `capacitor`, or `mahram` stub cookie redirects to `/decouvrir`. No cookie redirects to `/auth`. An opaque cookie probes `GET /v1/staff/signals/visits`: 401 goes to `/auth`, 403 goes to `/decouvrir`, and a failed probe fails closed to `/auth`. The live page fetches the same route. 401 sends the browser to `/auth`. 403 sends it to `/decouvrir`. Any other error shows the error banner with the French AD-7 line and `Réessayer`, which repeats the GET.
+`/staff/visit-signals` is screen 52 for staff sessions. A `web`, `capacitor`, or `mahram` stub cookie redirects to `/decouvrir`. No cookie redirects to `/auth`. An opaque cookie probes `GET /v1/staff/signals/visits`. 403 goes to `/decouvrir`. Every other non-OK status, including 401, 429, and 500, and a failed probe, goes to `/auth`. A 200 probe serves the page. The live page fetches the same route. 401 sends the browser to `/auth`. 403 sends it to `/decouvrir`. Any other error shows the error banner with the French AD-7 line and `Réessayer`. That button is bound once with `onclick`. A response older than the latest click is ignored. The error hides `#visit-count` so a measured count does not stay up.
 
 Copy uses the response, not the Stitch sample. The header count is `{count} cas actif` for 0 and 1, and `{count} cas actifs` otherwise. `Horodatage officiel :` is `generated_at` in Africa/Ouagadougou as `24 Mai 2026 • 15:42:19 GMT (Ouagadougou)`. `Membre depuis {mois AAAA}` uses that same zone, and appends ` • {city}` only when city is not null. City tokens use the existing French labels. `Consultations 24h` is `{n} fiches` plus `(+{n−50}/seuil)`. `Invitations Ta'aruf` is `{invites_sent_24h} transmise`. `Dépassement enregistré il y a {durée}` is `generated_at − over_threshold_at` (under 60 minutes as `N min`, otherwise `Hh Mmin`). The dossier line is `Membre ciblé : {pseudonym} ({M|F} / {age} ans)` and drops ` / {age} ans` when age is null (`sister` is F, `brother` is M). The ratio is `{profiles_viewed_24h} / {invites_sent_24h} (24h)`. Threshold sentences interpolate `threshold` and `window_hours`. The verified chip says `Identité vérifiée` only when `id_verified` is true. It does not say `CNIB Vérifiée (BF)`.
 
-`Examiner la fiche` selects that row in the browser and fills the dossier from the same list. The first row is selected on load. The selected card shows `En cours d'examen` and `Fiche active` with the Stitch selected border. That selection is not stored. Zero rows keep the top bar, timestamp, title, intro, ethical frame, golden rule, and `0 cas actif`. The cards are replaced by `Aucun membre n'a consulté plus de 50 fiches en 24h sans envoyer d'invitation.` and `Actualiser`, which repeats the GET. There is no dossier and no sample card. `Actualiser`, `Réessayer`, and `Examiner la fiche` use `min-h-[44px]`.
+`Examiner la fiche` selects that row in the browser and fills the dossier from the same list. The first row is selected on load. The selected card shows `En cours d'examen`, gold `crisis_alert`, and `Fiche active` with `hover:text-soft-gold transition-colors` and the Stitch selected border. A waiting card uses `schedule` at `text-deep-navy/40`, `border-hairline/60`, `hover:border-deep-navy/40 transition-colors`, and `Examiner la fiche` with `transition-colors`. The case dot has `animate-pulse`. The dossier kicker is `Dossier d'Arbitrage`. `REF-TS` is not rendered. The official stamp stays on the right (`ml-auto`) after `Retour à la console de modération` is removed. That selection is not stored. A live document does not paint `0 cas actif` or the empty sentence until a 200 body has zero rows. That 200 then keeps the top bar, timestamp, title, intro, ethical frame, golden rule, and `0 cas actif`, and replaces the cards with `Aucun membre n'a consulté plus de 50 fiches en 24h sans envoyer d'invitation.` and `Actualiser`, which repeats the GET. There is no dossier and no sample card. The count pill uses `count`, including when `truncated` is true and `rows` is shorter. `Actualiser`, `Réessayer`, and `Examiner la fiche` use `min-h-[44px]`. `over_threshold_at` is ISO even when the store returns a Drizzle timestamp such as `2026-05-24 14:00:00.000+00`.
 
 These blocks are not rendered, and the task cites the later story: the whole `Décision de l'arbitre référent` block is Story 8.7; `Antécédents d'avertissement` is Story 8.7; the audit register (`SHA256` / operator / protocol) is Story 12.7; `Retour à la console de modération` waits for the Story 12.1 staff home. `Moyenne de séjour par profil` never renders because there is no dwell field. Sample names, `REF-TS-2026-0884`, and `MED-OUAGA-7704` are not rendered. Settings screen 27 is unchanged and has no who-viewed list.
 
@@ -80,18 +80,23 @@ Open `/staff/visit-signals` with a moderator or operator session. A member sessi
 | Other reads | Browse and favourites controllers | They do not call `recordProfileVisit` |
 | Table | `0017_profile_visit.sql` | Three columns, primary key `(account_id, target_id, created_at)`, both foreign keys, index `(account_id, created_at)`, no `id` column |
 | Qualify | 50 distinct, then a repeat, then a 51st target | Absent, still absent, then one qualified row. Two accounts sort by later crossing first |
+| Window | 51 opens starting 25 hours before the list clock | `{ count: 0, rows: [] }` |
+| Drizzle time | Stored `created_at` like `2026-10-13 10:50:00.000+00` | `over_threshold_at` is `2026-10-13T10:50:00.000Z`. One granted capture of two leaves `id_verified` false |
+| Stale window | 51 opens dated `2026-10-11`, clock `2026-10-13` | `{ count: 0, rows: [] }` |
+| One grant | 51 opens in the window, only `id_document` granted | Listed, `id_verified` false |
+| Drizzle time | Store `created_at` is `2026-10-13 11:00:50.000+00` | `over_threshold_at` is `2026-10-13T11:00:50.000Z` |
 
 ## Web test cases
 
 | Case | Input | Expected |
 | --- | --- | --- |
 | Empty | Static paint with zero rows | Title, ethical frame, golden rule, `0 cas actif`, the empty sentence with 50 and 24, `Actualiser` at least 44px, official stamp `24 Mai 2026 • 15:42:19 GMT (Ouagadougou)`. No Souleymane, Al-Hassan, Oumar_K, CNIB, SHA256, moyenne de séjour, décision, retour, REF-TS, or MED-OUAGA. No fetch |
-| Filled | Two static rows, first selected | `2 cas actifs`, `Identité vérifiée`, `En cours d'examen`, `Fiche active`, `Examiner la fiche`, selected `border-2 border-deep-navy`, `64 fiches`, `(+14/seuil)`, `0 transmise`, dossier `Aminata_KDG_long_pseudonym_that_wraps (F / 29 ans)` and `64 / 0 (24h)`, `Membre depuis Janvier 2026 • Ouagadougou` |
+| Filled | Two static rows, first selected | `2 cas actifs`, `Identité vérifiée`, `En cours d'examen`, gold `crisis_alert`, `Fiche active` with `hover:text-soft-gold transition-colors`, waiting `schedule` at `text-deep-navy/40`, `border-hairline/60`, `animate-pulse`, `Dossier d'Arbitrage`, stamp `ml-auto`, `1h 42min`, `64 / 0 (24h)`. `count` 101 with one row paints `101 cas actifs` |
 | Null age | One brother row with `age` null | `Moussa_BF_long_pseudonym (M)` and not ` (M /` |
-| Live script | `visitSignalsHtml` with null paint | `data-visit-signals="live"`, fetch `GET /v1/staff/signals/visits`, script parses |
-| Live browser | Two JSON rows, then click the second, then refresh into HTTP 500 | Dossier becomes `Moussa_BF_long_pseudonym (M)` and `52 / 0 (24h)` with `En cours d'examen`. The error text is `Les signaux de visite sont indisponibles.` |
+| Live script | `visitSignalsHtml` with null paint | `data-visit-signals="live"`, fetch `GET /v1/staff/signals/visits`, script parses. The `<main>` markup has no `0 cas actif` and no empty sentence. `onclick` is assigned once. `visitToken` drops a stale response |
+| Live browser | Two JSON rows, then click the second, then refresh into HTTP 500 | Dossier becomes `Moussa_BF_long_pseudonym (M)` and `52 / 0 (24h)` with `En cours d'examen`. The error text is `Les signaux de visite sont indisponibles.` `#visit-count` is empty |
 | Settings | Screen 27 | No `qui a consulté`, no `profile_visit`, no `who_viewed` |
-| Route | `GET /staff/visit-signals` | Staff stub 200 live HTML. `web` and `mahram` stubs 303 to `/decouvrir`. No cookie, and an opaque cookie when the API probe fails, 303 to `/auth` |
+| Route | `GET /staff/visit-signals` | Staff stub 200 live HTML. `web` and `mahram` stubs 303 to `/decouvrir`. No cookie 303 to `/auth`. Opaque probe 200 serves HTML. 403 goes to `/decouvrir`. 401, 429, and 500 go to `/auth` |
 | Widths | Empty and filled at 360, 390, 768, 1024, 1280, 1440 | `document.documentElement.scrollWidth <= window.innerWidth`. Shots at 360 and 1440 |
 
 ## Test data
@@ -100,7 +105,8 @@ API memory accounts. Password `phrase avec espaces`. Date of birth `1990-01-15`.
 
 ## My results
 
-- `visit-signals.test.ts` and `visit-signals-page.test.ts`: 16 passed.
+- QA fail on [ANK-137](/ANK/issues/ANK-137) is fixed in this commit. A non-OK probe other than 403 goes to `/auth`. The live page does not show an empty result before a 200 with zero rows, and an error clears the count. Screen 52 cards use the Stitch icon, border, hover, pulse, kicker, and right-hand stamp. `over_threshold_at` is ISO.
+- `visit-signals.test.ts`: 14 passed. `visit-signals-page.test.ts`: 8 passed, including the six widths.
 - `public-profile.test.ts`: 5 passed. A 200 profile read still returns the profile body.
 - `tsc -p apps/api/tsconfig.json --noEmit` and `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
 - `drizzle-kit check` from `code/apps/api`: clean.

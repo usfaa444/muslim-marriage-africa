@@ -61,7 +61,12 @@ export function memoryProfileVisitStore(): ProfileVisitStore & { rows: VisitRow[
       rows.push(row)
     },
     async listInWindow(sinceIso, untilIso) {
-      return rows.filter((row) => row.created_at >= sinceIso && row.created_at <= untilIso)
+      const since = Date.parse(sinceIso)
+      const until = Date.parse(untilIso)
+      return rows.filter((row) => {
+        const at = Date.parse(row.created_at)
+        return at >= since && at <= until
+      })
     },
   }
 }
@@ -95,6 +100,15 @@ function postgresProfileVisitStore(): ProfileVisitStore {
   }
 }
 
+/** Drizzle's string timestamps are not ISO. The staff body always is. */
+export function toVisitIso(value: string): string {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) {
+    return value
+  }
+  return date.toISOString()
+}
+
 /** Discovery is the only writer. A failed insert must not change the profile read. */
 export async function recordProfileVisit(accountId: string, targetId: string): Promise<void> {
   try {
@@ -119,10 +133,11 @@ type Qualified = {
 export function qualifyVisitAccounts(rows: readonly VisitRow[], threshold = VISIT_THRESHOLD): Qualified[] {
   const byAccount = new Map<string, Map<string, string>>()
   for (const row of rows) {
+    const created = toVisitIso(row.created_at)
     const targets = byAccount.get(row.account_id) ?? new Map<string, string>()
     const first = targets.get(row.target_id)
-    if (!first || row.created_at < first) {
-      targets.set(row.target_id, row.created_at)
+    if (!first || created < first) {
+      targets.set(row.target_id, created)
     }
     byAccount.set(row.account_id, targets)
   }
@@ -214,7 +229,10 @@ async function idVerified(accountId: string): Promise<boolean> {
 export async function listVisitSignals(now = authNow()): Promise<VisitSignalsBody> {
   const generatedAt = now.toISOString()
   const since = new Date(now.getTime() - WINDOW_MS)
-  const visits = await getProfileVisitStore().listInWindow(since.toISOString(), generatedAt)
+  const visits = (await getProfileVisitStore().listInWindow(since.toISOString(), generatedAt)).map((row) => ({
+    ...row,
+    created_at: toVisitIso(row.created_at),
+  }))
   const qualified = qualifyVisitAccounts(visits)
   const kept: VisitSignalRow[] = []
   for (const item of qualified) {

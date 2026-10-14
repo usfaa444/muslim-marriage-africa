@@ -81,11 +81,11 @@ export async function visitSignalsResponse(request: Request): Promise<Response> 
       headers: { cookie },
       cache: 'no-store',
     })
-    if (probe.status === 401) {
-      return redirectTo(request, '/auth')
-    }
     if (probe.status === 403) {
       return redirectTo(request, '/decouvrir')
+    }
+    if (!probe.ok) {
+      return redirectTo(request, '/auth')
     }
   } catch {
     return redirectTo(request, '/auth')

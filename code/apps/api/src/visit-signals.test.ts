@@ -25,7 +25,7 @@ import { setFreeReviewSlaReader } from './profile-review.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
-import { memoryProfileVisitStore, qualifyVisitAccounts, setProfileVisitStore, type VisitRow } from './visit-signals.js'
+import { memoryProfileVisitStore, qualifyVisitAccounts, setProfileVisitStore, toVisitIso, type VisitRow } from './visit-signals.js'
 
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
@@ -88,6 +88,11 @@ describe('visit qualification', () => {
     ])
   })
 
+  it('turns a drizzle timestamp into ISO', () => {
+    expect(toVisitIso('2026-05-24 14:00:00.000+00')).toBe('2026-05-24T14:00:00.000Z')
+    expect(toVisitIso('2026-05-24T14:00:00.000Z')).toBe('2026-05-24T14:00:00.000Z')
+  })
+
   it('orders a later crossing first and breaks ties by account id', () => {
     const early = 'bbbbbbbb-bbbb-7bbb-8bbb-bbbbbbbbbbbb'
     const late = 'aaaaaaaa-aaaa-7aaa-8aaa-aaaaaaaaaaaa'
@@ -103,6 +108,20 @@ describe('visit qualification', () => {
     }
     const qualified = qualifyVisitAccounts(rows)
     expect(qualified.map((row) => row.account_id)).toEqual([late, early])
+  })
+
+  it('turns a drizzle timestamp into ISO', () => {
+    const accountId = 'aaaaaaaa-aaaa-7aaa-8aaa-aaaaaaaaaaaa'
+    const rows: VisitRow[] = []
+    for (let index = 0; index < 51; index += 1) {
+      rows.push({
+        account_id: accountId,
+        target_id: targetId(index),
+        created_at: `2026-10-13 10:${String(index).padStart(2, '0')}:00.000+00`,
+      })
+    }
+    expect(qualifyVisitAccounts(rows)[0]?.over_threshold_at).toBe('2026-10-13T10:50:00.000Z')
+    expect(toVisitIso('2026-05-24 14:00:00.000+00')).toBe('2026-05-24T14:00:00.000Z')
   })
 })
 
@@ -436,6 +455,30 @@ describe('staff visit signals', () => {
     expect(await invited.json()).toMatchObject({ count: 0, rows: [] })
   })
 
+  it('drops opens older than 24h and keeps a single grant unverified', async () => {
+    const member = await createAccount('brother')
+    const staff = await createAccount('sister')
+    const staffCookie = await signIn(staff.email)
+    staffRole(staff.id, 'moderator')
+    seedVisits(member.id, 51, 0, new Date(now.getTime() - 25 * 60 * 60 * 1000))
+    const stale = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
+    expect(await stale.json()).toMatchObject({ count: 0, rows: [] })
+    visits.rows.length = 0
+    grant(member.id, 'id_document')
+    for (let index = 0; index < 51; index += 1) {
+      visits.rows.push({
+        account_id: member.id,
+        target_id: targetId(index),
+        created_at: `2026-10-13 10:${String(index).padStart(2, '0')}:00.000+00`,
+      })
+    }
+    const listed = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
+    const body = (await listed.json()) as { count: number; rows: Array<{ over_threshold_at: string; id_verified: boolean }> }
+    expect(body.count).toBe(1)
+    expect(body.rows[0]?.over_threshold_at).toBe('2026-10-13T10:50:00.000Z')
+    expect(body.rows[0]?.id_verified).toBe(false)
+  })
+
   it('returns a retryable store failure and caps the list at 100', async () => {
     const staff = await createAccount('sister')
     const staffCookie = await signIn(staff.email)
@@ -463,6 +506,49 @@ describe('staff visit signals', () => {
     expect(await failed.json()).toMatchObject({
       error: { code: 'UNHANDLED', message: 'Les signaux de visite sont indisponibles.', retryable: true },
     })
+  })
+
+  it('drops opens older than 24 hours and keeps a single grant unverified', async () => {
+    const member = await createAccount('brother')
+    const staff = await createAccount('sister')
+    const staffCookie = await signIn(staff.email)
+    staffRole(staff.id, 'moderator')
+    seedVisits(member.id, 51, 0, new Date('2026-10-11T11:00:00.000Z'))
+    const stale = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
+    expect(await stale.json()).toMatchObject({ count: 0, rows: [] })
+    const crossed = seedVisits(member.id, 51)
+    grant(member.id, 'id_document')
+    const listed = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
+    const body = (await listed.json()) as { rows: Array<{ id_verified: boolean; over_threshold_at: string }> }
+    expect(body.rows[0]?.id_verified).toBe(false)
+    expect(body.rows[0]?.over_threshold_at).toBe(crossed)
+  })
+
+  it('emits ISO when the stored timestamp is not ISO', async () => {
+    const member = await createAccount('brother')
+    const staff = await createAccount('sister')
+    const staffCookie = await signIn(staff.email)
+    staffRole(staff.id, 'moderator')
+    const rows: VisitRow[] = []
+    for (let index = 0; index < 51; index += 1) {
+      const iso = new Date(Date.UTC(2026, 9, 13, 11, 0, index)).toISOString()
+      rows.push({
+        account_id: member.id,
+        target_id: targetId(index),
+        created_at: iso.replace('T', ' ').replace('Z', '+00'),
+      })
+    }
+    setProfileVisitStore({
+      async insert() {
+        return undefined
+      },
+      async listInWindow() {
+        return rows
+      },
+    })
+    const listed = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
+    const body = (await listed.json()) as { rows: Array<{ over_threshold_at: string }> }
+    expect(body.rows[0]?.over_threshold_at).toBe('2026-10-13T11:00:50.000Z')
   })
 
   it('does not record visits from browse or favourites', () => {
