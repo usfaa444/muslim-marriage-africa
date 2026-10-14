@@ -24,6 +24,7 @@ import {
   statusHtml,
 } from './v2-pages.js'
 import { discoverHtml } from './discover-page.js'
+import { favouritesHtml, type FavouriteCard } from './favourites-page.js'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail.js'
 
 const WIDTHS = [360, 390, 768, 1024, 1280, 1440] as const
@@ -50,6 +51,23 @@ function stitch(folder: string): string {
     fileURLToPath(new URL(`../../../design-stitch/ankanu-v2/${folder}/screen.html`, import.meta.url)),
     'utf8',
   )
+}
+
+function favouriteCard(): FavouriteCard {
+  return {
+    target_id: '01990000-0000-7000-8000-000000000099',
+    pseudonym: 'Aminata_KDG_long_pseudonym',
+    age: 29,
+    city: 'Ouagadougou',
+    profession: 'ingenierie',
+    madhhab: 'Maliki',
+    practice: 'Pratique assidue',
+    marital_status: 'Célibataire',
+    polygamy_intent: 'Non',
+    verified: true,
+    photo: null,
+    bio: 'Foyer posé.',
+  }
 }
 
 function screens(): Array<{ name: string; html: string }> {
@@ -135,6 +153,8 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '15-status', html: statusHtml(stitch('28-delete-export-status')) },
     { name: '16-profile-detail', html: profileDetailHtml(stitch('15-profile-detail'), profileDetailView(true)) },
     { name: '16b-profile-phone', html: profileDetailHtml(stitch('15-profile-detail'), profileDetailView(false)) },
+    { name: '18-favourites-empty', html: favouritesHtml(stitch('17-favourites'), []) },
+    { name: '18b-favourites-filled', html: favouritesHtml(stitch('17-favourites'), [favouriteCard()]) },
     {
       name: '17-discover',
       html: discoverHtml(

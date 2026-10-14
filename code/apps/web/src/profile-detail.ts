@@ -99,7 +99,38 @@ const TIMEFRAME: Record<string, string> = {
 }
 
 const THUMB_SIZE = 'relative min-w-0 w-12 h-12 min-[768px]:w-20 min-[768px]:h-20 rounded-md overflow-hidden'
-const GALLERY_SCRIPT = `document.querySelectorAll('[data-photo-src]').forEach(function (button) {
+const BOOKMARK_SCRIPT = `document.querySelectorAll('[data-bookmark]').forEach(function (button) {
+  button.addEventListener('click', function () {
+    var target = button.getAttribute('data-target-id')
+    if (!target) return
+    var status = document.getElementById('profile-bookmark-status')
+    if (!status) {
+      status = document.createElement('p')
+      status.id = 'profile-bookmark-status'
+      status.setAttribute('role', 'status')
+      status.className = 'text-sm text-deep-navy/80 break-words mt-2'
+      button.insertAdjacentElement('afterend', status)
+    }
+    status.textContent = ''
+    fetch('/v1/favourites', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: target })
+    }).then(function (response) {
+      if (response.status === 200 || response.status === 201) {
+        button.setAttribute('aria-pressed', 'true')
+        return
+      }
+      return response.json().then(function (payload) {
+        status.textContent = payload && payload.error && payload.error.message ? payload.error.message : 'Request failed'
+      })
+    }).catch(function () {
+      status.textContent = 'Request failed'
+    })
+  })
+})
+document.querySelectorAll('[data-photo-src]').forEach(function (button) {
   button.addEventListener('click', function () {
     var hero = document.getElementById('profile-hero')
     var src = button.getAttribute('data-photo-src')
@@ -397,7 +428,11 @@ export function profileDetailHtml(stitch: string, view: ProfileDetailView): stri
   html = applyLevels(html, view)
   html = applyFields(html, view)
   html = applyPhotos(html, view)
-  const page = prepareV2(html, view.photos.length > 0 ? GALLERY_SCRIPT : '')
+  html = html.replace(
+    'aria-label="Mémoriser discrètement ce profil"',
+    `data-bookmark="true" data-target-id="${escapeHtml(view.profile.id)}" aria-label="Mémoriser discrètement ce profil"`,
+  )
+  const page = prepareV2(html, BOOKMARK_SCRIPT)
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`
 }

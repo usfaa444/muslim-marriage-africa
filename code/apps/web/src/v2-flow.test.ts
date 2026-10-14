@@ -672,6 +672,8 @@ describe('server entry guard', () => {
     expect(entryLocation('/age-gate', 'anon')).toBe('/signup/identity')
     expect(entryLocation('/email-verification', 'anon')).toBe('/auth')
     expect(entryLocation('/decouvrir', 'anon')).toBe('/auth')
+    expect(entryLocation('/favoris', 'anon')).toBe('/auth')
+    expect(entryLocation('/favoris', 'account')).toBeNull()
     expect(entryLocation('/signup', 'email')).toBe('/email-verification')
     expect(entryLocation('/auth', 'phone')).toBe('/phone')
     expect(entryLocation('/otp', 'phone')).toBe('/phone')

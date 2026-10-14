@@ -142,6 +142,44 @@ function writeCache(items) {
     sessionStorage.setItem(key, JSON.stringify({ account: account, items: items.map(textRow) }))
   } catch (error) {}
 }
+function bookmarkError(message) {
+  var node = document.getElementById('discover-bookmark-error')
+  if (!node) {
+    node = document.createElement('p')
+    node.id = 'discover-bookmark-error'
+    node.setAttribute('role', 'status')
+    node.className = 'text-sm text-deep-navy/80 m-0 break-words'
+    var host = document.getElementById('discover-grid') || document.body
+    host.appendChild(node)
+  }
+  node.hidden = !message
+  node.textContent = message || ''
+}
+function saveFavourite(targetId, button) {
+  bookmarkError('')
+  fetch('/v1/favourites', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ target_id: targetId })
+  }).then(function (response) {
+    if (response.status === 200 || response.status === 201) {
+      var icon = button.querySelector('[data-icon]')
+      if (icon) {
+        icon.textContent = 'bookmark'
+        icon.setAttribute('data-icon', 'bookmark')
+      }
+      button.setAttribute('aria-pressed', 'true')
+      return
+    }
+    return response.json().then(function (payload) {
+      var message = payload && payload.error && payload.error.message ? payload.error.message : 'Request failed'
+      bookmarkError(message)
+    })
+  }).catch(function () {
+    bookmarkError('Request failed')
+  })
+}
 function chip(text) {
   var span = document.createElement('span')
   span.className = 'px-2.5 py-1 rounded bg-cream border border-hairline text-deep-navy break-words'
@@ -199,6 +237,7 @@ function paint(items) {
         if (bookmark) {
           event.preventDefault()
           event.stopPropagation()
+          saveFavourite(item.id, bookmark)
           return
         }
         window.location.assign('/profil/' + item.id)
@@ -206,7 +245,11 @@ function paint(items) {
       article.addEventListener('keydown', function (event) {
         if (event.key !== 'Enter') return
         var bookmark = event.target && event.target.closest ? event.target.closest('[data-bookmark]') : null
-        if (bookmark) return
+        if (bookmark) {
+          event.preventDefault()
+          saveFavourite(item.id, bookmark)
+          return
+        }
         window.location.assign('/profil/' + item.id)
       })
     }

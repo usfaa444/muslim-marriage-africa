@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
 import { discoverHtml } from './discover-page'
+import { favouritesHtml } from './favourites-page'
 import { entryRedirect, readSessionCookie, redirectTo } from './entry-guard'
 import { memberRouteResponse, sessionKind, type MemberPath } from './member-route'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail'
@@ -224,6 +225,19 @@ async function memberProfile(
 
 export function settingsResponse(request: Request): Promise<Response> {
   return send(request, '/settings', settingsHtml(stitchFile('27-settings')))
+}
+
+/** Screen 17. Stub cookies stay on the JSON envelope. A live session gets the private list. */
+export async function favouritesResponse(request: Request): Promise<Response> {
+  const redirect = await entryRedirect(request, '/favoris')
+  if (redirect) {
+    return redirect
+  }
+  const cookie = request.headers.get('cookie')
+  if (sessionKind(cookie) !== null || readSessionCookie(cookie) === null) {
+    return memberRouteResponse(cookie, '/favoris')
+  }
+  return htmlResponse(favouritesHtml(stitchFile('17-favourites')))
 }
 
 export function statusResponse(request: Request, path: string): Promise<Response> {

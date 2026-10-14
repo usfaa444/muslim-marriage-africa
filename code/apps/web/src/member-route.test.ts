@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { GET as getDecouvrir } from '../app/decouvrir/route.js'
 import { GET as getDiscussions } from '../app/discussions/route.js'
 import { GET as getInvitations } from '../app/invitations/route.js'
+import { GET as getFavoris } from '../app/favoris/route.js'
 import { GET as getProfil } from '../app/profil/route.js'
 import {
   MEMBER_PATHS,
@@ -57,7 +58,7 @@ describe('member routes', () => {
   })
 
   it('refuses a mahram cookie on browse, invite, and discussion paths', () => {
-    for (const path of ['/decouvrir', '/invitations', '/discussions'] as const) {
+    for (const path of ['/decouvrir', '/invitations', '/discussions', '/favoris'] as const) {
       const result = memberRouteResult(MAHRAM, path)
       expect(result.status).toBe(403)
       expect(result.body.error.code).toBe('FORBIDDEN')
@@ -71,6 +72,7 @@ describe('member routes', () => {
       ['/invitations', getInvitations],
       ['/discussions', getDiscussions],
       ['/profil', getProfil],
+      ['/favoris', getFavoris],
     ] as const
     for (const [path, get] of routes) {
       const staff = await get(new Request(`http://localhost${path}`, { headers: { cookie: STAFF } }))

@@ -52,6 +52,8 @@ describe('screen 15 public profile', () => {
     expect(html).toContain('w-12 h-12')
     expect(html).not.toContain('overflow-x-auto')
     expect(html).toContain('/v1/pin')
+    expect(html).toContain("fetch('/v1/favourites'")
+    expect(html).toContain('data-target-id="01990000-0000-7000-8000-000000000099"')
     expect(html).toContain('href="/decouvrir"')
     expect(html).toContain('/v1/media/get?token=main')
     expect(html).toContain("Demander l'accès à la photographie")

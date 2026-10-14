@@ -58,6 +58,7 @@ describe('discover grid page', () => {
     expect(html).toContain('Photographie réservée')
     expect(html).toContain('Photographie non publiée')
     expect(html).toContain('Enregistrer en toute discrétion')
+    expect(html).toContain("fetch('/v1/favourites'")
     expect(html).toContain('ankanu_browse_grid_text:')
     expect(html).toContain(`data-discover-account="${ACCOUNT}"`)
     expect(html).toContain('#discover-retry[hidden]')
@@ -191,8 +192,16 @@ describe('discover grid in a browser', () => {
 
   it.skipIf(!binary)('toggles to a real grid and fits every required width', async () => {
     let fetches = 0
+    let favouritePosts = 0
     const server: Server = createServer((request, response) => {
       const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (request.method === 'POST' && url.pathname === '/v1/favourites') {
+        favouritePosts += 1
+        response.statusCode = 201
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.end(JSON.stringify({ account_id: 'a', target_id: 't', created_at: '2026-10-13T12:00:00.000Z' }))
+        return
+      }
       if (url.pathname === '/v1/browse') {
         fetches += 1
         response.setHeader('content-type', 'application/json; charset=utf-8')
@@ -441,6 +450,22 @@ describe('discover grid in a browser', () => {
         sessionId,
       )
       expect((stayedOnEnter.result as { value?: string } | undefined)?.value).toBe('/')
+      const saved = await send(
+        'Runtime.evaluate',
+        {
+          expression:
+            "new Promise((resolve) => { const start = Date.now(); const tick = () => { const pressed = document.querySelector('[data-bookmark]')?.getAttribute('aria-pressed'); if (pressed === 'true' || Date.now() - start > 2000) resolve(pressed); else setTimeout(tick, 30) }; tick() })",
+          awaitPromise: true,
+          returnByValue: true,
+        },
+        sessionId,
+      )
+      expect((saved.result as { value?: string } | undefined)?.value).toBe('true')
+      const deadline = Date.now() + 2000
+      while (favouritePosts < 2 && Date.now() < deadline) {
+        await new Promise((resolve) => setTimeout(resolve, 30))
+      }
+      expect(favouritePosts).toBe(2)
       await send(
         'Runtime.evaluate',
         { expression: "document.querySelector('[data-tile]').click()" },

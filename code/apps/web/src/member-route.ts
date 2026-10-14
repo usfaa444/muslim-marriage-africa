@@ -2,11 +2,11 @@ import { ERROR_CODES, errorEnvelope, type ErrorEnvelope } from '@ankanu/kernel'
 
 export const SESSION_COOKIE = 'ankanu_session'
 
-export const MEMBER_PATHS = ['/decouvrir', '/invitations', '/discussions', '/profil'] as const
+export const MEMBER_PATHS = ['/decouvrir', '/invitations', '/discussions', '/profil', '/favoris'] as const
 
 export type MemberPath = (typeof MEMBER_PATHS)[number]
 
-const MAHRAM_REFUSED = new Set<MemberPath>(['/decouvrir', '/invitations', '/discussions'])
+const MAHRAM_REFUSED = new Set<MemberPath>(['/decouvrir', '/invitations', '/discussions', '/favoris'])
 
 const KINDS = new Set(['web', 'capacitor', 'mahram', 'staff'])
 

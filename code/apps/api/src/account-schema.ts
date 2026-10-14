@@ -1,5 +1,17 @@
 import { sql } from 'drizzle-orm'
-import { boolean, check, date, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  check,
+  date,
+  index,
+  jsonb,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from 'drizzle-orm/pg-core'
 
 /** Identity-owned account. `coc_version` is the Code of conduct version accepted at signup. */
 export const account = pgTable(
@@ -274,6 +286,21 @@ export const strike = pgTable(
       .on(table.evidence)
       .where(sql`${table.ladder} = 'photo_floor'`),
   ],
+)
+
+/** Discovery-owned private favourite. Grain is `(account_id, target_id)`. Not a pass and not a like. */
+export const favourite = pgTable(
+  'favourite',
+  {
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => account.id),
+    target_id: uuid('target_id')
+      .notNull()
+      .references(() => account.id),
+    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.account_id, table.target_id] })],
 )
 
 /** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */

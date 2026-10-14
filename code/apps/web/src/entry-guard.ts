@@ -32,6 +32,7 @@ const ACCOUNT = new Set([
   '/discussions',
   '/invitations',
   '/profil',
+  '/favoris',
 ])
 
 export function pathnameOf(path: string): string {
