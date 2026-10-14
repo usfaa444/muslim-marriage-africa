@@ -7,12 +7,13 @@ import { getCaptureStore } from './id-liveness-store.js'
 import { discoveryPhoto, signMedia, type MediaFailure } from './media.js'
 import { getMediaStore } from './media-store.js'
 import { parseBrowseFilters } from './browse-filters.js'
+import { sharedTraits, type SharedTrait } from './browse-traits.js'
+import { getExclusionStore } from './discovery-exclusion.js'
 import { profileStoreIsMemory, getProfileStore } from './profile-store.js'
 import { verificationRecord } from './account-schema.js'
 import {
   assertBrowseViewer,
   BROWSE_RATE_MESSAGE,
-  PROFILE_UNAVAILABLE,
   type PublicProfileFailure,
 } from './public-profile.js'
 import type { ResolvedSession } from './session-store.js'
@@ -84,6 +85,15 @@ export type BrowseGridBody = {
   view: 'grid'
   items: BrowseGridItem[]
   next_cursor: string | null
+}
+
+export type BrowseCardItem = BrowseGridItem & {
+  sharedTraits: SharedTrait[]
+}
+
+export type BrowseCardBody = {
+  view: 'card'
+  item: BrowseCardItem | null
 }
 
 export type BrowseGridFailure = {
@@ -186,32 +196,30 @@ async function verifiedAccountIds(accountIds: readonly string[]): Promise<Set<st
 }
 
 /**
- * Grid browse read. `view=card` and a missing view stay 404 until Story 3.13.
+ * People-list read. An omitted `view` is one card. `view=grid` is one page.
  * A refused viewer, a bad view, a bad cursor, and a bad filter do not take a browse slot.
- * A grid page takes one slot, then one profile query.
+ * A card or a grid page takes one slot, then one profile query.
  */
 export async function readBrowseGrid(
   viewer: ResolvedSession,
   query: Record<string, unknown>,
-): Promise<{ ok: true; body: BrowseGridBody } | BrowseGridFailure> {
+): Promise<{ ok: true; body: BrowseGridBody | BrowseCardBody } | BrowseGridFailure> {
   const gate = await assertBrowseViewer(viewer)
   if (!gate.ok) {
     return fromViewer(gate)
   }
 
   const viewText = oneValue(query.view)
-  if (viewText === null) {
+  if (viewText === null || (viewText !== undefined && viewText !== 'card' && viewText !== 'grid')) {
     return fail(400, 'UNHANDLED', VIEW_MESSAGE, { field: 'view' }, false)
   }
-  if (viewText === undefined || viewText === 'card') {
-    return fail(404, 'NOT_FOUND', PROFILE_UNAVAILABLE, null, false)
-  }
-  if (viewText !== 'grid') {
-    return fail(400, 'UNHANDLED', VIEW_MESSAGE, { field: 'view' }, false)
-  }
+  const mode = viewText === 'grid' ? 'grid' : 'card'
 
   const cursorText = oneValue(query.cursor)
   if (cursorText === null || (cursorText !== undefined && !UUID.test(cursorText))) {
+    return fail(400, 'UNHANDLED', CURSOR_MESSAGE, { field: 'cursor' }, false)
+  }
+  if (mode === 'card' && cursorText !== undefined) {
     return fail(400, 'UNHANDLED', CURSOR_MESSAGE, { field: 'cursor' }, false)
   }
 
@@ -229,15 +237,18 @@ export async function readBrowseGrid(
   }
 
   const opposite = gate.account.gender === 'brother' ? 'sister' : 'brother'
+  const excludeIds = await getExclusionStore().targetIds(gate.account.id)
+  const pageLimit = mode === 'card' ? 1 : GRID_PAGE_SIZE
   const fetched = await getProfileStore().browseGrid({
     viewerId: gate.account.id,
     oppositeGender: opposite,
-    cursor: cursorText?.toLowerCase() ?? null,
-    limit: GRID_PAGE_SIZE + 1,
+    cursor: mode === 'card' ? null : (cursorText?.toLowerCase() ?? null),
+    limit: mode === 'card' ? 1 : GRID_PAGE_SIZE + 1,
     filters: filters.filters,
+    excludeIds,
   })
-  const page = fetched.slice(0, GRID_PAGE_SIZE)
-  const nextCursor = fetched.length > GRID_PAGE_SIZE ? (page[page.length - 1]?.id ?? null) : null
+  const page = fetched.slice(0, pageLimit)
+  const nextCursor = mode === 'grid' && fetched.length > GRID_PAGE_SIZE ? (page[page.length - 1]?.id ?? null) : null
   const ages = page.map((row) => ageOn(row.dob, authNow()))
   if (ages.some((age) => age === null)) {
     return fail(503, 'UNHANDLED', 'Request failed', null, false)
@@ -268,23 +279,44 @@ export async function readBrowseGrid(
     photos.set(row.id, { id: asset.id, url: signed.url })
   }
 
+  const items = page.map((row, index) => ({
+    id: row.id,
+    pseudonym: row.pseudonym,
+    age: ages[index] ?? 0,
+    city: label(row.city, CITY),
+    marital_status: label(row.marital_status, MARITAL),
+    polygamy_intent: label(row.polygamy_intent, POLYGAMY),
+    madhhab: label(row.madhhab, MADHHAB),
+    practice: label(row.practice, PRACTICE),
+    verified: verified.has(row.id),
+    photo_blur: row.photo_blur,
+    photo: photos.get(row.id) ?? null,
+  }))
+  if (mode === 'card') {
+    const first = items[0] ?? null
+    if (!first) {
+      return { ok: true, body: { view: 'card', item: null } }
+    }
+    const [viewerProfile, targetProfile] = await Promise.all([
+      getProfileStore().read(gate.account.id),
+      getProfileStore().read(first.id),
+    ])
+    return {
+      ok: true,
+      body: {
+        view: 'card',
+        item: {
+          ...first,
+          sharedTraits: viewerProfile && targetProfile ? sharedTraits(viewerProfile, targetProfile) : [],
+        },
+      },
+    }
+  }
   return {
     ok: true,
     body: {
       view: 'grid',
-      items: page.map((row, index) => ({
-        id: row.id,
-        pseudonym: row.pseudonym,
-        age: ages[index] ?? 0,
-        city: label(row.city, CITY),
-        marital_status: label(row.marital_status, MARITAL),
-        polygamy_intent: label(row.polygamy_intent, POLYGAMY),
-        madhhab: label(row.madhhab, MADHHAB),
-        practice: label(row.practice, PRACTICE),
-        verified: verified.has(row.id),
-        photo_blur: row.photo_blur,
-        photo: photos.get(row.id) ?? null,
-      })),
+      items,
       next_cursor: nextCursor,
     },
   }

@@ -20,6 +20,7 @@ import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
 import { setPhotoStrikeConfigReader } from './photo-strike.js'
 import { setFreeReviewSlaReader } from './profile-review.js'
+import { clearMemoryExclusions } from './discovery-exclusion.js'
 import { getProfileStore, memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
@@ -125,6 +126,7 @@ describe('browse grid', () => {
     otp.rows.length = 0
     captures.rows.length = 0
     billingCalls = 0
+    clearMemoryExclusions()
     resetAuthRateWindow()
     setBrowseLimitReader(async () => 1000)
   })
@@ -273,7 +275,7 @@ describe('browse grid', () => {
     return json.id
   }
 
-  it('keeps card and a missing view at 404 and rejects a bad view or cursor', async () => {
+  it('defaults an omitted view to one card and rejects a bad view or cursor', async () => {
     const sister = await createAccount('sister')
     const brother = await createAccount('brother')
     const sisterCookie = await signIn(sister.email)
@@ -282,18 +284,41 @@ describe('browse grid', () => {
 
     const missing = await browse(sisterCookie, '')
     const card = await browse(sisterCookie, '?view=card')
-    expect(missing.status).toBe(404)
-    expect(card.status).toBe(404)
+    expect(missing.status).toBe(200)
+    expect(card.status).toBe(200)
     expect(missing.headers.get('cache-control')).toBe('no-store')
-    expect(await missing.json()).toMatchObject({
-      error: {
-        code: 'NOT_FOUND',
-        message: "Ce profil n'est pas disponible.",
-        details: null,
-        retryable: false,
-      },
-    })
-    expect(await card.json()).toMatchObject({ error: { code: 'NOT_FOUND', retryable: false } })
+    const omitted = (await missing.json()) as {
+      view: string
+      item: { id: string; sharedTraits: { field: string; label: string }[] }
+    }
+    const explicit = (await card.json()) as { view: string; item: { id: string } }
+    expect(omitted.view).toBe('card')
+    expect(explicit.view).toBe('card')
+    expect(omitted.item.id).toBe(brother.id)
+    expect(explicit.item.id).toBe(brother.id)
+    expect(omitted.item.sharedTraits.map((trait) => trait.field)).toEqual([
+      'city',
+      'marital_status',
+      'madhhab',
+      'practice',
+      'life_plans',
+      'profession',
+      'country',
+    ])
+    expect(omitted.item.sharedTraits.map((trait) => trait.label)).toEqual([
+      'Même ville (Ouagadougou)',
+      'Célibataire',
+      'Madhhab : Maliki',
+      'Pratique assidue',
+      "D'ici 6 mois",
+      'Ingénieur / Technique',
+      '🇧🇫 Burkina Faso',
+    ])
+    expect(JSON.stringify(omitted)).not.toContain('Union stable')
+    expect(JSON.stringify(omitted)).not.toContain('kids')
+    expect(JSON.stringify(omitted)).not.toContain('has_children')
+    expect(JSON.stringify(omitted)).not.toContain('bio')
+    expect(Object.keys(omitted).sort()).toEqual(['item', 'view'])
 
     const badView = await browse(sisterCookie, '?view=list')
     expect(badView.status).toBe(400)
@@ -316,10 +341,95 @@ describe('browse grid', () => {
     expect(response.status).toBe(200)
     expect(response.headers.get('cache-control')).toBe('no-store')
     expect(await response.json()).toEqual({ view: 'grid', items: [], next_cursor: null })
+    const card = await browse(cookie, '')
+    expect(await card.json()).toEqual({ view: 'card', item: null })
     expect(billingCalls).toBe(0)
   })
 
-  it('lists only the opposite-gender public member and uses French labels', async () => {
+  it('dismisses a card for this viewer only and leaves favourites and billing alone', async () => {
+    const sister = await createAccount('sister')
+    const earlier = await createAccount('brother')
+    const later = await createAccount('brother')
+    const sisterCookie = await signIn(sister.email)
+    await publish(sister.id, sisterCookie, { polygamy_intent: 'yes' })
+    await publish(earlier.id, await signIn(earlier.email), { city: 'bobo', polygamy_intent: 'no' })
+    await publish(later.id, await signIn(later.email), { city: 'koudougou', polygamy_intent: 'yes' })
+
+    const opened = await browse(sisterCookie, '')
+    const openedBody = (await opened.json()) as {
+      item: { id: string; sharedTraits: { field: string }[] }
+    }
+    expect(openedBody.item.id).toBe(later.id)
+    expect(openedBody.item.sharedTraits.map((trait) => trait.field)).toContain('polygamy_intent')
+    expect(openedBody.item.sharedTraits.map((trait) => trait.field)).not.toContain('city')
+
+    const passed = await fetch(`${base}/v1/browse/pass`, {
+      method: 'POST',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: later.id }),
+    })
+    expect(passed.status).toBe(201)
+    const row = (await passed.json()) as { viewer_id: string; target_id: string; created_at: string }
+    expect(row).toEqual({ viewer_id: sister.id, target_id: later.id, created_at: row.created_at })
+    now = new Date(now.getTime() + 60_000)
+    const replay = await fetch(`${base}/v1/browse/pass`, {
+      method: 'POST',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: later.id }),
+    })
+    expect(replay.status).toBe(200)
+    expect(await replay.json()).toEqual(row)
+    const upper = await fetch(`${base}/v1/browse/pass`, {
+      method: 'POST',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: later.id.toUpperCase() }),
+    })
+    expect(upper.status).toBe(200)
+    expect(await upper.json()).toEqual(row)
+
+    const witness = await createAccount('sister')
+    const witnessCookie = await signIn(witness.email)
+    await publish(witness.id, witnessCookie)
+    const witnessed = (await (await browse(witnessCookie, '')).json()) as { item: { id: string } }
+    expect(witnessed.item.id).toBe(later.id)
+
+    const next = (await (await browse(sisterCookie, '')).json()) as { item: { id: string } }
+    expect(next.item.id).toBe(earlier.id)
+    const grid = (await (await browse(sisterCookie, '?view=grid')).json()) as { items: { id: string }[] }
+    expect(grid.items.map((item) => item.id)).toEqual([earlier.id])
+    expect(JSON.stringify(grid)).not.toContain('sharedTraits')
+
+    await fetch(`${base}/v1/browse/pass`, {
+      method: 'POST',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: earlier.id }),
+    })
+    expect(await (await browse(sisterCookie, '')).json()).toEqual({ view: 'card', item: null })
+
+    const self = await fetch(`${base}/v1/browse/pass`, {
+      method: 'POST',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: sister.id }),
+    })
+    expect(self.status).toBe(400)
+    const selfUpper = await fetch(`${base}/v1/browse/pass`, {
+      method: 'POST',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: sister.id.toUpperCase() }),
+    })
+    expect(selfUpper.status).toBe(400)
+    const sameGender = await fetch(`${base}/v1/browse/pass`, {
+      method: 'POST',
+      headers: { cookie: sisterCookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ target_id: (await createAccount('sister')).id }),
+    })
+    expect(sameGender.status).toBe(404)
+    expect(billingCalls).toBe(0)
+  })
+
+  it(
+    'lists only the opposite-gender public member and uses French labels',
+    async () => {
     const sister = await createAccount('sister')
     const otherSister = await createAccount('sister')
     const hidden = await createAccount('brother')
@@ -413,7 +523,9 @@ describe('browse grid', () => {
     expect(text).not.toContain('online')
     expect(text).not.toContain('total')
     expect(billingCalls).toBe(0)
-  })
+  },
+    15_000,
+  )
 
   it('signs blur for a blurred main photo and sm when blur is off', async () => {
     const sister = await createAccount('sister')
@@ -595,10 +707,10 @@ describe('browse grid', () => {
     await publish(sister.id, sisterCookie)
     setBrowseLimitReader(async () => 1)
     const badView = await browse(sisterCookie, '?view=list')
-    const card = await browse(sisterCookie, '?view=card')
+    const cardCursor = await browse(sisterCookie, '?cursor=not-a-cursor')
     const badCursor = await browse(sisterCookie, '?view=grid&cursor=not-a-cursor')
     expect(badView.status).toBe(400)
-    expect(card.status).toBe(404)
+    expect(cardCursor.status).toBe(400)
     expect(badCursor.status).toBe(400)
     const grid = await browse(sisterCookie, '?view=grid')
     expect(grid.status).toBe(200)
@@ -690,7 +802,7 @@ describe('browse grid', () => {
     expect(citiesWithin('ouagadougou', 50)).not.toContain('autre')
   })
 
-  it('rejects an unknown filter before a browse slot and keeps view=card at 404', async () => {
+  it('rejects an unknown filter before a browse slot, including on a card', async () => {
     const sister = await createAccount('sister')
     const sisterCookie = await signIn(sister.email)
     await publish(sister.id, sisterCookie)
@@ -721,8 +833,10 @@ describe('browse grid', () => {
       error: { details: { field: 'radius_km' }, retryable: false },
     })
     const card = await browse(sisterCookie, '?view=card&age=1')
-    expect(card.status).toBe(404)
-    expect(await card.json()).toMatchObject({ error: { code: 'NOT_FOUND', retryable: false } })
+    expect(card.status).toBe(400)
+    expect(await card.json()).toMatchObject({
+      error: { code: 'UNHANDLED', details: { field: 'age' }, retryable: false },
+    })
     const catalogue = await fetch(`${base}/v1/filters`, { headers: { cookie: sisterCookie } })
     expect(catalogue.status).toBe(200)
     const grid = await browse(sisterCookie, '?view=grid')

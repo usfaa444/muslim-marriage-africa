@@ -21,7 +21,21 @@ const DOT_PATTERN = `<style id="discover-grid-pattern">
 #filters-retry[hidden],
 [data-reserved][hidden],
 [data-missing][hidden],
-[data-verified][hidden] { display: none !important; }
+[data-verified][hidden],
+#discover-focus[hidden],
+[data-card-missing][hidden],
+[data-card-verified][hidden],
+[data-card-verified-pill][hidden],
+[data-card-traits-section][hidden],
+[data-card-place][hidden],
+[data-card-reserved][hidden] { display: none !important; }
+#discover-focus h1,
+#discover-focus [data-card-place],
+#discover-focus [data-card-traits] {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
 </style>`
 
 const TILE = `<template id="discover-tile">
@@ -77,10 +91,17 @@ function mountLiteThumb(photo, url) {
     window.removeEventListener('resize', consider)
     if (observer) observer.disconnect()
   }
+  function paneHidden(node) {
+    var current = node
+    while (current) {
+      if (current.id === 'discover-card' || current.id === 'discover-grid') return current.hidden === true
+      current = current.parentElement
+    }
+    return false
+  }
   function begin() {
     if (started || !photo.isConnected) return
-    var grid = document.getElementById('discover-grid')
-    if (grid && grid.hidden) return
+    if (paneHidden(photo)) return
     started = true
     stopWatch()
     image.addEventListener('load', function () {
@@ -129,6 +150,29 @@ document.addEventListener('click', function (event) {
     openFilters()
     return
   }
+  var pass = event.target && event.target.closest ? event.target.closest('[data-card-pass]') : null
+  if (pass) {
+    event.preventDefault()
+    passCard()
+    return
+  }
+  var later = event.target && event.target.closest ? event.target.closest('[data-later]') : null
+  if (later) {
+    event.preventDefault()
+    return
+  }
+  var cardBookmark = event.target && event.target.closest ? event.target.closest('#discover-focus [data-bookmark]') : null
+  if (cardBookmark) {
+    event.preventDefault()
+    var target = cardBookmark.getAttribute('data-target-id') || (cardItem && cardItem.id)
+    if (target) saveFavourite(target, cardBookmark)
+    return
+  }
+  var opener = event.target && event.target.closest ? event.target.closest('[data-card-open]') : null
+  if (opener && cardItem && cardItem.id && !(event.target.closest && event.target.closest('button'))) {
+    window.location.assign('/profil/' + cardItem.id)
+    return
+  }
   var view = event.target && event.target.closest ? event.target.closest('[data-discover-view]') : null
   if (!view) return
   var mode = view.getAttribute('data-discover-view')
@@ -137,8 +181,10 @@ document.addEventListener('click', function (event) {
   if (!card || !grid) return
   card.hidden = mode === 'grid'
   grid.hidden = mode !== 'grid'
+  pending = 0
+  generation += 1
   if (mode === 'grid') loadGrid()
-  else syncCardStatus()
+  else loadCard()
 })
 var account = document.body.getAttribute('data-discover-account') || ''
 var memory = null
@@ -147,6 +193,10 @@ var pending = 0
 var generation = 0
 var lastItems = null
 var lastError = ''
+var cardItem = null
+var cardMemory = null
+var cardMemoryAt = 0
+var passPending = false
 var catalogue = null
 var cataloguePromise = null
 var URL_TTL = 60000
@@ -355,6 +405,234 @@ function showError(message) {
   lastError = message
   syncCardStatus()
 }
+function cardCacheKey() {
+  if (!account) return ''
+  var extra = filterQuery()
+  return 'ankanu_browse_card_text:' + account + (extra ? ':' + extra : '')
+}
+function cardText(item) {
+  return {
+    id: item.id,
+    pseudonym: item.pseudonym,
+    age: item.age,
+    city: item.city,
+    verified: item.verified === true,
+    photo_blur: item.photo_blur === true,
+    has_photo: item.has_photo === true || !!(item.photo && item.photo.url),
+    sharedTraits: Array.isArray(item.sharedTraits) ? item.sharedTraits.map(function (trait) {
+      return { field: trait.field, label: trait.label }
+    }) : []
+  }
+}
+function readCardCache() {
+  var key = cardCacheKey()
+  if (!key) return null
+  try {
+    var raw = sessionStorage.getItem(key)
+    if (!raw) return null
+    var parsed = JSON.parse(raw)
+    if (!parsed || parsed.account !== account || !parsed.item) return null
+    return parsed.item
+  } catch (error) {
+    return null
+  }
+}
+function writeCardCache(item) {
+  var key = cardCacheKey()
+  if (!key || !item) return
+  try {
+    sessionStorage.setItem(key, JSON.stringify({ account: account, item: cardText(item) }))
+  } catch (error) {}
+}
+function clearBrowseCache() {
+  memory = null
+  memoryAt = 0
+  cardMemory = null
+  cardMemoryAt = 0
+  try {
+    var prefixes = ['ankanu_browse_grid_text:' + account, 'ankanu_browse_card_text:' + account]
+    var keys = []
+    for (var i = 0; i < sessionStorage.length; i += 1) keys.push(sessionStorage.key(i))
+    keys.forEach(function (key) {
+      if (!key) return
+      for (var p = 0; p < prefixes.length; p += 1) {
+        if (key.indexOf(prefixes[p]) === 0) sessionStorage.removeItem(key)
+      }
+    })
+  } catch (error) {}
+}
+function traitChip(text) {
+  var span = document.createElement('span')
+  span.className = 'inline-flex items-center gap-1.5 bg-cream border border-[#E2D4B8] rounded-lg px-3 py-1.5 text-xs text-deep-navy break-words'
+  span.textContent = text
+  return span
+}
+function showCardError(message) {
+  var focus = document.getElementById('discover-focus')
+  var empty = document.getElementById('discover-card-empty')
+  var error = document.getElementById('discover-card-error')
+  var retry = document.getElementById('discover-card-retry')
+  if (focus) focus.hidden = true
+  if (empty) empty.hidden = true
+  if (error) {
+    error.hidden = false
+    error.textContent = message
+  }
+  if (retry) retry.hidden = false
+}
+function paintCard(item) {
+  releaseLiteThumbs()
+  var focus = document.getElementById('discover-focus')
+  var empty = document.getElementById('discover-card-empty')
+  var error = document.getElementById('discover-card-error')
+  var retry = document.getElementById('discover-card-retry')
+  if (!focus) return
+  if (!item) {
+    cardItem = null
+    focus.hidden = true
+    if (empty) empty.hidden = false
+    if (error) error.hidden = true
+    if (retry) retry.hidden = true
+    return
+  }
+  cardItem = item
+  focus.hidden = false
+  if (empty) empty.hidden = true
+  if (error) error.hidden = true
+  if (retry) retry.hidden = true
+  var name = focus.querySelector('[data-card-name]')
+  if (name) name.textContent = item.pseudonym + ', ' + String(item.age) + ' ans'
+  var badge = focus.querySelector('[data-card-verified]')
+  if (badge) badge.hidden = item.verified !== true
+  var place = focus.querySelector('[data-card-place]')
+  var city = focus.querySelector('[data-card-city]')
+  if (city) city.textContent = item.city || ''
+  if (place) place.hidden = !item.city
+  var traits = focus.querySelector('[data-card-traits]')
+  var section = focus.querySelector('[data-card-traits-section]')
+  if (traits) traits.textContent = ''
+  var list = Array.isArray(item.sharedTraits) ? item.sharedTraits : []
+  list.forEach(function (trait) {
+    if (trait && trait.label && traits) traits.appendChild(traitChip(trait.label))
+  })
+  if (section) section.hidden = list.length === 0
+  var bookmark = focus.querySelector('[data-bookmark]')
+  if (bookmark) bookmark.setAttribute('data-target-id', item.id)
+  var photo = focus.querySelector('[data-card-photo]')
+  var missing = focus.querySelector('[data-card-missing]')
+  var reserved = focus.querySelectorAll('[data-card-reserved]')
+  var pill = focus.querySelector('[data-card-verified-pill]')
+  if (photo) {
+    var old = photo.querySelector('img')
+    if (old) old.remove()
+  }
+  var url = item.photo && item.photo.url ? item.photo.url : ''
+  var knownPhoto = item.has_photo === true || url.length > 0
+  var showReserved = knownPhoto && item.photo_blur === true
+  var showMissing = !knownPhoto
+  for (var i = 0; i < reserved.length; i += 1) reserved[i].hidden = !showReserved
+  if (missing) missing.hidden = !showMissing
+  if (pill) pill.hidden = !(showReserved && item.verified === true)
+  if (!url || !photo || showMissing) return
+  var lite = liteEnabled()
+  if (lite && item.photo_blur !== true) {
+    mountLiteThumb(photo, url)
+    return
+  }
+  requestAnimationFrame(function () {
+    requestAnimationFrame(function () {
+      if (!photo.isConnected) return
+      var image = document.createElement('img')
+      image.alt = ''
+      image.className = 'absolute inset-0 h-full w-full object-cover'
+      photo.insertBefore(image, photo.firstChild)
+      image.src = url
+    })
+  })
+}
+function loadCard() {
+  if (cardMemory && Date.now() - cardMemoryAt < URL_TTL) {
+    paintCard(cardMemory)
+    return
+  }
+  cardMemory = null
+  var cached = readCardCache()
+  if (cached) paintCard(cached)
+  if (pending) return
+  var ticket = ++generation
+  pending = ticket
+  var browseUrl = '/v1/browse'
+  var extra = filterQuery()
+  if (extra) browseUrl += '?' + extra
+  window.fetch(browseUrl, { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+    return response.json().then(function (body) {
+      return { status: response.status, body: body }
+    })
+  }).then(function (result) {
+    if (ticket !== generation) return
+    pending = 0
+    var body = result.body || {}
+    var error = body.error
+    if (error && error.code === 'PIN_REQUIRED') return
+    if (result.status === 401) {
+      window.location.assign('/auth')
+      return
+    }
+    if (result.status === 403 && error && error.details && error.details.reason === 'viewer_not_listable') {
+      window.location.assign('/profile-edit')
+      return
+    }
+    if (result.status !== 200 || body.view !== 'card' || !('item' in body)) {
+      showCardError(error && error.message ? error.message : 'Request failed')
+      return
+    }
+    cardMemory = body.item
+    cardMemoryAt = Date.now()
+    if (body.item) writeCardCache(body.item)
+    else {
+      try { sessionStorage.removeItem(cardCacheKey()) } catch (error) {}
+    }
+    paintCard(body.item)
+  }, function () {
+    if (ticket !== generation) return
+    pending = 0
+    showCardError('Request failed')
+  })
+}
+function passCard() {
+  if (!cardItem || !cardItem.id || passPending) return
+  passPending = true
+  var targetId = cardItem.id
+  pending = 0
+  generation += 1
+  fetch('/v1/browse/pass', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ target_id: targetId })
+  }).then(function (response) {
+    return response.json().then(function (body) {
+      return { status: response.status, body: body }
+    })
+  }).then(function (result) {
+    passPending = false
+    var error = result.body && result.body.error
+    if (error && error.code === 'PIN_REQUIRED') return
+    if (result.status === 401) {
+      window.location.assign('/auth')
+      return
+    }
+    if (result.status !== 200 && result.status !== 201) {
+      showCardError(error && error.message ? error.message : 'Request failed')
+      return
+    }
+    clearBrowseCache()
+    loadCard()
+  }, function () {
+    passPending = false
+    showCardError('Request failed')
+  })
+}
 function loadGrid() {
   if (memory && Date.now() - memoryAt < URL_TTL) {
     paint(memory)
@@ -410,6 +688,8 @@ function bindRetry(node) {
   node.addEventListener('click', function () {
     memory = null
     memoryAt = 0
+    cardMemory = null
+    cardMemoryAt = 0
     pending = 0
     lastError = ''
     var error = document.getElementById('discover-error')
@@ -421,7 +701,9 @@ function bindRetry(node) {
     if (cardRetry) cardRetry.hidden = true
     var gridRetry = document.getElementById('discover-retry')
     if (gridRetry) gridRetry.hidden = true
-    loadGrid()
+    var grid = document.getElementById('discover-grid')
+    if (grid && grid.hidden === false) loadGrid()
+    else loadCard()
   })
 }
 bindRetry(document.getElementById('discover-retry'))
@@ -690,6 +972,17 @@ if (canvas) canvas.addEventListener('click', function (event) {
 })
 document.addEventListener('keydown', function (event) {
   if (event.key === 'Escape') closeFilters()
+  if (event.key !== 'Enter') return
+  var button = event.target && event.target.closest ? event.target.closest('#discover-focus [data-bookmark]') : null
+  if (button) {
+    var saved = button.getAttribute('data-target-id') || (cardItem && cardItem.id)
+    if (saved) saveFavourite(saved, button)
+    return
+  }
+  var open = event.target && event.target.closest ? event.target.closest('#discover-focus [data-card-open], #discover-focus') : null
+  if (!open || !cardItem || !cardItem.id) return
+  if (event.target.closest && event.target.closest('button, a')) return
+  window.location.assign('/profil/' + cardItem.id)
 })
 var filtersForm = document.getElementById('filters-form')
 if (filtersForm) {
@@ -713,13 +1006,15 @@ if (filtersRetry) filtersRetry.addEventListener('click', function () {
     if (ok) applyUrlToForm()
   })
 })
-if (filterParams().length) {
+if (filterParams().length >= 2) {
   var homeCard = document.getElementById('discover-card')
   var homeGrid = document.getElementById('discover-grid')
   if (homeCard) homeCard.hidden = true
   if (homeGrid) homeGrid.hidden = false
   ensureCatalogue()
   loadGrid()
+} else {
+  loadCard()
 }
 `
 
@@ -777,12 +1072,162 @@ function dropChipContaining(html: string, needle: string): string {
 }
 
 function markToggle(html: string, label: string, view: 'card' | 'grid'): string {
-  const needle = `aria-label="${label}"`
+  const needles = [`aria-label="${label}"`, `title="${label}"`]
+  let next = html
+  for (const needle of needles) {
+    let from = 0
+    while (from < next.length) {
+      const at = next.indexOf(needle, from)
+      if (at < 0) {
+        break
+      }
+      const start = next.lastIndexOf('<button', at)
+      if (start >= 0 && !next.slice(start, at).includes('data-discover-view')) {
+        next = `${next.slice(0, start)}<button type="button" data-discover-view="${view}" ${next.slice(start + '<button'.length)}`
+      }
+      from = at + needle.length
+    }
+  }
+  return next
+}
+
+function markButton(html: string, needle: string, attrs: string): string {
   const at = html.indexOf(needle)
   if (at < 0) {
     return html
   }
-  return `${html.slice(0, at)}data-discover-view="${view}" ${html.slice(at)}`
+  const start = html.lastIndexOf('<button', at)
+  if (start < 0 || html.slice(start, at).includes('data-card-pass') || html.slice(start, at).includes('data-later') || html.slice(start, at).includes('data-bookmark')) {
+    return html
+  }
+  return `${html.slice(0, start)}<button type="button" ${attrs} ${html.slice(start + '<button'.length)}`
+}
+
+function dropBlock(html: string, startMarker: string, endMarker: string): string {
+  const start = html.indexOf(startMarker)
+  const end = start < 0 ? -1 : html.indexOf(endMarker, start)
+  if (start < 0 || end < 0) {
+    return html
+  }
+  return html.slice(0, start) + html.slice(end)
+}
+
+function emptyChipBox(html: string): string {
+  const needle = '<div class="flex flex-wrap gap-2">'
+  const at = html.indexOf(needle)
+  if (at < 0) {
+    return html
+  }
+  let depth = 0
+  const token = /<\/?div\b[^>]*>/gi
+  token.lastIndex = at
+  let match = token.exec(html)
+  while (match) {
+    if (match[0].startsWith('</')) {
+      depth -= 1
+      if (depth === 0) {
+        return (
+          html.slice(0, at) +
+          '<div data-card-traits class="flex flex-wrap gap-2 min-w-0"></div>' +
+          html.slice(match.index + match[0].length)
+        )
+      }
+    } else {
+      depth += 1
+    }
+    match = token.exec(html)
+  }
+  return html
+}
+
+function prepareFocus(html: string): string {
+  const missing = `<div data-card-missing hidden class="relative z-10 flex flex-col items-center"><span class="material-symbols-outlined text-soft-gold text-2xl mb-1.5" data-icon="lock">lock</span><span class="font-display italic text-cream text-base tracking-wide">Photographie non publiée</span><span class="text-xs text-cream/70 font-normal mt-0.5">Choix de discrétion personnelle</span></div>`
+  let next = html
+  next = next.replace(
+    '<article class="max-w-2xl mx-auto w-full bg-[#FBF8F1] border border-[#E2D4B8] rounded-xl p-6 sm:p-8 flex flex-col gap-6 shadow-none mt-2">',
+    '<article id="discover-focus" hidden tabindex="0" data-card-open class="max-w-2xl mx-auto w-full bg-[#FBF8F1] border border-[#E2D4B8] rounded-xl p-6 sm:p-8 flex flex-col gap-6 shadow-none mt-2 min-w-0">',
+  )
+  next = next.replace(
+    '<section class="w-full max-w-2xl mx-auto bg-cream border border-hairline rounded-md p-6 sm:p-8 flex flex-col gap-6 shadow-sm" style="background-color: rgb(251, 248, 241);">',
+    '<section id="discover-focus" hidden tabindex="0" data-card-open class="w-full max-w-2xl mx-auto bg-cream border border-hairline rounded-md p-6 sm:p-8 flex flex-col gap-6 shadow-sm min-w-0" style="background-color: rgb(251, 248, 241);">',
+  )
+  next = next.replace(
+    '<h1 class="font-display text-2xl sm:text-3xl font-normal text-deep-navy leading-tight">\n              Al-Hassan_BF, 29 ans\n            </h1>',
+    '<h1 data-card-name data-card-open class="font-display text-2xl sm:text-3xl font-normal text-deep-navy leading-tight break-words"></h1>',
+  )
+  next = next.replace(
+    '<h1 class="font-display text-2xl sm:text-3xl text-deep-navy font-semibold">\n              Al-Hassan_BF, 29 ans\n            </h1>',
+    '<h1 data-card-name data-card-open class="font-display text-2xl sm:text-3xl text-deep-navy font-semibold break-words"></h1>',
+  )
+  next = next.replace(
+    '<span class="inline-flex items-center uppercase tracking-wider font-semibold border border-[#C9A86C]/60 bg-[#E6D5A8]/30 text-[#C9A86C] text-[11px] px-2 py-0.5 rounded">',
+    '<span data-card-verified hidden class="inline-flex items-center uppercase tracking-wider font-semibold border border-[#C9A86C]/60 bg-[#E6D5A8]/30 text-[#C9A86C] text-[11px] px-2 py-0.5 rounded">',
+  )
+  next = next.replace(
+    '<span class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded-full bg-soft-gold/20 text-deep-navy border border-soft-gold/40">',
+    '<span data-card-verified hidden class="inline-flex items-center px-2 py-0.5 text-[11px] font-medium rounded-full bg-soft-gold/20 text-deep-navy border border-soft-gold/40">',
+  )
+  next = next.replace(
+    '<p class="text-sm text-deep-navy/70 flex items-center gap-1 font-normal m-0">',
+    '<p data-card-place hidden class="text-sm text-deep-navy/70 flex items-center gap-1 font-normal m-0 min-w-0">',
+  )
+  next = next.replace(
+    '<span class="">Ouagadougou</span>',
+    '<span data-card-city class="break-words"></span>',
+  )
+  next = next.replace(
+    '<p class="font-body text-sm text-deep-navy/70 mt-1">\n            Ouagadougou, Secteur 15 • Ingénieur en télécommunications\n          </p>',
+    '<p data-card-place hidden class="font-body text-sm text-deep-navy/70 mt-1 break-words"><span data-card-city></span></p>',
+  )
+  next = next.replace(
+    '<div class="h-72 sm:h-80 w-full rounded-lg bg-[#0B1D36] relative flex flex-col items-center justify-center p-6 text-center overflow-hidden select-none">',
+    `<div data-card-photo data-card-open class="h-72 sm:h-80 w-full rounded-lg bg-[#0B1D36] relative flex flex-col items-center justify-center p-6 text-center overflow-hidden select-none">${missing}`,
+  )
+  next = next.replace(
+    '<div class="relative w-full h-72 sm:h-80 bg-deep-navy rounded-md overflow-hidden flex flex-col items-center justify-center p-6 text-center border border-hairline/30">',
+    `<div data-card-photo data-card-open class="relative w-full h-72 sm:h-80 bg-deep-navy rounded-md overflow-hidden flex flex-col items-center justify-center p-6 text-center border border-hairline/30">${missing}`,
+  )
+  next = next.replace(
+    '<div class="relative z-10 w-14 h-14 rounded-full bg-[#0B1D36]/80 border border-soft-gold/30 flex items-center justify-center mb-1">',
+    '<div data-card-reserved class="relative z-10 w-14 h-14 rounded-full bg-[#0B1D36]/80 border border-soft-gold/30 flex items-center justify-center mb-1">',
+  )
+  next = next.replace(
+    '<h2 class="relative z-10 font-display italic text-xl sm:text-2xl text-[#F7F1E3] mt-3 font-normal">',
+    '<h2 data-card-reserved class="relative z-10 font-display italic text-xl sm:text-2xl text-[#F7F1E3] mt-3 font-normal">',
+  )
+  next = next.replace(
+    '<p class="relative z-10 text-xs sm:text-sm text-[#F7F1E3]/70 max-w-md mt-1.5 leading-relaxed">',
+    '<p data-card-reserved class="relative z-10 text-xs sm:text-sm text-[#F7F1E3]/70 max-w-md mt-1.5 leading-relaxed">',
+  )
+  next = next.replace(
+    '<div class="relative z-10 inline-flex items-center gap-1.5 text-xs text-[#E6D5A8] bg-[#0B1D36]/80 border border-[#C9A86C]/40 px-3 py-1 rounded-full mt-3">',
+    '<div data-card-verified-pill hidden class="relative z-10 inline-flex items-center gap-1.5 text-xs text-[#E6D5A8] bg-[#0B1D36]/80 border border-[#C9A86C]/40 px-3 py-1 rounded-full mt-3">',
+  )
+  next = next.replace(
+    '<div class="relative z-10 max-w-md flex flex-col items-center">',
+    '<div data-card-reserved class="relative z-10 max-w-md flex flex-col items-center">',
+  )
+  next = next.replace(
+    '<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cream/10 border border-hairline/30 text-cream/90 text-xs">',
+    '<div data-card-verified-pill hidden class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cream/10 border border-hairline/30 text-cream/90 text-xs">',
+  )
+  next = next.replace(
+    '<section class="flex flex-col gap-3">',
+    '<section data-card-traits-section data-card-open hidden class="flex flex-col gap-3 min-w-0">',
+  )
+  next = next.replace(
+    '<div class="flex flex-col gap-3">\n<h2 class="text-xs font-semibold uppercase tracking-wider text-deep-navy/60 font-body">',
+    '<div data-card-traits-section data-card-open hidden class="flex flex-col gap-3 min-w-0">\n<h2 class="text-xs font-semibold uppercase tracking-wider text-deep-navy/60 font-body">',
+  )
+  next = emptyChipBox(next)
+  next = dropBlock(next, '<!-- Intention de mariage quote -->', '<!-- Actions row -->')
+  next = dropBlock(next, '<!-- Marriage Intention Statement -->', '<!-- Action Row -->')
+  next = next.replace(' • <span class="font-semibold text-deep-navy">1 profil correspondant</span>', '')
+  next = markButton(next, 'Passer avec égards', 'data-card-pass')
+  next = markButton(next, "Message d'introduction", 'data-later="flash"')
+  next = markButton(next, 'Envoyer une invitation Ta\'aruf', 'data-later="invite"')
+  next = markButton(next, 'Enregistrer en toute discrétion', 'data-bookmark')
+  return next
 }
 
 function replaceHrefs(html: string, hrefs: string[]): string {
@@ -807,12 +1252,12 @@ const CARD_STATUS = `<div id="discover-card-status" class="max-w-2xl mx-auto w-f
 
 const FILTER_KEYS = ['city', 'radius_km', 'marital_status', 'polygamy_intent', 'practice', 'madhhab', 'life_plans']
 
-function hasFilterSearch(search: string): boolean {
+function filterCount(search: string): number {
   const params = new URLSearchParams(search.startsWith('?') ? search.slice(1) : search)
-  return FILTER_KEYS.some((key) => {
+  return FILTER_KEYS.filter((key) => {
     const value = params.get(key)
     return value !== null && value.length > 0
-  })
+  }).length
 }
 
 function markFiltersButton(html: string): string {
@@ -836,20 +1281,28 @@ function markFiltersButton(html: string): string {
   return next
 }
 
-function loadFiltersSource(): string {
-  const beside = fileURLToPath(new URL('../../../design-stitch/ankanu-v2/14-filters/screen.html', import.meta.url))
+function loadStitch(name: string): string {
+  const beside = fileURLToPath(new URL(`../../../design-stitch/ankanu-v2/${name}`, import.meta.url))
   const candidates = [
     beside,
-    resolve(process.cwd(), 'design-stitch/ankanu-v2/14-filters/screen.html'),
-    resolve(process.cwd(), '../design-stitch/ankanu-v2/14-filters/screen.html'),
-    resolve(process.cwd(), '../../design-stitch/ankanu-v2/14-filters/screen.html'),
-    '/app/design-stitch/ankanu-v2/14-filters/screen.html',
+    resolve(process.cwd(), `design-stitch/ankanu-v2/${name}`),
+    resolve(process.cwd(), `../design-stitch/ankanu-v2/${name}`),
+    resolve(process.cwd(), `../../design-stitch/ankanu-v2/${name}`),
+    `/app/design-stitch/ankanu-v2/${name}`,
   ]
   const found = candidates.find((path) => existsSync(path))
   if (!found) {
-    throw new Error('code/design-stitch/ankanu-v2/14-filters/screen.html is not on disk')
+    throw new Error(`code/design-stitch/ankanu-v2/${name} is not on disk`)
   }
   return readFileSync(found, 'utf8')
+}
+
+function loadFiltersSource(): string {
+  return loadStitch('14-filters/screen.html')
+}
+
+function loadSearchSource(): string {
+  return loadStitch('13-search/screen.html')
 }
 
 function filterModal(source: string): string {
@@ -922,9 +1375,14 @@ function filterModal(source: string): string {
 }
 
 function stripCard(html: string): string {
-  const start = html.indexOf('<!-- 3. FOCUSED PROFILE CARD -->')
-  const end = html.indexOf('<!-- 4. UNDER-CARD')
-  let next = start >= 0 && end > start ? html.slice(0, start) + CARD_STATUS + html.slice(end) : html
+  let next = prepareFocus(html)
+  const under = next.indexOf('<!-- 4. UNDER-CARD')
+  const disclaimer = next.indexOf('<!-- Ethical Disclaimer')
+  if (under >= 0) {
+    next = next.slice(0, under) + CARD_STATUS + next.slice(under)
+  } else if (disclaimer >= 0) {
+    next = next.slice(0, disclaimer) + CARD_STATUS + next.slice(disclaimer)
+  }
   next = dropChipContaining(next, 'Ville : Ouagadougou')
   next = dropChipContaining(next, "Tranche d'âge")
   next = dropChipContaining(next, 'Pratique assidue')
@@ -983,13 +1441,14 @@ export function discoverHtml(
       ? accountId
       : ''
   const viewer = gender === 'sister' || gender === 'brother' ? gender : ''
-  const filtered = hasFilterSearch(search)
-  const headEnd = card.indexOf('</head>')
-  const head = headEnd < 0 ? card : card.slice(0, headEnd)
+  const many = filterCount(search) >= 2
+  const cardSource = many ? loadSearchSource() : card
+  const headEnd = cardSource.indexOf('</head>')
+  const head = headEnd < 0 ? cardSource : cardSource.slice(0, headEnd)
   const document = `${head}${DOT_PATTERN}</head>
 <body data-discover-account="${account}" data-viewer-gender="${viewer}" class="min-h-full bg-cream text-deep-navy font-body flex flex-col antialiased selection:bg-gold-soft selection:text-deep-navy pb-20 md:pb-8">
-<div id="discover-card"${filtered ? ' hidden' : ''} style="min-width:0;max-width:100%">${innerBody(stripCard(card))}</div>
-<div id="discover-grid"${filtered ? '' : ' hidden'} style="min-width:0;max-width:100%">${innerBody(stripGrid(grid))}${TILE}</div>
+<div id="discover-card"${many ? ' hidden' : ''} style="min-width:0;max-width:100%">${innerBody(stripCard(cardSource))}</div>
+<div id="discover-grid"${many ? '' : ' hidden'} style="min-width:0;max-width:100%">${innerBody(stripGrid(grid))}${TILE}</div>
 ${filterModal(loadFiltersSource())}
 </body></html>`
   const page = prepareV2(document, SCRIPT)

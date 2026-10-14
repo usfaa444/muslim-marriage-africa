@@ -306,6 +306,21 @@ export const profileVisit = pgTable(
   ],
 )
 
+/** Discovery-owned viewer pass. Grain is `(viewer_id, target_id)`. Not a like and not a favourite. */
+export const discoveryExclusion = pgTable(
+  'discovery_exclusion',
+  {
+    viewer_id: uuid('viewer_id')
+      .notNull()
+      .references(() => account.id),
+    target_id: uuid('target_id')
+      .notNull()
+      .references(() => account.id),
+    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.viewer_id, table.target_id] })],
+)
+
 /** Discovery-owned private favourite. Grain is `(account_id, target_id)`. Not a pass and not a like. */
 export const favourite = pgTable(
   'favourite',

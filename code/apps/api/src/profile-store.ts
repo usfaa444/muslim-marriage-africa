@@ -1,5 +1,5 @@
 import type { Gender } from '@ankanu/kernel'
-import { and, desc, eq, inArray, isNotNull, isNull, or, sql, type SQL } from 'drizzle-orm'
+import { and, desc, eq, inArray, isNotNull, isNull, notInArray, or, sql, type SQL } from 'drizzle-orm'
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { account, profile } from './account-schema.js'
 import { getIdentityDatabase } from './account-store.js'
@@ -60,6 +60,7 @@ export type BrowseGridQuery = {
   cursor: string | null
   limit: number
   filters?: BrowseFilters
+  excludeIds?: readonly string[]
 }
 
 export type ProfileStore = {
@@ -265,6 +266,9 @@ function memoryBrowseGrid(
     if (owner.id === query.viewerId || owner.gender !== query.oppositeGender) {
       continue
     }
+    if (query.excludeIds?.some((id) => id.toLowerCase() === owner.id.toLowerCase())) {
+      continue
+    }
     const roles = owner.roles ?? []
     if (!roles.includes('member') || roles.includes('moderator') || roles.includes('operator')) {
       continue
@@ -416,6 +420,7 @@ async function browseGridRows(query: BrowseGridQuery): Promise<BrowseGridRow[]> 
         sql`NOT (${account.roles} && ARRAY['moderator', 'operator']::text[])`,
         cursor,
         browseFilterSql(query.filters),
+        query.excludeIds && query.excludeIds.length > 0 ? notInArray(account.id, [...query.excludeIds]) : undefined,
       ),
     )
     .orderBy(desc(account.id))

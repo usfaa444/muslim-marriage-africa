@@ -170,6 +170,7 @@ function migrationSql(): string {
     '0015_profile_photo_gallery.sql',
     '0016_favourite.sql',
     '0017_profile_visit.sql',
+    '0018_discovery_exclusion.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -268,6 +269,7 @@ describe('operator_config migration', () => {
       'cil_ticket',
       'credential',
       'derivative',
+      'discovery_exclusion',
       'email_verification',
       'favourite',
       'operator_config',
@@ -289,6 +291,7 @@ describe('operator_config migration', () => {
       'public.cil_ticket',
       'public.credential',
       'public.derivative',
+      'public.discovery_exclusion',
       'public.email_verification',
       'public.favourite',
       'public.operator_config',
@@ -307,7 +310,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('18')
+    expect(applied.rows[0]?.count).toBe('19')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -829,6 +832,7 @@ describe('operator_config migration', () => {
       'cil_ticket',
       'credential',
       'derivative',
+      'discovery_exclusion',
       'email_verification',
       'favourite',
       'operator_config',
@@ -850,6 +854,7 @@ describe('operator_config migration', () => {
       'public.cil_ticket',
       'public.credential',
       'public.derivative',
+      'public.discovery_exclusion',
       'public.email_verification',
       'public.favourite',
       'public.operator_config',

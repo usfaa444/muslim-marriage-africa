@@ -46,11 +46,22 @@ describe('discover grid page', () => {
     expect(html).not.toContain('Al-Hassan')
     expect(html).not.toContain('Ibrahim_S')
     expect(html).not.toContain('Abdoul_N')
+    expect(html).not.toContain('Projet monogame')
+    expect(html).not.toContain("Projet d'édification")
     expect(beforeModal(html)).not.toContain('Ville : Ouagadougou')
     expect(beforeModal(html)).not.toContain("Tranche d'âge")
     expect(beforeModal(html)).not.toContain('Pratique assidue')
-    expect(html).not.toContain('Passer avec égards')
-    expect(html).not.toContain('Envoyer une invitation')
+    expect(beforeModal(html)).not.toContain('Même ville')
+    expect(html).toContain('id="discover-focus"')
+    expect(html).toContain('data-card-pass')
+    expect(html).toContain('Passer avec égards')
+    expect(html).toContain('data-later="flash"')
+    expect(html).toContain('data-later="invite"')
+    expect(html).toContain("Message d'introduction")
+    expect(html).toContain('Envoyer une invitation')
+    expect(html).toContain("fetch('/v1/browse/pass'")
+    expect(html).not.toContain('/v1/invites')
+    expect(html).toContain('ankanu_browse_card_text:')
     expect(html).not.toContain('href="#"')
     expect(html).toContain('href="/invitations"')
     expect(html).toContain('href="/discussions"')
@@ -86,7 +97,8 @@ describe('discover grid page', () => {
     const sectionClose = html.indexOf('</section>', tilesAt)
     expect(html.indexOf('id="discover-empty"')).toBeGreaterThan(sectionClose)
     expect(html.indexOf("error.code === 'PIN_REQUIRED'")).toBeLessThan(html.indexOf("window.location.assign('/auth')"))
-    expect(beforeModal(html).match(/<span[^>]*inline-flex/g)).toBeNull()
+    expect(beforeModal(html).match(/<span[^>]*inline-flex/g)).toHaveLength(1)
+    expect(beforeModal(html)).toContain('data-card-verified')
     expect(html).toContain('id="filters-modal" hidden')
     expect(html).toContain('id="filters-apply" disabled')
     expect(html).toContain('Indifférent')
@@ -105,6 +117,13 @@ describe('discover grid page', () => {
     expect(sisterFiltered).not.toContain('id="discover-grid" hidden')
     expect(sisterFiltered).toContain('polygamy_intent')
     expect(sisterFiltered).not.toContain('view=card')
+    expect(sisterFiltered).not.toContain('Al-Hassan')
+    expect(sisterFiltered).not.toContain('Secteur 15')
+    expect(sisterFiltered).not.toContain('1 profil correspondant')
+    expect(sisterFiltered).toContain('Recherche')
+    expect(sisterFiltered).toContain('Passer avec égards')
+    expect(sisterFiltered).toContain('data-discover-view="card"')
+    expect(sisterFiltered).toContain('data-card-pass')
     const modal = sisterFiltered.slice(sisterFiltered.indexOf('id="filters-modal"'))
     expect(modal).not.toContain('checked=""')
     expect(modal).toContain('<option value="" selected="">Indifférent</option>')
@@ -210,24 +229,28 @@ describe('discover grid in a browser', () => {
   it.skipIf(!binary)('toggles to a real grid and fits every required width', async () => {
     let fetches = 0
     let favouritePosts = 0
-    const server: Server = createServer((request, response) => {
-      const url = new URL(request.url || '/', 'http://127.0.0.1')
-      if (request.method === 'POST' && url.pathname === '/v1/favourites') {
-        favouritePosts += 1
-        response.statusCode = 201
-        response.setHeader('content-type', 'application/json; charset=utf-8')
-        response.end(JSON.stringify({ account_id: 'a', target_id: 't', created_at: '2026-10-13T12:00:00.000Z' }))
-        return
-      }
-      if (url.pathname === '/v1/browse') {
-        fetches += 1
-        response.setHeader('content-type', 'application/json; charset=utf-8')
-        response.setHeader('cache-control', 'no-store')
-        response.end(
-          JSON.stringify({
-            view: 'grid',
-            next_cursor: null,
-            items: [
+    let passPosts = 0
+    const cardItem = {
+      id: '01990000-0000-7000-8000-000000000001',
+      pseudonym: 'Amina_Bobo_nom_tres_long_pour_la_ligne',
+      age: 29,
+      city: 'Ouagadougou',
+      marital_status: 'Célibataire',
+      polygamy_intent: 'Non',
+      madhhab: 'Maliki',
+      practice: 'Pratique assidue',
+      verified: true,
+      photo_blur: true,
+      photo: { id: 'p1', url: '/media/blur-signed' },
+      sharedTraits: [
+        { field: 'city', label: 'Même ville (Ouagadougou)' },
+        { field: 'madhhab', label: 'Madhhab : Maliki' },
+      ],
+    }
+    const gridBody = {
+      view: 'grid',
+      next_cursor: null,
+      items: [
               {
                 id: '01990000-0000-7000-8000-000000000001',
                 pseudonym: 'Amina_Bobo_nom_tres_long_pour_la_ligne',
@@ -255,8 +278,29 @@ describe('discover grid in a browser', () => {
                 photo: null,
               },
             ],
-          }),
-        )
+    }
+    const server: Server = createServer((request, response) => {
+      const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (request.method === 'POST' && url.pathname === '/v1/favourites') {
+        favouritePosts += 1
+        response.statusCode = 201
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.end(JSON.stringify({ account_id: 'a', target_id: 't', created_at: '2026-10-13T12:00:00.000Z' }))
+        return
+      }
+      if (request.method === 'POST' && url.pathname === '/v1/browse/pass') {
+        passPosts += 1
+        response.statusCode = 201
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.end(JSON.stringify({ viewer_id: 'a', target_id: cardItem.id, created_at: '2026-10-13T12:00:00.000Z' }))
+        return
+      }
+      if (url.pathname === '/v1/browse') {
+        fetches += 1
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.setHeader('cache-control', 'no-store')
+        const grid = url.searchParams.get('view') === 'grid'
+        response.end(JSON.stringify(grid ? gridBody : { view: 'card', item: cardItem }))
         return
       }
       response.setHeader('content-type', 'text/html; charset=utf-8')
@@ -268,7 +312,9 @@ describe('discover grid in a browser', () => {
     const origin = `http://127.0.0.1:${address.port}`
     const profile = join(tmpdir(), `ankanu-discover-${Date.now()}`)
     const shots = fileURLToPath(new URL('../../../docs/qa-handoffs/epic-3-3.8-widths/', import.meta.url))
+    const storyShots = fileURLToPath(new URL('../../../docs/qa-handoffs/epic-3-3.13-widths/', import.meta.url))
     mkdirSync(shots, { recursive: true })
+    mkdirSync(storyShots, { recursive: true })
     const chrome = await launch(binary as string, profile)
     const ws = new WebSocket(chrome.ws)
     let seq = 0
@@ -335,10 +381,11 @@ describe('discover grid in a browser', () => {
         if (!value || value.scrollWidth > value.width) {
           failures.push(`${state}@${width} scroll ${value?.scrollWidth ?? '?'} > ${value?.width ?? width}`)
         }
-        if (width === 360 || width === 1440) {
-          const shot = await send('Page.captureScreenshot', { format: 'png' }, sessionId)
-          const data = String((shot as { data?: string }).data ?? '')
-          if (data) writeFileSync(join(shots, `${state}-${width}.png`), Buffer.from(data, 'base64'))
+        const shot = await send('Page.captureScreenshot', { format: 'png' }, sessionId)
+        const data = String((shot as { data?: string }).data ?? '')
+        if (data) {
+          writeFileSync(join(storyShots, `${state}-${width}.png`), Buffer.from(data, 'base64'))
+          if (width === 360 || width === 1440) writeFileSync(join(shots, `${state}-${width}.png`), Buffer.from(data, 'base64'))
         }
       }
       const loaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
@@ -348,12 +395,13 @@ describe('discover grid in a browser', () => {
         'Runtime.evaluate',
         {
           expression:
-            "new Promise((resolve) => { const start = Date.now(); const tick = () => { const color = getComputedStyle(document.body).backgroundColor; if ((color && color !== 'rgba(0, 0, 0, 0)') || Date.now() - start > 8000) resolve(true); else setTimeout(tick, 100) }; tick() })",
+            "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.body.innerText || ''; if (text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne') || Date.now() - start > 8000) resolve(text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne')); else setTimeout(tick, 50) }; tick() })",
           awaitPromise: true,
+          returnByValue: true,
         },
         sessionId,
       )
-      expect(fetches).toBe(0)
+      expect(fetches).toBe(1)
       for (const width of WIDTHS) await measure(width, 'card')
       await send('Runtime.evaluate', { expression: "localStorage.setItem('ankanu_lite','0')" }, sessionId)
       await send(
@@ -391,7 +439,8 @@ describe('discover grid in a browser', () => {
               missing: text.includes('Photographie non publiée'),
               empty: text.includes('Aucun profil pour ces filtres.'),
               verified: text.includes('VÉRIFIÉ'),
-              chips: document.querySelectorAll('#discover-card span.inline-flex, #discover-grid span.inline-flex').length,
+              chips: document.querySelectorAll('#discover-grid span.inline-flex').length,
+              traits: (document.querySelector('#discover-focus [data-card-traits]') || {}).textContent || '',
               retry: retry ? getComputedStyle(retry).display : '',
             }
           })()`,
@@ -411,6 +460,7 @@ describe('discover grid in a browser', () => {
             empty: boolean
             verified: boolean
             chips: number
+            traits: string
             retry: string
           }
         }
@@ -425,12 +475,14 @@ describe('discover grid in a browser', () => {
       expect(view?.empty).toBe(false)
       expect(view?.verified).toBe(true)
       expect(view?.chips).toBe(0)
+      expect(view?.traits).toContain('Même ville (Ouagadougou)')
+      expect(view?.traits).toContain('Madhhab : Maliki')
       expect(view?.retry).toBe('none')
       expect(view?.raw).toContain(`"account":"${ACCOUNT}"`)
       expect(view?.raw).not.toContain('/media/blur-signed')
       expect(view?.raw).not.toContain('"url"')
       expect(view?.images).toEqual(['/media/blur-signed'])
-      expect(fetches).toBe(1)
+      expect(fetches).toBe(2)
       for (const width of WIDTHS) await measure(width, 'grid')
       await send(
         'Runtime.evaluate',
@@ -442,7 +494,7 @@ describe('discover grid in a browser', () => {
         { expression: "document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()" },
         sessionId,
       )
-      expect(fetches).toBe(1)
+      expect(fetches).toBe(2)
       await send(
         'Runtime.evaluate',
         { expression: "document.querySelector('[data-bookmark]').click()" },
@@ -484,6 +536,22 @@ describe('discover grid in a browser', () => {
         await new Promise((resolve) => setTimeout(resolve, 30))
       }
       expect(favouritePosts).toBe(2)
+      await send(
+        'Runtime.evaluate',
+        { expression: "document.querySelector('[data-card-pass]').click()" },
+        sessionId,
+      )
+      const passDeadline = Date.now() + 2000
+      while (passPosts < 1 && Date.now() < passDeadline) {
+        await new Promise((resolve) => setTimeout(resolve, 30))
+      }
+      expect(passPosts).toBe(1)
+      const stayedOnPass = await send(
+        'Runtime.evaluate',
+        { expression: 'location.pathname', returnByValue: true },
+        sessionId,
+      )
+      expect((stayedOnPass.result as { value?: string } | undefined)?.value).toBe('/')
       await send(
         'Runtime.evaluate',
         { expression: "document.querySelector('[data-tile]').click()" },
@@ -557,6 +625,10 @@ describe('discover grid in a browser', () => {
         return
       }
       if (url.pathname === '/v1/browse') {
+        if (url.searchParams.get('view') !== 'grid') {
+          sendJson(response, 200, { view: 'card', item: null })
+          return
+        }
         fetches += 1
         const next = queue.shift()
         if (!next) {
@@ -900,7 +972,12 @@ describe('discover grid in a browser', () => {
         browseUrls.push(url.search)
         response.setHeader('content-type', 'application/json; charset=utf-8')
         response.setHeader('cache-control', 'no-store')
-        response.end(JSON.stringify({ view: 'grid', next_cursor: null, items: [] }))
+        const grid = url.searchParams.get('view') === 'grid'
+        response.end(
+          JSON.stringify(
+            grid ? { view: 'grid', next_cursor: null, items: [] } : { view: 'card', item: null },
+          ),
+        )
         return
       }
       const filtered = url.searchParams.get('marital_status')
@@ -993,7 +1070,7 @@ describe('discover grid in a browser', () => {
       }
       await go('/')
       expect(filterFetches).toBe(0)
-      expect(browseUrls).toEqual([])
+      expect(browseUrls).toEqual([''])
       await value("document.querySelector('[data-open-filters]').click()")
       const opened = (await value(
         "new Promise((resolve) => { const start = Date.now(); const tick = () => { const apply = document.getElementById('filters-apply'); if ((apply && apply.disabled === false) || Date.now() - start > 4000) resolve({ disabled: apply ? apply.disabled : true, checked: document.querySelectorAll('#filters-modal input:checked').length, distance: document.querySelector('#filters-modal input[name=\"distance\"]').disabled, madhhab: document.getElementById('madhhab-select').value, hidden: document.getElementById('filters-modal').hidden }); else setTimeout(tick, 30) }; tick() })",
@@ -1030,7 +1107,7 @@ describe('discover grid in a browser', () => {
       const landed = String(await value('location.pathname + location.search'))
       expect(landed).toBe('/decouvrir?marital_status=married&polygamy_intent=yes')
       const painted = (await value(
-        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const chip = document.body.innerText || ''; const empty = document.getElementById('discover-empty'); if ((chip.includes('Marié(e)') && empty && empty.hidden === false) || Date.now() - start > 4000) resolve({ text: chip, empty: empty ? empty.hidden : true, grid: document.getElementById('discover-grid').hidden, card: document.getElementById('discover-card').hidden, chips: document.querySelectorAll('#discover-card span.inline-flex, #discover-grid span.inline-flex').length, markup: document.documentElement.innerHTML.indexOf('view=card') }); else setTimeout(tick, 30) }; tick() })",
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const chip = document.body.innerText || ''; const empty = document.getElementById('discover-empty'); if ((chip.includes('Marié(e)') && empty && empty.hidden === false) || Date.now() - start > 4000) resolve({ text: chip, empty: empty ? empty.hidden : true, grid: document.getElementById('discover-grid').hidden, card: document.getElementById('discover-card').hidden, chips: document.querySelectorAll('[data-filter-chips] span.inline-flex').length, markup: document.documentElement.innerHTML.indexOf('view=card') }); else setTimeout(tick, 30) }; tick() })",
       )) as { text: string; empty: boolean; grid: boolean; card: boolean; chips: number; markup: number }
       expect(painted.empty).toBe(false)
       expect(painted.grid).toBe(false)
@@ -1045,10 +1122,16 @@ describe('discover grid in a browser', () => {
       const cacheKey = String(await value(`sessionStorage.getItem('ankanu_browse_grid_text:${ACCOUNT}:marital_status=married&polygamy_intent=yes') || ''`))
       expect(cacheKey).toContain(`"account":"${ACCOUNT}"`)
       await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
-      const cardEmpty = (await value(`(() => {
-        const node = document.getElementById('discover-card-empty')
-        return { hidden: node ? node.hidden : true, text: node ? node.textContent : '', card: document.getElementById('discover-card').hidden }
-      })()`)) as { hidden: boolean; text: string; card: boolean }
+      const cardEmpty = (await value(`new Promise((resolve) => {
+        const start = Date.now()
+        const tick = () => {
+          const node = document.getElementById('discover-card-empty')
+          const ready = node && node.hidden === false && (node.textContent || '').indexOf('Aucun profil') >= 0
+          if (ready || Date.now() - start > 4000) resolve({ hidden: node ? node.hidden : true, text: node ? node.textContent : '', card: document.getElementById('discover-card').hidden })
+          else setTimeout(tick, 30)
+        }
+        tick()
+      })`)) as { hidden: boolean; text: string; card: boolean }
       expect(cardEmpty.card).toBe(false)
       expect(cardEmpty.hidden).toBe(false)
       expect(cardEmpty.text).toBe('Aucun profil pour ces filtres.')
@@ -1092,6 +1175,10 @@ describe('discover grid in a browser', () => {
       }
       if (url.pathname === '/v1/browse') {
         response.setHeader('content-type', 'application/json')
+        if (url.searchParams.get('view') !== 'grid') {
+          response.end(JSON.stringify({ view: 'card', item: null }))
+          return
+        }
         response.end(
           JSON.stringify({
             view: 'grid',
