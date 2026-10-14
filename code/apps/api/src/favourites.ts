@@ -353,7 +353,8 @@ async function presentItem(row: FavouriteRow, viewerId: string): Promise<Favouri
     }
     photo = { id: asset.id, url: signed.url }
   }
-  const bio = profile.bio_live && profile.bio_live.trim().length > 0 ? profile.bio_live : null
+  const trimmedBio = profile.bio_live ? profile.bio_live.trim() : ''
+  const bio = trimmedBio.length > 0 ? trimmedBio : null
   return {
     target_id: row.target_id,
     created_at: row.created_at,

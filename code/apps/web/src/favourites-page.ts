@@ -67,16 +67,8 @@ function chip(text) {
   return span
 }
 function showError(message) {
-  var list = document.getElementById('favourites-list')
-  var empty = document.getElementById('favourites-empty')
-  var aside = document.getElementById('favourites-aside')
-  var count = document.getElementById('favourites-count')
   var error = document.getElementById('favourites-error')
   var retry = document.getElementById('favourites-retry')
-  if (list) list.textContent = ''
-  if (empty) empty.hidden = true
-  if (aside) aside.hidden = true
-  if (count) count.hidden = true
   if (error) {
     error.hidden = false
     error.textContent = message
@@ -152,15 +144,13 @@ function paint(body) {
     }
     if (remove) {
       remove.addEventListener('click', function () {
+        if (remove.disabled) return
         remove.disabled = true
         fetch('/v1/favourites/' + encodeURIComponent(item.target_id), {
           method: 'DELETE',
           credentials: 'same-origin'
         }).then(function (response) {
-          if (response.status === 200) {
-            load()
-            return
-          }
+          if (response.status === 200) return load()
           return response.json().then(function (payload) {
             var message = payload && payload.error && payload.error.message ? payload.error.message : 'Request failed'
             showError(message)
@@ -178,7 +168,7 @@ function paint(body) {
 function load() {
   var section = document.getElementById('favourites-list')
   if (section) section.setAttribute('aria-busy', 'true')
-  fetch('/v1/favourites', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+  return fetch('/v1/favourites', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
     return response.json().then(function (payload) {
       return { ok: response.ok, payload: payload }
     })
@@ -268,7 +258,7 @@ function shell(stitch: string, cards: FavouriteCard[] | null): string {
     cards === null
       ? ''
       : cards.map((item) => cardHtml(item)).join('')
-  const emptyHidden = cards !== null && cards.length > 0 ? ' hidden' : ''
+  const emptyHidden = cards === null || cards.length > 0 ? ' hidden' : ''
   const body = `<div id="favourites-list" class="space-y-6 min-w-0">${list}</div>
 <div id="favourites-empty"${emptyHidden} class="space-y-4">
 <p class="text-sm md:text-base text-deep-navy/80">Aucun favori.</p>

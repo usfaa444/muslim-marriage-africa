@@ -168,6 +168,7 @@ function migrationSql(): string {
     '0013_photo_replaced.sql',
     '0014_strike.sql',
     '0015_profile_photo_gallery.sql',
+    '0016_favourite.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -267,6 +268,7 @@ describe('operator_config migration', () => {
       'credential',
       'derivative',
       'email_verification',
+      'favourite',
       'operator_config',
       'password_reset',
       'photo_asset',
@@ -286,6 +288,7 @@ describe('operator_config migration', () => {
       'public.credential',
       'public.derivative',
       'public.email_verification',
+      'public.favourite',
       'public.operator_config',
       'public.password_reset',
       'public.photo_asset',
@@ -301,7 +304,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('16')
+    expect(applied.rows[0]?.count).toBe('17')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -824,6 +827,7 @@ describe('operator_config migration', () => {
       'credential',
       'derivative',
       'email_verification',
+      'favourite',
       'operator_config',
       'password_reset',
       'photo_asset',
@@ -843,6 +847,7 @@ describe('operator_config migration', () => {
       'public.credential',
       'public.derivative',
       'public.email_verification',
+      'public.favourite',
       'public.operator_config',
       'public.password_reset',
       'public.photo_asset',
@@ -1003,5 +1008,55 @@ describe('operator_config migration', () => {
     expect(rows.rows).toEqual([{ id: first, case_id: null }])
     await db().query(`delete from "strike" where "account_id" = $1`, [accountId])
     await db().query(`delete from "account" where "id" = $1`, [accountId])
+  })
+
+  it('keeps one favourite grain, orders by created_at then target_id, and deletes the row', async () => {
+    expect(migrated).toBe(true)
+    const owner = '018f3a40-7c2a-7000-8000-0000000000c1'
+    const older = '018f3a40-7c2a-7000-8000-0000000000c2'
+    const newer = '018f3a40-7c2a-7000-8000-0000000000c3'
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, 'sister', $4, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    await db().query(insertAccount, [owner, 'fav-owner@example.bf', 'Fav_Owner', ['member']])
+    await db().query(insertAccount, [older, 'fav-older@example.bf', 'Fav_Older', ['member']])
+    await db().query(insertAccount, [newer, 'fav-newer@example.bf', 'Fav_Newer', ['member']])
+    await db().query(
+      `insert into "favourite" ("account_id", "target_id", "created_at") values ($1, $2, $3)`,
+      [owner, older, '2026-10-13T12:00:00.000Z'],
+    )
+    await db().query(
+      `insert into "favourite" ("account_id", "target_id", "created_at") values ($1, $2, $3)`,
+      [owner, newer, '2026-10-13T12:00:01.000Z'],
+    )
+    let duplicate = false
+    try {
+      await db().query(
+        `insert into "favourite" ("account_id", "target_id", "created_at") values ($1, $2, $3)`,
+        [owner, older, '2026-10-13T12:00:02.000Z'],
+      )
+    } catch (error) {
+      duplicate = true
+      expect(postgresCode(error)).toBe('23505')
+    }
+    expect(duplicate).toBe(true)
+    const listed = await db().query<{ target_id: string }>(
+      `select "target_id" from "favourite" where "account_id" = $1 order by "created_at" desc, "target_id" desc`,
+      [owner],
+    )
+    expect(listed.rows.map((row) => row.target_id)).toEqual([newer, older])
+    await db().query(`update "favourite" set "created_at" = '2026-10-13T12:00:00.000Z' where "account_id" = $1`, [owner])
+    const tied = await db().query<{ target_id: string }>(
+      `select "target_id" from "favourite" where "account_id" = $1 order by "created_at" desc, "target_id" desc`,
+      [owner],
+    )
+    expect(tied.rows.map((row) => row.target_id)).toEqual([newer, older])
+    await db().query(`delete from "favourite" where "account_id" = $1 and "target_id" = $2`, [owner, newer])
+    const left = await db().query<{ target_id: string }>(
+      `select "target_id" from "favourite" where "account_id" = $1`,
+      [owner],
+    )
+    expect(left.rows).toEqual([{ target_id: older }])
+    await db().query(`delete from "favourite" where "account_id" = $1`, [owner])
+    await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[owner, older, newer]])
   })
 })

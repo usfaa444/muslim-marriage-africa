@@ -14,7 +14,7 @@ Auth on all three is `requireLiveSession` then `assertBrowseViewer`, the same ga
 
 The bookmark on the Découvrir grid (screen 57) and on profile detail (screen 15) posts `{ target_id }` to `/v1/favourites`. It is a bookmark, not a heart. A 200 or 201 marks the control pressed and does not navigate. Pass stays `POST` on browse, unchanged. `view=card` stays 404. Settings does not gain a who-favourited list.
 
-`/favoris` is screen 17. A staff or mahram cookie gets the member JSON envelope. An anonymous visitor is sent to `/auth`. A live session gets the private list. Zero rows keep the screen 17 shell (back « Mon espace personnel » to `/profil`, title « Profils favoris », the privacy callout) plus « Aucun favori. » and a Découvrir link to `/decouvrir`. One or more rows paint the real GET items: count pill « 1 profil enregistré » or « N profils enregistrés », chips for madhhab, practice, marital status, and polygamy when set, city only (no quartier), « Photographie réservée » only when `photo` is null, « Consulter la fiche détaillée » to `/profil/:id`, and « Retirer de ma sélection » as `DELETE`. Sample names, « Secteur 15 », and the two-card gallery are not rendered.
+`/favoris` is screen 17. A staff or mahram cookie gets the member JSON envelope. An anonymous visitor is sent to `/auth`. A live session gets the private list. The live document hides « Aucun favori. » until `GET /v1/favourites` returns zero rows, so a member who already has rows does not see the empty layout first. Zero rows then keep the screen 17 shell (back « Mon espace personnel » to `/profil`, title « Profils favoris », the privacy callout) plus « Aucun favori. » and a Découvrir link to `/decouvrir`. One or more rows paint the real GET items: count pill « 1 profil enregistré » or « N profils enregistrés », chips for madhhab, practice, marital status, and polygamy when set, city only (no quartier), « Photographie réservée » only when `photo` is null, « Consulter la fiche détaillée » to `/profil/:id`, and « Retirer de ma sélection » as `DELETE`. A failed DELETE shows the error and leaves the other cards on screen. The button stays disabled until a 200 DELETE's reload finishes. Sample names, « Secteur 15 », and the two-card gallery are not rendered.
 
 ## Where
 
@@ -37,7 +37,8 @@ The bookmark on the Découvrir grid (screen 57) and on profile detail (screen 15
 From `code/`:
 
 ```bash
-./node_modules/.bin/vitest run --config vitest.unit.config.ts --testTimeout 180000 apps/api/src/favourites.test.ts apps/web/src/favourites-page.test.ts apps/web/src/discover-page.test.ts apps/web/src/profile-detail.test.ts apps/web/src/member-route.test.ts apps/web/src/v2-flow.test.ts
+./node_modules/.bin/vitest run --config vitest.unit.config.ts --testTimeout 180000 apps/api/src/favourites.test.ts apps/web/src/favourites-page.test.ts
+./node_modules/.bin/vitest run --config vitest.integration.config.ts --fileParallelism false apps/api/src/operator-config.migrate.test.ts
 ./node_modules/.bin/tsc -p apps/api/tsconfig.json --noEmit
 ./node_modules/.bin/tsc -p apps/web/tsconfig.json --noEmit
 ```
@@ -50,7 +51,7 @@ Sign in as a listable member, open `/favoris` (empty copy, then save a profile f
 | --- | --- | --- |
 | Save | Listable sister, published opposite brother, `POST { target_id }` | 201 `{ account_id, target_id, created_at }`, `Cache-Control: no-store` |
 | Again | Same body | 200 with the same `created_at`. One row |
-| List | `GET /v1/favourites` as the owner | 200, `count` 1, labels, raw `profession`, `verified` true, blur `photo.url`, `bio`, no quartier |
+| List | `GET /v1/favourites` as the owner | 200, `count` 1, labels, raw `profession`, `verified` true, blur `photo.url`, `bio` trimmed, no quartier |
 | Private | `GET` as the target | 200 `{ count: 0, items: [] }` |
 | Who | `GET /v1/who-favourited-me` | 404 |
 | Order | Two saves, later `created_at` second | Newer row first |
@@ -65,6 +66,7 @@ Sign in as a listable member, open `/favoris` (empty copy, then save a profile f
 | No photo | No live MAIN | `photo` null, `photo_blur` false, `bio` null, `verified` false |
 | Billing | The calls above | `BillingPort.isEntitled` is not called |
 | Table | `0016_favourite.sql` | Primary key `(account_id, target_id)` |
+| Postgres grain | Migrated database, same `(account_id, target_id)` inserted twice | Second insert is `23505`. Rows list by `created_at` desc, then `target_id` desc. DELETE removes that row |
 
 ## Web test cases
 
@@ -72,7 +74,8 @@ Sign in as a listable member, open `/favoris` (empty copy, then save a profile f
 | --- | --- | --- |
 | Empty | `favouritesHtml` with `[]` | « Aucun favori. », Découvrir to `/decouvrir`, back to `/profil`, count and aside hidden. No Al-Hassan, Ibrahim_S, or Secteur 15 |
 | One card | Static card | « 1 profil enregistré », labeled place, madhhab chip, blur image, Consulter to `/profil/:id`, Retirer. The painted card has no lock |
-| Live | `favouritesHtml` with no array | `data-favourites="live"`, GET `/v1/favourites`, DELETE on Retirer |
+| Live | `favouritesHtml` with no array | `data-favourites="live"`, `#favourites-empty` hidden, GET `/v1/favourites`, DELETE on Retirer |
+| Live browser | Held GET of two items, then DELETE 404 on the first card | Empty copy is `display: none` before the response. After 404 both cards stay and the error is `Ce favori n'existe pas.` |
 | Settings | Screen 27 | No « favori », no `who_favourited`, no « qui vous a ajouté » |
 | Staff / anon | `GET /favoris` | Staff cookie 403 JSON. No cookie 303 to `/auth` |
 | Discover | Bookmark click and Enter on a grid tile | Two POSTs to `/v1/favourites`. Path stays `/`. The tile click still goes to `/profil/:id` |
@@ -81,18 +84,18 @@ Sign in as a listable member, open `/favoris` (empty copy, then save a profile f
 
 ## Test data
 
-API memory accounts. Password `phrase avec espaces`. Date of birth `1990-01-15`. Clock `2026-10-13` gives age 36. The brother is published with city `ouagadougou`, profession `ingenierie`, madhhab `maliki`, practice `assidue`, marital `single`, polygamy `no`, `bio_live` `Foyer posé.`, granted id and liveness, and one live MAIN photo. The browser card uses pseudonym `Aminata_KDG_long_pseudonym`, age 29, and a blur URL `/v1/media/get?token=blur`.
+API memory accounts. Password `phrase avec espaces`. Date of birth `1990-01-15`. Clock `2026-10-13` gives age 36. The brother is published with city `ouagadougou`, profession `ingenierie`, madhhab `maliki`, practice `assidue`, marital `single`, polygamy `no`, `bio_live` `  Foyer posé.  ` (the response bio is `Foyer posé.`), granted id and liveness, and one live MAIN photo. The browser card uses pseudonym `Aminata_KDG_long_pseudonym`, age 29, and a blur URL `/v1/media/get?token=blur`. The live browser stub adds `Moussa_BF`.
 
 ## My results
 
-- `favourites.test.ts` and `favourites-page.test.ts`: 10 passed after the final type fix. The earlier run of those two plus `discover-page.test.ts`, `profile-detail.test.ts`, `member-route.test.ts`, and `v2-flow.test.ts` was 53 passed.
-- Bookmark click and Enter posted twice and stayed on `/`.
-- Empty and filled `/favoris` passed all six widths. Shots: `code/docs/qa-handoffs/epic-3-3.10-widths/empty-360.png`, `empty-1440.png`, `filled-360.png`, `filled-1440.png`.
+- QA fail on `d7d36d1` is fixed in this commit. `favourites.test.ts` and `favourites-page.test.ts`: 11 passed. A spaced `bio_live` returns trimmed `Foyer posé.`. The live page hides « Aucun favori. » until GET returns. A 404 DELETE leaves both cards and shows `Ce favori n'existe pas.`
+- `operator-config.migrate.test.ts`: 10 passed on Postgres 17. Applied migration count is 17. A second insert of the same favourite grain is `23505`. The list is `created_at` desc, then `target_id` desc, and DELETE removes that row.
+- Empty and filled `/favoris` still passed all six widths. Shots: `code/docs/qa-handoffs/epic-3-3.10-widths/empty-360.png`, `empty-1440.png`, `filled-360.png`, `filled-1440.png`.
 - `tsc -p apps/api/tsconfig.json --noEmit` and `tsc -p apps/web/tsconfig.json --noEmit`: exit 0.
 
 ## Three validation passes
 
-1. Behavior: save, idempotent save, private list, delete, grid bookmark, profile bookmark, empty copy, no sample members, no who-favourited list, no billing call.
+1. Behavior: save, idempotent save, private list, delete, grid bookmark, profile bookmark, empty copy hidden until the live GET returns, a failed remove keeps the other cards, trimmed bio, no sample members, no who-favourited list, no billing call.
 2. Contract: POST, GET, and DELETE bodies and errors from the board comment. `favourite` primary key. AD-7 envelope. No browse slot. API and web typecheck are clean.
 3. Responsive: empty and filled screen 17 passed `scrollWidth <= innerWidth` at 360, 390, 768, 1024, 1280, and 1440.
 
@@ -117,5 +120,5 @@ API memory accounts. Password `phrase avec espaces`. Date of birth `1990-01-15`.
 - The count pill uses « 1 profil enregistré » for one row and « N profils enregistrés » otherwise.
 - Equal `created_at` values are ordered by `target_id` descending. The board comment did not name a tie-break.
 - `GET /v1/favourites` writes `signed_grant` rows when it signs a blur URL. It does not write a favourite.
-- The Postgres store and `0016_favourite.sql` were not executed against a database in this run. The automated tests use the memory store.
+- The API behaviour tests use the memory store. `operator-config.migrate.test.ts` applies `0016_favourite.sql` on Postgres 17 and checks the grain, the order, and the delete.
 - Not pushed. After QA passes, push this commit and comment the SHA on [ANK-132](/ANK/issues/ANK-132). No next story. No deploy. Parent [ANK-97](/ANK/issues/ANK-97) stays open.

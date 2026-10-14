@@ -279,7 +279,7 @@ describe('private favourites', () => {
     await publish(sister.id, sisterCookie)
     await publish(brother.id, brotherCookie)
     await publish(other.id, otherCookie)
-    await getProfileStore().patchReview(brother.id, { bio_live: 'Foyer posé.' })
+    await getProfileStore().patchReview(brother.id, { bio_live: '  Foyer posé.  ' })
     grant(brother.id, 'id_document')
     grant(brother.id, 'liveness')
     const photoId = await liveMain(brotherCookie)

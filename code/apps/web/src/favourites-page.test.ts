@@ -75,6 +75,7 @@ describe('screen 17 private favourites', () => {
     expect(live).toContain('data-favourites="live"')
     expect(live).toContain("fetch('/v1/favourites'")
     expect(live).toContain("method: 'DELETE'")
+    expect(live).toContain('id="favourites-empty" hidden')
     expect(live).toContain('Aucun favori.')
     expect(live).not.toContain('Al-Hassan')
     expect(live).not.toContain('Ibrahim_S')
@@ -237,5 +238,139 @@ describe('favourites widths', () => {
       await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
     }
     expect(failures).toEqual([])
+  }, 120_000)
+
+  it.skipIf(!binary)('hides the empty copy until the live list returns and keeps the other card after a failed remove', async () => {
+    const live = favouritesHtml(stitch('17-favourites'))
+    const items = [
+      card,
+      {
+        target_id: '01990000-0000-7000-8000-000000000098',
+        pseudonym: 'Moussa_BF',
+        age: 36,
+        city: 'Bobo-Dioulasso',
+        profession: null,
+        madhhab: null,
+        practice: null,
+        marital_status: null,
+        polygamy_intent: null,
+        verified: false,
+        photo: null,
+        bio: null,
+      },
+    ]
+    let released = false
+    const held: Array<{ setHeader: (name: string, value: string) => void; end: (body: string) => void }> = []
+    const sendList = (response: { setHeader: (name: string, value: string) => void; end: (body: string) => void }) => {
+      response.setHeader('content-type', 'application/json; charset=utf-8')
+      response.end(JSON.stringify({ count: items.length, items }))
+    }
+    const server: Server = createServer((request, response) => {
+      const url = new URL(request.url || '/', 'http://127.0.0.1')
+      if (request.method === 'GET' && url.pathname === '/v1/favourites') {
+        if (!released) {
+          held.push(response)
+          return
+        }
+        sendList(response)
+        return
+      }
+      if (request.method === 'DELETE' && url.pathname.startsWith('/v1/favourites/')) {
+        response.statusCode = 404
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        response.end(JSON.stringify({ error: { code: 'NOT_FOUND', message: "Ce favori n'existe pas." } }))
+        return
+      }
+      response.setHeader('content-type', 'text/html; charset=utf-8')
+      response.end(live)
+    })
+    await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', () => resolve()))
+    const address = server.address()
+    if (!address || typeof address === 'string') throw new Error('no port')
+    const origin = `http://127.0.0.1:${address.port}`
+    const profile = join(tmpdir(), `ankanu-favourites-live-${Date.now()}`)
+    const chrome = await launch(binary as string, profile)
+    const ws = new WebSocket(chrome.ws)
+    let seq = 0
+    const pending = new Map<number, { resolve: (value: { result?: { value?: unknown } }) => void; reject: (error: Error) => void }>()
+    const waits: Array<{ method: string; resolve: () => void }> = []
+    ws.addEventListener('message', (event) => {
+      const message = JSON.parse(String(event.data)) as {
+        id?: number
+        method?: string
+        result?: { result?: { value?: unknown } }
+        error?: { message?: string }
+      }
+      if (message.id && pending.has(message.id)) {
+        const waiter = pending.get(message.id)
+        pending.delete(message.id)
+        if (message.error) waiter?.reject(new Error(message.error.message ?? 'cdp'))
+        else waiter?.resolve(message.result ?? {})
+        return
+      }
+      if (!message.method) return
+      for (let index = waits.length - 1; index >= 0; index -= 1) {
+        const waiter = waits[index]
+        if (waiter && waiter.method === message.method) {
+          waits.splice(index, 1)
+          waiter.resolve()
+        }
+      }
+    })
+    await new Promise<void>((resolve, reject) => {
+      ws.addEventListener('open', () => resolve())
+      ws.addEventListener('error', () => reject(new Error('socket')))
+    })
+    const send = (method: string, params?: object, sessionId?: string) => {
+      const id = ++seq
+      return new Promise<{ result?: { value?: unknown } }>((resolve, reject) => {
+        pending.set(id, { resolve, reject })
+        ws.send(JSON.stringify({ id, method, params, sessionId }))
+      })
+    }
+    const value = async (expression: string, sessionId: string) => {
+      const result = await send('Runtime.evaluate', { expression, awaitPromise: true, returnByValue: true }, sessionId)
+      return (result.result as { value?: unknown } | undefined)?.value
+    }
+    try {
+      const created = await send('Target.createTarget', { url: 'about:blank' })
+      const targetId = String((created as { targetId?: string }).targetId)
+      const attached = await send('Target.attachToTarget', { targetId, flatten: true })
+      const sessionId = String((attached as { sessionId?: string }).sessionId)
+      await send('Page.enable', {}, sessionId)
+      await send('Runtime.enable', {}, sessionId)
+      const loaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
+      await send('Page.navigate', { url: `${origin}/` }, sessionId)
+      await loaded
+      const before = (await value(
+        "({ display: getComputedStyle(document.getElementById('favourites-empty')).display, cards: document.querySelectorAll('[data-favourite]').length })",
+        sessionId,
+      )) as { display: string; cards: number }
+      expect(before.display).toBe('none')
+      expect(before.cards).toBe(0)
+      released = true
+      for (const response of held) sendList(response)
+      const shown = await value(
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.getElementById('favourites-list') ? document.getElementById('favourites-list').innerText : ''; if ((text.includes('Aminata_KDG_long_pseudonym') && text.includes('Moussa_BF')) || Date.now() - start > 4000) resolve(text); else setTimeout(tick, 30) }; tick() })",
+        sessionId,
+      )
+      expect(String(shown)).toContain('Aminata_KDG_long_pseudonym')
+      expect(String(shown)).toContain('Moussa_BF')
+      expect(String(shown)).not.toContain('Aucun favori.')
+      await value("document.querySelector('[data-remove]').click()", sessionId)
+      const after = (await value(
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const error = document.getElementById('favourites-error'); const ready = error && error.textContent.indexOf('existe pas') >= 0; if (ready || Date.now() - start > 4000) resolve({ message: error ? error.textContent : '', cards: document.querySelectorAll('[data-favourite]').length, names: document.getElementById('favourites-list').innerText, display: getComputedStyle(document.getElementById('favourites-empty')).display }); else setTimeout(tick, 30) }; tick() })",
+        sessionId,
+      )) as { message: string; cards: number; names: string; display: string }
+      expect(after.message).toContain("Ce favori n'existe pas.")
+      expect(after.cards).toBe(2)
+      expect(after.names).toContain('Aminata_KDG_long_pseudonym')
+      expect(after.names).toContain('Moussa_BF')
+      expect(after.display).toBe('none')
+    } finally {
+      ws.close()
+      chrome.proc.kill('SIGKILL')
+      await new Promise<void>((resolve, reject) => server.close((error) => (error ? reject(error) : resolve())))
+    }
   }, 120_000)
 })
