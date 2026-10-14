@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpException, Post, Query, Req } from '@nestjs/common'
+import { Body, Controller, Get, Header, HttpCode, HttpException, Post, Query, Req } from '@nestjs/common'
 import { requireLiveSession } from './pin-session.js'
 import {
   decideProfileReview,
@@ -7,6 +7,7 @@ import {
   staffForbidden,
   type ReviewFailure,
 } from './profile-review.js'
+import { grantStagingVerification, stagingStaffGrantEnabled } from './staff-verification-grant.js'
 
 type CookieRequest = {
   headers?: { cookie?: string | string[] }
@@ -73,5 +74,28 @@ export class StaffController {
       fail(metrics)
     }
     return { free_review: metrics.free_review }
+  }
+
+  @Post('verifications/grant')
+  @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
+  async grantVerification(@Req() request: CookieRequest, @Body() body: unknown) {
+    if (!stagingStaffGrantEnabled()) {
+      throw new HttpException(
+        {
+          code: 'NOT_FOUND',
+          message: 'Introuvable.',
+          details: null,
+          retryable: false,
+        },
+        404,
+      )
+    }
+    const staffId = await staffAccount(request)
+    const granted = await grantStagingVerification(staffId, body)
+    if (!granted.ok) {
+      fail(granted)
+    }
+    return granted.result
   }
 }
