@@ -10,6 +10,8 @@ Shared chips use columns that already exist: city, polygamy intent, marital stat
 
 The card/grid toggle stays on Découvrir. Zero or one basic filter opens the card. Two or more basic filters open the grid, and the card toggle returns to one focused card. That many-filter card uses the Search chrome. There is no new `/recherche` route.
 
+A URL with at least one basic filter loads `GET /v1/filters` and paints the Story 3.9 chips on both frames, including the one-filter card. `/decouvrir?city=ouagadougou` stays on the card and shows « Ville : Ouagadougou ». `polygamy_intent` still has no chip. Zero filters do not call `/v1/filters` and show no chips.
+
 « Passer avec égards » posts the pass. On success the in-flight browse is dropped and the view that is actually open is loaded again: the grid calls `loadGrid()`, the card calls `loadCard()`. The passed profile leaves both. The bookmark still posts `POST /v1/favourites`. Each new card restores the Stitch bookmark markup and clears `aria-pressed`, so the previous profile's saved state does not carry over. Enter on that bookmark calls `preventDefault` and posts once. The name, the photo, and the trait block open `/profil/:id`. Enter on the card body does the same. « Message d'introduction » and « Envoyer une invitation Ta'aruf » stay visible and do not post.
 
 Trait chips keep the Stitch shell. Découvrir icons are `location_on` (city), `menu_book` (madhhab), `schedule` (practice), and `handshake` (polygamy intent). The Search card uses the same three field icons and does not add `handshake`. A stored field the comp does not icon, such as marital status, stays a label inside the shell. Sample copy (« Projet monogame exclusif », the intention quote, the sample filter chips) is not painted.
@@ -42,7 +44,7 @@ From `code/`:
 ./node_modules/.bin/tsc -p apps/web/tsconfig.json --noEmit
 ```
 
-Open `/decouvrir` with a member session. Pass, bookmark, and the grid toggle. A URL with two filters, for example `/decouvrir?marital_status=married&polygamy_intent=yes`, opens the grid. The card toggle returns to one card.
+Open `/decouvrir` with a member session. Pass, bookmark, and the grid toggle. A URL with one filter, for example `/decouvrir?city=ouagadougou`, stays on the card and shows « Ville : Ouagadougou ». A URL with two filters, for example `/decouvrir?marital_status=married&polygamy_intent=yes`, opens the grid. The card toggle returns to one card.
 
 ## Test cases
 
@@ -59,6 +61,7 @@ Open `/decouvrir` with a member session. Pass, bookmark, and the grid toggle. A 
 | Self / same gender | Own id, or an unpublished same-gender id | `400` for self. `404` when the target is not a listable opposite profile |
 | Billing | Card, grid, and pass | No billing call |
 | Discover HTML | `/decouvrir` | Card visible, grid hidden. Pass, flash, and invite buttons present. No Al-Hassan, no sample quote, no `view=card` in the document. Grid fetch stays `view=grid` |
+| One filter | `/decouvrir?city=ouagadougou` | Card visible, grid hidden. Chip « Ville : Ouagadougou » on both frames. `GET /v1/filters` runs. No marital chip |
 | Many filters | `marital_status` and `polygamy_intent` | Grid visible, card hidden, Search chrome, no "1 profil correspondant" |
 | Toggle | Card then grid then card | One fetch each, then the text cache. Bookmark posts `/v1/favourites`. Pass posts `/v1/browse/pass` and stays on the page. A tile opens `/profil/:id` |
 | Trait chips | Shared city, madhhab, practice, polygamy, marital status | Découvrir draws `location_on`, `menu_book`, `schedule`, and `handshake`, then the marital label with no icon. Search draws the first three icons and no `handshake`. No « Projet monogame exclusif » |
@@ -74,14 +77,14 @@ The browser card is Amina_Bobo_nom_tres_long_pour_la_ligne, 29, Ouagadougou, ver
 
 ## My results
 
-- `discover-page.test.ts`: 8 passed (3 page tests, 5 browser tests). Re-checked after the QA fail on chips, pass-vs-grid, and the card bookmark.
+- `discover-page.test.ts`: 8 passed (3 page tests, 5 browser tests). Re-checked after the epic-check fail: `/decouvrir?city=ouagadougou` paints « Ville : Ouagadougou » on the card, and zero filters still skip `/v1/filters`.
 - `browse-grid.test.ts`: not re-run. The API and the exclusion table did not change.
 - Card and grid passed `scrollWidth <= innerWidth` at 360, 390, 768, 1024, 1280, and 1440.
 - Shots: `code/docs/qa-handoffs/epic-3-3.13-widths/card-360.png` through `card-1440.png`, and `grid-360.png` through `grid-1440.png`. The card shots show the city and madhhab icons. The blur URL in that test server is not a file, so the reserved well shows a broken-image mark in the corner. A real signed blur URL covers the well.
 
 ## Three validation passes
 
-1. Behavior: omitted view is one card. Traits come from stored fields, with the Stitch icon only when that comp icons the field. Pass writes a viewer-scoped exclusion, drops the in-flight browse, and reloads the open view. Enter on the card bookmark posts once, and the next card does not keep the previous saved state. The grid toggle remains. Two filters open the grid. Invite and Flash do not post. Lite defers a clear photo and keeps a blur thumb.
+1. Behavior: omitted view is one card. Traits come from stored fields, with the Stitch icon only when that comp icons the field. Pass writes a viewer-scoped exclusion, drops the in-flight browse, and reloads the open view. Enter on the card bookmark posts once, and the next card does not keep the previous saved state. The grid toggle remains. One filter stays on the card and paints its Story 3.9 chip. Two filters open the grid. Invite and Flash do not post. Lite defers a clear photo and keeps a blur thumb.
 2. Responsive: card and grid passed `scrollWidth <= innerWidth` at 360, 390, 768, 1024, 1280, and 1440. Shots for every width are in `code/docs/qa-handoffs/epic-3-3.13-widths/`.
 3. Stitch: unfiltered Découvrir matches `57-discover/screen.html`, including the chip shell and `location_on`, `menu_book`, `schedule`, and `handshake`. The grid matches `57-discover/grid.html`. A many-filter card matches `13-search/screen.html`, including that screen's chip shell and the bookmark `data-icon`. Sample names, the sample quote, the invented count, and the state switchers are not a member-facing control.
 

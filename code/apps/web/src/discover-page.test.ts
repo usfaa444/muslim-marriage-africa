@@ -1430,6 +1430,16 @@ describe('discover grid in a browser', () => {
       expect(cardEmpty.text).toBe('Aucun profil pour ces filtres.')
       for (const width of WIDTHS) await measure(width, 'filtered')
       expect(filterFetches).toBe(2)
+      await go('/decouvrir?city=ouagadougou')
+      const oneFilter = (await value(
+        "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.body.innerText || ''; const card = document.getElementById('discover-card'); const grid = document.getElementById('discover-grid'); const ready = text.indexOf('Ville : Ouagadougou') >= 0; if (ready || Date.now() - start > 4000) resolve({ text: text, card: card ? card.hidden : true, grid: grid ? grid.hidden : true, chips: document.querySelectorAll('[data-filter-chips] span.inline-flex').length }); else setTimeout(tick, 30) }; tick() })",
+      )) as { text: string; card: boolean; grid: boolean; chips: number }
+      expect(oneFilter.text).toContain('Ville : Ouagadougou')
+      expect(oneFilter.text).not.toContain('Marié(e)')
+      expect(oneFilter.card).toBe(false)
+      expect(oneFilter.grid).toBe(true)
+      expect(oneFilter.chips).toBe(2)
+      expect(filterFetches).toBe(3)
     } finally {
       ws.close()
       chrome.proc.kill('SIGKILL')

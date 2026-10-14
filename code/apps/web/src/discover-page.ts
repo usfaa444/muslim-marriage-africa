@@ -1049,6 +1049,7 @@ if (filterParams().length >= 2) {
   ensureCatalogue()
   loadGrid()
 } else {
+  if (filterParams().length) ensureCatalogue()
   loadCard()
 }
 `
