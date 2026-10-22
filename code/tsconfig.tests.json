@@ -20,6 +20,8 @@
     "vitest.config.ts",
     "vitest.unit.config.ts",
     "vitest.integration.config.ts",
-    "apps/api/drizzle.config.ts"
+    "apps/api/drizzle.config.ts",
+    "e2e/**/*.ts",
+    "playwright.config.ts"
   ]
 }
