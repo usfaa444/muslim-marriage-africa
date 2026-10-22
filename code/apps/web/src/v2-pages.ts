@@ -424,11 +424,11 @@ export function profileHtml(stitch: string): string {
     )
     .replace(
       '<input checked="" class="sr-only peer" type="checkbox"/>',
-      '<input id="profile-photo-blur" class="sr-only peer" type="checkbox"/>',
+      '<input id="profile-photo-blur" class="sr-only peer" type="checkbox" aria-label="Activer le flou protecteur"/>',
     )
     .replace(
       '<input checked="" class="sr-only peer" type="checkbox"/>',
-      '<input id="profile-pin" class="sr-only peer" type="checkbox"/>',
+      '<input id="profile-pin" class="sr-only peer" type="checkbox" aria-label="Activer le code PIN d\'accès"/>',
     )
     .replace(
       '<div class="p-4 rounded-md border-2 border-soft-gold/70 bg-cream space-y-3">',
@@ -449,7 +449,7 @@ export function profileHtml(stitch: string): string {
     `<!-- 5-Slot Photo Grid -->
 <div id="profile-photo-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
 <p id="profile-photo-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="status"></p>
-<input id="profile-photo-file" class="sr-only" accept="image/jpeg,image/png" type="file">
+<input id="profile-photo-file" class="sr-only" accept="image/jpeg,image/png" type="file" aria-label="Ajouter une photo">
 <!-- Privacy Note -->`,
   )
   html = html.replace(/(<textarea\b[^>]*\bid="bio"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')

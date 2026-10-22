@@ -700,6 +700,15 @@ describe('profile edit load and meter', () => {
     expect(page.photoCap.classList.contains('hidden')).toBe(false)
   })
 
+  it('names the PIN switch, the blur switch and the photo picker with their screen copy', () => {
+    const html = profileHtml(stitch())
+    expect(html).toContain('id="profile-pin" class="sr-only peer" type="checkbox" aria-label="Activer le code PIN d\'accès"')
+    expect(html).toContain('id="profile-photo-blur" class="sr-only peer" type="checkbox" aria-label="Activer le flou protecteur"')
+    expect(html).toContain('id="profile-photo-file" class="sr-only" accept="image/jpeg,image/png" type="file" aria-label="Ajouter une photo"')
+    expect(stitch()).toContain("Activer le code PIN d'accès")
+    expect(stitch()).toContain('Activer le flou protecteur')
+  })
+
   it('opens pin setup when the access code is turned on', async () => {
     const html = profileHtml(stitch())
     expect(html).toContain('id="profile-pin"')
