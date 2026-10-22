@@ -61,20 +61,18 @@ First time only, create:
   services:
     web:
       ports: ["4012:3000"]
-      environment:
-        ANKANU_PUBLIC_ORIGIN: http://localhost:4012
-        ANKANU_ALLOWED_ORIGINS: http://localhost:4012
-    api:
-      environment:
-        ANKANU_PUBLIC_ORIGIN: http://localhost:4012
-        ANKANU_ALLOWED_ORIGINS: http://localhost:4012
-    worker:
-      environment:
-        ANKANU_PUBLIC_ORIGIN: http://localhost:4012
-        ANKANU_ALLOWED_ORIGINS: http://localhost:4012
   ```
 
-- `~/.ankanu/local.env` with `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY` set to random local-only values.
+- `~/.ankanu/local.env`:
+
+  ```bash
+  S3_ACCESS_KEY_ID=<random local-only value>
+  S3_SECRET_ACCESS_KEY=<random local-only value>
+  ANKANU_PUBLIC_ORIGIN=http://localhost:4012
+  ANKANU_ALLOWED_ORIGINS=http://localhost:4012
+  ```
+
+  `compose.yaml` reads both origins from the env file (staging keeps its own in `/var/lib/ankanu/compose.interpolate.env`), and the api refuses to boot without them. Object storage uses the `pgsty/minio` image, since `minio/minio` is no longer published.
 
 Each story, from `code/` on the story branch:
 
