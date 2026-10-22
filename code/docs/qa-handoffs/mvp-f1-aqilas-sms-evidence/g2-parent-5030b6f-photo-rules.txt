@@ -1,0 +1,35 @@
+
+ RUN  v5.0.3 /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/parent/code
+
+ ❯ apps/web/src/photo-rules.test.ts (3 tests | 1 failed) 29ms
+   ❯ photo rules (3)
+     × keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button 19ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/photo-rules.test.ts > photo rules > keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ apps/web/src/photo-rules.test.ts:256:20
+    254|       '/usr/bin/chromium',
+    255|     ].find((path) => existsSync(path))
+    256|     expect(binary).toBeTruthy()
+       |                    ^
+    257|     const html = photoHtml(stitch())
+    258|     const server = createServer((request, response) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 2 passed (3)
+   Start at  07:18:51
+   Duration  475ms (transform 71%, import 14%, tests 9%, setup 4%, worker 2%)
+
+exit 1

@@ -1,0 +1,5 @@
+
+> build
+> tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json
+
+exit 0

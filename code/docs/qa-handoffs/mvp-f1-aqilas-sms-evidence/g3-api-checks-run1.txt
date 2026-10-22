@@ -1,0 +1,36 @@
+PASS S01 signed out / bogus session: send is 401, GET is 401, vendor never called | send=401 get=401 bogus=401 vendorCalls=0
+PASS S02a send: 201 {expires_at}, exactly one POST to vendor | status=201 body={"expires_at":"2026-10-22T07:10:23.999Z"} vendorCalls=1
+PASS S02b vendor request: POST /api/v1/sms, X-AUTH-TOKEN test-key, JSON, from/to/text exact | {"t":"2026-10-22T07:00:24.010Z","method":"POST","url":"/api/v1/sms","host":"sms-stub:8099","token":"test-key","type":"application/json","headers":["host","connection","x-auth-token","content-type","accept","accept-language","sec-fetch-mode","user-agent","accept-encoding","content-length"],"body":{"from":"AnKanu","to":["+22600000011"],"text":"AnKanu : votre code est 630980. Il expire dans 10 minutes. Ne le partagez avec personne."}}
+PASS S02c SMS text is one GSM-7 segment (<=160, basic charset) | len=88
+PASS S02d stored hash is sha256 of the code in the SMS; phone stored; status pending | 09535716ddf9481df5a654f1ebb9ddc3bf172b9f0119a2e9c962f0bb11bb80a0|+22600000011|pending
+PASS S02e wrong code -> 400 OTP_INVALID | 400 {"error":{"code":"OTP_INVALID","message":"Code invalide ou expiré.","details":null,"request_id":"01a16269-33e2-7c49-861d-dfc5e66ac67e","retryable":false}}
+PASS S02f code from the vendor SMS verifies -> 200 granted | 200 {"status":"granted"}
+PASS S02g GET returns masked phone, never the E.164 or code | {"status":"granted","expires_at":"2026-10-22T07:10:23.999Z","phone_masked":"+226 00 •• •• 11"}
+PASS S02h sms_dispatch: one row, template OTP | 1|OTP
+PASS S02i sms_dispatch has no phone/code column | account_id,created_at,id,template
+PASS S02j send after granted -> 200, no new vendor call | 200 calls=1
+PASS S03 second send inside 60 s -> 200 same expires_at, vendor called once (Story 2.7 cooldown) | 201/200 calls=1
+PASS S04 8 concurrent sends -> one 201, rest 200, ONE vendor SMS (no double-send) | statuses=200,200,200,200,200,200,200,201 vendorCalls=1
+PASS S05-500 vendor 500 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-379c-7fe0-8a31-0fd5cabe6a42","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 22ms
+PASS S05-500-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-379c-7fe0-8a31-0fd5cabe6a42","retryable":true}}
+PASS S05-500-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-401 vendor 401 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3958-7dbe-b5e9-57c1d5760b9d","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 18ms
+PASS S05-401-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3958-7dbe-b5e9-57c1d5760b9d","retryable":true}}
+PASS S05-401-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-400 vendor 400 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3b2b-713a-b527-99429c82acc4","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 17ms
+PASS S05-400-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3b2b-713a-b527-99429c82acc4","retryable":true}}
+PASS S05-400-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-429 vendor 429 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3d24-7937-b092-bad3b9456578","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 21ms
+PASS S05-429-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3d24-7937-b092-bad3b9456578","retryable":true}}
+PASS S05-429-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-404 vendor 404 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3ee6-7b62-a8a5-baaada683273","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 18ms
+PASS S05-404-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-3ee6-7b62-a8a5-baaada683273","retryable":true}}
+PASS S05-404-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-503 vendor 503 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-40a8-7e7d-87b8-41a366c7eedc","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 17ms
+PASS S05-503-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16269-40a8-7e7d-87b8-41a366c7eedc","retryable":true}}
+PASS S05-503-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-200 vendor 200 counts as success -> 201 | 201 {"expires_at":"2026-10-22T07:10:27.984Z"}
+Error: signup failed 429 {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16269-43fd-7161-9b27-d1fbfab94637","retryable":false}}
+    at signup (file:///tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa/api-checks.mjs:60:33)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async main (file:///tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa/api-checks.mjs:152:19)

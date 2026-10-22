@@ -1,0 +1,29 @@
+PASS F2pre otp-step account prepared via API | 201
+FAIL F2-phone-360 /phone @360: no horizontal scroll; axe 0 serious/critical | scrollWidth=360 innerWidth=360 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-390 /phone @390: no horizontal scroll; axe 0 serious/critical | scrollWidth=390 innerWidth=390 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-768 /phone @768: no horizontal scroll; axe 0 serious/critical | scrollWidth=768 innerWidth=768 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1024 /phone @1024: no horizontal scroll; axe 0 serious/critical | scrollWidth=1024 innerWidth=1024 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1280 /phone @1280: no horizontal scroll; axe 0 serious/critical | scrollWidth=1280 innerWidth=1280 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1440 /phone @1440: no horizontal scroll; axe 0 serious/critical | scrollWidth=1440 innerWidth=1440 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-otp-360 /otp @360: no horizontal scroll; axe 0 serious/critical | scrollWidth=360 innerWidth=360 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 94x32; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-390 /otp @390: no horizontal scroll; axe 0 serious/critical | scrollWidth=390 innerWidth=390 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-768 /otp @768: no horizontal scroll; axe 0 serious/critical | scrollWidth=768 innerWidth=768 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1024 /otp @1024: no horizontal scroll; axe 0 serious/critical | scrollWidth=1024 innerWidth=1024 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1280 /otp @1280: no horizontal scroll; axe 0 serious/critical | scrollWidth=1280 innerWidth=1280 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1440 /otp @1440: no horizontal scroll; axe 0 serious/critical | scrollWidth=1440 innerWidth=1440 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+PASS F3a API answers 503 UNHANDLED retryable for the browser call | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a16272-ca87-700b-ae2c-3d4a0b5d2113","retryable":true}}
+FAIL F3b member is told the send failed and can retry (error message visible on /phone) | visible text mentions failure: false; role=alert/status/aria-live regions: []; url=http://localhost:4021/phone
+PASS F3c form keeps the typed number after the failure | 00000801
+PASS F3d after the vendor recovers, pressing Enter again sends and reaches /otp | http://localhost:4021/otp
+NOTE F3e console during failure | expected 503 responses=1; console=["Failed to load resource: the server responded with a status of 503 (Service Unavailable) http://localhost:4021/v1/verifications/otp"]; other problems=["POST http://localhost:4021/v1/verifications/otp net::ERR_ABORTED"]
+PASS F4a Resend inside 60 s: no second SMS (Story 2.7 cooldown) | calls=1
+FAIL F4b Resend while vendor fails: vendor tried once; member sees an error | calls=2 errorVisible=false
+PASS F4c after the failed resend the first code is still the stored one | 1
+PASS F4d Resend with vendor healthy: new SMS with a different code | calls=3 first=947749 second=548601
+PASS F4e old code rejected (400), new code accepted (200) | 400/200
+PASS F5a Tab reaches the phone input | after 1 Tab presses
+NOTE F5b focus on arrival at /otp | INPUT.Chiffre 1
+PASS F5c whole flow completes with the keyboard only (Tab, digits, Enter) | http://localhost:4021/id-liveness tabsOnOtp=11
+
+SUMMARY 10 pass, 14 fail, 2 notes
+FAILED: F2-phone-360, F2-phone-390, F2-phone-768, F2-phone-1024, F2-phone-1280, F2-phone-1440, F2-otp-360, F2-otp-390, F2-otp-768, F2-otp-1024, F2-otp-1280, F2-otp-1440, F3b, F4b

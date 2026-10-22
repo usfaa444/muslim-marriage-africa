@@ -1,0 +1,22 @@
+[
+ {
+  "path": "/phone",
+  "loadMs": 8975,
+  "lcpMs": 772,
+  "cls": 0.0107,
+  "transferKB": 1321,
+  "requests": 7,
+  "apiCalls": []
+ },
+ {
+  "path": "/otp",
+  "loadMs": 8909,
+  "lcpMs": 720,
+  "cls": 0.0018,
+  "transferKB": 1319,
+  "requests": 8,
+  "apiCalls": [
+   "200 http://localhost:4021/v1/verifications/otp 102"
+  ]
+ }
+]

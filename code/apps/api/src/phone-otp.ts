@@ -184,7 +184,7 @@ async function sendOtp(
     expiresAt: new Date(now.getTime() + OTP_TTL_MS),
     limit,
     waitMs: OTP_RESEND_WAIT_MS,
-    log: () => input.send({ code }),
+    log: () => input.send({ code, phone_e164: phone }),
   })
   if (issued.result === 'rate_limited') {
     return failure(429, 'RATE_LIMITED', RATE_MESSAGE, null, false)

@@ -1,0 +1,3 @@
+stub stopped -> 503 44 ms {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1628a-3714-7010-ad19-2f95631fe869","retryable":true}}
+sms aqilas network error
+

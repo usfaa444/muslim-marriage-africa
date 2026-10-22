@@ -1,0 +1,55 @@
+PASS S01 signed out / bogus session: send is 401, GET is 401, vendor never called | send=401 get=401 bogus=401 vendorCalls=0
+PASS S02a send: 201 {expires_at}, exactly one POST to vendor | status=201 body={"expires_at":"2026-10-22T08:09:04.840Z"} vendorCalls=1
+PASS S02b vendor request: POST /api/v1/sms, X-AUTH-TOKEN test-key, JSON, from/to/text exact | {"t":"2026-10-22T07:59:04.848Z","method":"POST","url":"/api/v1/sms","host":"sms-stub:8099","token":"test-key","type":"application/json","headers":["host","connection","x-auth-token","content-type","accept","accept-language","sec-fetch-mode","user-agent","accept-encoding","content-length"],"body":{"from":"AnKanu","to":["+22600002001"],"text":"AnKanu : votre code est 758869. Il expire dans 10 minutes. Ne le partagez avec personne."}}
+PASS S02c SMS text is one GSM-7 segment (<=160, basic charset) | len=88
+PASS S02d stored hash is sha256 of the code in the SMS; phone stored; status pending | 59390bd4c43999fab2a6c233c14446fac8f67ea257753ad5897b19ace84a0c54|+22600002001|pending
+PASS S02e wrong code -> 400 OTP_INVALID | 400 {"error":{"code":"OTP_INVALID","message":"Code invalide ou expiré.","details":null,"request_id":"01a1629e-ed2c-7edd-bd47-0043ecdd7eab","retryable":false}}
+PASS S02f code from the vendor SMS verifies -> 200 granted | 200 {"status":"granted"}
+PASS S02g GET returns masked phone, never the E.164 or code | {"status":"granted","expires_at":"2026-10-22T08:09:04.840Z","phone_masked":"+226 00 •• •• 01"}
+PASS S02h sms_dispatch: one row, template OTP | 1|OTP
+PASS S02i sms_dispatch has no phone/code column | account_id,created_at,id,template
+PASS S02j send after granted -> 200, no new vendor call | 200 calls=1
+PASS S03 second send inside 60 s -> 200 same expires_at, vendor called once (Story 2.7 cooldown) | 201/200 calls=1
+PASS S04 8 concurrent sends -> one 201, rest 200, ONE vendor SMS (no double-send) | statuses=200,200,200,200,200,200,200,201 vendorCalls=1
+PASS S05-500 vendor 500 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f151-7355-987c-8a0f3c0c1646","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 19ms
+PASS S05-500-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f151-7355-987c-8a0f3c0c1646","retryable":true}}
+PASS S05-500-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-401 vendor 401 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f318-7d57-945c-5a5c69b7da51","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 24ms
+PASS S05-401-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f318-7d57-945c-5a5c69b7da51","retryable":true}}
+PASS S05-401-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-400 vendor 400 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f4f4-7ed2-b38c-c9acd4cab00e","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 25ms
+PASS S05-400-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f4f4-7ed2-b38c-c9acd4cab00e","retryable":true}}
+PASS S05-400-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-429 vendor 429 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f6dd-7106-96d8-eadf8a3b889a","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 20ms
+PASS S05-429-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f6dd-7106-96d8-eadf8a3b889a","retryable":true}}
+PASS S05-429-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-404 vendor 404 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f8e4-7254-8683-eb21c9050f8a","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 32ms
+PASS S05-404-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-f8e4-7254-8683-eb21c9050f8a","retryable":true}}
+PASS S05-404-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-503 vendor 503 -> 503 UNHANDLED retryable, French message, nothing stored | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-fb62-7652-8eed-60884cca3e30","retryable":true}} verification_rows=0 dispatch=0 vendorCalls=1 20ms
+PASS S05-503-leak error body has no code/phone/key/vendor text | {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1629e-fb62-7652-8eed-60884cca3e30","retryable":true}}
+PASS S05-503-retry immediate retry after failure works (no cooldown from the rolled-back attempt) | 201
+PASS S05-200 vendor 200 counts as success -> 201 | 201 {"expires_at":"2026-10-22T08:09:09.239Z"}
+PASS S05-202 vendor 202 counts as success -> 201 | 201 {"expires_at":"2026-10-22T08:09:09.831Z"}
+PASS S05-204 vendor 204 counts as success -> 201 | 201 {"expires_at":"2026-10-22T08:09:10.470Z"}
+PASS S05b failed re-send keeps the earlier hash/phone/expiry and dispatch count; earlier code still verifies | before=e4bc945ef9d22418455f.. same=true dispatch=1 verifyOld=200
+PASS S06 vendor silent for 12 s -> 503 after ~10 s (9.5-11.5 s), nothing stored | 503 after 10031ms rows=0 vendorCalls=1
+PASS S06b vendor slow but under 10 s (3 s) -> 201 | 201 3027ms
+PASS S07-201 vendor sends 201 headers then stalls the body -> 201 within 3 s (body not awaited) | 201 20ms
+PASS S07-500 vendor sends 500 headers then stalls the body -> 503 within 3 s (body not awaited) | 503 26ms
+PASS S08-500 5 MB vendor body with 500 -> 503, body not echoed, fast | 503 25ms respLen=152
+PASS S08-201 5 MB vendor body with 201 -> 201, body not echoed, fast | 201 25ms respLen=41
+PASS S09 vendor 307 to ANOTHER host: the key must not follow it (expect no second request carrying X-AUTH-TOKEN) | status=503 requests=1 second=null
+PASS S10 invalid/hostile phone inputs and bodies -> 400 (never 5xx), vendor never called | missing phone:400 phone null:400 phone number type:400 phone array:400 phone object:400 spaces:400 no plus:400 script:400 sql:400 300 chars:400 16 digits:400 leading zero cc:400 trailing newline:400 arabic-indic digits:400 emoji:400 json-injection:400 unknown action:400 no action:400 nonJson:400 arrayBody:400 vendorCalls=0
+PASS S10b malformed bodies do not 5xx | 400 400
+PASS S10c valid non-BF E.164 (+33...) -> 201 and `to` carries it verbatim in a one-element list | 201 ["+33612345678"]
+PASS S11 another member's session cannot verify with A's code (400); A still can (200) | B=400 A=200
+PASS S11b B's GET shows no pending phone (no cross-account bleed) | {"status":"none"}
+PASS S12 hourly cap (5): sends 1-5 -> 201, 6th -> 429 with no vendor call | 201,201,201,201,201,429 vendorCalls=5
+api log sms/otp lines (distinct): ["sms aqilas status 301","sms aqilas status 302","sms aqilas status 303","sms aqilas status 307","sms aqilas status 308","sms aqilas status 500","sms aqilas status 401","sms aqilas status 400","sms aqilas status 429","sms aqilas status 404","sms aqilas status 503","sms aqilas timeout"]
+PASS S13a api container output has no code (32 codes), phone (28), key or vendor text
+PASS S13b api log has no `otp <code>` line in aqilas mode
+PASS S13c only fixed `sms aqilas ...` lines are emitted for failures
+PASS S13d DB dump: no plaintext code anywhere; phone only in verification_record (Story 2.7 design); no key/vendor text
+
+SUMMARY 52/52 passed

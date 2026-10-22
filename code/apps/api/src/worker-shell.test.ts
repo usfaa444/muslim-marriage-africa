@@ -58,6 +58,10 @@ function childEnv(port: number, role: string | undefined): NodeJS.ProcessEnv {
     'S3_REGION',
     'S3_ACCESS_KEY_ID',
     'S3_SECRET_ACCESS_KEY',
+    'SMS_PROVIDER',
+    'AQILAS_API_KEY',
+    'AQILAS_SENDER_ID',
+    'AQILAS_API_URL',
   ]) {
     delete env[key]
   }
@@ -69,10 +73,10 @@ function childEnv(port: number, role: string | undefined): NodeJS.ProcessEnv {
   return env
 }
 
-function spawnMain(port: number, role: string | undefined): ChildProcess {
+function spawnMain(port: number, role: string | undefined, extra: NodeJS.ProcessEnv = {}): ChildProcess {
   return spawn(process.execPath, ['dist/main.js'], {
     cwd: appRoot,
-    env: childEnv(port, role),
+    env: { ...childEnv(port, role), ...extra },
     stdio: ['ignore', 'ignore', 'pipe'],
   })
 }
@@ -161,6 +165,32 @@ describe('worker shell', () => {
     await expectWorkerProcess('worker')
     await expectWorkerProcess(' worker ')
   })
+
+  it('refuses to boot the api when the SMS settings are incomplete or unknown', async () => {
+    for (const [extra, expected] of [
+      [{ SMS_PROVIDER: 'aqilas' }, 'AQILAS_API_KEY is required when SMS_PROVIDER=aqilas'],
+      [{ SMS_PROVIDER: 'twilio' }, 'SMS_PROVIDER must be log or aqilas'],
+      [{ SMS_PROVIDER: 'aqilas', AQILAS_API_KEY: `test${'\n'}key` }, 'AQILAS_API_KEY must not contain control characters'],
+    ] as const) {
+      const port = await freePort()
+      const child = spawnMain(port, undefined, extra)
+      let stderr = ''
+      child.stderr?.setEncoding('utf8')
+      child.stderr?.on('data', (chunk: string) => {
+        stderr += chunk
+      })
+      try {
+        await expectNoListener(port, child)
+        if (child.exitCode === null) {
+          await once(child, 'exit')
+        }
+        expect(child.exitCode).not.toBe(0)
+        expect(stderr).toContain(expected)
+      } finally {
+        await stopChild(child)
+      }
+    }
+  }, 30_000)
 
   it('still serves GET /v1/health for the api role', async () => {
     await expectApiHealth(undefined)

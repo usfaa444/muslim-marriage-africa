@@ -1,0 +1,48 @@
+PASS F1a /phone renders for a phone-step account (no redirect) | http://localhost:4021/phone
+PASS F1b submit -> /otp, vendor received exactly one SMS to +226<digits> | url=http://localhost:4021/otp calls=1 to=+22600002201
+PASS F1c OTP screen shows only the masked number | +226 00 •• •• 01
+PASS F1d reload on /otp keeps the pending state (masked number re-read from server) | http://localhost:4021/otp
+PASS F1e code from the vendor SMS typed in the 6 boxes -> /id-liveness | http://localhost:4021/id-liveness
+PASS F1f persisted: verification_record status granted | granted
+FAIL F1g no console errors, page errors, failed requests or 4xx/5xx during the happy path | POST http://localhost:4021/v1/verifications/otp net::ERR_ABORTED
+PASS F2pre otp-step account prepared via API | 201
+FAIL F2-phone-360 /phone @360: no horizontal scroll; axe 0 serious/critical | scrollWidth=360 innerWidth=360 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-390 /phone @390: no horizontal scroll; axe 0 serious/critical | scrollWidth=390 innerWidth=390 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-768 /phone @768: no horizontal scroll; axe 0 serious/critical | scrollWidth=768 innerWidth=768 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1024 /phone @1024: no horizontal scroll; axe 0 serious/critical | scrollWidth=1024 innerWidth=1024 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1280 /phone @1280: no horizontal scroll; axe 0 serious/critical | scrollWidth=1280 innerWidth=1280 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1440 /phone @1440: no horizontal scroll; axe 0 serious/critical | scrollWidth=1440 innerWidth=1440 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-otp-360 /otp @360: no horizontal scroll; axe 0 serious/critical | scrollWidth=360 innerWidth=360 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 94x32; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-390 /otp @390: no horizontal scroll; axe 0 serious/critical | scrollWidth=390 innerWidth=390 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-768 /otp @768: no horizontal scroll; axe 0 serious/critical | scrollWidth=768 innerWidth=768 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1024 /otp @1024: no horizontal scroll; axe 0 serious/critical | scrollWidth=1024 innerWidth=1024 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1280 /otp @1280: no horizontal scroll; axe 0 serious/critical | scrollWidth=1280 innerWidth=1280 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1440 /otp @1440: no horizontal scroll; axe 0 serious/critical | scrollWidth=1440 innerWidth=1440 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+PASS F3a API answers 503 UNHANDLED retryable for the browser call | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a162a0-401a-737c-8792-318110d92fa3","retryable":true}}
+FAIL F3b member is told the send failed and can retry (error message visible on /phone) | visible text mentions failure: false; role=alert/status/aria-live regions: []; url=http://localhost:4021/phone
+PASS F3c form keeps the typed number after the failure | 00002202
+PASS F3d after the vendor recovers, pressing Enter again sends and reaches /otp | http://localhost:4021/otp
+NOTE F3e console during failure | expected 503 responses=1; console=["Failed to load resource: the server responded with a status of 503 (Service Unavailable) http://localhost:4021/v1/verifications/otp"]; other problems=["POST http://localhost:4021/v1/verifications/otp net::ERR_ABORTED"]
+PASS F4a Resend inside 60 s: no second SMS (Story 2.7 cooldown) | calls=1
+FAIL F4b Resend while vendor fails: vendor tried once; member sees an error | calls=2 errorVisible=false
+PASS F4c after the failed resend the first code is still the stored one | 1
+PASS F4d Resend with vendor healthy: new SMS with a different code | calls=3 first=763671 second=395219
+PASS F4e old code rejected (400), new code accepted (200) | 400/200
+PASS F5a Tab reaches the phone input | after 1 Tab presses
+NOTE F5b focus on arrival at /otp | INPUT.Chiffre 1
+PASS F5c whole flow completes with the keyboard only (Tab, digits, Enter) | http://localhost:4021/id-liveness tabsOnOtp=11
+PASS F6a Slow 3G + 1.5 s vendor: reaches /otp; triple submit sends ONE SMS | 28383 ms to /otp; vendorCalls=1
+NOTE F6b time to feedback | submit->/otp 28383 ms (3G + 1.5 s vendor). The send button shows no pending/disabled state in this screen.
+NOTE F7 session cleared mid-flow then submit | api=401 vendorCalls=0 url=http://localhost:4021/phone (UI shows no message on 401)
+PASS F7a expired session: API 401 and no SMS sent | 401 calls=0
+PASS F7b deep link /phone while signed out -> /auth | http://localhost:4021/auth
+NOTE F8a Back from /otp | lands on /otp
+PASS F8b deep link /phone while code pending is redirected to /otp (server-side step guard) | http://localhost:4021/otp
+PASS F8c deep link to a later step while pending -> /otp | http://localhost:4021/otp
+NOTE F8d change-number link on /otp | /phone
+PASS F9-320 /phone reflows at 320 (400% of 1280): no horizontal scroll | 320/320
+PASS F9-720 /phone reflows at 720 (200% of 1440): no horizontal scroll | 720/720
+PASS F10 non-digit junk in the field never reaches the vendor (client needs 8 digits; server validates E.164) | typed="<img src=x onerror=alert(1)>'; DROP--" vendorCalls=0
+
+SUMMARY 24 pass, 15 fail, 6 notes
+FAILED: F1g, F2-phone-360, F2-phone-390, F2-phone-768, F2-phone-1024, F2-phone-1280, F2-phone-1440, F2-otp-360, F2-otp-390, F2-otp-768, F2-otp-1024, F2-otp-1280, F2-otp-1440, F3b, F4b

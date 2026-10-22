@@ -1,0 +1,10 @@
+PASS F1a /phone renders for a phone-step account (no redirect) | http://localhost:4021/phone
+PASS F1b LOG MODE: submit -> /otp, vendor NOT called, code printed as `otp NNNNNN` in the api log | url=http://localhost:4021/otp vendorCalls=0 logCode=295644
+PASS F1c OTP screen shows only the masked number | +226 00 •• •• 01
+PASS F1d reload on /otp keeps the pending state (masked number re-read from server) | http://localhost:4021/otp
+PASS F1e code from the vendor SMS typed in the 6 boxes -> /id-liveness | http://localhost:4021/id-liveness
+PASS F1f persisted: verification_record status granted | granted
+FAIL F1g no console errors, page errors, failed requests or 4xx/5xx during the happy path | POST http://localhost:4021/v1/verifications/otp net::ERR_ABORTED
+
+SUMMARY 6 pass, 1 fail, 0 notes
+FAILED: F1g

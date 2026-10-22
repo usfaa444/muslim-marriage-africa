@@ -1,0 +1,1 @@
+4 fresh accounts (email NOT verified) each sent to the same number: statuses=201,201,201,201 vendor SMS to that number=4

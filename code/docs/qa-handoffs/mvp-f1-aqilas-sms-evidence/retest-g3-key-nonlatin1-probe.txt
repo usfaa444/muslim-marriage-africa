@@ -1,0 +1,5 @@
+plain ascii                | boot: accepted | sent OK (live local server) | log: []
+en dash U+2013             | boot: accepted | FAILED: aqilas send failed | log: ["sms aqilas network error"]
+e-acute U+00E9 (Latin-1)   | boot: accepted | sent OK (live local server) | log: []
+Arabic letter U+0627       | boot: accepted | FAILED: aqilas send failed | log: ["sms aqilas network error"]
+embedded space             | boot: accepted | sent OK (live local server) | log: []
