@@ -46,6 +46,7 @@ docker compose -p ankanu-local exec api node apps/api/dist/staff-cli.js disable 
 - First sign-in at `/staff/connexion`: email, that password and the captcha, then a new password (12 to 128 characters), then enroll an authenticator app (Google Authenticator, Authy: TOTP, SHA-1, 30 seconds, 6 digits) from the QR code or the manual key, then a six-digit code. Later sign-ins ask for email, password and a code.
 - A code is accepted once, within one 30-second step either side. Five wrong codes lock the account's staff sign-in for 15 minutes. Staff sessions end after 30 minutes without activity and are never PIN sessions.
 - `reset-mfa` clears the enrollment and ends the account's sessions; the next sign-in enrolls again (a lost phone). `disable` blocks sign-in and ends the sessions.
+- Exit codes: `0` done; `1` refused by the data, nothing changed (the email is already used, or no staff account uses it); `2` bad usage (unknown command, missing or malformed `--email`, a `--role` other than `moderator` or `operator`). An unexpected failure prints only the error class and the database code, never the SQL or its values.
 - Every command, sign-in success and failure, lockout, enrollment and password change writes an `audit_event`, never a password, code or secret.
 
 The TOTP secrets are stored encrypted (AES-256-GCM) with a server key. Put both variables in the api's env file (`~/.ankanu/api.env` locally, `/var/lib/ankanu/api.env` on staging), never in the repo:

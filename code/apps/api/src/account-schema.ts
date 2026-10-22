@@ -191,7 +191,7 @@ export const session = pgTable(
     check('session_kind_check', sql`${table.kind} in ('web', 'capacitor', 'mahram', 'staff')`),
     check(
       'session_mfa_state_check',
-      sql`(${table.kind} = 'staff' and ${table.mfa_state} in ('password_change', 'enroll', 'verify', 'done')) or (${table.kind} <> 'staff' and ${table.mfa_state} is null)`,
+      sql`(${table.kind} = 'staff' and ${table.mfa_state} is not null and ${table.mfa_state} in ('password_change', 'enroll', 'verify', 'done')) or (${table.kind} <> 'staff' and ${table.mfa_state} is null)`,
     ),
   ],
 )

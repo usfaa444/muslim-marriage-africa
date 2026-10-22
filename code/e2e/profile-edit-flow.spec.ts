@@ -2,8 +2,10 @@ import type { BrowserContext, Page, Request } from '@playwright/test'
 import { expect, expectAccessible, expectNoHorizontalOverflow, test } from './fixtures'
 
 // /profile-edit and /pin render for the `web` stub session without an API call on the
-// server, so these tests answer every browser call to /v1 themselves. They run the same
-// way against the local web-only server and against a full stack (E2E_BASE_URL).
+// server, so these tests answer every browser call to /v1 themselves. Stub cookies are a dev-build
+// test seam only (Story 12.1): a built image ignores them, so these run on the web-only dev server.
+
+const STUB_SKIP = 'A built image ignores stub cookies (Story 12.1); these run on the web-only dev server.'
 
 const PNG = Buffer.from(
   'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
@@ -227,6 +229,7 @@ async function filledDots(page: Page): Promise<number> {
 }
 
 test.describe('profile edit and the PIN screen', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
   test('turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile', async ({ page, context, baseURL }) => {
     const api = newApi()
     await serveApi(context, baseURL ?? '', api)
@@ -404,6 +407,7 @@ test.describe('profile edit and the PIN screen', () => {
 })
 
 test.describe('profile edit photos', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
   test('a photo whose signed URL expired is read again and shown without a reload', async ({ page, context, baseURL, guards }) => {
     const api = newApi({ tokens: ['expired', 'fresh'], liveTokens: new Set(['fresh']) })
     await serveApi(context, baseURL ?? '', api)
@@ -437,13 +441,20 @@ test.describe('profile edit photos', () => {
 test.describe('web image screens', () => {
   test.skip(!process.env.E2E_BASE_URL, 'The web-only dev server reads the repo; only a built image can miss a screen.')
 
-  test('screens read from the image answer without a server error', async ({ context, baseURL }) => {
-    // 52-ts-visit-signals is one of the screens the image did not copy. The staff stub reaches it with no
-    // account. Only the server answer is checked: the API has no staff stub, so the page's own data call
-    // answers 401. Review, discover and favourites need a member past the signup gate (see the handoff).
-    await context.addCookies([{ name: 'ankanu_session', value: 'staff', url: baseURL ?? '' }])
-    const response = await context.request.get('/staff/visit-signals', { maxRedirects: 0 })
+  test('screens read from the image answer without a server error', async ({ context }) => {
+    // 52-ts-visit-signals is one of the screens the image did not copy. The staff sign-in is built from it
+    // and needs no session. Review, discover and favourites need a member past the signup gate (see the handoff).
+    const response = await context.request.get('/staff/connexion', { maxRedirects: 0 })
     expect(response.status()).toBe(200)
     expect(response.headers()['content-type']).toContain('text/html')
+  })
+
+  test('the image ignores stub cookies: a forged staff cookie gets no staff page', async ({ context, baseURL }) => {
+    await context.addCookies([{ name: 'ankanu_session', value: 'staff', url: baseURL ?? '' }])
+    for (const path of ['/staff', '/staff/visit-signals']) {
+      const response = await context.request.get(path, { maxRedirects: 0 })
+      expect(response.status(), path).toBe(303)
+      expect(response.headers()['location'], path).toMatch(/\/staff\/connexion$/)
+    }
   })
 })

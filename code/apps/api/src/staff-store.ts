@@ -1,4 +1,4 @@
-import { and, eq, gt, isNull, lt, or } from 'drizzle-orm'
+import { and, eq, gt, isNull, lt, lte, or, sql } from 'drizzle-orm'
 import { isUuidV7, newId } from '@ankanu/kernel'
 import type { AuditAppend } from '@ankanu/ports'
 import { account, credential, session, staffCredential } from './account-schema.js'
@@ -49,15 +49,27 @@ export type StaffSessionView = StaffSessionRow & {
 
 export type StaffCredentialPatch = Partial<Omit<StaffCredentialRow, 'account_id' | 'created_at'>>
 
+/**
+ * One code attempt, reserved before the code is checked. `attempt` counts the attempts since the last
+ * success or lock; the attempt that reaches the limit sets the lock in the same statement.
+ * `refused`: the account is locked, so the code is not checked at all.
+ */
+export type StaffCodeClaim = { refused: false; attempt: number; locked_until: Date | null } | { refused: true; locked_until: Date | null }
+
+/** `create` answers `taken` when the email already exists, including a concurrent create that won. */
+export type StaffCreateResult = 'created' | 'taken'
+
 export type StaffStore = {
   /** The staff account and its factors, or null when the email has no staff credential. */
   findByEmail(email: string): Promise<{ account: StaffAccountRow; credential: StaffCredentialRow } | null>
   findById(accountId: string): Promise<{ account: StaffAccountRow; credential: StaffCredentialRow } | null>
   emailTaken(email: string): Promise<boolean>
-  create(row: StaffAccountRow & { password_hash: string }, factors: StaffCredentialRow, audit: AuditAppend): Promise<void>
+  create(row: StaffAccountRow & { password_hash: string }, factors: StaffCredentialRow, audit: AuditAppend): Promise<StaffCreateResult>
   updateCredential(accountId: string, patch: StaffCredentialPatch, audits?: AuditAppend[]): Promise<void>
   /** Writes `patch` with `totp_last_step = step` only while the stored step is lower. False when another call won. */
   consumeStep(accountId: string, step: number, patch: StaffCredentialPatch, audits: AuditAppend[]): Promise<boolean>
+  /** Atomic: concurrent calls see each other's attempts, so no more than `max` codes are checked per lock window. */
+  claimCodeAttempt(accountId: string, now: Date, max: number, lockMs: number): Promise<StaffCodeClaim>
   setPassword(accountId: string, passwordHash: string, audit: AuditAppend): Promise<void>
   disable(accountId: string, now: Date, audit: AuditAppend): Promise<void>
   insertSession(row: StaffSessionRow): Promise<void>
@@ -98,6 +110,7 @@ function emptyStore(): StaffStore {
     create: refuse,
     updateCredential: refuse,
     consumeStep: refuse,
+    claimCodeAttempt: refuse,
     setPassword: refuse,
     disable: refuse,
     insertSession: refuse,
@@ -154,9 +167,15 @@ export function memoryStaffStore(options: { memberEmailTaken?: (email: string) =
       return (await options.memberEmailTaken?.(email.toLowerCase())) ?? false
     },
     async create(row, factors, audit) {
-      accounts.push({ ...row, roles: [...row.roles] })
+      // No await between the check and the push: like the unique index, two creates cannot both pass.
+      const memberTaken = (await options.memberEmailTaken?.(row.email.toLowerCase())) ?? false
+      if (memberTaken || accounts.some((item) => item.email === row.email.toLowerCase())) {
+        return 'taken'
+      }
+      accounts.push({ ...row, email: row.email.toLowerCase(), roles: [...row.roles] })
       credentials.push({ ...factors })
       await audits([audit])
+      return 'created'
     },
     async updateCredential(accountId, patch, list) {
       const row = credentials.find((item) => item.account_id === accountId)
@@ -173,6 +192,21 @@ export function memoryStaffStore(options: { memberEmailTaken?: (email: string) =
       Object.assign(row, patch, { totp_last_step: step })
       await audits(list)
       return true
+    },
+    async claimCodeAttempt(accountId, now, max, lockMs) {
+      // Synchronous read and write: no other call runs between them.
+      const row = credentials.find((item) => item.account_id === accountId)
+      if (!row) {
+        return { refused: true, locked_until: null }
+      }
+      const expired = row.locked_until !== null && row.locked_until.getTime() <= now.getTime()
+      if (row.locked_until !== null && !expired) {
+        return { refused: true, locked_until: row.locked_until }
+      }
+      const attempt = expired ? 1 : row.failed_codes + 1
+      row.failed_codes = attempt
+      row.locked_until = attempt >= max ? new Date(now.getTime() + lockMs) : null
+      return { refused: false, attempt, locked_until: row.locked_until }
     },
     async setPassword(accountId, passwordHash, audit) {
       const row = accounts.find((item) => item.id === accountId)
@@ -225,6 +259,18 @@ function endAll(sessions: StaffSessionRow[], accountId: string, now: Date): void
       row.expires_at = now
     }
   }
+}
+
+function postgresErrorCode(error: unknown): string | undefined {
+  let current: unknown = error
+  for (let depth = 0; depth < 6 && typeof current === 'object' && current !== null; depth += 1) {
+    const record = current as { code?: unknown; cause?: unknown }
+    if (typeof record.code === 'string') {
+      return record.code
+    }
+    current = record.cause
+  }
+  return undefined
 }
 
 function isMfaState(value: string | null): value is StaffMfaState {
@@ -288,30 +334,39 @@ function postgresStaffStore(): StaffStore {
       return rows.length > 0
     },
     async create(row, factors, audit) {
-      await db().transaction(async (tx) => {
-        await tx.insert(account).values({
-          id: row.id,
-          email: row.email.toLowerCase(),
-          pseudonym: row.pseudonym,
-          gender: 'none',
-          roles: row.roles,
-          status: row.status,
-          age_attested: true,
-          coc_version: 'staff',
-          civil_given_name: '',
-          civil_family_name: '',
+      try {
+        await db().transaction(async (tx) => {
+          await tx.insert(account).values({
+            id: row.id,
+            email: row.email.toLowerCase(),
+            pseudonym: row.pseudonym,
+            gender: 'none',
+            roles: row.roles,
+            status: row.status,
+            age_attested: true,
+            coc_version: 'staff',
+            civil_given_name: '',
+            civil_family_name: '',
+          })
+          await tx.insert(credential).values({
+            id: newId(authNow()),
+            account_id: row.id,
+            kind: 'password',
+            secret_hash: row.password_hash,
+            provider_subject: null,
+            email_verified_at: null,
+          })
+          await tx.insert(staffCredential).values(factors)
+          await getAuditPort().append(tx, audit)
         })
-        await tx.insert(credential).values({
-          id: newId(authNow()),
-          account_id: row.id,
-          kind: 'password',
-          secret_hash: row.password_hash,
-          provider_subject: null,
-          email_verified_at: null,
-        })
-        await tx.insert(staffCredential).values(factors)
-        await getAuditPort().append(tx, audit)
-      })
+      } catch (error) {
+        // A concurrent create of the same email loses on the unique index. Nothing was written.
+        if (postgresErrorCode(error) === '23505') {
+          return 'taken'
+        }
+        throw error
+      }
+      return 'created'
     },
     async updateCredential(accountId, patch, audits = []) {
       await db().transaction(async (tx) => {
@@ -341,6 +396,35 @@ function postgresStaffStore(): StaffStore {
         }
         return true
       })
+    },
+    async claimCodeAttempt(accountId, now, max, lockMs) {
+      const until = new Date(now.getTime() + lockMs)
+      const expired = sql`(${staffCredential.locked_until} is not null and ${staffCredential.locked_until} <= ${now})`
+      const next = sql`(case when ${expired} then 1 else ${staffCredential.failed_codes} + 1 end)`
+      // One statement: Postgres serialises concurrent updates of the row, each sees the previous count.
+      const claimed = await db()
+        .update(staffCredential)
+        .set({
+          failed_codes: next,
+          locked_until: sql`(case when ${next} >= ${max} then ${until}::timestamptz else null end)`,
+        })
+        .where(
+          and(
+            eq(staffCredential.account_id, accountId),
+            or(isNull(staffCredential.locked_until), lte(staffCredential.locked_until, now)),
+          ),
+        )
+        .returning({ failed_codes: staffCredential.failed_codes, locked_until: staffCredential.locked_until })
+      const row = claimed[0]
+      if (row) {
+        return { refused: false, attempt: row.failed_codes, locked_until: asDate(row.locked_until) }
+      }
+      const current = await db()
+        .select({ locked_until: staffCredential.locked_until })
+        .from(staffCredential)
+        .where(eq(staffCredential.account_id, accountId))
+        .limit(1)
+      return { refused: true, locked_until: asDate(current[0]?.locked_until ?? null) }
     },
     async setPassword(accountId, passwordHash, audit) {
       await db().transaction(async (tx) => {

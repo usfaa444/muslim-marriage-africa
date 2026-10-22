@@ -12,6 +12,7 @@ import { setStaffMfaKey } from './staff-mfa-key.js'
 import { changeStaffPassword, loadStaffSessionById, readEnrollment, signInStaff, verifyStaffCode } from './staff-session.js'
 import { getStaffStore } from './staff-store.js'
 import { totpCode } from './staff-totp.js'
+import { newId } from '@ankanu/kernel'
 import { setAuthClock } from './auth-clock.js'
 import { readRlAuthPerMin } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
@@ -1175,6 +1176,99 @@ describe('operator_config migration', () => {
       expect(text).not.toContain(created.oneTimePassword)
       expect(text).not.toContain(secret)
       expect(text).not.toContain('phrase staff postgres')
+    } finally {
+      setStaffMfaKey(undefined)
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('counts staff code attempts atomically, refuses a staff session without a step, and a duplicate create (Story 12.1, QA round 1)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setStaffMfaKey({ key: Buffer.alloc(32, 0x5a), kid: 'test-staff-mfa' })
+    try {
+      // F9: two creates of one email at the same time. One wins; the other is a clean refusal.
+      const raced = await Promise.all([
+        createStaffAccount({ email: 'race.pg@example.bf', role: 'moderator' }),
+        createStaffAccount({ email: 'race.pg@example.bf', role: 'operator' }),
+      ])
+      expect(raced.filter((item) => item.ok)).toHaveLength(1)
+      const loser = raced.find((item) => !item.ok)
+      expect(loser).toEqual({ ok: false, message: 'An account already uses this email. Nothing was changed.' })
+      const winner = raced.find((item) => item.ok)
+      if (!winner?.ok) return
+      const rows = await db().query(`select "id" from "account" where "email" = 'race.pg@example.bf'`)
+      expect(rows.rows).toHaveLength(1)
+
+      // F3: a staff session always carries its MFA step.
+      let nullState = ''
+      try {
+        await db().query(
+          `insert into "session" ("id", "account_id", "kind", "expires_at", "last_seen_at", "mfa_state") values ($1, $2, 'staff', now() + interval '1 hour', now(), null)`,
+          [newId(new Date()), winner.accountId],
+        )
+      } catch (error) {
+        nullState = postgresCode(error) ?? ''
+      }
+      expect(nullState).toBe('23514')
+
+      // F1: 40 wrong codes at once on 40 pending sessions of one account. At most 5 are checked; one lock event.
+      await db().query(`update "staff_credential" set "must_change_password" = false where "account_id" = $1`, [winner.accountId])
+      const enrollmentPending = newId(new Date())
+      await getStaffStore().insertSession({
+        id: enrollmentPending,
+        account_id: winner.accountId,
+        expires_at: new Date(Date.now() + 3_600_000),
+        last_seen_at: new Date(),
+        mfa_state: 'enroll',
+      })
+      const enrolling = await loadStaffSessionById(enrollmentPending)
+      if (!enrolling) throw new Error('pending session')
+      const enrollment = await readEnrollment(enrolling)
+      if (!enrollment.ok) throw new Error('enrollment')
+      const secret = enrollment.body.secret.replace(/\s/g, '')
+      await db().query(`update "staff_credential" set "totp_sealed" = "totp_pending_sealed", "totp_pending_sealed" = null where "account_id" = $1`, [winner.accountId])
+      const ids: string[] = []
+      for (let index = 0; index < 40; index += 1) {
+        const id = newId(new Date())
+        ids.push(id)
+        await getStaffStore().insertSession({
+          id,
+          account_id: winner.accountId,
+          expires_at: new Date(Date.now() + 3_600_000),
+          last_seen_at: new Date(),
+          mfa_state: 'verify',
+        })
+      }
+      const views = await Promise.all(ids.map((id) => loadStaffSessionById(id)))
+      const now = new Date()
+      const valid = new Set([-1, 0, 1].map((offset) => totpCode(secret, now, offset)))
+      const wrong = ['000000', '111111', '222222', '333333'].find((item) => !valid.has(item)) ?? '444444'
+      const results = await Promise.all(views.map((view) => (view ? verifyStaffCode(view, { code: wrong }, now) : null)))
+      const statuses = results.map((item) => (item === null ? 0 : item.ok ? 200 : item.status))
+      expect(statuses.filter((item) => item === 401)).toHaveLength(4)
+      expect(statuses.filter((item) => item === 429)).toHaveLength(36)
+      const audit = await db().query<{ action: string; n: string }>(
+        `select "action", count(*)::text as n from "audit_event" where "action" in ('staff_sign_in_failure', 'staff_sign_in_locked') and "payload"->>'account_id' = $1 group by "action"`,
+        [winner.accountId],
+      )
+      expect(Object.fromEntries(audit.rows.map((row) => [row.action, row.n]))).toEqual({
+        staff_sign_in_failure: '5',
+        staff_sign_in_locked: '1',
+      })
+      const lock = await db().query<{ failed_codes: number; locked: boolean }>(
+        `select "failed_codes", "locked_until" > now() as locked from "staff_credential" where "account_id" = $1`,
+        [winner.accountId],
+      )
+      expect(lock.rows[0]).toEqual({ failed_codes: 5, locked: true })
+      const live = await db().query(`select 1 from "session" where "account_id" = $1 and "expires_at" > now()`, [winner.accountId])
+      expect(live.rows).toHaveLength(0)
     } finally {
       setStaffMfaKey(undefined)
       await closeAccountStore()

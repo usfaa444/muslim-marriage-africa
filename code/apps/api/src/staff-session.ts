@@ -29,7 +29,7 @@ export const STAFF_LOCK_MS = 15 * 60 * 1000
 
 export const STAFF_CREDENTIALS_MESSAGE = 'Identifiant ou mot de passe incorrect.'
 export const STAFF_CODE_MESSAGE = 'Code incorrect.'
-export const STAFF_CODE_FORMAT_MESSAGE = 'code : six chiffres sont requis.'
+export const STAFF_CODE_FORMAT_MESSAGE = 'Saisissez les six chiffres du code.'
 export const STAFF_LOCKED_MESSAGE = 'Connexion verrouillée. Réessayez dans 15 minutes.'
 export const STAFF_MFA_PENDING_MESSAGE = 'Validation en deux étapes requise.'
 export const STAFF_STEP_MESSAGE = "Cette étape n'est pas disponible."
@@ -37,8 +37,8 @@ export const STAFF_UNAVAILABLE_MESSAGE = 'La connexion staff est indisponible.'
 export const STAFF_MEMBER_MESSAGE = "Cette session d'équipe ne peut pas ouvrir un espace membre."
 export const STAFF_FORBIDDEN_MESSAGE = 'Accès réservé au personnel de modération.'
 export const STAFF_AUTH_MESSAGE = 'Authentification requise.'
-export const STAFF_SAME_PASSWORD_MESSAGE = 'new_password : choisissez un mot de passe différent.'
-export const STAFF_PASSWORD_RULE_MESSAGE = "new_password : la règle publiée n'est pas respectée."
+export const STAFF_SAME_PASSWORD_MESSAGE = 'Choisissez un mot de passe différent du mot de passe provisoire.'
+export const STAFF_PASSWORD_RULE_MESSAGE = 'Le mot de passe doit compter de 12 à 128 caractères.'
 
 export const STAFF_SIGN_IN_AUDIT = {
   success: 'staff_sign_in',
@@ -245,10 +245,10 @@ export async function signInStaff(
   const rawEmail = readField(body, 'email')
   const password = readField(body, 'password')
   if (rawEmail === null || rawEmail.trim().length === 0) {
-    return failure(400, 'UNHANDLED', 'email : un identifiant est requis.', { field: 'email' })
+    return failure(400, 'UNHANDLED', 'Saisissez votre adresse email.', { field: 'email' })
   }
   if (password === null || password.length === 0) {
-    return failure(400, 'UNHANDLED', 'password : un mot de passe est requis.', { field: 'password' })
+    return failure(400, 'UNHANDLED', 'Saisissez votre mot de passe.', { field: 'password' })
   }
   const email = rawEmail.trim().toLowerCase()
   if (email.length > MAX_EMAIL_LENGTH || email.includes('\0') || Array.from(password).length > MAX_PASSWORD_LENGTH) {
@@ -380,7 +380,8 @@ export async function verifyStaffCode(
   if (factors.locked_until && factors.locked_until.getTime() > now.getTime()) {
     return lockedFailure(factors.locked_until, now)
   }
-  const code = readField(body, 'code')
+  // Authenticator apps show "123 456": spaces are dropped, nothing else is.
+  const code = readField(body, 'code')?.replace(/\s+/g, '') ?? null
   if (code === null || !TOTP_CODE_PATTERN.test(code)) {
     return failure(400, 'UNHANDLED', STAFF_CODE_FORMAT_MESSAGE, { field: 'code' })
   }
@@ -392,6 +393,12 @@ export async function verifyStaffCode(
   const sealed = enrolling ? factors.totp_pending_sealed : factors.totp_sealed
   if (!sealed) {
     return stepFailure()
+  }
+  // The attempt is counted before the code is checked, in one atomic write: parallel guesses on several
+  // pending sessions of one account cannot get more than STAFF_MAX_CODE_FAILS codes checked per lock.
+  const claim = await store.claimCodeAttempt(session.account_id, now, STAFF_MAX_CODE_FAILS, STAFF_LOCK_MS)
+  if (claim.refused) {
+    return lockedFailure(claim.locked_until ?? new Date(now.getTime() + STAFF_LOCK_MS), now)
   }
   const step = matchTotpStep(openTotpSecret(sealed, key), code, now, enrolling ? null : factors.totp_last_step)
   const signedIn: AuditAppend = {
@@ -415,7 +422,7 @@ export async function verifyStaffCode(
         : [signedIn],
     ))
   if (!accepted) {
-    return wrongCode(session, factors.failed_codes, now)
+    return wrongCode(session, claim, now)
   }
   const fresh: StaffSessionRow = {
     id: newId(now),
@@ -433,29 +440,30 @@ export async function verifyStaffCode(
   }
 }
 
-async function wrongCode(session: StaffSessionView, failedBefore: number, now: Date): Promise<StaffFailure> {
+async function wrongCode(
+  session: StaffSessionView,
+  claim: { attempt: number; locked_until: Date | null },
+  now: Date,
+): Promise<StaffFailure> {
   const store = getStaffStore()
-  const fails = failedBefore + 1
   const failed: AuditAppend = {
     actorId: session.account_id,
     action: STAFF_SIGN_IN_AUDIT.failure,
     payload: { account_id: session.account_id, reason: 'code' },
   }
-  if (fails < STAFF_MAX_CODE_FAILS) {
-    await store.updateCredential(session.account_id, { failed_codes: fails }, [failed])
+  if (claim.attempt < STAFF_MAX_CODE_FAILS || claim.locked_until === null) {
+    await store.audit(failed)
     return codeFailure()
   }
-  const until = new Date(now.getTime() + STAFF_LOCK_MS)
-  await store.updateCredential(session.account_id, { failed_codes: 0, locked_until: until }, [
-    failed,
-    {
-      actorId: session.account_id,
-      action: STAFF_SIGN_IN_AUDIT.locked,
-      payload: { account_id: session.account_id, locked_until: until.toISOString() },
-    },
-  ])
+  // Only the attempt that reached the limit gets here, so the lock is written once.
+  await store.audit(failed)
+  await store.audit({
+    actorId: session.account_id,
+    action: STAFF_SIGN_IN_AUDIT.locked,
+    payload: { account_id: session.account_id, locked_until: claim.locked_until.toISOString() },
+  })
   await store.endSessions(session.account_id, now)
-  return lockedFailure(until, now)
+  return lockedFailure(claim.locked_until, now)
 }
 
 export async function endStaffSession(sessionId: string, now = authNow()): Promise<boolean> {

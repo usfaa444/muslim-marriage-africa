@@ -14,4 +14,4 @@ ALTER TABLE "account" DROP CONSTRAINT "account_gender_check";--> statement-break
 ALTER TABLE "session" ADD COLUMN "mfa_state" text;--> statement-breakpoint
 ALTER TABLE "staff_credential" ADD CONSTRAINT "staff_credential_account_id_account_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."account"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_gender_check" CHECK ("account"."gender" in ('sister', 'brother') or ("account"."gender" = 'none' and cardinality("account"."roles") > 0 and "account"."roles" <@ ARRAY['moderator', 'operator']::text[]));--> statement-breakpoint
-ALTER TABLE "session" ADD CONSTRAINT "session_mfa_state_check" CHECK (("session"."kind" = 'staff' and "session"."mfa_state" in ('password_change', 'enroll', 'verify', 'done')) or ("session"."kind" <> 'staff' and "session"."mfa_state" is null));
+ALTER TABLE "session" ADD CONSTRAINT "session_mfa_state_check" CHECK (("session"."kind" = 'staff' and "session"."mfa_state" is not null and "session"."mfa_state" in ('password_change', 'enroll', 'verify', 'done')) or ("session"."kind" <> 'staff' and "session"."mfa_state" is null));

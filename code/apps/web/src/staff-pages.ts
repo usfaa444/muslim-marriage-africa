@@ -38,12 +38,19 @@ export function staffBadgeHtml(): string {
   return `<span data-testid="staff-only-badge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold bg-cream text-deep-navy"><span class="w-1.5 h-1.5 rounded-full bg-soft-gold" aria-hidden="true"></span>${STAFF_BADGE_TEXT}</span>`
 }
 
-/** The inside of the staff header: brand, badge and, once signed in, the sign-out link. No member nav. */
-export function staffHeaderInner(signedIn: boolean): string {
+/** The centred row the staff header and the staff home content share. */
+const STAFF_ROW = 'max-w-7xl mx-auto px-4 md:px-12'
+
+/**
+ * The inside of the staff header: brand, badge and the sign-out link. No member nav.
+ * `pending`: the sign-in page, where the link shows once a session exists (an MFA-pending one can leave too).
+ */
+export function staffHeaderInner(signedIn: boolean | { pending: boolean }): string {
+  const hidden = typeof signedIn === 'object' && !signedIn.pending ? ' hidden' : ''
   const leave = signedIn
-    ? `<a class="inline-flex items-center min-h-[44px] px-2 text-sm font-medium text-cream underline underline-offset-4 decoration-soft-gold/60 hover:decoration-soft-gold" href="/staff/connexion?leave=1">Se déconnecter</a>`
+    ? `<a class="inline-flex${hidden} items-center min-h-[44px] px-2 text-sm font-medium text-cream underline underline-offset-4 decoration-soft-gold/60 hover:decoration-soft-gold" href="/staff/connexion?leave=1" id="staff-leave">Se déconnecter</a>`
     : ''
-  return `<div class="max-w-7xl mx-auto px-4 md:px-12 py-2 flex flex-wrap items-center justify-between gap-3" data-shell="staff">
+  return `<div class="${STAFF_ROW} py-2 flex flex-wrap items-center justify-between gap-3" data-shell="staff" data-testid="staff-header-row">
 <div class="flex flex-wrap items-center gap-3 min-w-0">
 <a class="inline-flex items-center min-h-[44px] font-display text-xl text-cream" href="/staff">AnKanu</a>
 ${staffBadgeHtml()}
@@ -69,7 +76,7 @@ function stitchHead(stitch: string): string {
   return stitch.slice(start + '<head>'.length, end)
 }
 
-function page(stitch: string, title: string, body: string, signedIn: boolean, extra = ''): string {
+function page(stitch: string, title: string, body: string, signedIn: boolean | { pending: boolean }, extra = ''): string {
   const head = stitchHead(stitch).replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`)
   const html = `<!DOCTYPE html><html class="h-full" lang="fr"><head>${head}</head>
 <body class="bg-cream text-deep-navy font-body antialiased min-h-full flex flex-col" data-staff-surface="true">
@@ -88,7 +95,7 @@ const PRIMARY =
 function codeField(id: string): string {
   return `<div class="space-y-2">
 <label class="${LABEL}" for="${id}">Code à six chiffres <span class="text-soft-gold">*</span></label>
-<input class="${FIELD} tracking-[0.4em] font-mono" id="${id}" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+<input class="${FIELD} tracking-[0.4em] font-mono" id="${id}" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="16" required>
 </div>`
 }
 
@@ -117,8 +124,8 @@ export function staffSignInHtml(stitch: string, siteKey: string, initial: StaffM
 <p class="text-sm text-deep-navy/70">Le mot de passe provisoire ne sert qu'une fois.</p>
 <div class="space-y-2">
 <label class="${LABEL}" for="staff-new-password">Nouveau mot de passe <span class="text-soft-gold">*</span></label>
-<input class="${FIELD}" id="staff-new-password" name="new_password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
-<p class="text-xs text-deep-navy/75">Au minimum 12 caractères avec lettres, chiffres et symbole noble.</p>
+<input class="${FIELD}" id="staff-new-password" name="new_password" type="password" autocomplete="new-password" minlength="12" maxlength="128" aria-describedby="staff-new-password-hint" required>
+<p class="text-xs text-deep-navy/75" id="staff-new-password-hint">De 12 à 128 caractères. Les espaces sont acceptés.</p>
 </div>
 <button class="${PRIMARY}" id="staff-password-submit" type="submit">Continuer</button>
 </form>
@@ -144,7 +151,7 @@ ${codeField('staff-verify-code')}
     stitch,
     'AnKanu — Connexion staff',
     body,
-    false,
+    { pending: initial !== null },
     `<script>${staffSignInScript(siteKey, initial)}</script>${recaptchaTag(siteKey)}`,
   )
 }
@@ -176,6 +183,8 @@ export function staffSignInScript(siteKey: string, initial: StaffMfaState | null
     ;['login', 'password', 'enroll', 'verify'].forEach(function (name) {
       el('staff-step-' + name).classList.toggle('hidden', name !== step)
     })
+    var leave = el('staff-leave')
+    if (leave) leave.classList.toggle('hidden', step === 'login')
     var heading = el('staff-step-' + step).querySelector('h2')
     if (heading) heading.focus()
     if (step === 'enroll') loadEnrollment()
@@ -261,7 +270,9 @@ function roleLine(identity: StaffIdentity | null): string {
 
 /** `/staff`: the staff home. Queue on the left, case on the right from 768 px; stacked below. */
 export function staffHomeHtml(stitch: string, identity: StaffIdentity | null): string {
-  const body = `<main class="flex-1 max-w-7xl w-full mx-auto px-4 md:px-12 py-8" id="staff-home">
+  // Same box as the header's inner row (STAFF_ROW), so the brand and the title share a left edge at every width.
+  const body = `<main class="flex-1 w-full" id="staff-home">
+<div class="${STAFF_ROW} py-8" data-testid="staff-content">
 <div class="pb-6 border-b border-hairline/80 mb-6">
 <h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal">Console de modération</h1>
 ${roleLine(identity)}
@@ -283,6 +294,7 @@ ${roleLine(identity)}
 <h2 class="font-display text-2xl text-deep-navy">Instruction du dossier</h2>
 <p class="text-sm text-deep-navy/70">Sélectionnez une fiche dans la file.</p>
 </section>
+</div>
 </div>
 </main>`
   return page(stitch, 'AnKanu — Console de modération', body, true)

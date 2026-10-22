@@ -1,3 +1,5 @@
+import { stubSessionsEnabled } from './member-route'
+
 /** Server step guard. Client flags never decide the next screen. */
 
 /**
@@ -132,7 +134,7 @@ export function readSessionCookie(header: string | null): string | null {
 }
 
 export function isStubSession(value: string | null): boolean {
-  return value !== null && STUBS.has(value)
+  return value !== null && STUBS.has(value) && stubSessionsEnabled()
 }
 
 export async function fetchGateStep(cookieHeader: string): Promise<GateStep | 'error'> {

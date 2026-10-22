@@ -18,9 +18,10 @@ import { setFreeReviewSlaReader } from './profile-review.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 import { createStaffAccount } from './staff-accounts.js'
-import { runStaffCli } from './staff-cli.js'
+import { cliFailureText, runStaffCli } from './staff-cli.js'
 import { assertStaffMfaBoot, openTotpSecret, readStaffMfaKey, sealTotpSecret, setStaffMfaKey } from './staff-mfa-key.js'
-import { STAFF_IDLE_MS } from './staff-session.js'
+import { newId } from '@ankanu/kernel'
+import { requireStaffSession, STAFF_IDLE_MS, STAFF_LOCK_MS, verifyStaffCode } from './staff-session.js'
 import { memoryStaffStore, type MemoryStaffStore } from './staff-store.js'
 import {
   base32Decode,
@@ -289,13 +290,37 @@ describe('staff identity and authenticator MFA (Story 12.1)', () => {
 
     it('refuses a role other than moderator or operator, and bad usage', async () => {
       const io = { out: () => undefined, err: () => undefined }
-      expect(await runStaffCli(['create', '--email', 'x@example.bf', '--role', 'member'], io)).toBe(1)
-      expect(await runStaffCli(['create', '--email', 'x@example.bf', '--role', 'system'], io)).toBe(1)
+      // Exit 2 for anything wrong on the command line, 1 only when the data refuses (README, handoff).
+      expect(await runStaffCli(['create', '--email', 'x@example.bf', '--role', 'member'], io)).toBe(2)
+      expect(await runStaffCli(['create', '--email', 'x@example.bf', '--role', 'system'], io)).toBe(2)
+      expect(await runStaffCli(['create', '--email', 'not-an-email', '--role', 'moderator'], io)).toBe(2)
+      expect(await runStaffCli(['reset-mfa', '--email', 'not-an-email'], io)).toBe(2)
       expect(await runStaffCli(['create', '--email', 'x@example.bf'], io)).toBe(2)
       expect(await runStaffCli(['grant', '--email', 'x@example.bf'], io)).toBe(2)
       expect(await runStaffCli(['reset-mfa', '--email', 'nobody@example.bf'], io)).toBe(1)
       expect(await runStaffCli(['disable', '--email', 'nobody@example.bf'], io)).toBe(1)
       expect(staffStore.accounts.length).toBe(0)
+    })
+
+    it('refuses the loser of two concurrent creates cleanly, and never prints a database request', async () => {
+      const errors: string[] = []
+      const io = { out: () => undefined, err: (text: string) => errors.push(text) }
+      const codes = await Promise.all([
+        runStaffCli(['create', '--email', 'race@example.bf', '--role', 'moderator'], io),
+        runStaffCli(['create', '--email', 'race@example.bf', '--role', 'operator'], io),
+      ])
+      expect([...codes].sort()).toEqual([0, 1])
+      expect(errors).toEqual(['An account already uses this email. Nothing was changed.\n'])
+      expect(staffStore.accounts.filter((row) => row.email === 'race@example.bf')).toHaveLength(1)
+      expect(audits.filter((row) => row.action === 'staff_account_created' && JSON.stringify(row).includes(staffStore.accounts.at(-1)?.id ?? '-'))).toHaveLength(1)
+
+      const driver = Object.assign(new Error('Failed query: insert into "account" ... params: race@example.bf,staff_0a1b2c3d4e5f'), {
+        cause: { code: '23505' },
+      })
+      const text = cliFailureText(driver)
+      expect(text).toBe('The staff command failed (Error, code 23505). Nothing was printed from the database request.\n')
+      expect(text).not.toContain('race@example.bf')
+      expect(text).not.toContain('insert')
     })
 
     it('reset-mfa clears the enrollment, ends sessions and the next sign-in enrolls again', async () => {
@@ -356,8 +381,15 @@ describe('staff identity and authenticator MFA (Story 12.1)', () => {
         })
       const same = await post({ new_password: created.oneTimePassword })
       expect(same.status).toBe(400)
-      expect(await same.json()).toMatchObject({ error: { details: { field: 'new_password' } } })
-      expect((await post({ new_password: 'court' })).status).toBe(400)
+      expect(await same.json()).toMatchObject({
+        error: { message: 'Choisissez un mot de passe différent du mot de passe provisoire.', details: { field: 'new_password' } },
+      })
+      const short = await post({ new_password: 'court' })
+      expect(short.status).toBe(400)
+      // The shown message states the rule the server enforces, without the technical field name.
+      expect(await short.json()).toMatchObject({
+        error: { message: 'Le mot de passe doit compter de 12 à 128 caractères.', details: { field: 'new_password' } },
+      })
       const changed = await post({ new_password: TEST_STAFF_PASSWORD })
       expect(changed.status).toBe(200)
       expect(await changed.json()).toMatchObject({ mfa_state: 'enroll' })
@@ -386,7 +418,9 @@ describe('staff identity and authenticator MFA (Story 12.1)', () => {
       expect((await get('/v1/staff/metrics', pending)).status).toBe(403)
 
       const before = audits.length
-      const verified = await code(pending, totpCode(secret, now))
+      // Typed or pasted as the apps show it: "123 456".
+      const valid = totpCode(secret, now)
+      const verified = await code(pending, ` ${valid.slice(0, 3)} ${valid.slice(3)} `)
       expect(verified.status).toBe(200)
       expect(await verified.json()).toMatchObject({ kind: 'staff', mfa_state: 'done' })
       expect(audits.slice(before).map((item) => item.action)).toEqual(['staff_mfa_enrolled', 'staff_sign_in'])
@@ -479,6 +513,40 @@ describe('staff identity and authenticator MFA (Story 12.1)', () => {
       expect((await code(cookieOf(after), freshCode(staffStore, staff.accountId, staff.secret))).status).toBe(200)
     })
 
+    it('checks at most 5 codes when 40 wrong codes arrive at once on 40 pending sessions, and locks once', async () => {
+      const staff = await openTestStaff(base, staffStore, 'moderator')
+      advance(60_000)
+      const views = []
+      for (let index = 0; index < 40; index += 1) {
+        const id = newId(now)
+        await staffStore.insertSession({
+          id,
+          account_id: staff.accountId,
+          expires_at: new Date(now.getTime() + 60 * 60_000),
+          last_seen_at: now,
+          mfa_state: 'verify',
+        })
+        const view = await staffStore.getSession(id)
+        if (!view) throw new Error('pending session')
+        views.push(view)
+      }
+      const valid = new Set([-1, 0, 1].map((offset) => totpCode(staff.secret, now, offset)))
+      const wrong = ['000000', '111111', '222222', '333333'].find((item) => !valid.has(item)) ?? '444444'
+      const before = audits.length
+      const results = await Promise.all(views.map((view) => verifyStaffCode(view, { code: wrong }, now)))
+      const statuses = results.map((item) => (item.ok ? 200 : item.status))
+      expect(statuses.filter((item) => item === 401)).toHaveLength(4)
+      expect(statuses.filter((item) => item === 429)).toHaveLength(36)
+      expect(statuses.filter((item) => item === 200)).toHaveLength(0)
+      const actions = audits.slice(before).map((item) => item.action)
+      expect(actions.filter((item) => item === 'staff_sign_in_failure')).toHaveLength(5)
+      expect(actions.filter((item) => item === 'staff_sign_in_locked')).toHaveLength(1)
+      const factors = staffStore.credentials.find((item) => item.account_id === staff.accountId)
+      expect(factors?.locked_until?.getTime()).toBe(now.getTime() + STAFF_LOCK_MS)
+      // Every pending session ended with the lock.
+      expect(staffStore.sessions.filter((row) => row.account_id === staff.accountId && row.expires_at > now)).toHaveLength(0)
+    })
+
     it('answers wrong password, unknown email and a member account with the same generic failure', async () => {
       const staff = await openTestStaff(base, staffStore, 'moderator')
       const member = await createMember()
@@ -563,6 +631,30 @@ describe('staff identity and authenticator MFA (Story 12.1)', () => {
         body: JSON.stringify({}),
       })
       expect(decide.status).toBe(403)
+    })
+
+    it('refuses an MFA-pending session in the staff controllers themselves, not only in the cookie gate', async () => {
+      const created = await provision()
+      const pending = cookieOf(await staffSignIn(created.email, created.oneTimePassword))
+      let thrown: unknown
+      try {
+        await requireStaffSession(pending)
+      } catch (error) {
+        thrown = error
+      }
+      expect((thrown as { getStatus?: () => number })?.getStatus?.()).toBe(403)
+      expect((thrown as { getResponse: () => unknown }).getResponse()).toMatchObject({ details: { reason: 'staff_mfa_pending' } })
+      const staff = await openTestStaff(base, staffStore, 'operator')
+      await expect(requireStaffSession(staff.cookie)).resolves.toMatchObject({ account_id: staff.accountId })
+    })
+
+    it('lets an MFA-pending session sign out', async () => {
+      const created = await provision()
+      const pending = cookieOf(await staffSignIn(created.email, created.oneTimePassword))
+      const out = await fetch(`${base}/v1/sessions/current`, { method: 'DELETE', headers: { cookie: pending } })
+      expect(out.status).toBe(204)
+      expect(out.headers.getSetCookie().join('\n')).toContain('ankanu_session=;')
+      expect((await get('/v1/staff/sessions/current', pending)).status).toBe(401)
     })
 
     it('refuses a staff session on member endpoints, and an MFA-pending one too', async () => {

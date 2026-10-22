@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { afterEach, describe, expect, it } from 'vitest'
-import { entryLocation, entryRedirect, fetchGateStep } from './entry-guard.js'
+import { afterEach, describe, expect, it, vi } from 'vitest'
+import { entryLocation, entryRedirect, fetchGateStep, isStubSession } from './entry-guard.js'
+import { sessionKind } from './member-route.js'
 import { fillStaffHeader, staffHomeHtml, staffSignInHtml, STAFF_BADGE_TEXT } from './staff-pages.js'
 import { staffHomeResponse, staffSignInResponse, visitSignalsResponse } from './v2-serve.js'
 import { visitSignalsHtml } from './visit-signals-page.js'
@@ -33,6 +34,7 @@ function request(path: string, cookie?: string): Request {
 
 afterEach(() => {
   globalThis.fetch = originalFetch
+  vi.unstubAllEnvs()
 })
 
 describe('staff shell (Story 12.1)', () => {
@@ -45,7 +47,17 @@ describe('staff shell (Story 12.1)', () => {
     for (const item of MEMBER_NAV) {
       expect(html).not.toContain(item)
     }
-    expect(html).not.toContain('Se déconnecter')
+    // No session yet: the sign-out link is there for the later steps, hidden.
+    expect(html).toContain('class="inline-flex hidden items-center')
+    expect(html).toContain('id="staff-leave">Se déconnecter</a>')
+    expect(html).toContain("leave.classList.toggle('hidden', step === 'login')")
+    // The code field takes "123 456" as the apps show it: no six-character cut, no digits-only pattern.
+    expect(html).not.toContain('maxlength="6"')
+    expect(html).not.toContain('pattern="[0-9]{6}"')
+    expect(html).toContain('maxlength="16"')
+    // The hint states the rule the server enforces.
+    expect(html).toContain('De 12 à 128 caractères. Les espaces sont acceptés.')
+    expect(html).not.toContain('symbole noble')
     expect(html).toContain('<h1 class="font-display text-3xl text-deep-navy font-normal">Connexion staff</h1>')
     for (const id of ['staff-email', 'staff-password', 'staff-new-password', 'staff-enroll-code', 'staff-verify-code']) {
       expect(html).toContain(`for="${id}"`)
@@ -80,6 +92,9 @@ describe('staff shell (Story 12.1)', () => {
     expect(enroll).not.toContain('render=explicit')
     const verify = staffSignInHtml(stitch52, '', 'verify')
     expect(verify).toMatch(/class="mt-6 space-y-5" id="staff-step-verify"/)
+    // An MFA-pending session can leave from any step.
+    expect(verify).toContain('class="inline-flex items-center min-h-[44px]')
+    expect(verify).toContain('href="/staff/connexion?leave=1" id="staff-leave"')
     const password = staffSignInHtml(stitch52, '', 'password_change')
     expect(password).toMatch(/class="mt-6 space-y-5" id="staff-step-password"/)
     expect(password).toContain('Choisissez un nouveau mot de passe')
@@ -94,6 +109,9 @@ describe('staff shell (Story 12.1)', () => {
       expect(html).not.toContain(item)
     }
     expect(html).toContain('class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start" data-testid="staff-panes"')
+    // Header row and content share one centred box, so the brand and the title line up at every width.
+    expect(html).toContain('<div class="max-w-7xl mx-auto px-4 md:px-12 py-2 flex flex-wrap items-center justify-between gap-3" data-shell="staff"')
+    expect(html).toContain('<main class="flex-1 w-full" id="staff-home">\n<div class="max-w-7xl mx-auto px-4 md:px-12 py-8" data-testid="staff-content">')
     const queue = html.indexOf('data-pane="queue"')
     const caseAt = html.indexOf('data-pane="case"')
     expect(queue).toBeGreaterThan(0)
@@ -163,6 +181,33 @@ describe('staff page routing (Story 12.1)', () => {
     expect(leave.headers.get('location')).toContain('/staff/connexion')
     expect(leave.headers.get('set-cookie')).toContain('ankanu_session=;')
     expect(calls[0]).toContain('/v1/sessions/current')
+  })
+
+  it('ignores stub cookies in a production build: a forged staff cookie must pass the API check', async () => {
+    vi.stubEnv('NODE_ENV', 'production')
+    expect(sessionKind('ankanu_session=staff')).toBeNull()
+    expect(isStubSession('staff')).toBe(false)
+    for (const answer of [401, 403]) {
+      const calls = apiAnswers(answer, { error: { code: answer === 401 ? 'UNAUTHENTICATED' : 'FORBIDDEN', details: null } })
+      const home = await staffHomeResponse(request('/staff', 'ankanu_session=staff'))
+      expect(home.status).toBe(303)
+      expect(home.headers.get('location')).not.toMatch(/\/staff$/)
+      expect(calls[0]).toContain('/v1/staff/sessions/current')
+      const signals = await visitSignalsResponse(request('/staff/visit-signals', 'ankanu_session=staff'))
+      expect(signals.status).toBe(303)
+      const signIn = await staffSignInResponse(request('/staff/connexion', 'ankanu_session=staff'))
+      expect(signIn.status).toBe(200)
+    }
+    // Only an API answer of a staff session with MFA done opens the page.
+    apiAnswers(200, { kind: 'staff', mfa_state: 'verify', roles: ['moderator'], email: 'm@example.bf' })
+    expect((await staffHomeResponse(request('/staff', 'ankanu_session=staff'))).headers.get('location')).toContain('/staff/connexion')
+    apiAnswers(200, { kind: 'staff', mfa_state: 'done', roles: ['moderator'], email: 'm@example.bf' })
+    expect((await staffHomeResponse(request('/staff', 'ankanu_session=staff'))).status).toBe(200)
+    // Member stubs are ignored too: the entry guard asks the API.
+    const gate = apiAnswers(401, { error: { code: 'UNAUTHENTICATED' } })
+    const member = await entryRedirect(request('/decouvrir', 'ankanu_session=web'), '/decouvrir')
+    expect(member?.headers.get('location')).toContain('/auth')
+    expect(gate[0]).toContain('/v1/accounts/gate')
   })
 
   it('sends an MFA-pending staff session from the visit-signals page to the staff sign-in', async () => {

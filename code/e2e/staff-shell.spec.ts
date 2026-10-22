@@ -3,7 +3,9 @@ import { totpCode } from '../apps/api/src/staff-totp'
 import { WIDTHS, expect, expectAccessible, expectNoHorizontalOverflow, test } from './fixtures'
 
 // Story 12.1: staff shell, staff sign-in and the staff/member separation.
-// The stub cookie value `staff` renders the staff pages without an API (local web-only run and full stack alike).
+// The stub cookie value `staff` renders the staff pages without an API on the web-only dev server only.
+// A built image ignores stub cookies, so on a stack (E2E_BASE_URL) those tests skip and the signed-in flow
+// below checks the same things with a real staff session.
 // The full first sign-in needs a stack (E2E_BASE_URL) and a fresh account from the server command:
 //   node apps/api/dist/staff-cli.js create --email <e> --role moderator
 // then E2E_STAFF_EMAIL=<e> E2E_STAFF_ONE_TIME_PASSWORD=<printed password>. The run spends that password.
@@ -19,6 +21,32 @@ async function expectNoMemberNav(page: Page) {
   }
 }
 
+const STUB_SKIP = 'A built image ignores stub cookies; the full-stack sign-in test covers this signed in.'
+
+/** The brand in the header and the page title share a left edge. */
+async function expectHeaderAligned(page: Page, width: number) {
+  const brand = await page.getByRole('link', { name: 'AnKanu', exact: true }).boundingBox()
+  const title = await page.getByRole('heading', { level: 1 }).boundingBox()
+  if (!brand || !title) throw new Error('brand and title must render')
+  expect(Math.abs(brand.x - title.x), `${width}: header and content aligned`).toBeLessThan(2)
+}
+
+async function expectPanes(page: Page) {
+  for (const width of WIDTHS) {
+    await page.setViewportSize({ width, height: 900 })
+    await expect(page.getByTestId('staff-only-badge')).toBeVisible()
+    const { queue, pane } = await paneBoxes(page)
+    if (width >= 768) {
+      expect(pane.x, `${width}: case beside the queue`).toBeGreaterThanOrEqual(queue.x + queue.width)
+      expect(Math.abs(pane.y - queue.y), `${width}: panes share a top`).toBeLessThan(2)
+    } else {
+      expect(pane.y, `${width}: case below the queue`).toBeGreaterThanOrEqual(queue.y + queue.height)
+    }
+    await expectHeaderAligned(page, width)
+    await expectNoHorizontalOverflow(page)
+  }
+}
+
 async function paneBoxes(page: Page) {
   const queue = await page.getByRole('region', { name: 'Liste des fiches à examiner' }).boundingBox()
   const pane = await page.getByRole('region', { name: 'Détails du dossier sélectionné' }).boundingBox()
@@ -28,6 +56,7 @@ async function paneBoxes(page: Page) {
 
 test.describe('staff shell', () => {
   test('the staff home shows the badge, no member nav, and passes axe', async ({ page, baseURL }) => {
+    test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
     await asStaffStub(page, baseURL)
     const response = await page.goto('/staff')
     expect(response?.status()).toBe(200)
@@ -40,26 +69,15 @@ test.describe('staff shell', () => {
 
   test('two panes from 768 px, the queue above the case below, no horizontal scroll', async ({ page, baseURL }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop', 'width sweep runs once')
+    test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
     await asStaffStub(page, baseURL)
     await page.goto('/staff')
-    for (const width of WIDTHS) {
-      await page.setViewportSize({ width, height: 900 })
-      await expect(page.getByTestId('staff-only-badge')).toBeVisible()
-      const { queue, pane } = await paneBoxes(page)
-      if (width >= 768) {
-        expect(pane.x, `${width}: case beside the queue`).toBeGreaterThanOrEqual(queue.x + queue.width)
-        expect(Math.abs(pane.y - queue.y), `${width}: panes share a top`).toBeLessThan(2)
-      } else {
-        expect(pane.y, `${width}: case below the queue`).toBeGreaterThanOrEqual(queue.y + queue.height)
-      }
-      await expectNoHorizontalOverflow(page)
-    }
+    await expectPanes(page)
   })
 
   test('the visit-signals page carries the badge and no member nav at every width', async ({ page, baseURL }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop', 'width sweep runs once')
-    // On a stack the page's own data call answers 401 to the stub; the full-stack flow below opens it signed in.
-    test.skip(!!process.env.E2E_BASE_URL, 'the stub cookie is not an API session')
+    test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
     await asStaffStub(page, baseURL)
     for (const width of WIDTHS) {
       await page.setViewportSize({ width, height: 900 })
@@ -87,6 +105,7 @@ test.describe('staff shell', () => {
   })
 
   test('a member stub cookie is sent away from the staff home', async ({ page, baseURL }) => {
+    test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
     await page.context().addCookies([{ name: 'ankanu_session', value: 'web', url: baseURL ?? '' }])
     const response = await page.request.get('/staff', { maxRedirects: 0 })
     expect(response.status()).toBe(303)
@@ -134,13 +153,18 @@ test.describe('staff first sign-in on a full stack', () => {
     // The browser logs the expected 401.
     guards.consoleErrors.splice(0)
 
-    await page.getByLabel('Code à six chiffres').first().fill(totpCode(key, new Date()))
+    // Pasted the way the apps show it, with a space in the middle.
+    const valid6 = totpCode(key, new Date())
+    await page.getByLabel('Code à six chiffres').first().fill(`${valid6.slice(0, 3)} ${valid6.slice(3)}`)
+    await expect(page.getByLabel('Code à six chiffres').first()).toHaveValue(`${valid6.slice(0, 3)} ${valid6.slice(3)}`)
     await page.getByRole('button', { name: 'Confirmer le code' }).first().click()
     await expect(page).toHaveURL(/\/staff$/)
     await expect(page.getByTestId('staff-only-badge')).toBeVisible()
     await expect(page.locator('#staff-identity')).toContainText(email ?? '')
     await expectNoMemberNav(page)
     await expectAccessible(page)
+    await expectPanes(page)
+    await page.setViewportSize({ width: 1440, height: 900 })
 
     await page.getByRole('link', { name: /Signaux de visite/ }).click()
     await expect(page).toHaveURL(/\/staff\/visit-signals$/)

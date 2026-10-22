@@ -15,6 +15,8 @@ export const STAFF_AUDIT = {
   disabled: 'staff_account_disabled',
 } as const
 
+const TAKEN_MESSAGE = 'An account already uses this email. Nothing was changed.'
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const MAX_EMAIL_LENGTH = 254
 
@@ -59,13 +61,13 @@ export async function createStaffAccount(
   }
   const store = deps.store ?? getStaffStore()
   if (await store.emailTaken(email)) {
-    return { ok: false, message: 'An account already uses this email. Nothing was changed.' }
+    return { ok: false, message: TAKEN_MESSAGE }
   }
   const now = deps.now ?? authNow()
   const password = oneTimePassword()
   const passwordHash = await (deps.hash ?? hashPassword)(password)
   const accountId = newId(now)
-  await store.create(
+  const result = await store.create(
     {
       id: accountId,
       email,
@@ -91,6 +93,9 @@ export async function createStaffAccount(
       payload: { account_id: accountId, role: input.role, via: 'server_command' },
     },
   )
+  if (result === 'taken') {
+    return { ok: false, message: TAKEN_MESSAGE }
+  }
   return { ok: true, accountId, email, role: input.role, oneTimePassword: password }
 }
 
