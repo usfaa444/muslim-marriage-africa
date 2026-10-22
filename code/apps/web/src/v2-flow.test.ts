@@ -258,6 +258,8 @@ describe('v2 signup and sign-in screens', () => {
     expect(pin).toContain('url.origin !== window.location.origin')
     // Feedback goes to the Stitch status hint, read out as a status; its icons are decoration.
     expect(pin).toContain('id="status-hint" role="status"')
+    // Brought into view with some room below it, not flush with the screen edge; the layout is unchanged.
+    expect(pin).toContain('id="status-hint" role="status" style="scroll-margin-bottom: 24px"')
     expect(pin).toContain('<span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>')
     expect(pin).toContain('<span aria-hidden="true" class="material-symbols-outlined text-xl" data-icon="backspace"></span>')
     expect(pin).not.toContain('>backspace</span>')

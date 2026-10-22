@@ -310,7 +310,7 @@ export function pinHtml(stitch: string): string {
     )
     .replace(
       '<div class="mt-6 text-xs text-deep-navy/50 flex items-center gap-1.5" id="status-hint">\n<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user">verified_user</span>\n<span class="">Chiffrement et vérification locale sécurisée</span>',
-      '<div class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5" id="status-hint" role="status">\n<span aria-hidden="true" class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user"></span>\n<span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>',
+      '<div class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5" id="status-hint" role="status" style="scroll-margin-bottom: 24px">\n<span aria-hidden="true" class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user"></span>\n<span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>',
     )
     .replace(/href="#">(\s*S'identifier à nouveau)/, 'href="/auth">$1')
   return mount(html, pinScript())

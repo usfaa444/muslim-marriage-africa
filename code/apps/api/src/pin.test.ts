@@ -263,6 +263,7 @@ describe('shared-device PIN', () => {
     const blockedBody = (await blocked.json()) as { error: { code: string; message: string } }
     expect(blocked.status).toBe(401)
     expect(blockedBody.error).toMatchObject({ code: 'PIN_REQUIRED', message: 'Code PIN requis.' })
+    expect(blocked.headers.get('cache-control')).toBe('no-store')
     expect(sessionRow(sister)?.last_seen_at.toISOString()).toBe(seen)
 
     const refused = await fetch(`${base}/v1/pin`, {
@@ -273,6 +274,7 @@ describe('shared-device PIN', () => {
     const refusedBody = (await refused.json()) as { error: { code: string } }
     expect(refused.status).toBe(401)
     expect(refusedBody.error.code).toBe('PIN_REQUIRED')
+    expect(refused.headers.get('cache-control')).toBe('no-store')
     expect(pins.rows[0]?.pin_hash.startsWith('$argon2')).toBe(true)
 
     const fresh = await signIn('fatim@example.bf')

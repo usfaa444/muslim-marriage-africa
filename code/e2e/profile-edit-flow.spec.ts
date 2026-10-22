@@ -209,6 +209,13 @@ function pinStatus(page: Page) {
   return page.getByRole('status')
 }
 
+// A navigation is over when the new page has loaded. Leaving it earlier aborts its stylesheet and
+// font downloads, which the guards count as failed requests (QA round 2, finding 16).
+async function expectArrived(page: Page, url: string | RegExp, message?: string): Promise<void> {
+  await expect(page, message).toHaveURL(url)
+  await page.waitForLoadState('load')
+}
+
 async function pressDigits(page: Page, digits: string): Promise<void> {
   for (const digit of digits) {
     await page.getByRole('button', { name: digit, exact: true }).click()
@@ -230,7 +237,7 @@ test.describe('profile edit and the PIN screen', () => {
     const saved = page.waitForRequest(isProfileSave)
     await pinSwitch(page).click()
     expect((await saved).postDataJSON()).toMatchObject({ origin: 'Kadiogo', dob: '1990-01-15', madhhab: 'maliki' })
-    await expect(page).toHaveURL(/\/pin\?next=%2Fprofile-edit$/)
+    await expectArrived(page, /\/pin\?next=%2Fprofile-edit$/)
     expect(api.saves).toHaveLength(1)
 
     await expect(page.locator('.pin-dot')).toHaveCount(6)
@@ -247,7 +254,7 @@ test.describe('profile edit and the PIN screen', () => {
     await expectAccessibleAsShipped(page)
 
     await pressDigits(page, '0')
-    await expect(page).toHaveURL(/\/profile-edit$/)
+    await expectArrived(page, /\/profile-edit$/)
     expect(api.pinSets).toEqual(['135790'])
     await expect(page.getByLabel("Origine / Région d'attache")).toHaveValue('Kadiogo')
     await expect(pinCheckbox(page)).toBeChecked()
@@ -298,7 +305,7 @@ test.describe('profile edit and the PIN screen', () => {
     await expect.poll(() => filledDots(page)).toBe(4)
     expect(api.unlocks).toEqual([])
     await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
-    await expect(page).toHaveURL(/\/profile-edit$/)
+    await expectArrived(page, /\/profile-edit$/)
     expect(api.unlocks).toEqual(['1357'])
   })
 
@@ -331,6 +338,47 @@ test.describe('profile edit and the PIN screen', () => {
     await expectNoHorizontalOverflow(page)
   })
 
+  for (const viewport of [
+    { width: 360, height: 780 },
+    { width: 1280, height: 800 },
+  ]) {
+    test(`the PIN screen brings what it says into view at ${viewport.width}x${viewport.height}`, async ({ page, context, baseURL, guards }) => {
+      const api = newApi({
+        unlockRefusals: [
+          { status: 400, body: { error: { code: 'PIN_INVALID', message: 'Code incorrect.', details: { attempts_left: 1 }, retryable: false } } },
+          { status: 401, body: { error: { code: 'PIN_LOCKED', message: 'Session verrouillée.', details: null, retryable: false } } },
+        ],
+      })
+      await page.setViewportSize(viewport)
+      await serveApi(context, baseURL ?? '', api)
+      const status = pinStatus(page)
+      // The member looks at the keypad; the status line is the last line of the card (QA round 2, finding 17).
+      const fromTheTop = () => page.evaluate(() => window.scrollTo(0, 0))
+
+      await page.goto('/pin?next=%2Fprofile-edit')
+      await pressDigits(page, '1357')
+      await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
+      await expect(status).toHaveText('pin : six chiffres sont requis.')
+      await expect(status).toBeInViewport({ ratio: 1 })
+
+      api.pinEnabled = true
+      await page.goto('/pin?next=%2Fprofile-edit')
+      await fromTheTop()
+      await pressDigits(page, '135791')
+      await expect(status).toHaveText('Code incorrect.')
+      await expect(status).toBeInViewport({ ratio: 1 })
+
+      await fromTheTop()
+      await pressDigits(page, '135791')
+      await expect(status).toHaveText('Session verrouillée.')
+      await expect(status).toBeInViewport({ ratio: 1 })
+      await expect(page.getByRole('link', { name: "S'identifier à nouveau" })).toBeInViewport({ ratio: 1 })
+      // The browser logs the two refused unlocks; they are the case under test.
+      guards.consoleErrors.length = 0
+      await expectNoHorizontalOverflow(page)
+    })
+  }
+
   test('the PIN screen never returns to another origin', async ({ page, context, baseURL }) => {
     const api = newApi()
     await serveApi(context, baseURL ?? '', api)
@@ -348,7 +396,7 @@ test.describe('profile edit and the PIN screen', () => {
     ]) {
       await page.goto(`/pin?next=${next}`)
       await pressDigits(page, '246813')
-      await expect(page, next).toHaveURL(`${origin}/onboarding`)
+      await expectArrived(page, `${origin}/onboarding`, next)
     }
     await page.goto('/pin?next=%2F%2Fevil.example%2Fprofile-edit')
     await expectAccessibleAsShipped(page)

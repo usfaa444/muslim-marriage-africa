@@ -58,6 +58,13 @@ function mount(options: { search?: string; enabled: boolean; answer?: number | A
   const calls: Call[] = []
   const events: string[] = []
   const hint = { textContent: RESTING }
+  // What the status line said each time the page scrolled it into view.
+  const scrolled: string[] = []
+  const statusLine = {
+    scrollIntoView(options?: { block?: string }) {
+      scrolled.push(`${hint.textContent} (${options?.block ?? 'start'})`)
+    },
+  }
   let answer: Answer =
     typeof options.answer === 'number' ? { status: options.answer } : (options.answer ?? { status: 200, body: {} })
   let state: Answer = options.state ?? { status: 200, body: { enabled: options.enabled, locked: options.enabled } }
@@ -75,6 +82,7 @@ function mount(options: { search?: string; enabled: boolean; answer?: number | A
     },
     getElementById(id: string) {
       if (id === 'pin-status-text') return hint
+      if (id === 'status-hint') return statusLine
       return controls.get(id) ?? null
     },
   }
@@ -109,6 +117,7 @@ function mount(options: { search?: string; enabled: boolean; answer?: number | A
     assigned,
     calls,
     events,
+    scrolled,
     hint: () => hint.textContent,
     answerWith(next: Answer) {
       answer = next
@@ -290,6 +299,28 @@ describe('PIN screen length', () => {
     expect(held.assigned).toEqual(['/profile-edit'])
   })
 
+  it('brings the status line into view each time it says something, and not when it rests', async () => {
+    const page = mount({ enabled: false })
+    expect(page.scrolled).toEqual([])
+    await page.press('1234')
+    expect(page.scrolled).toEqual([])
+    await page.submit()
+    expect(page.scrolled).toEqual([`${SET_LENGTH} (nearest)`])
+    await page.press('5')
+    expect(page.hint()).toBe(RESTING)
+    expect(page.scrolled).toHaveLength(1)
+
+    const wrong = mount({
+      enabled: true,
+      answer: { status: 400, body: { error: { code: 'PIN_INVALID', message: 'Code incorrect.', details: { attempts_left: 4 } } } },
+    })
+    await wrong.press('135791')
+    expect(wrong.scrolled).toEqual(['Validation du code en cours... (nearest)', 'Code incorrect. (nearest)'])
+    wrong.answerWith({ status: 401, body: { error: { code: 'PIN_LOCKED', message: 'Session verrouillée.', details: null } } })
+    await wrong.press('135791')
+    expect(wrong.scrolled.at(-1)).toBe('Session verrouillée. (nearest)')
+  })
+
   it('returns only to a same-origin path', async () => {
     const cases: Array<[string, string]> = [
       ['?next=%2Fprofile-edit', '/profile-edit'],
@@ -312,6 +343,8 @@ describe('PIN screen length', () => {
       ['?next=%09%2F%2Fevil.example', '/onboarding'],
       ['?next=%2F%00%2Fevil.example', '/onboarding'],
       ['?next=%2F%7F%2Fevil.example', '/onboarding'],
+      // A host the URL parser cannot read: the parse throws and the fallback applies.
+      ['?next=%2F%2F%5B', '/onboarding'],
       // Dot segments that resolve to a protocol-relative path.
       ['?next=%2F.%2F%2Fevil.example', '/onboarding'],
       ['?next=%2F..%2F%2Fevil.example', '/onboarding'],

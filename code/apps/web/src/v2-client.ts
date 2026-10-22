@@ -1024,14 +1024,17 @@ export function pinScript(): string {
     var slots = Array.from(document.querySelectorAll('.pin-dot'))
     var hint = document.getElementById('pin-status-text')
     var restingHint = hint ? hint.textContent : ''
+    var statusLine = document.getElementById('status-hint')
     function paint() {
       slots.forEach(function (dot, index) {
         dot.style.opacity = index < digits.length ? '1' : '0'
       })
     }
     // The Stitch status hint, read out by its role="status". Empty restores its resting line.
+    // The hint is the last line of the card, below the fold on a short screen, so a message brings it into view.
     function say(text) {
       if (hint) hint.textContent = text || restingHint
+      if (text && statusLine && typeof statusLine.scrollIntoView === 'function') statusLine.scrollIntoView({ block: 'nearest' })
     }
     function refusal(body) {
       var message = body && body.error && body.error.message

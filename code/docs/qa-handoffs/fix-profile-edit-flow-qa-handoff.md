@@ -398,3 +398,70 @@ stack, full suite     -> 37 passed, 5 failed, 8 skipped
 The 5 failures are the same in both full runs and are all in `e2e/smoke.spec.ts`, on pages this story does not touch: `/auth` and `/password-reset` axe (desktop and mobile; `label-content-name-mismatch` on the password toggle, `color-contrast` on the `lock_reset`, gold `.shrink-0` and mail icons) and `/` « fits every factory width » on desktop (`scrollWidth 1068 > 1024`). The markup, scripts and spec for those pages are unchanged from `origin/main`, and the local Tailwind build only scans the screens this story touches, so those pages are only partly styled in it; QA also saw the styled full suite fail existing tests. Unstyled (CDN blocked, no local Tailwind), the new spec now fails at its first accessibility check with the « Tailwind CDN did not load » message, by design.
 
 The stack (`ankanu-dev3`), its volumes and images, the scratch Postgres folders, the dev server and my CDN stub are removed or stopped. Files changed in this round: `packages/kernel/src/pin.ts`, `index.ts`, `kernel.test.ts`; `apps/api/src/pin-session.ts`, `pin.test.ts`; `apps/web/src/entry-guard.ts`, `v2-client.ts`, `v2-pages.ts`, `pin-screen.test.ts`, `pin-locked-entry.test.ts` (new), `profile-edit-page.test.ts`, `v2-flow.test.ts`, `web-image.test.ts`; `e2e/profile-edit-flow.spec.ts`; the spec (AC 3, 4 and 5 updated, AC 6 added) and this handoff.
+
+## Round 3 (QA retest of `07192e4`: FAIL on finding 16)
+
+QA's "Retest, round 2" section in the QA report confirmed the round 2 fixes and found one Major (16), one test gap (mutation N8), one Minor (17) and one Info (20). This round fixes those four and nothing else. `origin/main` is still `d60e97e`, already merged.
+
+| QA finding | Fix | Test that fails without it |
+| --- | --- | --- |
+| 16 Major: "the PIN screen never returns to another origin" red when fonts load | The spec has a new helper, `expectArrived(page, url)`: `toHaveURL`, then `page.waitForLoadState('load')`. Every navigation the spec causes and then acts on uses it: the loop's `/onboarding` arrivals, `/pin` after the PIN switch, `/profile-edit` after the sixth digit, and `/profile-edit` after the legacy unlock. The other `toHaveURL` calls check that the page did not move, so they stay as they are | The unchanged spec, run with fonts really loading, failed this test on every run (`GET https://fonts.gstatic.com/… net::ERR_ABORTED` from `fixtures.ts`), as QA found. With the fix: 3 × green on both projects, web only and on the stack |
+| N8 test gap: the parse failure fallback | `?next=%2F%2F%5B` (`//[`, which `new URL` cannot parse) added to "returns only to a same-origin path" | Fails when the `catch` returns `next` (`expected [ '//[' ] to deeply equal [ '/onboarding' ]`) |
+| 17 Minor: PIN status below the fold at 360x780 and 1280x800 | `say()` in `pinScript` calls `scrollIntoView({ block: 'nearest' })` on `#status-hint` whenever it writes a message. Going back to the resting line does not scroll. `#status-hint` also gets `style="scroll-margin-bottom: 24px"`, so the line lands with room below it instead of flush with the screen edge (without it, Chromium at 360x780 left it 98% in view). Scroll margin changes no layout. Nothing moves and no copy changes | `pin-screen.test.ts` › "brings the status line into view each time it says something, and not when it rests"; `v2-flow.test.ts` (the scroll margin); new e2e › "the PIN screen brings what it says into view at 360x780" and "…at 1280x800". Each step starts from the top of the page and checks the set-length message, « Code incorrect. » and « Session verrouillée. » with `toBeInViewport({ ratio: 1 })`, plus the « S'identifier à nouveau » link after the lockout. Without the scroll, the e2e fails 4 of 4 (viewport ratio 0) |
+| 20 Info: no `Cache-Control` on the locked 401 | `session-touch.ts`: `response.setHeader('Cache-Control', 'no-store')` before the `401 PIN_REQUIRED` it answers, the same call the controllers use | `pin.test.ts` › "requires the PIN after a restart and after 15 minutes…" now checks `cache-control: no-store` on the locked `GET /v1/health` and `PUT /v1/pin`; both are `null` without the fix |
+
+### Styled runs with real fonts
+
+QA's finding 16 only shows when the fonts are really downloaded, and round 2's local Tailwind build only covered the screens this story touches. This round uses a fuller stand-in, adapted from QA's `retest/scripts/cdn2-stub-server.mjs` (scratch, outside the repo):
+
+- `cdn.tailwindcss.com` is a shim that posts the page's own `tailwind.config` to a local Tailwind 3.4.17 compile (forms and container-queries plugins), scanning every Stitch screen and the web sources;
+- `fonts.googleapis.com` and `fonts.gstatic.com` go through a caching pass-through to the real Google Fonts.
+
+Chromium reaches it through `--host-resolver-rules` (those three hosts mapped to the stand-in, `MAP * ~NOTFOUND`, `EXCLUDE localhost`) with `--ignore-certificate-errors --no-proxy-server`. `E2E_ALLOW_ERRORS` covered only the blocked reCAPTCHA script (2 patterns) and, on the stack, `localhost:4031/favicon\.ico`.
+
+With this stand-in, round 2's five `smoke.spec.ts` failures do not occur. QA's attribution stands: they came from my partial build, not from `main` or this branch.
+
+### Real stack (`ankanu-dev3`, web on 4031, images built from this branch)
+
+```
+PUT /v1/pin: {"enabled":true}
+POST /v1/pin/lock: {"locked":true}
+locked GET /v1/me/profile: HTTP/1.1 401 Unauthorized cache-control: no-store
+locked GET /v1/browse: HTTP/1.1 401 Unauthorized cache-control: no-store
+locked GET /v1/accounts/gate: HTTP/1.1 401 Unauthorized cache-control: no-store
+locked GET /v1/me/profile body: {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.",…}}
+signed-out GET /v1/me/profile: HTTP/1.1 401 Unauthorized cache-control: no-store
+unlock: {"locked":false}
+unlocked GET /v1/me/profile: HTTP/1.1 200 OK cache-control: no-store
+```
+
+The same locked member in Chromium at 360x780, styled with real fonts: `/decouvrir` sends her to `/pin?next=%2Fdecouvrir`. Five wrong PINs, each typed from the top of the page: « Code incorrect. » four times, then « Session verrouillée. ». Each time the line is at top 740.3, bottom 756.3 of 780, so it is in view, and the « S'identifier à nouveau » link is at 698 to 713.
+
+### Round 3 self-check results
+
+```
+npm run lint        -> exit 0 (the same 3 pre-existing warnings)
+npm run typecheck   -> exit 0
+npm run build       -> exit 0
+npm run build -w @ankanu/web (next build) -> exit 0
+npm run test:unit (with Chromium) -> Tests 3 failed | 421 passed (424); the same 3 environment failures (ank-148-fix, photo-rules, v2-responsive)
+npm run test:integration -> 25 passed, 2 skipped; compose.test.ts fails at the api image's npm ci (sandbox proxy CA), as before
+```
+
+E2E, styled with the stand-in above:
+
+```
+web only, port 3100:  e2e/profile-edit-flow.spec.ts --repeat-each=3 -> 60 passed, 6 skipped (the image test needs E2E_BASE_URL)
+web only, full suite  -> 44 passed, 10 skipped, 0 failed
+stack, port 4031:     e2e/profile-edit-flow.spec.ts --repeat-each=3 -> 66 passed
+stack, full suite     -> 46 passed, 8 skipped, 0 failed
+```
+
+Fail-first:
+- **16:** with the round 2 spec, `--repeat-each=2` of that test failed 4 of 4 runs (both projects) with the font aborts.
+- **17:** with the scroll removed, the new e2e fails 4 of 4.
+- **17, N8 and 20 in unit tests:** with the scroll, the `catch` fallback and the header each removed, the new assertions in `pin-screen.test.ts` and `pin.test.ts` fail. Removing the header also breaks two later tests in `pin.test.ts`, only because the failed test stops before it resets its fake clock.
+
+Stack, volumes, images, scratch database folders, the dev server and the stand-in are removed or stopped. Generated files (`next-env.d.ts`, `AGENTS.md`, `CLAUDE.md`, the evidence PNGs the browser unit tests rewrite) are restored. The QA report and its evidence folder are left untracked.
+
+Files changed in this round: `apps/api/src/session-touch.ts`, `apps/api/src/pin.test.ts`, `apps/web/src/v2-client.ts`, `apps/web/src/v2-pages.ts`, `apps/web/src/pin-screen.test.ts`, `apps/web/src/v2-flow.test.ts`, `e2e/profile-edit-flow.spec.ts`, the spec (AC 5 and AC 6 wording) and this handoff.
