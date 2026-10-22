@@ -406,35 +406,16 @@ export function accountScript(siteKey: string, panel: 'signup' | 'login'): strin
         }
       })
     }
-    function hideLoginForm(hidden) {
+    // The server entry guard answers every fresh /auth load (no-store). Only a page
+    // restored from the back-forward cache skipped it, so reload and let it decide.
+    function leaveRestoredLogin(event) {
+      if (!event || !event.persisted) return
       var form = document.getElementById('login-form')
-      if (!form) return
-      if (hidden) form.setAttribute('hidden', 'hidden')
-      else form.removeAttribute('hidden')
-    }
-    function leaveLoginIfSignedIn(event) {
-      if (event && event.persisted) hideLoginForm(true)
-      fetch('/v1/accounts/gate', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
-        return readJson(response).then(function (payload) {
-          var step = payload && payload.step
-          if (response.ok && step === 'account') {
-            hideLoginForm(true)
-            window.location.replace('/decouvrir')
-            return
-          }
-          if (response.ok && STEP[step]) {
-            hideLoginForm(true)
-            window.location.replace(STEP[step])
-            return
-          }
-          hideLoginForm(false)
-        })
-      }).catch(function () {
-        hideLoginForm(false)
-      })
+      if (form) form.setAttribute('hidden', 'hidden')
+      window.location.reload()
     }
     if (PANEL === 'login' && window.addEventListener) {
-      window.addEventListener('pageshow', leaveLoginIfSignedIn)
+      window.addEventListener('pageshow', leaveRestoredLogin)
     }
   `
 }

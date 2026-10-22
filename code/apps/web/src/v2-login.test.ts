@@ -331,13 +331,15 @@ describe('sign-in routing and inline errors', () => {
     expect(page).not.toContain("|| '/onboarding'")
     expect(accountScript('site', 'login')).not.toContain("|| '/onboarding'")
     expect(accountScript('site', 'login')).toContain("addEventListener('pageshow'")
-    expect(accountScript('site', 'login')).toContain("location.replace('/decouvrir')")
+    expect(accountScript('site', 'login')).toContain('window.location.reload()')
+    expect(accountScript('site', 'login')).not.toContain("fetch('/v1/accounts/gate', { credentials: 'same-origin', cache: 'no-store' })")
     expect(accountScript('site', 'login')).toContain("form.setAttribute('hidden', 'hidden')")
   })
 
-  it('hides the restored login form and sends a signed-in account home', async () => {
+  it('reads no gate on a fresh sign-in page and reloads a restored one so the server guard decides', async () => {
     const form = element('login-form')
-    const assigned: string[] = []
+    const calls: string[] = []
+    let reloads = 0
     let pageshow = null as ((event: { persisted: boolean }) => void) | null
     const windowRef = {
       addEventListener(type: string, fn: (event: { persisted: boolean }) => void) {
@@ -345,10 +347,13 @@ describe('sign-in routing and inline errors', () => {
       },
       location: {
         assign(path: string) {
-          assigned.push(path)
+          calls.push(`assign ${path}`)
         },
         replace(path: string) {
-          assigned.push(path)
+          calls.push(`replace ${path}`)
+        },
+        reload() {
+          reloads += 1
         },
       },
     }
@@ -362,15 +367,41 @@ describe('sign-in routing and inline errors', () => {
     }
     const sessionStorage = { getItem: () => null, setItem() {}, removeItem() {} }
     const run = new Function('document', 'window', 'sessionStorage', 'fetch', accountScript('site-key', 'login'))
-    run(documentRef, windowRef, sessionStorage, async () => ({
-      status: 200,
-      ok: true,
-      json: async () => ({ step: 'account' }),
-    }))
+    run(documentRef, windowRef, sessionStorage, async (url: string) => {
+      calls.push(`fetch ${url}`)
+      return { status: 401, ok: false, json: async () => ({ error: { code: 'UNAUTHENTICATED' } }) }
+    })
     expect(pageshow).not.toBeNull()
+
+    // A fresh load was already answered by the server guard: no browser gate read, no 401.
+    pageshow?.({ persisted: false })
+    await new Promise((resolve) => setTimeout(resolve, 0))
+    expect(calls).toEqual([])
+    expect(reloads).toBe(0)
+    expect(form.getAttribute('hidden')).toBeNull()
+
+    // A back-forward cache restore skipped the guard: hide the form and ask the server again.
     pageshow?.({ persisted: true })
     await new Promise((resolve) => setTimeout(resolve, 0))
     expect(form.getAttribute('hidden')).toBe('hidden')
-    expect(assigned).toEqual(['/decouvrir'])
+    expect(reloads).toBe(1)
+    expect(calls).toEqual([])
+  })
+
+  it('registers no pageshow handler on the signup panel', () => {
+    const types: string[] = []
+    const windowRef = {
+      addEventListener(type: string) {
+        types.push(type)
+      },
+      location: { assign() {}, replace() {}, reload() {} },
+    }
+    const documentRef = { getElementById: () => null, querySelectorAll: () => [] }
+    const sessionStorage = { getItem: () => null, setItem() {}, removeItem() {} }
+    const run = new Function('document', 'window', 'sessionStorage', 'fetch', accountScript('site-key', 'signup'))
+    run(documentRef, windowRef, sessionStorage, async () => {
+      throw new Error('no request expected')
+    })
+    expect(types).not.toContain('pageshow')
   })
 })

@@ -15,6 +15,14 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     reason: 'The local web-only run has no API behind /v1. Full-stack checks run with E2E_BASE_URL.',
     when: webOnly,
   },
+  {
+    // Chromium's own message, logged from inside Google's anchor and bframe iframes for the
+    // test site key in compose.yaml. Our page never calls requestStorageAccess.
+    pattern:
+      /^requestStorageAccess: Permission denied\. https:\/\/www\.google\.com\/recaptcha\/api2\/(?:anchor|bframe)\?(?:\S*&)?k=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI(?:&\S*)?$/,
+    reason:
+      "Google's reCAPTCHA iframes ask for third-party storage access on load and headless Chromium denies it. Third-party code, not ours.",
+  },
 ]
 
 // E2E_ALLOW_ERRORS is a comma-separated list of extra regexes, for an environment
