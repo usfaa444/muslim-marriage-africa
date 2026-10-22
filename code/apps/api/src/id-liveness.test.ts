@@ -199,6 +199,17 @@ describe('POST /v1/verifications/id and /liveness', () => {
     return { status: response.status, json }
   }
 
+  /** The selfie step: a fresh random pose, then its id in the upload body. */
+  async function withChallenge(body: Record<string, unknown>, sessionCookie = cookie): Promise<Record<string, unknown>> {
+    const issued = await fetch(`${base}/v1/verifications/liveness-challenge`, {
+      method: 'POST',
+      headers: { cookie: sessionCookie },
+    })
+    expect(issued.status).toBe(201)
+    const challenge = (await issued.json()) as { challenge_id: string }
+    return { ...body, challenge_id: challenge.challenge_id }
+  }
+
   async function readCapture(
     path: 'id' | 'liveness',
     sessionCookie = cookie,
@@ -260,7 +271,7 @@ describe('POST /v1/verifications/id and /liveness', () => {
     expect(memory.profiles[0]?.visibility ?? null).toBeNull()
 
     const selfie = png()
-    const live = await postCapture('liveness', { image: selfie.toString('base64') })
+    const live = await postCapture('liveness', await withChallenge({ image: selfie.toString('base64') }))
     expect(live.status).toBe(201)
     expect(live.json).toMatchObject({ kind: 'liveness', status: 'pending' })
     const sealed = [...objects.values()].at(-1)
@@ -299,14 +310,14 @@ describe('POST /v1/verifications/id and /liveness', () => {
     const rows = captures.rows.length
     const stored = objects.size
     uploadLimit = 1
-    const blocked = await postCapture('liveness', { image: jpeg(16).toString('base64') })
+    const blocked = await postCapture('liveness', await withChallenge({ image: jpeg(16).toString('base64') }))
     expect(blocked.status).toBe(429)
     expect(blocked.json).toMatchObject({ error: { code: 'RATE_LIMITED', retryable: false } })
     expect(captures.rows).toHaveLength(rows)
     expect(objects.size).toBe(stored)
     now = new Date(now.getTime() + UPLOAD_HOUR_MS + 1)
     uploadLimit = 10
-    const later = await postCapture('liveness', { image: jpeg(200_000).toString('base64') })
+    const later = await postCapture('liveness', await withChallenge({ image: jpeg(200_000).toString('base64') }))
     expect(later.status).toBe(201)
     expect(later.json).toMatchObject({ kind: 'liveness', status: 'pending' })
     const latest = await readCapture('liveness')
@@ -335,7 +346,7 @@ describe('POST /v1/verifications/id and /liveness', () => {
         throw new Error('object storage down')
       },
     })
-    const writeFailed = await postCapture('liveness', { image: jpeg(16).toString('base64') })
+    const writeFailed = await postCapture('liveness', await withChallenge({ image: jpeg(16).toString('base64') }))
     expect(writeFailed.status).toBe(503)
     expect(writeFailed.json).toMatchObject({ error: { code: 'UNHANDLED', retryable: true } })
     expect(captures.rows).toHaveLength(rows)
@@ -345,10 +356,7 @@ describe('POST /v1/verifications/id and /liveness', () => {
     const beforeSave = captures.rows.length
     const beforeObjects = objects.size
     setCaptureStore({
-      hasGrantedPhone: (accountId) => captures.hasGrantedPhone(accountId),
-      accountStatus: (accountId) => captures.accountStatus(accountId),
-      countRecent: (accountId, sinceMs) => captures.countRecent(accountId, sinceMs),
-      latest: (accountId, kind) => captures.latest(accountId, kind),
+      ...captures,
       async save() {
         throw new Error('insert failed')
       },

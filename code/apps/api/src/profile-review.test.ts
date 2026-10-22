@@ -401,6 +401,14 @@ describe('human review before anyone else sees a profile', () => {
     insertVerification(member.id, 'id_document', 'pending')
     insertVerification(member.id, 'liveness', 'pending')
     await publishIfEligible(member.id)
+    // Staff review console: a pending ID or selfie is not a grant; a Moderator must approve both.
+    expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('unpublished')
+    now = new Date('2026-10-15T00:00:02.000Z')
+    insertVerification(member.id, 'id_document', 'granted')
+    await publishIfEligible(member.id)
+    expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('unpublished')
+    insertVerification(member.id, 'liveness', 'granted')
+    await publishIfEligible(member.id)
     expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('public')
     expect(isListableProfile('public', 'Active')).toBe(true)
 
@@ -547,9 +555,9 @@ describe('human review before anyone else sees a profile', () => {
     expect((await saveProfile(readyCookie)).status).toBe(200)
     insertVerification(ready.id, 'phone_otp', 'granted')
     now = new Date('2026-10-18T00:00:01.000Z')
-    insertVerification(ready.id, 'id_document', 'pending')
+    insertVerification(ready.id, 'id_document', 'granted')
     now = new Date('2026-10-18T00:00:02.000Z')
-    insertVerification(ready.id, 'liveness', 'pending')
+    insertVerification(ready.id, 'liveness', 'granted')
     const moderator = await openStaff('moderator')
     const moderatorCookie = moderator.cookie
     const published = await fetch(`${base}/v1/staff/cases`, {
@@ -564,9 +572,9 @@ describe('human review before anyone else sees a profile', () => {
     const waiting = await createAccount()
     const waitingCookie = await signIn(waiting.email)
     expect((await saveProfile(waitingCookie)).status).toBe(200)
-    insertVerification(waiting.id, 'id_document', 'pending')
+    insertVerification(waiting.id, 'id_document', 'granted')
     now = new Date('2026-10-18T01:00:01.000Z')
-    insertVerification(waiting.id, 'liveness', 'pending')
+    insertVerification(waiting.id, 'liveness', 'granted')
     // An hour later the staff session is past its 30-minute idle clock (Story 12.1): sign in again.
     const moderatorLater = await signInTestStaff(base, staffStore, moderator)
     const heldBack = await fetch(`${base}/v1/staff/cases`, {
@@ -634,8 +642,8 @@ describe('human review before anyone else sees a profile', () => {
     const passedAt = (await getProfileStore().read(member.id))?.review_passed_at
     expect(passedAt).toBeTruthy()
     insertVerification(member.id, 'phone_otp', 'granted')
-    insertVerification(member.id, 'id_document', 'pending')
-    insertVerification(member.id, 'liveness', 'pending')
+    insertVerification(member.id, 'id_document', 'granted')
+    insertVerification(member.id, 'liveness', 'granted')
     await publishIfEligible(member.id)
     expect(memory.profiles.find((row) => row.account_id === member.id)?.visibility).toBe('public')
 

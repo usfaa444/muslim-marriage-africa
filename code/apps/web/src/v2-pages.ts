@@ -1,5 +1,6 @@
 import { audioPromptScript } from './audio-prompt'
 import { pinGuardScript } from './pin-guard'
+import { HELD_NOTICE, ID_REJECT_NOTICE, POSE_CARD } from './liveness-pose-ui'
 import {
   accountScript,
   emailScript,
@@ -191,8 +192,24 @@ export function otpHtml(stitch: string): string {
   return mount(html, otpScript())
 }
 
+function placeOnce(html: string, anchor: string, replacement: string): string {
+  if (!html.includes(anchor)) {
+    throw new Error(`Stitch 07 no longer has: ${anchor}`)
+  }
+  return html.replace(anchor, replacement)
+}
+
 export function idHtml(stitch: string): string {
   let html = stitch.replace('Document téléversé : CNIB_recto_verso.pdf', '')
+  // Staff review console: the held notice, the ID refusal notice, the random pose card and the live preview box.
+  html = placeOnce(html, '<div class="h-px w-full bg-hairline/70"></div>', `<div class="h-px w-full bg-hairline/70"></div>\n${HELD_NOTICE}`)
+  html = placeOnce(html, '</section>\n<!-- ÉTAPE 2', `${ID_REJECT_NOTICE}\n</section>\n<!-- ÉTAPE 2`)
+  html = placeOnce(html, '<!-- Viseur Caméra au Repos -->', `${POSE_CARD}\n<!-- Viseur Caméra au Repos -->`)
+  html = placeOnce(
+    html,
+    '<div class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-deep-navy',
+    '<div id="liveness-viewfinder" class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-deep-navy',
+  )
   html = html.replace(
     '<div class="pt-2 flex flex-col gap-3">',
     `<div class="pt-2 flex flex-col gap-3">\n${ID_ERROR}`,

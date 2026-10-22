@@ -2,6 +2,18 @@
 
 import { LEGACY_PIN_LENGTH, PIN_LENGTH, PIN_SET_LENGTH_MESSAGE, PIN_UNLOCK_LENGTH_MESSAGE } from '@ankanu/kernel'
 import { LITE_STORAGE_KEY, liteModeSource } from './lite-mode'
+import {
+  HELD_TEXT,
+  ID_REJECTED_TEXT,
+  ID_RETAKE_TEXT,
+  LIVE_REJECTED_TEXT,
+  LIVE_RETAKE_TEXT,
+  MEMBER_REJECT_REASON,
+  POSE_EXPIRED_TEXT,
+  POSE_LABEL,
+  POSE_UNAVAILABLE_TEXT,
+  poseSvg,
+} from './liveness-pose-ui'
 
 /** Screen 12 Element 1. Narrow widths stack the chip under the label so it stays in the card. */
 export const REPLACEMENT_REVIEW_ROW =
@@ -645,8 +657,84 @@ export function otpScript(): string {
   `
 }
 
-export function idScript(): string {
+/** `tickMs`: one second per countdown step before the selfie; unit tests pass 0. */
+export function idScript(options: { tickMs?: number } = {}): string {
+  const pictos: Record<string, string> = {}
+  for (const pose of Object.keys(POSE_LABEL)) {
+    pictos[pose] = poseSvg(pose)
+  }
+  const copy = {
+    held: HELD_TEXT,
+    idRejected: ID_REJECTED_TEXT,
+    idRetake: ID_RETAKE_TEXT,
+    liveRejected: LIVE_REJECTED_TEXT,
+    liveRetake: LIVE_RETAKE_TEXT,
+    poseExpired: POSE_EXPIRED_TEXT,
+    poseUnavailable: POSE_UNAVAILABLE_TEXT,
+  }
   return `${HELPERS}
+    var POSE_LABEL = ${JSON.stringify(POSE_LABEL)}
+    var POSE_PICTO = ${JSON.stringify(pictos).replaceAll('<', '\\u003c')}
+    var REJECT_REASON = ${JSON.stringify(MEMBER_REJECT_REASON)}
+    var COPY = ${JSON.stringify(copy)}
+    var TICK_MS = ${JSON.stringify(options.tickMs ?? 1000)}
+    var challenge = null
+    var usedChallenge = null
+    function wait(ms) { return new Promise(function (resolve) { setTimeout(resolve, ms) }) }
+    function showPose(next) {
+      var card = document.getElementById('pose-card')
+      var label = document.getElementById('pose-label')
+      var picto = document.getElementById('pose-picto')
+      if (label) label.textContent = POSE_LABEL[next.pose] || next.label || ''
+      if (picto) picto.innerHTML = POSE_PICTO[next.pose] || ''
+      if (card) card.classList.remove('hidden')
+    }
+    async function newChallenge(loud) {
+      try {
+        var response = await fetch('/v1/verifications/liveness-challenge', {
+          method: 'POST',
+          credentials: 'same-origin',
+          cache: 'no-store'
+        })
+        var payload = await readJson(response)
+        if (response.status === 201 && payload && typeof payload.challenge_id === 'string') {
+          challenge = { id: payload.challenge_id, pose: payload.pose, label: payload.pose_label, expiresAt: payload.expires_at }
+          showPose(challenge)
+          return true
+        }
+        if (loud) showCaptureError(errorMessage(payload) || COPY.poseUnavailable)
+        return false
+      } catch (error) {
+        if (loud) showCaptureError(COPY.poseUnavailable)
+        return false
+      }
+    }
+    function challengeLive() {
+      if (!challenge) return false
+      var until = Date.parse(challenge.expiresAt)
+      return !isFinite(until) || until - Date.now() > 15000
+    }
+    function showNotice(id, text) {
+      var node = document.getElementById(id)
+      if (!node) return
+      node.textContent = text
+      node.classList.remove('hidden')
+    }
+    function rejectText(title, reason, retake) {
+      var why = REJECT_REASON[reason]
+      return title + (why ? ' : ' + why : '') + '. ' + retake
+    }
+    function countdown(step) {
+      var node = document.getElementById('pose-countdown')
+      if (!node) return
+      if (step <= 0) {
+        node.textContent = ''
+        node.classList.add('hidden')
+        return
+      }
+      node.textContent = 'Photo dans ' + step + '…'
+      node.classList.remove('hidden')
+    }
     bindSwitchAccount()
     var title = document.getElementById('doc-title')
     if (title) {
@@ -711,7 +799,7 @@ export function idScript(): string {
       if (!idOk) return "La pièce d'identité est manquante."
       return "La photo de présence est manquante."
     }
-    async function postImage(path, file) {
+    async function postImage(path, file, extra) {
       try {
         var bytes = await file.arrayBuffer()
         var binary = ''
@@ -722,11 +810,12 @@ export function idScript(): string {
           credentials: 'same-origin',
           cache: 'no-store',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ image: btoa(binary) })
+          body: JSON.stringify(Object.assign({ image: btoa(binary) }, extra || {}))
         })
         var payload = await readJson(response)
         if (response.status === 201) return { ok: true, message: '' }
-        return { ok: false, message: errorMessage(payload) || "L'envoi a échoué." }
+        var field = payload && payload.error && payload.error.details && payload.error.details.field
+        return { ok: false, message: errorMessage(payload) || "L'envoi a échoué.", challenge: field === 'challenge_id' }
       } catch (error) {
         return { ok: false, message: "La connexion a échoué." }
       }
@@ -784,15 +873,24 @@ export function idScript(): string {
         var stream = null
         var video = null
         try {
+          if (!challengeLive() && !(await newChallenge(true))) return
+          var pose = challenge
           stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
           video = document.createElement('video')
-          video.className = 'hidden'
+          var frame = document.getElementById('liveness-viewfinder')
+          video.className = frame ? 'absolute inset-0 w-full h-full object-cover z-30' : 'hidden'
+          if (frame && video.style) video.style.transform = 'scaleX(-1)'
           video.muted = true
           video.playsInline = true
           video.setAttribute('playsinline', '')
           video.srcObject = stream
-          document.body.appendChild(video)
+          ;(frame || document.body).appendChild(video)
           await video.play()
+          for (var step = 3; step > 0; step -= 1) {
+            countdown(step)
+            await wait(TICK_MS)
+          }
+          countdown(0)
           var canvas = document.createElement('canvas')
           canvas.width = video.videoWidth || 640
           canvas.height = video.videoHeight || 480
@@ -804,6 +902,7 @@ export function idScript(): string {
             return
           }
           chosenLive = new File([blob], 'liveness.jpg', { type: 'image/jpeg' })
+          usedChallenge = pose ? pose.id : null
           liveSent = false
           if (!busy) clearCaptureError()
         } catch (error) {
@@ -814,6 +913,7 @@ export function idScript(): string {
             showCaptureError("La capture a échoué.")
           }
         } finally {
+          countdown(0)
           if (stream) stream.getTracks().forEach(function (track) { track.stop() })
           if (video && video.remove) video.remove()
           capturing = false
@@ -839,12 +939,20 @@ export function idScript(): string {
               idSent = true
             }
             if (chosenLive && !liveSent) {
-              var postedLive = await postImage('/v1/verifications/liveness', chosenLive)
+              var postedLive = await postImage('/v1/verifications/liveness', chosenLive, { challenge_id: usedChallenge })
               if (!postedLive.ok) {
+                if (postedLive.challenge) {
+                  chosenLive = null
+                  usedChallenge = null
+                  await newChallenge(false)
+                  showCaptureError(COPY.poseExpired)
+                  return
+                }
                 showCaptureError(postedLive.message)
                 return
               }
               liveSent = true
+              challenge = null
             }
             var idRow = await readCapture('/v1/verifications/id')
             if (!idRow.ok) {
@@ -896,14 +1004,34 @@ export function idScript(): string {
         })
       }
     })
+    document.querySelectorAll('button').forEach(function (button) {
+      if ((button.textContent || '').indexOf('Reprendre la capture') !== -1) {
+        button.addEventListener('click', async function () {
+          if (busy || capturing) return
+          chosenLive = null
+          usedChallenge = null
+          liveSent = false
+          await newChallenge(true)
+        })
+      }
+    })
     Promise.all([
       fetch('/v1/verifications/id', { credentials: 'same-origin', cache: 'no-store' }).then(readJson),
       fetch('/v1/verifications/liveness', { credentials: 'same-origin', cache: 'no-store' }).then(readJson)
     ]).then(function (rows) {
-      if (capturePassed(rows[0]) && !chosenId) {
+      var idRow = rows[0] || {}
+      var liveRow = rows[1] || {}
+      if (capturePassed(idRow) && !chosenId) {
         showName('Pièce enregistrée')
         showBadge()
       }
+      if (idRow.status === 'held' || liveRow.status === 'held') {
+        showNotice('id-held', COPY.held)
+        return
+      }
+      if (idRow.status === 'rejected') showNotice('id-reject', rejectText(COPY.idRejected, idRow.reason, COPY.idRetake))
+      if (liveRow.status === 'rejected') showNotice('live-reject', rejectText(COPY.liveRejected, liveRow.reason, COPY.liveRetake))
+      if (!capturePassed(liveRow)) return newChallenge(false)
     }).catch(function () {})
   `
 }

@@ -6,6 +6,7 @@ import {
   type ReviewFailure,
 } from './profile-review.js'
 import { requireStaffSession } from './staff-session.js'
+import { moderatorGate } from './staff-review.js'
 import { grantStagingVerification, stagingStaffGrantEnabled } from './staff-verification-grant.js'
 
 type CookieRequest = {
@@ -30,11 +31,24 @@ async function staffAccount(request: CookieRequest): Promise<string> {
   return session.account_id
 }
 
+/** AD-8: the profile review queue (profile fields, photo grants) and its decisions are Moderator-only. */
+async function moderatorAccount(request: CookieRequest): Promise<string> {
+  const session = await requireStaffSession(request.headers?.cookie)
+  const refused = moderatorGate(session)
+  if (refused) {
+    throw new HttpException(
+      { code: refused.code, message: refused.message, details: refused.details, retryable: false },
+      refused.status,
+    )
+  }
+  return session.account_id
+}
+
 @Controller('staff')
 export class StaffController {
   @Get('cases')
   async cases(@Req() request: CookieRequest, @Query('kind') kind: unknown) {
-    const staffId = await staffAccount(request)
+    const staffId = await moderatorAccount(request)
     if (kind !== 'profile_review') {
       fail({
         ok: false,
@@ -55,7 +69,7 @@ export class StaffController {
   @Post('cases')
   @HttpCode(200)
   async decide(@Req() request: CookieRequest, @Body() body: unknown) {
-    const staffId = await staffAccount(request)
+    const staffId = await moderatorAccount(request)
     const decided = await decideProfileReview(staffId, body)
     if (!decided.ok) {
       fail(decided)

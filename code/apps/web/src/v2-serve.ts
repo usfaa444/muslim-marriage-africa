@@ -5,6 +5,7 @@ import { discoverHtml } from './discover-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { visitSignalsHtml } from './visit-signals-page'
+import { staffReviewHtml } from './staff-review-page'
 import { fillStaffHeader, staffHomeHtml, staffSignInHtml, type StaffIdentity, type StaffMfaState } from './staff-pages'
 import { entryRedirect, readSessionCookie, redirectTo, type GateStep } from './entry-guard'
 import { memberRouteResponse, sessionKind, type MemberPath } from './member-route'
@@ -160,6 +161,15 @@ export async function staffHomeResponse(request: Request): Promise<Response> {
     return gate.redirect
   }
   return htmlResponse(staffHomeHtml(stitchFile('52-ts-visit-signals'), gate.identity))
+}
+
+/** `/staff/revue`: the staff review console. The API decides what each role sees (Operators: counts only). */
+export async function staffReviewResponse(request: Request): Promise<Response> {
+  const gate = await staffPageGate(request)
+  if ('redirect' in gate) {
+    return gate.redirect
+  }
+  return htmlResponse(staffReviewHtml(stitchFile('52-ts-visit-signals'), gate.identity))
 }
 
 /** `/staff/connexion`: staff sign-in. A full staff session goes home; `?leave=1` ends the session first. */

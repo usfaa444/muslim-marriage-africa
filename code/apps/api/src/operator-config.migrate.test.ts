@@ -12,6 +12,9 @@ import { setStaffMfaKey } from './staff-mfa-key.js'
 import { changeStaffPassword, loadStaffSessionById, readEnrollment, signInStaff, verifyStaffCode } from './staff-session.js'
 import { getStaffStore } from './staff-store.js'
 import { totpCode } from './staff-totp.js'
+import { getCaptureStore } from './id-liveness-store.js'
+import { nextRecordId } from './id-liveness.js'
+import { decideVerification } from './staff-review.js'
 import { newId } from '@ankanu/kernel'
 import { setAuthClock } from './auth-clock.js'
 import { readRlAuthPerMin } from './auth-limit.js'
@@ -178,6 +181,7 @@ function migrationSql(): string {
     '0017_profile_visit.sql',
     '0018_discovery_exclusion.sql',
     '0019_staff_mfa.sql',
+    '0020_review_console.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -279,6 +283,7 @@ describe('operator_config migration', () => {
       'discovery_exclusion',
       'email_verification',
       'favourite',
+      'liveness_challenge',
       'operator_config',
       'password_reset',
       'photo_asset',
@@ -302,6 +307,7 @@ describe('operator_config migration', () => {
       'public.discovery_exclusion',
       'public.email_verification',
       'public.favourite',
+      'public.liveness_challenge',
       'public.operator_config',
       'public.password_reset',
       'public.photo_asset',
@@ -319,7 +325,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('20')
+    expect(applied.rows[0]?.count).toBe('21')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -848,6 +854,7 @@ describe('operator_config migration', () => {
       'discovery_exclusion',
       'email_verification',
       'favourite',
+      'liveness_challenge',
       'operator_config',
       'password_reset',
       'photo_asset',
@@ -871,6 +878,7 @@ describe('operator_config migration', () => {
       'public.discovery_exclusion',
       'public.email_verification',
       'public.favourite',
+      'public.liveness_challenge',
       'public.operator_config',
       'public.password_reset',
       'public.photo_asset',
@@ -1355,6 +1363,124 @@ describe('operator_config migration', () => {
       resetAuthRateWindow()
       setStaffMfaKey(undefined)
       await app.close()
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('keeps the liveness challenge single-use and the Moderator decision atomic on migrated Postgres (staff review console)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    const member = '018f3a40-7c2a-7000-8000-0000000000e1'
+    const minor = '018f3a40-7c2a-7000-8000-0000000000e2'
+    const staff = '018f3a40-7c2a-7000-8000-0000000000e3'
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, $4, $5, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    try {
+      await db().query(insertAccount, [member, 'review-pg@example.bf', 'Review_Pg', 'sister', ['member']])
+      await db().query(insertAccount, [minor, 'minor-pg@example.bf', 'Minor_Pg', 'sister', ['member']])
+      await db().query(insertAccount, [staff, 'moderator-pg@example.bf', 'Moderator_Pg', 'none', ['moderator']])
+      for (const id of [member, minor]) {
+        await db().query(
+          `insert into "profile" ("account_id", "dob", "visibility", "review_passed_at") values ($1, '1995-03-02', 'unpublished', now())`,
+          [id],
+        )
+        await db().query(
+          `insert into "verification_record" ("id", "account_id", "kind", "status") values ($1, $2, 'phone_otp', 'granted')`,
+          [newId(new Date()), id],
+        )
+      }
+      const store = getCaptureStore()
+      const soon = new Date(Date.now() + 600_000)
+      await store.issueChallenge({ id: newId(new Date()), account_id: member, pose: 'look_left', expires_at: soon })
+      const challengeId = newId(new Date(Date.now() + 1))
+      await store.issueChallenge({ id: challengeId, account_id: member, pose: 'thumbs_up', expires_at: soon })
+      expect(await store.challenge(member)).toMatchObject({ id: challengeId, pose: 'thumbs_up' })
+      const selfie = (id: string, accountId = member) => ({
+        id,
+        account_id: accountId,
+        kind: 'liveness' as const,
+        status: 'pending' as const,
+        vendor: null,
+        evidence_uri: `s3://ankanu/verification/${accountId}/${id}.json`,
+        phone_e164: null,
+        hash: null,
+        expires_at: null,
+        pose: 'thumbs_up' as const,
+      })
+      const firstId = nextRecordId(new Date())
+      const secondId = nextRecordId(new Date())
+      const raced = await Promise.all([
+        store.save(selfie(firstId), { challengeId, now: new Date() }),
+        store.save(selfie(secondId), { challengeId, now: new Date() }),
+      ])
+      expect([...raced].sort()).toEqual(['challenge_gone', 'saved'])
+      const kept = raced[0] === 'saved' ? firstId : secondId
+      expect(await store.challenge(member)).toBeNull()
+      const expiredId = newId(new Date())
+      await store.issueChallenge({ id: expiredId, account_id: member, pose: 'look_left', expires_at: new Date(Date.now() - 1) })
+      expect(await store.save(selfie(nextRecordId(new Date())), { challengeId: expiredId, now: new Date() })).toBe('challenge_gone')
+      const stored = await db().query<{ pose: string; status: string }>(
+        `select "pose", "status" from "verification_record" where "account_id" = $1 and "kind" = 'liveness'`,
+        [member],
+      )
+      expect(stored.rows).toEqual([{ pose: 'thumbs_up', status: 'pending' }])
+      let refused = ''
+      try {
+        await db().query(
+          `insert into "verification_record" ("id", "account_id", "kind", "status", "pose") values ($1, $2, 'id_document', 'pending', 'look_left')`,
+          [newId(new Date()), member],
+        )
+      } catch (error) {
+        refused = postgresCode(error) ?? ''
+      }
+      expect(refused, 'a pose only on a liveness row').toBe('23514')
+
+      const idId = nextRecordId(new Date())
+      expect(await store.save({ ...selfie(idId), kind: 'id_document', pose: null })).toBe('saved')
+      const pending = await store.pendingLatest()
+      expect(pending.filter((row) => row.account_id === member).map((row) => [row.kind, row.id, row.pseudonym]).sort()).toEqual(
+        [['id_document', idId, 'Review_Pg'], ['liveness', kept, 'Review_Pg']].sort(),
+      )
+
+      const moderator = { account_id: staff, roles: ['moderator'], session_id: 'pg-session' }
+      const decisions = await Promise.all([
+        decideVerification(moderator, { kind: 'id_document', account_id: member, record_id: idId, decision: 'approve' }),
+        decideVerification(moderator, { kind: 'id_document', account_id: member, record_id: idId, decision: 'reject', reason: 'expired' }),
+      ])
+      expect(decisions.map((item) => (item.ok ? 200 : item.status)).sort()).toEqual([200, 409])
+
+      const retakeId = nextRecordId(new Date())
+      expect(await store.save(selfie(retakeId))).toBe('saved')
+      const stale = await decideVerification(moderator, { kind: 'liveness', account_id: member, record_id: kept, decision: 'approve' })
+      expect(stale).toMatchObject({ ok: false, status: 409, code: 'REVIEW_STALE' })
+      const idStatus = await db().query<{ status: string }>(`select "status" from "verification_record" where "id" = $1`, [idId])
+      if (idStatus.rows[0]?.status === 'rejected') {
+        const again = nextRecordId(new Date())
+        await store.save({ ...selfie(again), kind: 'id_document', pose: null })
+        expect((await decideVerification(moderator, { kind: 'id_document', account_id: member, record_id: again, decision: 'approve' })).ok).toBe(true)
+      }
+      const approved = await decideVerification(moderator, { kind: 'liveness', account_id: member, record_id: retakeId, decision: 'approve' })
+      expect(approved).toMatchObject({ ok: true, result: { status: 'granted', visibility: 'public' } })
+
+      const minorId = nextRecordId(new Date())
+      await store.save({ ...selfie(minorId, minor), kind: 'id_document', pose: null })
+      const held = await decideVerification(moderator, { kind: 'id_document', account_id: minor, record_id: minorId, decision: 'suspected_minor' })
+      expect(held).toMatchObject({ ok: true, result: { status: 'held', visibility: 'held', account_status: 'held' } })
+
+      const audit = await db().query<{ action: string; payload: Record<string, string> }>(
+        `select "action", "payload" from "audit_event" where "actor_id" = $1 order by "id"`,
+        [staff],
+      )
+      expect(audit.rows.every((row) => row.action === 'moderator_verification_decision')).toBe(true)
+      expect(audit.rows.length).toBeGreaterThanOrEqual(3)
+      expect(JSON.stringify(audit.rows)).not.toMatch(/s3:\/\/|verification\//)
+    } finally {
       await closeAccountStore()
       if (previousDatabaseUrl === undefined) {
         delete process.env['DATABASE_URL']

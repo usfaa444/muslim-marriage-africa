@@ -13,7 +13,6 @@ import { getMediaStore, type ModerationState } from './media-store.js'
 import { operatorConfig } from './operator-config.js'
 import { getPhoneOtpStore, type PhoneOtpRow } from './phone-otp-store.js'
 import { getProfileStore, profileStoreIsMemory, type ProfileDb, type StoredProfile } from './profile-store.js'
-import { capturePassed } from './signup-gate.js'
 
 const STAFF_FORBIDDEN = 'Accès réservé au personnel de modération.'
 const NOT_FOUND_MESSAGE = "Ce profil n'est pas dans la file."
@@ -483,10 +482,11 @@ async function gatesPassed(accountId: string, db?: ProfileDb): Promise<boolean> 
     return gateReader(accountId)
   }
   const latest = db ? await latestVerification(accountId, db) : await latestVerification(accountId)
+  // Staff review console: ID and liveness count only once a Moderator granted them (pending is not enough).
   return (
     latest.get('phone_otp') === 'granted' &&
-    capturePassed(latest.get('liveness')) &&
-    capturePassed(latest.get('id_document'))
+    latest.get('liveness') === 'granted' &&
+    latest.get('id_document') === 'granted'
   )
 }
 

@@ -76,6 +76,11 @@ function stitchHead(stitch: string): string {
   return stitch.slice(start + '<head>'.length, end)
 }
 
+/** A full staff page on Stitch 52's head: staff header with the badge, no member nav. */
+export function staffPage(stitch: string, title: string, body: string, extra = ''): string {
+  return page(stitch, title, body, true, extra)
+}
+
 function page(stitch: string, title: string, body: string, signedIn: boolean | { pending: boolean }, extra = ''): string {
   const head = stitchHead(stitch).replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeHtml(title)}</title>`)
   const html = `<!DOCTYPE html><html class="h-full" lang="fr"><head>${head}</head>
@@ -282,6 +287,11 @@ ${roleLine(identity)}
 <div class="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-deep-navy/75 px-1">
 <span>Signalements &amp; Contrôles</span>
 </div>
+<a class="block bg-cream border border-hairline rounded-md p-4 hover:border-soft-gold/80 transition-colors" data-testid="staff-review-link" href="/staff/revue" style="background-color: rgb(251, 248, 241);">
+<span class="block text-base font-semibold text-deep-navy tracking-tight">Revue des inscriptions</span>
+<span class="block text-xs text-deep-navy/70 mt-2 leading-relaxed">Profils, photos, pièces d'identité et selfies en attente</span>
+<span class="mt-3.5 pt-2.5 border-t border-hairline/60 flex items-center justify-end text-[11px] text-deep-navy font-semibold gap-1">Ouvrir la file <span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span></span>
+</a>
 <a class="block bg-cream border border-hairline rounded-md p-4 hover:border-soft-gold/80 transition-colors" href="/staff/visit-signals" style="background-color: rgb(251, 248, 241);">
 <span class="flex items-start justify-between gap-2 mb-2">${staffBadgeHtml().replace('data-testid="staff-only-badge" ', '').replace('bg-cream text-deep-navy', 'bg-deep-navy text-cream')}</span>
 <span class="block text-base font-semibold text-deep-navy tracking-tight">Signaux de visite</span>

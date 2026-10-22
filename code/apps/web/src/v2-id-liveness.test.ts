@@ -108,6 +108,14 @@ function mount(fetchImpl: FetchImpl, camera: { getUserMedia?: () => Promise<unkn
   }
   const error = { ...classes('hidden'), textContent: '' }
   const errorText = { textContent: '' }
+  const notice = () => ({ ...classes('hidden'), textContent: '', innerHTML: '' })
+  const poseCard = notice()
+  const poseLabel = notice()
+  const posePicto = notice()
+  const countdown = notice()
+  const idReject = notice()
+  const liveReject = notice()
+  const held = notice()
   const listeners: Record<string, Listener> = {}
   function button(text: string) {
     const node = {
@@ -123,6 +131,7 @@ function mount(fetchImpl: FetchImpl, camera: { getUserMedia?: () => Promise<unkn
   const replace = button('Remplacer')
   const confirm = button('Confirmer et transmettre pour vérification arrow_forward')
   const cameraButton = button('Activer la caméra pour la capture')
+  const retakeButton = button('refresh Reprendre la capture')
   const idFile = {
     type: '',
     accept: '',
@@ -164,6 +173,13 @@ function mount(fetchImpl: FetchImpl, camera: { getUserMedia?: () => Promise<unkn
       if (id === 'id-error-text') return errorText
       if (id === 'trigger-cam-btn') return cameraButton
       if (id === 'switch-account') return { addEventListener() {} }
+      if (id === 'pose-card') return poseCard
+      if (id === 'pose-label') return poseLabel
+      if (id === 'pose-picto') return posePicto
+      if (id === 'pose-countdown') return countdown
+      if (id === 'id-reject') return idReject
+      if (id === 'live-reject') return liveReject
+      if (id === 'id-held') return held
       return null
     },
     querySelector(selector: string) {
@@ -172,7 +188,7 @@ function mount(fetchImpl: FetchImpl, camera: { getUserMedia?: () => Promise<unkn
     },
     querySelectorAll(selector: string) {
       if (selector === 'div') return [badge]
-      if (selector === 'button') return [replace, confirm, cameraButton]
+      if (selector === 'button') return [replace, confirm, cameraButton, retakeButton]
       if (selector === 'a') return []
       return []
     },
@@ -193,13 +209,31 @@ function mount(fetchImpl: FetchImpl, camera: { getUserMedia?: () => Promise<unkn
   const navigatorRef = {
     mediaDevices: camera.getUserMedia ? { getUserMedia: camera.getUserMedia } : undefined,
   }
-  const run = new Function('document', 'window', 'fetch', 'navigator', 'sessionStorage', idScript())
+  const run = new Function('document', 'window', 'fetch', 'navigator', 'sessionStorage', idScript({ tickMs: 0 }))
   run(documentRef, windowRef, fetchImpl, navigatorRef, {
     getItem: () => null,
     setItem() {},
     removeItem() {},
   })
-  return { title, badge, error, errorText, idFile, confirm, cameraButton, assigned, dialogs }
+  return {
+    title,
+    badge,
+    error,
+    errorText,
+    idFile,
+    confirm,
+    cameraButton,
+    retakeButton,
+    assigned,
+    dialogs,
+    poseCard,
+    poseLabel,
+    posePicto,
+    countdown,
+    idReject,
+    liveReject,
+    held,
+  }
 }
 
 async function settle(): Promise<void> {
@@ -260,11 +294,33 @@ describe('pseudonym tailwind config', () => {
 })
 
 describe('id-liveness confirm', () => {
-  function captureFetch(state: { id: string; live: string; gate: string; postId?: JsonResult; postLive?: JsonResult; failPost?: boolean }) {
-    const calls: Array<{ url: string; method: string }> = []
+  function captureFetch(state: {
+    id: string
+    live: string
+    gate: string
+    postId?: JsonResult
+    postLive?: JsonResult
+    failPost?: boolean
+    idReason?: string
+    liveReason?: string
+  }) {
+    const calls: Array<{ url: string; method: string; body?: Record<string, unknown> }> = []
+    const poses = ['look_left', 'thumbs_up', 'two_fingers']
+    let issued = 0
     const fetchImpl: FetchImpl = async (url, init) => {
       const method = init?.method ?? 'GET'
-      calls.push({ url, method })
+      const body = typeof init?.body === 'string' ? (JSON.parse(init.body) as Record<string, unknown>) : undefined
+      calls.push({ url, method, ...(body ? { body } : {}) })
+      if (method === 'POST' && url === '/v1/verifications/liveness-challenge') {
+        const pose = poses[issued % poses.length]
+        issued += 1
+        return json(201, {
+          challenge_id: `challenge-${issued}`,
+          pose,
+          pose_label: 'libellé serveur',
+          expires_at: new Date(Date.now() + 600_000).toISOString(),
+        })
+      }
       if (state.failPost && method === 'POST') {
         throw new Error('offline')
       }
@@ -278,8 +334,8 @@ describe('id-liveness confirm', () => {
         if (result.ok) state.live = 'pending'
         return result
       }
-      if (method === 'GET' && url === '/v1/verifications/id') return json(200, { status: state.id })
-      if (method === 'GET' && url === '/v1/verifications/liveness') return json(200, { status: state.live })
+      if (method === 'GET' && url === '/v1/verifications/id') return json(200, { status: state.id, ...(state.idReason ? { reason: state.idReason } : {}) })
+      if (method === 'GET' && url === '/v1/verifications/liveness') return json(200, { status: state.live, ...(state.liveReason ? { reason: state.liveReason } : {}) })
       if (url === '/v1/accounts/gate') return json(200, { step: state.gate })
       return json(500, { error: { message: 'Request failed' } })
     }
@@ -446,6 +502,85 @@ describe('id-liveness confirm', () => {
     expect(page.assigned).toEqual([])
     expect(page.confirm.disabled).toBe(false)
     expect(dialogs).toEqual([])
+  })
+
+  it('shows a random pose with its pictogram when the selfie step opens, and sends its challenge with the selfie', async () => {
+    const { calls, fetchImpl } = captureFetch({ id: 'none', live: 'none', gate: 'account' })
+    const page = await ready(fetchImpl, { getUserMedia: async () => ({ getTracks: () => [{ stop() {} }] }) })
+    expect(calls.filter((call) => call.method === 'POST').map((call) => call.url)).toEqual(['/v1/verifications/liveness-challenge'])
+    expect(page.poseCard.classList.contains('hidden')).toBe(false)
+    expect(page.poseLabel.textContent).toBe('Regardez vers la gauche')
+    expect(page.posePicto.innerHTML).toContain('<svg')
+    await chooseId(page)
+    await takeSelfie(page)
+    expect(page.countdown.classList.contains('hidden')).toBe(true)
+    await page.confirm.listeners.click?.({ preventDefault() {} })
+    const selfie = calls.find((call) => call.method === 'POST' && call.url === '/v1/verifications/liveness')
+    expect(selfie?.body).toMatchObject({ challenge_id: 'challenge-1' })
+    expect(page.assigned).toEqual(['/onboarding'])
+  })
+
+  it('asks for no pose when the selfie is already pending', async () => {
+    const { calls, fetchImpl } = captureFetch({ id: 'pending', live: 'pending', gate: 'account' })
+    const page = await ready(fetchImpl)
+    expect(calls.some((call) => call.url === '/v1/verifications/liveness-challenge')).toBe(false)
+    expect(page.poseCard.classList.contains('hidden')).toBe(true)
+  })
+
+  it('names each refused step with the reason category, gives a new pose, and never mentions payment', async () => {
+    const { calls, fetchImpl } = captureFetch({
+      id: 'rejected',
+      live: 'rejected',
+      gate: 'identity',
+      idReason: 'unreadable',
+      liveReason: 'pose_not_done',
+    })
+    const page = await ready(fetchImpl)
+    expect(page.idReject.classList.contains('hidden')).toBe(false)
+    expect(page.idReject.textContent).toBe(
+      "Votre pièce d'identité n'a pas été acceptée : la photo de la pièce est illisible. Envoyez une nouvelle photo de votre pièce avec le bouton « Remplacer ».",
+    )
+    expect(page.liveReject.textContent).toBe(
+      "Votre selfie n'a pas été accepté : le geste demandé n'apparaît pas sur le selfie. Reprenez le selfie en faisant le nouveau geste demandé.",
+    )
+    expect(`${page.idReject.textContent} ${page.liveReject.textContent}`).not.toMatch(/pay|pack|premium|abonnement|prix/i)
+    expect(page.poseLabel.textContent).toBe('Regardez vers la gauche')
+    await page.retakeButton.listeners.click?.()
+    expect(page.poseLabel.textContent, 'Reprendre la capture draws a new pose').toBe('Levez le pouce')
+    expect(calls.filter((call) => call.url === '/v1/verifications/liveness-challenge')).toHaveLength(2)
+  })
+
+  it('shows the age-hold notice instead of a retake for a held account', async () => {
+    const { calls, fetchImpl } = captureFetch({ id: 'held', live: 'held', gate: 'identity' })
+    const page = await ready(fetchImpl)
+    expect(page.held.classList.contains('hidden')).toBe(false)
+    expect(page.idReject.classList.contains('hidden')).toBe(true)
+    expect(calls.some((call) => call.url === '/v1/verifications/liveness-challenge')).toBe(false)
+  })
+
+  it('draws a new pose and asks for a new selfie when the challenge expired before the upload', async () => {
+    const { calls, fetchImpl } = captureFetch({
+      id: 'pending',
+      live: 'none',
+      gate: 'account',
+      postLive: json(400, { error: { code: 'VERIFICATION_RETAKE', message: 'Reprenez la capture.', details: { field: 'challenge_id', reason: 'challenge' } } }),
+    })
+    const page = await ready(fetchImpl, { getUserMedia: async () => ({ getTracks: () => [{ stop() {} }] }) })
+    await takeSelfie(page)
+    await page.confirm.listeners.click?.({ preventDefault() {} })
+    expect(page.errorText.textContent).toBe('Le geste a expiré. Reprenez le selfie avec le nouveau geste.')
+    expect(page.poseLabel.textContent).toBe('Levez le pouce')
+    expect(calls.filter((call) => call.url === '/v1/verifications/liveness-challenge')).toHaveLength(2)
+    expect(page.assigned).toEqual([])
+  })
+
+  it('places the pose card, the refusal notices and the live preview box on the served page', () => {
+    const page = idHtml(stitch('07-id-liveness'))
+    for (const id of ['pose-card', 'pose-label', 'pose-picto', 'pose-countdown', 'id-reject', 'live-reject', 'id-held', 'liveness-viewfinder']) {
+      expect(page, id).toContain(`id="${id}"`)
+    }
+    expect(page.indexOf('id="id-reject"')).toBeLessThan(page.indexOf('id="pose-card"'))
+    expect(page.indexOf('id="pose-card"')).toBeLessThan(page.indexOf('id="liveness-viewfinder"'))
   })
 
   it('puts the error line on the served page and does not call a native dialog', () => {
