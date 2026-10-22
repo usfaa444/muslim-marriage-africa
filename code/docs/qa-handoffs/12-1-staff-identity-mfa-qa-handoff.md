@@ -215,3 +215,31 @@ Self-check, round 2:
   - `/decouvrir` redirected to `/staff`.
   - The only console errors were the blocked Google reCAPTCHA/fonts and the favicon 404.
 - Log scan: the api, web and worker logs contain none of the one-time passwords, the chosen passwords or `otpauth`.
+
+## Round 3 (post-QA bug)
+
+**Bug (found by Fay on 82d017f):** a browser that still held a PIN-locked member session cookie got 401 `PIN_REQUIRED` from `POST /v1/staff/sessions`, so staff could not sign in from it. The member PIN gate in `applySessionGate` (`apps/api/src/pin-session.ts`) ran on every route except its own exempt list.
+
+**Fix:** staff sign-in now ignores a member cookie entirely. When the cookie belongs to a member session, `POST /v1/staff/sessions` and `GET /v1/staff/sessions/current` (the sign-in page's probe) skip the member gate: the member session is neither stamped nor locked. A staff cookie on these routes still goes through the staff gate, as before.
+
+**Results:**
+- **Sign-in:** a correct staff sign-in answers 201 and its `Set-Cookie` replaces the member cookie with the staff session cookie. The member session row stays as it was, and stays locked.
+- **The probe:** a member cookie, locked or not, now gets 403 on `GET /v1/staff/sessions/current`.
+- **The sign-in page:** with the 403 (or with a 401 `PIN_REQUIRED`), `/staff/connexion` renders its first step. It is not redirected to `/pin` or the member flow, because the page never ran the member entry guard. A unit test and an e2e test now lock that in.
+
+**Tests:**
+
+| Test | What it checks | Fails without the fix? |
+| --- | --- | --- |
+| `staff-mfa.test.ts` "signs staff in over a PIN-locked member cookie and replaces that cookie with the staff session" (memory stores) | A member sets a PIN and idles 16 minutes, so the member cookie gets 401 `PIN_REQUIRED`. The probe with that cookie is no longer 401. Staff sign-in with that cookie gives 201 `verify`, then the code gives a full staff session. The member cookie is still locked. | Yes, checked against the 82d017f `pin-session.ts` |
+| `operator-config.migrate.test.ts` "lets staff sign in over a PIN-locked member cookie on migrated Postgres (Story 12.1, round 3)" | The same flow over HTTP on Postgres. The probe is 403. Staff sign-in gives 201 `password_change` with a new cookie. The member cookie is still locked. | Yes, checked by running the whole file against 82d017f: 401 instead of 403 |
+| `staff-pages.test.ts` "serves the staff sign-in to a browser that holds a PIN-locked member cookie, without sending it to /pin" | The page renders its first step when the probe answers 401 `PIN_REQUIRED` or 403 | No. It also passes on 82d017f: it guards against a regression. |
+| e2e `staff-shell.spec.ts` "a leftover member session cookie does not send the staff sign-in to /pin or the member flow" | With a member-like session cookie, `/staff/connexion` answers 200 and shows the sign-in form | No. It also passes on 82d017f: it guards against a regression. |
+
+**Self-check, round 3:**
+- Lint: 0 errors.
+- Typecheck: clean.
+- Unit (`npx vitest run` with `compose.test.ts` excluded): 467 passed, 12 skipped, 1 failed (`photo-rules`, red on main).
+- Postgres migrate integration: 13 passed.
+- Staff e2e on the web-only server: 10 passed, 4 skipped. The skipped ones are the stack-only tests and the desktop-only width sweeps on mobile.
+- I did not rebuild the stack for this round. The API change is covered by the Postgres HTTP test above.

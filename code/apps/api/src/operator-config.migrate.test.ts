@@ -1279,4 +1279,88 @@ describe('operator_config migration', () => {
       }
     }
   }, 60_000)
+
+  it('lets staff sign in over a PIN-locked member cookie on migrated Postgres (Story 12.1, round 3)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setStaffMfaKey({ key: Buffer.alloc(32, 0x5a), kid: 'test-staff-mfa' })
+    resetAuthRateWindow()
+    let clock = new Date()
+    setAuthClock(() => clock)
+    const app = await createApp()
+    await app.listen(0, '127.0.0.1')
+    try {
+      const address = app.getHttpServer().address() as AddressInfo | string | null
+      if (address === null || typeof address === 'string') throw new Error('expected a TCP port')
+      const base = `http://127.0.0.1:${address.port}`
+      const post = (path: string, body: unknown, cookie = '') =>
+        fetch(`${base}${path}`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', ...(cookie ? { cookie } : {}) },
+          body: JSON.stringify(body),
+        })
+      const member = await post('/v1/accounts', {
+        email: 'pin.member@example.bf',
+        password: 'phrase avec espaces',
+        pseudonym: 'Pin_Member',
+        gender: 'sister',
+        pledge_accepted: true,
+        civil_given_name: 'Awa',
+        civil_family_name: 'Ouedraogo',
+        recaptcha_token: 'test-ok',
+        coc_version: 'FR-089',
+        dob: '1991-02-03',
+      })
+      expect(member.status).toBe(201)
+      const signed = await post('/v1/sessions', {
+        identifier: 'pin.member@example.bf',
+        password: 'phrase avec espaces',
+        remember_me: false,
+        recaptcha_token: 'test-ok',
+      })
+      expect(signed.status).toBe(201)
+      const memberCookie = /ankanu_session=[^;]+/.exec(signed.headers.get('set-cookie') ?? '')?.[0] ?? ''
+      const pin = await fetch(`${base}/v1/pin`, {
+        method: 'PUT',
+        headers: { cookie: memberCookie, 'content-type': 'application/json' },
+        body: JSON.stringify({ pin: '246813' }),
+      })
+      expect(pin.status).toBeLessThan(300)
+      clock = new Date(clock.getTime() + 16 * 60_000)
+      const locked = await fetch(`${base}/v1/health`, { headers: { cookie: memberCookie } })
+      expect(locked.status).toBe(401)
+      expect(await locked.json()).toMatchObject({ error: { code: 'PIN_REQUIRED' } })
+
+      const probe = await fetch(`${base}/v1/staff/sessions/current`, { headers: { cookie: memberCookie } })
+      expect(probe.status).toBe(403)
+      const created = await createStaffAccount({ email: 'pin.staff@example.bf', role: 'operator' })
+      if (!created.ok) throw new Error(created.message)
+      const opened = await post(
+        '/v1/staff/sessions',
+        { email: 'pin.staff@example.bf', password: created.oneTimePassword, recaptcha_token: 'test-ok' },
+        memberCookie,
+      )
+      expect(opened.status).toBe(201)
+      expect(await opened.json()).toMatchObject({ kind: 'staff', mfa_state: 'password_change' })
+      const staffCookie = /ankanu_session=[^;]+/.exec(opened.headers.get('set-cookie') ?? '')?.[0] ?? ''
+      expect(staffCookie).not.toBe(memberCookie)
+      const current = await fetch(`${base}/v1/staff/sessions/current`, { headers: { cookie: staffCookie } })
+      expect(current.status).toBe(200)
+      // The member session row stays as it was: still there, still locked.
+      expect((await fetch(`${base}/v1/health`, { headers: { cookie: memberCookie } })).status).toBe(401)
+    } finally {
+      setAuthClock(undefined)
+      resetAuthRateWindow()
+      setStaffMfaKey(undefined)
+      await app.close()
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
 })

@@ -104,6 +104,15 @@ test.describe('staff shell', () => {
     }
   })
 
+  test('a leftover member session cookie does not send the staff sign-in to /pin or the member flow', async ({ page, baseURL }) => {
+    // A session id the API does not know (web-only: no API at all). The page renders its first step.
+    await page.context().addCookies([{ name: 'ankanu_session', value: '01990000-0000-7000-8000-0000000000aa', url: baseURL ?? '' }])
+    const response = await page.goto('/staff/connexion')
+    expect(response?.status()).toBe(200)
+    await expect(page).toHaveURL(/\/staff\/connexion$/)
+    await expect(page.getByRole('button', { name: 'Se connecter' })).toBeVisible()
+  })
+
   test('a member stub cookie is sent away from the staff home', async ({ page, baseURL }) => {
     test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
     await page.context().addCookies([{ name: 'ankanu_session', value: 'web', url: baseURL ?? '' }])

@@ -547,6 +547,43 @@ describe('staff identity and authenticator MFA (Story 12.1)', () => {
       expect(staffStore.sessions.filter((row) => row.account_id === staff.accountId && row.expires_at > now)).toHaveLength(0)
     })
 
+    it('signs staff in over a PIN-locked member cookie and replaces that cookie with the staff session', async () => {
+      const staff = await openTestStaff(base, staffStore, 'moderator')
+      const member = await createMember()
+      const memberSession = await memberCookie(member.email)
+      const setPin = await fetch(`${base}/v1/pin`, {
+        method: 'PUT',
+        headers: { cookie: memberSession, 'content-type': 'application/json' },
+        body: JSON.stringify({ pin: '246813' }),
+      })
+      expect(setPin.status).toBeLessThan(300)
+      // Idle past the PIN window: the member cookie is now PIN-locked.
+      advance(16 * 60_000)
+      const locked = await get('/v1/health', memberSession)
+      expect(locked.status).toBe(401)
+      expect(await locked.json()).toMatchObject({ error: { code: 'PIN_REQUIRED' } })
+
+      // The staff sign-in page probes the current staff session with whatever cookie the browser has.
+      const probe = await get('/v1/staff/sessions/current', memberSession)
+      expect(probe.status).not.toBe(401)
+      expect(await probe.json()).not.toMatchObject({ error: { code: 'PIN_REQUIRED' } })
+
+      const opened = await fetch(`${base}/v1/staff/sessions`, {
+        method: 'POST',
+        headers: { cookie: memberSession, 'content-type': 'application/json' },
+        body: JSON.stringify({ email: staff.email, password: TEST_STAFF_PASSWORD, recaptcha_token: 'test-ok' }),
+      })
+      expect(opened.status).toBe(201)
+      expect(await opened.json()).toMatchObject({ kind: 'staff', mfa_state: 'verify' })
+      const pending = cookieOf(opened)
+      expect(pending).not.toBe(memberSession)
+      const verified = await code(pending, freshCode(staffStore, staff.accountId, staff.secret))
+      expect(verified.status).toBe(200)
+      expect((await get('/v1/staff/metrics', cookieOf(verified))).status).toBe(200)
+      // The member session itself is untouched: still there, still locked.
+      expect((await get('/v1/health', memberSession)).status).toBe(401)
+    })
+
     it('answers wrong password, unknown email and a member account with the same generic failure', async () => {
       const staff = await openTestStaff(base, staffStore, 'moderator')
       const member = await createMember()

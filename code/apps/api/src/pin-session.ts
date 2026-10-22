@@ -34,6 +34,14 @@ const EXEMPT = new Set([
   'POST /v1/sessions',
 ])
 
+/**
+ * Staff sign-in ignores a member cookie entirely: a browser that still holds a member session, even a
+ * PIN-locked one, must reach the staff sign-in and its session probe. The member session is neither
+ * stamped nor locked here; a successful staff sign-in replaces the cookie with the staff session.
+ * A staff cookie on these routes still goes through the staff gate.
+ */
+const STAFF_SIGN_IN_ROUTES = new Set(['POST /v1/staff/sessions', 'GET /v1/staff/sessions/current'])
+
 export type PinGateResult =
   | { stop: true }
   | { stop: true; status: 403; body: ErrorEnvelope }
@@ -188,7 +196,7 @@ export async function applySessionGate(
     const gated = await applyStaffGate(route, staff, now)
     return gated.stop ? gated : { stop: false, cookie: null }
   }
-  if (row.expires_at.getTime() <= now.getTime()) {
+  if (row.expires_at.getTime() <= now.getTime() || STAFF_SIGN_IN_ROUTES.has(route)) {
     return { stop: false, cookie: null }
   }
   const pin = await getPinLockStore().findByAccount(row.account_id)

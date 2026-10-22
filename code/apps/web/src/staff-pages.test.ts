@@ -210,6 +210,21 @@ describe('staff page routing (Story 12.1)', () => {
     expect(gate[0]).toContain('/v1/accounts/gate')
   })
 
+  it('serves the staff sign-in to a browser that holds a PIN-locked member cookie, without sending it to /pin', async () => {
+    const cookie = 'ankanu_session=01990000-0000-7000-8000-000000000009'
+    for (const [status, body] of [
+      [401, { error: { code: 'PIN_REQUIRED', message: 'Code PIN requis.', details: null } }],
+      [403, { error: { code: 'FORBIDDEN', message: 'Accès réservé au personnel de modération.', details: null } }],
+    ] as const) {
+      const calls = apiAnswers(status, body)
+      const page = await staffSignInResponse(request('/staff/connexion', cookie))
+      expect(page.status, String(status)).toBe(200)
+      expect(page.headers.get('location')).toBeNull()
+      expect(await page.text()).toMatch(/class="mt-6 space-y-5" id="staff-step-login"/)
+      expect(calls).toHaveLength(1)
+    }
+  })
+
   it('sends an MFA-pending staff session from the visit-signals page to the staff sign-in', async () => {
     apiAnswers(403, { error: { code: 'FORBIDDEN', details: { reason: 'staff_mfa_pending' } } })
     const response = await visitSignalsResponse(request('/staff/visit-signals', 'ankanu_session=01990000-0000-7000-8000-000000000003'))
