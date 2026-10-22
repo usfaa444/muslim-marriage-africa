@@ -106,6 +106,6 @@ jobs:
         with:
           name: e2e-report
           path: |
-            code/e2e/.report
-            code/e2e/.results
+            code/e2e/report
+            code/e2e/test-results
           retention-days: 14

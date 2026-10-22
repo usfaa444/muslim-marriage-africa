@@ -48,7 +48,9 @@ export async function expectAccessible(page: Page, exclude: string[] = []) {
   const { violations } = await builder.analyze()
   const blocking = violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
   expect(
-    blocking.map((v) => `${v.impact} ${v.id}: ${v.help} (${v.nodes.length} nodes)`),
+    blocking.flatMap((v) =>
+      v.nodes.map((node) => `${v.impact} ${v.id} at ${node.target.join(' ')}: ${node.any[0]?.message ?? v.help}`),
+    ),
     'serious or critical accessibility violations',
   ).toEqual([])
   return violations

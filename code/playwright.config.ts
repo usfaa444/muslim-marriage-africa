@@ -7,11 +7,11 @@ const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE
 
 export default defineConfig({
   testDir: './e2e',
-  outputDir: './e2e/.results',
+  outputDir: './e2e/test-results',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: 0,
-  reporter: process.env.CI ? [['list'], ['html', { open: 'never', outputFolder: 'e2e/.report' }]] : 'list',
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never', outputFolder: 'e2e/report' }]] : 'list',
   use: {
     baseURL,
     locale: 'fr-FR',

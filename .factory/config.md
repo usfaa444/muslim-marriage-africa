@@ -31,7 +31,7 @@ Read by the `factory-dev`, `factory-qa` and `feature-factory` skills. Keep it sh
 | Full local stack | `docker compose up` (see `code/README.md`) |
 | Dependency audit | `npm audit --omit=dev --audit-level=high` |
 
-E2E tests live in `code/e2e/`. Import `test`, `expect`, `expectAccessible` and `expectNoHorizontalOverflow` from `./fixtures`. Every test already fails on console errors, page errors, failed requests and 5xx responses. Tolerated errors live in `code/e2e/known-issues.ts`, each with a reason; QA lists every open entry in its report.
+E2E tests live in `code/e2e/`. Import `test`, `expect`, `expectAccessible` and `expectNoHorizontalOverflow` from `./fixtures`. Every test already fails on console errors, page errors, failed requests and 5xx responses. Failure artefacts land in `code/e2e/test-results/` and `code/e2e/report/`. Tolerated errors live in `code/e2e/known-issues.ts`, each with a reason; QA lists every open entry in its report.
 
 ## Environments
 
