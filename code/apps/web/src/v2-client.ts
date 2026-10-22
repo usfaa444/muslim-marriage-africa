@@ -1,5 +1,6 @@
 /** Browser behavior for the v2 signup and sign-in screens. No password is stored. */
 
+import { LEGACY_PIN_LENGTH, PIN_LENGTH } from '@ankanu/kernel'
 import { LITE_STORAGE_KEY, liteModeSource } from './lite-mode'
 
 /** Screen 12 Element 1. Narrow widths stack the chip under the label so it stays in the card. */
@@ -1033,54 +1034,78 @@ export function resetScript(copy: {
 
 export function pinScript(): string {
   return `
+    var PIN_LENGTH = ${PIN_LENGTH}
+    var LEGACY_PIN_LENGTH = ${LEGACY_PIN_LENGTH}
     var digits = ''
+    var busy = false
     var slots = Array.from(document.querySelectorAll('.pin-dot'))
     function paint() {
       slots.forEach(function (dot, index) {
         dot.style.opacity = index < digits.length ? '1' : '0'
       })
     }
+    function nextPath() {
+      var params = new URLSearchParams(window.location.search)
+      var next = params.get('next') || ''
+      if (next.charAt(0) !== '/' || next.charAt(1) === '/' || next.charAt(1) === '\\\\') next = '/onboarding'
+      return next
+    }
     async function finish(pin) {
-      var status = await fetch('/v1/pin', { credentials: 'same-origin' })
-      var body = await status.json().catch(function () { return null })
-      var response
-      if (body && body.enabled === false) {
-        response = await fetch('/v1/pin', {
-          method: 'PUT',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ pin: pin })
-        })
-      } else {
-        response = await fetch('/v1/pin/unlock', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ pin: pin })
-        })
-      }
-      if (response.ok) {
-        var params = new URLSearchParams(window.location.search)
-        var next = params.get('next') || ''
-        if (next.charAt(0) !== '/' || next.charAt(1) === '/' || next.charAt(1) === '\\\\') next = '/onboarding'
-        window.location.assign(next)
-      } else {
+      if (busy) return
+      busy = true
+      try {
+        var status = await fetch('/v1/pin', { credentials: 'same-origin', cache: 'no-store' })
+        var body = await status.json().catch(function () { return null })
+        var response
+        if (body && body.enabled === false) {
+          // A new PIN is always PIN_LENGTH digits. Keep the digits so the member can finish typing.
+          if (pin.length !== PIN_LENGTH) return
+          response = await fetch('/v1/pin', {
+            method: 'PUT',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ pin: pin })
+          })
+        } else {
+          response = await fetch('/v1/pin/unlock', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ pin: pin })
+          })
+        }
+        if (response.ok) {
+          window.location.assign(nextPath())
+          return
+        }
         digits = ''
         paint()
+      } catch (error) {
+        digits = ''
+        paint()
+      } finally {
+        busy = false
       }
     }
     document.querySelectorAll('[data-key]').forEach(function (button) {
       button.addEventListener('click', function () {
-        if (digits.length >= 4) return
+        if (busy || digits.length >= PIN_LENGTH) return
         digits += button.getAttribute('data-key') || ''
         paint()
-        if (digits.length === 4) finish(digits)
+        if (digits.length === PIN_LENGTH) finish(digits)
       })
     })
+    // A PIN saved while four digits were the rule still unlocks, with the Stitch unlock button.
+    var submit = document.getElementById('btn-submit')
+    if (submit) {
+      submit.addEventListener('click', function () {
+        if (digits.length === PIN_LENGTH || digits.length === LEGACY_PIN_LENGTH) finish(digits)
+      })
+    }
     var back = document.getElementById('btn-backspace')
-    if (back) back.addEventListener('click', function () { digits = digits.slice(0, -1); paint() })
+    if (back) back.addEventListener('click', function () { if (!busy) { digits = digits.slice(0, -1); paint() } })
     var clear = document.getElementById('btn-clear')
-    if (clear) clear.addEventListener('click', function () { digits = ''; paint() })
+    if (clear) clear.addEventListener('click', function () { if (!busy) { digits = ''; paint() } })
   `
 }
 

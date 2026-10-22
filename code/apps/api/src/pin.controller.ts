@@ -13,6 +13,7 @@ import {
   requireLiveSession,
   stampSeen,
   lockThisSession,
+  UNLOCK_PIN_PATTERN,
 } from './pin-session.js'
 import { clearSessionCookieHeader } from './session-cookie.js'
 
@@ -75,7 +76,7 @@ export class PinController {
   ): Promise<{ locked: false }> {
     await rejectIfAuthRateLimited(clientIp(request))
     const session = await requireLiveSession(request.headers?.cookie)
-    const pin = readPin(body)
+    const pin = readPin(body, UNLOCK_PIN_PATTERN)
     const row = await getPinLockStore().findByAccount(session.account_id)
     if (!row) {
       return { locked: false }

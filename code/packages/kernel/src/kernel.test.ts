@@ -6,6 +6,7 @@ import { assertAuthContext } from './auth.js'
 import { civilDayOuagadougou, toOuagadougouDisplay, toUtcStorage } from './clock.js'
 import { ERROR_CODES, errorEnvelope, isErrorEnvelope } from './error.js'
 import { isUuidV7, newId } from './id.js'
+import { LEGACY_PIN_LENGTH, PIN_LENGTH } from './pin.js'
 
 const srcDir = dirname(fileURLToPath(import.meta.url))
 
@@ -204,6 +205,13 @@ describe('error envelope', () => {
         retryable: false,
       }),
     ).toThrow(TypeError)
+  })
+})
+
+describe('shared-device PIN length', () => {
+  it('is six digits for a new PIN and keeps four only for a PIN saved before that rule', () => {
+    expect(PIN_LENGTH).toBe(6)
+    expect(LEGACY_PIN_LENGTH).toBe(4)
   })
 })
 

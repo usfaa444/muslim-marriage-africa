@@ -1,4 +1,5 @@
 import { HttpException } from '@nestjs/common'
+import { LEGACY_PIN_LENGTH, PIN_LENGTH } from '@ankanu/kernel'
 import { authNow } from './auth-clock.js'
 import { rejectIfAuthRateLimited } from './auth-guard.js'
 import { isSlidingRememberMe } from './create-session.js'
@@ -13,13 +14,16 @@ import {
 } from './session-cookie.js'
 import { getSessionStore, type ResolvedSession } from './session-store.js'
 
-export const PIN_PATTERN = /^[0-9]{4}$/
+/** A new PIN: exactly PIN_LENGTH digits. */
+export const PIN_PATTERN = new RegExp(`^[0-9]{${PIN_LENGTH}}$`)
+/** An unlock attempt: a new PIN, or a PIN saved while four digits were the rule. */
+export const UNLOCK_PIN_PATTERN = new RegExp(`^(?:[0-9]{${PIN_LENGTH}}|[0-9]{${LEGACY_PIN_LENGTH}})$`)
 export const PIN_IDLE_MS = 15 * 60 * 1000
 export const PIN_INVALID_MESSAGE = 'Code incorrect.'
 export const PIN_LOCKED_MESSAGE = 'Session verrouillée.'
 export const PIN_REQUIRED_MESSAGE = 'Code PIN requis.'
 const AUTH_MESSAGE = 'Authentification requise.'
-const PIN_FIELD_MESSAGE = 'pin : quatre chiffres sont requis.'
+const PIN_FIELD_MESSAGE = 'pin : six chiffres sont requis.'
 
 const EXEMPT = new Set([
   'GET /v1/pin',
@@ -55,12 +59,12 @@ export function pinField(): never {
   )
 }
 
-export function readPin(body: unknown): string {
+export function readPin(body: unknown, pattern: RegExp = PIN_PATTERN): string {
   if (typeof body !== 'object' || body === null || Array.isArray(body)) {
     pinField()
   }
   const pin = (body as { pin?: unknown }).pin
-  if (typeof pin !== 'string' || !PIN_PATTERN.test(pin)) {
+  if (typeof pin !== 'string' || !pattern.test(pin)) {
     pinField()
   }
   return pin

@@ -220,7 +220,7 @@ describe('v2 signup and sign-in screens', () => {
     expect(page).toContain('window.location.assign(path)')
   })
 
-  it('asks for a reset link and unlocks a four-digit PIN', () => {
+  it('asks for a reset link and unlocks a six-digit PIN', () => {
     const reset = resetHtml(stitch('05-password-reset'))
     expect(reset).toContain("fetch('/v1/password-resets'")
     expect(reset).toContain('href="/auth"')
@@ -250,7 +250,8 @@ describe('v2 signup and sign-in screens', () => {
     expect(done).toContain('id="reset-enter"')
     const pin = pinHtml(stitch('10-pin-lock'))
     expect(pin).toContain("fetch('/v1/pin/unlock'")
-    expect(pin).toContain('digits.length === 4')
+    expect(pin).toContain('var PIN_LENGTH = 6')
+    expect(pin).toContain('if (digits.length === PIN_LENGTH) finish(digits)')
     expect(pin).toContain('pin-dot')
     expect(pin).toContain("next.charAt(0) !== '/'")
     expect(pin).toContain("next.charAt(1) === '/'")

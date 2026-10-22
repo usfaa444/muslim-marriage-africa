@@ -242,7 +242,7 @@ describe('named life-pause', () => {
     const saved = await fetch(`${base}/v1/pin`, {
       method: 'PUT',
       headers: { cookie, 'content-type': 'application/json' },
-      body: JSON.stringify({ pin: '1357' }),
+      body: JSON.stringify({ pin: '135790' }),
     })
     expect(saved.status).toBe(200)
     const locked = await fetch(`${base}/v1/pin/lock`, { method: 'POST', headers: { cookie } })
