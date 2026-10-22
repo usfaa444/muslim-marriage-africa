@@ -1,5 +1,5 @@
 import type { BrowserContext, Page, Request } from '@playwright/test'
-import { expect, expectAccessible, test } from './fixtures'
+import { expect, expectAccessible, expectNoHorizontalOverflow, test } from './fixtures'
 
 // /profile-edit and /pin render for the `web` stub session without an API call on the
 // server, so these tests answer every browser call to /v1 themselves. They run the same
@@ -18,6 +18,8 @@ type Api = {
   saves: Array<Record<string, unknown>>
   pinSets: string[]
   unlocks: string[]
+  /** Answers for the next unlock attempts, in order. Then every unlock is accepted. */
+  unlockRefusals: Array<{ status: number; body: unknown }>
   /** Photo grants the stand-in API still honours. Any other token answers 403, like an expired grant. */
   liveTokens: Set<string>
   /** Token for the next profile reads, in order. The last one repeats. */
@@ -56,6 +58,7 @@ function newApi(overrides: Partial<Api> = {}): Api {
     saves: [],
     pinSets: [],
     unlocks: [],
+    unlockRefusals: [],
     liveTokens: new Set(),
     tokens: [],
     ...overrides,
@@ -119,6 +122,11 @@ async function serveApi(context: BrowserContext, baseURL: string, api: Api): Pro
     if (url.pathname === '/v1/pin/unlock') {
       const pin = String((request.postDataJSON() as { pin?: unknown }).pin ?? '')
       api.unlocks.push(pin)
+      const refusal = api.unlockRefusals.shift()
+      if (refusal) {
+        await route.fulfill(json(refusal.body, refusal.status))
+        return
+      }
       await route.fulfill(json({ locked: false }))
       return
     }
@@ -148,16 +156,58 @@ function pinSwitch(page: Page) {
   return page.locator('label').filter({ has: pinCheckbox(page) })
 }
 
-// The Stitch screens style themselves with the Tailwind CDN. Where the CDN is blocked (a sandbox),
-// they render unstyled, so the keypad and the small text buttons do not have their shipped sizes.
-// Only then are those targets left out of axe; a styled run checks them.
-async function accessibleAsShipped(page: Page, unstyledTargets: string[]): Promise<void> {
-  const styled = await page.evaluate(() => 'tailwind' in window)
-  await expectAccessible(page, styled ? [] : unstyledTargets)
+// The Stitch screens style themselves with the Tailwind CDN they load. Contrast and target sizes
+// only mean something on the styled page, so the accessibility check refuses an unstyled one
+// (a machine that cannot reach the CDN must serve it locally; see the QA handoff).
+async function expectStyled(page: Page): Promise<void> {
+  await expect
+    .poll(() => page.evaluate(() => 'tailwind' in window), {
+      message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+    })
+    .toBe(true)
 }
 
-const PROFILE_TARGETS = ['#profile-photo-rules']
-const PIN_TARGETS = ['[data-key]', '#btn-clear', '#btn-backspace']
+type PreExisting = { selector: string; count: number; what: string }
+
+// Known pre-existing issues, QA report fix-profile-edit-flow round 1, finding 4: Stitch text and icons
+// on /profile-edit below 4.5:1 on cream (axe color-contrast, serious). This story did not add or change
+// them; they are routed to a separate fix. Each selector must match exactly `count` elements, so an
+// exclusion cannot grow to hide a new element, and none may cover an element this story touches.
+const PROFILE_EDIT_PRE_EXISTING: PreExisting[] = [
+  { selector: 'p.text-xs.text-deep-navy\\/60.mt-1', count: 8, what: 'section subtitles, text-deep-navy/60 (4.34:1)' },
+  { selector: 'span.text-\\[11px\\].text-deep-navy\\/60', count: 1, what: '« Condition formelle préalable » (4.34:1)' },
+  { selector: 'p.text-\\[11px\\].text-deep-navy\\/60', count: 1, what: '« Mentionnez vos perspectives de vie commune… » (4.34:1)' },
+  { selector: 'span[data-icon="lock"]', count: 1, what: 'lock icon beside « Sécurité sur l\'appareil », text-deep-navy/60' },
+  { selector: 'span[data-icon="check_circle"]', count: 1, what: 'gold check icon in the madhhab block, text-soft-gold' },
+  { selector: 'span.material-symbols-outlined.text-\\[13px\\].text-soft-gold', count: 1, what: 'gold cake icon beside the age' },
+  { selector: 'span.material-symbols-outlined.text-deep-navy\\/40', count: 1, what: 'calendar icon in the date field, text-deep-navy/40' },
+  { selector: '#profile-meter-banner span[data-icon="info"]', count: 1, what: 'gold info icon of the « Il manque » banner, text-soft-gold' },
+]
+
+// What this story added or changed on /profile-edit. Every one of them is checked by axe.
+const PROFILE_EDIT_OWN = ['#profile-pin', '#profile-pin-status', '#profile-photo-blur', '#profile-photo-file', '#profile-photo-grid', '#profile-save-status']
+
+async function expectAccessibleAsShipped(page: Page, preExisting: PreExisting[] = [], own: string[] = []): Promise<void> {
+  await expectStyled(page)
+  for (const known of preExisting) {
+    await expect(page.locator(known.selector), known.what).toHaveCount(known.count)
+  }
+  for (const selector of own) {
+    const covered = await page.locator(selector).evaluateAll(
+      (nodes, selectors) => nodes.some((node) => selectors.some((known) => node.closest(known) !== null)),
+      preExisting.map((known) => known.selector),
+    )
+    expect(covered, `${selector} must not sit inside a pre-existing exclusion`).toBe(false)
+  }
+  await expectAccessible(
+    page,
+    preExisting.map((known) => known.selector),
+  )
+}
+
+function pinStatus(page: Page) {
+  return page.getByRole('status')
+}
 
 async function pressDigits(page: Page, digits: string): Promise<void> {
   for (const digit of digits) {
@@ -174,7 +224,7 @@ test.describe('profile edit and the PIN screen', () => {
     const api = newApi()
     await serveApi(context, baseURL ?? '', api)
     await openProfile(page)
-    await accessibleAsShipped(page, PROFILE_TARGETS)
+    await expectAccessibleAsShipped(page, PROFILE_EDIT_PRE_EXISTING, PROFILE_EDIT_OWN)
 
     await page.getByLabel("Origine / Région d'attache").fill('Kadiogo')
     const saved = page.waitForRequest(isProfileSave)
@@ -186,11 +236,15 @@ test.describe('profile edit and the PIN screen', () => {
     await expect(page.locator('.pin-dot')).toHaveCount(6)
     await pressDigits(page, '1357')
     await expect.poll(() => filledDots(page)).toBe(4)
+    // A new PIN needs six digits; the Stitch status hint says so and nothing is sent.
     await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
+    await expect(pinStatus(page)).toHaveText('pin : six chiffres sont requis.')
+    await expectAccessibleAsShipped(page)
     await pressDigits(page, '9')
     await expect.poll(() => filledDots(page)).toBe(5)
+    await expect(pinStatus(page)).toHaveText('Chiffrement et vérification locale sécurisée')
     expect(api.pinSets).toEqual([])
-    await accessibleAsShipped(page, PIN_TARGETS)
+    await expectAccessibleAsShipped(page)
 
     await pressDigits(page, '0')
     await expect(page).toHaveURL(/\/profile-edit$/)
@@ -199,35 +253,47 @@ test.describe('profile edit and the PIN screen', () => {
     await expect(pinCheckbox(page)).toBeChecked()
   })
 
-  test('a refused save keeps the member on the profile with the error and the PIN off', async ({ page, context, baseURL, guards }) => {
-    const api = newApi({
-      saveRefusal: {
-        status: 400,
-        body: { error: { code: 'UNHANDLED', message: "dob : l'âge déclaré est inférieur au minimum.", details: { field: 'dob' }, retryable: false } },
-      },
-    })
-    await serveApi(context, baseURL ?? '', api)
-    await openProfile(page)
-    await page.getByLabel("Origine / Région d'attache").fill('Kadiogo')
-    const saved = page.waitForResponse((response) => isProfileSave(response.request()))
-    await pinSwitch(page).click()
-    expect((await saved).status()).toBe(400)
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1440, height: 900 },
+  ]) {
+    test(`a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at ${viewport.width} px`, async ({ page, context, baseURL, guards }) => {
+      const message = 'marital_status : la situation matrimoniale est requise.'
+      const api = newApi({
+        saveRefusal: {
+          status: 400,
+          body: { error: { code: 'UNHANDLED', message, details: { field: 'marital_status' }, retryable: false } },
+        },
+      })
+      await page.setViewportSize(viewport)
+      await serveApi(context, baseURL ?? '', api)
+      await openProfile(page)
+      await page.getByLabel("Origine / Région d'attache").fill('Kadiogo')
+      const saved = page.waitForResponse((response) => isProfileSave(response.request()))
+      await pinSwitch(page).click()
+      expect((await saved).status()).toBe(400)
 
-    await expect(page.getByText("dob : l'âge déclaré est inférieur au minimum.").first()).toBeVisible()
-    // The browser logs the refused save; that is the case under test. The page shows the error
-    // after the browser logged it, so the log is in by now.
-    guards.consoleErrors.length = 0
-    await expect(page).toHaveURL(/\/profile-edit$/)
-    await expect(pinCheckbox(page)).not.toBeChecked()
-    await expect(page.getByLabel("Origine / Région d'attache")).toHaveValue('Kadiogo')
-    await accessibleAsShipped(page, PROFILE_TARGETS)
-  })
+      // Announced (role="alert") and in sight of the switch the member just tapped.
+      const reason = page.getByRole('alert').filter({ hasText: message })
+      await expect(reason).toBeVisible()
+      await expect(reason).toBeInViewport()
+      await expect(pinSwitch(page)).toBeInViewport()
+      // The browser logs the refused save; that is the case under test. The page shows the error
+      // after the browser logged it, so the log is in by now.
+      guards.consoleErrors.length = 0
+      await expect(page).toHaveURL(/\/profile-edit$/)
+      await expect(pinCheckbox(page)).not.toBeChecked()
+      await expect(page.getByLabel("Origine / Région d'attache")).toHaveValue('Kadiogo')
+      await expectNoHorizontalOverflow(page)
+      await expectAccessibleAsShipped(page, PROFILE_EDIT_PRE_EXISTING, PROFILE_EDIT_OWN)
+    })
+  }
 
   test('a PIN saved with four digits before the six-digit rule still unlocks with the unlock button', async ({ page, context, baseURL }) => {
     const api = newApi({ pinEnabled: true })
     await serveApi(context, baseURL ?? '', api)
     await page.goto('/pin?next=%2Fprofile-edit')
-    await accessibleAsShipped(page, PIN_TARGETS)
+    await expectAccessibleAsShipped(page)
     await pressDigits(page, '1357')
     await expect.poll(() => filledDots(page)).toBe(4)
     expect(api.unlocks).toEqual([])
@@ -236,13 +302,56 @@ test.describe('profile edit and the PIN screen', () => {
     expect(api.unlocks).toEqual(['1357'])
   })
 
+  test('a wrong PIN and the lockout are said on the PIN screen', async ({ page, context, baseURL, guards }) => {
+    const api = newApi({
+      pinEnabled: true,
+      unlockRefusals: [
+        { status: 400, body: { error: { code: 'PIN_INVALID', message: 'Code incorrect.', details: { attempts_left: 1 }, retryable: false } } },
+        { status: 401, body: { error: { code: 'PIN_LOCKED', message: 'Session verrouillée.', details: null, retryable: false } } },
+      ],
+    })
+    await serveApi(context, baseURL ?? '', api)
+    await page.goto('/pin?next=%2Fprofile-edit')
+    await pressDigits(page, '13579')
+    await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
+    await expect(pinStatus(page)).toHaveText('pin : quatre ou six chiffres sont requis.')
+    expect(api.unlocks).toEqual([])
+
+    await pressDigits(page, '1')
+    await expect(pinStatus(page)).toHaveText('Code incorrect.')
+    await expect.poll(() => filledDots(page)).toBe(0)
+    await pressDigits(page, '135791')
+    await expect(pinStatus(page)).toHaveText('Session verrouillée.')
+    expect(api.unlocks).toEqual(['135791', '135791'])
+    await expect(page).toHaveURL(/\/pin\?next=%2Fprofile-edit$/)
+    // The browser logs the two refused unlocks; they are the case under test.
+    guards.consoleErrors.length = 0
+    await expect(page.getByRole('link', { name: "S'identifier à nouveau" })).toHaveAttribute('href', '/auth')
+    await expectAccessibleAsShipped(page)
+    await expectNoHorizontalOverflow(page)
+  })
+
   test('the PIN screen never returns to another origin', async ({ page, context, baseURL }) => {
     const api = newApi()
     await serveApi(context, baseURL ?? '', api)
+    const origin = new URL(baseURL ?? '').origin
+    // Protocol-relative, backslash, and the tab, LF and CR that the URL parser deletes (QA round 1, finding 2).
+    for (const next of [
+      '%2F%2Fevil.example%2Fprofile-edit',
+      '%2F%5Cevil.example',
+      '%2F%09%2Fevil.example%2Fx',
+      '%2F%0A%2Fevil.example%2Fx',
+      '%2F%0D%2Fevil.example%2Fx',
+      '%2F%09%5Cevil.example',
+      '%2F.%2F%2Fevil.example',
+      'javascript%3Aalert(1)',
+    ]) {
+      await page.goto(`/pin?next=${next}`)
+      await pressDigits(page, '246813')
+      await expect(page, next).toHaveURL(`${origin}/onboarding`)
+    }
     await page.goto('/pin?next=%2F%2Fevil.example%2Fprofile-edit')
-    await accessibleAsShipped(page, PIN_TARGETS)
-    await pressDigits(page, '246813')
-    await expect(page).toHaveURL(/\/onboarding$/)
+    await expectAccessibleAsShipped(page)
   })
 })
 
@@ -257,7 +366,7 @@ test.describe('profile edit photos', () => {
     expect(api.profileReads).toBe(2)
     // The expired grant answered 403 once before the repair; the browser logs that load.
     guards.consoleErrors.length = 0
-    await accessibleAsShipped(page, PROFILE_TARGETS)
+    await expectAccessibleAsShipped(page, PROFILE_EDIT_PRE_EXISTING, PROFILE_EDIT_OWN)
   })
 
   test('a page restored from the back/forward cache reads fresh photo grants', async ({ page, context, baseURL }) => {
@@ -273,7 +382,7 @@ test.describe('profile edit photos', () => {
     await expect.poll(() => photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true)
     await expect(page.getByLabel("Origine / Région d'attache")).toHaveValue('Kadiogo')
     expect(api.profileReads).toBe(2)
-    await accessibleAsShipped(page, PROFILE_TARGETS)
+    await expectAccessibleAsShipped(page, PROFILE_EDIT_PRE_EXISTING, PROFILE_EDIT_OWN)
   })
 })
 

@@ -14,7 +14,7 @@ function stitch(): string {
 function pinSource(): string {
   const page = pinHtml(stitch())
   const scripts = [...page.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((match) => match[1] ?? '')
-  const source = scripts.find((script) => script.includes("fetch('/v1/pin/unlock'"))
+  const source = scripts.find((script) => script.includes("'/v1/pin/unlock'"))
   if (!source) throw new Error('pin script missing')
   return source
 }
@@ -40,7 +40,13 @@ async function flush(): Promise<void> {
   }
 }
 
-function mount(options: { search?: string; enabled: boolean; answer?: number }) {
+type Answer = { status: number; body?: unknown } | 'network'
+
+const RESTING = 'Chiffrement et vérification locale sécurisée'
+const SET_LENGTH = 'pin : six chiffres sont requis.'
+const UNLOCK_LENGTH = 'pin : quatre ou six chiffres sont requis.'
+
+function mount(options: { search?: string; enabled: boolean; answer?: number | Answer; state?: Answer }) {
   const dots = Array.from({ length: 6 }, () => ({ style: { opacity: '' } }))
   const keys = '1234567890'.split('').map((key) => button(key))
   const controls = new Map<string, Button>([
@@ -51,6 +57,11 @@ function mount(options: { search?: string; enabled: boolean; answer?: number }) 
   const assigned: string[] = []
   const calls: Call[] = []
   const events: string[] = []
+  const hint = { textContent: RESTING }
+  let answer: Answer =
+    typeof options.answer === 'number' ? { status: options.answer } : (options.answer ?? { status: 200, body: {} })
+  let state: Answer = options.state ?? { status: 200, body: { enabled: options.enabled, locked: options.enabled } }
+  let gate: Promise<void> | null = null
   const document = {
     querySelectorAll(selector: string) {
       if (selector === '.pin-dot') return dots
@@ -63,11 +74,13 @@ function mount(options: { search?: string; enabled: boolean; answer?: number }) 
       return []
     },
     getElementById(id: string) {
+      if (id === 'pin-status-text') return hint
       return controls.get(id) ?? null
     },
   }
   const window = {
     location: {
+      origin: 'http://localhost:3100',
       search: options.search ?? '',
       assign(path: string) {
         assigned.push(path)
@@ -78,18 +91,17 @@ function mount(options: { search?: string; enabled: boolean; answer?: number }) 
   function fetchImpl(url: string, init?: { method?: string; body?: string; cache?: string }) {
     const method = init?.method ?? 'GET'
     calls.push({ url, method, body: init?.body, cache: init?.cache })
-    if (url === '/v1/pin' && method === 'GET') {
-      return Promise.resolve({ ok: true, json: async () => ({ enabled: options.enabled, locked: options.enabled }) })
-    }
-    const status = options.answer ?? 200
-    return Promise.resolve({
-      ok: status < 300,
-      status,
+    const reply = url === '/v1/pin' && method === 'GET' ? state : answer
+    if (reply === 'network') return Promise.reject(new TypeError('Failed to fetch'))
+    const wait = method !== 'GET' && gate ? gate : Promise.resolve()
+    return wait.then(() => ({
+      ok: reply.status < 300,
+      status: reply.status,
       json: async () => {
-        events.push(`read ${method} ${url}`)
-        return {}
+        if (method !== 'GET') events.push(`read ${method} ${url}`)
+        return reply.body ?? {}
       },
-    })
+    }))
   }
   new Function('document', 'window', 'fetch', pinSource())(document, window, fetchImpl)
   return {
@@ -97,6 +109,24 @@ function mount(options: { search?: string; enabled: boolean; answer?: number }) 
     assigned,
     calls,
     events,
+    hint: () => hint.textContent,
+    answerWith(next: Answer) {
+      answer = next
+    },
+    stateWith(next: Answer) {
+      state = next
+    },
+    holdWrites() {
+      let open: () => void = () => {}
+      gate = new Promise<void>((resolve) => {
+        open = resolve
+      })
+      return () => open()
+    },
+    async clear() {
+      for (const fn of controls.get('btn-clear')?.listeners ?? []) fn()
+      await flush()
+    },
     async press(digits: string) {
       for (const digit of digits) {
         const key = keys.find((item) => item.key === digit)
@@ -131,15 +161,20 @@ describe('PIN screen length', () => {
     expect(page.filled()).toBe(4)
     expect(page.calls).toEqual([])
 
-    // Four digits are only an unlock length. A new PIN waits for the sixth digit.
+    // Four digits are only an unlock length. A new PIN waits for the sixth digit, and the hint says so.
     await page.submit()
     expect(page.writes()).toEqual([])
     expect(page.filled()).toBe(4)
     expect(page.assigned).toEqual([])
+    expect(page.hint()).toBe(SET_LENGTH)
 
     await page.press('5')
     expect(page.filled()).toBe(5)
+    expect(page.hint()).toBe(RESTING)
     expect(page.writes()).toEqual([])
+    await page.submit()
+    expect(page.writes()).toEqual([])
+    expect(page.hint()).toBe(SET_LENGTH)
     await page.press('6')
     expect(page.filled()).toBe(6)
     expect(page.writes()).toEqual([{ url: '/v1/pin', method: 'PUT', body: JSON.stringify({ pin: '123456' }), cache: undefined }])
@@ -162,9 +197,10 @@ describe('PIN screen length', () => {
     const legacy = mount({ enabled: true })
     await legacy.press('135')
     await legacy.submit()
-    expect(legacy.calls).toEqual([])
+    expect(legacy.writes()).toEqual([])
+    expect(legacy.hint()).toBe(UNLOCK_LENGTH)
     await legacy.press('7')
-    expect(legacy.calls).toEqual([])
+    expect(legacy.writes()).toEqual([])
     expect(legacy.filled()).toBe(4)
     await legacy.submit()
     expect(legacy.writes()).toEqual([
@@ -175,7 +211,9 @@ describe('PIN screen length', () => {
     const five = mount({ enabled: true })
     await five.press('13579')
     await five.submit()
-    expect(five.calls).toEqual([])
+    expect(five.writes()).toEqual([])
+    expect(five.filled()).toBe(5)
+    expect(five.hint()).toBe(UNLOCK_LENGTH)
   })
 
   it('reads the answer to the write before leaving, so the browser does not cancel it', async () => {
@@ -195,26 +233,97 @@ describe('PIN screen length', () => {
     expect(page.calls[0]).toEqual({ url: '/v1/pin', method: 'GET', body: undefined, cache: 'no-store' })
   })
 
-  it('clears the dots and stays after a refused PIN', async () => {
-    const page = mount({ search: '?next=%2Fprofile-edit', enabled: true, answer: 400 })
+  it('clears the dots, stays and says why after a refused PIN', async () => {
+    const page = mount({
+      search: '?next=%2Fprofile-edit',
+      enabled: true,
+      answer: { status: 400, body: { error: { code: 'PIN_INVALID', message: 'Code incorrect.', details: { attempts_left: 4 } } } },
+    })
     await page.press('135791')
     expect(page.writes()).toHaveLength(1)
     expect(page.filled()).toBe(0)
     expect(page.assigned).toEqual([])
+    expect(page.hint()).toBe('Code incorrect.')
+
+    // Typing again puts the resting hint back.
+    await page.press('1')
+    expect(page.hint()).toBe(RESTING)
+  })
+
+  it('says the session is locked after the last wrong PIN, and that sign-in is needed after that', async () => {
+    const page = mount({
+      enabled: true,
+      answer: { status: 401, body: { error: { code: 'PIN_LOCKED', message: 'Session verrouillée.', details: null } } },
+    })
+    await page.press('135791')
+    expect(page.hint()).toBe('Session verrouillée.')
+    expect(page.filled()).toBe(0)
+    expect(page.assigned).toEqual([])
+
+    // The API ended the session: the PIN state read now answers 401 and nothing is sent.
+    page.stateWith({ status: 401, body: { error: { code: 'UNAUTHENTICATED', message: 'Authentification requise.', details: null } } })
+    await page.press('135790')
+    expect(page.writes()).toHaveLength(1)
+    expect(page.hint()).toBe('Authentification requise.')
+    expect(page.filled()).toBe(0)
+    expect(page.assigned).toEqual([])
+  })
+
+  it('shows the Stitch progress line while the PIN is checked, and a connection error when the API cannot be reached', async () => {
+    const page = mount({ enabled: true, answer: 'network' })
+    await page.press('135790')
+    expect(page.hint()).toBe('La connexion a échoué.')
+    expect(page.filled()).toBe(0)
+    expect(page.assigned).toEqual([])
+
+    const held = mount({ search: '?next=%2Fprofile-edit', enabled: false })
+    const release = held.holdWrites()
+    await held.press('123456')
+    expect(held.writes()).toHaveLength(1)
+    expect(held.hint()).toBe('Validation du code en cours...')
+    // Keys, backspace and clear wait for the answer.
+    await held.press('7')
+    await held.clear()
+    expect(held.filled()).toBe(6)
+    release()
+    await flush()
+    expect(held.assigned).toEqual(['/profile-edit'])
   })
 
   it('returns only to a same-origin path', async () => {
     const cases: Array<[string, string]> = [
       ['?next=%2Fprofile-edit', '/profile-edit'],
+      ['?next=%2Fprofil%2Fabc%3Fvue%3Dgrille%23photos', '/profil/abc?vue=grille#photos'],
+      // A path that only looks encoded stays a path on this origin.
+      ['?next=%2F%252F%2Fevil.example', '/%2F/evil.example'],
       ['?next=%2F%2Fevil.example', '/onboarding'],
       ['?next=%2F%5Cevil.example', '/onboarding'],
+      ['?next=%5C%5Cevil.example', '/onboarding'],
+      ['?next=%2F%2F%2Fevil.example', '/onboarding'],
       ['?next=https%3A%2F%2Fevil.example', '/onboarding'],
+      ['?next=http%3A%2F%2Flocalhost%3A3100%2Fprofile-edit', '/onboarding'],
+      ['?next=javascript%3Aalert(1)', '/onboarding'],
+      ['?next=%2F%2Fevil.example%2F%2E%2E', '/onboarding'],
+      // The URL parser deletes tab, LF and CR, so these would become //evil.example.
+      ['?next=%2F%09%2Fevil.example%2Fx', '/onboarding'],
+      ['?next=%2F%0A%2Fevil.example%2Fx', '/onboarding'],
+      ['?next=%2F%0D%2Fevil.example%2Fx', '/onboarding'],
+      ['?next=%2F%09%5Cevil.example', '/onboarding'],
+      ['?next=%09%2F%2Fevil.example', '/onboarding'],
+      ['?next=%2F%00%2Fevil.example', '/onboarding'],
+      ['?next=%2F%7F%2Fevil.example', '/onboarding'],
+      // Dot segments that resolve to a protocol-relative path.
+      ['?next=%2F.%2F%2Fevil.example', '/onboarding'],
+      ['?next=%2F..%2F%2Fevil.example', '/onboarding'],
+      ['?next=%2F%2E%2E%2F%2Fevil.example', '/onboarding'],
       ['', '/onboarding'],
     ]
     for (const [search, target] of cases) {
       const page = mount({ search, enabled: false })
       await page.press('123456')
-      expect(page.assigned).toEqual([target])
+      expect(page.assigned, search).toEqual([target])
+      // What the browser would load: never another origin.
+      expect(new URL(target, 'http://localhost:3100').origin, search).toBe('http://localhost:3100')
     }
   })
 })

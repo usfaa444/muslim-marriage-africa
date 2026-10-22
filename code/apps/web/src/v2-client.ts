@@ -1,6 +1,6 @@
 /** Browser behavior for the v2 signup and sign-in screens. No password is stored. */
 
-import { LEGACY_PIN_LENGTH, PIN_LENGTH } from '@ankanu/kernel'
+import { LEGACY_PIN_LENGTH, PIN_LENGTH, PIN_SET_LENGTH_MESSAGE, PIN_UNLOCK_LENGTH_MESSAGE } from '@ankanu/kernel'
 import { LITE_STORAGE_KEY, liteModeSource } from './lite-mode'
 
 /** Screen 12 Element 1. Narrow widths stack the chip under the label so it stays in the card. */
@@ -1017,55 +1017,84 @@ export function pinScript(): string {
   return `
     var PIN_LENGTH = ${PIN_LENGTH}
     var LEGACY_PIN_LENGTH = ${LEGACY_PIN_LENGTH}
+    var SET_LENGTH_MESSAGE = ${JSON.stringify(PIN_SET_LENGTH_MESSAGE)}
+    var UNLOCK_LENGTH_MESSAGE = ${JSON.stringify(PIN_UNLOCK_LENGTH_MESSAGE)}
     var digits = ''
     var busy = false
     var slots = Array.from(document.querySelectorAll('.pin-dot'))
+    var hint = document.getElementById('pin-status-text')
+    var restingHint = hint ? hint.textContent : ''
     function paint() {
       slots.forEach(function (dot, index) {
         dot.style.opacity = index < digits.length ? '1' : '0'
       })
     }
+    // The Stitch status hint, read out by its role="status". Empty restores its resting line.
+    function say(text) {
+      if (hint) hint.textContent = text || restingHint
+    }
+    function refusal(body) {
+      var message = body && body.error && body.error.message
+      return typeof message === 'string' && message ? message : 'La connexion a échoué.'
+    }
     function nextPath() {
       var params = new URLSearchParams(window.location.search)
       var next = params.get('next') || ''
-      if (next.charAt(0) !== '/' || next.charAt(1) === '/' || next.charAt(1) === '\\\\') next = '/onboarding'
-      return next
+      // The URL parser drops tab, LF and CR and reads a backslash as a slash, so "/<tab>/x" or "/\\x"
+      // would leave this origin. Only a plain path on this origin is followed.
+      if (next.charAt(0) !== '/' || /[\\u0000-\\u001F\\u007F\\\\]/.test(next)) return '/onboarding'
+      try {
+        var url = new URL(next, window.location.origin)
+        var path = url.pathname + url.search + url.hash
+        if (url.origin !== window.location.origin || path.charAt(0) !== '/' || path.charAt(1) === '/') return '/onboarding'
+        return path
+      } catch (error) {
+        return '/onboarding'
+      }
     }
     async function finish(pin) {
       if (busy) return
       busy = true
       try {
         var status = await fetch('/v1/pin', { credentials: 'same-origin', cache: 'no-store' })
-        var body = await status.json().catch(function () { return null })
-        var response
-        if (body && body.enabled === false) {
-          // A new PIN is always PIN_LENGTH digits. Keep the digits so the member can finish typing.
-          if (pin.length !== PIN_LENGTH) return
-          response = await fetch('/v1/pin', {
-            method: 'PUT',
-            credentials: 'same-origin',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ pin: pin })
-          })
-        } else {
-          response = await fetch('/v1/pin/unlock', {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ pin: pin })
-          })
+        var state = await status.json().catch(function () { return null })
+        if (!status.ok) {
+          digits = ''
+          paint()
+          say(refusal(state))
+          return
         }
+        var setting = !!(state && state.enabled === false)
+        // A new PIN is always PIN_LENGTH digits; an unlock also takes a PIN saved with four.
+        // Keep the digits so the member can finish typing.
+        if (setting && pin.length !== PIN_LENGTH) {
+          say(SET_LENGTH_MESSAGE)
+          return
+        }
+        if (!setting && pin.length !== PIN_LENGTH && pin.length !== LEGACY_PIN_LENGTH) {
+          say(UNLOCK_LENGTH_MESSAGE)
+          return
+        }
+        say('Validation du code en cours...')
+        var response = await fetch(setting ? '/v1/pin' : '/v1/pin/unlock', {
+          method: setting ? 'PUT' : 'POST',
+          credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ pin: pin })
+        })
         // Read the answer before leaving, or the browser cancels a request the API already applied.
-        await response.json().catch(function () { return null })
+        var body = await response.json().catch(function () { return null })
         if (response.ok) {
           window.location.assign(nextPath())
           return
         }
         digits = ''
         paint()
+        say(refusal(body))
       } catch (error) {
         digits = ''
         paint()
+        say('La connexion a échoué.')
       } finally {
         busy = false
       }
@@ -1075,6 +1104,7 @@ export function pinScript(): string {
         if (busy || digits.length >= PIN_LENGTH) return
         digits += button.getAttribute('data-key') || ''
         paint()
+        say('')
         if (digits.length === PIN_LENGTH) finish(digits)
       })
     })
@@ -1082,13 +1112,13 @@ export function pinScript(): string {
     var submit = document.getElementById('btn-submit')
     if (submit) {
       submit.addEventListener('click', function () {
-        if (digits.length === PIN_LENGTH || digits.length === LEGACY_PIN_LENGTH) finish(digits)
+        if (digits.length > 0) finish(digits)
       })
     }
     var back = document.getElementById('btn-backspace')
-    if (back) back.addEventListener('click', function () { if (!busy) { digits = digits.slice(0, -1); paint() } })
+    if (back) back.addEventListener('click', function () { if (!busy) { digits = digits.slice(0, -1); paint(); say('') } })
     var clear = document.getElementById('btn-clear')
-    if (clear) clear.addEventListener('click', function () { if (!busy) { digits = ''; paint() } })
+    if (clear) clear.addEventListener('click', function () { if (!busy) { digits = ''; paint(); say('') } })
   `
 }
 
@@ -1347,15 +1377,32 @@ export function profileScript(): string {
         body: JSON.stringify(payload())
       }).then(function (response) {
         return response.json().then(function (body) {
-          if (response.ok) savedCount = sentAt
+          if (response.ok) {
+            savedCount = sentAt
+            showPinStatus('')
+          }
           return { ok: response.ok, body: body }
         })
       })
     }
 
-    function saveFailure(result) {
+    function failureText(result) {
       var message = result && result.body && result.body.error && result.body.error.message
-      showStatus(message || 'Enregistrement impossible.')
+      return message || 'Enregistrement impossible.'
+    }
+
+    function saveFailure(result) {
+      showStatus(failureText(result))
+    }
+
+    // The line under the PIN switch. The save line sits at the foot of the page, out of sight
+    // of a member who just tapped the switch.
+    function showPinStatus(text) {
+      var node = document.getElementById('profile-pin-status')
+      if (!node) return
+      node.textContent = text || ''
+      node.classList.toggle('hidden', !text)
+      if (text && typeof node.scrollIntoView === 'function') node.scrollIntoView({ block: 'nearest' })
     }
 
     function paintMeter(completeness) {
@@ -1724,7 +1771,7 @@ export function profileScript(): string {
     function stayForPin(result) {
       pinLeaving = false
       if (pinInput) pinInput.checked = pinEnabled
-      saveFailure(result)
+      showPinStatus(failureText(result))
     }
     if (pinInput) {
       pinInput.addEventListener('change', function () {
@@ -1744,6 +1791,7 @@ export function profileScript(): string {
         // Save what the member typed through the same save as the button, then open /pin.
         // A save before the profile is read would blank the fields she did not touch, so wait for it.
         showStatus('')
+        showPinStatus('')
         profileRead.then(function (loaded) {
           if (!loaded) {
             stayForPin(null)

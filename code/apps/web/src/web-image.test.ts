@@ -113,6 +113,29 @@ function ignoredByDocker(path: string, dockerignore: string): boolean {
   return ignored
 }
 
+/**
+ * Inside a reader, design files are read only through the loader: every path names its screen
+ * through the loader's parameters (`ankanu-v2/${…}`), and the one file read is the resolved candidate.
+ * A literal path or another read in the same file would bypass the parsed calls above.
+ */
+function loaderBypasses(source: Source): string[] {
+  const found: string[] = []
+  for (const match of source.text.matchAll(/ankanu-v2\/(?!\$\{)([^`'"\s]*)/g)) {
+    found.push(`${source.path}: design path ankanu-v2/${match[1] ?? ''} is not built from the loader's parameters`)
+  }
+  const reads = [...source.text.matchAll(/\b(readFileSync|readFile|createReadStream|openSync)\(\s*([^,)]*)/g)]
+  const allowed = reads.filter((match) => match[1] === 'readFileSync' && match[2]?.trim() === 'found')
+  if (allowed.length !== 1) {
+    found.push(`${source.path}: expected one readFileSync(found, …) in the loader, found ${allowed.length}`)
+  }
+  for (const match of reads) {
+    if (!allowed.includes(match)) {
+      found.push(`${source.path}: ${match[1]}(${match[2]?.trim() ?? ''}) reads a file outside the loader`)
+    }
+  }
+  return found
+}
+
 function covered(read: string, copies: string[]): boolean {
   return copies.some((copy) => copy === read || read.startsWith(`${copy}/`))
 }
@@ -154,11 +177,44 @@ describe('web image design files', () => {
   })
 
   it('reads design files only through the two parsed loaders', () => {
-    const readers = runtimeSources()
-      .filter((source) => source.text.includes('design-stitch') || /\breadFileSync\b|\breadFile\b/.test(source.text))
+    const sources = runtimeSources()
+    const readers = sources
+      .filter(
+        (source) =>
+          source.text.includes('design-stitch') ||
+          /\b(?:readFileSync|readFile|createReadStream|openSync)\b/.test(source.text),
+      )
       .map((source) => source.path.replaceAll('\\', '/'))
       .sort()
     expect(readers).toEqual(READERS)
+    // Inside the two readers too: no literal design path and no second read beside the loader.
+    expect(sources.filter((source) => READERS.includes(source.path.replaceAll('\\', '/'))).flatMap(loaderBypasses)).toEqual(
+      [],
+    )
+  })
+
+  it('catches a design file read directly inside a reader', () => {
+    const loader = [
+      'function loadStitch(name: string): string {',
+      '  const beside = fileURLToPath(new URL(`../../../design-stitch/ankanu-v2/${name}`, import.meta.url))',
+      '  const found = [beside].find((path) => existsSync(path))',
+      "  return readFileSync(found, 'utf8')",
+      '}',
+    ].join('\n')
+    expect(loaderBypasses({ path: 'src/discover-page.ts', text: loader })).toEqual([])
+    // QA round 1, mutation M6: a read of a named screen inside loadStitch itself.
+    const named = loader.replace(
+      "  return readFileSync(found, 'utf8')",
+      "  readFileSync(new URL('../../../design-stitch/ankanu-v2/60-x/screen.html', import.meta.url))\n  return readFileSync(found, 'utf8')",
+    )
+    expect(loaderBypasses({ path: 'src/discover-page.ts', text: named })).toEqual([
+      "src/discover-page.ts: design path ankanu-v2/60-x/screen.html is not built from the loader's parameters",
+      "src/discover-page.ts: readFileSync(new URL('../../../design-stitch/ankanu-v2/60-x/screen.html') reads a file outside the loader",
+    ])
+    const second = `${loader}\nconst extra = readFileSync(join(root, name), 'utf8')`
+    expect(loaderBypasses({ path: 'src/v2-serve.ts', text: second })).toEqual([
+      "src/v2-serve.ts: readFileSync(join(root) reads a file outside the loader",
+    ])
   })
 
   it('rejects a non-literal screen name and a copy to another path', () => {

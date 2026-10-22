@@ -1,5 +1,5 @@
 import { HttpException } from '@nestjs/common'
-import { LEGACY_PIN_LENGTH, PIN_LENGTH } from '@ankanu/kernel'
+import { LEGACY_PIN_LENGTH, PIN_LENGTH, PIN_SET_LENGTH_MESSAGE, PIN_UNLOCK_LENGTH_MESSAGE } from '@ankanu/kernel'
 import { authNow } from './auth-clock.js'
 import { rejectIfAuthRateLimited } from './auth-guard.js'
 import { isSlidingRememberMe } from './create-session.js'
@@ -23,7 +23,6 @@ export const PIN_INVALID_MESSAGE = 'Code incorrect.'
 export const PIN_LOCKED_MESSAGE = 'Session verrouillée.'
 export const PIN_REQUIRED_MESSAGE = 'Code PIN requis.'
 const AUTH_MESSAGE = 'Authentification requise.'
-const PIN_FIELD_MESSAGE = 'pin : six chiffres sont requis.'
 
 const EXEMPT = new Set([
   'GET /v1/pin',
@@ -47,11 +46,11 @@ export function unauthenticated(): never {
   )
 }
 
-export function pinField(): never {
+export function pinField(message: string = PIN_SET_LENGTH_MESSAGE): never {
   throw new HttpException(
     {
       code: 'UNHANDLED',
-      message: PIN_FIELD_MESSAGE,
+      message,
       details: { field: 'pin' },
       retryable: false,
     },
@@ -60,12 +59,13 @@ export function pinField(): never {
 }
 
 export function readPin(body: unknown, pattern: RegExp = PIN_PATTERN): string {
+  const message = pattern === UNLOCK_PIN_PATTERN ? PIN_UNLOCK_LENGTH_MESSAGE : PIN_SET_LENGTH_MESSAGE
   if (typeof body !== 'object' || body === null || Array.isArray(body)) {
-    pinField()
+    pinField(message)
   }
   const pin = (body as { pin?: unknown }).pin
   if (typeof pin !== 'string' || !pattern.test(pin)) {
-    pinField()
+    pinField(message)
   }
   return pin
 }

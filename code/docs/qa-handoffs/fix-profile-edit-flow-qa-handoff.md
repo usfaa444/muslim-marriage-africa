@@ -187,7 +187,7 @@ Full stack: follow "Local deployment" in `.factory/config.md` (`up -d --build --
 - **AC 1 e2e.** `/profile-review`, `/decouvrir` and `/favoris` need a real member past the signup gate, which the e2e suite cannot create (reCAPTCHA, emailed link, SMS code). The e2e covers the image through `/staff/visit-signals` (the staff stub cookie); the three member pages were checked on the built stack with a scripted disposable member (results below).
 - **AC 2 e2e.** Playwright request routing turns off the HTTP cache, so the e2e test sends the `pageshow` event a restore sends. The real-cache Back case runs in `profile-edit-back.test.ts` (Chromium, local server) and in the browser walk on the stack.
 - **AC 5 API message.** The field message changed from `pin : quatre chiffres sont requis.` to `pin : six chiffres sont requis.`.
-- **Sandbox limits.** The Tailwind CDN, Google Fonts and Google (reCAPTCHA) are blocked here, so the Stitch screens render unstyled and the browser logs `tailwind is not defined`. Two e2e helpers leave the keypad and the small text buttons out of the axe target-size rule only when `'tailwind' in window` is false; a styled run checks them. The full-stack runs used `E2E_ALLOW_ERRORS` for the blocked CDN and reCAPTCHA hosts. The api container could not reach Google's `siteverify`, so my scratch compose override (outside the repo) loaded `dist/test-recaptcha.js` (`token === 'test-ok'`, as the unit suites do) to sign up disposable members. The real images were built from scratch copies of the repo Dockerfiles that only add the proxy CA for `npm ci`.
+- **Sandbox limits.** The Tailwind CDN, Google Fonts and Google (reCAPTCHA) are blocked here, so the Stitch screens render unstyled and the browser logs `tailwind is not defined`. In round 1 two e2e helpers left the keypad and the small text buttons out of the axe target-size rule when `'tailwind' in window` was false; round 2 removed that (see Round 2, finding 1). The full-stack runs used `E2E_ALLOW_ERRORS` for the blocked CDN and reCAPTCHA hosts. The api container could not reach Google's `siteverify`, so my scratch compose override (outside the repo) loaded `dist/test-recaptcha.js` (`token === 'test-ok'`, as the unit suites do) to sign up disposable members. The real images were built from scratch copies of the repo Dockerfiles that only add the proxy CA for `npm ci`.
 - **favicon known issue is pinned to port 3100.** `e2e/known-issues.ts` tolerates `localhost:3100/favicon.ico` only. Against any other base URL (my stack on 4031, Fay's on 4012, staging if it serves no favicon) every smoke and auth-entry test fails on the favicon 404 (20 tests on my stack run). Pre-existing, not changed here; my full-stack run added `localhost:4031/favicon\.ico` to `E2E_ALLOW_ERRORS`. The orchestrator should decide whether that entry should match any origin.
 - **Integration.** `compose.test.ts` fails in this sandbox because the repo's api Dockerfile runs `npm ci` without the sandbox proxy CA (`SELF_SIGNED_CERT_IN_CHAIN`); the other four integration files pass. It does not depend on this change.
 - **Pre-existing browser unit failures (environment).** With a Chromium binary, `photo-rules.test.ts`, the ANK-148 width test and the `v2-responsive` scrollWidth test also fail on a `main` snapshot in the same sandbox (unstyled pages, blocked CDN). Running the browser unit tests also rewrites evidence PNGs under `code/docs/qa-handoffs/*-widths/`; I restored them and did not commit them.
@@ -295,3 +295,106 @@ The first full-stack run of my spec found two things the web-only run could not,
 ```
 
 The only browser errors in the walk were `tailwind is not defined` (CDN blocked). No failed request, no 4xx or 5xx from our origin. The pages render unstyled here, so I could not compare them with the Stitch captures visually; the markup is the Stitch HTML plus the three `aria-label`s.
+
+## Round 2 (QA round 1: FAIL)
+
+QA report: `docs/qa-handoffs/fix-profile-edit-flow-qa-report.md` (evidence in `fix-profile-edit-flow-evidence/`). This round fixes findings 1, 2, 3 and 6, and the cheap minors 7, 9, 11 and 14. Finding 8 (the Stitch copy « Exige un code à 4 ou 6 chiffres… ») is unchanged; the orchestrator raises it with Fay. Findings 4 (outside the PIN screen), 5, 10, 12, 13 and 15 are left as they are, as asked. `origin/main` has not moved since round 1 (`d60e97e`, already merged).
+
+| QA finding | Fix | Test that fails without it |
+| --- | --- | --- |
+| 1 Major: new e2e spec red when styled | PIN screen markup: the backspace icon is an empty `aria-hidden` span drawn from `data-icon` (no ligature text in the accessible name), `#btn-clear` and the status hint move from `/60` and `/50` to `text-deep-navy/70`, and the hint's icon is `aria-hidden`. The spec now refuses an unstyled page and checks everything else; pre-existing Stitch contrast issues on `/profile-edit` are excluded by named selector with exact counts | `e2e/profile-edit-flow.spec.ts`, styled: 18 of 18 on the stack. Round 1 code: 12 of 12 red (QA). `v2-flow.test.ts` › "asks for a reset link and unlocks a six-digit PIN" pins the PIN markup |
+| 2 Major: `/pin?next=` open redirect | `nextPath()` in `pinScript`: `next` must start with `/`, have no control character and no backslash, and `new URL(next, location.origin)` must keep this origin with a path that starts with a single `/`; otherwise `/onboarding` | `pin-screen.test.ts` › "returns only to a same-origin path" (22 cases); e2e › "the PIN screen never returns to another origin" (8 cases) |
+| 3 Major: refused pre-PIN save shown off screen | New `#profile-pin-status` (`role="alert"`) right under the PIN switch, scrolled into view; the bottom save line stays hidden for this case. Cleared on the next switch tap and on a successful save | `profile-edit-page.test.ts` › "stays on the profile with the save error and the switch off when the save fails", › "waits for the profile read…", › "puts a status line right under the PIN switch, read out when written"; e2e › "a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px" and "…at 1440 px" (`toBeInViewport`) |
+| 6 Major, pre-existing: locked session sent to `/auth` | `entry-guard.ts`: a gate `401` whose code is `PIN_REQUIRED` is a new step `locked`. A locked session gets `/pin`; any other member page answers 303 to `/pin?next=<path>`; sign-in, sign-up and password reset stay open. Any other 401 is still signed out (`/auth`) | New `pin-locked-entry.test.ts` (4 tests; 3 fail on the round 1 guard, the 4th pins that a signed-out visitor still goes to `/auth`) |
+| 7 Minor: wrong PIN and lockout silent | The PIN screen writes the API's message into the Stitch status hint (`role="status"`): « Code incorrect. », « Session verrouillée. », then « Authentification requise. »; the Stitch progress line « Validation du code en cours... » while checking; « La connexion a échoué. » (existing string) on a network error | `pin-screen.test.ts` › "clears the dots, stays and says why after a refused PIN", › "says the session is locked after the last wrong PIN…", › "shows the Stitch progress line…"; e2e › "a wrong PIN and the lockout are said on the PIN screen" |
+| 9 Minor: no hint below six digits | Setting a PIN, « Déverrouiller l'espace » with fewer than six digits shows `pin : six chiffres sont requis.` and keeps the digits; the next key restores the resting hint | `pin-screen.test.ts` › "fills all six dots and saves a new PIN only after the sixth digit"; e2e first test |
+| 11 Minor: direct design read in a reader not caught | `web-image.test.ts` › `loaderBypasses()`: in `v2-serve.ts` and `discover-page.ts`, only the loader's own `readFileSync(found, …)` may read; any other `readFileSync`/`readFile`/`createReadStream`/`openSync`, or an `ankanu-v2/` path not built from the loader's name, fails | QA's mutation M6 now fails › "reads design files only through the two parsed loaders"; new › "catches a design file read directly inside a reader" |
+| 14 Minor: unlock length message | `@ankanu/kernel` `PIN_SET_LENGTH_MESSAGE` and `PIN_UNLOCK_LENGTH_MESSAGE` (`pin : quatre ou six chiffres sont requis.`); the API's unlock refusal and the screen use it | `kernel.test.ts` › "names the lengths each refusal accepts…"; `pin.test.ts` › "sets only a six-digit PIN and still unlocks…" (five digits at unlock) |
+
+Also changed on the PIN screen: « S'identifier à nouveau » pointed at `#`; it now goes to `/auth`, which a locked session can open. The new unlock message is the only new copy, written on the pattern of the existing `pin : six chiffres sont requis.`; Fay may want to word it.
+
+### Finding 1 in detail
+
+- `expectAccessibleAsShipped` replaces round 1's `accessibleAsShipped`. It first polls `'tailwind' in window` and fails with « The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped. » So the spec now fails on a machine that cannot reach the CDN (this sandbox) unless Tailwind is served locally, instead of passing with weaker checks. No axe rule is turned off anywhere.
+- `/pin` runs axe with no exclusion at all.
+- `/profile-edit` excludes only `PROFILE_EDIT_PRE_EXISTING`, commented as known pre-existing issues (QA round 1, finding 4). Each selector must match exactly its count, so an exclusion cannot grow to cover a new element, and the test fails if any element this story added or changed (`#profile-pin`, `#profile-pin-status`, `#profile-photo-blur`, `#profile-photo-file`, `#profile-photo-grid`, `#profile-save-status`) sits inside one:
+
+  | Selector | Count | What (axe `color-contrast`, Stitch markup) |
+  | --- | --- | --- |
+  | `p.text-xs.text-deep-navy\/60.mt-1` | 8 | section subtitles (4.34:1) |
+  | `span.text-\[11px\].text-deep-navy\/60` | 1 | « Condition formelle préalable » |
+  | `p.text-\[11px\].text-deep-navy\/60` | 1 | « Mentionnez vos perspectives de vie commune… » |
+  | `span[data-icon="lock"]` | 1 | lock icon of « Sécurité sur l'appareil » |
+  | `span[data-icon="check_circle"]` | 1 | gold check in the madhhab block |
+  | `span.material-symbols-outlined.text-\[13px\].text-soft-gold` | 1 | gold cake icon beside the age |
+  | `span.material-symbols-outlined.text-deep-navy\/40` | 1 | calendar icon in the date field |
+  | `#profile-meter-banner span[data-icon="info"]` | 1 | gold info icon of the « Il manque » banner (found on the real stack) |
+
+  I kept the list in the spec rather than `e2e/known-issues.ts`, which holds console and request patterns, as the round 2 instruction allowed (named selectors with a comment). Moving it there is a small change if the orchestrator prefers.
+- Not covered by these exclusions and not seen by the e2e (its photos are approved): the gold « En revue » badge on a pending photo tile is also below 4.5:1 on the real stack. Pre-existing (same on `main`), part of finding 4.
+- How to run it styled where the CDN is blocked (as QA did, `fix-profile-edit-flow-evidence/scripts/tailwind-build.mjs`, `cdn-stub-server.mjs`, `chrome-wrap.sh`): in a scratch folder outside the repo, install `tailwindcss@3.4.17`, `@tailwindcss/forms` and `@tailwindcss/container-queries`; compile the CSS from the Stitch `tailwind.config` of `11-profile-edit`, scanning the three Stitch screens and `v2-pages.ts`, `v2-client.ts`, `v2-document.ts`; wrap it in a script that sets `window.tailwind` and injects the CSS; serve it over HTTPS (self-signed) for `cdn.tailwindcss.com` and `fonts.googleapis.com`; then point Playwright at a Chromium wrapper with `--host-resolver-rules="MAP cdn.tailwindcss.com 127.0.0.1:<port>, MAP fonts.googleapis.com 127.0.0.1:<port>, MAP * ~NOTFOUND, EXCLUDE localhost, EXCLUDE 127.0.0.1" --ignore-certificate-errors --no-proxy-server` via `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. `MAP * ~NOTFOUND` makes other blocked hosts fail fast instead of hanging the load event. On a machine with internet (Fay's, CI) nothing is needed.
+
+### Finding 3 on the real stack
+
+Real member whose save the API refuses (no marital status), Chromium on the stack, styled:
+
+```
+[390]  refused save: url=http://localhost:4031/profile-edit alert="marital_status : la situation matrimoniale est requise." top=480 bottom=496 viewport=844 inView=true switchChecked=false overflow=0
+[1440] refused save: url=http://localhost:4031/profile-edit alert="marital_status : la situation matrimoniale est requise." top=500 bottom=516 viewport=900 inView=true switchChecked=false overflow=0
+[390]  profile-edit axe (pre-existing excluded): []
+[1440] profile-edit axe (pre-existing excluded): []
+```
+
+### Finding 6 on the real stack
+
+Real member, PIN `135790` set, then `POST /v1/pin/lock` (`curl` with the session cookie, web on 4031):
+
+```
+GET /v1/accounts/gate -> 401 PIN_REQUIRED
+200 <- GET /pin
+200 <- GET /pin?next=%2Fdecouvrir
+303 /pin?next=%2Fdecouvrir      <- GET /decouvrir
+303 /pin?next=%2Fprofile-edit   <- GET /profile-edit
+303 /pin?next=%2Ffavoris        <- GET /favoris
+303 /pin?next=%2Fprofile-review <- GET /profile-review
+303 /pin?next=%2Fsettings       <- GET /settings
+200 <- GET /auth
+unlock 5 digits -> 400 "pin : quatre ou six chiffres sont requis."
+unlock wrong    -> 400 PIN_INVALID "Code incorrect." attempts_left 4
+unlock right    -> {"locked":false}
+200 <- GET /decouvrir
+no cookie or unknown session: 303 /auth <- GET /pin
+```
+
+In Chromium on the same stack, at 390 and 1440: a locked member opening `/decouvrir` lands on `/pin?next=%2Fdecouvrir`, axe finds nothing on `/pin` (also after a wrong PIN, which shows « Code incorrect. »), the right PIN returns to `/decouvrir`, and the `next` values `/%09/evil.example/x`, `%0A`, `%0D`, `/%09\evil.example` and `/.//evil.example` all end on `/onboarding` (all five at 390; only the tab case at 1440, because of the rate limit below).
+
+Stack note: the API's auth rate limit (`rl_auth_per_min`) counts per IP, and through the web proxy every member shares one bucket, so scripted walks that sign in and unlock many times in a minute get `429 RATE_LIMITED`. I waited it out; nothing changed.
+
+### Round 2 self-check results
+
+On the branch with `origin/main` at `d60e97e` merged, this sandbox, 2026-10-22.
+
+```
+npm run lint        -> exit 0 (the same 3 pre-existing warnings)
+npm run typecheck   -> exit 0
+npm run build       -> exit 0
+npm run build -w @ankanu/web (next build) -> exit 0
+npm run test:unit (with Chromium) -> Tests 3 failed | 420 passed (423)
+   the same 3 environment failures as round 1 and main: ank-148-fix, photo-rules, v2-responsive
+npm run test:integration -> 25 passed, 2 skipped; compose.test.ts fails at the api image's npm ci, as in round 1
+```
+
+Fail-first: with the round 1 `v2-client.ts`, `v2-pages.ts`, `entry-guard.ts` and `pin-session.ts` put back, 14 of the 73 tests in `pin-screen`, `pin-locked-entry`, `profile-edit-page`, `v2-flow` and `pin.test.ts` fail (redirect cases, PIN feedback, the status line under the switch, the locked step, the unlock message). QA's M6 mutation in `discover-page.ts` fails `web-image.test.ts`.
+
+E2E, styled (local Tailwind as above; `E2E_ALLOW_ERRORS` for the blocked reCAPTCHA script, and the 4031 favicon on the stack):
+
+```
+web only, port 3100:  e2e/profile-edit-flow.spec.ts -> 16 passed, 2 skipped (the image test needs E2E_BASE_URL)
+web only, full suite  -> 35 passed, 5 failed, 10 skipped
+stack, port 4031:     e2e/profile-edit-flow.spec.ts -> 18 passed
+stack, full suite     -> 37 passed, 5 failed, 8 skipped
+```
+
+The 5 failures are the same in both full runs and are all in `e2e/smoke.spec.ts`, on pages this story does not touch: `/auth` and `/password-reset` axe (desktop and mobile; `label-content-name-mismatch` on the password toggle, `color-contrast` on the `lock_reset`, gold `.shrink-0` and mail icons) and `/` « fits every factory width » on desktop (`scrollWidth 1068 > 1024`). The markup, scripts and spec for those pages are unchanged from `origin/main`, and the local Tailwind build only scans the screens this story touches, so those pages are only partly styled in it; QA also saw the styled full suite fail existing tests. Unstyled (CDN blocked, no local Tailwind), the new spec now fails at its first accessibility check with the « Tailwind CDN did not load » message, by design.
+
+The stack (`ankanu-dev3`), its volumes and images, the scratch Postgres folders, the dev server and my CDN stub are removed or stopped. Files changed in this round: `packages/kernel/src/pin.ts`, `index.ts`, `kernel.test.ts`; `apps/api/src/pin-session.ts`, `pin.test.ts`; `apps/web/src/entry-guard.ts`, `v2-client.ts`, `v2-pages.ts`, `pin-screen.test.ts`, `pin-locked-entry.test.ts` (new), `profile-edit-page.test.ts`, `v2-flow.test.ts`, `web-image.test.ts`; `e2e/profile-edit-flow.spec.ts`; the spec (AC 3, 4 and 5 updated, AC 6 added) and this handoff.

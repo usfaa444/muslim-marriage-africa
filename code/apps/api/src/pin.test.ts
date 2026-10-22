@@ -460,7 +460,10 @@ describe('shared-device PIN', () => {
     for (const pin of ['13579', '1357900', '135']) {
       const badShape = await unlock(pin)
       expect(badShape.status).toBe(400)
-      expect(badShape.body).toMatchObject({ error: { code: 'UNHANDLED', details: { field: 'pin' } } })
+      // Unlock takes four or six digits, so its refusal says both, not the set rule.
+      expect(badShape.body).toMatchObject({
+        error: { code: 'UNHANDLED', message: 'pin : quatre ou six chiffres sont requis.', details: { field: 'pin' } },
+      })
     }
     const wrongLegacy = await unlock('1358')
     expect(wrongLegacy.status).toBe(400)

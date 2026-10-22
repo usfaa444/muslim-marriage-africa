@@ -293,8 +293,27 @@ export function resetHtml(stitch: string, view: ResetView = 'request'): string {
   )
 }
 
+/** Draws a Material Symbols icon from its data-icon name, so the ligature name is not page text. */
+const ICON_GLYPH_STYLE = '<style>.material-symbols-outlined[data-icon]:empty::before{content:attr(data-icon)}</style>'
+
+/** Screen 10. The status hint carries the PIN screen's feedback; its icons are decoration. */
 export function pinHtml(stitch: string): string {
-  return mount(stitch, pinScript())
+  const html = stitch
+    .replace('</head>', `${ICON_GLYPH_STYLE}</head>`)
+    .replace(
+      'class="h-14 rounded-md border border-transparent hover:border-hairline text-xs font-medium text-deep-navy/60 hover:text-deep-navy transition-all duration-150 flex items-center justify-center focus:outline-none" id="btn-clear"',
+      'class="h-14 rounded-md border border-transparent hover:border-hairline text-xs font-medium text-deep-navy/70 hover:text-deep-navy transition-all duration-150 flex items-center justify-center focus:outline-none" id="btn-clear"',
+    )
+    .replace(
+      '<span class="material-symbols-outlined text-xl" data-icon="backspace">backspace</span>',
+      '<span aria-hidden="true" class="material-symbols-outlined text-xl" data-icon="backspace"></span>',
+    )
+    .replace(
+      '<div class="mt-6 text-xs text-deep-navy/50 flex items-center gap-1.5" id="status-hint">\n<span class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user">verified_user</span>\n<span class="">Chiffrement et vérification locale sécurisée</span>',
+      '<div class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5" id="status-hint" role="status">\n<span aria-hidden="true" class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user"></span>\n<span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>',
+    )
+    .replace(/href="#">(\s*S'identifier à nouveau)/, 'href="/auth">$1')
+  return mount(html, pinScript())
 }
 
 function onboardingScript(): string {
@@ -437,6 +456,11 @@ export function profileHtml(stitch: string): string {
     .replace(
       'class="flex items-center justify-center p-3 rounded-md border border-deep-navy bg-deep-navy text-cream cursor-pointer text-xs font-medium text-center"',
       'class="flex items-center justify-center p-3 rounded-md border border-hairline bg-cream text-deep-navy hover:border-soft-gold cursor-pointer text-xs font-medium text-center"',
+    )
+    .replace(
+      '</label>\n</div>\n</section>\n<!-- SECTION 8:',
+      // Right under the PIN switch: why the switch went back off, read out as soon as it is written.
+      '</label>\n</div>\n<p id="profile-pin-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="alert"></p>\n</section>\n<!-- SECTION 8:',
     )
     .replace(
       '<div class="pt-8 pb-4 flex justify-end">',

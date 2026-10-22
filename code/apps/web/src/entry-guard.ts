@@ -1,8 +1,9 @@
 /** Server step guard. Client flags never decide the next screen. */
 
-export type GateStep = 'email' | 'phone' | 'otp' | 'identity' | 'account' | 'anon'
+/** `locked`: a live session that must enter its PIN first (the gate answers 401 PIN_REQUIRED). */
+export type GateStep = 'email' | 'phone' | 'otp' | 'identity' | 'account' | 'anon' | 'locked'
 
-export const STEP_PATH: Record<Exclude<GateStep, 'anon'>, string> = {
+export const STEP_PATH: Record<Exclude<GateStep, 'anon' | 'locked'>, string> = {
   email: '/email-verification',
   phone: '/phone',
   otp: '/otp',
@@ -46,6 +47,15 @@ export function pathnameOf(path: string): string {
 /** Where this path must send the account, or null when the path is allowed. */
 export function entryLocation(path: string, step: GateStep): string | null {
   const normalized = pathnameOf(path)
+  if (step === 'locked') {
+    if (normalized === '/pin') {
+      return null
+    }
+    // What a signed-out visitor may open stays open, so the member can still sign in again.
+    // Every page that needs the account waits behind the PIN, then comes back here.
+    const signedOut = entryLocation(path, 'anon')
+    return signedOut === '/auth' ? `/pin?next=${encodeURIComponent(normalized)}` : signedOut
+  }
   if (normalized === '/password-reset') {
     return null
   }
@@ -126,7 +136,8 @@ export async function fetchGateStep(cookieHeader: string): Promise<GateStep | 'e
       cache: 'no-store',
     })
     if (response.status === 401) {
-      return 'anon'
+      const body = (await response.json().catch(() => null)) as { error?: { code?: unknown } } | null
+      return body?.error?.code === 'PIN_REQUIRED' ? 'locked' : 'anon'
     }
     if (!response.ok) {
       return 'error'

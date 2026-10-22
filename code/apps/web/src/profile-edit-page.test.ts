@@ -131,6 +131,14 @@ function mount() {
   const photoBlur = control('profile-photo-blur', { type: 'checkbox' })
   const photoRules = control('profile-photo-rules')
   const pin = control('profile-pin', { type: 'checkbox' })
+  const pinStatus = control('profile-pin-status', { className: 'hidden text-xs text-deep-navy' }) as Control & {
+    scrolled: number
+    scrollIntoView: () => void
+  }
+  pinStatus.scrolled = 0
+  pinStatus.scrollIntoView = () => {
+    pinStatus.scrolled += 1
+  }
   const photoFile = control('profile-photo-file') as Control & { files: Array<{ name: string }>; click: () => void }
   photoFile.files = []
   photoFile.click = () => {
@@ -144,6 +152,7 @@ function mount() {
   byId.set(photoBlur.id, photoBlur)
   byId.set(photoRules.id, photoRules)
   byId.set(pin.id, pin)
+  byId.set(pinStatus.id, pinStatus)
   byId.set(photoFile.id, photoFile)
   const inputs = [
     control('', { name: 'madhhab', value: 'maliki', type: 'radio' }),
@@ -700,6 +709,17 @@ describe('profile edit load and meter', () => {
     expect(page.photoCap.classList.contains('hidden')).toBe(false)
   })
 
+  it('puts a status line right under the PIN switch, read out when written', () => {
+    const html = profileHtml(stitch())
+    const line =
+      '<p id="profile-pin-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="alert"></p>'
+    expect(html.split(line)).toHaveLength(2)
+    const at = html.indexOf(line)
+    expect(html.indexOf('id="profile-pin"')).toBeLessThan(at)
+    expect(html.indexOf('<!-- SECTION 8:')).toBeGreaterThan(at)
+    expect(html.slice(html.indexOf('id="profile-pin"'), at)).not.toContain('<section')
+  })
+
   it('names the PIN switch, the blur switch and the photo picker with their screen copy', () => {
     const html = profileHtml(stitch())
     expect(html).toContain('id="profile-pin" class="sr-only peer" type="checkbox" aria-label="Activer le code PIN d\'accès"')
@@ -912,16 +932,30 @@ describe('profile edit PIN switch', () => {
     await turnPinOn(page)
     expect(page.location.href).toBe('')
     expect(page.pin.checked).toBe(false)
-    expect(page.byId.get('profile-save-status')?.textContent).toBe("dob : l'âge déclaré est inférieur au minimum.")
+    // The reason sits under the switch she just tapped, is shown and brought into view.
+    const pinStatus = page.byId.get('profile-pin-status') as Control & { scrolled: number }
+    expect(pinStatus.textContent).toBe("dob : l'âge déclaré est inférieur au minimum.")
+    expect(pinStatus.classList.contains('hidden')).toBe(false)
+    expect(pinStatus.scrolled).toBe(1)
+    // Not repeated in the save line at the foot of the page, so it is announced once.
+    expect(page.byId.get('profile-save-status')?.classList.contains('hidden')).toBe(true)
     expect(page.byId.get('origin')?.value).toBe('Kadiogo')
 
     page.answerSave('network')
     await turnPinOn(page)
     expect(page.location.href).toBe('')
     expect(page.pin.checked).toBe(false)
-    expect(page.byId.get('profile-save-status')?.textContent).toBe('Enregistrement impossible.')
+    expect(pinStatus.textContent).toBe('Enregistrement impossible.')
+    expect(pinStatus.scrolled).toBe(2)
 
+    // A save that goes through clears the reason.
     page.answerSave(null)
+    await page.save.listeners.click?.[0]?.()
+    await flush()
+    expect(pinStatus.textContent).toBe('')
+    expect(pinStatus.classList.contains('hidden')).toBe(true)
+
+    await editOrigin(page, 'Kadiogo-Est')
     await turnPinOn(page)
     expect(page.location.href).toBe('/pin?next=%2Fprofile-edit')
   })
@@ -946,7 +980,7 @@ describe('profile edit PIN switch', () => {
     expect(unread.calls.filter((call) => call.method === 'PUT')).toEqual([])
     expect(unread.location.href).toBe('')
     expect(unread.pin.checked).toBe(false)
-    expect(unread.byId.get('profile-save-status')?.textContent).toBe('Enregistrement impossible.')
+    expect(unread.byId.get('profile-pin-status')?.textContent).toBe('Enregistrement impossible.')
   })
 
   it('shows the real PIN state again when the page comes back from the back/forward cache', async () => {
