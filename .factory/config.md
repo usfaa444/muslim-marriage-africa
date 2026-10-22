@@ -49,6 +49,45 @@ E2E tests live in `code/e2e/`. Import `test`, `expect`, `expectAccessible` and `
 - Privacy (NFR-002, NFR-008): coarse geo only; photos stay blurred unless the spec allows.
 - Auditability (NFR-009): events listed in the NFR are written for the actions this story touches.
 
+## Local deployment (after every story)
+
+After QA passes, the factory deploys the story's branch on Fay's computer with Docker so Fay can test it. It runs there through a Remote Control session, never from the cloud container. The repo keeps one compose stack (`code/compose.yaml`, enforced by `self-managed-environment.test.ts`), so the local port and origins live outside the repo in `~/.ankanu/`, the same way staging keeps `compose.ports.yml` on its host.
+
+First time only, create:
+
+- `~/.ankanu/compose.local.yml`:
+
+  ```yaml
+  services:
+    web:
+      ports: ["4012:3000"]
+      environment:
+        ANKANU_PUBLIC_ORIGIN: http://localhost:4012
+        ANKANU_ALLOWED_ORIGINS: http://localhost:4012
+    api:
+      environment:
+        ANKANU_PUBLIC_ORIGIN: http://localhost:4012
+        ANKANU_ALLOWED_ORIGINS: http://localhost:4012
+    worker:
+      environment:
+        ANKANU_PUBLIC_ORIGIN: http://localhost:4012
+        ANKANU_ALLOWED_ORIGINS: http://localhost:4012
+  ```
+
+- `~/.ankanu/local.env` with `S3_ACCESS_KEY_ID` and `S3_SECRET_ACCESS_KEY` set to random local-only values.
+
+Each story, from `code/` on the story branch:
+
+```bash
+git fetch origin && git checkout <story-branch> && git pull
+docker compose -p ankanu-local --env-file ~/.ankanu/local.env \
+  -f compose.yaml -f ~/.ankanu/compose.local.yml up -d --build --wait
+curl -fsS http://localhost:4012/ >/dev/null && curl -fsS http://localhost:4012/v1/health
+E2E_BASE_URL=http://localhost:4012 npm run test:e2e
+```
+
+Then send Fay `http://localhost:4012` and the story's test steps from the QA handoff. Use the project name `ankanu-local` so the local stack never touches another project. Do not run `down -v`: it deletes the local database. To reset local data, ask Fay first.
+
 ## Handoffs and reports
 
 - Developer handoff: `code/docs/qa-handoffs/<story-id>-qa-handoff.md`
