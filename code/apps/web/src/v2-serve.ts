@@ -5,6 +5,7 @@ import { discoverHtml } from './discover-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { visitSignalsHtml } from './visit-signals-page'
+import { fillStaffHeader, staffHomeHtml, staffSignInHtml, type StaffIdentity, type StaffMfaState } from './staff-pages'
 import { entryRedirect, readSessionCookie, redirectTo, type GateStep } from './entry-guard'
 import { memberRouteResponse, sessionKind, type MemberPath } from './member-route'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail'
@@ -63,18 +64,75 @@ async function send(request: Request, path: string, html: string): Promise<Respo
   return htmlResponse(html)
 }
 
-/** Screen 52. Staff sessions only. Members and anonymous visitors leave this path. */
-export async function visitSignalsResponse(request: Request): Promise<Response> {
+type StaffProbe = { status: number; state: StaffMfaState | null; identity: StaffIdentity | null; reason: string | null }
+
+function staffState(value: unknown): StaffMfaState | null {
+  return value === 'password_change' || value === 'enroll' || value === 'verify' || value === 'done' ? value : null
+}
+
+/** `GET /v1/staff/sessions/current`. Null when the API cannot be reached. */
+async function probeStaffSession(cookie: string): Promise<StaffProbe | null> {
+  const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
+  try {
+    const response = await fetch(`${origin}/v1/staff/sessions/current`, { headers: { cookie }, cache: 'no-store' })
+    const body = (await response.json().catch(() => null)) as {
+      mfa_state?: unknown
+      email?: unknown
+      roles?: unknown
+      error?: { details?: { reason?: unknown } | null }
+    } | null
+    const identity =
+      body && typeof body.email === 'string' && Array.isArray(body.roles)
+        ? { email: body.email, roles: body.roles.filter((role): role is string => typeof role === 'string') }
+        : null
+    const reason = body?.error?.details?.reason
+    return {
+      status: response.status,
+      state: staffState(body?.mfa_state),
+      identity,
+      reason: typeof reason === 'string' ? reason : null,
+    }
+  } catch {
+    return null
+  }
+}
+
+/** Where a staff page sends a cookie that is not a full staff session, or null when it may render. */
+async function staffPageGate(request: Request): Promise<{ redirect: Response } | { identity: StaffIdentity | null }> {
   const cookie = request.headers.get('cookie')
   const kind = sessionKind(cookie)
   if (kind === 'staff') {
-    return htmlResponse(visitSignalsHtml(stitchFile('52-ts-visit-signals'), null))
+    return { identity: null }
+  }
+  if (kind === 'web' || kind === 'capacitor' || kind === 'mahram') {
+    return { redirect: redirectTo(request, '/decouvrir') }
+  }
+  if (!cookie || !readSessionCookie(cookie)) {
+    return { redirect: redirectTo(request, '/staff/connexion') }
+  }
+  const probe = await probeStaffSession(cookie)
+  if (probe?.status === 200 && probe.state === 'done') {
+    return { identity: probe.identity }
+  }
+  if (probe?.status === 403 && probe.reason !== 'staff_mfa_pending') {
+    return { redirect: redirectTo(request, '/decouvrir') }
+  }
+  return { redirect: redirectTo(request, '/staff/connexion') }
+}
+
+/** Screen 52. Staff sessions only. Members leave for their space; anyone else goes to the staff sign-in. */
+export async function visitSignalsResponse(request: Request): Promise<Response> {
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  const render = () => htmlResponse(fillStaffHeader(visitSignalsHtml(stitchFile('52-ts-visit-signals'), null), true))
+  if (kind === 'staff') {
+    return render()
   }
   if (kind === 'web' || kind === 'capacitor' || kind === 'mahram') {
     return redirectTo(request, '/decouvrir')
   }
   if (!cookie || !readSessionCookie(cookie)) {
-    return redirectTo(request, '/auth')
+    return redirectTo(request, '/staff/connexion')
   }
   const origin = process.env.ANKANU_API_ORIGIN ?? 'http://api:3000'
   try {
@@ -83,15 +141,48 @@ export async function visitSignalsResponse(request: Request): Promise<Response> 
       cache: 'no-store',
     })
     if (probe.status === 403) {
-      return redirectTo(request, '/decouvrir')
+      const body = (await probe.json().catch(() => null)) as { error?: { details?: { reason?: unknown } | null } } | null
+      return redirectTo(request, body?.error?.details?.reason === 'staff_mfa_pending' ? '/staff/connexion' : '/decouvrir')
     }
     if (!probe.ok) {
-      return redirectTo(request, '/auth')
+      return redirectTo(request, '/staff/connexion')
     }
   } catch {
-    return redirectTo(request, '/auth')
+    return redirectTo(request, '/staff/connexion')
   }
-  return htmlResponse(visitSignalsHtml(stitchFile('52-ts-visit-signals'), null))
+  return render()
+}
+
+/** `/staff`: the staff home after sign-in. */
+export async function staffHomeResponse(request: Request): Promise<Response> {
+  const gate = await staffPageGate(request)
+  if ('redirect' in gate) {
+    return gate.redirect
+  }
+  return htmlResponse(staffHomeHtml(stitchFile('52-ts-visit-signals'), gate.identity))
+}
+
+/** `/staff/connexion`: staff sign-in. A full staff session goes home; `?leave=1` ends the session first. */
+export async function staffSignInResponse(request: Request): Promise<Response> {
+  if (new URL(request.url).searchParams.get('leave') === '1') {
+    return leaveAccount(request, destroySession, '/staff/connexion')
+  }
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  if (kind === 'staff') {
+    return redirectTo(request, '/staff')
+  }
+  let initial: StaffMfaState | null = null
+  if (cookie && readSessionCookie(cookie) && kind === null) {
+    const probe = await probeStaffSession(cookie)
+    if (probe?.status === 200 && probe.state === 'done') {
+      return redirectTo(request, '/staff')
+    }
+    if (probe?.status === 200) {
+      initial = probe.state
+    }
+  }
+  return htmlResponse(staffSignInHtml(stitchFile('52-ts-visit-signals'), siteKey(), initial))
 }
 
 export function signupResponse(request: Request): Promise<Response> {
@@ -144,9 +235,13 @@ async function destroySession(cookie: string): Promise<string | null> {
 }
 
 /** Ends the session, then sends the browser to the sign-in panel with the cookie cleared. */
-export async function leaveAccount(request: Request, destroy: (cookie: string) => Promise<string | null> = destroySession): Promise<Response> {
+export async function leaveAccount(
+  request: Request,
+  destroy: (cookie: string) => Promise<string | null> = destroySession,
+  target = '/auth',
+): Promise<Response> {
   const cleared = (await destroy(request.headers.get('cookie') ?? '')) ?? sessionClearCookie()
-  const redirect = redirectTo(request, '/auth')
+  const redirect = redirectTo(request, target)
   const headers = new Headers(redirect.headers)
   headers.append('set-cookie', cleared)
   return new Response(null, { status: redirect.status, headers })

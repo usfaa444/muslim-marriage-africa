@@ -141,7 +141,13 @@ describe('screen 52 visit signals', () => {
         new Request('http://127.0.0.1/staff/visit-signals', { headers: { cookie: 'ankanu_session=staff' } }),
       )
       expect(staff.status).toBe(200)
-      expect(await staff.text()).toContain('data-visit-signals="live"')
+      const staffHtml = await staff.text()
+      expect(staffHtml).toContain('data-visit-signals="live"')
+      // Story 12.1: the staff-only badge sits in the staff header, with no member nav.
+      expect(staffHtml).toContain('data-testid="staff-only-badge"')
+      expect(staffHtml).toContain('Réservé Staff / Confidentiel')
+      expect(staffHtml).not.toContain('href="/decouvrir"')
+      expect(staffHtml).not.toContain('href="/invitations"')
       const member = await visitSignalsResponse(
         new Request('http://127.0.0.1/staff/visit-signals', { headers: { cookie: 'ankanu_session=web' } }),
       )
@@ -153,12 +159,12 @@ describe('screen 52 visit signals', () => {
       expect(mahram.headers.get('location')).toContain('/decouvrir')
       const anon = await visitSignalsResponse(new Request('http://127.0.0.1/staff/visit-signals'))
       expect(anon.status).toBe(303)
-      expect(anon.headers.get('location')).toContain('/auth')
+      expect(anon.headers.get('location')).toContain('/staff/connexion')
       const opaque = await visitSignalsResponse(
         new Request('http://127.0.0.1/staff/visit-signals', { headers: { cookie: 'ankanu_session=opaque-token' } }),
       )
       expect(opaque.status).toBe(303)
-      expect(opaque.headers.get('location')).toContain('/auth')
+      expect(opaque.headers.get('location')).toContain('/staff/connexion')
       const originalFetch = globalThis.fetch
       const probe = async (status: number) => {
         globalThis.fetch = async () => new Response('{}', { status })
@@ -172,13 +178,13 @@ describe('screen 52 visit signals', () => {
         expect(await ok.text()).toContain('data-visit-signals="live"')
         const denied = await probe(401)
         expect(denied.status).toBe(303)
-        expect(denied.headers.get('location')).toContain('/auth')
+        expect(denied.headers.get('location')).toContain('/staff/connexion')
         const forbidden = await probe(403)
         expect(forbidden.status).toBe(303)
         expect(forbidden.headers.get('location')).toContain('/decouvrir')
         const failed = await probe(500)
         expect(failed.status).toBe(303)
-        expect(failed.headers.get('location')).toContain('/auth')
+        expect(failed.headers.get('location')).toContain('/staff/connexion')
       } finally {
         globalThis.fetch = originalFetch
       }
@@ -191,7 +197,7 @@ describe('screen 52 visit signals', () => {
     }
   })
 
-  it('sends every failed opaque probe except 403 to auth', async () => {
+  it('sends every failed opaque probe except 403 to the staff sign-in (Story 12.1)', async () => {
     const original = globalThis.fetch
     const cases = [
       { status: 200, auth: false, discover: false },
@@ -213,7 +219,7 @@ describe('screen 52 visit signals', () => {
         } else {
           expect(response.status).toBe(303)
         }
-        expect(location.includes('/auth')).toBe(item.auth)
+        expect(location.includes('/staff/connexion')).toBe(item.auth)
         expect(location.includes('/decouvrir')).toBe(item.discover)
       }
     } finally {

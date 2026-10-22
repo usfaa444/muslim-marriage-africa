@@ -30,3 +30,29 @@ Where to put the variables: compose's `environment:` block for the api sets all 
 
 - Local: `~/.ankanu/local.env`.
 - Staging: the compose interpolation env file, `/var/lib/ankanu/compose.interpolate.env`. A key placed in `/var/lib/ankanu/api.env` is silently ignored and staging stays on `log`.
+
+## Staff accounts (sign-in with an authenticator app)
+
+Staff accounts (`moderator`, `operator`) are created on the server only, never from the web. Each person gets their own account; logins are never shared. Run the command inside the api container:
+
+```bash
+# from code/, on the host running the stack (use your compose project name)
+docker compose -p ankanu-local exec api node apps/api/dist/staff-cli.js create --email <email> --role moderator
+docker compose -p ankanu-local exec api node apps/api/dist/staff-cli.js reset-mfa --email <email>
+docker compose -p ankanu-local exec api node apps/api/dist/staff-cli.js disable --email <email>
+```
+
+- `create` makes a new account with that role only. It refuses an email that already exists (staff or member) and changes nothing. It prints a one-time password once; nothing else stores it. Hand it over in person.
+- First sign-in at `/staff/connexion`: email, that password and the captcha, then a new password (12 to 128 characters), then enroll an authenticator app (Google Authenticator, Authy: TOTP, SHA-1, 30 seconds, 6 digits) from the QR code or the manual key, then a six-digit code. Later sign-ins ask for email, password and a code.
+- A code is accepted once, within one 30-second step either side. Five wrong codes lock the account's staff sign-in for 15 minutes. Staff sessions end after 30 minutes without activity and are never PIN sessions.
+- `reset-mfa` clears the enrollment and ends the account's sessions; the next sign-in enrolls again (a lost phone). `disable` blocks sign-in and ends the sessions.
+- Every command, sign-in success and failure, lockout, enrollment and password change writes an `audit_event`, never a password, code or secret.
+
+The TOTP secrets are stored encrypted (AES-256-GCM) with a server key. Put both variables in the api's env file (`~/.ankanu/api.env` locally, `/var/lib/ankanu/api.env` on staging), never in the repo:
+
+| Variable | Meaning |
+| --- | --- |
+| `STAFF_MFA_KEY` | `openssl rand -base64 32`. A value that is not base64 for 32 bytes refuses to boot. |
+| `STAFF_MFA_KID` | A name for the key, written in each stored envelope, e.g. `local-staff-mfa-1`. |
+
+Without them the api refuses to boot when `NODE_ENV=production` and `RECAPTCHA_ALLOW_TEST_KEYS` is not `1` (a real production boot). On a stack with the reCAPTCHA test keys (local, staging) it boots, and staff sign-in answers 503 until the key is set. Changing the key makes every enrolled secret unreadable: run `reset-mfa` for each staff account afterwards.

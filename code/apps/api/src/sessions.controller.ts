@@ -7,6 +7,7 @@ import { notePinUnlocked } from './pin-lock-state.js'
 import { endWebSession } from './pin-session.js'
 import { clearSessionCookieHeader, readCookie, SESSION_COOKIE } from './session-cookie.js'
 import { getSessionStore } from './session-store.js'
+import { endStaffSession } from './staff-session.js'
 
 type CookieRequest = IpRequest & {
   headers?: { cookie?: string | string[] }
@@ -97,6 +98,7 @@ export class SessionsController {
     const id = readCookie(sessionId, SESSION_COOKIE)
     if (id) {
       await endWebSession(id)
+      await endStaffSession(id)
     }
     appendSetCookie(response, clearSessionCookieHeader())
   }

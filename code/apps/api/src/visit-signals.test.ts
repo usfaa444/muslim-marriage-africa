@@ -25,9 +25,14 @@ import { setFreeReviewSlaReader } from './profile-review.js'
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
+import { memoryStaffStore } from './staff-store.js'
+import { memoryAuditPort, setAuditPort, type AuditRow } from './audit-port.js'
+import { installTestStaff, openTestStaff } from './test-staff-session.js'
 import { memoryProfileVisitStore, qualifyVisitAccounts, setProfileVisitStore, toVisitIso, type VisitRow } from './visit-signals.js'
 
 const memory = memoryAccountStore()
+const staffAudits: AuditRow[] = []
+const staffStore = memoryStaffStore({ memberEmailTaken: (email) => memory.emailTaken(email) })
 const sessions = memorySessionStore(memory)
 const pins = memoryPinLockStore()
 const media = memoryMediaStore()
@@ -130,6 +135,8 @@ describe('staff visit signals', () => {
   let base: string
 
   beforeAll(async () => {
+    installTestStaff(staffStore)
+    setAuditPort(memoryAuditPort(staffAudits))
     setAuthClock(() => now)
     setMediaClock(() => now)
     setSignedTtlReader(async () => 60)
@@ -180,6 +187,8 @@ describe('staff visit signals', () => {
   })
 
   afterAll(async () => {
+    installTestStaff(undefined)
+    setAuditPort(undefined)
     setAuthClock(undefined)
     setMediaClock(undefined)
     setSignedTtlReader(undefined)
@@ -285,6 +294,12 @@ describe('staff visit signals', () => {
       hash: null,
       expires_at: null,
     })
+  }
+
+  /** A real staff session: server-command account, password change, enrollment and a TOTP code (Story 12.1). */
+  async function openStaff(role: 'moderator' | 'operator') {
+    const staff = await openTestStaff(base, staffStore, role)
+    return { ...staff, id: staff.accountId }
   }
 
   function staffRole(accountId: string, role: 'moderator' | 'operator'): void {
@@ -393,9 +408,8 @@ describe('staff visit signals', () => {
 
   it('lists a member only after 51 distinct opens and zero invites', async () => {
     const member = await createAccount('brother')
-    const staff = await createAccount('sister')
-    const staffCookie = await signIn(staff.email)
-    staffRole(staff.id, 'moderator')
+    const staff = await openStaff('moderator')
+    const staffCookie = staff.cookie
     const profile = await fetch(`${base}/v1/me/profile`, {
       method: 'PUT',
       headers: { cookie: await signIn(member.email), 'content-type': 'application/json' },
@@ -457,9 +471,8 @@ describe('staff visit signals', () => {
 
   it('drops opens older than 24h and keeps a single grant unverified', async () => {
     const member = await createAccount('brother')
-    const staff = await createAccount('sister')
-    const staffCookie = await signIn(staff.email)
-    staffRole(staff.id, 'moderator')
+    const staff = await openStaff('moderator')
+    const staffCookie = staff.cookie
     seedVisits(member.id, 51, 0, new Date(now.getTime() - 25 * 60 * 60 * 1000))
     const stale = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
     expect(await stale.json()).toMatchObject({ count: 0, rows: [] })
@@ -480,9 +493,8 @@ describe('staff visit signals', () => {
   })
 
   it('returns a retryable store failure and caps the list at 100', async () => {
-    const staff = await createAccount('sister')
-    const staffCookie = await signIn(staff.email)
-    staffRole(staff.id, 'operator')
+    const staff = await openStaff('operator')
+    const staffCookie = staff.cookie
     for (let index = 0; index < 101; index += 1) {
       const row = pushMember(index)
       seedVisits(row.id, 51, 0, new Date(Date.UTC(2026, 9, 13, 8, 0, index)))
@@ -510,9 +522,8 @@ describe('staff visit signals', () => {
 
   it('drops opens older than 24 hours and keeps a single grant unverified', async () => {
     const member = await createAccount('brother')
-    const staff = await createAccount('sister')
-    const staffCookie = await signIn(staff.email)
-    staffRole(staff.id, 'moderator')
+    const staff = await openStaff('moderator')
+    const staffCookie = staff.cookie
     seedVisits(member.id, 51, 0, new Date('2026-10-11T11:00:00.000Z'))
     const stale = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
     expect(await stale.json()).toMatchObject({ count: 0, rows: [] })
@@ -526,9 +537,8 @@ describe('staff visit signals', () => {
 
   it('emits ISO when the stored timestamp is not ISO', async () => {
     const member = await createAccount('brother')
-    const staff = await createAccount('sister')
-    const staffCookie = await signIn(staff.email)
-    staffRole(staff.id, 'moderator')
+    const staff = await openStaff('moderator')
+    const staffCookie = staff.cookie
     const rows: VisitRow[] = []
     for (let index = 0; index < 51; index += 1) {
       const iso = new Date(Date.UTC(2026, 9, 13, 11, 0, index)).toISOString()

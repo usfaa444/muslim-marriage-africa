@@ -36,6 +36,7 @@ E2E tests live in `code/e2e/`. Import `test`, `expect`, `expectAccessible` and `
 ## Environments
 
 - Staging: `https://staging.ankanu.com` (Next.js web in front of the API under `/v1`)
+- Staff sign-in: `/staff/connexion` (email, password, captcha, then an authenticator code). On staging open the first step with `POST /v1/staff/sessions` and `recaptcha_token: test-ok`, like member sign-in. Staff accounts come only from `staff-cli.js` in the api container.
 - reCAPTCHA on staging uses Google's test keys. A headless browser cannot tick the checkbox; open sessions with `POST /v1/sessions` and `recaptcha_token: test-ok`, which is what the panel sends.
 - Test accounts: create disposable accounts per run. Staff verification on staging uses `STAGING_STAFF_VERIFICATION_GRANT`. Never use real member data.
 
@@ -77,9 +78,11 @@ First time only, create:
   SMTP_URL=log://
   EVIDENCE_KEY=<openssl rand -base64 32>
   EVIDENCE_KID=local-ankanu-1
+  STAFF_MFA_KEY=<openssl rand -base64 32>
+  STAFF_MFA_KID=local-staff-mfa-1
   ```
 
-  Without `SMTP_URL` every email send is 503 `EMAIL_DELIVERY_FAILED`; with `log://` the api log prints `email <address> AnKanu <link>`. Without the evidence key, ID and liveness uploads are 503.
+  Without `SMTP_URL` every email send is 503 `EMAIL_DELIVERY_FAILED`; with `log://` the api log prints `email <address> AnKanu <link>`. Without the evidence key, ID and liveness uploads are 503. Without the staff MFA key, staff sign-in is 503 (a real production boot refuses to start); staging needs the same two lines in `/var/lib/ankanu/api.env`.
 
 - `~/.ankanu/local.env`:
 
@@ -121,6 +124,16 @@ docker compose -p ankanu-local --env-file ~/.ankanu/local.env \
 curl -fsS http://localhost:4012/ >/dev/null && curl -fsS http://localhost:4012/v1/health
 E2E_BASE_URL=http://localhost:4012 npm run test:e2e
 ```
+
+Staff accounts (Story 12.1) come only from the server command, run in the api container (see `code/README.md`, "Staff accounts"):
+
+```bash
+docker compose -p ankanu-local exec api node apps/api/dist/staff-cli.js create --email <email> --role moderator|operator
+docker compose -p ankanu-local exec api node apps/api/dist/staff-cli.js reset-mfa --email <email>
+docker compose -p ankanu-local exec api node apps/api/dist/staff-cli.js disable --email <email>
+```
+
+`create` prints a one-time password once. Sign in at `http://localhost:4012/staff/connexion`, set a new password, scan the QR code with an authenticator app and enter its code. The full-stack e2e spends a fresh account: `E2E_STAFF_EMAIL=<email> E2E_STAFF_ONE_TIME_PASSWORD=<printed password> E2E_BASE_URL=http://localhost:4012 npm run test:e2e`.
 
 Then send Fay `http://localhost:4012` and the story's test steps from the QA handoff. Phone codes and emails go to the api log locally: `docker compose -p ankanu-local logs api | grep -E 'otp |email '`. Use the project name `ankanu-local` so the local stack never touches another project. Prefer `up` over `down`: a `down` loses the evidence bucket's contents, and `down -v` also drops the other anonymous volumes. Deleting `code/pg-data` deletes the local database. To reset local data, ask Fay first.
 

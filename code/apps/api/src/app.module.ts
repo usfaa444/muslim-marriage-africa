@@ -13,6 +13,7 @@ import { ProfilesController } from './profiles.controller.js'
 import { PinController } from './pin.controller.js'
 import { SessionsController } from './sessions.controller.js'
 import { StaffController } from './staff.controller.js'
+import { StaffSessionsController } from './staff-sessions.controller.js'
 import { VisitSignalsController } from './visit-signals.controller.js'
 import { VerificationsController } from './verifications.controller.js'
 
@@ -31,6 +32,7 @@ import { VerificationsController } from './verifications.controller.js'
     FavouritesController,
     FiltersController,
     MediaController,
+    StaffSessionsController,
     StaffController,
     VisitSignalsController,
     CilController,

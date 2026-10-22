@@ -7,6 +7,11 @@ import { fileURLToPath } from 'node:url'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { Client } from 'pg'
 import { closeAccountStore, setAccountStore } from './account-store.js'
+import { createStaffAccount, disableStaffAccount, resetStaffMfa } from './staff-accounts.js'
+import { setStaffMfaKey } from './staff-mfa-key.js'
+import { changeStaffPassword, loadStaffSessionById, readEnrollment, signInStaff, verifyStaffCode } from './staff-session.js'
+import { getStaffStore } from './staff-store.js'
+import { totpCode } from './staff-totp.js'
 import { setAuthClock } from './auth-clock.js'
 import { readRlAuthPerMin } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
@@ -171,6 +176,7 @@ function migrationSql(): string {
     '0016_favourite.sql',
     '0017_profile_visit.sql',
     '0018_discovery_exclusion.sql',
+    '0019_staff_mfa.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -281,6 +287,7 @@ describe('operator_config migration', () => {
       'session',
       'signed_grant',
       'sms_dispatch',
+      'staff_credential',
       'strike',
       'verification_record',
     ])
@@ -303,6 +310,7 @@ describe('operator_config migration', () => {
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
+      'public.staff_credential',
       'public.strike',
       'public.verification_record',
     ])
@@ -310,7 +318,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('19')
+    expect(applied.rows[0]?.count).toBe('20')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -415,7 +423,11 @@ describe('operator_config migration', () => {
         'id',
         'kind',
         'last_seen_at',
+        // Story 12.1: set on staff sessions only.
+        'mfa_state',
       ])
+      const memberStates = await db().query<{ mfa_state: string | null }>(`select "mfa_state" from "session"`)
+      expect(memberStates.rows.every((row) => row.mfa_state === null)).toBe(true)
 
       const junkCookie = await fetch(`http://127.0.0.1:${address.port}/v1/health`, {
         headers: { cookie: 'ankanu_session=nope' },
@@ -844,6 +856,7 @@ describe('operator_config migration', () => {
       'session',
       'signed_grant',
       'sms_dispatch',
+      'staff_credential',
       'strike',
       'verification_record',
     ])
@@ -866,6 +879,7 @@ describe('operator_config migration', () => {
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
+      'public.staff_credential',
       'public.strike',
       'public.verification_record',
     ])
@@ -1069,4 +1083,106 @@ describe('operator_config migration', () => {
     await db().query(`delete from "favourite" where "account_id" = $1`, [owner])
     await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[owner, older, newer]])
   })
+  it('provisions a staff account and signs it in with TOTP on migrated Postgres (Story 12.1)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setStaffMfaKey({ key: Buffer.alloc(32, 0x5a), kid: 'test-staff-mfa' })
+    const cookieId = (cookie: string) => /ankanu_session=([^;]+)/.exec(cookie)?.[1] ?? ''
+    try {
+      const created = await createStaffAccount({ email: 'Staff.Pg@Example.bf', role: 'moderator' })
+      expect(created.ok).toBe(true)
+      if (!created.ok) return
+      expect((await createStaffAccount({ email: 'staff.pg@example.bf', role: 'operator' })).ok).toBe(false)
+      const row = await db().query<{ gender: string; roles: string[]; status: string }>(
+        `select "gender", "roles", "status" from "account" where "id" = $1`,
+        [created.accountId],
+      )
+      expect(row.rows[0]).toEqual({ gender: 'none', roles: ['moderator'], status: 'Active' })
+      // A gender-less account must be staff-only; a member stays sister or brother.
+      let refused = ''
+      try {
+        await db().query(
+          `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+           values ('018f3a40-7c2a-7000-8000-0000000000d1', 'none-member@example.bf', 'None_Member', 'none', $1, 'Active', true, 'FR-089', 'A', 'B')`,
+          [['member']],
+        )
+      } catch (error) {
+        refused = postgresCode(error) ?? ''
+      }
+      expect(refused).toBe('23514')
+
+      const opened = await signInStaff({ email: 'staff.pg@example.bf', password: created.oneTimePassword })
+      expect(opened.ok).toBe(true)
+      if (!opened.ok) return
+      expect(opened.body.mfa_state).toBe('password_change')
+      const pendingId = cookieId(opened.cookie)
+      let pending = await loadStaffSessionById(pendingId)
+      expect(pending?.mfa_state).toBe('password_change')
+      const kind = await db().query<{ kind: string; mfa_state: string }>(`select "kind", "mfa_state" from "session" where "id" = $1`, [pendingId])
+      expect(kind.rows[0]).toEqual({ kind: 'staff', mfa_state: 'password_change' })
+      let badState = ''
+      try {
+        await db().query(`update "session" set "kind" = 'web' where "id" = $1`, [pendingId])
+      } catch (error) {
+        badState = postgresCode(error) ?? ''
+      }
+      expect(badState).toBe('23514')
+
+      if (!pending) return
+      expect((await changeStaffPassword(pending, { new_password: 'phrase staff postgres' })).ok).toBe(true)
+      pending = await loadStaffSessionById(pendingId)
+      if (!pending) return
+      const enrollment = await readEnrollment(pending)
+      expect(enrollment.ok).toBe(true)
+      if (!enrollment.ok) return
+      const secret = enrollment.body.secret.replace(/\s/g, '')
+      const verified = await verifyStaffCode(pending, { code: totpCode(secret, new Date()) })
+      expect(verified.ok).toBe(true)
+      if (!verified.ok) return
+      const factors = await db().query<{ totp_sealed: string; totp_pending_sealed: string | null; totp_last_step: string }>(
+        `select "totp_sealed", "totp_pending_sealed", "totp_last_step"::text from "staff_credential" where "account_id" = $1`,
+        [created.accountId],
+      )
+      expect(factors.rows[0]?.totp_pending_sealed).toBeNull()
+      expect(factors.rows[0]?.totp_sealed).not.toContain(secret)
+      const lastStep = Number(factors.rows[0]?.totp_last_step)
+      expect(await getStaffStore().consumeStep(created.accountId, lastStep, {}, [])).toBe(false)
+      expect((await loadStaffSessionById(cookieId(verified.cookie)))?.mfa_state).toBe('done')
+      expect(await loadStaffSessionById(pendingId)).toBeNull()
+
+      expect((await resetStaffMfa({ email: 'staff.pg@example.bf' })).ok).toBe(true)
+      expect(await loadStaffSessionById(cookieId(verified.cookie))).toBeNull()
+      expect((await disableStaffAccount({ email: 'staff.pg@example.bf' })).ok).toBe(true)
+      const disabled = await signInStaff({ email: 'staff.pg@example.bf', password: 'phrase staff postgres' })
+      expect(disabled.ok).toBe(false)
+
+      const actions = await db().query<{ action: string; payload: Record<string, string> }>(
+        `select "action", "payload" from "audit_event" where "action" like 'staff_%'`,
+      )
+      expect(new Set(actions.rows.map((item) => item.action))).toEqual(
+        new Set([
+          'staff_account_created',
+          'staff_password_changed',
+          'staff_mfa_enrolled',
+          'staff_sign_in',
+          'staff_mfa_reset',
+          'staff_account_disabled',
+          'staff_sign_in_failure',
+        ]),
+      )
+      const text = JSON.stringify(actions.rows)
+      expect(text).not.toContain(created.oneTimePassword)
+      expect(text).not.toContain(secret)
+      expect(text).not.toContain('phrase staff postgres')
+    } finally {
+      setStaffMfaKey(undefined)
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
 })

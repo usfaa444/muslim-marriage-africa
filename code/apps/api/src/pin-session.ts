@@ -1,4 +1,5 @@
 import { HttpException } from '@nestjs/common'
+import type { ErrorEnvelope } from '@ankanu/kernel'
 import { LEGACY_PIN_LENGTH, PIN_LENGTH, PIN_SET_LENGTH_MESSAGE, PIN_UNLOCK_LENGTH_MESSAGE } from '@ankanu/kernel'
 import { authNow } from './auth-clock.js'
 import { rejectIfAuthRateLimited } from './auth-guard.js'
@@ -13,6 +14,7 @@ import {
   sessionCookieHeader,
 } from './session-cookie.js'
 import { getSessionStore, type ResolvedSession } from './session-store.js'
+import { applyStaffGate, loadStaffSessionById } from './staff-session.js'
 
 /** A new PIN: exactly PIN_LENGTH digits. */
 export const PIN_PATTERN = new RegExp(`^[0-9]{${PIN_LENGTH}}$`)
@@ -32,7 +34,10 @@ const EXEMPT = new Set([
   'POST /v1/sessions',
 ])
 
-export type PinGateResult = { stop: true } | { stop: false; cookie: string | null }
+export type PinGateResult =
+  | { stop: true }
+  | { stop: true; status: 403; body: ErrorEnvelope }
+  | { stop: false; cookie: string | null }
 
 export function unauthenticated(): never {
   throw new HttpException(
@@ -157,16 +162,33 @@ export async function applySessionGate(
   if (route === 'PUT /v1/pin') {
     await rejectIfAuthRateLimited(ip)
   }
+  const sessionId = readCookie(cookieHeader, SESSION_COOKIE)
   if (EXEMPT.has(route)) {
+    // PIN routes stay outside the idle gate, but a staff session is never a PIN session.
+    if (sessionId && route.includes(' /v1/pin')) {
+      const staff = await loadStaffSessionById(sessionId)
+      if (staff) {
+        const gated = await applyStaffGate(route, staff, authNow())
+        return gated.stop ? gated : { stop: false, cookie: null }
+      }
+    }
     return { stop: false, cookie: null }
   }
-  const sessionId = readCookie(cookieHeader, SESSION_COOKIE)
   if (!sessionId) {
     return { stop: false, cookie: null }
   }
   const row = await getSessionStore().get(sessionId)
   const now = authNow()
-  if (!row || row.expires_at.getTime() <= now.getTime()) {
+  if (!row) {
+    // A staff session is never a PIN session. It reaches staff routes only, and only its MFA steps until MFA is done.
+    const staff = await loadStaffSessionById(sessionId, now)
+    if (!staff) {
+      return { stop: false, cookie: null }
+    }
+    const gated = await applyStaffGate(route, staff, now)
+    return gated.stop ? gated : { stop: false, cookie: null }
+  }
+  if (row.expires_at.getTime() <= now.getTime()) {
     return { stop: false, cookie: null }
   }
   const pin = await getPinLockStore().findByAccount(row.account_id)

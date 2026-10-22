@@ -1,9 +1,11 @@
 import { sql } from 'drizzle-orm'
 import {
+  bigint,
   boolean,
   check,
   date,
   index,
+  integer,
   jsonb,
   pgTable,
   primaryKey,
@@ -29,7 +31,11 @@ export const account = pgTable(
     civil_family_name: text('civil_family_name').notNull(),
   },
   (table) => [
-    check('account_gender_check', sql`${table.gender} in ('sister', 'brother')`),
+    // A staff account (Story 12.1) is not a Member: gender `none`, staff roles only.
+    check(
+      'account_gender_check',
+      sql`${table.gender} in ('sister', 'brother') or (${table.gender} = 'none' and cardinality(${table.roles}) > 0 and ${table.roles} <@ ARRAY['moderator', 'operator']::text[])`,
+    ),
     check(
       'account_status_check',
       sql`${table.status} in ('Active', 'deactivated', 'held', 'pending_deletion')`,
@@ -165,7 +171,10 @@ export const pinLock = pgTable('pin_lock', {
   pin_hash: text('pin_hash').notNull(),
 })
 
-/** Web session. No remember-me column and no gender column. */
+/**
+ * Web session. No remember-me column and no gender column.
+ * `mfa_state` is set on staff sessions only; a staff session is usable only at `done`.
+ */
 export const session = pgTable(
   'session',
   {
@@ -176,11 +185,35 @@ export const session = pgTable(
     kind: text('kind').notNull(),
     expires_at: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
     last_seen_at: timestamp('last_seen_at', { withTimezone: true, mode: 'date' }).notNull(),
+    mfa_state: text('mfa_state'),
   },
   (table) => [
     check('session_kind_check', sql`${table.kind} in ('web', 'capacitor', 'mahram', 'staff')`),
+    check(
+      'session_mfa_state_check',
+      sql`(${table.kind} = 'staff' and ${table.mfa_state} in ('password_change', 'enroll', 'verify', 'done')) or (${table.kind} <> 'staff' and ${table.mfa_state} is null)`,
+    ),
   ],
 )
+
+/**
+ * Staff sign-in factors (Story 12.1). Created only by the server command.
+ * TOTP secrets are AES-256-GCM envelopes under `STAFF_MFA_KEY`, never plaintext.
+ * `totp_last_step` refuses a code that was already accepted.
+ */
+export const staffCredential = pgTable('staff_credential', {
+  account_id: uuid('account_id')
+    .primaryKey()
+    .references(() => account.id),
+  must_change_password: boolean('must_change_password').notNull(),
+  totp_sealed: text('totp_sealed'),
+  totp_pending_sealed: text('totp_pending_sealed'),
+  totp_enrolled_at: timestamp('totp_enrolled_at', { withTimezone: true, mode: 'date' }),
+  totp_last_step: bigint('totp_last_step', { mode: 'number' }),
+  failed_codes: integer('failed_codes').notNull().default(0),
+  locked_until: timestamp('locked_until', { withTimezone: true, mode: 'date' }),
+  created_at: timestamp('created_at', { withTimezone: true, mode: 'date' }).notNull(),
+})
 
 /** Operator-owned CIL ticket. Identity calls OperatorPort; it does not insert this row. */
 export const cilTicket = pgTable(

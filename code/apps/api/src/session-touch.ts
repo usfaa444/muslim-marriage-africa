@@ -42,6 +42,11 @@ export function sessionTouch(
 ): void {
   const path = request.originalUrl ?? request.url ?? ''
   void applySessionGate(request.method ?? 'GET', path, cookieHeader(request), clientIp(request)).then((result) => {
+    if (result.stop && 'status' in result) {
+      response.setHeader('Cache-Control', 'no-store')
+      response.status(result.status).json(result.body)
+      return
+    }
     if (result.stop) {
       // Like every other 401, never stored: the session is still live behind its PIN.
       response.setHeader('Cache-Control', 'no-store')
@@ -55,7 +60,7 @@ export function sessionTouch(
       )
       return
     }
-    if (result.cookie) {
+    if ('cookie' in result && result.cookie) {
       appendSetCookie(response, result.cookie)
     }
     next()
