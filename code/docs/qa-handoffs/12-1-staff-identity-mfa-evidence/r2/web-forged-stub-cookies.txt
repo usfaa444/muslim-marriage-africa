@@ -1,0 +1,120 @@
+cookie [ankanu_session=]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=staff]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=web]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=capacitor]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=mahram]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=staff; ankanu_session=zzz]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=zzz; ankanu_session=staff]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=STAFF]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=staff%20]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 
+cookie [ankanu_session=%73taff]:
+  /staff 303 http://localhost:3100/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:3100/staff/connexion
+  /decouvrir 303 http://localhost:3100/auth
+  /profile-edit 303 http://localhost:3100/auth
+  /profil 303 http://localhost:3100/auth
+  /favoris 303 http://localhost:3100/auth
+  /parametres 404 
+  /signup 200 
+  /auth 200 
+  / 200 

@@ -74,3 +74,50 @@ Known tolerated e2e entries (known-issues.ts): favicon 404 on port 3100, reCAPTC
 - WebKit/mobile profile beyond Pixel 7 in the shipped e2e: not run.
 - Staff `media/get` happy path (needs seeded media): only the 403 for a staff-session on member media was checked.
 - Integration `compose.test.ts` and unit `photo-rules`: known environment failures. Note that `compose.test.ts` deletes `code/pg-data` of the worktree and runs `down -v` on project `ankanu`; it wiped my stack's database mid-run (re-migrated, earlier API evidence kept in the evidence folder).
+
+---
+
+# Retest, round 2 (commit 4c104d0)
+
+model: Claude Sonnet 5.5
+**Verdict: PASS with minor findings** (2026-10-22). Round 1 above is kept unchanged. Environment: fresh local stack from 4c104d0 (built images, fresh Postgres, migration 0019 as edited), project `ankanu-qa-staff`, same stand-ins as round 1 (siteverify and widget stubs, Tailwind v4 compiled per page, real Google Fonts through the proxy). Evidence: `code/docs/qa-handoffs/12-1-staff-identity-mfa-evidence/r2/`.
+
+## Round 1 findings, retested
+| # | Round 1 | Round 2 result | Evidence |
+| --- | --- | --- | --- |
+| F1 Major | 29 of 40 parallel wrong codes evaluated | **Fixed.** Same 40-parallel burst on 40 pending sessions against built-image Postgres: 4 x 401 `OTP_INVALID` + 36 x 429 `staff_locked`; audit rows: 5 `staff_sign_in_failure`, 1 `staff_sign_in_locked`; all sessions ended. Edge: 4 wrong codes then the correct 5th is accepted (200, full session works). Sequential lock, `Retry-After: 900`, lock expiry, +-1 window, replay all unchanged. Mutation (claim never counts) fails the Postgres migrate test; threshold 5->6 fails 2 unit tests. | `api-race-40-retally.txt`, `api-4wrong-then-correct.txt`, `api-totp-lockout-r2.txt`, `mutation-checks-r2.txt` |
+| F2 Major | forged `staff` cookie got 200 on `/staff` | **Fixed on the built image.** Cookies `staff`, `web`, `capacitor`, `mahram`, `STAFF`, `staff%20`, `%73taff`, and combined `staff; ...=zzz` / `zzz; ...=staff` on 11 paths (`/staff`, `/staff/visit-signals`, `/decouvrir`, `/profile-edit`, `/profil`, `/favoris`, ...): every gated path answers 303 (staff pages to `/staff/connexion`, member pages to `/auth`); none answers 200. Real signed-in staff still gets `/staff` and visit-signals. Mutation (stubs always on) fails the unit test. | `web-forged-stub-cookies.txt`, `ui-r2-log.txt` |
+| F3 Minor | NULL `mfa_state` accepted | **Fixed.** Constraint now has `mfa_state IS NOT NULL` for staff; insert fails with 23514 on the fresh DB. | `db-integrity-and-f3.txt` |
+| F4 Minor | 500 on a 200 KB body | Not fixed, pre-existing (same on member sign-in); accepted. | round 1 |
+| F5 Minor | "123 456" truncated | **Fixed.** Field `maxlength=16`, no pattern; typed "491 768" stays in the field and signs in (UI); API strips spaces. | `ui-r2-log.txt` |
+| F6 Minor | field-name prefix, wrong hint | **Fixed.** "Le mot de passe doit compter de 12 à 128 caractères.", "Choisissez un mot de passe différent du mot de passe provisoire.", hint "De 12 à 128 caractères. Les espaces sont acceptés." with `aria-describedby`. | `ui-r2-log.txt`, `api-flow-pending-r2.txt` |
+| F7 Minor | visit-signals contrast | Still open, pre-existing page (3 serious nodes with real fonts loaded); accepted as known. | `ui-r2-log.txt` |
+| F8 Minor | header/content misaligned at 1440 | **Fixed.** Brand x = title x at all widths (16/16 at 360 and 390, 48/48 at 768-1280, 128/128 at 1440); no horizontal scroll, badge present, no nav. | `ui-r2-log.txt`, `r2-home-1440.png` |
+| F9 Minor | raw SQL error on concurrent create | **Fixed.** Three rounds of 3 concurrent creates for one email: exactly one account each, the others print the normal refusal (exit 1); no orphan `staff_credential`/credential rows, one audit row per account. | `cli-concurrent-create.txt`, `db-integrity-and-f3.txt` |
+| F10 Minor | exit code | **Fixed.** Bad role, malformed email: exit 2 with usage. | `cli-concurrent-create.txt` |
+| F11 Minor | controller check unprotected | **Fixed.** Removing the check in `requireStaffSession` alone now fails the new controller-level test. | `mutation-checks-r2.txt` |
+| F12 Minor | pending session could not sign out | **Fixed in the UI.** "Se déconnecter" (`/staff/connexion?leave=1`) is in the markup for the pending steps and is toggled hidden on the email step (in my Tailwind v4 stand-in `hidden` loses to `inline-flex`, so it shows on the email step; the real Tailwind v3 CDN orders `hidden` last; not counted). Clicking it on the enrollment step clears the cookie and returns to the email step. The DELETE route already worked in round 1 (my POST /logout probe was a wrong route). | `ui-r2-log.txt` |
+| F13 Info | no security headers | unchanged, accepted. | |
+
+## Gate re-run
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS. Lint 0 errors, typecheck clean, migration-check clean, the only audit finding is still the existing critical on `next`; package.json/lock unchanged since round 1 (uqr unchanged). | console |
+| G2 Tests | PASS. Unit 445 passed, 12 skipped, 1 failed (`photo-rules`, known). Integration (compose.test.ts excluded): 19 passed in 4 files, including the new Postgres race, NULL-session and concurrent-create test. Four mutations (non-atomic claim, threshold, controller check, stubs in production) each fail a test. Web-only e2e `--repeat-each=3`: 150 passed, 48 skipped, 0 flaky; the only failures are `/auth` axe (6/6, deterministic; see G8). Stack e2e staff shell repeat x3: 6 passed, 0 flaky. | `unit-run-r2.txt`, `integration-r2-no-compose.txt`, `mutation-checks-r2.txt`, `e2e-webonly-repeat3-r2.txt`, `e2e-stack-repeat3-r2.txt` |
+| G3 Functional | PASS. Separation matrix unchanged (no session/garbage 401; member, member with staff role 403; pending 403; staff session 403 on 13 member endpoints), reset-mfa/disable behave as before, first sign-in on the built stack passes (e2e, spaced code). | `api-separation-matrix-r2.txt`, `api-reset-disable-r2.txt`, `api-flow-pending-r2.txt`, `e2e-staff-shell-r2.txt` |
+| G4 UI | PASS at 360, 390, 768, 1024, 1280, 1440. | `ui-r2-log.txt`, `r2-*.png` |
+| G5 UX | PASS (F5, F6, F8, F12 fixed). | |
+| G6 Accessibility | PASS for the new surfaces: axe zero violations on login, password, enroll and staff home. Visit-signals remains F7 (pre-existing). | `ui-r2-log.txt` |
+| G7 Non-functional | Security re-run as above. Lighthouse/Web Vitals, 3G throttling and ZAP still not run (see below). | |
+| G8 Regression | PASS with caveat. Stack e2e 28 passed, 37 skipped; the only red items are `/auth` axe target-size (a page this story does not touch; my Tailwind v4 stand-in cannot reproduce the CDN's CSS exactly, and it fails identically in round 1) and one run of the first sign-in test that aborted font requests while my stand-in was slow, which passed three times once the stand-in cached fonts. | `e2e-full-stack-r2.txt`, `e2e-staff-shell-r2.txt` |
+
+## New finding
+| # | Severity | Gate | Description |
+| --- | --- | --- | --- |
+| F14 | Minor | G2 coverage | Judging the change you asked about. Stub-cookie tests now skip on a built stack (stack e2e: 28-31 passed, 37 skipped, down from 54 passed). I reviewed what was lost. The 8 `profile-edit-flow` tests mock every browser `/v1` call themselves (`context.route`) and only needed the server to render `/profile-edit` and `/pin` for the `web` stub; they do not touch the real API, so they still run, and pass, on the web-only dev server (150 passed there). The staff-shell stub tests are replaced on a stack by the real first sign-in, which covers badge, axe, panes, header alignment and no horizontal scroll with a real staff session, and by the forged-cookie test. What is genuinely lost: no e2e on a built image now renders `/profile-edit`, `/pin`, `/decouvrir` or the favourites page for a member (a real member past the signup gate needs email, phone OTP and ID steps; with a real session but before the gate those pages 303 to `/auth`). The remaining protection is static (`web-image.test.ts` checks the Dockerfile copy list against the screens the server reads) plus the screen-52 sign-in check. I accept that as a Minor gap rather than a blocker, because security was the reason for the change and the build-time gate is correct, but a seeded real-member e2e (or a documented test-only member fixture created by a command like `staff-cli`) should replace the lost image-render check before more screens depend on the stubs. |
+
+## Not tested and why (round 2)
+- Lighthouse/Web Vitals, 3G throttling, ZAP, WebKit: not run (same as round 1). These remain open gates; the changes in this round do not alter page weight or render path, and I judge the risk low, but strictly they were not measured.
+- `NODE_ENV=production` boot without `STAFF_MFA_KEY`: not re-run by me.
+- Real Google reCAPTCHA and the real Tailwind CDN: stand-ins as in round 1.
+- Environment note: the Postgres integration tests (not only `compose.test.ts`) and the restore drill delete the worktree's `code/pg-data`; the stack database was wiped twice and re-migrated. `compose.test.ts` was not run, as instructed.

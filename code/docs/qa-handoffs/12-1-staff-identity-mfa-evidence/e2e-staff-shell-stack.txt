@@ -1,0 +1,18 @@
+
+Running 12 tests using 2 workers
+
+  -   2 [mobile] › e2e/staff-shell.spec.ts:41:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -   3 [mobile] › e2e/staff-shell.spec.ts:59:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓   1 [mobile] › e2e/staff-shell.spec.ts:30:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.3s)
+  ✓   5 [mobile] › e2e/staff-shell.spec.ts:89:3 › staff shell › a member stub cookie is sent away from the staff home (216ms)
+  -   6 [mobile] › e2e/staff-shell.spec.ts:101:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓   4 [mobile] › e2e/staff-shell.spec.ts:73:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.3s)
+  ✓   8 [desktop] › e2e/staff-shell.spec.ts:41:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (940ms)
+  -   9 [desktop] › e2e/staff-shell.spec.ts:59:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓   7 [desktop] › e2e/staff-shell.spec.ts:30:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.4s)
+  ✓  11 [desktop] › e2e/staff-shell.spec.ts:89:3 › staff shell › a member stub cookie is sent away from the staff home (215ms)
+  ✓  10 [desktop] › e2e/staff-shell.spec.ts:73:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.4s)
+  ✓  12 [desktop] › e2e/staff-shell.spec.ts:101:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome (3.0s)
+
+  4 skipped
+  8 passed (9.0s)

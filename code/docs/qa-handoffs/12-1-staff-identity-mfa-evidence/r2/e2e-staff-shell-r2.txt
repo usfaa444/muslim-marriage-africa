@@ -1,0 +1,5 @@
+  ✓   4 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.8s)
+  ✓   9 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.5s)
+  ✓  12 [desktop] › e2e/staff-shell.spec.ts:120:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome (4.0s)
+  9 skipped
+  3 passed (9.3s)

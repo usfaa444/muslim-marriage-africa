@@ -1,0 +1,47 @@
+== qa.dup1@example.bf rows: 1
+An account already uses this email. Nothing was changed.
+exit 1
+An account already uses this email. Nothing was changed.
+exit 1
+Staff account created: qa.dup1@example.bf (moderator).
+One-time password: [redacted]
+Sign in at /staff/connexion, then enroll an authenticator app.
+exit 0
+== qa.dup2@example.bf rows: 1
+Staff account created: qa.dup2@example.bf (moderator).
+One-time password: [redacted]
+Sign in at /staff/connexion, then enroll an authenticator app.
+exit 0
+An account already uses this email. Nothing was changed.
+exit 1
+An account already uses this email. Nothing was changed.
+exit 1
+== qa.dup3@example.bf rows: 1
+An account already uses this email. Nothing was changed.
+exit 1
+Staff account created: qa.dup3@example.bf (operator).
+One-time password: [redacted]
+Sign in at /staff/connexion, then enroll an authenticator app.
+exit 0
+An account already uses this email. Nothing was changed.
+exit 1
+== bad role
+--role must be moderator or operator.
+Usage:
+  node apps/api/dist/staff-cli.js create --email <email> --role moderator|operator
+  node apps/api/dist/staff-cli.js reset-mfa --email <email>
+  node apps/api/dist/staff-cli.js disable --email <email>
+exit 2
+== malformed email
+A valid --email is required.
+Usage:
+  node apps/api/dist/staff-cli.js create --email <email> --role moderator|operator
+  node apps/api/dist/staff-cli.js reset-mfa --email <email>
+  node apps/api/dist/staff-cli.js disable --email <email>
+exit 2
+== no args
+Usage:
+  node apps/api/dist/staff-cli.js create --email <email> --role moderator|operator
+  node apps/api/dist/staff-cli.js reset-mfa --email <email>
+  node apps/api/dist/staff-cli.js disable --email <email>
+exit 2

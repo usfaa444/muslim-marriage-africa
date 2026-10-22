@@ -1,0 +1,25 @@
+== F1 mutation: non-atomic claim (claim always attempt 1, never locks)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/operator-config.migrate.test.ts > operator_config migration > counts staff code attempts atomically, refuses a staff session without a step, and a duplicate create (Story 12.1, QA round 1)
+      Tests  1 failed | 11 passed (12)
+Updated 1 path from the index
+== F11 mutation: requireStaffSession ignores MFA-pending (controller layer only)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC4 separation > refuses an MFA-pending session in the staff controllers themselves, not only in the cookie gate
+      Tests  1 failed | 24 passed (25)
+Updated 1 path from the index
+== F1 unit mutation: memory store claim lock threshold
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC3 enrolled sign-in > locks sign-in for 15 minutes after 5 wrong codes, then opens again
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC3 enrolled sign-in > checks at most 5 codes when 40 wrong codes arrive at once on 40 pending sessions, and locks once
+      Tests  2 failed | 23 passed (25)
+Updated 1 path from the index
+== F2 mutation: stubs enabled in production
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/staff-pages.test.ts > staff page routing (Story 12.1) > ignores stub cookies in a production build: a forged staff cookie must pass the API check
+      Tests  1 failed | 8 passed (9)
+Updated 1 path from the index
+== F3 mutation (constraint) is DB-level: verified live above (23514)

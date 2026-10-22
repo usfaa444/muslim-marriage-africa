@@ -1,0 +1,17 @@
+mod login 401
+reset-mfa: Authenticator enrollment cleared. The next sign-in enrolls again.
+old full session 401 old pending 401
+signin after reset enroll
+new secret differs true
+old secret code at re-enroll 401
+new secret code 200 done
+login again 200
+disable: Staff account disabled. Its sessions have ended.
+after disable: old session 401
+signin disabled 401 Identifiant ou mot de passe incorrect.
+signin unknown 401 Identifiant ou mot de passe incorrect.
+signin member acct at staff 401 Identifiant ou mot de passe incorrect.
+signin wrong pw 401 Identifiant ou mot de passe incorrect.
+no captcha 400 CAPTCHA_FAILED
+bad captcha 400 CAPTCHA_FAILED
+disable again/reset on disabled: Authenticator enrollment cleared. The next sign-in enrolls again.

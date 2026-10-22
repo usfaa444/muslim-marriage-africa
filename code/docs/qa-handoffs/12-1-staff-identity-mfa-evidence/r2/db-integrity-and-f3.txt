@@ -1,0 +1,8 @@
+accounts(gender none): 7
+staff_credential rows: 7
+credential password rows for staff: 7
+created audit rows: 7
+dup created audit: 3
+gap: check constraint NULL staff session:
+ERROR:  new row for relation "session" violates check constraint "session_mfa_state_check"
+DETAIL:  Failing row contains (f6bd05e5-b688-4488-9811-95bd05a8e3f4, 01a164ee-fcc5-78a4-aa79-a5fa4b85da75, staff, 2026-10-22 18:49:09.125354+00, 2026-10-22 18:49:09.125354+00, null).
