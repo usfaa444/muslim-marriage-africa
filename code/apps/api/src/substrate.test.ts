@@ -13,8 +13,15 @@ import {
   redisSettings,
 } from './redis-substrate.js'
 import { writeTestObjectAndEnqueueNoOp } from './substrate.js'
+import { RECAPTCHA_TEST_SECRET_KEY, RECAPTCHA_TEST_SITE_KEY } from './recaptcha.js'
 
 const apiRoot = fileURLToPath(new URL('..', import.meta.url))
+// Story 2.2 refuses to boot without reCAPTCHA keys; the documented test pair is enough here.
+const RECAPTCHA_TEST_ENV = {
+  RECAPTCHA_SITE_KEY: RECAPTCHA_TEST_SITE_KEY,
+  RECAPTCHA_SECRET_KEY: RECAPTCHA_TEST_SECRET_KEY,
+  RECAPTCHA_ALLOW_TEST_KEYS: '1',
+}
 const tsc = fileURLToPath(new URL('../../../node_modules/typescript/bin/tsc', import.meta.url))
 const minioImage = 'pgsty/minio:RELEASE.2026-08-04T00-00-00Z'
 
@@ -268,6 +275,7 @@ describe('redis and S3-compatible substrate', () => {
       cwd: apiRoot,
       env: {
         ...process.env,
+        ...RECAPTCHA_TEST_ENV,
         PROCESS_ROLE: 'worker',
         PORT: String(httpPort),
         REDIS_HOST: '127.0.0.1',
@@ -312,6 +320,7 @@ describe('redis and S3-compatible substrate', () => {
       cwd: apiRoot,
       env: {
         ...process.env,
+        ...RECAPTCHA_TEST_ENV,
         PROCESS_ROLE: 'worker',
         PORT: String(httpPort),
         REDIS_HOST: '127.0.0.1',

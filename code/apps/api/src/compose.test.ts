@@ -301,7 +301,7 @@ describe('docker compose up', () => {
       'api',
       'node',
       '-e',
-      "fetch('http://web:3000/auth').then(async (response) => { const html = await response.text(); if (!response.ok || !html.includes('function validateSubmissionState') || !html.includes('Démarche')) process.exit(1); }).catch(() => process.exit(1))",
+      "fetch('http://web:3000/auth').then(async (response) => { const html = await response.text(); if (!response.ok || !html.includes('id=\"panel-login\"') || !html.includes('/v1/sessions')) process.exit(1); }).catch(() => process.exit(1))",
     ])
     await run([
       ...projectArgs,
