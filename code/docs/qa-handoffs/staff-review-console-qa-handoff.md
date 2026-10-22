@@ -292,3 +292,41 @@ New French strings in round 2:
   - No horizontal scroll at 360 and 1440.
   - The profile shows "Situation matrimoniale Célibataire" and "Études Licence / Bac+3".
   - After "Mineure présumée", the member's `/id-liveness` at 390 px shows the hold notice and none of the four capture buttons (count 0 each), with no horizontal scroll.
+
+## Round 3 (QA round 2 FAIL on 203c273: R2-1)
+
+The updated QA report has been copied to `code/docs/qa-handoffs/staff-review-console-qa-report.md`.
+
+| Finding | Fix | Test (fails without the fix) |
+| --- | --- | --- |
+| R2-1 Major: axe `serious` color-contrast 4.41:1 on the 11 px "Caméra frontale" label of `/id-liveness` | "Caméra frontale" goes from `text-deep-navy/60` to `/80`. Its sibling "Délivrée par l'Office National d'Identification (Burkina Faso)" (11 px, `/65`) also goes to `/80`. | `v2-id-liveness.test.ts` "keeps no 11 px text on the page lighter than navy/70": every 11 px class on the served page must be navy/70 or darker. The new e2e sweep below fails on the old class with "serious color-contrast … 4.41 … Caméra frontale" (checked by putting `/60` back). |
+
+Also fixed during the sweep: when the pose service answered 5xx, the member page showed the API's English "Request failed". It now shows "Le geste à faire n'a pas pu être chargé. Réessayez." The API's French message is still shown for a 4xx. The sweep checks this text.
+
+### Axe sweep of every touched state (serious and critical, WCAG 2.2 AA)
+
+New web-only e2e, styled with the Tailwind stand-in: `e2e/staff-review.spec.ts`, "contrast sweep of the touched states". It runs `expectAccessible` and the overflow check at 360, 390 and 1440 on these states:
+- `/id-liveness`:
+  - ID and selfie steps with a pose card
+  - ID refusal and selfie refusal notices
+  - held notice
+  - pose expired after a real fake-camera capture and upload
+  - pose unavailable (challenge 503 on "Reprendre la capture")
+- `/staff/revue`:
+  - queue
+  - case, with evidence shown from blob URLs
+  - alert after a 409
+  - Operator view
+
+Results:
+- All states passed with no serious or critical violation, and with no horizontal scroll.
+- In my runs axe reported no icon-ligature hits. QA's run did show hits on the gold icon ligature text, because the stand-in cannot load the Material Symbols font. Those are environmental: with the real font the ligature renders as an icon, not text.
+- On the stack, a real member's `/id-liveness` (pose step) gave `serious/critical []` at 360, 390 and 1440.
+
+### Round 3 self-check (2026-10-22)
+
+- Lint: exit 0, the same 3 warnings in files this story does not touch. Typecheck: pass. Build: pass.
+- Unit: `Test Files 1 failed | 69 passed | 2 skipped (72)`, `Tests 1 failed | 481 passed | 12 skipped (494)`. The failure is the known `photo-rules.test.ts`.
+- Integration, run with no stack up: `Test Files 1 failed | 4 passed (5)`, `Tests 29 passed | 2 skipped (31)`. The failure is the known `compose.test.ts`.
+- E2E web-only, full suite: `72 passed`, 20 skipped.
+- E2E against a fresh `ankanu-dev-review` stack built from this commit, with fresh staff accounts: `36 passed (1.8m)`, 56 skipped. The two sweep tests and the other stub tests skip on a built image.

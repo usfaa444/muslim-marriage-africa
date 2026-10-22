@@ -229,6 +229,17 @@ export function idHtml(stitch: string): string {
     '<span class="text-[11px] text-deep-navy/60 font-medium">CNIB • Passeport • Carte Consulaire</span>',
     '<span class="text-[11px] text-deep-navy/80 font-medium">CNIB • Passeport • Carte Consulaire</span>',
   )
+  // QA round 2 (R2-1): the 11 px step labels pass 4.5:1 on cream.
+  html = placeOnce(
+    html,
+    '<span class="text-[11px] text-deep-navy/60 font-medium">Caméra frontale</span>',
+    '<span class="text-[11px] text-deep-navy/80 font-medium">Caméra frontale</span>',
+  )
+  html = placeOnce(
+    html,
+    '<p class="text-[11px] text-deep-navy/65 mt-0.5">Délivrée par',
+    '<p class="text-[11px] text-deep-navy/80 mt-0.5">Délivrée par',
+  )
   return mount(html, idScript())
 }
 

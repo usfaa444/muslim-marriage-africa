@@ -142,3 +142,56 @@ F1 needs a fix and a retest, because it is a Major (G5). After the fix I would r
 - **Evidence encrypted at rest in MinIO.** Not re-checked, because the sealing format was not changed here.
 - **The 5 public smoke and 4 PIN-test failures on a baseline commit.** Not run (see G2).
 - **`compose.test.ts`.** Not run, see G2. It conflicts with a running stack and fails at `npm ci` anyway.
+
+---
+
+# Retest, round 2
+
+model: Claude Sonnet 5.5 (claude-sonnet-5-5)
+
+Verdict: **FAIL** (2026-10-22). Round 1's Major (F1) is fixed and verified on the real stack. The retest found one remaining axe `serious` item on the member `/id-liveness` page (R2-1, below). Everything else from F2 to F9 is fixed or accepted.
+
+- Build: commit `203c273` (branch `factory/staff-review-console`), same worktree `/home/claude/ankanu-qa-review`.
+- Environment: fresh stack from this commit (compose project `ankanu-qa-review`, new images, **fresh database**, `pg-data` recreated), migrations 0000 to 0020 applied from the host, bucket created. Same sandbox stand-ins as round 1. No pg-data-deleting test ran next to the stack.
+- Cleanup: stack removed with `down -v`, images and scratch files removed, `/etc/hosts` and `next-env.d.ts` restored, no standin process left.
+- Evidence: `staff-review-console-evidence/round2/`. The round 1 evidence is unchanged.
+
+## Round 1 findings, retested
+
+| # | Result | How verified |
+| --- | --- | --- |
+| F1 (Major) | **FIXED** | On the real stack, in a browser. Scenario 1, two Moderators open the same case: Moderator 2 approves the ID, then Moderator 1 refuses it. Moderator 1's console shows, in a visible `role="alert"` line scrolled into view and focused: "Ce dossier a changé depuis son ouverture (autre décision ou nouvelle prise du membre). Votre décision n'a pas été enregistrée : le dossier a été rechargé, vérifiez son état avant de décider." The case reloaded (ID shows "Approuvé", form gone). A double click sent 1 POST. In the database the ID is `granted` by Moderator 2 with no reason, and there is one audit decision row: nothing overwritten. Scenario 2, the member retakes the selfie after the case was opened: Moderator approves the old one and gets the same alert; the case reloads with the new pose ("Touchez votre oreille gauche"); the old selfie stays `pending` with no decider; the new one is `pending`. Evidence: `b7-round2-walk.txt`, `shots/f1-two-moderators.png`, `shots/f1-member-retake.png`. |
+| F2 | **FIXED** | The case shows "Ouagadougou", "Célibataire" and "Non"; no English tokens. |
+| F3 | **FIXED** | After retakes the history reads "Remplacée par une nouvelle prise (non examinée)". Mutation (revert the label) fails a unit test. |
+| F4 | **FIXED on the page; API behaviour judged acceptable** | The held member's `/id-liveness` (390 px) shows the hold notice and none of the four capture controls is visible (`visible=false disabled=true`), no overflow. The API still stores an upload from a held member as a `held` row (201, re-run: `a6.txt`). I judge this acceptable and consistent with Story 2.6: the account stays `held`, the profile stays `held`, the new row is `held` so it never enters the queue, and a hold cannot be lifted or bypassed this way (H stayed held after the selfie approval and the profile review, and the profile was invisible to other members). The remaining cost is storage of unreviewed evidence, which Story 2.6 already allowed. |
+| F5 | **FIXED (header); limitation unchanged** | The 429 now carries `Retry-After: 60` and the French message (33 parallel views: 30 x 200, 3 x 429). The counter is still in process, which the handoff discloses. Accepted as a documented limit. |
+| F6 | **FIXED** | `GET /v1/staff/cases`, `POST /v1/staff/cases` and `GET /v1/staff/metrics` answer `Cache-Control: no-store` (matrix in `a2.txt`). A mutation that removes it from metrics fails a unit test. |
+| F7 | **FIXED** | The test now pins 30. Mutation 30 to 3000 fails the rate-limit test. |
+| F8 | **FIXED** | A 500 on the queue shows "La file n'a pas pu être chargée. Réessayez dans un instant." |
+| F9 | **PARTLY FIXED, see R2-1** | "Remplacer" and "Se connecter avec un autre compte" are now at least 44 px: no control under 44 px at 360, 390, 768 and 1440. The "CNIB • Passeport • Carte Consulaire" line was raised to navy/80. One sibling line was left at 4.41:1 (R2-1). |
+| F10 | Unchanged | Old `next` audit, not caused by this story. Left as agreed. |
+
+## New finding
+
+| # | Severity | Gate | Steps to reproduce | Expected | Actual | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| R2-1 | Major | G6 | Open `/id-liveness` as a member with phone OTP granted, run axe (WCAG 2.2 AA) at 390 px. | No serious violation on a screen this story changed. | axe reports `serious color-contrast` 4.41:1 (needs 4.5:1) on the 11 px "Caméra frontale" label (`text-[11px] text-deep-navy/60`, Stitch 07 line 111). The round 2 fix darkened the "CNIB" label (line 84) but not this one. The other axe hits in this run are the gold icon ligature text (the stand-in cannot load the icon font), which I treat as environmental. A one-class fix (`/60` to `/80`) with a test. | `round2/b8-member-targets.txt` |
+
+I rate R2-1 Major because the severity rule counts an axe `serious` result as blocking. It is a trivial fix with a clear contrast margin, but it keeps the verdict at FAIL.
+
+## Gates re-run
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS. Lint exit 0 (same 3 old warnings), typecheck pass, migration-check "Everything's fine", no secrets or debug leftovers in the round 2 diff, no new audit issue. | `round2/g1-static.txt` |
+| G2 Tests | PASS. Unit: `Tests 1 failed | 480 passed | 12 skipped (493)`; the one failure is the known `photo-rules.test.ts`. E2E on the stack: 31 passed, 52 skipped, 5 failed. The 5 are the same public `smoke.spec.ts` items as round 1 (axe contrast on icon text, target size and a 1068 > 1024 width on `/`, caused by the missing icon font), not in this story's diff. The full-stack capture-to-publish test (now includes the real stale 409) and the staff first sign-in test pass. Web-only `staff-review` and `staff-shell` with `--repeat-each=3`: 78 passed, 18 skipped, 0 failed, so no flakes. Mutations: superseded label, Retry-After, metrics no-store and 30 to 3000 are all caught; removing the guard in the "Reprendre la capture" handler survives because the button is also hidden and disabled (defence in depth). | `round2/g2-*`, `unit-run.txt` |
+| G3 Functional | PASS (F1 to F8 above). | `b7-round2-walk.txt` |
+| G4 UI fidelity | PASS on layout: no horizontal scroll at 360, 390, 768, 1024, 1280, 1440 on the console and the member page. Same stand-in limit as round 1. | `shots/` |
+| G5 UX | PASS. The F1 message is visible, announced as an alert, focused and in view, and the case reloads. | `b7` |
+| G6 Accessibility | FAIL on R2-1 only. I did not re-run my own axe pass on the staff console in round 2. The e2e tests that call `expectAccessible` on the console (web-only, 3 repeats, and the full-stack test) passed. | `b8-member-targets.txt` |
+| G7 Non-functional | PASS. Access matrix identical to round 1 (signed out, forged uuid, stub, 3000-char cookie, member, brother, Mahram, MFA-pending, Operator, Moderator over 10 endpoints). Evidence headers, audit, unblur scope and expiry, pose and challenge checks, decision validation and 10-way concurrency all re-ran with the same results. | `a1` to `a6`, `b7` |
+| G8 Regression | PASS apart from the 5 environmental smoke failures. | `g2-e2e-stack-full.log` |
+
+## Not tested in round 2
+
+Same as round 1: WebKit, Lighthouse under the real CDN, ZAP, exact Stitch pixel match, Premium ordering end to end, and baseline-commit runs of the 5 public smoke failures. `compose.test.ts` was not run.

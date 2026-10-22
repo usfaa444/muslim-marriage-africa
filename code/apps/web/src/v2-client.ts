@@ -702,7 +702,8 @@ export function idScript(options: { tickMs?: number } = {}): string {
           showPose(challenge)
           return true
         }
-        if (loud) showCaptureError(errorMessage(payload) || COPY.poseUnavailable)
+        // A 4xx carries the API's French message; a 5xx says "Request failed", so the page says it in French.
+        if (loud) showCaptureError((response.status < 500 && errorMessage(payload)) || COPY.poseUnavailable)
         return false
       } catch (error) {
         if (loud) showCaptureError(COPY.poseUnavailable)

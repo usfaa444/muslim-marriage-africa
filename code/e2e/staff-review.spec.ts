@@ -356,6 +356,142 @@ test.describe('staff review console (web-only, synthetic data)', () => {
   })
 })
 
+// ---- Contrast and axe sweep (QA round 2) ----
+// Every state this story touches, styled with the page's Tailwind config, at 360, 390 and 1440 px.
+
+const SWEEP = [360, 390, 1440] as const
+
+async function sweep(page: Page, label: string) {
+  for (const width of SWEEP) {
+    await page.setViewportSize({ width, height: 900 })
+    await expectNoHorizontalOverflow(page)
+    await test.step(`${label} at ${width}`, async () => {
+      await expectAccessible(page)
+    })
+  }
+}
+
+type Captures = { id: Record<string, unknown>; live: Record<string, unknown>; challenge?: number }
+
+async function stubMember(page: Page, baseURL: string | undefined, rows: Captures) {
+  await page.context().addCookies([{ name: 'ankanu_session', value: 'web', url: baseURL ?? '' }])
+  const posted: string[] = []
+  await page.route('**/v1/verifications/id', async (route) => {
+    if (route.request().method() === 'POST') {
+      posted.push('id')
+      await route.fulfill({ status: 201, json: { id: ID_RECORD, kind: 'id_document', status: 'pending' } })
+      return
+    }
+    await route.fulfill({ json: rows.id })
+  })
+  await page.route('**/v1/verifications/liveness', async (route) => {
+    if (route.request().method() === 'POST') {
+      posted.push('liveness')
+      await route.fulfill({
+        status: 400,
+        json: { error: { code: 'VERIFICATION_RETAKE', message: 'Reprenez la capture.', details: { field: 'challenge_id', reason: 'challenge' }, retryable: true } },
+      })
+      return
+    }
+    await route.fulfill({ json: rows.live })
+  })
+  await page.route('**/v1/verifications/liveness-challenge', (route) =>
+    rows.challenge && rows.challenge >= 500
+      ? route.fulfill({ status: rows.challenge, json: { error: { code: 'UNHANDLED', message: 'Request failed', details: null, retryable: true } } })
+      : route.fulfill({
+          status: 201,
+          json: { challenge_id: '01990000-0000-7000-8000-0000000000c1', pose: 'thumbs_up', pose_label: 'Levez le pouce', expires_at: '2026-10-22T10:10:00.000Z' },
+        }),
+  )
+  await page.route('**/v1/accounts/gate', (route) => route.fulfill({ json: { step: 'identity' } }))
+  return posted
+}
+
+test.describe('contrast sweep of the touched states (web-only, synthetic data)', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+
+  test('/id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose', async ({ page, baseURL, guards }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'the sweep sets its own widths')
+    test.setTimeout(120_000)
+    await stubMember(page, baseURL, { id: { status: 'none' }, live: { status: 'none' } })
+    await page.goto('/id-liveness')
+    await expect(page.getByTestId('pose-label')).toHaveText('Levez le pouce')
+    await sweep(page, 'ID and selfie steps with a pose')
+
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+    await stubMember(page, baseURL, {
+      id: { id: ID_RECORD, kind: 'id_document', status: 'rejected', reason: 'unreadable' },
+      live: { id: LIVE_RECORD, kind: 'liveness', status: 'rejected', reason: 'pose_not_done' },
+    })
+    await page.goto('/id-liveness')
+    await expect(page.getByTestId('id-reject')).toContainText('la photo de la pièce est illisible')
+    await expect(page.getByTestId('live-reject')).toContainText("le geste demandé n'apparaît pas sur le selfie")
+    await sweep(page, 'ID and selfie refusal notices')
+
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+    await stubMember(page, baseURL, {
+      id: { id: ID_RECORD, kind: 'id_document', status: 'held' },
+      live: { id: LIVE_RECORD, kind: 'liveness', status: 'held' },
+    })
+    await page.goto('/id-liveness')
+    await expect(page.getByTestId('id-held')).toBeVisible()
+    await sweep(page, 'held notice')
+
+    // The pose expired before the upload: a new pose and the expiry message.
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+    const posted = await stubMember(page, baseURL, { id: { status: 'none' }, live: { status: 'none' } })
+    await page.setViewportSize({ width: 1440, height: 900 })
+    await page.goto('/id-liveness')
+    await expect(page.getByTestId('pose-card')).toBeVisible()
+    await page.locator('input[type=file]').first().setInputFiles({ name: 'piece.jpg', mimeType: 'image/jpeg', buffer: syntheticJpeg('id') })
+    await page.locator('#trigger-cam-btn').click()
+    await expect(page.locator('#pose-countdown')).toBeVisible()
+    await expect(page.locator('#pose-countdown')).toBeHidden({ timeout: 15_000 })
+    await page.getByRole('button', { name: /Confirmer et transmettre/ }).click()
+    await expect(page.locator('#id-error-text')).toHaveText('Le geste a expiré. Reprenez le selfie avec le nouveau geste.')
+    expect(posted).toEqual(['id', 'liveness'])
+    await sweep(page, 'pose expired message')
+
+    // The pose service fails when the member asks for a new pose.
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+    await stubMember(page, baseURL, { id: { status: 'none' }, live: { status: 'none' }, challenge: 503 })
+    await page.goto('/id-liveness')
+    await page.getByRole('button', { name: /Reprendre la capture/ }).click()
+    await expect(page.locator('#id-error-text')).toHaveText("Le geste à faire n'a pas pu être chargé. Réessayez.")
+    await sweep(page, 'pose unavailable message')
+    // The browser logs the expected 400 and 503 answers.
+    guards.consoleErrors.splice(0)
+  })
+
+  test('/staff/revue: queue, case, Operator view and the alert after a 409', async ({ page, baseURL, guards }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'the sweep sets its own widths')
+    test.setTimeout(120_000)
+    await asStaffStub(page, baseURL)
+    await stubConsole(page, 'moderator', { staleDecision: true })
+    await page.goto('/staff/revue')
+    await expect(page.getByRole('button', { name: /Aminata_test/ })).toBeVisible()
+    await sweep(page, 'queue')
+    await page.getByRole('button', { name: /Aminata_test/ }).click()
+    await expect(page.getByTestId('case-pose')).toHaveText('Levez le pouce')
+    await page.getByRole('button', { name: 'Afficher la pièce' }).click()
+    await page.getByRole('button', { name: 'Afficher le selfie' }).click()
+    await expect(page.getByRole('img', { name: 'Selfie envoyé par le membre' })).toHaveAttribute('src', /^blob:/)
+    await sweep(page, 'case')
+    const idForm = page.getByTestId('decision-id_document')
+    await idForm.getByLabel('Approuver').check()
+    await idForm.getByRole('button', { name: 'Enregistrer la décision' }).click()
+    await expect(page.getByRole('alert')).toContainText('Ce dossier a changé')
+    await sweep(page, 'alert after a 409')
+    guards.consoleErrors.splice(0)
+
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+    await stubConsole(page, 'operator')
+    await page.goto('/staff/revue')
+    await expect(page.getByTestId('review-operator')).toBeVisible()
+    await sweep(page, 'Operator view')
+  })
+})
+
 // ---- Full stack ----
 
 function apiLog(): string {

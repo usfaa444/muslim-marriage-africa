@@ -611,6 +611,13 @@ describe('id-liveness confirm', () => {
     expect(page).toContain('text-[11px] text-deep-navy/80 font-medium">CNIB • Passeport • Carte Consulaire')
   })
 
+  it('keeps no 11 px text on the page lighter than navy/70 (QA round 2, R2-1)', () => {
+    const page = idHtml(stitch('07-id-liveness'))
+    expect(page).toContain('text-[11px] text-deep-navy/80 font-medium">Caméra frontale')
+    const faint = (page.match(/class="[^"]*text-\[11px\][^"]*"/g) ?? []).filter((cls) => /text-deep-navy\/(?:[1-6]\d)\b/.test(cls))
+    expect(faint).toEqual([])
+  })
+
   it('puts the error line on the served page and does not call a native dialog', () => {
     const page = idHtml(stitch('07-id-liveness'))
     expect(page).toContain('id="id-error"')
