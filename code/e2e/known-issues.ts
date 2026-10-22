@@ -30,9 +30,9 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     reason: "Google's reCAPTCHA iframe loads its own stylesheet by XHR and gstatic refuses it by CORS. Third-party code, not ours.",
   },
   {
-    // The same refused stylesheet, as Chromium's console line and as the guard's failed request.
+    // The same refused stylesheet, as Chromium's console line.
     pattern:
-      /^(?:Failed to load resource: net::ERR_FAILED |GET )https:\/\/www\.gstatic\.com\/recaptcha\/releases\/[\w-]+\/styles__ltr\.css(?: net::ERR_FAILED)?$/,
+      /^Failed to load resource: net::ERR_FAILED https:\/\/www\.gstatic\.com\/recaptcha\/releases\/[\w-]+\/styles__ltr\.css$/,
     reason: "The reCAPTCHA stylesheet that gstatic refuses to Google's own iframe. Third-party code, not ours.",
   },
   {
@@ -43,9 +43,12 @@ export const KNOWN_ISSUES: KnownIssue[] = [
       "Google's reCAPTCHA frame carries a report-only frame-ancestors policy that logs when our page embeds it. Report-only, third-party, not ours.",
   },
   {
-    // The report beacon of that same policy, which Chromium's opaque-response blocking drops.
-    pattern: /^POST https:\/\/csp\.withgoogle\.com\/csp\/script-inclusions\/[0-9a-f]+ net::ERR_BLOCKED_BY_ORB$/,
-    reason: "Google's reCAPTCHA frame posts its CSP report to csp.withgoogle.com and Chromium blocks the reply. Third-party code, not ours.",
+    // Network failures of the widget's own requests (refused stylesheet, CSP report beacons that
+    // opaque-response blocking drops, a frame load aborted when the test ends or resizes). These
+    // hosts are Google's reCAPTCHA infrastructure only; a failure of ours never matches.
+    pattern:
+      /^(?:GET|POST) https:\/\/(?:www\.google\.com\/recaptcha\/api2\/|www\.gstatic\.com\/recaptcha\/releases\/|csp\.withgoogle\.com\/csp\/)\S* net::ERR_[A-Z_]+$/,
+    reason: "A failed network request made by Google's reCAPTCHA widget to Google's own hosts. Third-party code, not ours.",
   },
 ]
 
