@@ -1,0 +1,11 @@
+$ (cd apps/api && DATABASE_URL=postgres://ankanu@127.0.0.1:55432/ankanu npx drizzle-kit migrate)
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/home/claude/ankanu-e2e-fix/code/apps/api/drizzle.config.ts'
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[⣯] applying migrations...[2K[1G[✓] migrations applied successfully!exit 0
+
+--- re-run (idempotent?)
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/home/claude/ankanu-e2e-fix/code/apps/api/drizzle.config.ts'
+Using 'pg' driver for database querying
+[⣷] applying migrations...[2K[1G[✓] migrations applied successfully!

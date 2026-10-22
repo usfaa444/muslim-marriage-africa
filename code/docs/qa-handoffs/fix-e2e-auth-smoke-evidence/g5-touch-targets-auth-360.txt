@@ -1,0 +1,9 @@
+button#tab-signup Créer un compte 135x44
+button#tab-login Connexion 135x44
+input#login-email email 278x48
+a# Mot de passe oublié ? 125x16
+input#login-password password 278x48
+button# Afficher ou masquer le mot de  36x36
+input#login-remember checkbox 16x16 (wrapping label 134x16)
+button#login-submit login
+Se connecter 278x48

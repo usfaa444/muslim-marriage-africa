@@ -1,0 +1,48 @@
+
+Running 5 tests using 1 worker
+
+annotations: [
+ "Google's reCAPTCHA iframes ask for third-party storage access on load and headless Chromium denies it. Third-party code, not ours. (requestStorageAccess: Permission denied. https://www.google.com/recaptcha/api2/anchor?ar=1&k=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI&co=aHR0cDovL2xvY2FsaG9zdDo0MDEy&hl=fr&v=abc_DEF-123&size=normal&anchor-ms=20000&execute-ms=15000&cb=q1w2e3)",
+ "Google's reCAPTCHA iframes ask for third-party storage access on load and headless Chromium denies it. Third-party code, not ours. (requestStorageAccess: Permission denied. https://www.google.com/recaptcha/api2/bframe?hl=fr&v=abc_DEF-123&k=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI)"
+]
+  ✓  1 [desktop] › recaptcha-sim.spec.ts:28:5 › test-key iframes: the storage-access message is tolerated, annotated, and nothing else is (2.3s)
+  ✘  2 [desktop] › recaptcha-sim.spec.ts:39:5 › a different site key is NOT tolerated (2.1s)
+  ✘  3 [desktop] › recaptcha-sim.spec.ts:46:5 › test-key iframe that also logs another error is NOT tolerated (2.1s)
+  ✘  4 [desktop] › recaptcha-sim.spec.ts:53:5 › the same message from our own origin is NOT tolerated (2.2s)
+  ✘  5 [desktop] › recaptcha-sim.spec.ts:62:5 › unhandled rejection from the iframe surfaces as a page error, which is NOT tolerated (documents a residual risk) (2.1s)
+
+  5 passed (12.0s)
+  1) [desktop] › recaptcha-sim.spec.ts:39:5 › a different site key is NOT tolerated ────────────────
+    Error: console errors
+    - Expected  - 1
+    + Received  + 4
+    - Array []
+    + Array [
+    +   "requestStorageAccess: Permission denied. https://www.google.com/recaptcha/api2/anchor?ar=1&k=6LcSomeOtherSiteKey_0123456789abcdefghijk&co=aHR0cDovL2xvY2FsaG9zdDo0MDEy&hl=fr&v=abc_DEF-123&size=normal&anchor-ms=20000&execute-ms=15000&cb=q1w2e3",
+    +   "requestStorageAccess: Permission denied. https://www.google.com/recaptcha/api2/bframe?hl=fr&v=abc_DEF-123&k=6LcSomeOtherSiteKey_0123456789abcdefghijk",
+    + ]
+  2) [desktop] › recaptcha-sim.spec.ts:46:5 › test-key iframe that also logs another error is NOT tolerated 
+    Error: console errors
+    - Expected  - 1
+    + Received  + 4
+    - Array []
+    + Array [
+    +   "Uncaught TypeError: x is not a function https://www.google.com/recaptcha/api2/anchor?ar=1&k=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI&co=aHR0cDovL2xvY2FsaG9zdDo0MDEy&hl=fr&v=abc_DEF-123&size=normal&anchor-ms=20000&execute-ms=15000&cb=q1w2e3",
+    +   "Uncaught TypeError: x is not a function https://www.google.com/recaptcha/api2/bframe?hl=fr&v=abc_DEF-123&k=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
+    + ]
+  3) [desktop] › recaptcha-sim.spec.ts:53:5 › the same message from our own origin is NOT tolerated 
+    Error: console errors
+    - Expected  - 1
+    + Received  + 3
+    - Array []
+    + Array [
+    +   "requestStorageAccess: Permission denied. about:srcdoc",
+    + ]
+  4) [desktop] › recaptcha-sim.spec.ts:62:5 › unhandled rejection from the iframe surfaces as a page error, which is NOT tolerated (documents a residual risk) 
+    Error: console errors
+    - Expected  - 1
+    + Received  + 3
+    - Array []
+    + Array [
+    +   "requestStorageAccess not allowed",
+    + ]

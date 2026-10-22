@@ -234,6 +234,41 @@ describe('POST /v1/sessions', () => {
     expect(sessions.sessions).toHaveLength(before)
   })
 
+  it('answers the signup gate with 401 UNAUTHENTICATED when no live session is sent', async () => {
+    const none = await fetch(`${base}/v1/accounts/gate`)
+    const unknown = await fetch(`${base}/v1/accounts/gate`, {
+      headers: { cookie: `${SESSION_COOKIE}=01990000-0000-7000-8000-000000000000` },
+    })
+    const opened = await fetch(`${base}/v1/sessions`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        identifier: 'fatim@example.bf',
+        password: 'phrase avec espaces',
+        remember_me: false,
+        recaptcha_token: 'test-ok',
+      }),
+    })
+    expect(opened.status).toBe(201)
+    const sessionId = ((await opened.json()) as { id: string }).id
+    const started = now
+    now = new Date(started.getTime() + TWELVE_HOURS_MS)
+    try {
+      const expired = await fetch(`${base}/v1/accounts/gate`, {
+        headers: { cookie: `${SESSION_COOKIE}=${sessionId}` },
+      })
+      for (const response of [none, unknown, expired]) {
+        const body = (await response.json()) as { error: { code: string; retryable: boolean } }
+        expect(response.status).toBe(401)
+        expect(body.error.code).toBe('UNAUTHENTICATED')
+        expect(body.error.retryable).toBe(false)
+        expect(body).not.toHaveProperty('step')
+      }
+    } finally {
+      now = started
+    }
+  })
+
   it('does not open a session when the identifier matches two accounts', async () => {
     await createAccount({ email: 'autre@example.bf', pseudonym: 'fatim@example.bf' })
     const before = sessions.sessions.length

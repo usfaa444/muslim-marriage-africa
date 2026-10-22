@@ -1,0 +1,70 @@
+// QA scratch spec (not part of the repo): simulate Google's reCAPTCHA iframes at their real URLs
+// (https://www.google.com/recaptcha/api2/{anchor,bframe}?...k=<key>) with page.route, because Google is
+// unreachable in this sandbox. The iframe calls document.requestStorageAccess() the way Google's does.
+// The repo's own fixture (guards) decides pass or fail.
+import { expect, test } from '/home/claude/ankanu-e2e-fix/code/e2e/fixtures'
+
+const TEST_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+async function simulate(page: import('@playwright/test').Page, key: string, extraIframeScript = '') {
+  await page.route('https://www.google.com/recaptcha/api.js*', (route) =>
+    route.fulfill({
+      contentType: 'text/javascript',
+      body: `(function(){
+        function add(src){var f=document.createElement('iframe');f.src=src;f.style.cssText='width:300px;height:76px;border:0';document.body.appendChild(f)}
+        add('https://www.google.com/recaptcha/api2/anchor?ar=1&k=${key}&co=aHR0cDovL2xvY2FsaG9zdDo0MDEy&hl=fr&v=abc_DEF-123&size=normal&anchor-ms=20000&execute-ms=15000&cb=q1w2e3');
+        add('https://www.google.com/recaptcha/api2/bframe?hl=fr&v=abc_DEF-123&k=${key}');
+      })()`,
+    }),
+  )
+  await page.route('https://www.google.com/recaptcha/api2/**', (route) =>
+    route.fulfill({
+      contentType: 'text/html',
+      body: `<!doctype html><script>document.requestStorageAccess().catch(function(){});${extraIframeScript}</script>`,
+    }),
+  )
+  await page.route('https://cdn.tailwindcss.com/**', (route) => route.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+}
+
+test('test-key iframes: the storage-access message is tolerated, annotated, and nothing else is', async ({ page }, testInfo) => {
+  await simulate(page, TEST_KEY)
+  await page.goto('/auth')
+  await page.waitForLoadState('networkidle')
+  await page.waitForTimeout(1000)
+  const notes = testInfo.annotations.filter((a) => a.type === 'known-issue').map((a) => a.description ?? '')
+  console.log('annotations:', JSON.stringify(notes, null, 1))
+  expect(notes.filter((n) => n.includes('anchor?'))).toHaveLength(1)
+  expect(notes.filter((n) => n.includes('bframe?'))).toHaveLength(1)
+})
+
+test('a different site key is NOT tolerated', async ({ page }) => {
+  test.fail(!process.env.SHOW, 'expected: the guard fails this test')
+  await simulate(page, '6LcSomeOtherSiteKey_0123456789abcdefghijk')
+  await page.goto('/auth')
+  await page.waitForTimeout(1500)
+})
+
+test('test-key iframe that also logs another error is NOT tolerated', async ({ page }) => {
+  test.fail(!process.env.SHOW, 'expected: the guard fails this test')
+  await simulate(page, TEST_KEY, 'console.error("Uncaught TypeError: x is not a function");')
+  await page.goto('/auth')
+  await page.waitForTimeout(1500)
+})
+
+test('the same message from our own origin is NOT tolerated', async ({ page }) => {
+  test.fail(!process.env.SHOW, 'expected: the guard fails this test')
+  await page.route('https://cdn.tailwindcss.com/**', (route) => route.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+  await page.route('https://www.google.com/recaptcha/api.js*', (route) => route.fulfill({ contentType: 'text/javascript', body: '' }))
+  await page.goto('/auth')
+  await page.evaluate(() => { const f = document.createElement('iframe'); f.srcdoc = '<script>document.requestStorageAccess().catch(function(){})<\/script>'; document.body.appendChild(f) })
+  await page.waitForTimeout(1500)
+})
+
+test('unhandled rejection from the iframe surfaces as a page error, which is NOT tolerated (documents a residual risk)', async ({ page }) => {
+  test.fail(!process.env.SHOW, 'expected: the guard fails this test')
+  await simulate(page, TEST_KEY)
+  await page.route('https://www.google.com/recaptcha/api2/anchor*', (route) =>
+    route.fulfill({ contentType: 'text/html', body: '<!doctype html><script>document.requestStorageAccess()</script>' }),
+  )
+  await page.goto('/auth')
+  await page.waitForTimeout(1500)
+})

@@ -1,0 +1,9 @@
+import { defineConfig, devices } from '@playwright/test'
+export default defineConfig({
+  testDir: '.',
+  outputDir: './results',
+  reporter: 'list',
+  retries: 0,
+  use: { baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:4012', locale: 'fr-FR', launchOptions: { executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE } },
+  projects: [{ name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } } }],
+})

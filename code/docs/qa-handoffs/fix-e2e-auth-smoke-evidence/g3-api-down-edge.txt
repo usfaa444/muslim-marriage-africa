@@ -1,0 +1,5 @@
+### Edge: api unreachable while a signed-in member opens /auth (server guard cannot read the gate)
+http://localhost:4012 /auth with live session cookie, api stopped -> 200 (0.011510s) form-in-body=1
+http://localhost:4014 /auth with live session cookie, api stopped -> 200 (0.011720s) form-in-body=1
+api back: gate with member e cookie -> {"step":"account"}
+head /auth with live cookie after api returns -> 303 http://localhost:4012/decouvrir

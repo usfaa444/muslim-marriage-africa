@@ -1,0 +1,12 @@
+### Claim: without SMTP_URL every email send is 503 EMAIL_DELIVERY_FAILED (evidence key present)
+HTTP/1.1 503 Service Unavailable
+{"error":{"code":"EMAIL_DELIVERY_FAILED","message":"L'envoi du lien a échoué.","details":null,"request_id":"01a162e9-770a-725b-8e56-3105367017b7","retryable":true}}
+### Claim: without the evidence key, ID and liveness uploads are 503 (SMTP_URL=log:// present)
+HTTP/1.1 503 Service Unavailable
+{"error":{"code":"UNHANDLED","message":"Request failed","details":null,"request_id":"01a162e9-8173-7a5c-846f-4147fd9431e8","retryable":true}}
+HTTP/1.1 503 Service Unavailable
+{"error":{"code":"UNHANDLED","message":"Request failed","details":null,"request_id":"01a162e9-8188-74ee-be3e-ebb92cf64049","retryable":true}}
+### Claim: api refuses to boot without the two origins (config.md: 'the api refuses to boot without them')
+file:///app/apps/api/dist/public-origin.js:60
+        throw new Error('ANKANU_PUBLIC_ORIGIN must be an http(s) origin in production');
+Error: ANKANU_PUBLIC_ORIGIN must be an http(s) origin in production

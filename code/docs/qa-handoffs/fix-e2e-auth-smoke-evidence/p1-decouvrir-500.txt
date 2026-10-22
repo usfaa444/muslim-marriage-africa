@@ -1,0 +1,26 @@
+Pre-existing defect P1, observed on the fresh QA stack (member at gate step `account`, session cookie sent):
+
+head web image (f5ba843), http://localhost:4012
+  /onboarding   200
+  /decouvrir    500
+  /photo-rules  200
+  /profile-edit 200
+  /settings     200
+  /favoris      500
+  /pin          200
+  /discussions  401
+  /invitations  401
+  /profile-review 303 -> /profile-edit
+  /age-gate     303 -> /onboarding
+
+origin/main web image (7505c57) built by QA from `git archive`, same api, http://localhost:4014
+  /decouvrir 500
+  /favoris   500
+  /onboarding 200
+
+Web log (head image):
+  Error: code/design-stitch/ankanu-v2/57-discover/screen.html is not on disk
+
+Cause: apps/web/Dockerfile copies a fixed list of 14 screen.html files into the runtime image and
+code/.dockerignore excludes the rest of design-stitch/ankanu-v2; 57-discover is not in either list.
+Neither file is touched by this story.

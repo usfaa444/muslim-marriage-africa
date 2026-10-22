@@ -1,0 +1,121 @@
+{
+  "head": [
+    {
+      "lcp": 284,
+      "cls": 0,
+      "ttfb": 13.599999999627471,
+      "dcl": 331.59999999962747,
+      "load": 341.40000000037253,
+      "docBytes": 22861,
+      "sameOrigin": [
+        "GET /auth"
+      ]
+    },
+    {
+      "lcp": 284,
+      "cls": 0,
+      "ttfb": 10.899999998509884,
+      "dcl": 313.8999999985099,
+      "load": 322.3999999985099,
+      "docBytes": 22861,
+      "sameOrigin": [
+        "GET /auth"
+      ]
+    },
+    {
+      "lcp": 332,
+      "cls": 0,
+      "ttfb": 10.200000001117587,
+      "dcl": 334.90000000037253,
+      "load": 339,
+      "docBytes": 22861,
+      "sameOrigin": [
+        "GET /auth"
+      ]
+    },
+    {
+      "lcp": 296,
+      "cls": 0,
+      "ttfb": 8.800000000745058,
+      "dcl": 312,
+      "load": 320.80000000074506,
+      "docBytes": 22861,
+      "sameOrigin": [
+        "GET /auth"
+      ]
+    },
+    {
+      "lcp": 280,
+      "cls": 0,
+      "ttfb": 9.799999998882413,
+      "dcl": 292,
+      "load": 298.2999999988824,
+      "docBytes": 22861,
+      "sameOrigin": [
+        "GET /auth"
+      ]
+    }
+  ],
+  "main": [
+    {
+      "lcp": 260,
+      "cls": 0,
+      "ttfb": 14.199999999254942,
+      "dcl": 295.19999999925494,
+      "load": 302.19999999925494,
+      "docBytes": 23429,
+      "sameOrigin": [
+        "GET /auth",
+        "GET /v1/accounts/gate"
+      ]
+    },
+    {
+      "lcp": 260,
+      "cls": 0,
+      "ttfb": 11.900000000372529,
+      "dcl": 296.80000000074506,
+      "load": 308.19999999925494,
+      "docBytes": 23429,
+      "sameOrigin": [
+        "GET /auth",
+        "GET /v1/accounts/gate"
+      ]
+    },
+    {
+      "lcp": 276,
+      "cls": 0,
+      "ttfb": 10.400000000372529,
+      "dcl": 292.1000000014901,
+      "load": 300.1000000014901,
+      "docBytes": 23429,
+      "sameOrigin": [
+        "GET /auth",
+        "GET /v1/accounts/gate"
+      ]
+    },
+    {
+      "lcp": 296,
+      "cls": 0,
+      "ttfb": 19.199999999254942,
+      "dcl": 308.5,
+      "load": 315.30000000074506,
+      "docBytes": 23429,
+      "sameOrigin": [
+        "GET /auth",
+        "GET /v1/accounts/gate"
+      ]
+    },
+    {
+      "lcp": 288,
+      "cls": 0,
+      "ttfb": 9,
+      "dcl": 299.90000000037253,
+      "load": 306.30000000074506,
+      "docBytes": 23429,
+      "sameOrigin": [
+        "GET /auth",
+        "GET /v1/accounts/gate"
+      ]
+    }
+  ]
+}

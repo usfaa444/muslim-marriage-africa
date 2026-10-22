@@ -1,0 +1,6 @@
+[default (bfcache disabled by Playwright)] /auth cache-control: no-store
+[default (bfcache disabled by Playwright)] signed-out Back to /auth: document restored from bfcache=false, pageshow.persisted log=[false], url=/auth, form visible=true, gateReads=0, consoleErrors=[]
+[default (bfcache disabled by Playwright)] signed-in Back to /auth: final url=/id-liveness, login form count=0, navs=["/auth","/password-reset","/id-liveness"], consoleErrors=[]
+[bfcache enabled] /auth cache-control: no-store
+[bfcache enabled] signed-out Back to /auth: document restored from bfcache=false, pageshow.persisted log=[false], url=/auth, form visible=true, gateReads=0, consoleErrors=[]
+[bfcache enabled] signed-in Back to /auth: final url=/id-liveness, login form count=0, navs=["/auth","/password-reset","/id-liveness"], consoleErrors=[]

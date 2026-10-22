@@ -1,0 +1,26 @@
+// Independent probe: what does Chromium emit when a cross-origin iframe calls requestStorageAccess()?
+import { createServer } from 'node:http'
+import { chromium } from '/home/claude/ankanu-e2e-fix/code/node_modules/playwright-core/index.mjs'
+const exe = process.argv[2]
+const variants = {
+  handled: `document.requestStorageAccess().then(()=>console.log('granted'),(e)=>console.log('rejected',String(e)))`,
+  unhandled: `document.requestStorageAccess()`,
+  hasAccessThenRequest: `document.hasStorageAccess().then((h)=>{ if(!h) return document.requestStorageAccess() }).catch(()=>{})`,
+}
+for (const [name, code] of Object.entries(variants)) {
+  const frame = createServer((req, res) => { res.setHeader('content-type', 'text/html'); res.end(`<!doctype html><script>${code}</script>`) }).listen(0, '127.0.0.1')
+  await new Promise((r) => frame.once('listening', r))
+  const top = createServer((req, res) => { res.setHeader('content-type', 'text/html'); res.end(`<!doctype html><iframe src="http://127.0.0.1:${frame.address().port}/recaptcha/api2/anchor?ar=1&k=KEY"></iframe>`) }).listen(0, '127.0.0.1')
+  await new Promise((r) => top.once('listening', r))
+  const browser = await chromium.launch({ executablePath: exe })
+  const page = await browser.newPage()
+  const seen = []
+  page.on('console', (m) => seen.push(`console.${m.type()} text=${JSON.stringify(m.text())} url=${m.location().url}`))
+  page.on('pageerror', (e) => seen.push(`pageerror name=${e.name} message=${JSON.stringify(e.message)}`))
+  await page.goto(`http://localhost:${top.address().port}/`)
+  await page.waitForTimeout(1200)
+  console.log(`--- ${name} (${exe.split('/').slice(-3).join('/')}) version ${browser.version()}`)
+  for (const s of seen) console.log('   ' + s)
+  if (!seen.length) console.log('   (nothing)')
+  await browser.close(); frame.close(); top.close()
+}

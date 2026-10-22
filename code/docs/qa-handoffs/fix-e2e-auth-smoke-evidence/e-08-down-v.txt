@@ -1,0 +1,6 @@
+### config.md: 'Do not run down -v: it deletes the local database.' Check what down -v removes (own scratch stack ankanu-qa2)
+pg-data before: 24 entries, 127M
+volumes before: 21
+down -v exit 0
+pg-data after down -v: 23 entries, 128M  (bind mount ./pg-data is not touched by -v)
+volumes after: 20

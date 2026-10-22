@@ -1,0 +1,2 @@
+head median LCP 284 ms; CLS 0.0000 ; TTFB 10 ms; load 322 ms; doc bytes 22861 ; same-origin requests ["GET /auth"]
+main median LCP 276 ms; CLS 0.0000 ; TTFB 12 ms; load 306 ms; doc bytes 23429 ; same-origin requests ["GET /auth","GET /v1/accounts/gate"]

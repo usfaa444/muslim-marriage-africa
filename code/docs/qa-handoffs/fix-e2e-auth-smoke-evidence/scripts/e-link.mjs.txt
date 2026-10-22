@@ -1,0 +1,23 @@
+import { execSync } from 'node:child_process'
+import { launch, newCtx, watch, EV } from './lib.mjs'
+const B = 'http://localhost:4012'
+const H = { 'content-type': 'application/json', origin: B }
+let r = await fetch(B + '/v1/accounts', { method: 'POST', headers: H, body: JSON.stringify({ civil_given_name: 'Moussa', civil_family_name: 'Traoré', pledge_accepted: true, coc_version: '1', email: 'qa2.f@example.test', pseudonym: 'qa2f', gender: 'brother', password: 'correct horse battery staple', dob: '1990-03-02', recaptcha_token: 'test-ok' }) })
+const cookie = r.headers.get('set-cookie').split(';')[0]
+r = await fetch(B + '/v1/accounts/email-verifications', { method: 'POST', headers: { ...H, cookie } })
+console.log('issue', r.status)
+// the literal command from config.md, without --no-log-prefix
+const log = execSync(`docker compose -p ankanu-qa2 logs api | grep -E 'otp |email ' | grep qa2.f@`, { cwd: '/home/claude/ankanu-e2e-fix/code', encoding: 'utf8', shell: '/bin/bash' })
+console.log('log line (literal config.md grep):', log.trim())
+const link = log.trim().split(' ').pop()
+const browser = await launch(); const ctx = await newCtx(browser, 'mobile', cookie); const page = await ctx.newPage(); const w = watch(page)
+await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+await page.goto(link); await page.waitForLoadState('networkidle'); await page.waitForTimeout(1500)
+await page.screenshot({ path: `${EV}/e-email-link-opened.png` })
+const gate = await (await fetch(B + '/v1/accounts/gate', { headers: { cookie } })).json()
+console.log('after following the link in a browser: url', page.url().replace(B, ''), 'gate', JSON.stringify(gate), 'console errors', JSON.stringify(w.consoleErrors), 'bad', JSON.stringify(w.badResponses))
+console.log('body text:', (await page.locator('body').innerText()).replace(/\s+/g, ' ').slice(0, 300))
+// token is single use
+const again = await fetch(B + '/v1/accounts/email-verifications/consume', { method: 'POST', headers: H, body: JSON.stringify({ token: new URL(link).searchParams.get('token') }) })
+console.log('re-using the token ->', again.status)
+await browser.close()

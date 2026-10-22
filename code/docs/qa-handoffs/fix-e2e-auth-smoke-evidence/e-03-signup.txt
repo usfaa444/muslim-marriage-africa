@@ -1,0 +1,57 @@
+### 1 POST /v1/accounts (recaptcha_token test-ok)
+HTTP/1.1 201 Created
+set-cookie: ankanu_session=01a162d2-257a-7eae-afeb-fd29374b88a5; Path=/; HttpOnly; SameSite=Lax
+content-type: application/json; charset=utf-8
+content-length: 198
+date: Thu, 22 Oct 2026 08:55:01 GMT
+
+{"id":"01a162d2-2521-799c-a76c-d6390b115949","email":"qa2.member1@example.test","pseudonym":"qa2member1","gender":"sister","roles":["member"],"status":"Active","age_attested":true,"coc_version":"1"}
+
+### 2 GET /v1/accounts/gate with the session cookie
+HTTP/1.1 200 OK
+{"step":"email"}
+
+### 3 api log so far: email lines
+### stub log
+siteverify stub on 443
+{"method":"POST","url":"/recaptcha/api/siteverify","secretIsTest":true,"token":"test-ok"}
+### 4 POST /v1/accounts/email-verifications
+HTTP/1.1 201 Created
+{"expires_at":"2026-10-22T09:25:08.065Z"}
+
+### 5 api log: email line (SMTP_URL=log://)
+email qa2.member1@example.test AnKanu http://localhost:4012/email-verification?token=a0Gbeu1IrtSUab5U50nQYGr3hsdVRcV0mF3Wf9bgmWk
+### 6 consume token
+HTTP/1.1 200 OK
+{"email_verified_at":"2026-10-22T08:55:16.577Z"}
+### 7 gate
+{"step":"phone"}
+### 8 POST /v1/verifications/otp send
+HTTP/1.1 201 Created
+{"expires_at":"2026-10-22T09:05:16.626Z"}
+### 9 api log otp line
+otp 821579
+### 10 verify otp
+HTTP/1.1 200 OK
+{"status":"granted"}
+### 11 gate
+{"step":"identity"}
+### 12 ID upload BEFORE bucket creation (config.md says 503)
+HTTP/1.1 503 Service Unavailable
+{"error":{"code":"UNHANDLED","message":"Request failed","details":null,"request_id":"01a162d2-7d68-72b2-b3a5-f2e9e4556acd","retryable":true}}
+### 13 liveness upload BEFORE bucket creation
+HTTP/1.1 503 Service Unavailable
+{"error":{"code":"UNHANDLED","message":"Request failed","details":null,"request_id":"01a162d2-7d89-7e36-8a3f-2e3a496b0c05","retryable":true}}
+### 14 ID upload AFTER bucket creation
+HTTP/1.1 201 Created
+{"id":"01a162d2-d520-795d-a872-af6a27208d74","kind":"id_document","status":"pending"}
+### 15 liveness upload AFTER bucket creation
+HTTP/1.1 201 Created
+{"id":"01a162d2-d54a-7fb3-9b9e-611feb1fa754","kind":"liveness","status":"pending"}
+### 16 gate
+{"step":"account"}
+### 17 objects in the bucket (sealed, versioned)
+[
+  'verification/01a162d2-2521-799c-a76c-d6390b115949/01a162d2-d520-795d-a872-af6a27208d74.json 130B',
+  'verification/01a162d2-2521-799c-a76c-d6390b115949/01a162d2-d54a-7fb3-9b9e-611feb1fa754.json 130B'
+]

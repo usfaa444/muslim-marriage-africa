@@ -1,0 +1,2 @@
+mobile signup UI: GET /signup/account 200 | POST /v1/accounts [201] | landed /email-verification | consoleErrors [] | gateReads 0
+desktop signup UI: GET /signup/account 200 | POST /v1/accounts [201] | landed /email-verification | consoleErrors [] | gateReads 0

@@ -1,0 +1,30 @@
+ok   MATCH real anchor url (k in the middle) -> tolerated
+ok   MATCH bframe, k first -> tolerated
+ok   MATCH bframe, k last -> tolerated
+ok   MATCH k only -> tolerated
+ok   MISS other site key -> fails the test
+ok   MISS key with extra suffix -> fails the test
+ok   MISS key with extra prefix (kk=) -> fails the test
+ok   MISS no key -> fails the test
+ok   MISS our origin -> fails the test
+ok   MISS our origin carrying the google url as a param -> fails the test
+ok   MISS http scheme -> fails the test
+ok   MISS other host (suffix) -> fails the test
+ok   MISS other host (prefix) -> fails the test
+ok   MISS google.com without www -> fails the test
+ok   MISS recaptcha.net host -> fails the test
+ok   MISS other reCAPTCHA path (enterprise) -> fails the test
+ok   MISS other path /api2/userverify -> fails the test
+ok   MISS api2/anchor2 -> fails the test
+ok   MISS different message -> fails the test
+ok   MISS message without the dot -> fails the test
+ok   MISS other error from the same iframe -> fails the test
+ok   MISS CSP violation from the same iframe -> fails the test
+ok   MISS prefixed text -> fails the test
+ok   MISS 401 gate (stack) -> fails the test
+ok   MISS 500 -> fails the test
+ok   MISS newline smuggling -> fails the test
+ok   MISS space smuggling -> fails the test
+E2E_BASE_URL=unset: gate 401 on :4012 tolerated=false; on :3100 tolerated=true
+E2E_BASE_URL=http://localhost:4012: gate 401 on :4012 tolerated=false; on :3100 tolerated=false
+all as expected

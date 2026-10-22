@@ -1,0 +1,31 @@
+import { chromium, devices } from '/home/claude/ankanu-e2e-fix/code/node_modules/playwright-core/index.mjs'
+import { readFileSync, writeFileSync } from 'node:fs'
+export const BASE = process.env.BASE ?? 'http://localhost:4012'
+export const EXE = '/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell'
+export const EV = '/home/claude/ankanu-e2e-fix/code/docs/qa-handoffs/fix-e2e-auth-smoke-evidence'
+export const accounts = Object.fromEntries(readFileSync('/tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/accounts.jsonl', 'utf8').trim().split('\n').map((l) => JSON.parse(l)).map((a) => [a.label, a]))
+// sandbox-only: hosts that are blocked here (Tailwind CDN, Google reCAPTCHA script)
+const SANDBOX = [/net::ERR_TUNNEL_CONNECTION_FAILED https:\/\/www\.google\.com\/recaptcha\/api\.js\?onload=onRecaptchaLoad&render=explicit/, /net::ERR_TUNNEL_CONNECTION_FAILED https:\/\/cdn\.tailwindcss\.com\//, /^tailwind is not defined/]
+export const VIEW = { mobile: { viewport: { width: 360, height: 780 }, ...devices['Pixel 7'] }, desktop: { viewport: { width: 1440, height: 900 } } }
+export async function launch(extra = {}) {
+  return chromium.launch({ executablePath: EXE, ...extra })
+}
+export async function newCtx(browser, kind = 'desktop', cookie) {
+  const base = kind === 'mobile' ? { ...devices['Pixel 7'], viewport: { width: 360, height: 780 } } : { viewport: { width: 1440, height: 900 } }
+  const ctx = await browser.newContext({ ...base, locale: 'fr-FR', timezoneId: 'Africa/Ouagadougou' })
+  if (cookie) { const [name, value] = cookie.split('='); await ctx.addCookies([{ name, value, url: BASE }]) }
+  return ctx
+}
+export function watch(page) {
+  const w = { gateReads: [], consoleErrors: [], badResponses: [], navs: [], sandboxIgnored: 0, requests: [] }
+  const keep = (t) => { if (SANDBOX.some((r) => r.test(t))) { w.sandboxIgnored++; return false } return true }
+  page.on('request', (r) => { const u = new URL(r.url()); if (u.origin === BASE) w.requests.push(`${r.method()} ${u.pathname}`); if (u.origin === BASE && u.pathname === '/v1/accounts/gate') w.gateReads.push(`${r.method()} ${r.url()}`) })
+  page.on('console', (m) => { if (m.type() === 'error') { const t = `${m.text()} ${m.location().url}`.trim(); if (keep(t)) w.consoleErrors.push(t) } })
+  page.on('pageerror', (e) => { if (keep(e.message)) w.consoleErrors.push('pageerror ' + e.message) })
+  page.on('response', (r) => { if (r.status() >= 400) { const t = `${r.status()} ${r.request().method()} ${r.url()}`; if (keep(t)) w.badResponses.push(t) } })
+  page.on('framenavigated', (f) => { if (f === page.mainFrame()) w.navs.push(f.url().replace(BASE, '')) })
+  return w
+}
+export const results = []
+export function record(id, name, pass, detail) { results.push({ id, name, pass, detail }); console.log(`${pass ? 'PASS' : 'FAIL'} ${id} ${name} :: ${typeof detail === 'string' ? detail : JSON.stringify(detail)}`) }
+export function save(file) { writeFileSync(`${EV}/${file}`, JSON.stringify(results, null, 2)) }
