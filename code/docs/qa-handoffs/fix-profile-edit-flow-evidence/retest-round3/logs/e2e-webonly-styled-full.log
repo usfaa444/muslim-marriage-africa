@@ -1,0 +1,67 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 54 tests using 2 workers
+
+  ✓   1 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.7s)
+  ✓   2 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.7s)
+  -   4 [mobile] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key
+  -   5 [mobile] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them
+  -   6 [mobile] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts
+  -   7 [mobile] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack
+  ✓   3 [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.2s)
+  ✓   9 [mobile] › e2e/profile-edit-flow.spec.ts:267:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (2.5s)
+  ✓   8 [mobile] › e2e/profile-edit-flow.spec.ts:230:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.7s)
+  ✓  10 [mobile] › e2e/profile-edit-flow.spec.ts:267:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (2.7s)
+  ✓  11 [mobile] › e2e/profile-edit-flow.spec.ts:299:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (2.5s)
+  ✓  12 [mobile] › e2e/profile-edit-flow.spec.ts:312:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (2.7s)
+  ✓  13 [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (2.4s)
+  ✓  14 [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (2.8s)
+  ✓  16 [mobile] › e2e/profile-edit-flow.spec.ts:407:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.5s)
+  ✓  17 [mobile] › e2e/profile-edit-flow.spec.ts:420:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.3s)
+  -  18 [mobile] › e2e/profile-edit-flow.spec.ts:440:3 › web image screens › screens read from the image answer without a server error
+  ✓  19 [mobile] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (4.1s)
+  -  20 [mobile] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width
+  ✓  15 [mobile] › e2e/profile-edit-flow.spec.ts:382:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (11.3s)
+  -  22 [mobile] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width
+  ✓  21 [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (1.7s)
+  -  24 [mobile] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width
+  ✓  23 [mobile] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.9s)
+  -  26 [mobile] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width
+  ✓  25 [mobile] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (1.7s)
+  ✓  27 [mobile] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (561ms)
+  ✓  28 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.1s)
+  ✓  29 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.1s)
+  ✓  31 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (22ms)
+  ✓  32 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them (7ms)
+  ✓  33 [desktop] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts (20ms)
+  ✓  34 [desktop] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack (3ms)
+  ✓  30 [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.2s)
+  ✓  36 [desktop] › e2e/profile-edit-flow.spec.ts:267:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (2.3s)
+  ✓  37 [desktop] › e2e/profile-edit-flow.spec.ts:267:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (2.6s)
+  ✓  35 [desktop] › e2e/profile-edit-flow.spec.ts:230:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.8s)
+  ✓  38 [desktop] › e2e/profile-edit-flow.spec.ts:299:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (2.7s)
+  ✓  39 [desktop] › e2e/profile-edit-flow.spec.ts:312:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (2.7s)
+  ✓  40 [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (2.5s)
+  ✓  41 [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (2.7s)
+  ✓  43 [desktop] › e2e/profile-edit-flow.spec.ts:407:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.3s)
+  ✓  44 [desktop] › e2e/profile-edit-flow.spec.ts:420:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.6s)
+  -  45 [desktop] › e2e/profile-edit-flow.spec.ts:440:3 › web image screens › screens read from the image answer without a server error
+  ✓  46 [desktop] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.3s)
+  ✓  47 [desktop] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width (3.0s)
+  ✓  42 [desktop] › e2e/profile-edit-flow.spec.ts:382:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (11.6s)
+  ✓  48 [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (1.5s)
+  ✓  49 [desktop] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width (1.2s)
+  ✓  51 [desktop] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width (783ms)
+  ✓  50 [desktop] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.3s)
+  ✓  53 [desktop] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width (1.2s)
+  ✓  52 [desktop] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (1.4s)
+  ✓  54 [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (547ms)
+
+  10 skipped
+  44 passed (1.0m)
+exit=0

@@ -1,0 +1,30 @@
+# PIN API probe, member pinapi (no PIN yet). PUT /v1/pin must accept exactly 6 digits.
+GET /v1/pin:                
+200 {"enabled":false,"locked":false}
+PUT {"pin":"1234"} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2c92-7cb1-9828-b7805b06a80b","retryable":false}}
+PUT {"pin":"12345"} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2cb0-79f9-80dc-4cc0d93b59c5","retryable":false}}
+PUT {"pin":"1234567"} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2cd3-7884-808c-db2f5c1504fa","retryable":false}}
+PUT {"pin":"abcdef"} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2cea-7356-9887-eb65368689e6","retryable":false}}
+PUT {"pin":"12 456"} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2d03-754f-a7d1-adc319be180a","retryable":false}}
+PUT {"pin":123456} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2d17-731c-a8ae-5bbb673aa80e","retryable":false}}
+PUT {"pin":""} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2d33-7853-abd1-29e0e28f4450","retryable":false}}
+PUT {} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16327-2d50-755e-af05-5e23f9664657","retryable":false}}
+PUT [] -> 429 {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16327-2d63-7061-8347-b38c5bd4630f","retryable":false}}
+PUT {"pin":["123456"]} -> 429 {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16327-2d76-7477-9949-739c52f74796","retryable":false}}
+PUT {"pin":"１２３４５６"} -> 429 {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16327-2d8d-73fd-a985-d14813e3b2d5","retryable":false}}
+PUT {"pin":"123456\n"} -> 429 {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16327-2d9e-794c-9a02-a12f73a85a0a","retryable":false}}
+GET /v1/pin after rejects (must still be enabled:false):
+200 {"enabled":false,"locked":false}
+PUT 6 digits 482916 -> 429 {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16327-2dc6-7fed-8c47-026ba71928a4","retryable":false}}
+GET /v1/pin:
+200 {"enabled":false,"locked":false}
+# (continued after the 10/min per-IP auth rate limit window cleared; calls paced 7 s apart)
+PUT [] -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16328-e0b0-7f7d-9abc-861c571cb80f","retryable":false}}
+PUT {"pin":["123456"]} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16328-fc23-7763-bbc0-4b48b583fc43","retryable":false}}
+PUT {"pin":"１２３４５６"} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16329-1798-79d0-9282-eec95ca6707a","retryable":false}}
+PUT {"pin":"123456\n"} -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16329-330b-7787-bec0-5519e99f6810","retryable":false}}
+GET /v1/pin after rejects (must still be enabled:false):
+200 {"enabled":false,"locked":false}
+PUT 6 digits 482916 -> 200 {"enabled":true}
+GET /v1/pin:
+200 {"enabled":true,"locked":false}

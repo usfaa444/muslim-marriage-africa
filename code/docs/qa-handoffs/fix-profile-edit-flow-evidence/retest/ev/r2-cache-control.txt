@@ -1,0 +1,9 @@
+# Cache-Control on the profile endpoints (retest), r2photo session
+GET profile -> 200 | cache-control: no-store
+GET profile (no session) -> 401 | cache-control: no-store
+PUT profile valid -> 200 | cache-control: no-store
+PUT profile refused (under-age) -> 400 | cache-control: no-store
+PATCH profile blur -> 400 | cache-control: no-store
+PATCH profile invalid -> 400 | cache-control: no-store
+(locked session 401s: see r2-api-locked-vs-anon.txt, no Cache-Control on PIN_REQUIRED answers)
+PATCH profile blur (valid photo_blur:true) -> 200 | cache-control: no-store

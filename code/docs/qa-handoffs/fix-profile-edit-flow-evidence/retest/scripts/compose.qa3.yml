@@ -1,0 +1,25 @@
+services:
+  web:
+    image: ankanu-qa3-web
+    pull_policy: never
+    build: !reset null
+    ports: ["4043:3000"]
+  api:
+    image: ankanu-qa3-api
+    pull_policy: never
+    build: !reset null
+    environment:
+      # Scratch only: the container cannot reach Google, so accept the token 'test-ok' as the unit suites do.
+      NODE_OPTIONS: --import=/app/apps/api/dist/test-recaptcha.js
+    env_file:
+      - path: /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa3/api.env
+        required: true
+  worker:
+    image: ankanu-qa3-api
+    pull_policy: never
+  postgres:
+    ports: ["127.0.0.1:55443:5432"]
+    volumes: !override
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa3/pg-data:/var/lib/postgresql/data
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa3/pg-wal:/var/lib/postgresql/wal-archive
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa3/pg-base:/var/lib/postgresql/basebackups

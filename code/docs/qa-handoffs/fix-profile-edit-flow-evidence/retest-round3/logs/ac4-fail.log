@@ -1,0 +1,11 @@
+[360] 1 refused save -> {"path":"/profile-edit","pin":false,"dob":"2015-06-01","origin":"Valeur à garder","status":"","statusHidden":true}
+[360] 1 calls: ["PUT /v1/me/profile {\"dob\":\"2015-06-01\",\"city\":null,\"country\":null,\"origin\":\"Valeur à garder\",\"marit"]
+[360] 2 network failure -> {"path":"/profile-edit","pin":false,"dob":"1990-01-15","origin":"Valeur à garder","status":"","statusHidden":true}
+[360] 2 calls: ["PUT /v1/me/profile {\"dob\":\"1990-01-15\",\"city\":null,\"country\":null,\"origin\":\"Valeur à garder\",\"marit"]
+[360] 3 503 -> {"path":"/profile-edit","pin":false,"dob":"1990-01-15","origin":"Valeur à garder","status":"","statusHidden":true}
+[360] 4 double tap: calls=["PUT /v1/me/profile {\"dob\":\"1990-01-15\",\"city\":null,\"country\":null,\"origin\":\"Double tap\",\"marital_st","NAV /pin?next=%2Fprofile-edit"]
+[360] 5 back from /pin without PIN -> {"path":"/profile-edit","pin":false,"dob":"1990-01-15","origin":"Double tap","status":"","statusHidden":true}
+[360] 6 no edits: calls=["NAV /pin?next=%2Fprofile-edit"]
+[360] 7 keyboard Space on switch: url=/pin?next=%2Fprofile-edit calls=["PUT /v1/me/profile {\"dob\":\"1990-01-15\",\"city\":null,\"country\":null,\"origin\":\"Clavier\",\"marital_statu","NAV /pin?next=%2Fprofile-edit"]
+[360] console/network problems: ["console.error: Failed to load resource: the server responded with a status of 404 (Not Found)","http 400: PUT http://localhost:4043/v1/me/profile","console.error: Failed to load resource: the server responded with a status of 400 (Bad Request)","requestfailed: PUT http://localhost:4043/v1/me/profile net::ERR_FAILED","console.error: Failed to load resource: net::ERR_FAILED","http 503: PUT http://localhost:4043/v1/me/profile","console.error: Failed to load resource: the server responded with a status of 503 (Service Unavailable)"]
+exit=0

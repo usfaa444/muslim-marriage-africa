@@ -1,0 +1,308 @@
+
+Running 6 tests using 2 workers
+
+  ✘  1 [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (9.8s)
+  ✘  2 [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (9.5s)
+  ✘  3 [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (10.9s)
+  ✘  4 [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (10.9s)
+  ✘  5 [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (11.8s)
+  ✘  6 [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (11.8s)
+
+
+  1) [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: failed requests
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko40yyygA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko40yyygA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    + ]
+
+       at fixtures.ts:35
+
+      33 |       await use(guards)
+      34 |       expect(guards.consoleErrors, 'console errors').toEqual([])
+    > 35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+         |                                                        ^
+      36 |     },
+      37 |     { auto: true },
+      38 |   ],
+        at Object.base.extend.guards.auto (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:35:56)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: failed requests
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 12
+
+    - Array []
+    + Array [
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko40yyygA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET http://localhost:4043/v1/pin net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    + ]
+
+       at fixtures.ts:35
+
+      33 |       await use(guards)
+      34 |       expect(guards.consoleErrors, 'console errors').toEqual([])
+    > 35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+         |                                                        ^
+      36 |     },
+      37 |     { auto: true },
+      38 |   ],
+        at Object.base.extend.guards.auto (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:35:56)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: failed requests
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 12
+
+    - Array []
+    + Array [
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko40yyygA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    + ]
+
+       at fixtures.ts:35
+
+      33 |       await use(guards)
+      34 |       expect(guards.consoleErrors, 'console errors').toEqual([])
+    > 35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+         |                                                        ^
+      36 |     },
+      37 |     { auto: true },
+      38 |   ],
+        at Object.base.extend.guards.auto (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:35:56)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: failed requests
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 9
+
+    - Array []
+    + Array [
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    + ]
+
+       at fixtures.ts:35
+
+      33 |       await use(guards)
+      34 |       expect(guards.consoleErrors, 'console errors').toEqual([])
+    > 35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+         |                                                        ^
+      36 |     },
+      37 |     { auto: true },
+      38 |   ],
+        at Object.base.extend.guards.auto (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:35:56)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: failed requests
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 14
+
+    - Array []
+    + Array [
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko40yyygA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko20yw.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/plusjakartasans/v12/LDIoaomQNQcsA88c7O9yZ4KMCoOg4Ko40yyygA.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    + ]
+
+       at fixtures.ts:35
+
+      33 |       await use(guards)
+      34 |       expect(guards.consoleErrors, 'console errors').toEqual([])
+    > 35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+         |                                                        ^
+      36 |     },
+      37 |     { auto: true },
+      38 |   ],
+        at Object.base.extend.guards.auto (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:35:56)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: failed requests
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 11
+
+    - Array []
+    + Array [
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/newsreader/v26/cY9AfjOCX1hbuyalUrK4397yjA.woff2 net::ERR_ABORTED",
+    +   "GET http://localhost:4043/v1/pin net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    +   "GET https://fonts.gstatic.com/s/materialsymbolsoutlined/v380/kJEPBvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzBwG-RpA6RzaxHMPdY40KH8nGzv3fzfVJO1Q.woff2 net::ERR_ABORTED",
+    + ]
+
+       at fixtures.ts:35
+
+      33 |       await use(guards)
+      34 |       expect(guards.consoleErrors, 'console errors').toEqual([])
+    > 35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+         |                                                        ^
+      36 |     },
+      37 |     { auto: true },
+      38 |   ],
+        at Object.base.extend.guards.auto (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:35:56)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 

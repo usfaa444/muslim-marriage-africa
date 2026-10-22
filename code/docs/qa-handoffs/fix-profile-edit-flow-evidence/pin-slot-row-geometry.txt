@@ -1,0 +1,3 @@
+[360] {"card":[16,344],"padL":"32px","row":[18,342],"firstSlotLeft":18,"lastSlotRight":342,"slotW":44,"slotH":16}
+[390] {"card":[16,374],"padL":"32px","row":[33,357],"firstSlotLeft":33,"lastSlotRight":357,"slotW":44,"slotH":16}
+[768] {"card":[94,674],"padL":"48px","row":[200,568],"firstSlotLeft":200,"lastSlotRight":568,"slotW":48,"slotH":56}

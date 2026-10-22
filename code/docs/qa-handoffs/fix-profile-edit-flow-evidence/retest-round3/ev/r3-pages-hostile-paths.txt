@@ -1,0 +1,18 @@
+# hostile paths, round 3, head d47d354, 2026-10-22T15:01:21Z: path | locked session (r3lock, GET /v1/pin says locked: {"enabled":true,"locked":true}) | no cookie
+/profil/%2F%2Fevil.example | locked: 303 /pin?next=%2Fprofil%2F%2F%2Fevil.example | anon: 401 
+/profil//evil.example | locked: 308 /profil/evil.example | anon: 308 /profil/evil.example
+/profil/../..//evil.example | locked: 308 /evil.example | anon: 308 /evil.example
+//evil.example | locked: 308 /evil.example | anon: 308 /evil.example
+/%2F%2Fevil.example | locked: 404  | anon: 404 
+/pin//evil.example | locked: 308 /pin/evil.example | anon: 308 /pin/evil.example
+/pin/%2F%2Fevil.example | locked: 404  | anon: 404 
+/decouvrir%0D%0ALocation:%20http://evil.example | locked: 308 /decouvrir%0D%0ALocation:%20http:/evil.example | anon: 308 /decouvrir%0D%0ALocation:%20http:/evil.example
+/decouvrir/ | locked: 308 /decouvrir | anon: 308 /decouvrir
+/decouvrir// | locked: 308 /decouvrir/ | anon: 308 /decouvrir/
+/DECOUVRIR | locked: 404  | anon: 404 
+/profile-edit/ | locked: 308 /profile-edit | anon: 308 /profile-edit
+/profile-edit%2F | locked: 404  | anon: 404 
+/settings?next=//evil.example | locked: 303 /pin?next=%2Fsettings | anon: 303 /auth
+/pin?next=%2F%2Fevil.example | locked: 200  | anon: 303 /auth
+/favoris;x=1 | locked: 404  | anon: 404 
+/profile-edit%00 | locked: 404  | anon: 404 

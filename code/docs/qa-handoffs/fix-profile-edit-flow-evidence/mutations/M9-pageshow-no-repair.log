@@ -1,0 +1,18 @@
+     × reads fresh photo grants when the page comes back from the back/forward cache 20ms
+     × repairs a photo whose signed URL failed, at most twice per page view 14ms
+     × keeps the blur rule and the owner preview URL as the API sends them 16ms
+ Test Files  1 failed | 1 passed (2)
+      Tests  3 failed | 21 passed (24)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > reads fresh photo grants when the page comes back from the back/forward cache
+AssertionError: expected 1 to be 2 // Object.is equality
+- Expected
++ Received
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > repairs a photo whose signed URL failed, at most twice per page view
+AssertionError: expected 3 to be 4 // Object.is equality
+- Expected
++ Received
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > keeps the blur rule and the owner preview URL as the API sends them
+AssertionError: expected '<div class="relative aspect-[4/5] rou…' to contain 'src="/v1/media/get?token=owner-again"'
+Expected: "src="/v1/media/get?token=owner-again""
+Received: "<div class="relative aspect-[4/5] rounded-lg overflow-hidden border border-hairline bg-[#FBF8F1] shadow-none flex flex-col justify-end group"><img alt="Photo principale de profil" class="absolute inset-0 w-full h-full object-cover" src="/v1/media/get?token=owner"><div class="absolute inset-x-0 bottom-0 p-2.5 bg-gradient-to-t from-deep-navy/80 via-deep-navy/40 to-transparent flex items-center justify-between"><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-deep-navy text-gold-soft border border-soft-gold/40 shadow-sm">Principale</span></div></div><button id="profile-photo-add" class="aspect-[4/5] rounded-lg border-2 border-dashed border-[#E2D4B8] bg-[#FBF8F1]/50 hover:bg-[#FBF8F1] hover:border-soft-gold/70 transition-all p-3 flex flex-col items-center justify-center text-center gap-2 text-deep-navy/70 hover:text-deep-navy group" type="button"><div class="w-10 h-10 rounded-full bg-hairline/40 group-hover:bg-deep-navy group-hover:text-cream border border-hairline flex items-center justify-center transition-colors text-deep-navy"><span class="material-symbols-outlined text-xl">add</span></div><span class="text-xs font-medium">Ajouter une photo</span></button>"

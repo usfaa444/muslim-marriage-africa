@@ -1,0 +1,24 @@
+loadStitch 13-search/screen.html 
+loadStitch 14-filters/screen.html 
+loadStitch 53-barre-de-navigation/screen.html 
+stitchFile 02-auth 
+stitchFile 03-age-gate 
+stitchFile 04-email-verification 
+stitchFile 05-password-reset 
+stitchFile 06-otp 
+stitchFile 07-id-liveness 
+stitchFile 08-onboarding 
+stitchFile 09-photo-rules 
+stitchFile 10-pin-lock 
+stitchFile 11-profile-edit 
+stitchFile 12-profile-not-yet-public 
+stitchFile 15-profile-detail 
+stitchFile 17-favourites 
+stitchFile 27-settings 
+stitchFile 28-delete-export-status 
+stitchFile 52-ts-visit-signals 
+stitchFile 53-barre-de-navigation 
+stitchFile 54-pseudonym-dob 
+stitchFile 56-otp-alt 
+stitchFile 57-discover 
+stitchFile 57-discover grid.html

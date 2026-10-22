@@ -1,0 +1,111 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > names missing Islamic criteria and rejects a married brother without polygamy yes 4ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > stores only the pin hash 8ms
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > requires a session and saves sister fields without a shame label 884ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > refuses a missing session and reports an unset PIN without moving last_seen 925ms
+ ✓ apps/api/src/life-pause.test.ts > named life-pause > reads status through identity and discards the named reason 1082ms
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > rejects a married brother unless polygamy intent is yes, and keeps bio_live untouched 944ms
+ ✓ apps/api/src/life-pause.test.ts > named life-pause > rejects a bad reason or note and leaves the account active 815ms
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > keeps stored sister columns when the body omits them and clears only blank values 712ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > sets the PIN, locks this session, and unlocks only after the server check 1590ms
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > rejects a screen token, a bad delay, and an unreadable min age without writing 713ms
+ ✓ apps/api/src/life-pause.test.ts > named life-pause > refuses a hold and a non-member session without writing 1531ms
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > lists every brother gap and rejects a save that still has no marital status 739ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > ends only this session on the fifth wrong PIN 1548ms
+ ✓ apps/api/src/life-pause.test.ts > named life-pause > stops on the PIN gate and does not change status 921ms
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > rejects a married status when the stored polygamy intent is no and the key is omitted 594ms
+ ✓ apps/api/src/profile.test.ts > profile fields and completeness > answers the profile read and both writes with no-store, so a back navigation never reuses expired photo grants 689ms
+ ✓ apps/web/src/pin-screen.test.ts > PIN screen length > uses the six slots of the Stitch screen and the shared kernel length 4ms
+ ✓ apps/web/src/pin-screen.test.ts > PIN screen length > fills all six dots and saves a new PIN only after the sixth digit 77ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > requires the PIN after a restart and after 15 minutes for a sister or a mahram 1719ms
+ ✓ apps/web/src/pin-screen.test.ts > PIN screen length > unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button 161ms
+ ✓ apps/web/src/pin-screen.test.ts > PIN screen length > reads the answer to the write before leaving, so the browser does not cancel it 98ms
+ ✓ apps/web/src/pin-screen.test.ts > PIN screen length > reads the PIN state without the HTTP cache 62ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > slides remember-me and only the last-seen time of a 12-hour session 160ms
+ ✓ apps/web/src/pin-screen.test.ts > PIN screen length > clears the dots and stays after a refused PIN 66ms
+ ✓ apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path 250ms
+ ✓ apps/web/src/profile-edit-back.test.ts > profile edit photos after a back navigation in Chromium > reads fresh grants on Back instead of the cached profile, so no photo is broken 1445ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > clears the cookie on logout, including a locked session, and limits PIN posts 724ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > hides the whole missing banner until a response names a gap 8ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > ignores a save before the profile loads and does not paint over edits 19ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > keeps the stored delay when only the intentions text is edited early 8ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > shows the banner without the madhhab helper when another criterion is missing 4ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > uploads a profile photo and shows the pending tile without sample faces 18ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > stays on screen 11 when a live photo has a pending replacement 8ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > clears the file input when the upload is rejected or the reader fails 6ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > shows the photo-strike sentence on the existing status line after a refused upload 19ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > switches the main photo, removes a live photo, and saves the one blur setting 14ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > hides the add tile and shows the six-photo line when the cap is reached 5ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > names the PIN switch, the blur switch and the photo picker with their screen copy 5ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > opens pin setup when the access code is turned on 9ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit load and meter > opens the photo rules page from consignes de pudeur 5ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > reads the profile and the PIN state without the HTTP cache 9ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > reads fresh photo grants when the page comes back from the back/forward cache 11ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > repairs a photo whose signed URL failed, at most twice per page view 14ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > keeps the blur rule and the owner preview URL as the API sends them 3ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > returns to the profile from the PIN screen and sends no save when nothing changed 5ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > saves unsaved edits through the profile save before opening the PIN screen 6ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > does not save again after the member already saved her edits 5ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails 8ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > waits for the profile read before saving edits typed early, and stays when that read fails 11ms
+ ✓ apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > shows the real PIN state again when the page comes back from the back/forward cache 9ms
+ ✓ apps/web/src/web-image.test.ts > web image design files > finds the screens the web reads, including the review, discover grid and filter screens 9ms
+ ✓ apps/web/src/web-image.test.ts > web image design files > copies every Stitch file the web reads at runtime into the image 8ms
+ ✓ apps/web/src/web-image.test.ts > web image design files > keeps every copied Stitch file in the build context that .dockerignore allows 20ms
+ ✓ apps/web/src/web-image.test.ts > web image design files > copies only Stitch files that exist and that the web still reads 5ms
+ ✓ apps/web/src/web-image.test.ts > web image design files > reads design files only through the two parsed loaders 4ms
+ ✓ apps/web/src/web-image.test.ts > web image design files > rejects a non-literal screen name and a copy to another path 2ms
+ ✓ packages/kernel/src/kernel.test.ts > ids > mints UUID v7 2ms
+ ✓ packages/kernel/src/kernel.test.ts > ids > rejects timestamps outside the 48-bit UUID v7 range 1ms
+ ✓ packages/kernel/src/kernel.test.ts > ids > rejects a UUID v4 1ms
+ ✓ packages/kernel/src/kernel.test.ts > ids > mints distinct ids 1ms
+ ✓ packages/kernel/src/kernel.test.ts > clocks > stores UTC and displays the Ouagadougou civil time 1ms
+ ✓ packages/kernel/src/kernel.test.ts > clocks > formats the pre-standard Ouagadougou offset 0ms
+ ✓ packages/kernel/src/kernel.test.ts > clocks > rejects an invalid date 0ms
+ ✓ packages/kernel/src/kernel.test.ts > AuthContext > accepts a member session with gender 1ms
+ ✓ packages/kernel/src/kernel.test.ts > AuthContext > requires gender on member sessions 1ms
+ ✓ packages/kernel/src/kernel.test.ts > AuthContext > rejects staff combined with member 1ms
+ ✓ packages/kernel/src/kernel.test.ts > AuthContext > rejects mahram combined with member 0ms
+ ✓ packages/kernel/src/kernel.test.ts > AuthContext > rejects system combined with another role and mahram combined with staff 0ms
+ ✓ packages/kernel/src/kernel.test.ts > AuthContext > stores lowercase UUID v7 ids and rejects a non-v7 id 0ms
+ ✓ packages/kernel/src/kernel.test.ts > AuthContext > accepts a mahram ward id and rejects an entitlement field 0ms
+ ✓ packages/kernel/src/kernel.test.ts > error envelope > emits only the AD-7 shape 1ms
+ ✓ packages/kernel/src/kernel.test.ts > shared-device PIN length > is six digits for a new PIN and keeps four only for a PIN saved before that rule 0ms
+ ✓ packages/kernel/src/kernel.test.ts > shipped source > does not carry the banned lexicon or a second error shape name 1ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > builds step 0 from the splash mark, not the broken stitch HTML 7ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > opens sign-in from the splash without writing the signup draft 3ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > creates the account once from the signup panel with a captcha token 1ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > signs in from the connexion panel and returns to step 0 from the other tab 1ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > keeps steps 1 and 2 on the client until precheck passes 1ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > verifies email, phone, and the code only after a real send 3ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > offers another account on the in-progress steps that already have a text link 4ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > hides the specimen identity state until a capture is stored 2ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN 8ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > clears the specimen status until the ticket is read 1ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > serves no specimen strings on the built v2 screens 35ms
+ ✓ apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > compiles every served inline script as a classic script 16ms
+ ✓ apps/web/src/v2-flow.test.ts > email link result > shows the real address from the read and not from session storage 3ms
+ ✓ apps/web/src/v2-flow.test.ts > email link result > moves on only when consume succeeds 3ms
+ ✓ apps/web/src/v2-flow.test.ts > email link result > shows the expired state and a resend when the member is signed in 4ms
+ ✓ apps/web/src/v2-flow.test.ts > email link result > sends a signed-out member to sign in after a dead link 2ms
+ ✓ apps/web/src/v2-flow.test.ts > email link result > updates the shown address from the change-email response 3ms
+ ✓ apps/web/src/v2-flow.test.ts > email link result > deletes the session and opens sign-in, including when logout fails 4ms
+ ✓ apps/web/src/v2-flow.test.ts > screen 12 review timing > prints one configured SLA and omits a bio row that is not pending 1ms
+ ✓ apps/web/src/v2-flow.test.ts > server entry guard > sends each account to the first unfinished step 1ms
+ ✓ apps/web/src/v2-flow.test.ts > server entry guard > reads the gate 401 as a signed-out visitor and anything unexpected as an error 22ms
+ ✓ apps/web/src/v2-flow.test.ts > server entry guard > sends a signed-in account away from the login form to in-app home 3ms
+ ✓ apps/web/src/v2-flow.test.ts > server entry guard > keeps an email link on the page until consume finishes 1ms
+ ✓ apps/web/src/v2-flow.test.ts > server entry guard > redirects a signed-out member route and leaves stub cookies on the JSON envelope 2ms
+ ✓ apps/web/src/v2-flow.test.ts > server entry guard > keeps a gate error off auth and password reset 2ms
+ ✓ apps/web/src/v2-flow.test.ts > route files > reads the v2 screens when the process cwd is the web package 6ms
+ ✓ apps/web/src/v2-flow.test.ts > route files > clears the cookie on leave and the next /auth stays on the sign-in panel 3ms
+ ✓ apps/web/src/v2-flow.test.ts > landing calls > keeps the landing visual and points signup and login at the v2 screens 14ms
+ ✓ apps/api/src/pin.test.ts > shared-device PIN > sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule 1163ms
+
+ Test Files  9 passed (9)
+      Tests  102 passed (102)
+   Start at  10:35:35
+   Duration  10.43s (tests 71%, import 18%, transform 11%)
+

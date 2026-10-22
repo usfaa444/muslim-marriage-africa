@@ -1,0 +1,13 @@
+     × unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button 99ms
+     × reads the answer to the write before leaving, so the browser does not cancel it 80ms
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+AssertionError: expected [] to deeply equal [ { url: '/v1/pin/unlock', …(3) } ]
+- Expected
++ Received
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > reads the answer to the write before leaving, so the browser does not cancel it
+AssertionError: expected [] to deeply equal [ 'read POST /v1/pin/unlock', …(1) ]
+- Expected
++ Received

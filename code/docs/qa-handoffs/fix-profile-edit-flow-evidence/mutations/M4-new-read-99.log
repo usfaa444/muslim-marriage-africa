@@ -1,0 +1,8 @@
+     × copies every Stitch file the web reads at runtime into the image 15ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/web-image.test.ts > web image design files > copies every Stitch file the web reads at runtime into the image
+AssertionError: expected [ '99-new-screen/screen.html' ] to deeply equal []
+- Expected
++ Received

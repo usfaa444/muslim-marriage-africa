@@ -1,0 +1,11 @@
+initial tokens ["01a16408","01a16408"]
+waiting 63 s so the grants expire (signed_url_ttl_seconds = 60)
+tokens after repair ["01a16409","01a16409"]
+network after the expired request: ["403 GET /v1/media/get?token=01a16408…&again=1","200 GET /v1/me/profile","200 GET /v1/media/get?token=01a16409…","200 GET /v1/media/get?token=01a16409…"]
+all photos loaded after repair: true
+origin edit kept: Edit en cours — non enregistré
+main-frame navigations during repair: []
+always-403 media: profile reads in 6 s after load = 3 (1 initial + at most 2 repairs)
+after 4 more forced failures: profile reads = 3 (must stay <= 3); media 403 count = 14
+problems: ["console.error: Failed to load resource: the server responded with a status of 404 (Not Found)","http 403: GET http://localhost:4043/v1/media/get?token=01a16408-90db-7ece-8817-0b4a2dc12e9d&again=1","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-942a-7eaa-895c-9735213abe77","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-942e-7a9b-b323-043e5278bd6b","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-946d-78bd-b10c-f3834aff9a04","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9471-749a-a492-ef013d096d50","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9493-7e00-828c-fcf68cb3c9bf","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9496-7c70-9ab6-dbf50617ddaa","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9493-7e00-828c-fcf68cb3c9bf&x=0","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9496-7c70-9ab6-dbf50617ddaa&x=0","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9493-7e00-828c-fcf68cb3c9bf&x=0&x=1","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9496-7c70-9ab6-dbf50617ddaa&x=0&x=1","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9493-7e00-828c-fcf68cb3c9bf&x=0&x=1&x=2","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9496-7c70-9ab6-dbf50617ddaa&x=0&x=1&x=2","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9493-7e00-828c-fcf68cb3c9bf&x=0&x=1&x=2&x=3","http 403: GET http://localhost:4043/v1/media/get?token=01a16409-9496-7c70-9ab6-dbf50617ddaa&x=0&x=1&x=2&x=3"]
+exit=0

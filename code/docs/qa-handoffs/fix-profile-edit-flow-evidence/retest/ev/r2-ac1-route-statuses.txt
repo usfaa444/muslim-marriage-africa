@@ -1,0 +1,16 @@
+# AC1 routes on the built image (ankanu-qa3-web, head 07192e4), member r2perf (unlocked, PIN-less, pending main photo)
+/profile-review -> 200 
+/decouvrir -> 200 
+/decouvrir?vue=grille -> 200 
+/favoris -> 200 
+/settings -> 200 
+/onboarding -> 200 
+/photo-rules -> 200 
+/pin -> 200 
+/profile-edit -> 200 
+/profil/00000000-0000-7000-8000-000000000000 -> 200 
+/staff/visit-signals -> 303 http://localhost:4043/decouvrir
+profile-review title: <title>AnKanu — Espace Personnel &amp; Statut du Profil</title>
+profile-review SLA text: Délai habituel de modération : 24 heures
+web log 'not on disk' lines: 0
+web log 5xx-ish 'Error' lines: 0

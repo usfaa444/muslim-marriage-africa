@@ -1,0 +1,5 @@
+first view: [{"ok":true,"alt":"Photo principale de profil"},{"ok":true,"alt":"Photographie de profil en revue"}]
+on /settings, waiting 65 s
+after Back: [{"ok":true,"alt":"Photo principale de profil"},{"ok":true,"alt":"Photographie de profil en revue"}] network=["200 GET /v1/me/profile","200 GET /v1/media/get?token=01a16408…","200 GET /v1/media/get?token=01a16408…"]
+403s: 0
+problems: ["console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"]

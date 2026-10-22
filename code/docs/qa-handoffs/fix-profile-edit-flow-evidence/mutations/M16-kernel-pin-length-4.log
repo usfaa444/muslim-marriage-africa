@@ -1,0 +1,30 @@
+     × is six digits for a new PIN and keeps four only for a PIN saved before that rule 13ms
+     × uses the six slots of the Stitch screen and the shared kernel length 13ms
+     × fills all six dots and saves a new PIN only after the sixth digit 39ms
+     × unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button 39ms
+     × reads the answer to the write before leaving, so the browser does not cancel it 80ms
+     × clears the dots and stays after a refused PIN 46ms
+     × refuses a missing session and reports an unset PIN without moving last_seen 315ms
+     × sets the PIN, locks this session, and unlocks only after the server check 192ms
+     × ends only this session on the fifth wrong PIN 135ms
+     × requires the PIN after a restart and after 15 minutes for a sister or a mahram 77ms
+     × slides remember-me and only the last-seen time of a 12-hour session 158ms
+     × clears the cookie on logout, including a locked session, and limits PIN posts 69ms
+     × sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule 2ms
+ Test Files  3 failed (3)
+      Tests  13 failed | 19 passed (32)
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > refuses a missing session and reports an unset PIN without moving last_seen
+AssertionError: expected { error: { code: 'UNHANDLED', …(4) } } to deeply equal { locked: false }
+- Expected
++ Received
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > sets the PIN, locks this session, and unlocks only after the server check
+AssertionError: expected 400 to be 200 // Object.is equality
+- Expected
++ Received
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > ends only this session on the fifth wrong PIN
+AssertionError: expected undefined to be 4 // Object.is equality
+- Expected:
++ Received:
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > requires the PIN after a restart and after 15 minutes for a sister or a mahram
+AssertionError: expected { enabled: false, locked: false } to deeply equal { enabled: true, locked: true }

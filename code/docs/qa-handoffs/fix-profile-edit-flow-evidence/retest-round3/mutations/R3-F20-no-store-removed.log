@@ -1,0 +1,143 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [InstanceLoader] AppModule dependencies initialized +26ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] HealthController {/v1}: +20ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +4ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +3ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] MeController {/v1/me}: +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +2ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] BrowseController {/v1/browse}: +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +1ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +0ms
+[Nest] 4092  - 10/22/2026, 2:49:39 PM     LOG [NestApplication] Nest application successfully started +5ms
+ ❯ apps/api/src/pin.test.ts (8 tests | 3 failed) 3471ms
+   ❯ shared-device PIN (8)
+     × requires the PIN after a restart and after 15 minutes for a sister or a mahram 106ms
+     × slides remember-me and only the last-seen time of a 12-hour session 190ms
+     × clears the cookie on logout, including a locked session, and limits PIN posts 80ms
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  3 failed | 98 passed (101)
+   Start at  14:49:36
+   Duration  6.14s (tests 63%, transform 20%, import 16%, setup 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > requires the PIN after a restart and after 15 minutes for a sister or a mahram
+AssertionError: expected null to be 'no-store' // Object.is equality
+
+- Expected:
+"no-store"
+
++ Received:
+null
+
+ ❯ apps/api/src/pin.test.ts:266:50
+    264|     expect(blocked.status).toBe(401)
+    265|     expect(blockedBody.error).toMatchObject({ code: 'PIN_REQUIRED', me…
+    266|     expect(blocked.headers.get('cache-control')).toBe('no-store')
+       |                                                  ^
+    267|     expect(sessionRow(sister)?.last_seen_at.toISOString()).toBe(seen)
+    268|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > slides remember-me and only the last-seen time of a 12-hour session
+AssertionError: expected 401 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 401
+
+ ❯ signIn apps/api/src/pin.test.ts:97:29
+     95|       }),
+     96|     })
+     97|     expect(response.status).toBe(201)
+       |                             ^
+     98|     const cookie = response.headers.getSetCookie().join('\n')
+     99|     const match = new RegExp(`${SESSION_COOKIE}=([^;]+)`).exec(cookie)
+ ❯ apps/api/src/pin.test.ts:335:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > clears the cookie on logout, including a locked session, and limits PIN posts
+AssertionError: expected 401 to be 201 // Object.is equality
+
+- Expected
++ Received
+
+- 201
++ 401
+
+ ❯ signIn apps/api/src/pin.test.ts:97:29
+     95|       }),
+     96|     })
+     97|     expect(response.status).toBe(201)
+       |                             ^
+     98|     const cookie = response.headers.getSetCookie().join('\n')
+     99|     const match = new RegExp(`${SESSION_COOKIE}=([^;]+)`).exec(cookie)
+ ❯ apps/api/src/pin.test.ts:350:20
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

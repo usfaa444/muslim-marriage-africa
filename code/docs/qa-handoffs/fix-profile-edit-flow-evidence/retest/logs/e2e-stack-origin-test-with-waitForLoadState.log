@@ -1,0 +1,11 @@
+
+Running 6 tests using 2 workers
+
+  ✓  1 [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (8.9s)
+  ✓  2 [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (9.1s)
+  ✓  3 [mobile] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (10.5s)
+  ✓  4 [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (11.0s)
+  ✓  5 [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (12.0s)
+  ✓  6 [desktop] › e2e/profile-edit-flow.spec.ts:334:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (11.8s)
+
+  6 passed (36.6s)

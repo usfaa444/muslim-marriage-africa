@@ -1,0 +1,31 @@
+# page statuses, round 3, head d47d354: path | no cookie | garbage cookie | unlocked member (r3perf) | PIN-locked member (r3lock)
+/ | 200  | 200  | 200  | 200 
+/auth | 200  | 200  | 303 /decouvrir | 200 
+/password-reset | 200  | 200  | 200  | 200 
+/signup | 200  | 200  | 303 /onboarding | 200 
+/signup/identity | 200  | 200  | 303 /onboarding | 200 
+/age-gate | 303 /signup/identity | 303 /signup/identity | 303 /onboarding | 303 /signup/identity
+/pin | 303 /auth | 303 /auth | 200  | 200 
+/pin?next=%2Fprofile-edit | 303 /auth | 303 /auth | 200  | 200 
+/decouvrir | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fdecouvrir
+/decouvrir?vue=grille | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fdecouvrir
+/favoris | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Ffavoris
+/profile-edit | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fprofile-edit
+/profile-review | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fprofile-review
+/settings | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fsettings
+/onboarding | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fonboarding
+/photo-rules | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fphoto-rules
+/discussions | 303 /auth | 303 /auth | 401  | 303 /pin?next=%2Fdiscussions
+/invitations | 303 /auth | 303 /auth | 401  | 303 /pin?next=%2Finvitations
+/profil | 303 /auth | 303 /auth | 401  | 303 /pin?next=%2Fprofil
+/profil/00000000-0000-7000-8000-000000000000 | 303 /auth | 303 /auth | 200  | 303 /pin?next=%2Fprofil%2F00000000-0000-7000-8000-000000000000
+/privacy/status | 404  | 404  | 404  | 404 
+/email-verification | 303 /auth | 303 /auth | 303 /onboarding | 303 /pin?next=%2Femail-verification
+/phone | 303 /auth | 303 /auth | 303 /onboarding | 303 /pin?next=%2Fphone
+/otp | 303 /auth | 303 /auth | 303 /onboarding | 303 /pin?next=%2Fotp
+/id-liveness | 303 /auth | 303 /auth | 303 /onboarding | 303 /pin?next=%2Fid-liveness
+/staff/visit-signals | 303 /auth | 303 /auth | 303 /decouvrir | 303 /auth
+
+# hostile paths: locked (r3lock) | no cookie
+/profil/%2F%2Fevil.example | locked: 303 /pin?next=%2Fprofil%2F%2F%2Fevil.example | anon: 401 
+/profil//evil.example | locked: 308 /profil/evil.example | anon: 308 /profil/evil.example

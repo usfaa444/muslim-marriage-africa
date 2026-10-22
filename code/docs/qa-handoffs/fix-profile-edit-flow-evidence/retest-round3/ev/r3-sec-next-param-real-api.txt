@@ -1,0 +1,13 @@
+control: plain path | next="/profile-edit" | navigations=["/pin?next=%2Fprofile-edit","/profile-edit"] | LEFT ORIGIN: no
+control: protocol-relative // | next="//evil.example/x" | navigations=["/pin?next=%2F%2Fevil.example%2Fx","/onboarding"] | LEFT ORIGIN: no
+control: backslash /\ | next="/\\evil.example/x" | navigations=["/pin?next=%2F%5Cevil.example%2Fx","/onboarding"] | LEFT ORIGIN: no
+control: absolute https | next="https://evil.example/x" | navigations=["/pin?next=https%3A%2F%2Fevil.example%2Fx","/onboarding"] | LEFT ORIGIN: no
+control: javascript: | next="javascript:alert(1)" | navigations=["/pin?next=javascript%3Aalert(1)","/onboarding"] | LEFT ORIGIN: no
+tab inside: /<TAB>/evil | next="/\t/evil.example/x" | navigations=["/pin?next=%2F%09%2Fevil.example%2Fx","/onboarding"] | LEFT ORIGIN: no
+newline inside: /<LF>/evil | next="/\n/evil.example/x" | navigations=["/pin?next=%2F%0A%2Fevil.example%2Fx","/onboarding"] | LEFT ORIGIN: no
+carriage return inside: /<CR>/evil | next="/\r/evil.example/x" | navigations=["/pin?next=%2F%0D%2Fevil.example%2Fx","/onboarding"] | LEFT ORIGIN: no
+tab then backslash: /<TAB>\evil | next="/\t\\evil.example/x" | navigations=["/pin?next=%2F%09%5Cevil.example%2Fx","/onboarding"] | LEFT ORIGIN: no
+dot segment: /.//evil | next="/.//evil.example" | navigations=["/pin?next=%2F.%2F%2Fevil.example","/onboarding"] | LEFT ORIGIN: no
+dot segments: /a/..//evil | next="/a/..//evil.example" | navigations=["/pin?next=%2Fa%2F..%2F%2Fevil.example","/onboarding"] | LEFT ORIGIN: no
+encoded dot segments: /%2e%2e//evil | next="/%2e%2e//evil.example" | navigations=["/pin?next=%2F%252e%252e%2F%2Fevil.example","/onboarding"] | LEFT ORIGIN: no
+control char US: /<US>/evil | next="/\u001f/evil.example" | navigations=["/pin?next=%2F%1F%2Fevil.example","/onboarding"] | LEFT ORIGIN: no

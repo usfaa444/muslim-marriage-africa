@@ -1,0 +1,10 @@
+initial tokens ["01a163af"]
+waiting 63 s so the grants expire (signed_url_ttl_seconds = 60)
+tokens after repair ["01a163b0"]
+network after the expired request: ["403 GET /v1/media/get?token=01a163af…&again=1","200 GET /v1/me/profile","200 GET /v1/media/get?token=01a163b0…"]
+all photos loaded after repair: true
+origin edit kept: Edit en cours — non enregistré
+main-frame navigations during repair: []
+always-403 media: profile reads in 6 s after load = 3 (1 initial + at most 2 repairs)
+after 4 more forced failures: profile reads = 3 (must stay <= 3); media 403 count = 7
+problems: ["console.error: Failed to load resource: the server responded with a status of 404 (Not Found)","http 403: GET http://localhost:4043/v1/media/get?token=01a163af-e7b9-719e-b7d5-cae55cf4a6be&again=1","http 403: GET http://localhost:4043/v1/media/get?token=01a163b0-eafb-7194-946a-7152bb5dd5dc","http 403: GET http://localhost:4043/v1/media/get?token=01a163b0-eb30-7b5c-b8d7-0e99cf7a738d","http 403: GET http://localhost:4043/v1/media/get?token=01a163b0-eb54-71b8-a345-64d39c3c16d0","http 403: GET http://localhost:4043/v1/media/get?token=01a163b0-eb54-71b8-a345-64d39c3c16d0&x=0","http 403: GET http://localhost:4043/v1/media/get?token=01a163b0-eb54-71b8-a345-64d39c3c16d0&x=0&x=1","http 403: GET http://localhost:4043/v1/media/get?token=01a163b0-eb54-71b8-a345-64d39c3c16d0&x=0&x=1&x=2","http 403: GET http://localhost:4043/v1/media/get?token=01a163b0-eb54-71b8-a345-64d39c3c16d0&x=0&x=1&x=2&x=3"]

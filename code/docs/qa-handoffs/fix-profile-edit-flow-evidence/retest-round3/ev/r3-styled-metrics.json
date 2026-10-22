@@ -1,0 +1,2212 @@
+[
+ {
+  "screen": "profile-edit",
+  "width": 360,
+  "overflow": false,
+  "scrollWidth": 360,
+  "innerWidth": 360,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 122,
+    "h": 16,
+    "right": 146,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 57,
+    "left": 41
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 121,
+    "left": 105
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 69,
+    "left": 53
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 212,
+    "left": 196
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 69,
+    "left": 53
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 212,
+    "left": 196
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 69,
+    "left": 53
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 210,
+    "left": 194
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 210,
+    "left": 194
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 270,
+    "h": 34,
+    "right": 315,
+    "left": 45
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 93,
+    "h": 16,
+    "right": 315,
+    "left": 222
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".px-2.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: no"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": [
+   "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ },
+ {
+  "screen": "profile-edit",
+  "width": 390,
+  "overflow": false,
+  "scrollWidth": 390,
+  "innerWidth": 390,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 122,
+    "h": 16,
+    "right": 146,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 57,
+    "left": 41
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 121,
+    "left": 105
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 69,
+    "left": 53
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 227,
+    "left": 211
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 69,
+    "left": 53
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 227,
+    "left": 211
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 69,
+    "left": 53
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 300,
+    "h": 34,
+    "right": 345,
+    "left": 45
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 93,
+    "h": 16,
+    "right": 345,
+    "left": 252
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".px-2.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: no"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 768,
+  "overflow": false,
+  "scrollWidth": 768,
+  "innerWidth": 768,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 122,
+    "h": 16,
+    "right": 696,
+    "left": 574
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 376,
+    "left": 72
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 696,
+    "left": 392
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 376,
+    "left": 72
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 696,
+    "left": 392
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 105,
+    "left": 89
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 169,
+    "left": 153
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 376,
+    "left": 72
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 696,
+    "left": 392
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 117,
+    "left": 101
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 316,
+    "left": 300
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 516,
+    "left": 500
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 117,
+    "left": 101
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 316,
+    "left": 300
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 101,
+    "left": 85
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 313,
+    "left": 297
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 525,
+    "left": 509
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 97,
+    "left": 81
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 413,
+    "left": 397
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 97,
+    "left": 81
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 413,
+    "left": 397
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 118,
+    "left": 102
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 266,
+    "left": 250
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 414,
+    "left": 398
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 562,
+    "left": 546
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 675,
+    "left": 93
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 93,
+    "h": 16,
+    "right": 675,
+    "left": 582
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".px-2.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: no"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 1024,
+  "overflow": false,
+  "scrollWidth": 1024,
+  "innerWidth": 1024,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 122,
+    "h": 16,
+    "right": 824,
+    "left": 702
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 504,
+    "left": 200
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 824,
+    "left": 520
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 504,
+    "left": 200
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 824,
+    "left": 520
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 233,
+    "left": 217
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 297,
+    "left": 281
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 504,
+    "left": 200
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 824,
+    "left": 520
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 245,
+    "left": 229
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 444,
+    "left": 428
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 644,
+    "left": 628
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 245,
+    "left": 229
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 444,
+    "left": 428
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 229,
+    "left": 213
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 441,
+    "left": 425
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 653,
+    "left": 637
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 541,
+    "left": 525
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 541,
+    "left": 525
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 246,
+    "left": 230
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 394,
+    "left": 378
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 542,
+    "left": 526
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 690,
+    "left": 674
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 803,
+    "left": 221
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 93,
+    "h": 16,
+    "right": 803,
+    "left": 710
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".px-2.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: no"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 1280,
+  "overflow": false,
+  "scrollWidth": 1280,
+  "innerWidth": 1280,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 122,
+    "h": 16,
+    "right": 952,
+    "left": 830
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 632,
+    "left": 328
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 952,
+    "left": 648
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 632,
+    "left": 328
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 952,
+    "left": 648
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 361,
+    "left": 345
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 425,
+    "left": 409
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 632,
+    "left": 328
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 952,
+    "left": 648
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 373,
+    "left": 357
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 572,
+    "left": 556
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 772,
+    "left": 756
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 373,
+    "left": 357
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 572,
+    "left": 556
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 357,
+    "left": 341
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 569,
+    "left": 553
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 781,
+    "left": 765
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 353,
+    "left": 337
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 669,
+    "left": 653
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 353,
+    "left": 337
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 669,
+    "left": 653
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 374,
+    "left": 358
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 522,
+    "left": 506
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 670,
+    "left": 654
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 818,
+    "left": 802
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 931,
+    "left": 349
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 93,
+    "h": 16,
+    "right": 931,
+    "left": 838
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".px-2.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: no"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 1440,
+  "overflow": false,
+  "scrollWidth": 1440,
+  "innerWidth": 1440,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 122,
+    "h": 16,
+    "right": 1032,
+    "left": 910
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 712,
+    "left": 408
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 1032,
+    "left": 728
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 712,
+    "left": 408
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 1032,
+    "left": 728
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 441,
+    "left": 425
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 505,
+    "left": 489
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 712,
+    "left": 408
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 1032,
+    "left": 728
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 453,
+    "left": 437
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 652,
+    "left": 636
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 852,
+    "left": 836
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 453,
+    "left": 437
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 652,
+    "left": 636
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 437,
+    "left": 421
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 649,
+    "left": 633
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 861,
+    "left": 845
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 433,
+    "left": 417
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 749,
+    "left": 733
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 433,
+    "left": 417
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 749,
+    "left": 733
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 454,
+    "left": 438
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 602,
+    "left": 586
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 750,
+    "left": 734
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 898,
+    "left": 882
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 1011,
+    "left": 429
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 93,
+    "h": 16,
+    "right": 1011,
+    "left": 918
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".px-2.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: no"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     },
+     {
+      "target": ".space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+      "msg": "Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 360,
+  "overflow": false,
+  "scrollWidth": 360,
+  "innerWidth": 360,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 80,
+    "h": 15,
+    "right": 146,
+    "left": 66
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 121,
+    "h": 15,
+    "right": 294,
+    "left": 173
+   }
+  ],
+  "outside": [],
+  "axe": [],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 390,
+  "overflow": false,
+  "scrollWidth": 390,
+  "innerWidth": 390,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 80,
+    "h": 15,
+    "right": 161,
+    "left": 81
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 121,
+    "h": 15,
+    "right": 309,
+    "left": 188
+   }
+  ],
+  "outside": [],
+  "axe": [],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 768,
+  "overflow": false,
+  "scrollWidth": 768,
+  "innerWidth": 768,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 80,
+    "h": 15,
+    "right": 350,
+    "left": 270
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 121,
+    "h": 15,
+    "right": 498,
+    "left": 377
+   }
+  ],
+  "outside": [],
+  "axe": [],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 1024,
+  "overflow": false,
+  "scrollWidth": 1024,
+  "innerWidth": 1024,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 80,
+    "h": 15,
+    "right": 478,
+    "left": 398
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 121,
+    "h": 15,
+    "right": 626,
+    "left": 505
+   }
+  ],
+  "outside": [],
+  "axe": [],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 1280,
+  "overflow": false,
+  "scrollWidth": 1280,
+  "innerWidth": 1280,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 80,
+    "h": 15,
+    "right": 606,
+    "left": 526
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 121,
+    "h": 15,
+    "right": 754,
+    "left": 633
+   }
+  ],
+  "outside": [],
+  "axe": [],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 1440,
+  "overflow": false,
+  "scrollWidth": 1440,
+  "innerWidth": 1440,
+  "styled": true,
+  "iconFont": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 80,
+    "h": 15,
+    "right": 686,
+    "left": 606
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 121,
+    "h": 15,
+    "right": 834,
+    "left": 713
+   }
+  ],
+  "outside": [],
+  "axe": [],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 360,
+  "overflow": false,
+  "scrollWidth": 360,
+  "innerWidth": 360,
+  "styled": true,
+  "iconFont": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".px-2\\.5.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 9.0pt (12px), font weight: no"
+     },
+     {
+      "target": ".mt-8 > .text-deep-navy\\/50",
+      "msg": "Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 390,
+  "overflow": false,
+  "scrollWidth": 390,
+  "innerWidth": 390,
+  "styled": true,
+  "iconFont": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".px-2\\.5.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 9.0pt (12px), font weight: no"
+     },
+     {
+      "target": ".mt-8 > .text-deep-navy\\/50",
+      "msg": "Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 768,
+  "overflow": false,
+  "scrollWidth": 768,
+  "innerWidth": 768,
+  "styled": true,
+  "iconFont": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".px-2\\.5.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 9.0pt (12px), font weight: no"
+     },
+     {
+      "target": ".mt-8 > .text-deep-navy\\/50",
+      "msg": "Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 1024,
+  "overflow": false,
+  "scrollWidth": 1024,
+  "innerWidth": 1024,
+  "styled": true,
+  "iconFont": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".px-2\\.5.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 9.0pt (12px), font weight: no"
+     },
+     {
+      "target": ".mt-8 > .text-deep-navy\\/50",
+      "msg": "Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 1280,
+  "overflow": false,
+  "scrollWidth": 1280,
+  "innerWidth": 1280,
+  "styled": true,
+  "iconFont": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".px-2\\.5.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 9.0pt (12px), font weight: no"
+     },
+     {
+      "target": ".mt-8 > .text-deep-navy\\/50",
+      "msg": "Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 1440,
+  "overflow": false,
+  "scrollWidth": 1440,
+  "innerWidth": 1440,
+  "styled": true,
+  "iconFont": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": [
+     {
+      "target": ".px-2\\.5.py-0\\.5.text-soft-gold",
+      "msg": "Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 9.0pt (12px), font weight: no"
+     },
+     {
+      "target": ".mt-8 > .text-deep-navy\\/50",
+      "msg": "Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight:"
+     }
+    ]
+   }
+  ],
+  "problems": []
+ }
+]

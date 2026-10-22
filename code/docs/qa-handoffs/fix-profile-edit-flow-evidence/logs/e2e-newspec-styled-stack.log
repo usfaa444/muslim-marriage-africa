@@ -1,0 +1,641 @@
+
+Running 14 tests using 2 workers
+
+  ✘   1 [mobile] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (2.2s)
+  ✘   2 [mobile] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (2.5s)
+  ✘   3 [mobile] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.7s)
+  ✘   4 [mobile] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (1.6s)
+  ✘   5 [mobile] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.5s)
+  ✘   6 [mobile] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.4s)
+  ✓   7 [mobile] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error (369ms)
+  ✘   8 [desktop] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (2.2s)
+  ✘   9 [desktop] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (2.2s)
+  ✘  10 [desktop] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.6s)
+  ✘  11 [desktop] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (1.5s)
+  ✘  12 [desktop] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.4s)
+  ✘  13 [desktop] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.2s)
+  ✓  14 [desktop] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error (296ms)
+
+
+  1) [mobile] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:177:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:223:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at #btn-clear: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"verified_user\"]: Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at #status-hint > span:nth-child(2): Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious label-content-name-mismatch at #btn-backspace: Text inside the element is not included in the accessible name",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:230:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at #btn-clear: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"verified_user\"]: Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at #status-hint > span:nth-child(2): Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious label-content-name-mismatch at #btn-backspace: Text inside the element is not included in the accessible name",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:243:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [mobile] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:260:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [mobile] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:276:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [desktop] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:177:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [desktop] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-\\[11px\\].text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:223:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--2ffe8-h-the-error-and-the-PIN-off-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [desktop] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at #btn-clear: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"verified_user\"]: Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at #status-hint > span:nth-child(2): Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious label-content-name-mismatch at #btn-backspace: Text inside the element is not included in the accessible name",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:230:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [desktop] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at #btn-clear: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"verified_user\"]: Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at #status-hint > span:nth-child(2): Element has insufficient color contrast of 3.25 (foreground color: #838b94, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious label-content-name-mismatch at #btn-backspace: Text inside the element is not included in the accessible name",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:243:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [desktop] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:260:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [desktop] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 16
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at .sm\\:flex-row > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-\\[13px\\]: Element has insufficient color contrast of 1.8 (foreground color: #c9a86c, background color: #efe5d2, font size: 9.8pt (13px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .text-deep-navy\\/40: Element has insufficient color contrast of 2.45 (foreground color: #999c9e, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(3) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-5.pt-8:nth-child(4) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .items-start.justify-between.flex > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-2:nth-child(4) > .text-deep-navy\\/60.text-\\[11px\\]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(6) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .justify-between.flex.items-center:nth-child(1) > div > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 15.0pt (20px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at .space-y-4.pt-8:nth-child(8) > div:nth-child(1) > .mt-1.text-deep-navy\\/60: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+    +   "serious color-contrast at span[data-icon=\"check_circle\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio of 4.5:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-profile-fix/code/e2e/fixtures.ts:55:5)
+        at accessibleAsShipped (/home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:156:3)
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:276:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12 failed
+    [mobile] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [mobile] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off 
+    [mobile] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [mobile] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [mobile] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+    [mobile] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+    [desktop] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [desktop] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off 
+    [desktop] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [desktop] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+    [desktop] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+  2 passed (24.0s)

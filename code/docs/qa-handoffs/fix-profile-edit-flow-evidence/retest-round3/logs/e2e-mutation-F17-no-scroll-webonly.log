@@ -1,0 +1,177 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 4 tests using 2 workers
+
+  ✘  1 [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (6.9s)
+  ✘  2 [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (7.0s)
+  ✘  3 [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (6.3s)
+  ✘  4 [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (6.3s)
+
+
+  1) [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  getByRole('status')
+    Expected: in viewport
+    Received: viewport ratio 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeInViewport" getByRole('status') with timeout 5000ms
+      - waiting for getByRole('status')
+        14 × locator resolved to <div role="status" id="status-hint" class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5">…</div>
+           - unexpected value "viewport ratio 0"
+
+
+      360 |       await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
+      361 |       await expect(status).toHaveText('pin : six chiffres sont requis.')
+    > 362 |       await expect(status).toBeInViewport({ ratio: 1 })
+          |                            ^
+      363 |
+      364 |       api.pinEnabled = true
+      365 |       await page.goto('/pin?next=%2Fprofile-edit')
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:362:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  getByRole('status')
+    Expected: in viewport
+    Received: viewport ratio 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeInViewport" getByRole('status') with timeout 5000ms
+      - waiting for getByRole('status')
+        14 × locator resolved to <div role="status" id="status-hint" class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5">…</div>
+           - unexpected value "viewport ratio 0"
+
+
+      360 |       await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
+      361 |       await expect(status).toHaveText('pin : six chiffres sont requis.')
+    > 362 |       await expect(status).toBeInViewport({ ratio: 1 })
+          |                            ^
+      363 |
+      364 |       api.pinEnabled = true
+      365 |       await page.goto('/pin?next=%2Fprofile-edit')
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:362:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  getByRole('status')
+    Expected: in viewport
+    Received: viewport ratio 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeInViewport" getByRole('status') with timeout 5000ms
+      - waiting for getByRole('status')
+        14 × locator resolved to <div role="status" id="status-hint" class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5">…</div>
+           - unexpected value "viewport ratio 0"
+
+
+      360 |       await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
+      361 |       await expect(status).toHaveText('pin : six chiffres sont requis.')
+    > 362 |       await expect(status).toBeInViewport({ ratio: 1 })
+          |                            ^
+      363 |
+      364 |       api.pinEnabled = true
+      365 |       await page.goto('/pin?next=%2Fprofile-edit')
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:362:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8af1a-t-says-into-view-at-360x780-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 
+
+    Error: expect(locator).toBeInViewport() failed
+
+    Locator:  getByRole('status')
+    Expected: in viewport
+    Received: viewport ratio 0
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeInViewport" getByRole('status') with timeout 5000ms
+      - waiting for getByRole('status')
+        14 × locator resolved to <div role="status" id="status-hint" class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5">…</div>
+           - unexpected value "viewport ratio 0"
+
+
+      360 |       await page.getByRole('button', { name: "Déverrouiller l'espace" }).click()
+      361 |       await expect(status).toHaveText('pin : six chiffres sont requis.')
+    > 362 |       await expect(status).toBeInViewport({ ratio: 1 })
+          |                            ^
+      363 |
+      364 |       api.pinEnabled = true
+      365 |       await page.goto('/pin?next=%2Fprofile-edit')
+        at /home/claude/ankanu-profile-fix/code/e2e/profile-edit-flow.spec.ts:362:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--1ea51--says-into-view-at-1280x800-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 
+    [mobile] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 
+    [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 
+    [desktop] › e2e/profile-edit-flow.spec.ts:345:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 
+exit=1

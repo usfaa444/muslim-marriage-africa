@@ -1,0 +1,30 @@
+     × opens pin setup when the access code is turned on 16ms
+     × returns to the profile from the PIN screen and sends no save when nothing changed 5ms
+     × saves unsaved edits through the profile save before opening the PIN screen 10ms
+     × does not save again after the member already saved her edits 6ms
+     × stays on the profile with the save error and the switch off when the save fails 8ms
+     × waits for the profile read before saving edits typed early, and stays when that read fails 5ms
+     × shows the real PIN state again when the page comes back from the back/forward cache 4ms
+ Test Files  1 failed | 1 passed (2)
+      Tests  7 failed | 23 passed (30)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit load and meter > opens pin setup when the access code is turned on
+AssertionError: expected '/pin' to be '/pin?next=%2Fprofile-edit' // Object.is equality
+Expected: "/pin?next=%2Fprofile-edit"
+Received: "/pin"
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > returns to the profile from the PIN screen and sends no save when nothing changed
+AssertionError: expected '/pin' to be '/pin?next=%2Fprofile-edit' // Object.is equality
+Expected: "/pin?next=%2Fprofile-edit"
+Received: "/pin"
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > saves unsaved edits through the profile save before opening the PIN screen
+AssertionError: expected '/pin' to be '/pin?next=%2Fprofile-edit' // Object.is equality
+Expected: "/pin?next=%2Fprofile-edit"
+Received: "/pin"
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > does not save again after the member already saved her edits
+AssertionError: expected '/pin' to be '/pin?next=%2Fprofile-edit' // Object.is equality
+Expected: "/pin?next=%2Fprofile-edit"
+Received: "/pin"
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails
+AssertionError: expected '/pin' to be '/pin?next=%2Fprofile-edit' // Object.is equality
+Expected: "/pin?next=%2Fprofile-edit"
+Received: "/pin"

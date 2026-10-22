@@ -1,0 +1,5 @@
+# AC4 failure modes (390x800, styled, r2b). The fifth control case (200 OK) navigates to /pin, so the probe script stopped there as designed.
+network failure: puts=1 {"alert":"Enregistrement impossible.","shown":true,"inView":true,"pin":false,"origin":"Edit network failure","bottomLine":"","path":"/profile-edit"} navigations=["/profile-edit"]
+503 with JSON error body: puts=1 {"alert":"Service indisponible.","shown":true,"inView":true,"pin":false,"origin":"Edit 503 with JSON error body","bottomLine":"","path":"/profile-edit"} navigations=["/profile-edit"]
+503 with HTML body: puts=1 {"alert":"Enregistrement impossible.","shown":true,"inView":true,"pin":false,"origin":"Edit 503 with HTML body","bottomLine":"","path":"/profile-edit"} navigations=["/profile-edit"]
+400 with no message: puts=1 {"alert":"Enregistrement impossible.","shown":true,"inView":true,"pin":false,"origin":"Edit 400 with no message","bottomLine":"","path":"/profile-edit"} navigations=["/profile-edit"]

@@ -1,0 +1,18 @@
+     × saves unsaved edits through the profile save before opening the PIN screen 18ms
+     × stays on the profile with the save error and the switch off when the save fails 5ms
+     × waits for the profile read before saving edits typed early, and stays when that read fails 3ms
+ Test Files  1 failed (1)
+      Tests  3 failed | 20 passed (23)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > saves unsaved edits through the profile save before opening the PIN screen
+AssertionError: expected [] to have a length of 1 but got +0
+- Expected
++ Received
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails
+AssertionError: expected '/pin?next=%2Fprofile-edit' to be '' // Object.is equality
+- Expected
++ Received
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > waits for the profile read before saving edits typed early, and stays when that read fails
+AssertionError: expected '/pin?next=%2Fprofile-edit' to be '' // Object.is equality
+- Expected
++ Received

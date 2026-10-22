@@ -1,0 +1,70 @@
+
+ RUN  v5.0.3 /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa3/main/code
+
+ ❯ apps/web/src/photo-rules.test.ts (3 tests | 1 failed) 16ms
+   ❯ photo rules (3)
+     × keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button 8ms
+ ❯ apps/web/src/ank-148-fix.test.ts (1 test | 1 failed) 113997ms
+   ❯ founder staging fixes (1)
+     × wires onboarding, the browse hold, and the first photo, and fits six widths 113994ms
+ ❯ apps/web/src/v2-responsive.test.ts (2 tests | 1 failed) 361702ms
+   ❯ v2 screens fit the required widths (2)
+     × keeps scrollWidth within the viewport at every required width 360014ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/ank-148-fix.test.ts > founder staging fixes > wires onboarding, the browse hold, and the first photo, and fits six widths
+AssertionError: expected 'undefined' to contain 'règles'
+
+Expected: "règles"
+Received: "undefined"
+
+ ❯ apps/web/src/ank-148-fix.test.ts:397:61
+    395|       )) as string
+    396|       expect(photoPathname).toBe('/photo-rules')
+    397|       expect(String(await read('document.body.innerText'))).toContain(…
+       |                                                             ^
+    398|       gateStep = 'identity'
+    399|       await open('/onboarding', 1280)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  apps/web/src/photo-rules.test.ts > photo rules > keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ apps/web/src/photo-rules.test.ts:256:20
+    254|       '/usr/bin/chromium',
+    255|     ].find((path) => existsSync(path))
+    256|     expect(binary).toBeTruthy()
+       |                    ^
+    257|     const html = photoHtml(stitch())
+    258|     const server = createServer((request, response) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  apps/web/src/v2-responsive.test.ts > v2 screens fit the required widths > keeps scrollWidth within the viewport at every required width
+Error: Test timed out in 360000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ apps/web/src/v2-responsive.test.ts:472:21
+    470| describe('v2 screens fit the required widths', () => {
+    471|   const binary = chromeBinary()
+    472|   it.skipIf(!binary)('keeps scrollWidth within the viewport at every r…
+       |                     ^
+    473|     const pages = screens()
+    474|     const server: Server = createServer((request, response) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  3 failed (3)
+      Tests  3 failed | 3 passed (6)
+   Start at  10:34:17
+   Duration  362.27s (tests 100%)
+
+exit=1

@@ -1,0 +1,3 @@
+waiting 65 s
+after Back: photos=[{"ok":true},{"ok":true}] origin="" net=["200 GET /v1/me/profile","200 GET /v1/media/get?token=01a1640a…","200 GET /v1/media/get?token=01a1640a…"]
+pageshow: ["console.log: PAGESHOW persisted=false /profile-edit","console.log: PAGESHOW persisted=false /settings","console.log: PAGESHOW persisted=false /profile-edit"]

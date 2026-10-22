@@ -1,0 +1,26 @@
+# page statuses for a PIN-LOCKED session (r2lock), no redirect follow; compare r2-pages-anon-garbage-member.txt
+/ | locked: 200 
+/auth | locked: 200 
+/password-reset | locked: 200 
+/signup | locked: 200 
+/signup/identity | locked: 200 
+/age-gate | locked: 303 /signup/identity
+/pin | locked: 200 
+/pin?next=%2Fprofile-edit | locked: 200 
+/decouvrir | locked: 303 /pin?next=%2Fdecouvrir
+/decouvrir?vue=grille | locked: 303 /pin?next=%2Fdecouvrir
+/favoris | locked: 303 /pin?next=%2Ffavoris
+/profile-edit | locked: 303 /pin?next=%2Fprofile-edit
+/profile-review | locked: 303 /pin?next=%2Fprofile-review
+/settings | locked: 303 /pin?next=%2Fsettings
+/onboarding | locked: 303 /pin?next=%2Fonboarding
+/photo-rules | locked: 303 /pin?next=%2Fphoto-rules
+/discussions | locked: 303 /pin?next=%2Fdiscussions
+/invitations | locked: 303 /pin?next=%2Finvitations
+/profil | locked: 303 /pin?next=%2Fprofil
+/profil/00000000-0000-7000-8000-000000000000 | locked: 303 /pin?next=%2Fprofil%2F00000000-0000-7000-8000-000000000000
+/privacy/status | locked: 404 
+/email-verification | locked: 303 /pin?next=%2Femail-verification
+/phone | locked: 303 /pin?next=%2Fphone
+/otp | locked: 303 /pin?next=%2Fotp
+/id-liveness | locked: 303 /pin?next=%2Fid-liveness

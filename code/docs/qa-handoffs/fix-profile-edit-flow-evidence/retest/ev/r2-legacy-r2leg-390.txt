@@ -1,0 +1,12 @@
+[390] stored PIN state: 200 {"enabled":true,"locked":false}
+[390] lock: 200 {"locked":true}
+[390] locked, open /decouvrir -> /pin?next=%2Fdecouvrir
+[390] 4 digits typed: calls=[] status="Chiffrement et vérification locale sécurisée" url=/pin
+[390] after "Déverrouiller l'espace": url=/decouvrir calls=["POST /v1/pin/unlock {\"pin\":\"1234\"}"]
+[390] pin state after: 200 {"enabled":true,"locked":false}
+[390] PUT /v1/pin 1234 (4 digits): 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a163a8-4fce-75d8-a68d-11c1251b76d3","retryable":false}}
+[390] PUT /v1/pin 135790: 200 {"enabled":true}
+[390] lock: 200 {"locked":true}
+[390] unlock with the old 1234: 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":4},"request_id":"01a163a8-a2b3-7950-9409-015105c19769","retryable":false}}
+[390] unlock with 135790: 200 {"locked":false}
+[390] problems: []

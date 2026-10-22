@@ -1,0 +1,13 @@
+import { launch, memberContext, sleep, BASE } from './lib.mjs'
+const browser = await launch()
+const ctx = await memberContext(browser, process.argv[2], { width: 390, height: 800 })
+const page = await ctx.newPage()
+page.on('response', async (r) => { if (r.url().endsWith('/v1/me/profile') && r.request().method() === 'PUT') console.log('PUT', r.status(), (await r.text()).slice(0, 300), '\nREQ', r.request().postData()) })
+await page.goto(`${BASE}/profile-edit`, { waitUntil: 'load' })
+await page.waitForFunction(() => /^\d{4}-/.test(document.getElementById('dob').value))
+console.log('marital values', await page.$$eval('input[name="marital_status"]', (i) => i.map((x) => x.value + ':' + x.checked)))
+console.log('polygyny', await page.$$eval('input[name="polygyny_intent"]', (i) => i.map((x) => x.value + ':' + x.checked)))
+await page.locator('input[name="marital_status"][value="celibataire"]').check({ force: true })
+await page.locator('label:has(#profile-pin)').first().click(); await sleep(1500)
+console.log('alert:', await page.textContent('#profile-pin-status'), page.url())
+await browser.close()

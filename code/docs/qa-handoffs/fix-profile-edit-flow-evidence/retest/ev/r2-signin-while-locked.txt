@@ -1,0 +1,9 @@
+# sign in again while a session is PIN-locked (retest AC6: sign-in stays open)
+lock old session: 200
+gate with old (locked) cookie: 401
+POST /v1/sessions (password sign-in): 201
+new cookie issued: yes (differs from old: yes)
+gate with NEW cookie: {"step":"account"} 200
+pin state with NEW cookie: {"enabled":true,"locked":false}
+gate with OLD cookie still: 401
+PUT /v1/pin with OLD (locked) cookie: {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a163b7-7656-73db-92c9-dde124038413","retryable":

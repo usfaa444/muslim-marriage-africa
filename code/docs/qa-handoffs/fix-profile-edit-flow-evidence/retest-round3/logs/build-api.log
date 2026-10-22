@@ -1,0 +1,86 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from api.Dockerfile
+#1 transferring dockerfile: 1.06kB done
+#1 DONE 0.0s
+
+#2 [context ca] load .dockerignore
+#2 transferring ca: 2B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:24.21.0
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 4.05kB done
+#4 DONE 0.0s
+
+#5 [build  1/11] FROM docker.io/library/node:24.21.0@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0
+#5 resolve docker.io/library/node:24.21.0@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0 0.0s done
+#5 DONE 0.0s
+
+#6 [context ca] load from client
+#6 transferring ca: 36B done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 3.05MB 0.2s done
+#7 DONE 0.2s
+
+#8 [build  2/11] WORKDIR /app
+#8 CACHED
+
+#9 [build  4/11] COPY apps/api/package.json apps/api/package.json
+#9 CACHED
+
+#10 [build  7/11] COPY packages/ports/package.json packages/ports/package.json
+#10 CACHED
+
+#11 [build  5/11] COPY apps/web/package.json apps/web/package.json
+#11 CACHED
+
+#12 [build  8/11] COPY --from=ca ca-bundle.crt /ca.crt
+#12 CACHED
+
+#13 [build  3/11] COPY package.json package-lock.json ./
+#13 CACHED
+
+#14 [build  6/11] COPY packages/kernel/package.json packages/kernel/package.json
+#14 CACHED
+
+#15 [build  9/11] RUN npm_config_cafile=/ca.crt npm ci
+#15 CACHED
+
+#16 [build 10/11] COPY . .
+#16 DONE 0.3s
+
+#17 [build 11/11] RUN npm run build
+#17 0.382 
+#17 0.382 > build
+#17 0.382 > tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json
+#17 0.382 
+#17 DONE 2.4s
+
+#18 [stage-1 11/12] COPY --from=build /app/packages/ports/dist packages/ports/dist
+#18 CACHED
+
+#19 [stage-1  9/12] RUN npm_config_cafile=/ca.crt npm ci --omit=dev
+#19 CACHED
+
+#20 [stage-1 10/12] COPY --from=build /app/packages/kernel/dist packages/kernel/dist
+#20 CACHED
+
+#21 [stage-1 12/12] COPY --from=build /app/apps/api/dist apps/api/dist
+#21 CACHED
+
+#22 exporting to image
+#22 exporting layers done
+#22 exporting manifest sha256:68680ec4d2753816ad8983eb19f774cf86ca96179f243a610b7b4eb63d398671 done
+#22 exporting config sha256:f98c238a74cf4d31d20ee9b9b5df03af8396b8d90594404dd9212376597b64d7 done
+#22 exporting attestation manifest sha256:6a696058fc4eb320832bea6e05083000e21e7add173a8cd1172bc360d5515ee9 done
+#22 exporting manifest list sha256:0b6e2946fb8ba5882d04b53b8b3908e614297eca35cdc53b6f18447451877719 done
+#22 naming to docker.io/library/ankanu-qa3-api:latest done
+#22 unpacking to docker.io/library/ankanu-qa3-api:latest
+#22 unpacking to docker.io/library/ankanu-qa3-api:latest 7.0s done
+#22 DONE 7.1s
+api-exit=0

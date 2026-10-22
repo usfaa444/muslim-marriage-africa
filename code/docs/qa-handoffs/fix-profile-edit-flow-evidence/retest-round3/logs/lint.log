@@ -1,0 +1,8 @@
+
+> lint
+> oxlint packages apps e2e
+
+apps/web/src/photo-rules.test.ts:60:9: warning typescript(no-this-alias): Unexpected aliasing of 'this' to local variable. help: Assigning a variable to this instead of properly using arrow lambdas may be a symptom of pre-ES2015 practices or not managing scope well.
+apps/web/src/v2-flow.test.ts:497:9: warning eslint(no-unused-vars): Variable 'editBtn' is declared but never used. Unused variables should start with a '_'. help: Consider removing this declaration.
+apps/api/src/life-pause.ts:18:19: warning eslint(no-control-regex): Unexpected control characters help: Avoid matching control characters in regular expressions. If intentional, disable this rule for the expression.
+lint-exit=0

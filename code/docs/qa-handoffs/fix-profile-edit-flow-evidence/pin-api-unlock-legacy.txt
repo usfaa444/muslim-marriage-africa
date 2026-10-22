@@ -1,0 +1,14 @@
+# Legacy member: stored 4-digit PIN (argon2id hash of '1234' written to pin_lock; main-era PIN)
+GET /v1/pin -> 200 {"enabled":true,"locked":false}
+POST /v1/pin/lock -> 200 {"locked":true}
+GET /v1/pin (locked) -> 200 {"enabled":true,"locked":true}
+unlock 5 digits 12345 -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a1632a-598c-75f2-be70-b81b3d460f20","retryable":false}}
+unlock wrong legacy 9999 -> 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":4},"request_id":"01a1632a-754e-717f-8c04-46aaa068d12b","retryable":false}}
+unlock wrong 6 digits 999999 -> 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":3},"request_id":"01a1632a-911b-7df7-8fff-2c3e97aa4daa","retryable":false}}
+unlock correct legacy 1234 -> 200 {"locked":false}
+GET /v1/pin (after unlock) -> 200 {"enabled":true,"locked":false}
+PUT /v1/pin 1234 (set with 4 digits must be refused) -> 400 {"error":{"code":"UNHANDLED","message":"pin : six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a1632a-e3d9-765f-97a6-99268b5fd5a5","retryable":false}}
+PUT /v1/pin 135790 (new six-digit) -> 200 {"enabled":true}
+POST /v1/pin/lock -> 200 {"locked":true}
+unlock old legacy 1234 (must now be refused) -> 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":4},"request_id":"01a1632b-36c9-7b90-aa14-ffec3703e4be","retryable":false}}
+unlock new 135790 -> 200 {"locked":false}

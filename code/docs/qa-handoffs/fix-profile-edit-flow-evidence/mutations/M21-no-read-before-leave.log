@@ -1,0 +1,8 @@
+     × reads the answer to the write before leaving, so the browser does not cancel it 52ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > reads the answer to the write before leaving, so the browser does not cancel it
+AssertionError: expected [ 'assign /profile-edit' ] to deeply equal [ 'read PUT /v1/pin', …(1) ]
+- Expected
++ Received

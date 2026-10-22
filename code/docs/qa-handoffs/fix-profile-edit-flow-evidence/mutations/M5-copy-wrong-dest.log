@@ -1,0 +1,9 @@
+     × copies every Stitch file the web reads at runtime into the image 5ms
+     × keeps every copied Stitch file in the build context that .dockerignore allows 2ms
+     × copies only Stitch files that exist and that the web still reads 4ms
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/web-image.test.ts > web image design files > copies every Stitch file the web reads at runtime into the image
+ FAIL  apps/web/src/web-image.test.ts > web image design files > keeps every copied Stitch file in the build context that .dockerignore allows
+ FAIL  apps/web/src/web-image.test.ts > web image design files > copies only Stitch files that exist and that the web still reads

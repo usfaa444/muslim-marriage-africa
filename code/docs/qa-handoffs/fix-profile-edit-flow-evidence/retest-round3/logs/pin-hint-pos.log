@@ -1,0 +1,7 @@
+[360x640] {"vh":640,"hint":{"top":814,"bottom":846},"submit":{"top":694,"bottom":742},"docH":928,"scrollable":true} after 4 digits + button: {"text":"pin : six chiffres sont requis.","top":542,"bottom":558,"visible":true,"scrollY":272}
+[360x780] {"vh":780,"hint":{"top":814,"bottom":846},"submit":{"top":694,"bottom":742},"docH":928,"scrollable":true} after 4 digits + button: {"text":"pin : six chiffres sont requis.","top":740,"bottom":756,"visible":true,"scrollY":74}
+[390x844] {"vh":844,"hint":{"top":814,"bottom":830},"submit":{"top":694,"bottom":742},"docH":912,"scrollable":true} after 4 digits + button: {"text":"pin : six chiffres sont requis.","top":804,"bottom":820,"visible":true,"scrollY":10}
+[768x1024] {"vh":1024,"hint":{"top":844,"bottom":860},"submit":{"top":724,"bottom":772},"docH":1024,"scrollable":false} after 4 digits + button: {"text":"pin : six chiffres sont requis.","top":844,"bottom":860,"visible":true,"scrollY":0}
+[1280x800] {"vh":800,"hint":{"top":844,"bottom":860},"submit":{"top":724,"bottom":772},"docH":974,"scrollable":true} after 4 digits + button: {"text":"pin : six chiffres sont requis.","top":760,"bottom":776,"visible":true,"scrollY":84}
+[1440x900] {"vh":900,"hint":{"top":844,"bottom":860},"submit":{"top":724,"bottom":772},"docH":974,"scrollable":true} after 4 digits + button: {"text":"pin : six chiffres sont requis.","top":844,"bottom":860,"visible":true,"scrollY":0}
+exit=0

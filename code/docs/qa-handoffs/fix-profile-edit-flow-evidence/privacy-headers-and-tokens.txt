@@ -1,0 +1,28 @@
+# Cache-Control on every verb of /v1/me/profile (live stack)
+GET (member):
+HTTP/1.1 200 OK|cache-control: no-store|content-type: application/json; charset=utf-8|etag: W/"367-aZiALPOCL27ey+8LA7p7eLCQPcY"|Vary: Accept-Encoding|
+GET (no session, 401):
+HTTP/1.1 401 Unauthorized|cache-control: no-store|content-type: application/json; charset=utf-8|etag: W/"9f-uE/sDshD5LNQqPX+er0DtoAqS1M"|Vary: Accept-Encoding|
+PUT (valid payload):
+HTTP/1.1 200 OK|cache-control: no-store|content-type: application/json; charset=utf-8|etag: W/"327-NzPdbPoj/15e4YJl1RVJySeUUTg"|Vary: Accept-Encoding|
+PUT (invalid 400):
+HTTP/1.1 400 Bad Request|cache-control: no-store|content-type: application/json; charset=utf-8|etag: W/"bc-Z4bbQl2yt0Ao4UfvIDExeqHrgfA"|Vary: Accept-Encoding|
+PATCH (blur):
+HTTP/1.1 200 OK|cache-control: no-store|content-type: application/json; charset=utf-8|etag: W/"327-lPegfVo78f3M2lLBdJi9D2Odotk"|Vary: Accept-Encoding|
+PATCH (invalid 400):
+HTTP/1.1 400 Bad Request|cache-control: no-store|content-type: application/json; charset=utf-8|etag: W/"c1-5Pl5qzF5rroj5L2+Utg5M99n55o"|Vary: Accept-Encoding|
+GET /v1/pin:
+HTTP/1.1 200 OK|content-type: application/json; charset=utf-8|etag: W/"20-lgOvl17mI/KwLXvT1OJEv/C0rEo"|Vary: Accept-Encoding|
+# Media gateway: token bound to the owner, expires, answers
+owner, fresh token:
+HTTP/1.1 200 OK|content-type: image/png|
+no session:
+HTTP/1.1 401 Unauthorized|content-type: application/json; charset=utf-8|etag: W/"9f-L4GPW1ol9xBstaazjMiaxKiyRv8"|Vary: Accept-Encoding|
+another member (pinweb) with the owner's token:
+HTTP/1.1 403 Forbidden|content-type: application/json; charset=utf-8|etag: W/"99-sJHpCl+O3egozuZlfxw84ZKaeR8"|Vary: Accept-Encoding|
+empty token:
+HTTP/1.1 403 Forbidden|content-type: application/json; charset=utf-8|etag: W/"99-XmoogL6ZNcmbs+dUoqwoUVvwTQY"|Vary: Accept-Encoding|
+garbage token:
+HTTP/1.1 403 Forbidden|content-type: application/json; charset=utf-8|etag: W/"99-kCj8se/S02XwRgwRFzOOLIEy4fg"|Vary: Accept-Encoding|
+owner, same token after 62 s (TTL 60 s):
+HTTP/1.1 403 Forbidden|content-type: application/json; charset=utf-8|etag: W/"99-3zqoXpMwwxfcVFolfIiLueOe3UA"|Vary: Accept-Encoding|

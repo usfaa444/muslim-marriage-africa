@@ -1,0 +1,11 @@
+# Profile save and PIN endpoints: no session, long input, script/SQL payloads
+PUT /v1/pin no session -> 401
+POST /v1/pin/unlock no session -> 401
+PUT /v1/me/profile no session -> 401
+PUT /v1/me/profile with a staff stub cookie (wrong role) -> 401
+origin 5000 chars -> 200 {"dob":"1990-01-15","city":null,"country":null,"origin":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bio 5000 chars -> 200 {"dob":"1990-01-15","city":null,"country":null,"origin":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+script payload in origin -> 200 {"dob":"1990-01-15","city":null,"country":null,"origin":"<script>alert(1)</script>","marital_status":null,"polygamy_intent":null,"education":null,"profession":null,"madhh
+SQL payload in origin -> 200 {"dob":"1990-01-15","city":null,"country":null,"origin":"x'); DROP TABLE profile;--","marital_status":null,"polygamy_intent":null,"education":null,"profession":null,"madh
+accents + non-Latin + emoji -> 200 {"dob":"1990-01-15","city":null,"country":null,"origin":"Ouagadougou – é à ç ñ 日本語 العربية 🙂","marital_status":null,"polygamy_intent":null,"educatio
+read back: 'Ouagadougou – é à ç ñ 日本語 العربية 🙂'

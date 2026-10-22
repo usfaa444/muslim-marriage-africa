@@ -1,0 +1,36 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/web-image.test.ts (7 tests | 1 failed) 52ms
+   ❯ web image design files (7)
+     × keeps every copied Stitch file in the build context that .dockerignore allows 21ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  12:47:57
+   Duration  296ms (transform 48%, tests 32%, setup 10%, import 7%, worker 4%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/web-image.test.ts > web image design files > keeps every copied Stitch file in the build context that .dockerignore allows
+AssertionError: expected [ '17-favourites/screen.html' ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "17-favourites/screen.html",
++ ]
+
+ ❯ apps/web/src/web-image.test.ts:166:21
+    164|     const dockerignore = readFileSync(join(codeRoot, '.dockerignore'),…
+    165|     const ignored = dockerCopies(dockerfile()).filter((copy) => ignore…
+    166|     expect(ignored).toEqual([])
+       |                     ^
+    167|     // The allow list still keeps the captures and the screens the web…
+    168|     expect(ignoredByDocker(`${STITCH_ROOT}12-profile-not-yet-public/sc…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

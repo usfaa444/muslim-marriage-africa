@@ -1,0 +1,8 @@
+     × repairs a photo whose signed URL failed, at most twice per page view 18ms
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 23 passed (24)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > repairs a photo whose signed URL failed, at most twice per page view
+AssertionError: expected 4 to be 3 // Object.is equality
+- Expected
++ Received

@@ -1,0 +1,115 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/pin-screen.test.ts (10 tests | 2 failed) 1901ms
+   ❯ PIN screen length (10)
+     × fills all six dots and saves a new PIN only after the sixth digit 85ms
+     × unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button 87ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [InstanceLoader] AppModule dependencies initialized +9ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] HealthController {/v1}: +6ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +2ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +4ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RoutesResolver] CilController {/v1/me}: +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +1ms
+[Nest] 22396  - 10/22/2026, 2:47:07 PM     LOG [NestApplication] Nest application successfully started +2ms
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  2 failed | 99 passed (101)
+   Start at  14:47:04
+   Duration  7.32s (tests 59%, transform 23%, import 17%, setup 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > fills all six dots and saves a new PIN only after the sixth digit
+AssertionError: expected 'Chiffrement et vérification locale sé…' to be 'pin : six chiffres sont requis.' // Object.is equality
+
+Expected: "pin : six chiffres sont requis."
+Received: "Chiffrement et vérification locale sécurisée"
+
+ ❯ apps/web/src/pin-screen.test.ts:186:25
+    184|     await page.submit()
+    185|     expect(page.writes()).toEqual([])
+    186|     expect(page.hint()).toBe(SET_LENGTH)
+       |                         ^
+    187|     await page.press('6')
+    188|     expect(page.filled()).toBe(6)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+AssertionError: expected 'Chiffrement et vérification locale sé…' to be 'pin : quatre ou six chiffres sont req…' // Object.is equality
+
+Expected: "pin : quatre ou six chiffres sont requis."
+Received: "Chiffrement et vérification locale sécurisée"
+
+ ❯ apps/web/src/pin-screen.test.ts:210:27
+    208|     await legacy.submit()
+    209|     expect(legacy.writes()).toEqual([])
+    210|     expect(legacy.hint()).toBe(UNLOCK_LENGTH)
+       |                           ^
+    211|     await legacy.press('7')
+    212|     expect(legacy.writes()).toEqual([])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
