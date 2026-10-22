@@ -100,8 +100,14 @@ export function showAuthPanel(html: string, panel: 'signup' | 'login'): string {
     .replace('class="__TAB_SELECTED__"', `class="${TAB_IDLE}"`)
 }
 
+// Soft gold is 2.1:1 on cream. The link keeps the gold family at 5.6:1 (WCAG AA).
+export const AUTH_LINK_GOLD = 'text-[#7D5F27]'
+
 export function pointAuthLinks(html: string): string {
-  return html.replace('href="#">Mot de passe oublié ?', 'href="/password-reset">Mot de passe oublié ?')
+  return html.replace(
+    'class="text-xs text-soft-gold hover:underline font-medium" href="#">Mot de passe oublié ?',
+    `class="text-xs ${AUTH_LINK_GOLD} hover:underline font-medium" href="/password-reset">Mot de passe oublié ?`,
+  )
 }
 
 const LOGIN_ERROR = `<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="login-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span> </p>`

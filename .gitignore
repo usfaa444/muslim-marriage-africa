@@ -21,3 +21,5 @@ code/pg-data/
 code/pg-wal/
 code/pg-base/
 api.env
+code/e2e/test-results/
+code/e2e/report/

@@ -271,10 +271,14 @@ function applyResetView(html: string, view: ResetView): string {
 }
 
 export function resetHtml(stitch: string, view: ResetView = 'request'): string {
-  const linked = stitch.replace(
-    /<a ([^>]*?)href="#"([^>]*)>([\s\S]*?Retour à la connexion[\s\S]*?)<\/a>/,
-    '<a $1href="/auth"$2>$3</a>',
-  )
+  // deep-navy/50 is 3.2:1 on cream; /70 meets WCAG AA for the small print.
+  const linked = stitch
+    .replace(
+      /<a ([^>]*?)href="#"([^>]*)>([\s\S]*?Retour à la connexion[\s\S]*?)<\/a>/,
+      '<a $1href="/auth"$2>$3</a>',
+    )
+    .replace('<p class="text-[11px] text-deep-navy/50 font-normal">', '<p class="text-[11px] text-deep-navy/70 font-normal">')
+    .replace('<p class="text-xs text-deep-navy/50 font-body">', '<p class="text-xs text-deep-navy/70 font-body">')
   return mount(
     applyResetView(linked, view),
     resetScript({
