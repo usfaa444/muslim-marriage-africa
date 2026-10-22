@@ -1,0 +1,20 @@
+== baseline
+ Test Files  3 passed (3)
+      Tests  44 passed (44)
+== mutation A: remove the exemption (back to round 2 behaviour)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC3 enrolled sign-in > signs staff in over a PIN-locked member cookie and replaces that cookie with the staff session
+      Tests  1 failed | 33 passed (34)
+Updated 1 path from the index
+== mutation B: widen the exemption to every /v1/staff route
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+      Tests  52 passed (52)
+Updated 1 path from the index
+== mutation C: widen to the whole member API (exempt every route)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > requires the PIN after a restart and after 15 minutes for a sister or a mahram
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > slides remember-me and only the last-seen time of a 12-hour session
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > clears the cookie on logout, including a locked session, and limits PIN posts
+Updated 1 path from the index

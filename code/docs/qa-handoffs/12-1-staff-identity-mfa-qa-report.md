@@ -121,3 +121,40 @@ model: Claude Sonnet 5.5
 - `NODE_ENV=production` boot without `STAFF_MFA_KEY`: not re-run by me.
 - Real Google reCAPTCHA and the real Tailwind CDN: stand-ins as in round 1.
 - Environment note: the Postgres integration tests (not only `compose.test.ts`) and the restore drill delete the worktree's `code/pg-data`; the stack database was wiped twice and re-migrated. `compose.test.ts` was not run, as instructed.
+
+---
+
+# Retest, round 3 (commit fb14484): staff sign-in over a PIN-locked member cookie
+
+model: Claude Sonnet 5.5
+**Verdict: PASS with one minor finding.** Rounds 1 and 2 above are unchanged. Environment: fresh local stack from fb14484 (built images, fresh Postgres, migration 0019), project `ankanu-qa-staff`, real Chromium, same siteverify/widget/CDN/font stand-ins as before. Evidence: `code/docs/qa-handoffs/12-1-staff-identity-mfa-evidence/r3/`. The stack and volumes are removed. I ran no pg-data-deleting test.
+
+## The reported bug, in a real browser
+| Scenario | Steps | Result |
+| --- | --- | --- |
+| Idle (real time) | Seeded sister signs in at `/auth` through the UI, sets a PIN (`PUT /v1/pin` 200), then the browser idles 16 min 5 s. Member cookie now answers `/v1/me/profile` 401 `PIN_REQUIRED`, `GET /v1/pin` `locked:true`. Same browser opens `/staff/connexion`, signs in as a fresh staff account through the UI: password change, QR, code. | **Works.** The page renders its first step (no redirect to `/pin` or the member flow), `POST /v1/staff/sessions` 201, the cookie is replaced by the staff session (`staff:done` row), the browser lands on `/staff`, axe clean. The member session row is untouched (`last_seen_at` still the pre-idle value). Member pages then redirect to `/staff`. | 
+| Explicit lock | Brother signs in through the UI, sets a PIN, `POST /v1/pin/lock`, then the same staff flow. | Same result. |
+Evidence: `r3-ui-idle.txt`, `r3-ui-lock.txt`, `idle-*.png`, `lock-*.png`.
+
+## The widened exemption opens nothing else
+With a PIN-locked member cookie (API level, `api-locked-member-matrix.txt`):
+- Every member route (`/v1/me/profile`, `/v1/browse`, `/v1/favourites`, `/v1/discover`, `/v1/me`, `/v1/notifications`, `/v1/visits`, `/v1/me/export`, `POST /v1/media`, `GET /v1/media/get`, `/v1/accounts/gate`, `/v1/sessions/current`, `PUT /v1/pin`) still answers 401 `PIN_REQUIRED`.
+- Every other staff route (`/v1/staff/cases`, `metrics`, `signals/visits`, `POST cases`, `verifications/grant`, `sessions/password`, `sessions/enrollment`, `sessions/mfa`) answers 401 `PIN_REQUIRED` from the PIN gate, so none is usable. The two exempt routes: `GET /v1/staff/sessions/current` gives 403 `FORBIDDEN`; `POST /v1/staff/sessions` runs the staff sign-in (400 for an empty body). Path variants (`?x=1` reaches the same exempt route and gets the same 403; a trailing slash 308s; `//`, `%2f`, `/Staff/`, `..` traversals give `PIN_REQUIRED`) open nothing.
+- The member session is neither stamped nor unlocked: its DB `last_seen_at` is unchanged after all of the above, and `GET /v1/pin` still says `locked:true`. A staff cookie is still handled by the staff gate.
+- An unlocked member cookie and a member with staff roles still get 403 on every `/v1/staff/*` route (separation matrix re-run, `api-separation-matrix-r3.txt`, identical to round 2: none/garbage 401; member and member-with-staff-role 403; MFA-pending 403; a staff session 403 `staff_session` on 13 member endpoints; staff logout 204 then 401).
+
+## Gates re-run
+| Gate | Result |
+| --- | --- |
+| G1 | Lint 0 errors, typecheck clean, migration-check clean; only the existing `next` critical in `npm audit`; no dependency or migration change since round 2. |
+| G2 | Unit 447 passed, 12 skipped, 1 failed (`photo-rules`, known). Staff e2e and full e2e on the built stack: 31 passed, 37 skipped; failures only `/auth` axe (stand-in artefact, as in rounds 1 and 2). The new e2e "a leftover member session cookie does not send the staff sign-in to /pin..." and the real first sign-in both pass. Mutations: removing the exemption fails the new unit test; making it exempt every route fails 3 `pin.test.ts` tests; widening it to every `/v1/staff/` route fails nothing (F15). |
+| G3/G7 security | PASS as above. |
+| G6 | axe clean on the staff home after sign-in. |
+| G8 | Separation matrix and staff e2e re-run, unchanged. |
+
+## New finding
+| # | Severity | Gate | Description |
+| --- | --- | --- | --- |
+| F15 | Minor | G2 | No test pins the exemption to the two sign-in routes. Mutation: replace `STAFF_SIGN_IN_ROUTES.has(route)` with `route.includes(' /v1/staff/')`; the unit tests (`staff-mfa`, `pin`, `staff-verification-grant`, `visit-signals`: 52 tests) all pass. Live behaviour is correct today (the matrix above); add one test that a PIN-locked member cookie still gets `PIN_REQUIRED` on `/v1/staff/metrics` and `/v1/staff/sessions/mfa`. |
+
+Open items unchanged from round 2 (F4, F7, F13, F14) and the not-run gates (Lighthouse/Web Vitals, 3G throttling, ZAP, WebKit, production-boot-without-key) still apply.

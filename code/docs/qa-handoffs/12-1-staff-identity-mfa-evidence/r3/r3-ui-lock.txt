@@ -1,0 +1,22 @@
+member after UI sign-in url "/phone"
+member cookie set true
+set PIN 200
+lock 200
+member cookie state before staff sign-in (/v1/me/profile) [401,"PIN_REQUIRED"]
+GET /v1/pin {"enabled":true,"locked":true}
+member last_seen in DB (set/after idle) "2026-10-22 19:51:51.7+00"
+staff page url "/staff/connexion"
+first step visible ["login"]
+requests on page load []
+after password: error text ""
+sign-in requests ["201 POST /v1/staff/sessions"]
+cookies after staff step 1 ["01a1652b (new)"]
+landed "/staff"
+axe staff home []
+final cookie is staff session (differs from member) true
+staff session row "staff:done"
+member row unchanged true
+staff browser opens /decouvrir "/staff"
+staff browser opens /pin "/staff"
+staff browser opens /profile-edit "/staff"
+navigation trail ["/auth","/phone","/staff/connexion","/staff","/staff","/staff","/staff"]
