@@ -14,6 +14,7 @@ import {
 } from './media.js'
 import { getMediaStore } from './media-store.js'
 import { requireLiveSession } from './pin-session.js'
+import { loadStaffSession } from './staff-session.js'
 
 type CookieRequest = {
   headers?: { cookie?: string | string[] }
@@ -54,12 +55,12 @@ async function memberAccount(request: CookieRequest): Promise<{ accountId: strin
 
 /** A signed blur grant is readable by the member who holds it and by staff reviewing that grant. */
 async function grantViewer(request: CookieRequest): Promise<{ accountId: string }> {
+  const staff = await loadStaffSession(request.headers?.cookie)
+  if (staff && staff.mfa_state === 'done') {
+    return { accountId: staff.account_id }
+  }
   const session = await requireLiveSession(request.headers?.cookie)
-  if (
-    !session.roles.includes('member') &&
-    !session.roles.includes('moderator') &&
-    !session.roles.includes('operator')
-  ) {
+  if (!session.roles.includes('member')) {
     forbid()
   }
   return { accountId: session.account_id }

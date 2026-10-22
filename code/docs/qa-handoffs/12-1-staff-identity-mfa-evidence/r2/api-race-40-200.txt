@@ -1,0 +1,7 @@
+burst 40 sessions 40 responses {"401":11,"429/staff_locked":29}
+burst 200 (account already locked) sessions 0 responses {}
+staff_mfa_enrolled|1
+staff_password_changed|1
+staff_sign_in|1
+staff_sign_in_failure|5
+staff_sign_in_locked|1

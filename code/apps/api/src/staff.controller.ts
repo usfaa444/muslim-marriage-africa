@@ -1,12 +1,11 @@
 import { Body, Controller, Get, Header, HttpCode, HttpException, Post, Query, Req } from '@nestjs/common'
-import { requireLiveSession } from './pin-session.js'
 import {
   decideProfileReview,
   listProfileReviews,
   readReviewMetrics,
-  staffForbidden,
   type ReviewFailure,
 } from './profile-review.js'
+import { requireStaffSession } from './staff-session.js'
 import { grantStagingVerification, stagingStaffGrantEnabled } from './staff-verification-grant.js'
 
 type CookieRequest = {
@@ -25,11 +24,9 @@ function fail(error: ReviewFailure): never {
   )
 }
 
+/** A staff session with MFA done. Member and Mahram sessions are 403 even on an account with a staff role. */
 async function staffAccount(request: CookieRequest): Promise<string> {
-  const session = await requireLiveSession(request.headers?.cookie)
-  if (!session.roles.includes('moderator') && !session.roles.includes('operator')) {
-    fail(staffForbidden())
-  }
+  const session = await requireStaffSession(request.headers?.cookie)
   return session.account_id
 }
 

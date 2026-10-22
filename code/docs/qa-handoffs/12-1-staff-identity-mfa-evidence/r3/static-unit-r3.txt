@@ -1,0 +1,7 @@
+
+Everything's fine 🐶🔥
+1 critical severity vulnerability
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/photo-rules.test.ts > photo rules > keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button
+ Test Files  1 failed | 66 passed | 2 skipped (69)
+      Tests  1 failed | 447 passed | 12 skipped (460)

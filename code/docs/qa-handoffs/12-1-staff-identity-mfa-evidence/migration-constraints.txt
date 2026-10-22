@@ -1,0 +1,17 @@
+gender none roles {}:
+ERROR:  new row for relation "account" violates check constraint "account_gender_check"
+gender none roles {mahram}:
+ERROR:  new row for relation "account" violates check constraint "account_gender_check"
+gender none roles {moderator,mahram}:
+ERROR:  new row for relation "account" violates check constraint "account_gender_check"
+gender none roles {moderator}:
+INSERT 0 1
+gender none roles {moderator,operator}:
+INSERT 0 1
+gender none roles {admin}:
+ERROR:  new row for relation "account" violates check constraint "account_gender_check"
+gender other:
+ERROR:  new row for relation "account" violates check constraint "account_gender_check"
+session constraint: staff w/o mfa_state, web with mfa_state
+INSERT 0 1
+ERROR:  new row for relation "session" violates check constraint "session_mfa_state_check"

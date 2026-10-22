@@ -1,0 +1,7 @@
+500
+gate 401 {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a164f6-1be7-7f3a-a4b5-e9440e7b37d6","retryable":false}}
+/profile-edit 303 http://localhost:3100/auth
+/pin 303 http://localhost:3100/auth
+/decouvrir 303 http://localhost:3100/auth
+/favoris 303 http://localhost:3100/auth
+/profil/x 303 http://localhost:3100/auth

@@ -21,10 +21,13 @@ import { setFreeReviewSlaReader } from './profile-review.js'
 import { getProfileStore, memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
+import { memoryStaffStore } from './staff-store.js'
+import { installTestStaff, openTestStaff } from './test-staff-session.js'
 import { grantStagingVerification } from './staff-verification-grant.js'
 import { entryLocation } from '../../web/src/entry-guard.js'
 
 const memory = memoryAccountStore()
+const staffStore = memoryStaffStore({ memberEmailTaken: (email) => memory.emailTaken(email) })
 const sessions = memorySessionStore(memory)
 const otp = memoryPhoneOtpStore()
 const captures = memoryCaptureStore({
@@ -70,6 +73,7 @@ describe('staging staff verification grant', () => {
   let base: string
 
   beforeAll(async () => {
+    installTestStaff(staffStore)
     setAuthClock(() => now)
     setAuthLimitReader(async () => 1000)
     resetAuthRateWindow()
@@ -113,6 +117,7 @@ describe('staging staff verification grant', () => {
   })
 
   afterAll(async () => {
+    installTestStaff(undefined)
     setAuthClock(undefined)
     setAuthLimitReader(undefined)
     resetAuthRateWindow()
@@ -175,10 +180,10 @@ describe('staging staff verification grant', () => {
     return `${SESSION_COOKIE}=${match?.[1] ?? ''}`
   }
 
-  function asStaff(accountId: string, role: 'moderator' | 'operator'): void {
-    const row = memory.accounts.find((item) => item.id === accountId)
-    expect(row).toBeTruthy()
-    ;(row as { roles: string[] }).roles = [role]
+  /** A real staff session: server-command account, password change, enrollment and a TOTP code (Story 12.1). */
+  async function openStaff(role: 'moderator' | 'operator') {
+    const staff = await openTestStaff(base, staffStore, role)
+    return { ...staff, id: staff.accountId }
   }
 
   function verifyEmail(accountId: string): void {
@@ -235,9 +240,8 @@ describe('staging staff verification grant', () => {
   })
 
   it('returns 404 when the flag is off or the origin is not staging', async () => {
-    const staff = await createAccount()
-    const staffCookie = await signIn(staff.email)
-    asStaff(staff.id, 'moderator')
+    const staff = await openStaff('moderator')
+    const staffCookie = staff.cookie
     const member = await createAccount()
     delete process.env.STAGING_STAFF_VERIFICATION_GRANT
     process.env.ANKANU_PUBLIC_ORIGIN = 'https://staging.ankanu.com'
@@ -268,9 +272,8 @@ describe('staging staff verification grant', () => {
 
   it('rejects anonymous callers and members, then grants only id and liveness', async () => {
     enableStaging()
-    const operator = await createAccount()
-    const operatorCookie = await signIn(operator.email)
-    asStaff(operator.id, 'operator')
+    const operator = await openStaff('operator')
+    const operatorCookie = operator.cookie
     const member = await createAccount()
     const memberCookie = await signIn(member.email)
     await saveProfile(memberCookie)
@@ -400,9 +403,8 @@ describe('staging staff verification grant', () => {
 
   it('publishes a reviewed member and lets that member open discover', async () => {
     enableStaging()
-    const moderator = await createAccount()
-    const moderatorCookie = await signIn(moderator.email)
-    asStaff(moderator.id, 'moderator')
+    const moderator = await openStaff('moderator')
+    const moderatorCookie = moderator.cookie
     const member = await createAccount()
     const memberCookie = await signIn(member.email)
     await saveProfile(memberCookie)

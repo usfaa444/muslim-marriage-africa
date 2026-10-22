@@ -1,0 +1,11 @@
+tab order ["A#.AnKanu","INPUT#staff-email.","INPUT#staff-password.","INPUT#fake-captcha.","BUTTON#staff-login-submit.Se connecter","BODY#.AnKanu\nRéservé Staff","A#.AnKanu"]
+focus is submit "staff-login-submit"
+focus on verify heading "Code de l'application d'authentification"
+focus input "staff-verify-code"
+focus ring {"outline":"auto 1px","box":"rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0","border":"rgb(226, 212, 184)"}
+url after code "http://localhost:3100/staff"
+reached logout by Tab after 2
+after logout url "http://localhost:3100/staff/connexion"
+back button url "http://localhost:3100/staff/connexion"
+/staff after logout "http://localhost:3100/staff/connexion"
+cookies []

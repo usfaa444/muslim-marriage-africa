@@ -14,8 +14,17 @@ export const STAFF_MEMBER_MESSAGE = "Cette session d'équipe ne peut pas ouvrir 
 export const MAHRAM_MEMBER_MESSAGE = 'Une session mahram ne peut pas ouvrir cet espace.'
 export const UNAUTHENTICATED_MESSAGE = 'Session non authentifiée.'
 
+/**
+ * Test seam: the cookie values `web`, `capacitor`, `mahram` and `staff` stand in for a session without an API
+ * (vitest and the web-only `next dev` e2e run). A production build never honours them: Next replaces
+ * `process.env.NODE_ENV` with "production" at build time, so the seam cannot be switched on at runtime.
+ */
+export function stubSessionsEnabled(): boolean {
+  return process.env.NODE_ENV !== 'production'
+}
+
 export function sessionKind(cookieHeader: string | null): string | null {
-  if (!cookieHeader) {
+  if (!cookieHeader || !stubSessionsEnabled()) {
     return null
   }
   const found: string[] = []

@@ -1,0 +1,6 @@
+burst 40 sessions 40 responses {"401/OTP_INVALID":4,"429/RATE_LIMITED/staff_locked":36}
+staff_mfa_enrolled|1
+staff_password_changed|1
+staff_sign_in|1
+staff_sign_in_failure|5
+staff_sign_in_locked|1

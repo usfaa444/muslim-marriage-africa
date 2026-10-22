@@ -4,6 +4,7 @@ import { assertRecaptchaBoot } from './recaptcha.js'
 import { assertPublicOriginBoot } from './public-origin.js'
 import { assertCookieSecureBoot } from './session-cookie.js'
 import { assertSmsBoot } from './sms-port.js'
+import { assertStaffMfaBoot } from './staff-mfa-key.js'
 import { processRole, runWorkerProcess } from './worker-shell.js'
 
 assertRecaptchaBoot(process.env)
@@ -21,6 +22,7 @@ if (processRole() === 'worker') {
 } else {
   // Only the api sends codes. The worker does not read the SMS settings.
   assertSmsBoot(process.env)
+  assertStaffMfaBoot(process.env)
   const { createApp } = await import('./create-app.js')
   const { listenPort } = await import('./listen-port.js')
 

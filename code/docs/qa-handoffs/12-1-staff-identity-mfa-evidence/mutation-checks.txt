@@ -1,0 +1,32 @@
+== baseline
+ Test Files  1 passed (1)
+      Tests  21 passed (21)
+== mutation A: lock after 6 instead of 5
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC3 enrolled sign-in > locks sign-in for 15 minutes after 5 wrong codes, then opens again
+      Tests  1 failed | 20 passed (21)
+Updated 1 path from the index
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+== mutation B: requireStaffSession ignores MFA-pending
+      Tests  21 passed (21)
+Updated 1 path from the index
+== mutation C: matchTotpStep without replay check
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > TOTP (RFC 6238, SHA-1, 30 s, 6 digits) > accepts the current step and one either side, once each, and nothing further
+      Tests  1 failed | 20 passed (21)
+Updated 1 path from the index
+== mutation D: window 2
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > TOTP (RFC 6238, SHA-1, 30 s, 6 digits) > accepts the current step and one either side, once each, and nothing further
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC3 enrolled sign-in > refuses a reused code and a code outside the ±1 step window
+      Tests  2 failed | 19 passed (21)
+Updated 1 path from the index
+== mutation E: gate lets pending reach staff routes (middleware)
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC2 first sign-in: new password, QR and key, then a valid code > walks password change, enrollment and the code; a wrong code keeps the session MFA-pending
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC3 enrolled sign-in > refuses a reused code and a code outside the ±1 step window
+ FAIL  apps/api/src/staff-mfa.test.ts > staff identity and authenticator MFA (Story 12.1) > AC4 separation > refuses MFA-pending, member and Mahram sessions on every staff endpoint, even with a staff role
+      Tests  3 failed | 18 passed (21)
+Updated 1 path from the index
+== mutation F: both gates removed => above; mutation: member-staff separation (applyStaffGate member message)

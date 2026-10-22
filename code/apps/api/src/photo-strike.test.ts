@@ -27,6 +27,8 @@ import { setFreeReviewSlaReader, setVerificationGateReader } from './profile-rev
 import { memoryProfileStore, setProfileStore } from './profile-store.js'
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
+import { memoryStaffStore } from './staff-store.js'
+import { installTestStaff, openTestStaff, signInTestStaff } from './test-staff-session.js'
 
 const require = createRequire(import.meta.url)
 const { PNG } = require('pngjs') as {
@@ -37,6 +39,7 @@ const { PNG } = require('pngjs') as {
 }
 
 const memory = memoryAccountStore()
+const staffStore = memoryStaffStore({ memberEmailTaken: (email) => memory.emailTaken(email) })
 const sessions = memorySessionStore(memory)
 const pins = memoryPinLockStore()
 const media = memoryMediaStore()
@@ -112,6 +115,7 @@ describe('photo strike floor on profile upload', () => {
   const png = samplePng()
 
   beforeAll(async () => {
+    installTestStaff(staffStore)
     setAuthClock(() => now)
     setMediaClock(() => now)
     setSignedTtlReader(async () => 60)
@@ -139,6 +143,7 @@ describe('photo strike floor on profile upload', () => {
   })
 
   afterAll(async () => {
+    installTestStaff(undefined)
     setAuthClock(undefined)
     setMediaClock(undefined)
     setSignedTtlReader(undefined)
@@ -202,10 +207,10 @@ describe('photo strike floor on profile upload', () => {
     return `${SESSION_COOKIE}=${match?.[1] ?? ''}`
   }
 
-  function asStaff(accountId: string): void {
-    const row = memory.accounts.find((item) => item.id === accountId)
-    expect(row).toBeTruthy()
-    ;(row as { roles: string[] }).roles = ['moderator']
+  /** A real staff session: server-command account, password change, enrollment and a TOTP code (Story 12.1). */
+  async function openStaff(role: 'moderator' | 'operator') {
+    const staff = await openTestStaff(base, staffStore, role)
+    return { ...staff, id: staff.accountId }
   }
 
   async function upload(cookie: string, body: unknown): Promise<Response> {
@@ -240,9 +245,8 @@ describe('photo strike floor on profile upload', () => {
     now = new Date('2026-10-20T08:00:00.000Z')
     const member = await createAccount()
     const cookie = await signIn(member.email)
-    const moderator = await createAccount()
-    const staff = await signIn(moderator.email)
-    asStaff(moderator.id)
+    const moderator = await openStaff('moderator')
+    const staff = moderator.cookie
 
     const chat = await upload(cookie, { kind: 'chat_photo', image: png.toString('base64') })
     expect(chat.status).toBe(400)
@@ -334,7 +338,7 @@ describe('photo strike floor on profile upload', () => {
 
     now = new Date(thirdAt.getTime() + hourMs(24))
     const fresh = await signIn(member.email)
-    const staffFresh = await signIn(moderator.email)
+    const staffFresh = await signInTestStaff(base, staffStore, moderator)
     const reopened = await upload(fresh, { kind: 'profile_photo', image: png.toString('base64') })
     expect(reopened.status).toBe(201)
     const again = (await reopened.json()) as { id: string }
@@ -355,9 +359,8 @@ describe('photo strike floor on profile upload', () => {
     now = new Date('2026-10-22T08:00:00.000Z')
     const member = await createAccount()
     const cookie = await signIn(member.email)
-    const moderator = await createAccount()
-    const staff = await signIn(moderator.email)
-    asStaff(moderator.id)
+    const moderator = await openStaff('moderator')
+    const staff = moderator.cookie
 
     const first = await upload(cookie, { kind: 'profile_photo', image: png.toString('base64') })
     expect(first.status).toBe(201)

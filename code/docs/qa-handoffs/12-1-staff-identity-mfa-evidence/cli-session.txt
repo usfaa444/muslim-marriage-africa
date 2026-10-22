@@ -1,0 +1,40 @@
+## create mod
+Staff account created: qa.mod@example.bf (moderator).
+One-time password (shown once, change at first sign-in): [redacted]
+Sign in at /staff/connexion, then enroll an authenticator app.
+exit 0
+## create dup
+An account already uses this email. Nothing was changed.
+exit 1
+## create uppercase dup
+An account already uses this email. Nothing was changed.
+exit 1
+## bad role
+--role must be moderator or operator.
+exit 1
+## no email
+Usage:
+  node apps/api/dist/staff-cli.js create --email <email> --role moderator|operator
+  node apps/api/dist/staff-cli.js reset-mfa --email <email>
+  node apps/api/dist/staff-cli.js disable --email <email>
+exit 2
+## no args
+Usage:
+  node apps/api/dist/staff-cli.js create --email <email> --role moderator|operator
+  node apps/api/dist/staff-cli.js reset-mfa --email <email>
+  node apps/api/dist/staff-cli.js disable --email <email>
+exit 2
+## reset unknown
+No staff account uses this email.
+exit 1
+## disable unknown
+No staff account uses this email.
+exit 1
+## create op
+Staff account created: qa.op@example.bf (operator).
+One-time password (shown once, change at first sign-in): [redacted]
+Sign in at /staff/connexion, then enroll an authenticator app.
+exit 0
+## create invalid email
+A valid --email is required.
+exit 1

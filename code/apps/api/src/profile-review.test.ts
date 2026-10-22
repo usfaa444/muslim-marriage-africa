@@ -24,6 +24,8 @@ import { getProfileStore, memoryProfileStore, setProfileStore } from './profile-
 import { SESSION_COOKIE } from './session-cookie.js'
 import { setSmsPort } from './sms-port.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
+import { memoryStaffStore } from './staff-store.js'
+import { installTestStaff, openTestStaff, signInTestStaff } from './test-staff-session.js'
 
 const require = createRequire(import.meta.url)
 const { PNG } = require('pngjs') as {
@@ -34,6 +36,7 @@ const { PNG } = require('pngjs') as {
 }
 
 const memory = memoryAccountStore()
+const staffStore = memoryStaffStore({ memberEmailTaken: (email) => memory.emailTaken(email) })
 const sessions = memorySessionStore(memory)
 const pins = memoryPinLockStore()
 const media = memoryMediaStore()
@@ -113,6 +116,7 @@ describe('human review before anyone else sees a profile', () => {
   const png = samplePng()
 
   beforeAll(async () => {
+    installTestStaff(staffStore)
     setAuthClock(() => now)
     setMediaClock(() => now)
     setSignedTtlReader(async () => 60)
@@ -146,6 +150,7 @@ describe('human review before anyone else sees a profile', () => {
   })
 
   afterAll(async () => {
+    installTestStaff(undefined)
     setAuthClock(undefined)
     setMediaClock(undefined)
     setSignedTtlReader(undefined)
@@ -210,10 +215,10 @@ describe('human review before anyone else sees a profile', () => {
     return `${SESSION_COOKIE}=${match?.[1] ?? ''}`
   }
 
-  function asStaff(accountId: string, role: 'moderator' | 'operator'): void {
-    const row = memory.accounts.find((item) => item.id === accountId)
-    expect(row).toBeTruthy()
-    ;(row as { roles: string[] }).roles = [role]
+  /** A real staff session: server-command account, password change, enrollment and a TOTP code (Story 12.1). */
+  async function openStaff(role: 'moderator' | 'operator') {
+    const staff = await openTestStaff(base, staffStore, role)
+    return { ...staff, id: staff.accountId }
   }
 
   async function saveProfile(cookie: string, body: Record<string, unknown> = {}): Promise<Response> {
@@ -231,9 +236,8 @@ describe('human review before anyone else sees a profile', () => {
     expect(isListableProfile('public', 'Active')).toBe(true)
     expect(isListableProfile('held', 'Active')).toBe(false)
 
-    const operator = await createAccount()
-    const operatorCookie = await signIn(operator.email)
-    asStaff(operator.id, 'operator')
+    const operator = await openStaff('operator')
+    const operatorCookie = operator.cookie
     billingCalls = 0
     const empty = await fetch(`${base}/v1/staff/metrics`, { headers: { cookie: operatorCookie } })
     expect(empty.status).toBe(200)
@@ -263,9 +267,8 @@ describe('human review before anyone else sees a profile', () => {
     const paidCookie = await signIn(paid.email)
     expect((await saveProfile(paidCookie)).status).toBe(200)
 
-    const moderator = await createAccount()
-    const moderatorCookie = await signIn(moderator.email)
-    asStaff(moderator.id, 'moderator')
+    const moderator = await openStaff('moderator')
+    const moderatorCookie = moderator.cookie
     const listed = await fetch(`${base}/v1/staff/cases?kind=profile_review`, { headers: { cookie: moderatorCookie } })
     expect(listed.status).toBe(200)
     const body = (await listed.json()) as {
@@ -279,7 +282,7 @@ describe('human review before anyone else sees a profile', () => {
     expect(JSON.stringify(body)).not.toContain('phone_e164')
 
     now = new Date('2026-10-14T03:00:00.000Z')
-    const laterCookie = await signIn(moderator.email)
+    const laterCookie = await signInTestStaff(base, staffStore, moderator)
     const breached = await fetch(`${base}/v1/staff/metrics`, { headers: { cookie: laterCookie } })
     expect(breached.status).toBe(200)
     const metrics = (await breached.json()) as { free_review: { waiting: number; sla_breach: number; sla_hours: number } }
@@ -310,9 +313,8 @@ describe('human review before anyone else sees a profile', () => {
     const asset = media.assets.find((row) => row.id === photo.id)
     expect(asset?.moderation_state).toBe('pending')
 
-    const moderator = await createAccount()
-    const moderatorCookie = await signIn(moderator.email)
-    asStaff(moderator.id, 'moderator')
+    const moderator = await openStaff('moderator')
+    const moderatorCookie = moderator.cookie
     const queue = await fetch(`${base}/v1/staff/cases?kind=profile_review`, { headers: { cookie: moderatorCookie } })
     const queued = (await queue.json()) as { rows: Array<{ account_id: string; photos: Array<{ asset_id: string; blur_url: string }> }> }
     const mine = queued.rows.find((row) => row.account_id === member.id)
@@ -427,9 +429,8 @@ describe('human review before anyone else sees a profile', () => {
     })
     expect(uploaded.status).toBe(201)
     const photo = (await uploaded.json()) as { id: string }
-    const moderator = await createAccount()
-    const moderatorCookie = await signIn(moderator.email)
-    asStaff(moderator.id, 'moderator')
+    const moderator = await openStaff('moderator')
+    const moderatorCookie = moderator.cookie
     const blocked = await fetch(`${base}/v1/staff/cases`, {
       method: 'POST',
       headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
@@ -501,9 +502,8 @@ describe('human review before anyone else sees a profile', () => {
     })
     expect(uploaded.status).toBe(201)
     const photo = (await uploaded.json()) as { id: string }
-    const moderator = await createAccount()
-    const moderatorCookie = await signIn(moderator.email)
-    asStaff(moderator.id, 'moderator')
+    const moderator = await openStaff('moderator')
+    const moderatorCookie = moderator.cookie
     const inner = memoryAuditPort(audits)
     setAuditPort({
       async append(tx, input) {
@@ -550,9 +550,8 @@ describe('human review before anyone else sees a profile', () => {
     insertVerification(ready.id, 'id_document', 'pending')
     now = new Date('2026-10-18T00:00:02.000Z')
     insertVerification(ready.id, 'liveness', 'pending')
-    const moderator = await createAccount()
-    const moderatorCookie = await signIn(moderator.email)
-    asStaff(moderator.id, 'moderator')
+    const moderator = await openStaff('moderator')
+    const moderatorCookie = moderator.cookie
     const published = await fetch(`${base}/v1/staff/cases`, {
       method: 'POST',
       headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
@@ -568,9 +567,11 @@ describe('human review before anyone else sees a profile', () => {
     insertVerification(waiting.id, 'id_document', 'pending')
     now = new Date('2026-10-18T01:00:01.000Z')
     insertVerification(waiting.id, 'liveness', 'pending')
+    // An hour later the staff session is past its 30-minute idle clock (Story 12.1): sign in again.
+    const moderatorLater = await signInTestStaff(base, staffStore, moderator)
     const heldBack = await fetch(`${base}/v1/staff/cases`, {
       method: 'POST',
-      headers: { cookie: moderatorCookie, 'content-type': 'application/json' },
+      headers: { cookie: moderatorLater, 'content-type': 'application/json' },
       body: JSON.stringify({ kind: 'profile_review', account_id: waiting.id, profile: 'allow', photos: [] }),
     })
     expect(heldBack.status).toBe(200)
@@ -616,9 +617,8 @@ describe('human review before anyone else sees a profile', () => {
     expect(firstUpload.status).toBe(201)
     const first = (await firstUpload.json()) as { id: string; blur_url: string }
     const firstToken = first.blur_url.split('token=')[1] ?? ''
-    const moderator = await createAccount()
-    const moderatorCookie = await signIn(moderator.email)
-    asStaff(moderator.id, 'moderator')
+    const moderator = await openStaff('moderator')
+    const moderatorCookie = moderator.cookie
     const allowed = await fetch(`${base}/v1/staff/cases`, {
       method: 'POST',
       headers: { cookie: moderatorCookie, 'content-type': 'application/json' },

@@ -1,0 +1,4 @@
+  ✓  29 [desktop] › e2e/staff-shell.spec.ts:73:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.3s)
+
+  9 skipped
+  21 passed (20.0s)

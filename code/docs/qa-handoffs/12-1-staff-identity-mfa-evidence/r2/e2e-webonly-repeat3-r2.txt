@@ -1,0 +1,15 @@
+    Usage:
+
+        npx playwright show-trace e2e/test-results/smoke-public-page-auth-ren-9f484-le-errors-and-passes-axe-AA-desktop-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+    [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+    [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+    [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+    [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+    [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+  48 skipped
+  150 passed (2.7m)

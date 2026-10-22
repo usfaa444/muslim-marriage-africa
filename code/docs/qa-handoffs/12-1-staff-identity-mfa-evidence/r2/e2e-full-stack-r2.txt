@@ -1,0 +1,82 @@
+  ✓   1 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.7s)
+  ✓   2 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.8s)
+  -   4 [mobile] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key
+  -   5 [mobile] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them
+  -   6 [mobile] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts
+  -   7 [mobile] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack
+  -   8 [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile
+  -   9 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px
+  -  10 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px
+  -  11 [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button
+  -  12 [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen
+  -  13 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780
+  -  14 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800
+  -  15 [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin
+  -  16 [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload
+  -  17 [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants
+  ✓  18 [mobile] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error (287ms)
+  ✓  19 [mobile] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page (245ms)
+  ✓   3 [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.7s)
+  -  21 [mobile] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width
+  ✓  20 [mobile] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (1.9s)
+  -  23 [mobile] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width
+  ✘  22 [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.1s)
+  ✓  24 [mobile] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.5s)
+  -  26 [mobile] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width
+  -  27 [mobile] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width
+  ✓  25 [mobile] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (1.8s)
+  -  29 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe
+  -  30 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -  31 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓  28 [mobile] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (924ms)
+  -  33 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a member stub cookie is sent away from the staff home
+  -  34 [mobile] › e2e/staff-shell.spec.ts:120:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  32 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.7s)
+  ✓  35 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.3s)
+  ✓  36 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.5s)
+  ✓  38 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (7ms)
+  ✓  39 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them (4ms)
+  ✓  40 [desktop] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts (11ms)
+  ✓  41 [desktop] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack (1ms)
+  -  42 [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile
+  -  43 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px
+  -  44 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px
+  -  45 [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button
+  -  46 [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen
+  -  47 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780
+  -  48 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800
+  -  49 [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin
+  -  50 [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload
+  -  51 [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants
+  ✓  52 [desktop] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error (201ms)
+  ✓  37 [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.7s)
+  ✓  53 [desktop] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page (205ms)
+  ✓  54 [desktop] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.3s)
+  ✓  55 [desktop] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width (3.2s)
+  ✘  56 [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.1s)
+  ✓  57 [desktop] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width (3.2s)
+  ✓  58 [desktop] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.8s)
+  ✓  59 [desktop] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width (2.6s)
+  ✓  60 [desktop] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (1.7s)
+  ✓  62 [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (837ms)
+  -  63 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe
+  -  64 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -  65 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓  66 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.9s)
+  ✓  61 [desktop] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width (4.0s)
+  -  67 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a member stub cookie is sent away from the staff home
+  ✘  68 [desktop] › e2e/staff-shell.spec.ts:120:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome (7.3s)
+    - Expected  - 1
+    - Array []
+    e2e/test-results/smoke-public-page-auth-ren-9f484-le-errors-and-passes-axe-AA-mobile/test-failed-1.png
+    - Expected  - 1
+    - Array []
+    e2e/test-results/smoke-public-page-auth-ren-9f484-le-errors-and-passes-axe-AA-desktop/test-failed-1.png
+    Error: failed requests
+    - Expected  - 1
+    - Array []
+    > 35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+    e2e/test-results/staff-shell-staff-first-si-94ee7--code-then-no-member-chrome-desktop/test-failed-1.png
+  3 failed
+  37 skipped
+  28 passed (36.2s)

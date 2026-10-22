@@ -1,0 +1,5 @@
+after lock expiry signin 201 verify
+code after expiry 401 undefined
+sessions 201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201,201
+parallel wrong codes (processed as 401 means a guess was evaluated): { '401': 29, '429': 11 }
+post-expiry valid code 201 200 done

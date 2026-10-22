@@ -1,9 +1,14 @@
+import { stubSessionsEnabled } from './member-route'
+
 /** Server step guard. Client flags never decide the next screen. */
 
-/** `locked`: a live session that must enter its PIN first (the gate answers 401 PIN_REQUIRED). */
-export type GateStep = 'email' | 'phone' | 'otp' | 'identity' | 'account' | 'anon' | 'locked'
+/**
+ * `locked`: a live session that must enter its PIN first (the gate answers 401 PIN_REQUIRED).
+ * `staff`: a staff session, MFA done or not (the gate answers 403). Member pages send it to the staff home.
+ */
+export type GateStep = 'email' | 'phone' | 'otp' | 'identity' | 'account' | 'anon' | 'locked' | 'staff'
 
-export const STEP_PATH: Record<Exclude<GateStep, 'anon' | 'locked'>, string> = {
+export const STEP_PATH: Record<Exclude<GateStep, 'anon' | 'locked' | 'staff'>, string> = {
   email: '/email-verification',
   phone: '/phone',
   otp: '/otp',
@@ -15,7 +20,7 @@ const STUBS = new Set(['web', 'capacitor', 'mahram', 'staff'])
 
 const OPEN = new Set(['/signup', '/signup/identity', '/signup/pseudonym', '/signup/account'])
 
-const OWNED: Record<string, Exclude<GateStep, 'anon' | 'account'>> = {
+const OWNED: Record<string, Exclude<GateStep, 'anon' | 'account' | 'staff' | 'locked'>> = {
   '/email-verification': 'email',
   '/phone': 'phone',
   '/otp': 'otp',
@@ -47,6 +52,10 @@ export function pathnameOf(path: string): string {
 /** Where this path must send the account, or null when the path is allowed. */
 export function entryLocation(path: string, step: GateStep): string | null {
   const normalized = pathnameOf(path)
+  if (step === 'staff') {
+    // A staff session never opens member, signup or member sign-in chrome (AD-8, UX-DR27).
+    return '/staff'
+  }
   if (step === 'locked') {
     if (normalized === '/pin') {
       return null
@@ -125,7 +134,7 @@ export function readSessionCookie(header: string | null): string | null {
 }
 
 export function isStubSession(value: string | null): boolean {
-  return value !== null && STUBS.has(value)
+  return value !== null && STUBS.has(value) && stubSessionsEnabled()
 }
 
 export async function fetchGateStep(cookieHeader: string): Promise<GateStep | 'error'> {
@@ -138,6 +147,11 @@ export async function fetchGateStep(cookieHeader: string): Promise<GateStep | 'e
     if (response.status === 401) {
       const body = (await response.json().catch(() => null)) as { error?: { code?: unknown } } | null
       return body?.error?.code === 'PIN_REQUIRED' ? 'locked' : 'anon'
+    }
+    if (response.status === 403) {
+      const body = (await response.json().catch(() => null)) as { error?: { details?: { reason?: unknown } | null } } | null
+      const reason = body?.error?.details?.reason
+      return reason === 'staff_session' || reason === 'staff_mfa_pending' ? 'staff' : 'error'
     }
     if (!response.ok) {
       return 'error'

@@ -7,6 +7,12 @@ import { fileURLToPath } from 'node:url'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { Client } from 'pg'
 import { closeAccountStore, setAccountStore } from './account-store.js'
+import { createStaffAccount, disableStaffAccount, resetStaffMfa } from './staff-accounts.js'
+import { setStaffMfaKey } from './staff-mfa-key.js'
+import { changeStaffPassword, loadStaffSessionById, readEnrollment, signInStaff, verifyStaffCode } from './staff-session.js'
+import { getStaffStore } from './staff-store.js'
+import { totpCode } from './staff-totp.js'
+import { newId } from '@ankanu/kernel'
 import { setAuthClock } from './auth-clock.js'
 import { readRlAuthPerMin } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
@@ -171,6 +177,7 @@ function migrationSql(): string {
     '0016_favourite.sql',
     '0017_profile_visit.sql',
     '0018_discovery_exclusion.sql',
+    '0019_staff_mfa.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -281,6 +288,7 @@ describe('operator_config migration', () => {
       'session',
       'signed_grant',
       'sms_dispatch',
+      'staff_credential',
       'strike',
       'verification_record',
     ])
@@ -303,6 +311,7 @@ describe('operator_config migration', () => {
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
+      'public.staff_credential',
       'public.strike',
       'public.verification_record',
     ])
@@ -310,7 +319,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('19')
+    expect(applied.rows[0]?.count).toBe('20')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -415,7 +424,11 @@ describe('operator_config migration', () => {
         'id',
         'kind',
         'last_seen_at',
+        // Story 12.1: set on staff sessions only.
+        'mfa_state',
       ])
+      const memberStates = await db().query<{ mfa_state: string | null }>(`select "mfa_state" from "session"`)
+      expect(memberStates.rows.every((row) => row.mfa_state === null)).toBe(true)
 
       const junkCookie = await fetch(`http://127.0.0.1:${address.port}/v1/health`, {
         headers: { cookie: 'ankanu_session=nope' },
@@ -844,6 +857,7 @@ describe('operator_config migration', () => {
       'session',
       'signed_grant',
       'sms_dispatch',
+      'staff_credential',
       'strike',
       'verification_record',
     ])
@@ -866,6 +880,7 @@ describe('operator_config migration', () => {
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
+      'public.staff_credential',
       'public.strike',
       'public.verification_record',
     ])
@@ -1069,4 +1084,283 @@ describe('operator_config migration', () => {
     await db().query(`delete from "favourite" where "account_id" = $1`, [owner])
     await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[owner, older, newer]])
   })
+  it('provisions a staff account and signs it in with TOTP on migrated Postgres (Story 12.1)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setStaffMfaKey({ key: Buffer.alloc(32, 0x5a), kid: 'test-staff-mfa' })
+    const cookieId = (cookie: string) => /ankanu_session=([^;]+)/.exec(cookie)?.[1] ?? ''
+    try {
+      const created = await createStaffAccount({ email: 'Staff.Pg@Example.bf', role: 'moderator' })
+      expect(created.ok).toBe(true)
+      if (!created.ok) return
+      expect((await createStaffAccount({ email: 'staff.pg@example.bf', role: 'operator' })).ok).toBe(false)
+      const row = await db().query<{ gender: string; roles: string[]; status: string }>(
+        `select "gender", "roles", "status" from "account" where "id" = $1`,
+        [created.accountId],
+      )
+      expect(row.rows[0]).toEqual({ gender: 'none', roles: ['moderator'], status: 'Active' })
+      // A gender-less account must be staff-only; a member stays sister or brother.
+      let refused = ''
+      try {
+        await db().query(
+          `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+           values ('018f3a40-7c2a-7000-8000-0000000000d1', 'none-member@example.bf', 'None_Member', 'none', $1, 'Active', true, 'FR-089', 'A', 'B')`,
+          [['member']],
+        )
+      } catch (error) {
+        refused = postgresCode(error) ?? ''
+      }
+      expect(refused).toBe('23514')
+
+      const opened = await signInStaff({ email: 'staff.pg@example.bf', password: created.oneTimePassword })
+      expect(opened.ok).toBe(true)
+      if (!opened.ok) return
+      expect(opened.body.mfa_state).toBe('password_change')
+      const pendingId = cookieId(opened.cookie)
+      let pending = await loadStaffSessionById(pendingId)
+      expect(pending?.mfa_state).toBe('password_change')
+      const kind = await db().query<{ kind: string; mfa_state: string }>(`select "kind", "mfa_state" from "session" where "id" = $1`, [pendingId])
+      expect(kind.rows[0]).toEqual({ kind: 'staff', mfa_state: 'password_change' })
+      let badState = ''
+      try {
+        await db().query(`update "session" set "kind" = 'web' where "id" = $1`, [pendingId])
+      } catch (error) {
+        badState = postgresCode(error) ?? ''
+      }
+      expect(badState).toBe('23514')
+
+      if (!pending) return
+      expect((await changeStaffPassword(pending, { new_password: 'phrase staff postgres' })).ok).toBe(true)
+      pending = await loadStaffSessionById(pendingId)
+      if (!pending) return
+      const enrollment = await readEnrollment(pending)
+      expect(enrollment.ok).toBe(true)
+      if (!enrollment.ok) return
+      const secret = enrollment.body.secret.replace(/\s/g, '')
+      const verified = await verifyStaffCode(pending, { code: totpCode(secret, new Date()) })
+      expect(verified.ok).toBe(true)
+      if (!verified.ok) return
+      const factors = await db().query<{ totp_sealed: string; totp_pending_sealed: string | null; totp_last_step: string }>(
+        `select "totp_sealed", "totp_pending_sealed", "totp_last_step"::text from "staff_credential" where "account_id" = $1`,
+        [created.accountId],
+      )
+      expect(factors.rows[0]?.totp_pending_sealed).toBeNull()
+      expect(factors.rows[0]?.totp_sealed).not.toContain(secret)
+      const lastStep = Number(factors.rows[0]?.totp_last_step)
+      expect(await getStaffStore().consumeStep(created.accountId, lastStep, {}, [])).toBe(false)
+      expect((await loadStaffSessionById(cookieId(verified.cookie)))?.mfa_state).toBe('done')
+      expect(await loadStaffSessionById(pendingId)).toBeNull()
+
+      expect((await resetStaffMfa({ email: 'staff.pg@example.bf' })).ok).toBe(true)
+      expect(await loadStaffSessionById(cookieId(verified.cookie))).toBeNull()
+      expect((await disableStaffAccount({ email: 'staff.pg@example.bf' })).ok).toBe(true)
+      const disabled = await signInStaff({ email: 'staff.pg@example.bf', password: 'phrase staff postgres' })
+      expect(disabled.ok).toBe(false)
+
+      const actions = await db().query<{ action: string; payload: Record<string, string> }>(
+        `select "action", "payload" from "audit_event" where "action" like 'staff_%'`,
+      )
+      expect(new Set(actions.rows.map((item) => item.action))).toEqual(
+        new Set([
+          'staff_account_created',
+          'staff_password_changed',
+          'staff_mfa_enrolled',
+          'staff_sign_in',
+          'staff_mfa_reset',
+          'staff_account_disabled',
+          'staff_sign_in_failure',
+        ]),
+      )
+      const text = JSON.stringify(actions.rows)
+      expect(text).not.toContain(created.oneTimePassword)
+      expect(text).not.toContain(secret)
+      expect(text).not.toContain('phrase staff postgres')
+    } finally {
+      setStaffMfaKey(undefined)
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('counts staff code attempts atomically, refuses a staff session without a step, and a duplicate create (Story 12.1, QA round 1)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setStaffMfaKey({ key: Buffer.alloc(32, 0x5a), kid: 'test-staff-mfa' })
+    try {
+      // F9: two creates of one email at the same time. One wins; the other is a clean refusal.
+      const raced = await Promise.all([
+        createStaffAccount({ email: 'race.pg@example.bf', role: 'moderator' }),
+        createStaffAccount({ email: 'race.pg@example.bf', role: 'operator' }),
+      ])
+      expect(raced.filter((item) => item.ok)).toHaveLength(1)
+      const loser = raced.find((item) => !item.ok)
+      expect(loser).toEqual({ ok: false, message: 'An account already uses this email. Nothing was changed.' })
+      const winner = raced.find((item) => item.ok)
+      if (!winner?.ok) return
+      const rows = await db().query(`select "id" from "account" where "email" = 'race.pg@example.bf'`)
+      expect(rows.rows).toHaveLength(1)
+
+      // F3: a staff session always carries its MFA step.
+      let nullState = ''
+      try {
+        await db().query(
+          `insert into "session" ("id", "account_id", "kind", "expires_at", "last_seen_at", "mfa_state") values ($1, $2, 'staff', now() + interval '1 hour', now(), null)`,
+          [newId(new Date()), winner.accountId],
+        )
+      } catch (error) {
+        nullState = postgresCode(error) ?? ''
+      }
+      expect(nullState).toBe('23514')
+
+      // F1: 40 wrong codes at once on 40 pending sessions of one account. At most 5 are checked; one lock event.
+      await db().query(`update "staff_credential" set "must_change_password" = false where "account_id" = $1`, [winner.accountId])
+      const enrollmentPending = newId(new Date())
+      await getStaffStore().insertSession({
+        id: enrollmentPending,
+        account_id: winner.accountId,
+        expires_at: new Date(Date.now() + 3_600_000),
+        last_seen_at: new Date(),
+        mfa_state: 'enroll',
+      })
+      const enrolling = await loadStaffSessionById(enrollmentPending)
+      if (!enrolling) throw new Error('pending session')
+      const enrollment = await readEnrollment(enrolling)
+      if (!enrollment.ok) throw new Error('enrollment')
+      const secret = enrollment.body.secret.replace(/\s/g, '')
+      await db().query(`update "staff_credential" set "totp_sealed" = "totp_pending_sealed", "totp_pending_sealed" = null where "account_id" = $1`, [winner.accountId])
+      const ids: string[] = []
+      for (let index = 0; index < 40; index += 1) {
+        const id = newId(new Date())
+        ids.push(id)
+        await getStaffStore().insertSession({
+          id,
+          account_id: winner.accountId,
+          expires_at: new Date(Date.now() + 3_600_000),
+          last_seen_at: new Date(),
+          mfa_state: 'verify',
+        })
+      }
+      const views = await Promise.all(ids.map((id) => loadStaffSessionById(id)))
+      const now = new Date()
+      const valid = new Set([-1, 0, 1].map((offset) => totpCode(secret, now, offset)))
+      const wrong = ['000000', '111111', '222222', '333333'].find((item) => !valid.has(item)) ?? '444444'
+      const results = await Promise.all(views.map((view) => (view ? verifyStaffCode(view, { code: wrong }, now) : null)))
+      const statuses = results.map((item) => (item === null ? 0 : item.ok ? 200 : item.status))
+      expect(statuses.filter((item) => item === 401)).toHaveLength(4)
+      expect(statuses.filter((item) => item === 429)).toHaveLength(36)
+      const audit = await db().query<{ action: string; n: string }>(
+        `select "action", count(*)::text as n from "audit_event" where "action" in ('staff_sign_in_failure', 'staff_sign_in_locked') and "payload"->>'account_id' = $1 group by "action"`,
+        [winner.accountId],
+      )
+      expect(Object.fromEntries(audit.rows.map((row) => [row.action, row.n]))).toEqual({
+        staff_sign_in_failure: '5',
+        staff_sign_in_locked: '1',
+      })
+      const lock = await db().query<{ failed_codes: number; locked: boolean }>(
+        `select "failed_codes", "locked_until" > now() as locked from "staff_credential" where "account_id" = $1`,
+        [winner.accountId],
+      )
+      expect(lock.rows[0]).toEqual({ failed_codes: 5, locked: true })
+      const live = await db().query(`select 1 from "session" where "account_id" = $1 and "expires_at" > now()`, [winner.accountId])
+      expect(live.rows).toHaveLength(0)
+    } finally {
+      setStaffMfaKey(undefined)
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('lets staff sign in over a PIN-locked member cookie on migrated Postgres (Story 12.1, round 3)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setStaffMfaKey({ key: Buffer.alloc(32, 0x5a), kid: 'test-staff-mfa' })
+    resetAuthRateWindow()
+    let clock = new Date()
+    setAuthClock(() => clock)
+    const app = await createApp()
+    await app.listen(0, '127.0.0.1')
+    try {
+      const address = app.getHttpServer().address() as AddressInfo | string | null
+      if (address === null || typeof address === 'string') throw new Error('expected a TCP port')
+      const base = `http://127.0.0.1:${address.port}`
+      const post = (path: string, body: unknown, cookie = '') =>
+        fetch(`${base}${path}`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', ...(cookie ? { cookie } : {}) },
+          body: JSON.stringify(body),
+        })
+      const member = await post('/v1/accounts', {
+        email: 'pin.member@example.bf',
+        password: 'phrase avec espaces',
+        pseudonym: 'Pin_Member',
+        gender: 'sister',
+        pledge_accepted: true,
+        civil_given_name: 'Awa',
+        civil_family_name: 'Ouedraogo',
+        recaptcha_token: 'test-ok',
+        coc_version: 'FR-089',
+        dob: '1991-02-03',
+      })
+      expect(member.status).toBe(201)
+      const signed = await post('/v1/sessions', {
+        identifier: 'pin.member@example.bf',
+        password: 'phrase avec espaces',
+        remember_me: false,
+        recaptcha_token: 'test-ok',
+      })
+      expect(signed.status).toBe(201)
+      const memberCookie = /ankanu_session=[^;]+/.exec(signed.headers.get('set-cookie') ?? '')?.[0] ?? ''
+      const pin = await fetch(`${base}/v1/pin`, {
+        method: 'PUT',
+        headers: { cookie: memberCookie, 'content-type': 'application/json' },
+        body: JSON.stringify({ pin: '246813' }),
+      })
+      expect(pin.status).toBeLessThan(300)
+      clock = new Date(clock.getTime() + 16 * 60_000)
+      const locked = await fetch(`${base}/v1/health`, { headers: { cookie: memberCookie } })
+      expect(locked.status).toBe(401)
+      expect(await locked.json()).toMatchObject({ error: { code: 'PIN_REQUIRED' } })
+
+      const probe = await fetch(`${base}/v1/staff/sessions/current`, { headers: { cookie: memberCookie } })
+      expect(probe.status).toBe(403)
+      const created = await createStaffAccount({ email: 'pin.staff@example.bf', role: 'operator' })
+      if (!created.ok) throw new Error(created.message)
+      const opened = await post(
+        '/v1/staff/sessions',
+        { email: 'pin.staff@example.bf', password: created.oneTimePassword, recaptcha_token: 'test-ok' },
+        memberCookie,
+      )
+      expect(opened.status).toBe(201)
+      expect(await opened.json()).toMatchObject({ kind: 'staff', mfa_state: 'password_change' })
+      const staffCookie = /ankanu_session=[^;]+/.exec(opened.headers.get('set-cookie') ?? '')?.[0] ?? ''
+      expect(staffCookie).not.toBe(memberCookie)
+      const current = await fetch(`${base}/v1/staff/sessions/current`, { headers: { cookie: staffCookie } })
+      expect(current.status).toBe(200)
+      // The member session row stays as it was: still there, still locked.
+      expect((await fetch(`${base}/v1/health`, { headers: { cookie: memberCookie } })).status).toBe(401)
+    } finally {
+      setAuthClock(undefined)
+      resetAuthRateWindow()
+      setStaffMfaKey(undefined)
+      await app.close()
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
 })

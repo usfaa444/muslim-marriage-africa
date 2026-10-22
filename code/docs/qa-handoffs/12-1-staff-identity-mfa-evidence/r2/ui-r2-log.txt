@@ -1,0 +1,31 @@
+leave link on email step ["/staff/connexion?leave=1"]
+axe login []
+leave link on password step ["/staff/connexion?leave=1"]
+axe password []
+password hint "Le mot de passe provisoire ne sert qu'une fois."
+aria-describedby "staff-new-password-hint"
+short "Le mot de passe doit compter de 12 à 128 caractères."
+same "Choisissez un mot de passe différent du mot de passe provisoire."
+leave link on enroll step ["/staff/connexion?leave=1"]
+axe enroll []
+field attrs {"maxlength":"16","pattern":null}
+href "/staff/connexion?leave=1"
+after pending sign-out url "http://localhost:3100/staff/connexion"
+step after ["login"]
+cookies after leave []
+same pending key after re-login true
+field keeps spaced code "491 768"
+after spaced code "http://localhost:3100/staff"
+axe home []
+home@360 {"sw":360,"iw":360,"brandX":16,"h1X":16,"badge":true,"nav":0}
+home@390 {"sw":390,"iw":390,"brandX":16,"h1X":16,"badge":true,"nav":0}
+home@768 {"sw":768,"iw":768,"brandX":48,"h1X":48,"badge":true,"nav":0}
+home@1024 {"sw":1024,"iw":1024,"brandX":48,"h1X":48,"badge":true,"nav":0}
+home@1280 {"sw":1280,"iw":1280,"brandX":48,"h1X":48,"badge":true,"nav":0}
+home@1440 {"sw":1440,"iw":1440,"brandX":128,"h1X":128,"badge":true,"nav":0}
+signed-in staff opens /decouvrir "/staff"
+signed-in staff opens /auth "/staff"
+signed-in staff opens /profile-edit "/staff"
+visit-signals url "/staff/visit-signals"
+axe visit-signals [["color-contrast","serious",3]]
+console errors ["Failed to load resource: the server responded with a status of 404 (Not Found)","Failed to load resource: the server responded with a status of 400 (Bad Request)","Failed to load resource: the server responded with a status of 400 (Bad Request)"]

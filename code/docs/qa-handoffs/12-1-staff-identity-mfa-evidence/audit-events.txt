@@ -1,0 +1,83 @@
+staff_account_created|-|{"via": "server_command", "role": "moderator", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_account_created|-|{"via": "server_command", "role": "operator", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_password_changed|qa.mod@example.bf|{"account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_sign_in_failure|qa.mod@example.bf|{"reason": "code", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_mfa_enrolled|qa.mod@example.bf|{"account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_sign_in|qa.mod@example.bf|{"role": "moderator", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_sign_in|qa.mod@example.bf|{"role": "moderator", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_password_changed|qa.op@example.bf|{"account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_mfa_enrolled|qa.op@example.bf|{"account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in|qa.op@example.bf|{"role": "operator", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_account_created|-|{"via": "server_command", "role": "moderator", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_password_changed|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_mfa_enrolled|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in|qa.race@example.bf|{"role": "moderator", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in|qa.op@example.bf|{"role": "operator", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in|qa.op@example.bf|{"role": "operator", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in|qa.op@example.bf|{"role": "operator", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_locked|qa.op@example.bf|{"account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df", "locked_until": "2026-10-22T18:02:31.245Z"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "credentials", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "code", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_locked|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44", "locked_until": "2026-10-22T18:03:18.339Z"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_locked|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44", "locked_until": "2026-10-22T18:03:18.342Z"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_locked|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44", "locked_until": "2026-10-22T18:03:18.344Z"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_locked|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44", "locked_until": "2026-10-22T18:03:18.332Z"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_locked|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44", "locked_until": "2026-10-22T18:03:18.338Z"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_locked|qa.race@example.bf|{"account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44", "locked_until": "2026-10-22T18:03:18.340Z"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in_failure|qa.race@example.bf|{"reason": "code", "account_id": "01a164b8-cf1b-7052-8afa-f28acd9d0e44"}
+staff_sign_in|qa.op@example.bf|{"role": "operator", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_sign_in|qa.mod@example.bf|{"role": "moderator", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_mfa_reset|-|{"via": "server_command", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_sign_in_failure|qa.mod@example.bf|{"reason": "code", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_mfa_enrolled|qa.mod@example.bf|{"account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_sign_in|qa.mod@example.bf|{"role": "moderator", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_sign_in|qa.mod@example.bf|{"role": "moderator", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_account_disabled|-|{"via": "server_command", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_sign_in_failure|-|{"reason": "credentials"}
+staff_sign_in_failure|-|{"reason": "credentials"}
+staff_sign_in_failure|-|{"reason": "credentials"}
+staff_sign_in_failure|qa.op@example.bf|{"reason": "credentials", "account_id": "01a164b5-d6db-75e4-abdb-790edc4e46df"}
+staff_mfa_reset|-|{"via": "server_command", "account_id": "01a164b5-bdf6-753e-85f3-3f4ccd48027a"}
+staff_account_created|-|{"via": "server_command", "role": "moderator", "account_id": "01a164bb-941d-704e-a656-f394dcce3dc9"}

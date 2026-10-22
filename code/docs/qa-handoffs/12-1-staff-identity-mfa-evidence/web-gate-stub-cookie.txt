@@ -1,0 +1,20 @@
+cookie []:
+  /staff 303 http://localhost:4061/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:4061/staff/connexion
+  /decouvrir 303 http://localhost:4061/auth
+cookie [ankanu_session=staff]:
+  /staff 200 
+  /staff/connexion 303 http://localhost:4061/staff
+  /staff/visit-signals 200 
+  /decouvrir 403 
+cookie [ankanu_session=zzz]:
+  /staff 303 http://localhost:4061/staff/connexion
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:4061/staff/connexion
+  /decouvrir 303 http://localhost:4061/auth
+cookie [ankanu_session=web]:
+  /staff 303 http://localhost:4061/decouvrir
+  /staff/connexion 200 
+  /staff/visit-signals 303 http://localhost:4061/decouvrir
+  /decouvrir 401 
