@@ -70,7 +70,12 @@ function run(
 }
 
 function composeEnv(overrides: Record<string, string | undefined>): NodeJS.ProcessEnv {
-  const env: NodeJS.ProcessEnv = { ...process.env, COMPOSE_PROJECT_NAME: 'ankanu' }
+  const env: NodeJS.ProcessEnv = {
+    ...process.env,
+    COMPOSE_PROJECT_NAME: 'ankanu',
+    ANKANU_PUBLIC_ORIGIN: 'https://staging.ankanu.com',
+    ANKANU_ALLOWED_ORIGINS: 'https://staging.ankanu.com,http://72.61.0.79:4012',
+  }
   for (const [key, value] of Object.entries(overrides)) {
     if (value === undefined) {
       delete env[key]
@@ -145,8 +150,9 @@ describe('compose file', () => {
     expect(text).toContain('POSTGRES_USER: ankanu')
     expect(text).toContain('POSTGRES_DB: ankanu')
     expect(text).toContain('DATABASE_URL: postgres://ankanu@postgres:5432/ankanu')
-    expect(text).toContain('ANKANU_PUBLIC_ORIGIN: https://staging.ankanu.com')
-    expect(text).toContain('ANKANU_ALLOWED_ORIGINS: https://staging.ankanu.com,http://72.61.0.79:4012')
+    // Origins differ per host, so they come from the host env file. The api refuses to boot without them.
+    expect(text).toContain('ANKANU_PUBLIC_ORIGIN: "${ANKANU_PUBLIC_ORIGIN:-}"')
+    expect(text).toContain('ANKANU_ALLOWED_ORIGINS: "${ANKANU_ALLOWED_ORIGINS:-}"')
     expect(text).not.toContain('ANKANU_COOKIE_SECURE: "false"')
     expect(text).toContain('*[![:space:]]*')
     expect(text).not.toContain('[ -z "$$MINIO_ROOT_USER" ]')

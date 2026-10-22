@@ -10,6 +10,13 @@ docker compose -p ankanu --env-file /var/lib/ankanu/compose.interpolate.env \
   up -d --build --no-deps web api worker
 ```
 
+`/var/lib/ankanu/compose.interpolate.env` must hold the two origins, because `code/compose.yaml` no longer names a host. Add them before the first deploy that includes this change. The api refuses to boot without them.
+
+```
+ANKANU_PUBLIC_ORIGIN=https://staging.ankanu.com
+ANKANU_ALLOWED_ORIGINS=https://staging.ankanu.com,http://72.61.0.79:4012
+```
+
 Do not run `docker compose -p ankanu down`. Do not recreate postgres, redis, or the bucket unless that is the change. Do not stop other projects.
 
 ## Upstream
