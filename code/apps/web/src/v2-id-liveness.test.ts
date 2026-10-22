@@ -221,6 +221,7 @@ function mount(fetchImpl: FetchImpl, camera: { getUserMedia?: () => Promise<unkn
     error,
     errorText,
     idFile,
+    replace,
     confirm,
     cameraButton,
     retakeButton,
@@ -479,12 +480,18 @@ describe('id-liveness confirm', () => {
     expect(dialogs).toEqual([])
   })
 
-  it('asks for a new capture when the stored photo is held and does not open onboarding', async () => {
-    const { fetchImpl } = captureFetch({ id: 'held', live: 'pending', gate: 'identity' })
+  // Before the staff review console this asked for a retake ("Reprenez la capture."). A held capture now means the
+  // age hold: the page says no action is needed, so it neither asks for a retake nor opens onboarding (QA round 1, F4).
+  it('neither asks for a new capture nor opens onboarding when the stored photo is held', async () => {
+    const { calls, fetchImpl } = captureFetch({ id: 'held', live: 'pending', gate: 'identity' })
     const page = await ready(fetchImpl)
+    expect(page.held.classList.contains('hidden')).toBe(false)
+    const before = calls.length
     await page.confirm.listeners.click?.({ preventDefault() {} })
+    expect(calls.length).toBe(before)
     expect(page.assigned).toEqual([])
-    expect(page.errorText.textContent).toBe('Reprenez la capture.')
+    expect(page.errorText.textContent).not.toBe('Reprenez la capture.')
+    expect(page.confirm.disabled).toBe(true)
     expect(dialogs).toEqual([])
   })
 
@@ -556,6 +563,15 @@ describe('id-liveness confirm', () => {
     expect(page.held.classList.contains('hidden')).toBe(false)
     expect(page.idReject.classList.contains('hidden')).toBe(true)
     expect(calls.some((call) => call.url === '/v1/verifications/liveness-challenge')).toBe(false)
+    // QA round 1 (F4): nothing to redo, so every capture control is gone and inert.
+    for (const control of [page.replace, page.cameraButton, page.retakeButton, page.confirm]) {
+      expect(control.disabled, control.textContent).toBe(true)
+      expect((control as { hidden?: boolean }).hidden, control.textContent).toBe(true)
+    }
+    const before = calls.length
+    await page.confirm.listeners.click?.({ preventDefault() {} })
+    await page.cameraButton.listeners.click?.()
+    expect(calls.length).toBe(before)
   })
 
   it('draws a new pose and asks for a new selfie when the challenge expired before the upload', async () => {
@@ -581,6 +597,18 @@ describe('id-liveness confirm', () => {
     }
     expect(page.indexOf('id="id-reject"')).toBeLessThan(page.indexOf('id="pose-card"'))
     expect(page.indexOf('id="pose-card"')).toBeLessThan(page.indexOf('id="liveness-viewfinder"'))
+  })
+
+  it('gives "Remplacer" and the switch-account link 44 px targets (QA round 1, F9)', () => {
+    const page = idHtml(stitch('07-id-liveness'))
+    const replace = /<button class="([^"]*)" type="button">\s*Remplacer/.exec(page)?.[1] ?? ''
+    expect(replace).toContain('min-h-[44px]')
+    expect(replace).toContain('min-w-[44px]')
+    expect(replace).toContain('inline-flex')
+    const tags = page.match(/<a [^>]*>/g) ?? []
+    const switchLink = tags.find((tag) => tag.includes('switch-account')) ?? ''
+    expect(switchLink).toContain('min-h-[44px]')
+    expect(page).toContain('text-[11px] text-deep-navy/80 font-medium">CNIB • Passeport • Carte Consulaire')
   })
 
   it('puts the error line on the served page and does not call a native dialog', () => {

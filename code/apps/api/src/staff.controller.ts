@@ -47,6 +47,7 @@ async function moderatorAccount(request: CookieRequest): Promise<string> {
 @Controller('staff')
 export class StaffController {
   @Get('cases')
+  @Header('Cache-Control', 'no-store')
   async cases(@Req() request: CookieRequest, @Query('kind') kind: unknown) {
     const staffId = await moderatorAccount(request)
     if (kind !== 'profile_review') {
@@ -68,6 +69,7 @@ export class StaffController {
 
   @Post('cases')
   @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
   async decide(@Req() request: CookieRequest, @Body() body: unknown) {
     const staffId = await moderatorAccount(request)
     const decided = await decideProfileReview(staffId, body)
@@ -78,6 +80,7 @@ export class StaffController {
   }
 
   @Get('metrics')
+  @Header('Cache-Control', 'no-store')
   async metrics(@Req() request: CookieRequest) {
     await staffAccount(request)
     const metrics = await readReviewMetrics()

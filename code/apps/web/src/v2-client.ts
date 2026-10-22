@@ -767,6 +767,7 @@ export function idScript(options: { tickMs?: number } = {}): string {
     var chosenLive = null
     var liveSent = false
     var busy = false
+    var heldAccount = false
     var capturing = false
     function showName(name) {
       if (!title) return
@@ -843,7 +844,7 @@ export function idScript(options: { tickMs?: number } = {}): string {
     document.querySelectorAll('button').forEach(function (button) {
       if ((button.textContent || '').indexOf('Remplacer') !== -1) {
         button.addEventListener('click', function () {
-          if (busy) return
+          if (busy || heldAccount) return
           idFile.click()
         })
       }
@@ -864,7 +865,7 @@ export function idScript(options: { tickMs?: number } = {}): string {
     var camera = document.getElementById('trigger-cam-btn')
     if (camera) {
       camera.addEventListener('click', async function () {
-        if (busy || capturing) return
+        if (busy || capturing || heldAccount) return
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           showCaptureError("La caméra est indisponible.")
           return
@@ -924,7 +925,7 @@ export function idScript(options: { tickMs?: number } = {}): string {
       if ((button.textContent || '').indexOf('Confirmer et transmettre') !== -1) {
         button.addEventListener('click', async function (event) {
           if (event && event.preventDefault) event.preventDefault()
-          if (busy) return
+          if (busy || heldAccount) return
           busy = true
           button.disabled = true
           clearCaptureError()
@@ -1007,7 +1008,7 @@ export function idScript(options: { tickMs?: number } = {}): string {
     document.querySelectorAll('button').forEach(function (button) {
       if ((button.textContent || '').indexOf('Reprendre la capture') !== -1) {
         button.addEventListener('click', async function () {
-          if (busy || capturing) return
+          if (busy || capturing || heldAccount) return
           chosenLive = null
           usedChallenge = null
           liveSent = false
@@ -1027,6 +1028,16 @@ export function idScript(options: { tickMs?: number } = {}): string {
       }
       if (idRow.status === 'held' || liveRow.status === 'held') {
         showNotice('id-held', COPY.held)
+        // Age hold: nothing to redo, so no capture controls (QA round 1, F4).
+        heldAccount = true
+        document.querySelectorAll('button').forEach(function (button) {
+          var text = button.textContent || ''
+          if (text.indexOf('Remplacer') !== -1 || text.indexOf('Activer la caméra') !== -1 || text.indexOf('Reprendre la capture') !== -1 || text.indexOf('Confirmer et transmettre') !== -1) {
+            button.disabled = true
+            button.hidden = true
+            if (button.style) button.style.display = 'none'
+          }
+        })
         return
       }
       if (idRow.status === 'rejected') showNotice('id-reject', rejectText(COPY.idRejected, idRow.reason, COPY.idRetake))

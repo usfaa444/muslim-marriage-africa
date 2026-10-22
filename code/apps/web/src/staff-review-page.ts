@@ -1,4 +1,5 @@
 import { POSE_LABEL, poseSvg } from './liveness-pose-ui'
+import { LIFE_PLAN_TIMEFRAME_LABEL, PROFILE_VALUE_LABEL } from './profile-detail'
 import { staffPage, type StaffIdentity } from './staff-pages'
 
 /**
@@ -14,7 +15,26 @@ export const STATUS_LABEL: Record<string, string> = {
   granted: 'Approuvé',
   rejected: 'Refusé',
   held: "Retenu (contrôle d'âge)",
+  superseded: 'Remplacée par une nouvelle prise (non examinée)',
 }
+
+/** Education tokens, worded as on the member's profile screen (Stitch 11). */
+export const EDUCATION_LABEL: Record<string, string> = {
+  secondaire: 'Baccalauréat / Secondaire',
+  licence: 'Licence / Bac+3',
+  master_eco: 'Master en Sciences Économiques',
+  master_autre: 'Master / Bac+5',
+  doctorat: 'Doctorat / Études supérieures approfondies',
+  autre: 'Autre / Formation spécialisée',
+}
+
+/** Every enum field of the case's profile, in French (QA round 1, F2). */
+export const PROFILE_VALUES: Record<string, Record<string, string>> = { ...PROFILE_VALUE_LABEL, education: EDUCATION_LABEL }
+
+export const STALE_TEXT =
+  'Ce dossier a changé depuis son ouverture (autre décision ou nouvelle prise du membre). Votre décision n\'a pas été enregistrée : le dossier a été rechargé, vérifiez son état avant de décider.'
+export const QUEUE_FAILED_TEXT = "La file n'a pas pu être chargée. Réessayez dans un instant."
+export const REQUEST_FAILED_TEXT = 'La requête a échoué. Réessayez dans un instant.'
 
 export const ID_REASON_LABEL: Record<string, string> = {
   unreadable: 'Illisible',
@@ -97,7 +117,7 @@ export function staffReviewHtml(stitch: string, identity: StaffIdentity | null):
 ${who}
 <p class="text-sm text-deep-navy" data-testid="review-counts" id="review-counts" aria-live="polite">Chargement de la file…</p>
 </div>
-<p class="hidden mb-4 p-3 rounded-md border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 text-sm text-[#9B2C2C] font-medium" id="review-error" role="alert"></p>
+<p class="hidden mb-4 p-3 rounded-md border border-[#9B2C2C]/40 bg-[#9B2C2C]/5 text-sm text-[#9B2C2C] font-medium" id="review-error" role="alert" tabindex="-1"></p>
 <p class="hidden mb-4 p-3 rounded-md border border-soft-gold/60 bg-soft-gold/10 text-sm text-deep-navy font-medium" id="review-done" role="status"></p>
 <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start" data-testid="staff-panes">
 <section aria-label="Liste des fiches à examiner" class="md:col-span-5 flex flex-col gap-3 min-w-0" data-pane="queue">
@@ -131,6 +151,11 @@ ${FIT}`
     profileReasons: PROFILE_BLOCK_REASONS,
     fields: FIELD_LABEL,
     visibility: VISIBILITY_LABEL,
+    values: PROFILE_VALUES,
+    timeframe: LIFE_PLAN_TIMEFRAME_LABEL,
+    stale: STALE_TEXT,
+    queueFailed: QUEUE_FAILED_TEXT,
+    requestFailed: REQUEST_FAILED_TEXT,
     poses: POSE_LABEL,
     pictos,
   }
@@ -163,13 +188,39 @@ export function staffReviewScript(config: unknown): string {
       })
     })
   }
-  function message(result) {
-    return (result && result.body && result.body.error && result.body.error.message) || 'La requête a échoué.'
+  /** The API's French message for a 4xx; a fixed French line for a 5xx or an unreadable answer (F8). */
+  function message(result, fallback) {
+    var text = result && result.body && result.body.error && result.body.error.message
+    if (!text || !result.status || result.status >= 500) return fallback || C.requestFailed
+    return text
   }
-  function showError(text) {
+  function profileValue(key, raw) {
+    if (raw === null || raw === undefined || raw === '') return raw
+    if (key === 'life_plans') {
+      var value = String(raw)
+      if (value.indexOf('tf:') !== 0) return value
+      var lineEnd = value.indexOf('\\n')
+      var head = lineEnd === -1 ? value.slice(3) : value.slice(3, lineEnd)
+      var body = lineEnd === -1 ? '' : value.slice(lineEnd + 1).trim()
+      return body || C.timeframe[head] || head
+    }
+    var labels = C.values[key]
+    return (labels && labels[raw]) || raw
+  }
+  function showError(text, reveal) {
     var box = el('review-error')
     box.textContent = text || ''
     box.classList.toggle('hidden', !text)
+    if (text && reveal) {
+      if (box.scrollIntoView) box.scrollIntoView({ block: 'center' })
+      box.focus()
+    }
+  }
+  /** A refused decision: reload the queue and the case so the Moderator sees the current state, then say why (F1). */
+  function decisionFailed(result) {
+    showDone('')
+    var text = result.status === 409 ? C.stale : message(result)
+    return refresh().then(function () { showError(text, true) })
   }
   function showDone(text) {
     var box = el('review-done')
@@ -240,7 +291,7 @@ export function staffReviewScript(config: unknown): string {
   function loadQueue() {
     return call('GET', '/v1/staff/review/queue').then(function (result) {
       if (signedOut(result)) return
-      if (result.status !== 200 || !result.body) { showError(message(result)); return }
+      if (result.status !== 200 || !result.body) { showError(message(result, C.queueFailed)); return }
       renderQueue(result.body)
     }, function () { showError('La connexion a échoué.') })
   }
@@ -365,8 +416,7 @@ export function staffReviewScript(config: unknown): string {
         submit.disabled = false
         if (signedOut(result)) return
         if (result.status !== 200) {
-          showError(message(result))
-          if (result.status === 409) refresh()
+          decisionFailed(result)
           return
         }
         showDone('Décision enregistrée : ' + (C.status[result.body.status] || result.body.status) + '. Visibilité du profil : ' + seen(result.body.visibility) + '.')
@@ -481,8 +531,7 @@ export function staffReviewScript(config: unknown): string {
         submit.disabled = false
         if (signedOut(result)) return
         if (result.status !== 200) {
-          showError(message(result))
-          if (result.status === 409) refresh()
+          decisionFailed(result)
           return
         }
         showDone('Revue du profil enregistrée. Visibilité du profil : ' + seen(result.body.visibility) + '.')
@@ -552,7 +601,7 @@ export function staffReviewScript(config: unknown): string {
     box.appendChild(photos)
 
     var profile = section('Profil', 'case-profile')
-    profile.appendChild(definition(Object.keys(C.fields).map(function (key) { return [C.fields[key], view.profile[key]] })))
+    profile.appendChild(definition(Object.keys(C.fields).map(function (key) { return [C.fields[key], profileValue(key, view.profile[key])] })))
     if (view.profile_review.queued && (view.profile_review.profile_required || view.profile_review.bio_required || view.profile_review.photo_ids.length > 0)) {
       profile.appendChild(profileForm(view))
     } else {
@@ -606,7 +655,7 @@ export function staffReviewScript(config: unknown): string {
     }, function () { showError('La connexion a échoué.') })
   }
   function refresh() {
-    loadQueue().then(function () {
+    return loadQueue().then(function () {
       if (!selected) return
       var still = document.querySelector('#review-queue button[data-account="' + selected + '"]')
       if (still) return openCase(selected, false)

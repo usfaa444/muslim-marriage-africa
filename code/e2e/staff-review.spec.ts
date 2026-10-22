@@ -84,8 +84,8 @@ function caseBody(state: { idStatus: string; liveStatus: string }) {
       city: 'ouagadougou',
       country: 'BF',
       origin: null,
-      marital_status: null,
-      polygamy_intent: null,
+      marital_status: 'single',
+      polygamy_intent: 'no',
       education: null,
       profession: null,
       madhhab: null,
@@ -108,14 +108,16 @@ function caseBody(state: { idStatus: string; liveStatus: string }) {
       pose: 'thumbs_up',
       pose_label: 'Levez le pouce',
     },
-    history: [],
+    history: [
+      { kind: 'liveness', record_id: '01990000-0000-7000-8000-0000000000d0', status: 'superseded', reason: null, captured_at: '2026-10-20T07:58:00.000Z', decided_at: null },
+    ],
   }
 }
 
 type Posted = { path: string; body: Record<string, unknown> }
 
 /** Answers every console call with synthetic data and records what the page sends. */
-async function stubConsole(page: Page, role: 'moderator' | 'operator') {
+async function stubConsole(page: Page, role: 'moderator' | 'operator', options: { staleDecision?: boolean } = {}) {
   const posted: Posted[] = []
   const state = { idStatus: 'pending', liveStatus: 'pending' }
   const png = (shade: number) => (route: Route) =>
@@ -132,6 +134,15 @@ async function stubConsole(page: Page, role: 'moderator' | 'operator') {
   await page.route('**/v1/staff/review/decisions', async (route) => {
     const body = route.request().postDataJSON() as Record<string, unknown>
     posted.push({ path: 'decisions', body })
+    if (options.staleDecision) {
+      // Another Moderator decided this ID first: the server keeps their decision and refuses this one.
+      state.idStatus = 'granted'
+      await route.fulfill({
+        status: 409,
+        json: { error: { code: 'REVIEW_STALE', message: 'La file a changé. Rechargez avant de décider.', details: null, retryable: false } },
+      })
+      return
+    }
     const status = body.decision === 'approve' ? 'granted' : body.decision === 'reject' ? 'rejected' : 'held'
     if (body.kind === 'id_document') state.idStatus = status
     else state.liveStatus = status
@@ -257,6 +268,57 @@ test.describe('staff review console (web-only, synthetic data)', () => {
     expect(stored).toEqual({ local: 0, session: 0 })
     await expectAccessible(page)
     if (testInfo.project.name === 'desktop') await expectPanes(page)
+  })
+
+  test('a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1)', async ({ page, baseURL, guards }) => {
+    test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+    await asStaffStub(page, baseURL)
+    await stubConsole(page, 'moderator', { staleDecision: true })
+    await page.goto('/staff/revue')
+    await page.getByRole('button', { name: /Aminata_test/ }).click()
+    const idForm = page.getByTestId('decision-id_document')
+    await idForm.getByLabel('Approuver').check()
+    const reloaded = page.waitForResponse((r) => r.url().endsWith(`/v1/staff/review/cases/${MEMBER}`))
+    await idForm.getByRole('button', { name: 'Enregistrer la décision' }).click()
+    await reloaded
+    const alert = page.getByRole('alert')
+    await expect(alert).toHaveText(/Ce dossier a changé depuis son ouverture/)
+    await expect(alert).toContainText("Votre décision n'a pas été enregistrée")
+    await expect(alert).toBeInViewport()
+    // The case shows its current state: the ID was decided by someone else, so it has no form any more.
+    await expect(page.getByTestId('case-id')).toContainText('Approuvé')
+    await expect(page.getByTestId('decision-id_document')).toHaveCount(0)
+    await expect(page.getByTestId('decision-liveness')).toBeVisible()
+    // The browser logs the expected 409.
+    guards.consoleErrors.splice(0)
+  })
+
+  test('the case shows French values and labels replaced captures (QA round 1, F2 and F3)', async ({ page, baseURL }) => {
+    test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+    await asStaffStub(page, baseURL)
+    await stubConsole(page, 'moderator')
+    await page.goto('/staff/revue')
+    await page.getByRole('button', { name: /Aminata_test/ }).click()
+    const profile = page.getByTestId('case-profile')
+    await expect(profile).toContainText('Célibataire')
+    await expect(profile).toContainText('Ouagadougou')
+    await expect(profile).not.toContainText('single')
+    const history = page.getByTestId('case-history')
+    await expect(history).toContainText('Remplacée par une nouvelle prise (non examinée)')
+    await expect(history).not.toContainText('En attente')
+  })
+
+  test('a queue that fails to load says so in French (QA round 1, F8)', async ({ page, baseURL, guards }) => {
+    test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+    await asStaffStub(page, baseURL)
+    await page.route('**/v1/staff/review/queue', (route) =>
+      route.fulfill({ status: 500, json: { error: { code: 'UNHANDLED', message: 'Request failed', details: null, retryable: false } } }),
+    )
+    await page.goto('/staff/revue')
+    await expect(page.getByRole('alert')).toHaveText("La file n'a pas pu être chargée. Réessayez dans un instant.")
+    // The expected 500 is logged by the browser and recorded by the guard.
+    guards.consoleErrors.splice(0)
+    guards.failedRequests.splice(0)
   })
 
   test('an Operator sees the counts only, with no case list', async ({ page, baseURL }) => {
@@ -458,10 +520,20 @@ test.describe('staff review console on a full stack', () => {
     await staff.locator(`#review-queue button[data-account="${memberId}"]`).click()
     await expect(staff.getByTestId('case-pose')).toHaveText(retakeLabel)
     await expect(staff.getByTestId('case-history')).toContainText('Geste demandé non fait')
+    // A second decision on the same ID (here sent straight to the API while the page still shows the form) wins;
+    // the page's late decision is refused, said so in an alert, and the case reloads (QA round 1, F1).
+    const opened = (await (await staff.request.get(`/v1/staff/review/cases/${memberId}`)).json()) as { id_document: { record_id: string } }
+    const first = await staff.request.post('/v1/staff/review/decisions', {
+      data: { kind: 'id_document', account_id: memberId, record_id: opened.id_document.record_id, decision: 'approve' },
+    })
+    expect(first.status()).toBe(200)
     const idForm = staff.getByTestId('decision-id_document')
     await idForm.getByLabel('Approuver').check()
     await idForm.getByRole('button', { name: 'Enregistrer la décision' }).click()
+    await expect(staff.getByRole('alert')).toContainText('Ce dossier a changé depuis son ouverture')
+    await expect(staff.getByRole('alert')).toBeInViewport()
     await expect(staff.getByTestId('decision-id_document')).toHaveCount(0)
+    await expect(staff.getByTestId('case-id')).toContainText('Approuvé')
     const liveForm = staff.getByTestId('decision-liveness')
     await liveForm.getByLabel('Approuver').check()
     await liveForm.getByRole('button', { name: 'Enregistrer la décision' }).click()

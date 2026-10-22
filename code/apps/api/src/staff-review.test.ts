@@ -486,14 +486,22 @@ describe('staff review console', { timeout: 30_000 }, () => {
     it('rate-limits evidence views per staff session, counting parallel requests atomically', async () => {
       const { idRecord } = await fullCase()
       const moderator = await openTestStaff(base, staffStore, 'moderator')
+      // QA round 1 (F7): the number itself is pinned, not only the constant.
+      expect(EVIDENCE_VIEWS_PER_MINUTE).toBe(30)
       const burst = await Promise.all(
-        Array.from({ length: EVIDENCE_VIEWS_PER_MINUTE + 10 }, () => get(`/v1/staff/review/evidence/${idRecord}`, moderator.cookie)),
+        Array.from({ length: 40 }, () => get(`/v1/staff/review/evidence/${idRecord}`, moderator.cookie)),
       )
       const statuses = burst.map((response) => response.status)
-      expect(statuses.filter((status) => status === 200)).toHaveLength(EVIDENCE_VIEWS_PER_MINUTE)
+      expect(statuses.filter((status) => status === 200)).toHaveLength(30)
       expect(statuses.filter((status) => status === 429)).toHaveLength(10)
+      // QA round 1 (F5): the 429 says when to come back.
+      const limited = burst.find((response) => response.status === 429)
+      expect(limited?.headers.get('retry-after')).toBe('60')
+      expect(await limited?.json()).toMatchObject({ error: { code: 'RATE_LIMITED', message: 'Trop de consultations. Réessayez dans une minute.' } })
       const views = audits.filter((row) => row.action === 'moderator_evidence_view' && row.actor_id === moderator.accountId)
-      expect(views).toHaveLength(EVIDENCE_VIEWS_PER_MINUTE)
+      expect(views).toHaveLength(30)
+      advance(61_000)
+      expect((await get(`/v1/staff/review/evidence/${idRecord}`, moderator.cookie)).status, 'a new minute').toBe(200)
       const fresh = await openTestStaff(base, staffStore, 'moderator')
       expect((await get(`/v1/staff/review/evidence/${idRecord}`, fresh.cookie)).status, 'another session has its own count').toBe(200)
     })
@@ -555,6 +563,34 @@ describe('staff review console', { timeout: 30_000 }, () => {
       expect(audits.filter((row) => row.action !== 'staff_sign_in').length, 'no refused call wrote an audit event').toBe(viewsBefore)
       expect(captures.rows.find((row) => row.id === idRecord)?.status).toBe('pending')
     }, 60_000)
+
+    it('answers no-store on the reused profile-review and metrics routes (QA round 1, F6)', async () => {
+      const { member, photoId } = await fullCase()
+      const moderator = await openTestStaff(base, staffStore, 'moderator')
+      const listed = await get('/v1/staff/cases?kind=profile_review', moderator.cookie)
+      expect(listed.status).toBe(200)
+      expect(listed.headers.get('cache-control')).toBe('no-store')
+      const metrics = await get('/v1/staff/metrics', moderator.cookie)
+      expect(metrics.status).toBe(200)
+      expect(metrics.headers.get('cache-control')).toBe('no-store')
+      const decided = await approveProfile(moderator, member.id, photoId)
+      expect(decided.status).toBe(200)
+      expect(decided.headers.get('cache-control')).toBe('no-store')
+    })
+
+    it('labels a capture replaced by a retake before any decision as superseded, never as waiting (QA round 1, F3)', async () => {
+      const { member, selfie } = await fullCase()
+      const retake = await uploadSelfie(member)
+      const moderator = await openTestStaff(base, staffStore, 'moderator')
+      const view = (await (await get(`/v1/staff/review/cases/${member.id}`, moderator.cookie)).json()) as {
+        liveness: { record_id: string }
+        history: Array<{ record_id: string; status: string; decided_at: string | null }>
+      }
+      expect(view.liveness.record_id).toBe(retake.id)
+      const old = view.history.find((row) => row.record_id === selfie.id)
+      expect(old).toMatchObject({ status: 'superseded', decided_at: null })
+      expect(view.history.some((row) => row.status === 'pending')).toBe(false)
+    })
 
     it('pins the console routes: every route but the queue is Moderator-only (fails if a route is added)', () => {
       const routes = Object.getOwnPropertyNames(StaffReviewController.prototype)

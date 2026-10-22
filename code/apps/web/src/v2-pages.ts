@@ -119,7 +119,7 @@ const OTP_SWITCH = switchAccountLink(
   'inline-block max-w-full text-center whitespace-normal font-body text-xs text-deep-navy/70 hover:text-soft-gold underline underline-offset-4 decoration-hairline transition-colors duration-150',
 )
 const ID_SWITCH = switchAccountLink(
-  'inline-block max-w-full text-center whitespace-normal text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors',
+  'inline-flex items-center justify-center min-h-[44px] max-w-full text-center whitespace-normal text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors',
 )
 const ID_ERROR = `<p class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-[#9B2C2C] flex items-start gap-1 font-medium" id="id-error"><span class="material-symbols-outlined text-[14px] shrink-0" data-icon="error">error</span><span class="min-w-0 break-words" id="id-error-text"></span></p>`
 
@@ -217,6 +217,17 @@ export function idHtml(stitch: string): string {
   html = html.replace(
     'strictement réservées à la validation du compte.\n          </span>\n</div>',
     `strictement réservées à la validation du compte.\n          </span>\n</div>\n${ID_SWITCH}`,
+  )
+  // QA round 1 (F9): 44 px targets for "Remplacer" and readable contrast on the accepted documents line.
+  html = placeOnce(
+    html,
+    '<button class="text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors shrink-0" type="button">',
+    '<button class="inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-2 text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors shrink-0" type="button">',
+  )
+  html = placeOnce(
+    html,
+    '<span class="text-[11px] text-deep-navy/60 font-medium">CNIB • Passeport • Carte Consulaire</span>',
+    '<span class="text-[11px] text-deep-navy/80 font-medium">CNIB • Passeport • Carte Consulaire</span>',
   )
   return mount(html, idScript())
 }

@@ -3,9 +3,22 @@ import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { LIVENESS_POSES } from '../../api/src/liveness-pose.js'
 import { ID_REJECT_REASONS, LIVENESS_REJECT_REASONS } from '../../api/src/staff-review.js'
+import {
+  CITY,
+  COUNTRY,
+  EDUCATION,
+  LIFE_PLAN_TIMEFRAME,
+  MADHHAB,
+  MARITAL_STATUS,
+  POLYGAMY_INTENT,
+  PRACTICE,
+  PROFESSION,
+} from '../../api/src/profile-fields.js'
 import { STAFF_BADGE_TEXT } from './staff-pages.js'
 import {
   ID_REASON_LABEL,
+  PROFILE_VALUES,
+  STATUS_LABEL,
   LIVENESS_REASON_LABEL,
   REVIEW_TITLE,
   VISIBILITY_LABEL,
@@ -76,6 +89,30 @@ describe('staff review console page', () => {
     const allowed = /"visibility" in \(([^)]*)\)/.exec(migration)?.[1]?.match(/'[^']+'/g)?.map((v) => v.slice(1, -1)) ?? []
     expect(allowed.length).toBeGreaterThan(0)
     expect(Object.keys(VISIBILITY_LABEL).sort()).toEqual([...allowed].sort())
+  })
+
+  it('names every stored profile token in French, as the member profile does (QA round 1, F2)', () => {
+    const lists: Record<string, readonly string[]> = {
+      city: CITY,
+      country: COUNTRY,
+      education: EDUCATION,
+      madhhab: MADHHAB,
+      marital_status: MARITAL_STATUS,
+      polygamy_intent: POLYGAMY_INTENT,
+      practice: PRACTICE,
+      profession: PROFESSION,
+    }
+    expect(Object.keys(PROFILE_VALUES).sort()).toEqual(Object.keys(lists).sort())
+    for (const [field, tokens] of Object.entries(lists)) {
+      expect(Object.keys(PROFILE_VALUES[field] ?? {}).sort(), field).toEqual([...tokens].sort())
+    }
+    expect(PROFILE_VALUES.marital_status?.single).toBe('Célibataire')
+    expect(PROFILE_VALUES.polygamy_intent?.no).toBe('Non')
+    const html = staffReviewHtml(stitch52, null)
+    for (const token of LIFE_PLAN_TIMEFRAME) {
+      expect(html, token).toContain(`"${token}":`)
+    }
+    expect(STATUS_LABEL.superseded).toBe('Remplacée par une nouvelle prise (non examinée)')
   })
 
   it('escapes the config so a label can never close the script', () => {

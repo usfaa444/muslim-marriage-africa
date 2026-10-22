@@ -22,7 +22,7 @@
 - After a refusal, the step that must be redone shows a notice with the reason category in plain French. There is no payment prompt anywhere on this path.
   - ID: "Votre pièce d'identité n'a pas été acceptée : <reason>. Envoyez une nouvelle photo de votre pièce avec le bouton « Remplacer »."
   - Selfie: "Votre selfie n'a pas été accepté : <reason>. Reprenez le selfie en faisant le nouveau geste demandé." A new pose is shown.
-- Held account (suspected minor): "Votre compte est en attente d'une vérification complémentaire. Aucune action n'est demandée pour le moment." No retake is offered.
+- Held account (suspected minor): "Votre compte est en attente d'une vérification complémentaire. Aucune action n'est demandée pour le moment." No retake is offered: "Remplacer", the camera button, "Reprendre la capture" and "Confirmer…" are hidden and inert (round 2, F4). The API still accepts an upload from a held account and stores it as `held`; this is Story 2.6 behaviour, pinned by `id-liveness.test.ts` "holds a suspected-minor account and does not lift an existing hold". Such a capture never publishes and never lifts the hold.
 
 ### Staff side: `/staff/revue` "Revue des inscriptions"
 
@@ -257,3 +257,38 @@ Staff:
   - "Décision enregistrée : … Visibilité du profil : …"; "Revue du profil enregistrée. Visibilité du profil : …"
   - "Choisissez une décision."; "Choisissez un motif de refus."; "Décidez chaque élément du profil."; "La requête a échoué."; "La connexion a échoué."
 - API messages: "Réservé aux modérateurs."; "Ce dossier n'est pas dans la file."; "Trop de consultations. Réessayez dans une minute."; "La pièce est indisponible."; "Saisissez un motif de 10 à 300 caractères."
+
+## Round 2 (QA round 1 FAIL on 648dd58)
+
+QA report: `code/docs/qa-handoffs/staff-review-console-qa-report.md` (copied from the QA worktree; evidence not copied). Each finding has a test that failed before the fix. I checked this by running the new tests against the round-1 sources.
+
+| Finding | Fix | Test (fails without the fix) |
+| --- | --- | --- |
+| F1 Major: stale decision gives no message | Any refused decision (409 or other) on the ID, selfie or profile form now reloads the queue and the case, then shows the message in the `role="alert"` line, scrolled into view and focused. For 409: "Ce dossier a changé depuis son ouverture (autre décision ou nouvelle prise du membre). Votre décision n'a pas été enregistrée : le dossier a été rechargé, vérifiez son état avant de décider." Before, the reload cleared the alert. | e2e web-only "a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1)" (stubbed 409); the full-stack test also decides the ID by API first, then clicks the stale form and checks the alert, its visibility and the reloaded state |
+| F2: raw English enum values | The case view shows French values from the member profile's labels (`PROFILE_VALUE_LABEL`, now exported from `profile-detail.ts`): city, country, profession, marital status, polygamy, madhhab, practice, and education (Stitch 11 wording). It also shows the life-plans timeframe. | `staff-review-page.test.ts` "names every stored profile token in French…" (each API enum list must have a label); e2e "the case shows French values…" (`Célibataire`, `Ouagadougou`, no `single`) |
+| F3: superseded captures listed as "En attente" | The case API returns `status: 'superseded'` for an earlier capture replaced before any decision. The page shows "Remplacée par une nouvelle prise (non examinée)". | `staff-review.test.ts` "labels a capture replaced by a retake…"; e2e "…labels replaced captures" |
+| F4: held member still sees capture controls | When the ID or selfie is `held`, the page hides and disables "Remplacer", the camera button, "Reprendre la capture" and "Confirmer…", and their handlers do nothing. The API is unchanged (see section 1). The existing test "asks for a new capture when the stored photo is held" expected "Reprenez la capture.", which contradicts the hold notice, so it now checks the opposite. The test history is in a comment. | `v2-id-liveness.test.ts` "shows the age-hold notice instead of a retake…" (controls hidden, disabled, inert) and "neither asks for a new capture nor opens onboarding when the stored photo is held" |
+| F5: no Retry-After, in-process counter | The evidence 429 carries `Retry-After: 60`. The counter stays in process; the restart reset is noted in section 7. | `staff-review.test.ts` "rate-limits evidence views…" (header, French message, new minute allowed) |
+| F6: no `no-store` on `/v1/staff/cases` and `/v1/staff/metrics` | `Cache-Control: no-store` on `GET /v1/staff/cases`, `POST /v1/staff/cases` and `GET /v1/staff/metrics`. | `staff-review.test.ts` "answers no-store on the reused profile-review and metrics routes" |
+| F7: 30 per minute not pinned | The test now uses the literal 30 (40 parallel views: 30 × 200, 10 × 429) and asserts the constant is 30. | same test |
+| F8: "Request failed" on a queue failure | A 5xx or unreadable answer shows French text: queue "La file n'a pas pu être chargée. Réessayez dans un instant."; other calls "La requête a échoué. Réessayez dans un instant." The API's own 4xx messages, already French, are kept. | e2e "a queue that fails to load says so in French" |
+| F9: small targets on `/id-liveness` | The controls are old, but this story changed the page, so they are fixed here. "Remplacer" is now at least 44 by 44 px; "Se connecter avec un autre compte" is at least 44 px high; the "CNIB • Passeport • Carte Consulaire" line goes from navy/60 to navy/80 for contrast. | `v2-id-liveness.test.ts` "gives \"Remplacer\" and the switch-account link 44 px targets" |
+| F10: `next` audit | Old issue; left as is, as agreed. | — |
+
+New French strings in round 2:
+- "Ce dossier a changé depuis son ouverture (autre décision ou nouvelle prise du membre). Votre décision n'a pas été enregistrée : le dossier a été rechargé, vérifiez son état avant de décider."
+- "La file n'a pas pu être chargée. Réessayez dans un instant."; "La requête a échoué. Réessayez dans un instant."
+- "Remplacée par une nouvelle prise (non examinée)"
+- Education values: "Baccalauréat / Secondaire", "Licence / Bac+3", "Master en Sciences Économiques", "Master / Bac+5", "Doctorat / Études supérieures approfondies", "Autre / Formation spécialisée". These are the Stitch 11 wording. The other values reuse the member profile labels, for example "Célibataire", "Non", "Ouagadougou".
+
+### Round 2 self-check (2026-10-22, same worktree)
+
+- Lint: exit 0, the same 3 warnings in files this story does not touch. Typecheck: pass. Build: pass.
+- Unit, `npm run test:unit`: `Test Files 1 failed | 69 passed | 2 skipped (72)`, `Tests 1 failed | 480 passed | 12 skipped (493)`. The failure is the known `photo-rules.test.ts`.
+- Integration, run with no stack up: `Test Files 1 failed | 4 passed (5)`, `Tests 29 passed | 2 skipped (31)`. The failure is the known `compose.test.ts`.
+- E2E web-only, full suite: `70 passed`, 18 skipped. That includes the 16 tests of `e2e/staff-review.spec.ts` on mobile and desktop.
+- E2E against a fresh stack (`ankanu-dev-review`, built from this commit, migrated, bucket created), full suite with fresh staff accounts: `36 passed (1.8m)`, `52 skipped`. The full-stack review test now includes the real stale 409.
+- Browser walk on the stack with a real Moderator:
+  - No horizontal scroll at 360 and 1440.
+  - The profile shows "Situation matrimoniale Célibataire" and "Études Licence / Bac+3".
+  - After "Mineure présumée", the member's `/id-liveness` at 390 px shows the hold notice and none of the four capture buttons (count 0 each), with no horizontal scroll.

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Header, HttpCode, HttpException, Param, Post, Query, Req, StreamableFile } from '@nestjs/common'
+import { Body, Controller, Get, Header, HttpCode, HttpException, Param, Post, Query, Req, Res, StreamableFile } from '@nestjs/common'
 import { requireStaffSession } from './staff-session.js'
 import {
   decideVerification,
@@ -12,6 +12,10 @@ import {
 } from './staff-review.js'
 
 type CookieRequest = { headers?: { cookie?: string | string[] } }
+type HeaderResponse = { setHeader(name: string, value: string): void }
+
+/** Seconds a staff session waits after the evidence limit (the window is one minute). */
+export const EVIDENCE_RETRY_AFTER_SECONDS = '60'
 
 function fail(error: ReviewConsoleFailure): never {
   throw new HttpException(
@@ -60,10 +64,17 @@ export class StaffReviewController {
   @Header('Pragma', 'no-cache')
   @Header('X-Content-Type-Options', 'nosniff')
   @Header('Content-Security-Policy', "default-src 'none'; frame-ancestors 'self'")
-  async evidence(@Req() request: CookieRequest, @Param('recordId') recordId: string): Promise<StreamableFile> {
+  async evidence(
+    @Req() request: CookieRequest,
+    @Res({ passthrough: true }) response: HeaderResponse,
+    @Param('recordId') recordId: string,
+  ): Promise<StreamableFile> {
     const caller = await staffCaller(request)
     const read = await readEvidence(caller, recordId)
     if (!read.ok) {
+      if (read.status === 429) {
+        response.setHeader('Retry-After', EVIDENCE_RETRY_AFTER_SECONDS)
+      }
       fail(read)
     }
     return evidenceFile(read.bytes, read.contentType)

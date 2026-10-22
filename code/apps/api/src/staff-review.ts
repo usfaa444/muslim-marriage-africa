@@ -327,7 +327,8 @@ export async function openReviewCase(
     .map((row) => ({
       kind: row.kind,
       record_id: row.id,
-      status: row.status,
+      // A capture replaced by a retake before anyone decided it is not waiting any more (QA round 1, F3).
+      status: row.status === 'pending' ? 'superseded' : row.status,
       reason: row.decision_reason ?? null,
       captured_at: iso(recordTimeMs(row.id)),
       decided_at: row.decided_at ? row.decided_at.toISOString() : null,
