@@ -39,6 +39,27 @@ test.describe('known issues', () => {
     }
   })
 
+  test("tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them", () => {
+    const css = 'https://www.gstatic.com/recaptcha/releases/NhfdZHzre16wrc2m6BxEdu7J/styles__ltr.css'
+    const cors = `Access to XMLHttpRequest at '${css}' from origin 'https://www.google.com' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.`
+    const framing = `Framing 'https://www.google.com/' violates the following report-only Content Security Policy directive: "frame-ancestors 'self'". The violation has been logged, but no further action has been taken.`
+    withBaseUrl('http://localhost:4012', () => {
+      expect(knownIssue(`${cors} ${ANCHOR}`)?.reason).toContain('reCAPTCHA')
+      expect(knownIssue(`Failed to load resource: net::ERR_FAILED ${css}`)?.reason).toContain('reCAPTCHA')
+      expect(knownIssue(`GET ${css} net::ERR_FAILED`)?.reason).toContain('reCAPTCHA')
+      expect(knownIssue(framing)?.reason).toContain('reCAPTCHA')
+      expect(knownIssue(`${framing} http://localhost:4012/auth`)?.reason).toContain('reCAPTCHA')
+      expect(knownIssue(`${cors} ${ANCHOR.replace(TEST_KEY, '6LcProductionSiteKey')}`)).toBeUndefined()
+      expect(knownIssue(`${cors.replace("'https://www.google.com'", "'http://localhost:4012'")} ${ANCHOR}`)).toBeUndefined()
+      expect(knownIssue(`${cors.replace('styles__ltr.css', 'recaptcha__fr.js')} ${ANCHOR}`)).toBeUndefined()
+      expect(knownIssue(`Failed to load resource: net::ERR_FAILED ${css.replace('www.gstatic.com', 'www.gstatic.com.example.net')}`)).toBeUndefined()
+      expect(knownIssue(`Failed to load resource: net::ERR_FAILED http://localhost:4012/_next/static/css/app.css`)).toBeUndefined()
+      expect(knownIssue(`POST ${css} net::ERR_FAILED`)).toBeUndefined()
+      expect(knownIssue(framing.replace('report-only ', ''))).toBeUndefined()
+      expect(knownIssue(framing.replace('https://www.google.com/', 'http://localhost:4012/'))).toBeUndefined()
+    })
+  })
+
   test('never tolerates the sign-in gate 401 against a running stack', () => {
     withBaseUrl('http://localhost:4012', () => {
       expect(knownIssue(GATE_401)).toBeUndefined()
