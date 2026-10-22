@@ -42,6 +42,11 @@ export const KNOWN_ISSUES: KnownIssue[] = [
     reason:
       "Google's reCAPTCHA frame carries a report-only frame-ancestors policy that logs when our page embeds it. Report-only, third-party, not ours.",
   },
+  {
+    // The report beacon of that same policy, which Chromium's opaque-response blocking drops.
+    pattern: /^POST https:\/\/csp\.withgoogle\.com\/csp\/script-inclusions\/[0-9a-f]+ net::ERR_BLOCKED_BY_ORB$/,
+    reason: "Google's reCAPTCHA frame posts its CSP report to csp.withgoogle.com and Chromium blocks the reply. Third-party code, not ours.",
+  },
 ]
 
 // E2E_ALLOW_ERRORS is a comma-separated list of extra regexes, for an environment

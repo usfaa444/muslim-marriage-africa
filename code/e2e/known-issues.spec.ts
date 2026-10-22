@@ -57,6 +57,12 @@ test.describe('known issues', () => {
       expect(knownIssue(`POST ${css} net::ERR_FAILED`)).toBeUndefined()
       expect(knownIssue(framing.replace('report-only ', ''))).toBeUndefined()
       expect(knownIssue(framing.replace('https://www.google.com/', 'http://localhost:4012/'))).toBeUndefined()
+      const beacon = 'POST https://csp.withgoogle.com/csp/script-inclusions/38fac9d5b82543fc4729580d18ff2d3d'
+      expect(knownIssue(`${beacon} net::ERR_BLOCKED_BY_ORB`)?.reason).toContain('reCAPTCHA')
+      expect(knownIssue(`${beacon} net::ERR_FAILED`)).toBeUndefined()
+      expect(knownIssue(`${beacon.replace('POST', 'GET')} net::ERR_BLOCKED_BY_ORB`)).toBeUndefined()
+      expect(knownIssue(`${beacon.replace('csp.withgoogle.com', 'csp.withgoogle.com.example.net')} net::ERR_BLOCKED_BY_ORB`)).toBeUndefined()
+      expect(knownIssue('POST http://localhost:4012/v1/sessions net::ERR_BLOCKED_BY_ORB')).toBeUndefined()
     })
   })
 
