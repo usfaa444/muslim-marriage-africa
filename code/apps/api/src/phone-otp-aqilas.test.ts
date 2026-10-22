@@ -222,6 +222,60 @@ describe('POST /v1/verifications/otp with SMS_PROVIDER=aqilas', () => {
     }
   })
 
+  it('does not follow a 307 to another host and answers 503', async () => {
+    now = new Date(now.getTime() + 61_000)
+    const elsewhere: Seen[] = []
+    const other = createServer((request, response) => {
+      let body = ''
+      request.setEncoding('utf8')
+      request.on('data', (chunk: string) => {
+        body += chunk
+      })
+      request.on('end', () => {
+        elsewhere.push({ method: request.method ?? '', headers: request.headers, body })
+        response.writeHead(201, { 'content-type': 'application/json' })
+        response.end('{"bulk_id":"elsewhere"}')
+      })
+    })
+    await new Promise<void>((resolve) => other.listen(0, '127.0.0.1', resolve))
+    const otherUrl = `http://127.0.0.1:${(other.address() as AddressInfo).port}/redirected-target`
+    let redirected = 0
+    const redirector = createServer((request, response) => {
+      request.resume()
+      request.on('end', () => {
+        redirected += 1
+        response.writeHead(307, { location: otherUrl, 'content-type': 'application/json' })
+        response.end(JSON.stringify({ message: VENDOR_BODY }))
+      })
+    })
+    await new Promise<void>((resolve) => redirector.listen(0, '127.0.0.1', resolve))
+    const before = { hash: otp.rows[0]?.hash, phone: otp.rows[0]?.phone_e164, dispatches: otp.dispatches.length }
+    process.env['AQILAS_API_URL'] = `http://127.0.0.1:${(redirector.address() as AddressInfo).port}/api/v1/sms`
+    try {
+      const failed = await send()
+      expect(failed.status).toBe(503)
+      expect(failed.json).toMatchObject({
+        error: { code: 'UNHANDLED', message: "L'envoi du code a échoué.", retryable: true },
+      })
+      expect(redirected).toBe(1)
+      expect(elsewhere).toEqual([])
+      expect(otp.rows[0]?.hash).toBe(before.hash)
+      expect(otp.rows[0]?.phone_e164).toBe(before.phone)
+      expect(otp.dispatches).toHaveLength(before.dispatches)
+      expect(output.join('')).toContain('sms aqilas status 307')
+      const joined = [failed.text, ...output].join('\n')
+      expect(joined).not.toContain(PHONE)
+      expect(joined).not.toContain(KEY)
+      expect(joined).not.toContain(VENDOR_BODY)
+    } finally {
+      process.env['AQILAS_API_URL'] = vendorUrl
+      for (const server of [other, redirector]) {
+        server.closeAllConnections()
+        await new Promise<void>((resolve) => server.close(() => resolve()))
+      }
+    }
+  })
+
   it('rolls back and answers 503 when the network fails', async () => {
     now = new Date(now.getTime() + 61_000)
     const before = { hash: otp.rows[0]?.hash, phone: otp.rows[0]?.phone_e164, dispatches: otp.dispatches.length }

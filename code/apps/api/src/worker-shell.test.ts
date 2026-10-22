@@ -170,6 +170,7 @@ describe('worker shell', () => {
     for (const [extra, expected] of [
       [{ SMS_PROVIDER: 'aqilas' }, 'AQILAS_API_KEY is required when SMS_PROVIDER=aqilas'],
       [{ SMS_PROVIDER: 'twilio' }, 'SMS_PROVIDER must be log or aqilas'],
+      [{ SMS_PROVIDER: 'aqilas', AQILAS_API_KEY: `test${'\n'}key` }, 'AQILAS_API_KEY must not contain control characters'],
     ] as const) {
       const port = await freePort()
       const child = spawnMain(port, undefined, extra)

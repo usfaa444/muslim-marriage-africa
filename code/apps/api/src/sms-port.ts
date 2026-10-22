@@ -58,6 +58,12 @@ export function assertSmsBoot(env: NodeJS.ProcessEnv): void {
     if ((env['AQILAS_API_KEY'] ?? '').trim() === '') {
       throw new Error('AQILAS_API_KEY is required when SMS_PROVIDER=aqilas')
     }
+    if (hasControl(env['AQILAS_API_KEY'] ?? '')) {
+      throw new Error('AQILAS_API_KEY must not contain control characters')
+    }
+    if (hasControl(env['AQILAS_SENDER_ID'] ?? '')) {
+      throw new Error('AQILAS_SENDER_ID must not contain control characters')
+    }
     const url = (env['AQILAS_API_URL'] ?? '').trim()
     if (url !== '' && !httpUrl(url)) {
       throw new Error('AQILAS_API_URL must be an http or https URL')
@@ -67,6 +73,17 @@ export function assertSmsBoot(env: NodeJS.ProcessEnv): void {
   if (env['NODE_ENV'] === 'production' && env['RECAPTCHA_ALLOW_TEST_KEYS'] !== '1') {
     throw new Error('log SMS is refused in production')
   }
+}
+
+/** A key or sender with a control character would break the request header or the SMS. */
+function hasControl(value: string): boolean {
+  for (const char of value) {
+    const code = char.charCodeAt(0)
+    if (code < 32 || code === 127) {
+      return true
+    }
+  }
+  return false
 }
 
 function httpUrl(value: string): boolean {
@@ -111,6 +128,9 @@ export function aqilasSmsPort(options: {
           headers: { 'X-AUTH-TOKEN': options.apiKey, 'Content-Type': 'application/json' },
           body: JSON.stringify({ from: options.senderId, to: [message.phone_e164], text: otpSmsText(message.code) }),
           signal: controller.signal,
+          // Never follow a redirect: it would re-send the key, phone and code to another host.
+          // A 3xx comes back as is and fails below like any other non-2xx.
+          redirect: 'manual',
         })
       } catch {
         // Only the kind of failure. The error may carry the URL or request details.

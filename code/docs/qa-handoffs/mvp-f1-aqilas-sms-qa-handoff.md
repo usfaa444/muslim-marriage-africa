@@ -141,3 +141,25 @@ Without Docker, the same cases run in `phone-otp-aqilas.test.ts` and `sms-port.t
 - One attempt per send. No retry, no Twilio fallback, no queue (out of scope).
 - A production boot with `SMS_PROVIDER=log` needs `RECAPTCHA_ALLOW_TEST_KEYS=1`. Staging sets it, so staging keeps log SMS until the key is added to its interpolation env file (`/var/lib/ankanu/compose.interpolate.env`). Values in `api.env` are overridden by the compose `environment` block, so the SMS variables must go in the interpolation env file there.
 - Not verified here: a real SMS to a real phone (needs Fay's key; see the spec's manual test) and the browser `/otp` flow on the stack (reCAPTCHA cannot reach Google from this sandbox).
+
+## Round 2 (QA findings F-1 to F-3)
+
+QA passed `f135622` with minor findings (`mvp-f1-aqilas-sms-qa-report.md`). This round fixes F-1, F-2 and F-3 on the same branch. F-4 (the vendor call inside the Story 2.7 transaction) and P-1 to P-5 are left for follow-up stories, as asked.
+
+| Finding | Fix | Tests |
+| --- | --- | --- |
+| F-1 The adapter followed redirects, so a 307 to another host re-sent the key, phone and code | `sms-port.ts` `aqilasSmsPort`: `redirect: 'manual'`. A 3xx comes back unfollowed and fails like any non-2xx: one stderr line `sms aqilas status <n>`, then the Story 2.7 503 rollback. | `sms-port.test.ts` "never follows a 301/302/303/307/308 to another host": a real stub answers with `Location` set to a second stub, which receives nothing; status-only line; clean error. "posts one JSON request..." also asserts `redirect: 'manual'`. `phone-otp-aqilas.test.ts` "does not follow a 307 to another host and answers 503": the real route gives 503 `L'envoi du code a échoué.`, `retryable` true, the second stub receives nothing, hash, phone and dispatch count are unchanged, and nothing leaks. Removing the option fails all 7. |
+| F-2 A key with a newline booted, and every send was then logged as a network error | `sms-port.ts` `assertSmsBoot`, aqilas mode only: refuses `AQILAS_API_KEY` or `AQILAS_SENDER_ID` containing any character below U+0020 or U+007F, including a leading or trailing newline or carriage return. Messages are `AQILAS_API_KEY must not contain control characters` and `AQILAS_SENDER_ID must not contain control characters`, never the value. A loop is used instead of a regex so lint stays at its 3 pre-existing warnings. | `sms-port.test.ts` "refuses an AQILAS_API_KEY with a newline / a carriage return / a trailing newline / a tab / a NUL / a DEL and names only the variable", "refuses an AQILAS_SENDER_ID with a control character and names only the variable" (also checks that `AnKanu` boots and log mode ignores the Aqilas settings). `worker-shell.test.ts` "refuses to boot the api when the SMS settings are incomplete or unknown" now also starts `dist/main.js` with a key containing a newline: it exits non-zero with that message and never listens. Disabling the key check fails 6. |
+| F-3 Staging must set the SMS variables where compose reads them | `code/README.md` "SMS": compose's `environment:` block overrides `env_file`. Local values go in `~/.ankanu/local.env`. Staging values go in the compose interpolation env file `/var/lib/ankanu/compose.interpolate.env`, never `/var/lib/ankanu/api.env`, where a key is silently ignored and staging stays on `log`. The README also states the control-character and no-redirect rules. | Docs only. |
+
+### Round 2 self-check (from `code/`)
+
+| Command | Result |
+| --- | --- |
+| `npm run lint` | 0 errors, the same 3 pre-existing warnings. |
+| `npm run typecheck` | Pass. |
+| Related files: `npx vitest run --config vitest.unit.config.ts apps/api/src/sms-port.test.ts apps/api/src/phone-otp-aqilas.test.ts apps/api/src/phone-otp.test.ts apps/api/src/worker-shell.test.ts apps/api/src/id-liveness.test.ts apps/api/src/profile-review.test.ts apps/api/src/email-port.test.ts` | 7 files, 78 passed. |
+| `npm run test:unit` | 63 files: 370 passed, 1 failed, 12 skipped (383). The only failure is the same pre-existing `photo-rules.test.ts` one (no Chrome binary in this container), also red on `5030b6f`. |
+| `npx vitest run --config vitest.integration.config.ts apps/api/src/compose.test.ts` | 8 passed, 2 skipped. The "docker compose up" suite fails at `npm ci --omit=dev` in the image build (sandbox TLS interception), as on `5030b6f`. The static compose test with the SMS lines passes. |
+
+Not re-run in round 2: e2e, `migration-check` and the audit (no web, schema or dependency change since round 1), and the scratch Docker stack.

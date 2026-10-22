@@ -20,7 +20,11 @@ const VENDOR_BODY = 'vendor-said-something-private'
 
 type Seen = { method: string; url: string; headers: IncomingHttpHeaders; body: string }
 
-async function stub(status: number, reply: string): Promise<{ server: Server; url: string; seen: Seen[] }> {
+async function stub(
+  status: number,
+  reply: string,
+  headers: Record<string, string> = {},
+): Promise<{ server: Server; url: string; seen: Seen[] }> {
   const seen: Seen[] = []
   const server = createServer((request, response) => {
     let body = ''
@@ -30,7 +34,7 @@ async function stub(status: number, reply: string): Promise<{ server: Server; ur
     })
     request.on('end', () => {
       seen.push({ method: request.method ?? '', url: request.url ?? '', headers: request.headers, body })
-      response.writeHead(status, { 'content-type': 'application/json' })
+      response.writeHead(status, { 'content-type': 'application/json', ...headers })
       response.end(reply)
     })
   })
@@ -84,6 +88,7 @@ describe('Aqilas SMS adapter', () => {
       text: `AnKanu : votre code est ${CODE}. Il expire dans 10 minutes. Ne le partagez avec personne.`,
     })
     expect(calls[0]?.init.signal).toBeInstanceOf(AbortSignal)
+    expect(calls[0]?.init.redirect).toBe('manual')
     expect(lines).toEqual([])
   })
 
@@ -112,6 +117,24 @@ describe('Aqilas SMS adapter', () => {
     expectClean(String((error as Error).message) + String((error as Error).stack))
     expect(lines).toEqual([`sms aqilas status ${status}\n`])
     expect(vendor.seen).toHaveLength(1)
+  })
+
+  it.each([301, 302, 303, 307, 308])('never follows a %i to another host', async (status) => {
+    const other = await stub(201, '{"bulk_id":"elsewhere"}')
+    servers.push(other.server)
+    const vendor = await stub(status, JSON.stringify({ message: VENDOR_BODY }), { location: other.url })
+    servers.push(vendor.server)
+    const lines: string[] = []
+    const port = aqilasSmsPort({ apiKey: KEY, senderId: 'AnKanu', url: vendor.url, write: (line) => lines.push(line) })
+    const error = await port.sendOtp({ code: CODE, phone_e164: PHONE }).then(
+      () => null,
+      (caught: unknown) => caught,
+    )
+    expect(error).toBeInstanceOf(Error)
+    expectClean(String((error as Error).message) + String((error as Error).stack))
+    expect(vendor.seen).toHaveLength(1)
+    expect(other.seen).toEqual([])
+    expect(lines).toEqual([`sms aqilas status ${status}\n`])
   })
 
   it('throws on a network error without echoing the request', async () => {
@@ -251,6 +274,40 @@ describe('assertSmsBoot', () => {
     expect(() =>
       assertSmsBoot({ SMS_PROVIDER: 'aqilas', AQILAS_API_KEY: KEY, AQILAS_API_URL: 'http://127.0.0.1:9/sms' }),
     ).not.toThrow()
+  })
+
+  it.each([
+    ['a newline', `test${'\n'}key`],
+    ['a carriage return', `test${'\r'}key`],
+    ['a trailing newline', `test-key${'\n'}`],
+    ['a tab', `test${'\t'}key`],
+    ['a NUL', `test${'\u0000'}key`],
+    ['a DEL', `test${'\u007f'}key`],
+  ])('refuses an AQILAS_API_KEY with %s and names only the variable', (_label, key) => {
+    let message = ''
+    try {
+      assertSmsBoot({ SMS_PROVIDER: 'aqilas', AQILAS_API_KEY: key })
+    } catch (error) {
+      message = (error as Error).message
+    }
+    expect(message).toBe('AQILAS_API_KEY must not contain control characters')
+    expect(message).not.toContain('test')
+  })
+
+  it('refuses an AQILAS_SENDER_ID with a control character and names only the variable', () => {
+    for (const sender of [`AnKa${'\n'}nu`, `AnKanu${'\r'}`, `AnKa${'\u0000'}nu`]) {
+      let message = ''
+      try {
+        assertSmsBoot({ SMS_PROVIDER: 'aqilas', AQILAS_API_KEY: KEY, AQILAS_SENDER_ID: sender })
+      } catch (error) {
+        message = (error as Error).message
+      }
+      expect(message).toBe('AQILAS_SENDER_ID must not contain control characters')
+      expect(message).not.toContain('AnKa')
+    }
+    expect(() => assertSmsBoot({ SMS_PROVIDER: 'aqilas', AQILAS_API_KEY: KEY, AQILAS_SENDER_ID: 'AnKanu' })).not.toThrow()
+    // Log mode does not read the Aqilas settings.
+    expect(() => assertSmsBoot({ SMS_PROVIDER: 'log', AQILAS_API_KEY: `a${'\n'}b` })).not.toThrow()
   })
 
   it('refuses log SMS in a production boot without the test-keys opt-in', () => {
