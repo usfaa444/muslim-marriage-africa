@@ -73,10 +73,13 @@ describe('session cookie secure flag', () => {
     expect(sessionCookieHeader('abc', null, {}, other)).toContain('Secure')
   })
 
-  it('sets the staging public origin and does not force the cookie flag off', () => {
+  it('reads the public origin from the host env file and does not force the cookie flag off', () => {
     const compose = readFileSync(fileURLToPath(new URL('../../../compose.yaml', import.meta.url)), 'utf8')
-    expect(compose).toContain('ANKANU_PUBLIC_ORIGIN: https://staging.ankanu.com')
-    expect(compose).toContain('ANKANU_ALLOWED_ORIGINS: https://staging.ankanu.com,http://72.61.0.79:4012')
+    const runbook = readFileSync(fileURLToPath(new URL('../../../docs/staging-edge.md', import.meta.url)), 'utf8')
+    expect(compose).toContain('ANKANU_PUBLIC_ORIGIN: "${ANKANU_PUBLIC_ORIGIN:-}"')
+    expect(compose).toContain('ANKANU_ALLOWED_ORIGINS: "${ANKANU_ALLOWED_ORIGINS:-}"')
+    expect(runbook).toContain('ANKANU_PUBLIC_ORIGIN=https://staging.ankanu.com')
+    expect(runbook).toContain('ANKANU_ALLOWED_ORIGINS=https://staging.ankanu.com,http://72.61.0.79:4012')
     expect(compose).not.toContain('ANKANU_COOKIE_SECURE: "false"')
   })
 })
