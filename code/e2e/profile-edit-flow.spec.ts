@@ -212,10 +212,11 @@ test.describe('profile edit and the PIN screen', () => {
     const saved = page.waitForResponse((response) => isProfileSave(response.request()))
     await pinSwitch(page).click()
     expect((await saved).status()).toBe(400)
-    // The browser logs the refused save; that is the case under test.
-    guards.consoleErrors.length = 0
 
     await expect(page.getByText("dob : l'âge déclaré est inférieur au minimum.").first()).toBeVisible()
+    // The browser logs the refused save; that is the case under test. The page shows the error
+    // after the browser logged it, so the log is in by now.
+    guards.consoleErrors.length = 0
     await expect(page).toHaveURL(/\/profile-edit$/)
     await expect(pinCheckbox(page)).not.toBeChecked()
     await expect(page.getByLabel("Origine / Région d'attache")).toHaveValue('Kadiogo')
@@ -279,10 +280,13 @@ test.describe('profile edit photos', () => {
 test.describe('web image screens', () => {
   test.skip(!process.env.E2E_BASE_URL, 'The web-only dev server reads the repo; only a built image can miss a screen.')
 
-  test('screens read from the image answer without a server error', async ({ page, context, baseURL }) => {
-    // 52-ts-visit-signals is one of the screens the image did not copy. The staff stub reaches it with no account.
+  test('screens read from the image answer without a server error', async ({ context, baseURL }) => {
+    // 52-ts-visit-signals is one of the screens the image did not copy. The staff stub reaches it with no
+    // account. Only the server answer is checked: the API has no staff stub, so the page's own data call
+    // answers 401. Review, discover and favourites need a member past the signup gate (see the handoff).
     await context.addCookies([{ name: 'ankanu_session', value: 'staff', url: baseURL ?? '' }])
-    const response = await page.goto('/staff/visit-signals')
-    expect(response?.status()).toBe(200)
+    const response = await context.request.get('/staff/visit-signals', { maxRedirects: 0 })
+    expect(response.status()).toBe(200)
+    expect(response.headers()['content-type']).toContain('text/html')
   })
 })

@@ -1055,6 +1055,8 @@ export function pinScript(): string {
             body: JSON.stringify({ pin: pin })
           })
         }
+        // Read the answer before leaving, or the browser cancels a request the API already applied.
+        await response.json().catch(function () { return null })
         if (response.ok) {
           window.location.assign(nextPath())
           return

@@ -36,7 +36,7 @@ story_id: 'fix-profile-edit-flow'
 
 ## Acceptance Criteria
 
-1. **Given** the web image built from `code/apps/web/Dockerfile`, **when** a member opens `/profile-review` (or any page that reads a Stitch screen at runtime), **then** the screen file is in the image and the page renders, not 500. **And** a unit test fails if any `stitchFile(...)`/`loadStitch(...)` name (or another runtime-read design file) used by the web source is not copied by the Dockerfile.
+1. **Given** the web image built from `code/apps/web/Dockerfile`, **when** a member opens `/profile-review`, `/decouvrir`, `/favoris` (which read `57-discover` and `17-favourites`, also missing from the image) or any page that reads a Stitch screen at runtime, **then** the screen file is in the image and the page renders, not 500. **And** a unit test fails if any `stitchFile(...)`/`loadStitch(...)` name (or another runtime-read design file) used by the web source is not copied by the Dockerfile, or is copied but left out of the build context by `code/.dockerignore`.
 2. **Given** a member on `/profile-edit` with photos, **when** the page is shown again from the back/forward cache, is loaded by a back/forward navigation, or an image's signed URL has expired, **then** the photo grid re-reads `/v1/me/profile` and shows fresh signed URLs without the member reloading, and no photo stays broken. `GET /v1/me/profile` answers `Cache-Control: no-store` and the page reads it with `cache: 'no-store'`. TTL and privacy rules are unchanged.
 3. **Given** a member on `/profile-edit` without a PIN, **when** she turns on "Activer le code PIN d'accès" and saves a PIN on `/pin`, **then** she returns to `/profile-edit`. The existing `next` validation on `/pin` still refuses other origins.
 4. **Given** a member who edited fields on `/profile-edit` without saving, **when** she turns on the PIN, **then** the edits are saved through `PUT /v1/me/profile` before `/pin` opens, and they are on the page when she returns. **When** that save fails, she stays on `/profile-edit`, the PIN switch goes back off, and the existing save error line shows the API message (or `Enregistrement impossible.`).
@@ -45,6 +45,7 @@ story_id: 'fix-profile-edit-flow'
 ## Code Map
 
 - `code/apps/web/Dockerfile` — COPY lines for the Stitch files.
+- `code/.dockerignore` — allow list that lets those Stitch files into the build context.
 - `code/apps/web/src/v2-serve.ts`, `code/apps/web/src/discover-page.ts` — the two runtime readers of `code/design-stitch/ankanu-v2`.
 - `code/apps/web/src/v2-client.ts` — `profileScript` (photos, PIN switch, pre-PIN save), `pinScript` (length, `next`), `reviewScript`.
 - `code/apps/api/src/profile.controller.ts` — `Cache-Control: no-store` on the member profile read and writes.

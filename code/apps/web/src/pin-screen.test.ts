@@ -50,6 +50,7 @@ function mount(options: { search?: string; enabled: boolean; answer?: number }) 
   ])
   const assigned: string[] = []
   const calls: Call[] = []
+  const events: string[] = []
   const document = {
     querySelectorAll(selector: string) {
       if (selector === '.pin-dot') return dots
@@ -70,6 +71,7 @@ function mount(options: { search?: string; enabled: boolean; answer?: number }) 
       search: options.search ?? '',
       assign(path: string) {
         assigned.push(path)
+        events.push(`assign ${path}`)
       },
     },
   }
@@ -80,13 +82,21 @@ function mount(options: { search?: string; enabled: boolean; answer?: number }) 
       return Promise.resolve({ ok: true, json: async () => ({ enabled: options.enabled, locked: options.enabled }) })
     }
     const status = options.answer ?? 200
-    return Promise.resolve({ ok: status < 300, status, json: async () => ({}) })
+    return Promise.resolve({
+      ok: status < 300,
+      status,
+      json: async () => {
+        events.push(`read ${method} ${url}`)
+        return {}
+      },
+    })
   }
   new Function('document', 'window', 'fetch', pinSource())(document, window, fetchImpl)
   return {
     dots,
     assigned,
     calls,
+    events,
     async press(digits: string) {
       for (const digit of digits) {
         const key = keys.find((item) => item.key === digit)
@@ -166,6 +176,17 @@ describe('PIN screen length', () => {
     await five.press('13579')
     await five.submit()
     expect(five.calls).toEqual([])
+  })
+
+  it('reads the answer to the write before leaving, so the browser does not cancel it', async () => {
+    const set = mount({ search: '?next=%2Fprofile-edit', enabled: false })
+    await set.press('123456')
+    expect(set.events).toEqual(['read PUT /v1/pin', 'assign /profile-edit'])
+
+    const unlock = mount({ search: '?next=%2Fprofile-edit', enabled: true })
+    await unlock.press('1357')
+    await unlock.submit()
+    expect(unlock.events).toEqual(['read POST /v1/pin/unlock', 'assign /profile-edit'])
   })
 
   it('reads the PIN state without the HTTP cache', async () => {
