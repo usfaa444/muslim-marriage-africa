@@ -70,7 +70,15 @@ First time only, create:
   S3_SECRET_ACCESS_KEY=<random local-only value>
   ANKANU_PUBLIC_ORIGIN=http://localhost:4012
   ANKANU_ALLOWED_ORIGINS=http://localhost:4012
+  SMS_PROVIDER=log
+  # To send real SMS through Aqilas instead (key from Fay's Aqilas account, never committed):
+  # SMS_PROVIDER=aqilas
+  # AQILAS_API_KEY=<key>
+  # AQILAS_SENDER_ID=AnKanu
+  # AQILAS_API_URL=<only to point at a stub; leave unset for the real vendor>
   ```
+
+  `SMS_PROVIDER=log` (also the default when unset) prints the phone code in the api log (`docker compose -p ankanu-local logs api | grep otp`). With `SMS_PROVIDER=aqilas` and no `AQILAS_API_KEY` the api refuses to boot. See `code/README.md`, "SMS".
 
   `compose.yaml` reads both origins from the env file (staging keeps its own in `/var/lib/ankanu/compose.interpolate.env`), and the api refuses to boot without them. Object storage uses the `pgsty/minio` image, since `minio/minio` is no longer published.
 

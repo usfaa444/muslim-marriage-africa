@@ -154,6 +154,11 @@ describe('compose file', () => {
     expect(text).toContain('ANKANU_PUBLIC_ORIGIN: "${ANKANU_PUBLIC_ORIGIN:-}"')
     expect(text).toContain('ANKANU_ALLOWED_ORIGINS: "${ANKANU_ALLOWED_ORIGINS:-}"')
     expect(text).not.toContain('ANKANU_COOKIE_SECURE: "false"')
+    // SMS settings pass through from the host env file. No default key.
+    expect(text).toContain('SMS_PROVIDER: "${SMS_PROVIDER:-log}"')
+    expect(text).toContain('AQILAS_API_KEY: "${AQILAS_API_KEY:-}"')
+    expect(text).toContain('AQILAS_SENDER_ID: "${AQILAS_SENDER_ID:-}"')
+    expect(text).toContain('AQILAS_API_URL: "${AQILAS_API_URL:-}"')
     expect(text).toContain('*[![:space:]]*')
     expect(text).not.toContain('[ -z "$$MINIO_ROOT_USER" ]')
   })
