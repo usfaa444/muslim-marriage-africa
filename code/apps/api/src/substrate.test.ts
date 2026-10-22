@@ -16,7 +16,7 @@ import { writeTestObjectAndEnqueueNoOp } from './substrate.js'
 
 const apiRoot = fileURLToPath(new URL('..', import.meta.url))
 const tsc = fileURLToPath(new URL('../../../node_modules/typescript/bin/tsc', import.meta.url))
-const minioImage = 'minio/minio:RELEASE.2025-07-23T15-54-02Z'
+const minioImage = 'quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z'
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
