@@ -1,0 +1,8 @@
+     × answers the profile read and both writes with no-store, so a back navigation never reuses expired photo grants 8ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/profile.test.ts > profile fields and completeness > answers the profile read and both writes with no-store, so a back navigation never reuses expired photo grants
+AssertionError: expected null to be 'no-store' // Object.is equality
+- Expected:
++ Received:

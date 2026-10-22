@@ -131,6 +131,14 @@ function mount() {
   const photoBlur = control('profile-photo-blur', { type: 'checkbox' })
   const photoRules = control('profile-photo-rules')
   const pin = control('profile-pin', { type: 'checkbox' })
+  const pinStatus = control('profile-pin-status', { className: 'hidden text-xs text-deep-navy' }) as Control & {
+    scrolled: number
+    scrollIntoView: () => void
+  }
+  pinStatus.scrolled = 0
+  pinStatus.scrollIntoView = () => {
+    pinStatus.scrolled += 1
+  }
   const photoFile = control('profile-photo-file') as Control & { files: Array<{ name: string }>; click: () => void }
   photoFile.files = []
   photoFile.click = () => {
@@ -144,6 +152,7 @@ function mount() {
   byId.set(photoBlur.id, photoBlur)
   byId.set(photoRules.id, photoRules)
   byId.set(pin.id, pin)
+  byId.set(pinStatus.id, pinStatus)
   byId.set(photoFile.id, photoFile)
   const inputs = [
     control('', { name: 'madhhab', value: 'maliki', type: 'radio' }),
@@ -160,33 +169,47 @@ function mount() {
       this.href = path
     },
   }
-  const calls: Array<{ url: string; method: string; body?: string | undefined }> = []
+  const calls: Array<{ url: string; method: string; body?: string | undefined; cache?: string | undefined }> = []
   // A later story's read can carry fields the base profile does not.
-  let release: (body: typeof stored & Record<string, unknown>) => void = () => {}
-  const gate = new Promise<typeof stored & Record<string, unknown>>((resolve) => {
-    release = resolve
+  type Read = { ok: boolean; body: (typeof stored & Record<string, unknown>) | null }
+  let settle: (read: Read) => void = () => {}
+  const gate = new Promise<Read>((resolve) => {
+    settle = resolve
   })
+  let laterReads: Array<typeof stored & Record<string, unknown>> = []
+  let profileReads = 0
   let completeness = stored.completeness
   let rejectMedia = false
   let strike: { message: string; blockedUntil: string } | null = null
+  let saveAnswer: { status: number; body: unknown } | 'network' | null = null
+  let holdSave: Promise<void> | null = null
+  let pinEnabled = false
+  const windowListeners: Record<string, Array<(event?: { persisted?: boolean }) => void>> = {}
 
-  function fetchImpl(url: string, init?: { method?: string; body?: string }) {
+  function fetchImpl(url: string, init?: { method?: string; body?: string; cache?: string }) {
     const method = init?.method ?? 'GET'
-    calls.push({ url, method, body: init?.body })
+    calls.push({ url, method, body: init?.body, cache: init?.cache })
     if (url === '/v1/pin') {
-      return Promise.resolve({ ok: true, json: async () => ({ enabled: false }) })
+      return Promise.resolve({ ok: true, json: async () => ({ enabled: pinEnabled }) })
     }
     if (url === '/v1/me/profile' && method === 'GET') {
-      return gate.then((body) => ({ ok: true, json: async () => body }))
+      profileReads += 1
+      const later = profileReads > 1 ? laterReads.shift() : undefined
+      if (later) return Promise.resolve({ ok: true, json: async () => later })
+      return gate.then((read) => ({ ok: read.ok, json: async () => read.body ?? { error: { message: 'Request failed' } } }))
     }
     if ((method === 'PUT' || method === 'DELETE') && url.indexOf('/v1/media/') === 0) {
       return Promise.resolve({ ok: true, json: async () => ({ photos: [] }) })
     }
     if (method === 'PUT') {
-      return Promise.resolve({
+      const answer = saveAnswer
+      const held = holdSave ?? Promise.resolve()
+      if (answer === 'network') return held.then(() => Promise.reject(new TypeError('Failed to fetch')))
+      if (answer) return held.then(() => ({ ok: answer.status < 300, json: async () => answer.body }))
+      return held.then(() => ({
         ok: true,
         json: async () => ({ ...JSON.parse(init?.body ?? '{}'), bio_live: null, completeness }),
-      })
+      }))
     }
     if (url === '/v1/me/profile' && method === 'PATCH') {
       const sent = JSON.parse(init?.body ?? '{}') as { photo_blur?: boolean }
@@ -239,7 +262,15 @@ function mount() {
     },
   }
 
-  new Function('document', 'window', 'fetch', profileScript())(documentRef, { location }, fetchImpl)
+  const windowRef = {
+    location,
+    addEventListener(type: string, fn: (event?: { persisted?: boolean }) => void) {
+      windowListeners[type] = windowListeners[type] ?? []
+      windowListeners[type].push(fn)
+    },
+  }
+
+  new Function('document', 'window', 'fetch', profileScript())(documentRef, windowRef, fetchImpl)
 
   return {
     byId,
@@ -258,7 +289,37 @@ function mount() {
     location,
     form,
     calls,
-    release,
+    release(body: typeof stored & Record<string, unknown>) {
+      settle({ ok: true, body })
+    },
+    failRead() {
+      settle({ ok: false, body: null })
+    },
+    laterRead(body: typeof stored & Record<string, unknown>) {
+      laterReads.push(body)
+    },
+    answerSave(answer: { status: number; body: unknown } | 'network' | null) {
+      saveAnswer = answer
+    },
+    holdSave() {
+      let open: () => void = () => {}
+      holdSave = new Promise<void>((resolve) => {
+        open = resolve
+      })
+      return () => {
+        holdSave = null
+        open()
+      }
+    },
+    setPinEnabled(next: boolean) {
+      pinEnabled = next
+    },
+    pageshow(persisted: boolean) {
+      for (const fn of windowListeners.pageshow ?? []) fn({ persisted })
+    },
+    profileReads() {
+      return calls.filter((call) => call.url === '/v1/me/profile' && call.method === 'GET')
+    },
     rejectMedia() {
       rejectMedia = true
     },
@@ -648,6 +709,26 @@ describe('profile edit load and meter', () => {
     expect(page.photoCap.classList.contains('hidden')).toBe(false)
   })
 
+  it('puts a status line right under the PIN switch, read out when written', () => {
+    const html = profileHtml(stitch())
+    const line =
+      '<p id="profile-pin-status" class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-deep-navy" role="alert"></p>'
+    expect(html.split(line)).toHaveLength(2)
+    const at = html.indexOf(line)
+    expect(html.indexOf('id="profile-pin"')).toBeLessThan(at)
+    expect(html.indexOf('<!-- SECTION 8:')).toBeGreaterThan(at)
+    expect(html.slice(html.indexOf('id="profile-pin"'), at)).not.toContain('<section')
+  })
+
+  it('names the PIN switch, the blur switch and the photo picker with their screen copy', () => {
+    const html = profileHtml(stitch())
+    expect(html).toContain('id="profile-pin" class="sr-only peer" type="checkbox" aria-label="Activer le code PIN d\'accès"')
+    expect(html).toContain('id="profile-photo-blur" class="sr-only peer" type="checkbox" aria-label="Activer le flou protecteur"')
+    expect(html).toContain('id="profile-photo-file" class="sr-only" accept="image/jpeg,image/png" type="file" aria-label="Ajouter une photo"')
+    expect(stitch()).toContain("Activer le code PIN d'accès")
+    expect(stitch()).toContain('Activer le flou protecteur')
+  })
+
   it('opens pin setup when the access code is turned on', async () => {
     const html = profileHtml(stitch())
     expect(html).toContain('id="profile-pin"')
@@ -658,13 +739,265 @@ describe('profile edit load and meter', () => {
     expect(page.pin.checked).toBe(false)
     page.pin.checked = true
     page.pin.listeners.change?.[0]?.()
-    expect(page.location.href).toBe('/pin')
+    expect(page.location.href).toBe('/pin?next=%2Fprofile-edit')
     expect(page.calls.some((call) => call.method === 'PATCH')).toBe(false)
+    expect(page.calls.some((call) => call.method === 'PUT')).toBe(false)
   })
 
   it('opens the photo rules page from consignes de pudeur', () => {
     const page = mount()
     page.photoRules.listeners.click?.[0]?.()
     expect(page.location.href).toBe('/photo-rules')
+  })
+})
+
+describe('profile edit photos after back, forward and expiry', () => {
+  const livePhoto = (token: string) => ({ id: 'main', moderation_state: 'live', is_main: true, url: `/v1/media/get?token=${token}` })
+
+  it('reads the profile and the PIN state without the HTTP cache', async () => {
+    const html = profileHtml(stitch())
+    expect(html).toContain("cache: 'no-store'")
+    const page = mount()
+    page.release({ ...stored, photos: [livePhoto('first')] })
+    await flush()
+    await page.photoGrid.listeners.click?.[0]?.({
+      target: {
+        closest(selector: string) {
+          if (selector === '[data-photo-main]') return { getAttribute: () => 'main' }
+          return null
+        },
+      },
+    })
+    await flush()
+    const reads = page.profileReads()
+    expect(reads.length).toBe(2)
+    expect(reads.every((call) => call.cache === 'no-store')).toBe(true)
+    expect(page.calls.filter((call) => call.url === '/v1/pin').every((call) => call.cache === 'no-store')).toBe(true)
+  })
+
+  it('reads fresh photo grants when the page comes back from the back/forward cache', async () => {
+    const page = mount()
+    page.release({ ...stored, photos: [livePhoto('old')] })
+    await flush()
+    expect(page.photoGrid.innerHTML).toContain('token=old')
+    const origin = page.byId.get('origin')
+    if (!origin) throw new Error('origin missing')
+    origin.value = 'Kadiogo'
+    fire(page.form, origin)
+
+    page.pageshow(false)
+    await flush()
+    expect(page.profileReads().length).toBe(1)
+
+    page.laterRead({ ...stored, photos: [livePhoto('fresh')] })
+    page.pageshow(true)
+    await flush()
+    expect(page.profileReads().length).toBe(2)
+    expect(page.profileReads()[1]?.cache).toBe('no-store')
+    expect(page.photoGrid.innerHTML).toContain('token=fresh')
+    expect(page.photoGrid.innerHTML).not.toContain('token=old')
+    expect(origin.value).toBe('Kadiogo')
+    expect(page.location.href).toBe('')
+  })
+
+  it('repairs a photo whose signed URL failed, at most twice per page view', async () => {
+    const page = mount()
+    page.release({ ...stored, photos: [livePhoto('expired')] })
+    await flush()
+    const onError = page.photoGrid.listeners.error?.[0]
+    if (!onError) throw new Error('the grid does not watch image errors')
+
+    onError({ target: { id: 'profile-photo-add' } } as never)
+    await flush()
+    expect(page.profileReads().length).toBe(1)
+
+    page.laterRead({ ...stored, photos: [livePhoto('second')] })
+    onError({ target: { tagName: 'IMG' } } as never)
+    onError({ target: { tagName: 'IMG' } } as never)
+    await flush()
+    expect(page.profileReads().length).toBe(2)
+    expect(page.photoGrid.innerHTML).toContain('token=second')
+    expect(page.photoGrid.innerHTML).not.toContain('token=expired')
+
+    page.laterRead({ ...stored, photos: [livePhoto('third')] })
+    onError({ target: { tagName: 'IMG' } } as never)
+    await flush()
+    expect(page.profileReads().length).toBe(3)
+    expect(page.photoGrid.innerHTML).toContain('token=third')
+
+    // A photo that keeps failing does not turn into a read loop.
+    page.laterRead({ ...stored, photos: [livePhoto('fourth')] })
+    onError({ target: { tagName: 'IMG' } } as never)
+    await flush()
+    expect(page.profileReads().length).toBe(3)
+
+    // A page restored from the back/forward cache starts a new view.
+    page.pageshow(true)
+    await flush()
+    expect(page.profileReads().length).toBe(4)
+    expect(page.photoGrid.innerHTML).toContain('token=fourth')
+  })
+
+  it('keeps the blur rule and the owner preview URL as the API sends them', async () => {
+    const page = mount()
+    page.release({ ...stored, photo_blur: true, photos: [livePhoto('owner')] })
+    await flush()
+    page.laterRead({ ...stored, photo_blur: true, photos: [livePhoto('owner-again')] })
+    page.pageshow(true)
+    await flush()
+    expect(page.photoBlur.checked).toBe(true)
+    expect(page.photoGrid.innerHTML).toContain('src="/v1/media/get?token=owner-again"')
+    expect(page.photoGrid.innerHTML).not.toContain('filter:blur')
+    expect(page.calls.some((call) => call.method === 'PATCH')).toBe(false)
+  })
+})
+
+describe('profile edit PIN switch', () => {
+  async function editOrigin(page: ReturnType<typeof mount>, value: string): Promise<void> {
+    const origin = page.byId.get('origin')
+    if (!origin) throw new Error('origin missing')
+    origin.value = value
+    fire(page.form, origin)
+  }
+
+  async function turnPinOn(page: ReturnType<typeof mount>): Promise<void> {
+    page.pin.checked = true
+    page.pin.listeners.change?.[0]?.()
+    await flush()
+  }
+
+  it('returns to the profile from the PIN screen and sends no save when nothing changed', async () => {
+    const page = mount()
+    page.release(stored)
+    await flush()
+    await turnPinOn(page)
+    expect(page.location.href).toBe('/pin?next=%2Fprofile-edit')
+    expect(page.calls.filter((call) => call.method === 'PUT')).toEqual([])
+  })
+
+  it('saves unsaved edits through the profile save before opening the PIN screen', async () => {
+    const page = mount()
+    page.release(stored)
+    await flush()
+    await editOrigin(page, 'Kadiogo')
+    const open = page.holdSave()
+    page.pin.checked = true
+    page.pin.listeners.change?.[0]?.()
+    await flush()
+    const puts = page.calls.filter((call) => call.url === '/v1/me/profile' && call.method === 'PUT')
+    expect(puts).toHaveLength(1)
+    expect(JSON.parse(puts[0]?.body ?? '{}')).toMatchObject({
+      dob: '1990-01-15',
+      origin: 'Kadiogo',
+      city: 'ouagadougou',
+      madhhab: 'maliki',
+      life_plans: 'tf:6months\nUnion stable',
+      bio_pending: 'Une présentation sobre.',
+    })
+    // Not before the save answers.
+    expect(page.location.href).toBe('')
+    // A second tick or an untick while saving changes nothing.
+    page.pin.checked = false
+    page.pin.listeners.change?.[0]?.()
+    expect(page.pin.checked).toBe(true)
+    page.pin.listeners.change?.[0]?.()
+    open()
+    await flush()
+    expect(page.calls.filter((call) => call.method === 'PUT')).toHaveLength(1)
+    expect(page.location.href).toBe('/pin?next=%2Fprofile-edit')
+  })
+
+  it('does not save again after the member already saved her edits', async () => {
+    const page = mount()
+    page.release(stored)
+    await flush()
+    await editOrigin(page, 'Kadiogo')
+    await page.save.listeners.click?.[0]?.()
+    await flush()
+    expect(page.calls.filter((call) => call.method === 'PUT')).toHaveLength(1)
+    await turnPinOn(page)
+    expect(page.calls.filter((call) => call.method === 'PUT')).toHaveLength(1)
+    expect(page.location.href).toBe('/pin?next=%2Fprofile-edit')
+  })
+
+  it('stays on the profile with the save error and the switch off when the save fails', async () => {
+    const page = mount()
+    page.release(stored)
+    await flush()
+    await editOrigin(page, 'Kadiogo')
+    page.answerSave({
+      status: 400,
+      body: { error: { code: 'UNHANDLED', message: "dob : l'âge déclaré est inférieur au minimum.", details: { field: 'dob' } } },
+    })
+    await turnPinOn(page)
+    expect(page.location.href).toBe('')
+    expect(page.pin.checked).toBe(false)
+    // The reason sits under the switch she just tapped, is shown and brought into view.
+    const pinStatus = page.byId.get('profile-pin-status') as Control & { scrolled: number }
+    expect(pinStatus.textContent).toBe("dob : l'âge déclaré est inférieur au minimum.")
+    expect(pinStatus.classList.contains('hidden')).toBe(false)
+    expect(pinStatus.scrolled).toBe(1)
+    // Not repeated in the save line at the foot of the page, so it is announced once.
+    expect(page.byId.get('profile-save-status')?.classList.contains('hidden')).toBe(true)
+    expect(page.byId.get('origin')?.value).toBe('Kadiogo')
+
+    page.answerSave('network')
+    await turnPinOn(page)
+    expect(page.location.href).toBe('')
+    expect(page.pin.checked).toBe(false)
+    expect(pinStatus.textContent).toBe('Enregistrement impossible.')
+    expect(pinStatus.scrolled).toBe(2)
+
+    // A save that goes through clears the reason.
+    page.answerSave(null)
+    await page.save.listeners.click?.[0]?.()
+    await flush()
+    expect(pinStatus.textContent).toBe('')
+    expect(pinStatus.classList.contains('hidden')).toBe(true)
+
+    await editOrigin(page, 'Kadiogo-Est')
+    await turnPinOn(page)
+    expect(page.location.href).toBe('/pin?next=%2Fprofile-edit')
+  })
+
+  it('waits for the profile read before saving edits typed early, and stays when that read fails', async () => {
+    const early = mount()
+    await editOrigin(early, 'Kadiogo')
+    await turnPinOn(early)
+    expect(early.calls.filter((call) => call.method === 'PUT')).toEqual([])
+    expect(early.location.href).toBe('')
+    early.release(stored)
+    await flush()
+    const put = early.calls.find((call) => call.method === 'PUT')
+    expect(JSON.parse(put?.body ?? '{}')).toMatchObject({ origin: 'Kadiogo', city: 'ouagadougou', madhhab: 'maliki' })
+    expect(early.location.href).toBe('/pin?next=%2Fprofile-edit')
+
+    const unread = mount()
+    await editOrigin(unread, 'Kadiogo')
+    await turnPinOn(unread)
+    unread.failRead()
+    await flush()
+    expect(unread.calls.filter((call) => call.method === 'PUT')).toEqual([])
+    expect(unread.location.href).toBe('')
+    expect(unread.pin.checked).toBe(false)
+    expect(unread.byId.get('profile-pin-status')?.textContent).toBe('Enregistrement impossible.')
+  })
+
+  it('shows the real PIN state again when the page comes back from the back/forward cache', async () => {
+    const page = mount()
+    page.release(stored)
+    await flush()
+    await turnPinOn(page)
+    expect(page.location.href).toBe('/pin?next=%2Fprofile-edit')
+    expect(page.pin.checked).toBe(true)
+    // The member pressed Back on /pin without saving a PIN.
+    page.pageshow(true)
+    await flush()
+    expect(page.pin.checked).toBe(false)
+
+    page.setPinEnabled(true)
+    page.pageshow(true)
+    await flush()
+    expect(page.pin.checked).toBe(true)
   })
 })

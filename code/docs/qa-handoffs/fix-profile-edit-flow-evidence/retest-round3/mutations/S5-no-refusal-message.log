@@ -1,0 +1,137 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/pin-screen.test.ts (10 tests | 3 failed) 1808ms
+   ❯ PIN screen length (10)
+     × clears the dots, stays and says why after a refused PIN 59ms
+     × says the session is locked after the last wrong PIN, and that sign-in is needed after that 47ms
+     × brings the status line into view each time it says something, and not when it rests 141ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [InstanceLoader] AppModule dependencies initialized +23ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RoutesResolver] HealthController {/v1}: +8ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +5ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:15 PM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] PinController {/v1/pin}: +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +3ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +4ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +1ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +0ms
+[Nest] 24734  - 10/22/2026, 2:47:16 PM     LOG [NestApplication] Nest application successfully started +2ms
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  3 failed | 98 passed (101)
+   Start at  14:47:12
+   Duration  7.10s (tests 60%, transform 21%, import 18%, setup 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > clears the dots, stays and says why after a refused PIN
+AssertionError: expected 'Validation du code en cours...' to be 'Code incorrect.' // Object.is equality
+
+Expected: "Code incorrect."
+Received: "Validation du code en cours..."
+
+ ❯ apps/web/src/pin-screen.test.ts:255:25
+    253|     expect(page.filled()).toBe(0)
+    254|     expect(page.assigned).toEqual([])
+    255|     expect(page.hint()).toBe('Code incorrect.')
+       |                         ^
+    256|
+    257|     // Typing again puts the resting hint back.
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > says the session is locked after the last wrong PIN, and that sign-in is needed after that
+AssertionError: expected 'Validation du code en cours...' to be 'Session verrouillée.' // Object.is equality
+
+Expected: "Session verrouillée."
+Received: "Validation du code en cours..."
+
+ ❯ apps/web/src/pin-screen.test.ts:268:25
+    266|     })
+    267|     await page.press('135791')
+    268|     expect(page.hint()).toBe('Session verrouillée.')
+       |                         ^
+    269|     expect(page.filled()).toBe(0)
+    270|     expect(page.assigned).toEqual([])
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > brings the status line into view each time it says something, and not when it rests
+AssertionError: expected [ Array(1) ] to deeply equal [ …(2) ]
+
+- Expected
++ Received
+
+  [
+    "Validation du code en cours... (nearest)",
+-   "Code incorrect. (nearest)",
+  ]
+
+ ❯ apps/web/src/pin-screen.test.ts:318:28
+    316|     })
+    317|     await wrong.press('135791')
+    318|     expect(wrong.scrolled).toEqual(['Validation du code en cours... (n…
+       |                            ^
+    319|     wrong.answerWith({ status: 401, body: { error: { code: 'PIN_LOCKED…
+    320|     await wrong.press('135791')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

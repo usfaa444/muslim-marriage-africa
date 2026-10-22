@@ -1,0 +1,20 @@
+[1440] +0.2s opened /profile-edit
+[1440] +0.5s after upload -> /profile-review
+[1440] +0.5s waiting 65 s (signed_url_ttl_seconds = 60)
+[1440] +65.6s back -> /profile-edit
+[1440] photos after back: [{"complete":true,"w":64,"src":"/v1/media/get?token=…"}]
+[1440] all photos loaded: true
+[1440] after-back net: GET 200 /v1/pin cache-control=null
+[1440] after-back net: GET 200 /v1/pin cache-control=null
+[1440] after-back net: GET 200 /v1/me/profile cache-control=no-store
+[1440] after-back net: GET 200 /v1/media/get?token=… cache-control=null
+[1440] requests served from HTTP cache (profile/media): []
+[1440] 403/4xx from media: []
+[1440] +68.2s forward -> /profile-review
+[1440] 2nd back photos: [{"complete":true,"w":64,"src":"/v1/media/get?token=…"}] all loaded: true
+[1440] 2nd-back net: GET 200 /v1/pin cache-control=null
+[1440] 2nd-back net: GET 200 /v1/pin cache-control=null
+[1440] 2nd-back net: GET 200 /v1/me/profile cache-control=no-store
+[1440] 2nd-back net: GET 200 /v1/media/get?token=… cache-control=null
+[1440] console/network problems: ["console.log: PAGESHOW persisted=false /profile-edit","console.error: Failed to load resource: the server responded with a status of 404 (Not Found)","console.log: PAGESHOW persisted=false /profile-review","console.log: PAGESHOW persisted=false /profile-edit","console.log: PAGESHOW persisted=false /profile-review","console.log: PAGESHOW persisted=false /profile-edit"]
+[1440] pageshow events: ["console.log: PAGESHOW persisted=false /profile-edit","console.log: PAGESHOW persisted=false /profile-review","console.log: PAGESHOW persisted=false /profile-edit","console.log: PAGESHOW persisted=false /profile-review","console.log: PAGESHOW persisted=false /profile-edit"]

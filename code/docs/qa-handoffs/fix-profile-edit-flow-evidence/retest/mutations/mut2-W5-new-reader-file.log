@@ -1,0 +1,37 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/web-image.test.ts (7 tests | 1 failed) 50ms
+   ❯ web image design files (7)
+     × reads design files only through the two parsed loaders 11ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  12:47:59
+   Duration  318ms (transform 57%, tests 27%, import 7%, setup 6%, worker 2%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/web-image.test.ts > web image design files > reads design files only through the two parsed loaders
+AssertionError: expected [ 'src/discover-page.ts', …(2) ] to deeply equal [ 'src/discover-page.ts', …(1) ]
+
+- Expected
++ Received
+
+  [
+    "src/discover-page.ts",
+    "src/v2-serve.ts",
++   "src/zz-qa-reader.ts",
+  ]
+
+ ❯ apps/web/src/web-image.test.ts:189:21
+    187|       .map((source) => source.path.replaceAll('\\', '/'))
+    188|       .sort()
+    189|     expect(readers).toEqual(READERS)
+       |                     ^
+    190|     // Inside the two readers too: no literal design path and no secon…
+    191|     expect(sources.filter((source) => READERS.includes(source.path.rep…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

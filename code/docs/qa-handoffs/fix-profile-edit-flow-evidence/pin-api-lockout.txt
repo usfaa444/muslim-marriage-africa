@@ -1,0 +1,8 @@
+# Lockout after repeated wrong PINs (member pinapi, PIN 482916): 5th failure ends the session
+POST /v1/pin/lock -> 200 {"locked":true} 
+unlock wrong 1111 -> 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":4},"request_id":"01a1632b-f6de-75f9-87aa-18359d3ca35f","retryable":false}} 
+unlock wrong 222222 -> 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":3},"request_id":"01a1632c-12a0-74b8-8f18-be83983a9971","retryable":false}} 
+unlock wrong 3333 -> 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":2},"request_id":"01a1632c-2e61-7a6d-9389-72986aaeeb1c","retryable":false}} 
+unlock wrong 444444 -> 400 {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":1},"request_id":"01a1632c-4a27-7169-a51c-989633400995","retryable":false}} 
+unlock wrong 5555 -> 401 {"error":{"code":"PIN_LOCKED","message":"Session verrouillée.","details":null,"request_id":"01a1632c-660a-74d6-b194-69be2ad9841a","retryable":false}} set-cookie: ankanu_session=; Path=/; HttpOnly; SameSite=Lax;
+GET /v1/me/profile after lockout (session should be gone) -> 401 {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a1632c-817c-7c14-8cd4-4f8c12cf6a0b","retryable":false}} 

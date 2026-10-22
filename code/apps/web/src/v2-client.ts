@@ -1,5 +1,6 @@
 /** Browser behavior for the v2 signup and sign-in screens. No password is stored. */
 
+import { LEGACY_PIN_LENGTH, PIN_LENGTH, PIN_SET_LENGTH_MESSAGE, PIN_UNLOCK_LENGTH_MESSAGE } from '@ankanu/kernel'
 import { LITE_STORAGE_KEY, liteModeSource } from './lite-mode'
 
 /** Screen 12 Element 1. Narrow widths stack the chip under the label so it stays in the card. */
@@ -1014,54 +1015,113 @@ export function resetScript(copy: {
 
 export function pinScript(): string {
   return `
+    var PIN_LENGTH = ${PIN_LENGTH}
+    var LEGACY_PIN_LENGTH = ${LEGACY_PIN_LENGTH}
+    var SET_LENGTH_MESSAGE = ${JSON.stringify(PIN_SET_LENGTH_MESSAGE)}
+    var UNLOCK_LENGTH_MESSAGE = ${JSON.stringify(PIN_UNLOCK_LENGTH_MESSAGE)}
     var digits = ''
+    var busy = false
     var slots = Array.from(document.querySelectorAll('.pin-dot'))
+    var hint = document.getElementById('pin-status-text')
+    var restingHint = hint ? hint.textContent : ''
+    var statusLine = document.getElementById('status-hint')
     function paint() {
       slots.forEach(function (dot, index) {
         dot.style.opacity = index < digits.length ? '1' : '0'
       })
     }
-    async function finish(pin) {
-      var status = await fetch('/v1/pin', { credentials: 'same-origin' })
-      var body = await status.json().catch(function () { return null })
-      var response
-      if (body && body.enabled === false) {
-        response = await fetch('/v1/pin', {
-          method: 'PUT',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ pin: pin })
-        })
-      } else {
-        response = await fetch('/v1/pin/unlock', {
-          method: 'POST',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ pin: pin })
-        })
+    // The Stitch status hint, read out by its role="status". Empty restores its resting line.
+    // The hint is the last line of the card, below the fold on a short screen, so a message brings it into view.
+    function say(text) {
+      if (hint) hint.textContent = text || restingHint
+      if (text && statusLine && typeof statusLine.scrollIntoView === 'function') statusLine.scrollIntoView({ block: 'nearest' })
+    }
+    function refusal(body) {
+      var message = body && body.error && body.error.message
+      return typeof message === 'string' && message ? message : 'La connexion a échoué.'
+    }
+    function nextPath() {
+      var params = new URLSearchParams(window.location.search)
+      var next = params.get('next') || ''
+      // The URL parser drops tab, LF and CR and reads a backslash as a slash, so "/<tab>/x" or "/\\x"
+      // would leave this origin. Only a plain path on this origin is followed.
+      if (next.charAt(0) !== '/' || /[\\u0000-\\u001F\\u007F\\\\]/.test(next)) return '/onboarding'
+      try {
+        var url = new URL(next, window.location.origin)
+        var path = url.pathname + url.search + url.hash
+        if (url.origin !== window.location.origin || path.charAt(0) !== '/' || path.charAt(1) === '/') return '/onboarding'
+        return path
+      } catch (error) {
+        return '/onboarding'
       }
-      if (response.ok) {
-        var params = new URLSearchParams(window.location.search)
-        var next = params.get('next') || ''
-        if (next.charAt(0) !== '/' || next.charAt(1) === '/' || next.charAt(1) === '\\\\') next = '/onboarding'
-        window.location.assign(next)
-      } else {
+    }
+    async function finish(pin) {
+      if (busy) return
+      busy = true
+      try {
+        var status = await fetch('/v1/pin', { credentials: 'same-origin', cache: 'no-store' })
+        var state = await status.json().catch(function () { return null })
+        if (!status.ok) {
+          digits = ''
+          paint()
+          say(refusal(state))
+          return
+        }
+        var setting = !!(state && state.enabled === false)
+        // A new PIN is always PIN_LENGTH digits; an unlock also takes a PIN saved with four.
+        // Keep the digits so the member can finish typing.
+        if (setting && pin.length !== PIN_LENGTH) {
+          say(SET_LENGTH_MESSAGE)
+          return
+        }
+        if (!setting && pin.length !== PIN_LENGTH && pin.length !== LEGACY_PIN_LENGTH) {
+          say(UNLOCK_LENGTH_MESSAGE)
+          return
+        }
+        say('Validation du code en cours...')
+        var response = await fetch(setting ? '/v1/pin' : '/v1/pin/unlock', {
+          method: setting ? 'PUT' : 'POST',
+          credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ pin: pin })
+        })
+        // Read the answer before leaving, or the browser cancels a request the API already applied.
+        var body = await response.json().catch(function () { return null })
+        if (response.ok) {
+          window.location.assign(nextPath())
+          return
+        }
         digits = ''
         paint()
+        say(refusal(body))
+      } catch (error) {
+        digits = ''
+        paint()
+        say('La connexion a échoué.')
+      } finally {
+        busy = false
       }
     }
     document.querySelectorAll('[data-key]').forEach(function (button) {
       button.addEventListener('click', function () {
-        if (digits.length >= 4) return
+        if (busy || digits.length >= PIN_LENGTH) return
         digits += button.getAttribute('data-key') || ''
         paint()
-        if (digits.length === 4) finish(digits)
+        say('')
+        if (digits.length === PIN_LENGTH) finish(digits)
       })
     })
+    // A PIN saved while four digits were the rule still unlocks, with the Stitch unlock button.
+    var submit = document.getElementById('btn-submit')
+    if (submit) {
+      submit.addEventListener('click', function () {
+        if (digits.length > 0) finish(digits)
+      })
+    }
     var back = document.getElementById('btn-backspace')
-    if (back) back.addEventListener('click', function () { digits = digits.slice(0, -1); paint() })
+    if (back) back.addEventListener('click', function () { if (!busy) { digits = digits.slice(0, -1); paint(); say('') } })
     var clear = document.getElementById('btn-clear')
-    if (clear) clear.addEventListener('click', function () { digits = ''; paint() })
+    if (clear) clear.addEventListener('click', function () { if (!busy) { digits = ''; paint(); say('') } })
   `
 }
 
@@ -1167,7 +1227,7 @@ export function reviewScript(): string {
         window.location.assign(reviewReturn())
       })
     }
-    fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
+    fetch('/v1/me/profile', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
       return response.json().then(function (body) {
         var photo = body && body.photo
         var pending = photo && photo.moderation_state === 'pending'
@@ -1279,12 +1339,73 @@ export function profileScript(): string {
 
     var touched = {}
     var profileLoaded = false
+    // The controls payload() sends. Edits to them are unsaved until a PUT that carried them succeeds.
+    var PROFILE_FIELDS = {
+      dob: 1, origin: 1, country_residence: 1, city_residence: 1, education: 1, job: 1, marital_status: 1,
+      polygyny_intent: 1, madhhab: 1, religious_practice: 1, marriage_timeframe: 1, intentions: 1, bio: 1
+    }
+    var editCount = 0
+    var savedCount = 0
 
     function markTouched(event) {
       var el = event && event.target
       if (!el) return
       var key = el.id || el.name
       if (key) touched[key] = true
+      if (key && Object.prototype.hasOwnProperty.call(PROFILE_FIELDS, key)) editCount += 1
+    }
+
+    function hasUnsavedEdits() {
+      return editCount !== savedCount
+    }
+
+    // Each read signs fresh photo URLs that expire after signed_url_ttl_seconds. Never reuse a stored copy,
+    // which a back/forward navigation would otherwise serve.
+    function readProfile() {
+      return fetch('/v1/me/profile', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+        return response.json().then(function (body) {
+          return { ok: response.ok, body: body }
+        }, function () {
+          return { ok: false, body: null }
+        })
+      })
+    }
+
+    function saveProfile() {
+      var sentAt = editCount
+      return fetch('/v1/me/profile', {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload())
+      }).then(function (response) {
+        return response.json().then(function (body) {
+          if (response.ok) {
+            savedCount = sentAt
+            showPinStatus('')
+          }
+          return { ok: response.ok, body: body }
+        })
+      })
+    }
+
+    function failureText(result) {
+      var message = result && result.body && result.body.error && result.body.error.message
+      return message || 'Enregistrement impossible.'
+    }
+
+    function saveFailure(result) {
+      showStatus(failureText(result))
+    }
+
+    // The line under the PIN switch. The save line sits at the foot of the page, out of sight
+    // of a member who just tapped the switch.
+    function showPinStatus(text) {
+      var node = document.getElementById('profile-pin-status')
+      if (!node) return
+      node.textContent = text || ''
+      node.classList.toggle('hidden', !text)
+      if (text && typeof node.scrollIntoView === 'function') node.scrollIntoView({ block: 'nearest' })
     }
 
     function paintMeter(completeness) {
@@ -1455,17 +1576,14 @@ export function profileScript(): string {
       form.addEventListener('change', markTouched)
     }
 
-    fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
-      return response.json().then(function (body) {
-        return { ok: response.ok, body: body }
-      }, function () {
-        return { ok: false, body: null }
-      })
-    }).then(function (result) {
-      if (!result.ok || !result.body || typeof result.body.dob !== 'string') return
+    var profileRead = readProfile().then(function (result) {
+      if (!result.ok || !result.body || typeof result.body.dob !== 'string') return false
       applyProfile(result.body, true)
       profileLoaded = true
-    }).catch(function () {})
+      return true
+    }).catch(function () {
+      return false
+    })
 
     var photoPickerUntil = 0
     var photoFile = document.getElementById('profile-photo-file')
@@ -1499,13 +1617,7 @@ export function profileScript(): string {
               showStatus(uploadFailure(result.body))
               return
             }
-            return fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (profileResponse) {
-              return profileResponse.json().then(function (profile) {
-                return { ok: profileResponse.ok, body: profile }
-              }, function () {
-                return { ok: false, body: null }
-              })
-            }).then(function (read) {
+            return readProfile().then(function (read) {
               var photos = read.ok && read.body ? photoList(read.body) : []
               var live = false
               for (var photoIndex = 0; photoIndex < photos.length; photoIndex += 1) {
@@ -1574,13 +1686,7 @@ export function profileScript(): string {
             showStatus(message || 'Modification de la photo impossible.')
             return
           }
-          return fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (profileResponse) {
-            return profileResponse.json().then(function (profile) {
-              return { ok: profileResponse.ok, body: profile }
-            }, function () {
-              return { ok: false, body: null }
-            })
-          }).then(function (read) {
+          return readProfile().then(function (read) {
             if (!read.ok || !read.body) {
               var message = read.body && read.body.error && read.body.error.message
               showStatus(message || 'Modification de la photo impossible.')
@@ -1592,6 +1698,30 @@ export function profileScript(): string {
           showStatus('Modification de la photo impossible.')
         })
       })
+    }
+
+    // A photo URL is a short-lived grant. When one fails (expired while the page stayed open, or the page
+    // came back from the back/forward cache), read fresh grants and repaint the grid only. Two repairs per view.
+    var photoRepair = null
+    var photoRepairs = 0
+    function repairPhotos() {
+      if (photoRepair) return photoRepair
+      photoRepair = readProfile().then(function (read) {
+        photoRepair = null
+        if (read.ok && read.body && typeof read.body.dob === 'string') paintPhoto(read.body)
+      }, function () {
+        photoRepair = null
+      })
+      return photoRepair
+    }
+    if (photoGrid) {
+      photoGrid.addEventListener('error', function (event) {
+        var target = event && event.target
+        if (!target || String(target.tagName || '').toUpperCase() !== 'IMG') return
+        if (photoRepair || photoRepairs >= 2) return
+        photoRepairs += 1
+        repairPhotos()
+      }, true)
     }
 
     document.querySelectorAll('button').forEach(function (button) {
@@ -1613,19 +1743,9 @@ export function profileScript(): string {
       button.addEventListener('click', function () {
         if (!profileLoaded) return
         showStatus('')
-        fetch('/v1/me/profile', {
-          method: 'PUT',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(payload())
-        }).then(function (response) {
-          return response.json().then(function (body) {
-            return { ok: response.ok, body: body }
-          })
-        }).then(function (result) {
+        saveProfile().then(function (result) {
           if (!result.ok) {
-            var message = result.body && result.body.error && result.body.error.message
-            showStatus(message || 'Enregistrement impossible.')
+            saveFailure(result)
             return
           }
           applyProfile(result.body)
@@ -1638,19 +1758,68 @@ export function profileScript(): string {
 
     var pinInput = document.getElementById('profile-pin')
     var pinEnabled = false
-    fetch('/v1/pin', { credentials: 'same-origin' }).then(function (response) {
-      return response.json()
-    }).then(function (body) {
-      pinEnabled = !!(body && body.enabled)
+    var pinLeaving = false
+    function readPinState() {
+      fetch('/v1/pin', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+        return response.json()
+      }).then(function (body) {
+        pinEnabled = !!(body && body.enabled)
+        if (pinInput && !pinLeaving) pinInput.checked = pinEnabled
+      }).catch(function () {})
+    }
+    readPinState()
+    function openPin() {
+      window.location.assign('/pin?next=' + encodeURIComponent('/profile-edit'))
+    }
+    function stayForPin(result) {
+      pinLeaving = false
       if (pinInput) pinInput.checked = pinEnabled
-    }).catch(function () {})
+      showPinStatus(failureText(result))
+    }
     if (pinInput) {
       pinInput.addEventListener('change', function () {
-        if (pinInput.checked && !pinEnabled) {
-          window.location.assign('/pin')
+        if (pinLeaving) {
+          pinInput.checked = true
           return
         }
-        pinInput.checked = pinEnabled
+        if (!pinInput.checked || pinEnabled) {
+          pinInput.checked = pinEnabled
+          return
+        }
+        pinLeaving = true
+        if (!hasUnsavedEdits()) {
+          openPin()
+          return
+        }
+        // Save what the member typed through the same save as the button, then open /pin.
+        // A save before the profile is read would blank the fields she did not touch, so wait for it.
+        showStatus('')
+        showPinStatus('')
+        profileRead.then(function (loaded) {
+          if (!loaded) {
+            stayForPin(null)
+            return
+          }
+          return saveProfile().then(function (result) {
+            if (!result.ok) {
+              stayForPin(result)
+              return
+            }
+            openPin()
+          })
+        }).catch(function () {
+          stayForPin(null)
+        })
+      })
+    }
+
+    if (window.addEventListener) {
+      window.addEventListener('pageshow', function (event) {
+        if (!event || !event.persisted) return
+        pinLeaving = false
+        photoRepairs = 0
+        readPinState()
+        repairPhotos()
       })
     }
 

@@ -1,0 +1,30 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from di.Dockerfile
+#1 transferring dockerfile: 4.24kB done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/node:24.21.0
+#2 DONE 0.0s
+
+#3 [1/3] FROM docker.io/library/node:24.21.0@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0
+#3 resolve docker.io/library/node:24.21.0@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0 0.0s done
+#3 DONE 0.0s
+
+#4 [internal] load build context
+#4 transferring context: 266B done
+#4 DONE 0.0s
+
+#5 [2/3] COPY design-stitch/ankanu-v2/57-discover/screen.html design-stitch/ankanu-v2/57-discover/grid.html design-stitch/ankanu-v2/17-favourites/screen.html /x/
+#5 ERROR: failed to calculate checksum of ref gxwqiffp54kjgk9ltlh0754xi::0xj88yuk2hubudz00y00se6qk: "/design-stitch/ankanu-v2/17-favourites/screen.html": not found
+------
+ > [2/3] COPY design-stitch/ankanu-v2/57-discover/screen.html design-stitch/ankanu-v2/57-discover/grid.html design-stitch/ankanu-v2/17-favourites/screen.html /x/:
+------
+di.Dockerfile:2
+--------------------
+   1 |     FROM node:24.21.0
+   2 | >>> COPY design-stitch/ankanu-v2/57-discover/screen.html design-stitch/ankanu-v2/57-discover/grid.html design-stitch/ankanu-v2/17-favourites/screen.html /x/
+   3 |     RUN ls -la /x
+   4 |     
+--------------------
+ERROR: failed to build: failed to solve: failed to compute cache key: failed to calculate checksum of ref gxwqiffp54kjgk9ltlh0754xi::0xj88yuk2hubudz00y00se6qk: "/design-stitch/ankanu-v2/17-favourites/screen.html": not found

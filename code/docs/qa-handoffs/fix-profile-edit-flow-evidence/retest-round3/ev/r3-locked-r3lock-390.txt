@@ -1,0 +1,30 @@
+[390] GET /v1/pin -> 200 {"enabled":true,"locked":false}
+[390] POST /v1/pin/lock -> 200 {"locked":true}
+[390] gate for locked session -> 401 {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a163fe-6620-7445-bc95-d04f665e794c","retryable":false}}
+[390] locked, open /decouvrir -> /pin?next=%2Fdecouvrir (navigations: /decouvrir > /pin?next=%2Fdecouvrir)
+[390] pin screen: dots=6 status="Chiffrement et vérification locale sécurisée" role=status
+[390] axe locked /pin (resting): serious/critical=0  all=
+[390] wrong six digits -> status="Code incorrect." dotsFilled=0 url=/pin
+[390] axe after wrong PIN: serious/critical=0  all=
+[390] five digits + button -> status="pin : quatre ou six chiffres sont requis." dotsFilled=5 (nothing sent)
+[390] sixth digit (123456, wrong) -> status="Code incorrect." dotsFilled=0
+[390] correct PIN -> /decouvrir; page title="AnKanu - Découvrir"
+[390] gate after unlock -> 200 {"step":"account"}
+[390] POST /v1/pin/lock -> 200 {"locked":true}
+[390] locked, open /decouvrir?vue=grille -> /pin?next=%2Fdecouvrir
+[390] after unlock -> /decouvrir (query kept: false)
+[390] POST /v1/pin/lock -> 200 {"locked":true}
+[390] locked GET /pin -> 200 
+[390] locked GET /auth -> 200 
+[390] locked GET /password-reset -> 200 
+[390] locked GET /signup -> 200 
+[390] locked GET /profile-edit -> 303 http://localhost:4043/pin?next=%2Fprofile-edit
+[390] locked GET /settings -> 303 http://localhost:4043/pin?next=%2Fsettings
+[390] locked GET /profile-review -> 303 http://localhost:4043/pin?next=%2Fprofile-review
+[390] locked GET /favoris -> 303 http://localhost:4043/pin?next=%2Ffavoris
+[390] locked GET /onboarding -> 303 http://localhost:4043/pin?next=%2Fonboarding
+[390] locked GET / -> 200 
+[390] "S'identifier à nouveau" href=/auth
+[390] after clicking it -> /auth (locked session on /auth is shown the sign-in form: true)
+[390] /pin without next, correct PIN -> /onboarding
+[390] problems: ["http 400: POST http://localhost:4043/v1/pin/unlock","http 400: POST http://localhost:4043/v1/pin/unlock","http 403: GET http://localhost:4043/v1/browse","console.error: Failed to load resource: the server responded with a status of 403 (Forbidden)","http 403: GET http://localhost:4043/v1/browse","console.error: Failed to load resource: the server responded with a status of 403 (Forbidden)"]

@@ -1,0 +1,11 @@
+# Cache-Control on the profile endpoints and finding 13 (long free text), member r3perf, head d47d354
+GET profile -> 200 cache-control: no-store
+GET profile (no session) -> 401 cache-control: no-store
+PUT valid -> 200 cache-control: no-store
+PUT refused (under-age) -> 400 cache-control: no-store
+PATCH invalid -> 400 cache-control: no-store
+PATCH valid blur -> 200 cache-control: no-store
+GET /v1/pin -> 200 cache-control: <none> (finding 15: unchanged)
+Finding 13: PUT origin x5000 -> 200
+  GET after: origin length 5000
+Finding 13: PUT bio x5000 -> 200

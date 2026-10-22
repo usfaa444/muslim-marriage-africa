@@ -220,7 +220,7 @@ describe('v2 signup and sign-in screens', () => {
     expect(page).toContain('window.location.assign(path)')
   })
 
-  it('asks for a reset link and unlocks a four-digit PIN', () => {
+  it('asks for a reset link and unlocks a six-digit PIN', () => {
     const reset = resetHtml(stitch('05-password-reset'))
     expect(reset).toContain("fetch('/v1/password-resets'")
     expect(reset).toContain('href="/auth"')
@@ -249,11 +249,23 @@ describe('v2 signup and sign-in screens', () => {
     expect(done).toContain('Accéder à mon espace Ta\'aruf')
     expect(done).toContain('id="reset-enter"')
     const pin = pinHtml(stitch('10-pin-lock'))
-    expect(pin).toContain("fetch('/v1/pin/unlock'")
-    expect(pin).toContain('digits.length === 4')
+    expect(pin).toContain("'/v1/pin/unlock'")
+    expect(pin).toContain('var PIN_LENGTH = 6')
+    expect(pin).toContain('if (digits.length === PIN_LENGTH) finish(digits)')
     expect(pin).toContain('pin-dot')
     expect(pin).toContain("next.charAt(0) !== '/'")
-    expect(pin).toContain("next.charAt(1) === '/'")
+    expect(pin).toContain('new URL(next, window.location.origin)')
+    expect(pin).toContain('url.origin !== window.location.origin')
+    // Feedback goes to the Stitch status hint, read out as a status; its icons are decoration.
+    expect(pin).toContain('id="status-hint" role="status"')
+    // Brought into view with some room below it, not flush with the screen edge; the layout is unchanged.
+    expect(pin).toContain('id="status-hint" role="status" style="scroll-margin-bottom: 24px"')
+    expect(pin).toContain('<span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>')
+    expect(pin).toContain('<span aria-hidden="true" class="material-symbols-outlined text-xl" data-icon="backspace"></span>')
+    expect(pin).not.toContain('>backspace</span>')
+    expect(pin).not.toContain('text-deep-navy/50')
+    expect(pin).toContain('text-deep-navy/70 hover:text-deep-navy transition-all duration-150 flex items-center justify-center focus:outline-none" id="btn-clear"')
+    expect(pin).toMatch(/href="\/auth">\s*S'identifier à nouveau/)
     const settings = settingsHtml(stitch('27-settings'))
     expect(settings).toContain('confirm: true')
     const onboarding = onboardingHtml(stitch('08-onboarding'))

@@ -1,0 +1,264 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 42 tests using 2 workers
+
+  ✓   1 [mobile] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (3.2s)
+  ✓   2 [mobile] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.3s)
+  ✓   3 [mobile] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (3.3s)
+  ✓   4 [mobile] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (3.0s)
+  ✓   5 [mobile] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.9s)
+  -   7 [mobile] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓   6 [mobile] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.9s)
+  ✓   9 [mobile] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (3.3s)
+  ✓   8 [mobile] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.2s)
+  ✓  10 [mobile] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (3.1s)
+  ✓  11 [mobile] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (3.2s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  12 [mobile] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (3.0s)
+  -  14 [mobile] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓  13 [mobile] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (3.1s)
+  ✓  16 [mobile] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (3.1s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  15 [mobile] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.1s)
+  ✓  17 [mobile] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (2.9s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  18 [mobile] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (3.2s)
+  ✓  19 [mobile] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.8s)
+  -  21 [mobile] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓  20 [mobile] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (3.0s)
+  ✓  23 [desktop] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (3.0s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  22 [desktop] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.2s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  25 [desktop] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (2.9s)
+  ✓  24 [desktop] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (3.3s)
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  26 [desktop] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.6s)
+  -  28 [desktop] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓  27 [desktop] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.7s)
+  ✓  30 [desktop] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (2.9s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  29 [desktop] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (4.5s)
+  ✓  31 [desktop] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (3.2s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  32 [desktop] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (3.2s)
+  ✓  33 [desktop] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.8s)
+  -  35 [desktop] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓  34 [desktop] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (3.0s)
+  ✓  37 [desktop] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (3.4s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  36 [desktop] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.6s)
+  ✓  38 [desktop] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (3.2s)
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  39 [desktop] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (3.4s)
+  ✓  40 [desktop] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.6s)
+  -  42 [desktop] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓  41 [desktop] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.7s)
+
+  6 skipped
+  36 passed (1.2m)

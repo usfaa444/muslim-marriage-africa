@@ -1,0 +1,19 @@
+profile-edit 360 overflow false 360/360 styled true small 27 outside 0 serious/critical color-contrast(11) other 
+profile-edit 390 overflow false 390/390 styled true small 27 outside 0 serious/critical color-contrast(11) other 
+profile-edit 768 overflow false 768/768 styled true small 27 outside 0 serious/critical color-contrast(11) other 
+profile-edit 1024 overflow false 1024/1024 styled true small 27 outside 0 serious/critical color-contrast(11) other 
+profile-edit 1280 overflow false 1280/1280 styled true small 27 outside 0 serious/critical color-contrast(11) other 
+profile-edit 1440 overflow false 1440/1440 styled true small 27 outside 0 serious/critical color-contrast(11) other 
+pin 360 overflow false 360/360 styled true small 2 outside 0 serious/critical none other 
+pin 390 overflow false 390/390 styled true small 2 outside 0 serious/critical none other 
+pin 768 overflow false 768/768 styled true small 2 outside 0 serious/critical none other 
+pin 1024 overflow false 1024/1024 styled true small 2 outside 0 serious/critical none other 
+pin 1280 overflow false 1280/1280 styled true small 2 outside 0 serious/critical none other 
+pin 1440 overflow false 1440/1440 styled true small 2 outside 0 serious/critical none other 
+profile-review 360 overflow false 360/360 styled true small 0 outside 0 serious/critical color-contrast(2) other 
+profile-review 390 overflow false 390/390 styled true small 0 outside 0 serious/critical color-contrast(2) other 
+profile-review 768 overflow false 768/768 styled true small 0 outside 0 serious/critical color-contrast(2) other 
+profile-review 1024 overflow false 1024/1024 styled true small 0 outside 0 serious/critical color-contrast(2) other 
+profile-review 1280 overflow false 1280/1280 styled true small 0 outside 0 serious/critical color-contrast(2) other 
+profile-review 1440 overflow false 1440/1440 styled true small 0 outside 0 serious/critical color-contrast(2) other 
+exit=0

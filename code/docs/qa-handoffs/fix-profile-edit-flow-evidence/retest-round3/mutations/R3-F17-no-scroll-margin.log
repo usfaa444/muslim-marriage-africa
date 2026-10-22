@@ -1,0 +1,377 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/v2-flow.test.ts (28 tests | 1 failed) 212ms
+   ❯ v2 signup and sign-in screens (12)
+     × asks for a reset link and unlocks a six-digit PIN 44ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [InstanceLoader] AppModule dependencies initialized +22ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] HealthController {/v1}: +7ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +3ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +2ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +2ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +2ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +1ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +0ms
+[Nest] 1460  - 10/22/2026, 2:49:31 PM     LOG [NestApplication] Nest application successfully started +1ms
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 100 passed (101)
+   Start at  14:49:27
+   Duration  8.03s (tests 62%, transform 20%, import 17%, setup 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+AssertionError: expected '<!DOCTYPE html><html class="h-full" l…' to contain 'id="status-hint" role="status" style=…'
+
+- Expected
++ Received
+
+- id="status-hint" role="status" style="scroll-margin-bottom: 24px"
++ <!DOCTYPE html><html class="h-full" lang="fr"><head>
++ <meta charset="utf-8">
++ <meta content="width=device-width, initial-scale=1.0" name="viewport">
++ <title>Verrouillage de Sécurité — AnKanu</title>
++ <!-- Google Fonts -->
++ <link href="https://fonts.googleapis.com" rel="preconnect">
++ <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
++ <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
++ <!-- Material Symbols Outlined -->
++ <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
++ <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
++ <!-- Tailwind CSS -->
++ <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
++ <script id="tailwind-config">
++     tailwind.config = {
++       darkMode: "class",
++       theme: {
++         extend: {
++           colors: {
++             'deep-navy': '#0B1D36',
++             'soft-gold': '#C9A86C',
++             'cream': '#F7F1E3',
++             'on-navy': '#F7F1E3',
++             'on-cream': '#0B1D36',
++             'gold-soft': '#E6D5A8',
++             'hairline': '#E2D4B8'
++           },
++           borderRadius: {
++             "DEFAULT": "0.25rem",
++             "md": "8px",
++             "lg": "0.5rem",
++             "xl": "0.75rem",
++             "full": "9999px"
++           },
++           fontFamily: {
++             "headline": ["Newsreader", "Georgia", "serif"],
++             "display": ["Newsreader", "Georgia", "serif"],
++             "body": ["Plus Jakarta Sans", "system-ui", "sans-serif"],
++             "label": ["Plus Jakarta Sans", "system-ui", "sans-serif"]
++           }
++         }
++       }
++     }
++   </script>
++ <style>
++     .material-symbols-outlined {
++       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
++       display: inline-block;
++       vertical-align: middle;
++       line-height: 1;
++     }
++     .material-symbols-outlined.fill-icon {
++       font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
++     }
++   </style>
++ <style>.material-symbols-outlined[data-icon]:empty::before{content:attr(data-icon)}</style><style id="ankanu-responsive">
++ *, *::before, *::after { box-sizing: border-box; }
++ html, body {
++   max-width: 100% !important;
++   width: auto !important;
++   height: auto !important;
++   min-height: 100%;
++   overflow: auto !important;
++ }
++ img, svg, video, canvas { max-width: 100%; height: auto; }
++ iframe { max-width: 100%; }
++ main, section, form, header, footer { min-width: 0; max-width: 100%; }
++ @media (max-width: 400px) {
++   .g-recaptcha { transform: scale(0.88); transform-origin: 0 0; }
++ }
++ </style></head>
++ <body class="bg-cream text-deep-navy font-body min-h-full flex flex-col antialiased selection:bg-soft-gold/30 selection:text-deep-navy">
++ <!-- Sticky Header -->
++ <header class="w-full top-0 sticky z-50 bg-cream border-b border-hairline/60">
++
++ </header>
++ <!-- Main Canvas: Centered PIN Lock Screen -->
++ <main class="flex-1 flex items-center justify-center px-4 py-12 md:py-16">
++ <div class="w-full max-w-[580px] bg-cream border border-hairline rounded-md p-8 md:p-12 flex flex-col items-center text-center" style="background-color: rgb(251, 248, 241);">
++ <!-- Security Icon Badge -->
++ <div class="w-16 h-16 rounded-full bg-cream border border-soft-gold/50 flex items-center justify-center mb-6 text-soft-gold shadow-none">
++ <span class="material-symbols-outlined text-3xl" data-icon="lock">lock</span>
++ </div>
++ <!-- Headline & Subtitle -->
++ <h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal mb-3 tracking-tight">
++         Code d'accès confidentiel
++       </h1>
++ <p class="text-sm leading-relaxed text-deep-navy/75 max-w-md mx-auto mb-8 font-normal">
++         Saisissez votre code PIN pour accéder à votre espace noble et préserver la confidentialité de vos échanges.
++       </p>
++ <!-- PIN Discrete Indicators (6 digits) -->
++ <div class="flex items-center justify-center gap-3 md:gap-4 mb-8" id="pin-display">
++ <div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="0">
++ <div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
++ </div>
++ <div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="1">
++ <div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
++ </div>
++ <div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="2">
++ <div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
++ </div>
++ <div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="3">
++ <div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
++ </div>
++ <div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="4">
++ <div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
++ </div>
++ <div class="pin-slot w-11 h-13 md:w-12 md:h-14 rounded-md border-2 border-hairline bg-cream flex items-center justify-center transition-all duration-150" data-index="5">
++ <div class="w-3 h-3 rounded-full bg-deep-navy opacity-0 transition-opacity duration-150 pin-dot"></div>
++ </div>
++ </div>
++ <!-- Numeric Keypad Layout -->
++ <div class="grid grid-cols-3 gap-3 md:gap-4 w-full max-w-[320px] mb-8">
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="1" type="button">1</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="2" type="button">2</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="3" type="button">3</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="4" type="button">4</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="5" type="button">5</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="6" type="button">6</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="7" type="button">7</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="8" type="button">8</button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="9" type="button">9</button>
++ <!-- Clear Action -->
++ <button class="h-14 rounded-md border border-transparent hover:border-hairline text-xs font-medium text-deep-navy/70 hover:text-deep-navy transition-all duration-150 flex items-center justify-center focus:outline-none" id="btn-clear" type="button">
++           Effacer
++         </button>
++ <button class="num-key h-14 rounded-md border border-hairline/80 bg-cream hover:border-soft-gold hover:text-deep-navy active:bg-hairline/30 text-lg font-medium text-deep-navy transition-all duration-150 focus:outline-none focus:ring-1 focus:ring-soft-gold" data-key="0" type="button">0</button>
++ <!-- Backspace Action -->
++ <button aria-label="Supprimer un chiffre" class="h-14 rounded-md border border-transparent hover:border-hairline text-deep-navy/70 hover:text-deep-navy transition-all duration-150 flex items-center justify-center focus:outline-none" id="btn-backspace" type="button">
++ <span aria-hidden="true" class="material-symbols-outlined text-xl" data-icon="backspace"></span>
++ </button>
++ </div>
++ <!-- Action Button -->
++ <div class="w-full max-w-[320px] space-y-4">
++ <button class="w-full h-12 bg-deep-navy hover:bg-deep-navy/90 text-cream rounded-md font-medium text-sm flex items-center justify-center gap-2 transition-all duration-150 active:opacity-90" id="btn-submit" type="button">
++ <span class="">Déverrouiller l'espace</span>
++ <span class="material-symbols-outlined text-base" data-icon="arrow_forward">arrow_forward</span>
++ </button>
++ <!-- Secondary subtle recovery link -->
++ <div class="pt-2">
++ <a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-200 underline underline-offset-4 decoration-hairline" href="#">
++             Code oublié ?
++           </a>
++ <span class="text-hairline mx-2">•</span>
++ <a class="text-xs text-deep-navy/70 hover:text-soft-gold transition-colors duration-200 underline underline-offset-4 decoration-hairline" href="/auth">
++             S'identifier à nouveau
++           </a>
++ </div>
++ </div>
++ <!-- Micro Status Hint -->
++ <div class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5" id="status-hint" role="status">
++ <span aria-hidden="true" class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user"></span>
++ <span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>
++ </div>
++ </div>
++ </main>
++ <!-- Shared Footer -->
++ <footer class="w-full border-t border-hairline/60 bg-cream mt-auto">
++
++ </footer>
++ <!-- Micro-interactions Script -->
++
++
++
++
++
++
++
++ <script>
++     var PIN_LENGTH = 6
++     var LEGACY_PIN_LENGTH = 4
++     var SET_LENGTH_MESSAGE = "pin : six chiffres sont requis."
++     var UNLOCK_LENGTH_MESSAGE = "pin : quatre ou six chiffres sont requis."
++     var digits = ''
++     var busy = false
++     var slots = Array.from(document.querySelectorAll('.pin-dot'))
++     var hint = document.getElementById('pin-status-text')
++     var restingHint = hint ? hint.textContent : ''
++     var statusLine = document.getElementById('status-hint')
++     function paint() {
++       slots.forEach(function (dot, index) {
++         dot.style.opacity = index < digits.length ? '1' : '0'
++       })
++     }
++     // The Stitch status hint, read out by its role="status". Empty restores its resting line.
++     // The hint is the last line of the card, below the fold on a short screen, so a message brings it into view.
++     function say(text) {
++       if (hint) hint.textContent = text || restingHint
++       if (text && statusLine && typeof statusLine.scrollIntoView === 'function') statusLine.scrollIntoView({ block: 'nearest' })
++     }
++     function refusal(body) {
++       var message = body && body.error && body.error.message
++       return typeof message === 'string' && message ? message : 'La connexion a échoué.'
++     }
++     function nextPath() {
++       var params = new URLSearchParams(window.location.search)
++       var next = params.get('next') || ''
++       // The URL parser drops tab, LF and CR and reads a backslash as a slash, so "/<tab>/x" or "/\x"
++       // would leave this origin. Only a plain path on this origin is followed.
++       if (next.charAt(0) !== '/' || /[\u0000-\u001F\u007F\\]/.test(next)) return '/onboarding'
++       try {
++         var url = new URL(next, window.location.origin)
++         var path = url.pathname + url.search + url.hash
++         if (url.origin !== window.location.origin || path.charAt(0) !== '/' || path.charAt(1) === '/') return '/onboarding'
++         return path
++       } catch (error) {
++         return '/onboarding'
++       }
++     }
++     async function finish(pin) {
++       if (busy) return
++       busy = true
++       try {
++         var status = await fetch('/v1/pin', { credentials: 'same-origin', cache: 'no-store' })
++         var state = await status.json().catch(function () { return null })
++         if (!status.ok) {
++           digits = ''
++           paint()
++           say(refusal(state))
++           return
++         }
++         var setting = !!(state && state.enabled === false)
++         // A new PIN is always PIN_LENGTH digits; an unlock also takes a PIN saved with four.
++         // Keep the digits so the member can finish typing.
++         if (setting && pin.length !== PIN_LENGTH) {
++           say(SET_LENGTH_MESSAGE)
++           return
++         }
++         if (!setting && pin.length !== PIN_LENGTH && pin.length !== LEGACY_PIN_LENGTH) {
++           say(UNLOCK_LENGTH_MESSAGE)
++           return
++         }
++         say('Validation du code en cours...')
++         var response = await fetch(setting ? '/v1/pin' : '/v1/pin/unlock', {
++           method: setting ? 'PUT' : 'POST',
++           credentials: 'same-origin',
++           headers: { 'content-type': 'application/json' },
++           body: JSON.stringify({ pin: pin })
++         })
++         // Read the answer before leaving, or the browser cancels a request the API already applied.
++         var body = await response.json().catch(function () { return null })
++         if (response.ok) {
++           window.location.assign(nextPath())
++           return
++         }
++         digits = ''
++         paint()
++         say(refusal(body))
++       } catch (error) {
++         digits = ''
++         paint()
++         say('La connexion a échoué.')
++       } finally {
++         busy = false
++       }
++     }
++     document.querySelectorAll('[data-key]').forEach(function (button) {
++       button.addEventListener('click', function () {
++         if (busy || digits.length >= PIN_LENGTH) return
++         digits += button.getAttribute('data-key') || ''
++         paint()
++         say('')
++         if (digits.length === PIN_LENGTH) finish(digits)
++       })
++     })
++     // A PIN saved while four digits were the rule still unlocks, with the Stitch unlock button.
++     var submit = document.getElementById('btn-submit')
++     if (submit) {
++       submit.addEventListener('click', function () {
++         if (digits.length > 0) finish(digits)
++       })
++     }
++     var back = document.getElementById('btn-backspace')
++     if (back) back.addEventListener('click', function () { if (!busy) { digits = digits.slice(0, -1); paint(); say('') } })
++     var clear = document.getElementById('btn-clear')
++     if (clear) clear.addEventListener('click', function () { if (!busy) { digits = ''; paint(); say('') } })
++   </script></body></html>
+
+ ❯ apps/web/src/v2-flow.test.ts:262:17
+    260|     expect(pin).toContain('id="status-hint" role="status"')
+    261|     // Brought into view with some room below it, not flush with the s…
+    262|     expect(pin).toContain('id="status-hint" role="status" style="scrol…
+       |                 ^
+    263|     expect(pin).toContain('<span id="pin-status-text" class="">Chiffre…
+    264|     expect(pin).toContain('<span aria-hidden="true" class="material-sy…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

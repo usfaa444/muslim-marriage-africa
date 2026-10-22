@@ -1,0 +1,15 @@
+[360x780] resting: text="Chiffrement et vérification locale sécurisée" scrollY=0 (top of page) hintBottom=846.3 vh=780
+[360x780] four digits typed (nothing said yet): text="Chiffrement et vérification locale sécurisée" scrollY=0
+[360x780] A set a PIN: four digits + button: IN VIEW text="pin : six chiffres sont requis." hint={"top":740.3,"bottom":756.3,"left":93,"right":267} link={"top":698.3,"bottom":713.3,"left":173,"right":294} roomBelowHint=23.7px scrollY=74 vh=780
+[360x780] fifth digit: text back to resting="Chiffrement et vérification locale sécurisée" scrollY=0
+[360x780] A again: five digits + button: IN VIEW text="pin : six chiffres sont requis." hint={"top":740.3,"bottom":756.3,"left":93,"right":267} link={"top":698.3,"bottom":713.3,"left":173,"right":294} roomBelowHint=23.7px scrollY=74 vh=780
+[360x780] r3x pin state: 200 {"enabled":false,"locked":false}
+PUT /v1/pin: 200 {"enabled":true}
+lock: 200 {"locked":true}
+[360x780] locked, open /decouvrir -> /pin?next=%2Fdecouvrir
+[360x780] B wrong PIN #1 (typed from the top): IN VIEW text="Code incorrect." hint={"top":740.3,"bottom":756.3,"left":125,"right":235} link={"top":698.3,"bottom":713.3,"left":173,"right":294} roomBelowHint=23.7px scrollY=74 vh=780
+[360x780] B wrong PIN #2 (typed from the top): IN VIEW text="Code incorrect." hint={"top":740.3,"bottom":756.3,"left":125,"right":235} link={"top":698.3,"bottom":713.3,"left":173,"right":294} roomBelowHint=23.7px scrollY=74 vh=780
+[360x780] B wrong PIN #3 (typed from the top): IN VIEW text="Code incorrect." hint={"top":740.3,"bottom":756.3,"left":125,"right":235} link={"top":698.3,"bottom":713.3,"left":173,"right":294} roomBelowHint=23.7px scrollY=74 vh=780
+[360x780] B wrong PIN #4 (typed from the top): IN VIEW text="Code incorrect." hint={"top":740.3,"bottom":756.3,"left":125,"right":235} link={"top":698.3,"bottom":713.3,"left":173,"right":294} roomBelowHint=23.7px scrollY=74 vh=780
+[360x780] B wrong PIN #5 (typed from the top): IN VIEW text="Session verrouillée." hint={"top":740.3,"bottom":756.3,"left":115,"right":245} link={"top":698.3,"bottom":713.3,"left":173,"right":294} roomBelowHint=23.7px scrollY=74 vh=780
+[360x780] SUMMARY: steps not fully in view: 0

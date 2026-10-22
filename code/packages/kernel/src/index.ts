@@ -4,3 +4,4 @@ export { civilDayOuagadougou, OUAGADOUGOU_TIME_ZONE, toOuagadougouDisplay, toUtc
 export { copyErrorBody, ERROR_CODES, errorEnvelope, isErrorBody, isErrorEnvelope } from './error.js'
 export type { ErrorBody, ErrorEnvelope } from './error.js'
 export { isUuidV7, newId, uuidV7Instant } from './id.js'
+export { LEGACY_PIN_LENGTH, PIN_LENGTH, PIN_SET_LENGTH_MESSAGE, PIN_UNLOCK_LENGTH_MESSAGE } from './pin.js'

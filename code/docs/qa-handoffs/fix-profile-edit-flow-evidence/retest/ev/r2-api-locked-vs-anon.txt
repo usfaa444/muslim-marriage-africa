@@ -1,0 +1,44 @@
+# API authorization matrix, retest round 2 (stack ankanu-qa3, 2026-10-22T12:32:04Z)
+## setup: r2photo sets a 6-digit PIN while unlocked and reads its own photo token
+setup | PUT /v1/pin | 200 | cc= | {"enabled":true}
+own photo token present: yes
+setup | POST /v1/pin/lock | 200 | cc= | {"locked":true}
+## locked session (r2photo) vs anonymous vs garbage cookie vs another member's token
+locked | GET /v1/me/profile | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-1599-7ee3-93c2-39d4348c9f7c","retryable":false}}
+anon | GET /v1/me/profile | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-15b6-7083-95ff-c3fe1f0448d2","retryable
+garbage | GET /v1/me/profile | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-15e1-76f8-94e7-881f522958f9","retryable
+locked | PUT /v1/me/profile | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-1617-7675-aa41-d73de9290ba8","retryable":false}}
+anon | PUT /v1/me/profile | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-166c-76d9-b243-f3803e6cc781","retryable
+garbage | PUT /v1/me/profile | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-16b6-75ce-8d35-93a1f34bae24","retryable
+locked | PATCH /v1/me/profile | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-16ff-7ebb-9ad9-7ef67daca68a","retryable":false}}
+anon | PATCH /v1/me/profile | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-172d-77a9-844b-a15ae23e8940","retryable
+garbage | PATCH /v1/me/profile | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-175d-7d6c-94bf-98c775e04b77","retryable
+locked | GET /v1/accounts/gate | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-1784-75bf-afc4-766167c5bc1f","retryable":false}}
+anon | GET /v1/accounts/gate | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-17c5-7a5b-9dd8-3496156c20a7","retryable
+garbage | GET /v1/accounts/gate | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-1818-761f-8f46-a348fdf1ce53","retryable
+locked | GET /v1/browse | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-183c-7884-ac60-33a89fb2c01f","retryable":false}}
+anon | GET /v1/browse | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-185a-7da5-a8d7-ee5761d22bda","retryable
+garbage | GET /v1/browse | 401 | cc=no-store | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-188c-754f-893c-036501fb2d97","retryable
+locked | GET /v1/pin | 200 | cc= | {"enabled":true,"locked":true}
+anon | GET /v1/pin | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-18c4-79da-8572-f31e84539e47","retryable
+garbage | GET /v1/pin | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-18e5-7818-b905-b27be1a52238","retryable
+locked | PUT /v1/pin | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-1903-7177-b811-202d30af103f","retryable":false}}
+anon | PUT /v1/pin | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-1923-73c0-a371-cf892f1a1bcb","retryable
+garbage | PUT /v1/pin | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-349e-709a-9852-3bb6dbc62dcc","retryable
+locked | POST /v1/pin/unlock | 400 | cc= | {"error":{"code":"UNHANDLED","message":"pin : quatre ou six chiffres sont requis.","details":{"field":"pin"},"request_id":"01a16399-5027-792d-b3ff-003
+anon | POST /v1/pin/unlock | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-6bc3-7c32-b449-8cd665d3ae7d","retryable
+garbage | POST /v1/pin/unlock | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-8750-79ea-b294-ee983e4991d5","retryable
+## media token (r2photo's own, taken while unlocked)
+locked(owner) | GET /v1/media/get?token=… | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-a2e9-7ba3-bf0d-23e11b95f54b","retryable":false}}
+anon | GET /v1/media/get?token=… | 401 | cc= | {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a16399-a32c-70f8-b2d7-1402916cd0b7","retryable
+other member | GET /v1/media/get?token=… | 403 | cc= | {"error":{"code":"FORBIDDEN","message":"Accès au média refusé.","details":null,"request_id":"01a16399-a356-73f0-bfbf-1e7622dc7a97","retryable":fals
+## locked session after a wrong PIN is still locked and PUT /v1/pin still refused
+locked | POST /v1/pin/unlock | 400 | cc= | {"error":{"code":"PIN_INVALID","message":"Code incorrect.","details":{"attempts_left":4},"request_id":"01a16399-a44a-7aad-afae-574ac4ca925e","retryabl
+locked | PUT /v1/pin | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-bfc5-7620-966e-fd41a5ca2ea6","retryable":false}}
+locked | GET /v1/accounts/gate | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-db46-79f4-a9d4-79d6d0f018b1","retryable":false}}
+## unlock with the real PIN restores access
+locked | POST /v1/pin/unlock | 429 | cc= | {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16399-db62-7cdf-83cd-b7f6d76fa519","retrya
+unlocked | GET /v1/me/profile | 401 | cc= | {"error":{"code":"PIN_REQUIRED","message":"Code PIN requis.","details":null,"request_id":"01a16399-db7f-73c4-a9df-ef3440406688","retryable":false}}
+## retry after the rate-limit window
+locked POST /v1/pin/unlock (right PIN) | 200 | {"locked":false}
+unlocked GET /v1/me/profile | 200 | cc=no-store | {"dob":"1990-01-15","city":null,"country":null,"origin":null,"marital_status":null,"polygamy_intent":null,"education":nu

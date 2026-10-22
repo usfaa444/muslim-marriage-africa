@@ -1,0 +1,8 @@
+     × sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule 351ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/pin.test.ts > shared-device PIN > sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule
+AssertionError: expected 200 to be 400 // Object.is equality
+- Expected
++ Received

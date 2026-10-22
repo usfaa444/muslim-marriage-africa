@@ -1,0 +1,142 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 46 tests using 2 workers
+
+  ✓   1 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (2.5s)
+  ✓   2 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (2.5s)
+  -   4 [mobile] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key
+  -   5 [mobile] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them
+  -   6 [mobile] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts
+  -   7 [mobile] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack
+  ✓   3 [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (2.1s)
+  ✓   9 [mobile] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (2.8s)
+  ✓   8 [mobile] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (5.9s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  10 [mobile] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (3.2s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  11 [mobile] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (3.3s)
+  ✓  12 [mobile] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.6s)
+  -  14 [mobile] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓  13 [mobile] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (3.1s)
+  -  16 [mobile] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width
+  ✓  15 [mobile] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.6s)
+  -  18 [mobile] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width
+  ✓  17 [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.5s)
+  -  20 [mobile] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width
+  ✓  19 [mobile] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (2.2s)
+  -  22 [mobile] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width
+  ✓  23 [mobile] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (1.2s)
+  ✓  21 [mobile] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (2.5s)
+  ✓  24 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.7s)
+  ✓  25 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.7s)
+  ✓  27 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (7ms)
+  ✓  28 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them (12ms)
+  ✓  29 [desktop] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts (20ms)
+  ✓  30 [desktop] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack (2ms)
+  ✓  26 [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (2.1s)
+  ✓  32 [desktop] › e2e/profile-edit-flow.spec.ts:202:3 › profile edit and the PIN screen › a refused save keeps the member on the profile with the error and the PIN off (2.5s)
+  ✓  31 [desktop] › e2e/profile-edit-flow.spec.ts:173:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (4.6s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  33 [desktop] › e2e/profile-edit-flow.spec.ts:226:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (3.1s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  34 [desktop] › e2e/profile-edit-flow.spec.ts:239:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (3.2s)
+  ✓  35 [desktop] › e2e/profile-edit-flow.spec.ts:250:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (2.9s)
+  -  37 [desktop] › e2e/profile-edit-flow.spec.ts:283:3 › web image screens › screens read from the image answer without a server error
+  ✓  36 [desktop] › e2e/profile-edit-flow.spec.ts:263:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (2.8s)
+  ✓  38 [desktop] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.8s)
+  ✓  39 [desktop] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width (2.6s)
+  ✓  40 [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.5s)
+  ✓  41 [desktop] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width (2.6s)
+  ✓  42 [desktop] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (2.0s)
+  ✓  43 [desktop] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width (1.1s)
+  ✓  44 [desktop] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (2.2s)
+  ✓  45 [desktop] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width (2.6s)
+  ✓  46 [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (1.3s)
+
+  10 skipped
+  36 passed (49.4s)

@@ -1,0 +1,2108 @@
+[
+ {
+  "screen": "profile-edit",
+  "width": 360,
+  "overflow": false,
+  "scrollWidth": 360,
+  "innerWidth": 360,
+  "styled": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 123,
+    "h": 16,
+    "right": 147,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 57,
+    "left": 41
+   },
+   {
+    "tag": "label",
+    "id": null,
+    "label": "Oui",
+    "w": 43,
+    "h": 16,
+    "right": 148,
+    "left": 104
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 120,
+    "left": 104
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 312,
+    "h": 38,
+    "right": 336,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 68,
+    "left": 52
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 212,
+    "left": 196
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 68,
+    "left": 52
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 212,
+    "left": 196
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 68,
+    "left": 52
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 210,
+    "left": 194
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 210,
+    "left": 194
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 270,
+    "h": 34,
+    "right": 315,
+    "left": 45
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 94,
+    "h": 16,
+    "right": 315,
+    "left": 221
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 14,
+    "targets": [
+     ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+     ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+     ".text-\\[13px\\]",
+     ".text-deep-navy\\/40"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 390,
+  "overflow": false,
+  "scrollWidth": 390,
+  "innerWidth": 390,
+  "styled": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 123,
+    "h": 16,
+    "right": 147,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 57,
+    "left": 41
+   },
+   {
+    "tag": "label",
+    "id": null,
+    "label": "Oui",
+    "w": 43,
+    "h": 16,
+    "right": 148,
+    "left": 104
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 120,
+    "left": 104
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 342,
+    "h": 38,
+    "right": 366,
+    "left": 24
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 68,
+    "left": 52
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 227,
+    "left": 211
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 68,
+    "left": 52
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 227,
+    "left": 211
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 68,
+    "left": 52
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 53,
+    "left": 37
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 49,
+    "left": 33
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 70,
+    "left": 54
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 300,
+    "h": 34,
+    "right": 345,
+    "left": 45
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 94,
+    "h": 16,
+    "right": 345,
+    "left": 251
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 14,
+    "targets": [
+     ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+     ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+     ".text-\\[13px\\]",
+     ".text-deep-navy\\/40"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 768,
+  "overflow": false,
+  "scrollWidth": 768,
+  "innerWidth": 768,
+  "styled": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 123,
+    "h": 16,
+    "right": 696,
+    "left": 573
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 376,
+    "left": 72
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 696,
+    "left": 392
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 376,
+    "left": 72
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 696,
+    "left": 392
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 105,
+    "left": 89
+   },
+   {
+    "tag": "label",
+    "id": null,
+    "label": "Oui",
+    "w": 43,
+    "h": 16,
+    "right": 196,
+    "left": 152
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 168,
+    "left": 152
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 376,
+    "left": 72
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 696,
+    "left": 392
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 116,
+    "left": 100
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 316,
+    "left": 300
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 516,
+    "left": 500
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 116,
+    "left": 100
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 316,
+    "left": 300
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 101,
+    "left": 85
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 313,
+    "left": 297
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 525,
+    "left": 509
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 97,
+    "left": 81
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 413,
+    "left": 397
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 97,
+    "left": 81
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 413,
+    "left": 397
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 118,
+    "left": 102
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 266,
+    "left": 250
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 414,
+    "left": 398
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 562,
+    "left": 546
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 675,
+    "left": 93
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 94,
+    "h": 16,
+    "right": 675,
+    "left": 581
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 14,
+    "targets": [
+     ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+     ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+     ".text-\\[13px\\]",
+     ".text-deep-navy\\/40"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 1024,
+  "overflow": false,
+  "scrollWidth": 1024,
+  "innerWidth": 1024,
+  "styled": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 123,
+    "h": 16,
+    "right": 824,
+    "left": 701
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 504,
+    "left": 200
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 824,
+    "left": 520
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 504,
+    "left": 200
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 824,
+    "left": 520
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 233,
+    "left": 217
+   },
+   {
+    "tag": "label",
+    "id": null,
+    "label": "Oui",
+    "w": 43,
+    "h": 16,
+    "right": 324,
+    "left": 280
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 296,
+    "left": 280
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 504,
+    "left": 200
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 824,
+    "left": 520
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 244,
+    "left": 228
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 444,
+    "left": 428
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 644,
+    "left": 628
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 244,
+    "left": 228
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 444,
+    "left": 428
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 229,
+    "left": 213
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 441,
+    "left": 425
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 653,
+    "left": 637
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 541,
+    "left": 525
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 225,
+    "left": 209
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 541,
+    "left": 525
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 246,
+    "left": 230
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 394,
+    "left": 378
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 542,
+    "left": 526
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 690,
+    "left": 674
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 803,
+    "left": 221
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 94,
+    "h": 16,
+    "right": 803,
+    "left": 709
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 14,
+    "targets": [
+     ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+     ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+     ".text-\\[13px\\]",
+     ".text-deep-navy\\/40"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 1280,
+  "overflow": false,
+  "scrollWidth": 1280,
+  "innerWidth": 1280,
+  "styled": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 123,
+    "h": 16,
+    "right": 952,
+    "left": 829
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 632,
+    "left": 328
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 952,
+    "left": 648
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 632,
+    "left": 328
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 952,
+    "left": 648
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 361,
+    "left": 345
+   },
+   {
+    "tag": "label",
+    "id": null,
+    "label": "Oui",
+    "w": 43,
+    "h": 16,
+    "right": 452,
+    "left": 408
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 424,
+    "left": 408
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 632,
+    "left": 328
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 952,
+    "left": 648
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 372,
+    "left": 356
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 572,
+    "left": 556
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 772,
+    "left": 756
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 372,
+    "left": 356
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 572,
+    "left": 556
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 357,
+    "left": 341
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 569,
+    "left": 553
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 781,
+    "left": 765
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 353,
+    "left": 337
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 669,
+    "left": 653
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 353,
+    "left": 337
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 669,
+    "left": 653
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 374,
+    "left": 358
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 522,
+    "left": 506
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 670,
+    "left": 654
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 818,
+    "left": 802
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 931,
+    "left": 349
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 94,
+    "h": 16,
+    "right": 931,
+    "left": 837
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 14,
+    "targets": [
+     ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+     ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+     ".text-\\[13px\\]",
+     ".text-deep-navy\\/40"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-edit",
+  "width": 1440,
+  "overflow": false,
+  "scrollWidth": 1440,
+  "innerWidth": 1440,
+  "styled": true,
+  "small": [
+   {
+    "tag": "button",
+    "id": "profile-photo-rules",
+    "label": "Consignes de pudeur",
+    "w": 123,
+    "h": 16,
+    "right": 1032,
+    "left": 909
+   },
+   {
+    "tag": "input",
+    "id": "dob",
+    "label": "dob",
+    "w": 304,
+    "h": 38,
+    "right": 712,
+    "left": 408
+   },
+   {
+    "tag": "input",
+    "id": "origin",
+    "label": "origin",
+    "w": 304,
+    "h": 38,
+    "right": 1032,
+    "left": 728
+   },
+   {
+    "tag": "select",
+    "id": "country_residence",
+    "label": "🇧🇫 Burkina Faso 🇨🇮 Côte d'Ivoire 🇲\ud83c",
+    "w": 304,
+    "h": 38,
+    "right": 712,
+    "left": 408
+   },
+   {
+    "tag": "select",
+    "id": "city_residence",
+    "label": "Ouagadougou Bobo-Dioulasso Koudougou Oua",
+    "w": 304,
+    "h": 38,
+    "right": 1032,
+    "left": 728
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 441,
+    "left": 425
+   },
+   {
+    "tag": "label",
+    "id": null,
+    "label": "Oui",
+    "w": 43,
+    "h": 16,
+    "right": 532,
+    "left": 488
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "polygyny_intent",
+    "w": 16,
+    "h": 16,
+    "right": 504,
+    "left": 488
+   },
+   {
+    "tag": "select",
+    "id": "education",
+    "label": "Baccalauréat / SecondaireLicence / Bac+3",
+    "w": 304,
+    "h": 38,
+    "right": 712,
+    "left": 408
+   },
+   {
+    "tag": "select",
+    "id": "job",
+    "label": "Cadre analyste financierEnseignant / Che",
+    "w": 304,
+    "h": 38,
+    "right": 1032,
+    "left": 728
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 452,
+    "left": 436
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 652,
+    "left": 636
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 852,
+    "left": 836
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 452,
+    "left": 436
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "madhhab",
+    "w": 16,
+    "h": 16,
+    "right": 652,
+    "left": 636
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 437,
+    "left": 421
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 649,
+    "left": 633
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "religious_practice",
+    "w": 16,
+    "h": 16,
+    "right": 861,
+    "left": 845
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 433,
+    "left": 417
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 749,
+    "left": 733
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 433,
+    "left": 417
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "marriage_timeframe",
+    "w": 16,
+    "h": 16,
+    "right": 749,
+    "left": 733
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 454,
+    "left": 438
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 602,
+    "left": 586
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 750,
+    "left": 734
+   },
+   {
+    "tag": "input",
+    "id": null,
+    "label": "pause_reason",
+    "w": 16,
+    "h": 16,
+    "right": 898,
+    "left": 882
+   },
+   {
+    "tag": "input",
+    "id": "other_reason",
+    "label": "other_reason",
+    "w": 582,
+    "h": 34,
+    "right": 1011,
+    "left": 429
+   },
+   {
+    "tag": "button",
+    "id": null,
+    "label": "Mettre en pause",
+    "w": 94,
+    "h": 16,
+    "right": 1011,
+    "left": 917
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 14,
+    "targets": [
+     ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+     ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60",
+     ".text-\\[13px\\]",
+     ".text-deep-navy\\/40"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 360,
+  "overflow": false,
+  "scrollWidth": 360,
+  "innerWidth": 360,
+  "styled": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 81,
+    "h": 15,
+    "right": 144,
+    "left": 63
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 124,
+    "h": 15,
+    "right": 297,
+    "left": 173
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 3,
+    "targets": [
+     "#btn-clear",
+     "span[data-icon=\"verified_user\"]",
+     "#status-hint > span:nth-child(2)"
+    ]
+   },
+   {
+    "id": "label-content-name-mismatch",
+    "impact": "serious",
+    "nodes": 1,
+    "targets": [
+     "#btn-backspace"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 390,
+  "overflow": false,
+  "scrollWidth": 390,
+  "innerWidth": 390,
+  "styled": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 81,
+    "h": 15,
+    "right": 159,
+    "left": 78
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 124,
+    "h": 15,
+    "right": 312,
+    "left": 188
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 3,
+    "targets": [
+     "#btn-clear",
+     "span[data-icon=\"verified_user\"]",
+     "#status-hint > span:nth-child(2)"
+    ]
+   },
+   {
+    "id": "label-content-name-mismatch",
+    "impact": "serious",
+    "nodes": 1,
+    "targets": [
+     "#btn-backspace"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 768,
+  "overflow": false,
+  "scrollWidth": 768,
+  "innerWidth": 768,
+  "styled": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 81,
+    "h": 15,
+    "right": 348,
+    "left": 267
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 124,
+    "h": 15,
+    "right": 501,
+    "left": 377
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 3,
+    "targets": [
+     "#btn-clear",
+     "span[data-icon=\"verified_user\"]",
+     "#status-hint > span:nth-child(2)"
+    ]
+   },
+   {
+    "id": "label-content-name-mismatch",
+    "impact": "serious",
+    "nodes": 1,
+    "targets": [
+     "#btn-backspace"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 1024,
+  "overflow": false,
+  "scrollWidth": 1024,
+  "innerWidth": 1024,
+  "styled": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 81,
+    "h": 15,
+    "right": 476,
+    "left": 395
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 124,
+    "h": 15,
+    "right": 629,
+    "left": 505
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 3,
+    "targets": [
+     "#btn-clear",
+     "span[data-icon=\"verified_user\"]",
+     "#status-hint > span:nth-child(2)"
+    ]
+   },
+   {
+    "id": "label-content-name-mismatch",
+    "impact": "serious",
+    "nodes": 1,
+    "targets": [
+     "#btn-backspace"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 1280,
+  "overflow": false,
+  "scrollWidth": 1280,
+  "innerWidth": 1280,
+  "styled": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 81,
+    "h": 15,
+    "right": 604,
+    "left": 523
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 124,
+    "h": 15,
+    "right": 757,
+    "left": 633
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 3,
+    "targets": [
+     "#btn-clear",
+     "span[data-icon=\"verified_user\"]",
+     "#status-hint > span:nth-child(2)"
+    ]
+   },
+   {
+    "id": "label-content-name-mismatch",
+    "impact": "serious",
+    "nodes": 1,
+    "targets": [
+     "#btn-backspace"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "pin",
+  "width": 1440,
+  "overflow": false,
+  "scrollWidth": 1440,
+  "innerWidth": 1440,
+  "styled": true,
+  "small": [
+   {
+    "tag": "a",
+    "id": null,
+    "label": "Code oublié ?",
+    "w": 81,
+    "h": 15,
+    "right": 684,
+    "left": 603
+   },
+   {
+    "tag": "a",
+    "id": null,
+    "label": "S'identifier à nouveau",
+    "w": 124,
+    "h": 15,
+    "right": 837,
+    "left": 713
+   }
+  ],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 3,
+    "targets": [
+     "#btn-clear",
+     "span[data-icon=\"verified_user\"]",
+     "#status-hint > span:nth-child(2)"
+    ]
+   },
+   {
+    "id": "label-content-name-mismatch",
+    "impact": "serious",
+    "nodes": 1,
+    "targets": [
+     "#btn-backspace"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 360,
+  "overflow": false,
+  "scrollWidth": 360,
+  "innerWidth": 360,
+  "styled": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 5,
+    "targets": [
+     "span[data-icon=\"hourglass_top\"]",
+     ".px-2\\.5.py-0\\.5.text-soft-gold",
+     "span[data-icon=\"verified_user\"]",
+     ".mt-0\\.5"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 390,
+  "overflow": false,
+  "scrollWidth": 390,
+  "innerWidth": 390,
+  "styled": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 5,
+    "targets": [
+     "span[data-icon=\"hourglass_top\"]",
+     ".px-2\\.5.py-0\\.5.text-soft-gold",
+     "span[data-icon=\"verified_user\"]",
+     ".mt-0\\.5"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 768,
+  "overflow": false,
+  "scrollWidth": 768,
+  "innerWidth": 768,
+  "styled": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 5,
+    "targets": [
+     "span[data-icon=\"hourglass_top\"]",
+     ".px-2\\.5.py-0\\.5.text-soft-gold",
+     "span[data-icon=\"verified_user\"]",
+     ".mt-0\\.5"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 1024,
+  "overflow": false,
+  "scrollWidth": 1024,
+  "innerWidth": 1024,
+  "styled": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 5,
+    "targets": [
+     "span[data-icon=\"hourglass_top\"]",
+     ".px-2\\.5.py-0\\.5.text-soft-gold",
+     "span[data-icon=\"verified_user\"]",
+     ".mt-0\\.5"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 1280,
+  "overflow": false,
+  "scrollWidth": 1280,
+  "innerWidth": 1280,
+  "styled": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 5,
+    "targets": [
+     "span[data-icon=\"hourglass_top\"]",
+     ".px-2\\.5.py-0\\.5.text-soft-gold",
+     "span[data-icon=\"verified_user\"]",
+     ".mt-0\\.5"
+    ]
+   }
+  ],
+  "problems": []
+ },
+ {
+  "screen": "profile-review",
+  "width": 1440,
+  "overflow": false,
+  "scrollWidth": 1440,
+  "innerWidth": 1440,
+  "styled": true,
+  "small": [],
+  "outside": [],
+  "axe": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "nodes": 5,
+    "targets": [
+     "span[data-icon=\"hourglass_top\"]",
+     ".px-2\\.5.py-0\\.5.text-soft-gold",
+     "span[data-icon=\"verified_user\"]",
+     ".mt-0\\.5"
+    ]
+   }
+  ],
+  "problems": []
+ }
+]

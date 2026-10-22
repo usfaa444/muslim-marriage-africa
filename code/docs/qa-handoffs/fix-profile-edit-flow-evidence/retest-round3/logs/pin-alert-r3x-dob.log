@@ -1,0 +1,25 @@
+[360x780] A refused save: {"text":"dob : l'âge déclaré est inférieur au minimum.","role":"alert","hidden":false,"top":449,"bottom":465,"inView":true,"switchInView":true,"switchTop":378,"switchBottom":402,"vh":780,"pinChecked":false,"bottomLineHidden":true,"bottomLineText":"","color":"rgb(11, 29, 54)","fontSize":"12px","scrollY":3276,"overflow":false,"active":"profile-pin","scrollBefore":3276,"puts":1,"url":"/profile-edit"}
+[360x780] B second tap: {"hidden":false,"text":"dob : l'âge déclaré est inférieur au minimum.","pinChecked":false,"puts":2}
+[360x780] C after fixing the cause: url=/pin?next=%2Fprofile-edit puts=3
+[360x780] problems: ["http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile"]
+[390x800] A refused save: {"text":"dob : l'âge déclaré est inférieur au minimum.","role":"alert","hidden":false,"top":458,"bottom":474,"inView":true,"switchInView":true,"switchTop":388,"switchBottom":412,"vh":800,"pinChecked":false,"bottomLineHidden":true,"bottomLineText":"","color":"rgb(11, 29, 54)","fontSize":"12px","scrollY":3191,"overflow":false,"active":"profile-pin","scrollBefore":3191,"puts":1,"url":"/profile-edit"}
+[390x800] B second tap: {"hidden":false,"text":"dob : l'âge déclaré est inférieur au minimum.","pinChecked":false,"puts":2}
+[390x800] C after fixing the cause: url=/pin?next=%2Fprofile-edit puts=3
+[390x800] problems: ["http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile"]
+[768x1024] A refused save: {"text":"dob : l'âge déclaré est inférieur au minimum.","role":"alert","hidden":false,"top":562,"bottom":578,"inView":true,"switchInView":true,"switchTop":500,"switchBottom":524,"vh":1024,"pinChecked":false,"bottomLineHidden":true,"bottomLineText":"","color":"rgb(11, 29, 54)","fontSize":"12px","scrollY":2292,"overflow":false,"active":"profile-pin","scrollBefore":2292,"puts":1,"url":"/profile-edit"}
+[768x1024] B second tap: {"hidden":false,"text":"dob : l'âge déclaré est inférieur au minimum.","pinChecked":false,"puts":2}
+[768x1024] C after fixing the cause: url=/pin?next=%2Fprofile-edit puts=3
+[768x1024] problems: ["http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile"]
+[1024x768] A refused save: {"text":"dob : l'âge déclaré est inférieur au minimum.","role":"alert","hidden":false,"top":434,"bottom":450,"inView":true,"switchInView":true,"switchTop":372,"switchBottom":396,"vh":768,"pinChecked":false,"bottomLineHidden":true,"bottomLineText":"","color":"rgb(11, 29, 54)","fontSize":"12px","scrollY":2420,"overflow":false,"active":"profile-pin","scrollBefore":2420,"puts":1,"url":"/profile-edit"}
+[1024x768] B second tap: {"hidden":false,"text":"dob : l'âge déclaré est inférieur au minimum.","pinChecked":false,"puts":2}
+[1024x768] C after fixing the cause: url=/pin?next=%2Fprofile-edit puts=3
+[1024x768] problems: ["http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile"]
+[1280x800] A refused save: {"text":"dob : l'âge déclaré est inférieur au minimum.","role":"alert","hidden":false,"top":450,"bottom":466,"inView":true,"switchInView":true,"switchTop":388,"switchBottom":412,"vh":800,"pinChecked":false,"bottomLineHidden":true,"bottomLineText":"","color":"rgb(11, 29, 54)","fontSize":"12px","scrollY":2404,"overflow":false,"active":"profile-pin","scrollBefore":2404,"puts":1,"url":"/profile-edit"}
+[1280x800] B second tap: {"hidden":false,"text":"dob : l'âge déclaré est inférieur au minimum.","pinChecked":false,"puts":2}
+[1280x800] C after fixing the cause: url=/pin?next=%2Fprofile-edit puts=3
+[1280x800] problems: ["http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile"]
+[1440x900] A refused save: {"text":"dob : l'âge déclaré est inférieur au minimum.","role":"alert","hidden":false,"top":500,"bottom":516,"inView":true,"switchInView":true,"switchTop":438,"switchBottom":462,"vh":900,"pinChecked":false,"bottomLineHidden":true,"bottomLineText":"","color":"rgb(11, 29, 54)","fontSize":"12px","scrollY":2354,"overflow":false,"active":"profile-pin","scrollBefore":2354,"puts":1,"url":"/profile-edit"}
+[1440x900] B second tap: {"hidden":false,"text":"dob : l'âge déclaré est inférieur au minimum.","pinChecked":false,"puts":2}
+[1440x900] C after fixing the cause: url=/pin?next=%2Fprofile-edit puts=3
+[1440x900] problems: ["http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile"]
+exit=0

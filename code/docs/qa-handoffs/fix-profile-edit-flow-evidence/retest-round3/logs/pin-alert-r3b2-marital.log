@@ -1,0 +1,5 @@
+[390x800] A refused save: {"text":"marital_status : la situation matrimoniale est requise.","role":"alert","hidden":false,"top":458,"bottom":474,"inView":true,"switchInView":true,"switchTop":388,"switchBottom":412,"vh":800,"pinChecked":false,"bottomLineHidden":true,"bottomLineText":"","color":"rgb(11, 29, 54)","fontSize":"12px","scrollY":3211,"overflow":false,"active":"profile-pin","scrollBefore":3211,"puts":1,"url":"/profile-edit"}
+[390x800] B second tap: {"hidden":false,"text":"marital_status : la situation matrimoniale est requise.","pinChecked":false,"puts":2}
+[390x800] C after fixing the cause: url=/profile-edit puts=3
+[390x800] problems: ["http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile","http 400: PUT http://localhost:4043/v1/me/profile"]
+exit=0

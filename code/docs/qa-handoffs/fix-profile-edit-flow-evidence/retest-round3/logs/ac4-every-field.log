@@ -1,0 +1,15 @@
+dob: saves=1 sentTheEdit=true openedPin=true
+origin: saves=1 sentTheEdit=true openedPin=true
+country_residence: saves=1 sentTheEdit=true openedPin=true
+city_residence: saves=1 sentTheEdit=true openedPin=true
+marital_status: saves=1 sentTheEdit=true openedPin=true
+polygyny_intent: saves=1 sentTheEdit=true openedPin=true
+education: saves=1 sentTheEdit=true openedPin=true
+job: saves=1 sentTheEdit=true openedPin=true
+madhhab: saves=1 sentTheEdit=true openedPin=true
+religious_practice: saves=1 sentTheEdit=true openedPin=true
+marriage_timeframe: saves=1 sentTheEdit=true openedPin=true
+intentions: saves=1 sentTheEdit=true openedPin=true
+bio: saves=1 sentTheEdit=true openedPin=true
+problems: ["console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"]
+exit=0

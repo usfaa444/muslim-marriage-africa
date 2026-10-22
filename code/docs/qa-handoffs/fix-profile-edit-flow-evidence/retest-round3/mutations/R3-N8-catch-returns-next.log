@@ -1,0 +1,103 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/pin-screen.test.ts (10 tests | 1 failed) 1702ms
+   ❯ PIN screen length (10)
+     × returns only to a same-origin path 938ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [InstanceLoader] AppModule dependencies initialized +10ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] HealthController {/v1}: +6ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +4ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +1ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +2ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +0ms
+[Nest] 21633  - 10/22/2026, 2:48:50 PM     LOG [NestApplication] Nest application successfully started +2ms
+
+ Test Files  1 failed | 8 passed (9)
+      Tests  1 failed | 100 passed (101)
+   Start at  14:48:47
+   Duration  7.35s (tests 60%, transform 21%, import 18%, setup 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+AssertionError: ?next=%2F%2F%5B: expected [ '//[' ] to deeply equal [ '/onboarding' ]
+
+- Expected
++ Received
+
+  [
+-   "/onboarding",
++   "//[",
+  ]
+
+ ❯ apps/web/src/pin-screen.test.ts:357:37
+    355|       const page = mount({ search, enabled: false })
+    356|       await page.press('123456')
+    357|       expect(page.assigned, search).toEqual([target])
+       |                                     ^
+    358|       // What the browser would load: never another origin.
+    359|       expect(new URL(target, 'http://localhost:3100').origin, search).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

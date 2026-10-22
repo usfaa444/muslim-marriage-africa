@@ -1,0 +1,17 @@
+[360] profile loaded; pin switch checked=false
+[360] typed origin/bio/education without saving
+[360] url after PIN switch: /pin?next=%2Fprofile-edit
+[360] saves before /pin: 1; body has typed origin: true; bio: true; education: true
+[360] sequence: PUT /v1/me/profile -> NAV /pin?next=%2Fprofile-edit
+[360] pin dots on screen: 6
+[360] after 4 digits dots=["1","1","1","1","0","0"]
+[360] after 4 digits + 'Déverrouiller l'espace': url=/pin?next=%2Fprofile-edit PUT /v1/pin sent=false dots=["1","1","1","1","0","0"]
+[360] after 5 digits: url=/pin?next=%2Fprofile-edit PUT sent=false dots=["1","1","1","1","1","0"]
+[360] after 6th digit: PUT /v1/pin x1 body={"pin":"482916"}; now at /profile-edit
+[360] sequence on pin screen: PUT /v1/pin -> NAV /profile-edit
+[360] back on profile-edit: {"origin":"Kadiogo – Ouaga ébène ñ 日本 <b>x</b>","bio":"Texte non enregistré — vérifié par QA. “Guillemets” & accents éàçù.","education":"licence","pin":true}
+[360] edits kept: origin=true bio=true education=true pinOn=true
+[360] API says origin="Kadiogo – Ouaga ébène ñ 日本 <b>x</b>" education="licence" bio_pending="Texte non enregistré — vérifié par QA. “Guillemets” & accents éàçù."; cache-control=no-store
+[360] API pin state {"enabled":true,"locked":false}
+[360] console/network problems: ["console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"]
+exit=0

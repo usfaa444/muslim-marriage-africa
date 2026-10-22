@@ -1,0 +1,9 @@
+# Round 3: the running images carry the d47d354 code (checked inside ankanu-qa3-web-1 and ankanu-qa3-api-1), 2026-10-22T14:58:10Z
+git head: d47d354
+-- web: scroll-margin-bottom / scrollIntoView({ block: 'nearest' }) in the built server code
+/app/apps/web/.next/server/chunks/[root-of-the-server]__1ay-zz1._.js.map
+/app/apps/web/.next/server/chunks/[root-of-the-server]__1ay-zz1._.js
+/app/apps/web/.next/server/chunks/[root-of-the-server]__1ay-zz1._.js.map
+/app/apps/web/.next/server/chunks/[root-of-the-server]__1ay-zz1._.js
+-- api: Cache-Control no-store before the PIN_REQUIRED 401
+27:            response.setHeader('Cache-Control', 'no-store');

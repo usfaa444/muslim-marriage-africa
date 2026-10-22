@@ -1,0 +1,2 @@
+pin keypad key focused by keyboard: {"key":"2","outline":"solid 2px","boxShadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px, rgba(0, 0, 0, 0) 0px 0px 0px 0px","focusVisible":true}
+pin switch focused by keyboard: {"active":true,"focusVisible":true,"sibs":[{"tag":"INPUT","cls":"sr-only peer","shadow":"rgb(255, 255, 255) 0px 0px 0px 2px, rgb(37, 99, 235) 0px 0px","outline":"solid"},{"tag":"DIV","cls":"w-11 h-6 bg-hairline peer-focus:outline-none rounded-full peer peer-checked:after:translat","shadow":"none","outline":"solid"}]}

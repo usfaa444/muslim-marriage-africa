@@ -1,0 +1,14 @@
+[390x844] 200 {"enabled":false,"locked":false}
+PUT: 200 {"enabled":true}
+lock: 200 {"locked":true}
+[390x844] open /decouvrir while locked -> /pin?next=%2Fdecouvrir
+[390x844] wrong PIN #1: {"text":"Code incorrect.","inView":true,"top":814,"vh":844} filledDots=0 url=/pin
+[390x844] wrong PIN #2: {"text":"Code incorrect.","inView":true,"top":814,"vh":844} filledDots=0 url=/pin
+[390x844] wrong PIN #3: {"text":"Code incorrect.","inView":true,"top":814,"vh":844} filledDots=0 url=/pin
+[390x844] wrong PIN #4: {"text":"Code incorrect.","inView":true,"top":814,"vh":844} filledDots=0 url=/pin
+[390x844] wrong PIN #5: {"text":"Session verrouillée.","inView":true,"top":814,"vh":844} filledDots=0 url=/pin
+[390x844] wrong PIN #6: {"text":"Authentification requise.","inView":true,"top":814,"vh":844} filledDots=0 url=/pin
+[390x844] after lockout GET /v1/pin: 401 {"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a163aa-f330-7410-9348-693c331b16e1","retryable":false}}
+[390x844] after lockout GET /decouvrir with the same cookie -> 303 http://localhost:4043/auth
+[390x844] "S'identifier à nouveau" box: {"x":188.1875,"y":772.25,"width":121.171875,"height":15} viewportH=844
+[390x844] problems: []

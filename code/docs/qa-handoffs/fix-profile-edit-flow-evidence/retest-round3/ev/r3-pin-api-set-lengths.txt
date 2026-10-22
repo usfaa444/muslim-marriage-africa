@@ -1,0 +1,17 @@
+# PUT /v1/pin accepts exactly six digits (member r3api, PIN-less), head d47d354; requests paced 7 s (auth rate limit)
+GET /v1/pin -> {"enabled":false,"locked":false} 200
+4 digits {"pin":"1234"}              -> 400 pin : six chiffres sont requis.
+5 digits                             -> 400 pin : six chiffres sont requis.
+7 digits                             -> 400 pin : six chiffres sont requis.
+letters                              -> 400 pin : six chiffres sont requis.
+six chars with space                 -> 400 pin : six chiffres sont requis.
+number 123456 (not a string)         -> 400 pin : six chiffres sont requis.
+empty string                         -> 400 pin : six chiffres sont requis.
+empty object {}                      -> 400 pin : six chiffres sont requis.
+array ["123456"]                     -> 400 pin : six chiffres sont requis.
+full-width digits                    -> 400 pin : six chiffres sont requis.
+trailing newline                     -> 400 pin : six chiffres sont requis.
+null                                 -> 400 pin : six chiffres sont requis.
+GET /v1/pin after refusals -> {"enabled":false,"locked":false} 200
+6 digits 135790 -> 200 {"enabled":true}
+GET /v1/pin -> {"enabled":true,"locked":false} 200

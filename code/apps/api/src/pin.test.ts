@@ -3,12 +3,13 @@ import type { AddressInfo } from 'node:net'
 import { fileURLToPath } from 'node:url'
 import type { INestApplication } from '@nestjs/common'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { ERROR_CODES } from '@ankanu/kernel'
+import { ERROR_CODES, LEGACY_PIN_LENGTH, newId, PIN_LENGTH } from '@ankanu/kernel'
 import { memoryAccountStore, setAccountStore } from './account-store.js'
 import { setAuthClock } from './auth-clock.js'
 import { setAuthLimitReader } from './auth-limit.js'
 import { resetAuthRateWindow } from './auth-rate.js'
 import { createApp } from './create-app.js'
+import { hashPassword } from './password-hash.js'
 import { FOURTEEN_DAYS_MS, SESSION_COOKIE, TWELVE_HOURS_MS } from './session-cookie.js'
 import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
 import { resetPinEntries } from './pin-lock-state.js'
@@ -17,8 +18,9 @@ import { memorySessionStore, setSessionStore } from './session-store.js'
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)
 const pins = memoryPinLockStore()
-const PIN = '1357'
-const WRONG = '1358'
+const PIN = '135790'
+const WRONG = '135791'
+const LEGACY_PIN = '1357'
 let now = new Date('2026-10-05T08:00:00.000Z')
 
 function accountBody(overrides: Record<string, unknown> = {}): Record<string, unknown> {
@@ -261,16 +263,18 @@ describe('shared-device PIN', () => {
     const blockedBody = (await blocked.json()) as { error: { code: string; message: string } }
     expect(blocked.status).toBe(401)
     expect(blockedBody.error).toMatchObject({ code: 'PIN_REQUIRED', message: 'Code PIN requis.' })
+    expect(blocked.headers.get('cache-control')).toBe('no-store')
     expect(sessionRow(sister)?.last_seen_at.toISOString()).toBe(seen)
 
     const refused = await fetch(`${base}/v1/pin`, {
       method: 'PUT',
       headers: { cookie: sister, 'content-type': 'application/json' },
-      body: JSON.stringify({ pin: '2468' }),
+      body: JSON.stringify({ pin: '246813' }),
     })
     const refusedBody = (await refused.json()) as { error: { code: string } }
     expect(refused.status).toBe(401)
     expect(refusedBody.error.code).toBe('PIN_REQUIRED')
+    expect(refused.headers.get('cache-control')).toBe('no-store')
     expect(pins.rows[0]?.pin_hash.startsWith('$argon2')).toBe(true)
 
     const fresh = await signIn('fatim@example.bf')
@@ -384,7 +388,7 @@ describe('shared-device PIN', () => {
     const secondPut = await fetch(`${base}/v1/pin`, {
       method: 'PUT',
       headers: { cookie: limited, 'content-type': 'application/json' },
-      body: JSON.stringify({ pin: '2468' }),
+      body: JSON.stringify({ pin: '246813' }),
     })
     const secondPutBody = (await secondPut.json()) as { error: { code: string } }
     expect(firstPut.status).toBe(200)
@@ -410,6 +414,76 @@ describe('shared-device PIN', () => {
     expect(secondUnlock.status).toBe(429)
     expect(secondUnlockBody.error.code).toBe('RATE_LIMITED')
     setAuthLimitReader(async () => 100)
+    resetAuthRateWindow()
+  })
+
+  it('sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule', async () => {
+    expect(PIN.length).toBe(PIN_LENGTH)
+    expect(LEGACY_PIN.length).toBe(LEGACY_PIN_LENGTH)
+    resetAuthRateWindow()
+    await createAccount({ email: 'awa@example.bf', pseudonym: 'Awa_Ouaga' })
+    const cookie = await signIn('awa@example.bf')
+    const accountId = sessionRow(cookie)?.account_id ?? ''
+    async function put(pin: string) {
+      const response = await fetch(`${base}/v1/pin`, {
+        method: 'PUT',
+        headers: { cookie, 'content-type': 'application/json' },
+        body: JSON.stringify({ pin }),
+      })
+      return { status: response.status, body: (await response.json()) as Record<string, unknown> }
+    }
+    async function unlock(pin: string) {
+      const response = await fetch(`${base}/v1/pin/unlock`, {
+        method: 'POST',
+        headers: { cookie, 'content-type': 'application/json' },
+        body: JSON.stringify({ pin }),
+      })
+      return { status: response.status, body: (await response.json()) as Record<string, unknown> }
+    }
+
+    for (const pin of [LEGACY_PIN, '13579', '1357900', '13579a', '']) {
+      const refused = await put(pin)
+      expect(refused.status).toBe(400)
+      expect(refused.body).toEqual({
+        error: expect.objectContaining({
+          code: 'UNHANDLED',
+          message: 'pin : six chiffres sont requis.',
+          details: { field: 'pin' },
+          retryable: false,
+        }),
+      })
+    }
+    expect(pins.rows.some((row) => row.account_id === accountId)).toBe(false)
+
+    // A PIN saved while four digits were the rule (staging and local data).
+    await pins.save(accountId, await hashPassword(LEGACY_PIN), newId(now))
+    await fetch(`${base}/v1/pin/lock`, { method: 'POST', headers: { cookie } })
+    expect(await (await fetch(`${base}/v1/pin`, { headers: { cookie } })).json()).toEqual({ enabled: true, locked: true })
+    for (const pin of ['13579', '1357900', '135']) {
+      const badShape = await unlock(pin)
+      expect(badShape.status).toBe(400)
+      // Unlock takes four or six digits, so its refusal says both, not the set rule.
+      expect(badShape.body).toMatchObject({
+        error: { code: 'UNHANDLED', message: 'pin : quatre ou six chiffres sont requis.', details: { field: 'pin' } },
+      })
+    }
+    const wrongLegacy = await unlock('1358')
+    expect(wrongLegacy.status).toBe(400)
+    expect(wrongLegacy.body).toMatchObject({ error: { code: 'PIN_INVALID', details: { attempts_left: 4 } } })
+    const legacy = await unlock(LEGACY_PIN)
+    expect(legacy.status).toBe(200)
+    expect(legacy.body).toEqual({ locked: false })
+
+    const renewed = await put(PIN)
+    expect(renewed.status).toBe(200)
+    expect(renewed.body).toEqual({ enabled: true })
+    await fetch(`${base}/v1/pin/lock`, { method: 'POST', headers: { cookie } })
+    const oldPin = await unlock(LEGACY_PIN)
+    expect(oldPin.status).toBe(400)
+    expect(oldPin.body).toMatchObject({ error: { code: 'PIN_INVALID' } })
+    const sixDigits = await unlock(PIN)
+    expect(sixDigits.status).toBe(200)
+    expect(sixDigits.body).toEqual({ locked: false })
     resetAuthRateWindow()
   })
 })

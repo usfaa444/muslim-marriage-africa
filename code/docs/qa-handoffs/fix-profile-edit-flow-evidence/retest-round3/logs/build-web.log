@@ -1,0 +1,230 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from web.Dockerfile
+#1 transferring dockerfile: 4.16kB done
+#1 DONE 0.0s
+
+#2 [context ca] load .dockerignore
+#2 transferring ca: 2B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:24.21.0
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 4.05kB done
+#4 DONE 0.0s
+
+#5 [build  1/11] FROM docker.io/library/node:24.21.0@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0
+#5 resolve docker.io/library/node:24.21.0@sha256:3d27e5c11e5786e309ec3e03f93ae536eb36e6e5eb3714d5eb3300a36157add0 0.0s done
+#5 DONE 0.0s
+
+#6 [context ca] load from client
+#6 transferring ca: 185.25kB 0.0s done
+#6 DONE 0.0s
+
+#7 [internal] load build context
+#7 transferring context: 8.32MB 0.2s done
+#7 DONE 0.3s
+
+#8 [build  9/11] RUN npm_config_cafile=/ca.crt npm ci
+#8 CACHED
+
+#9 [build 10/11] COPY . .
+#9 DONE 0.3s
+
+#10 [build  2/11] WORKDIR /app
+#10 CACHED
+
+#11 [build  5/11] COPY apps/web/package.json apps/web/package.json
+#11 CACHED
+
+#12 [build  3/11] COPY package.json package-lock.json ./
+#12 CACHED
+
+#13 [build  4/11] COPY apps/api/package.json apps/api/package.json
+#13 CACHED
+
+#14 [build  6/11] COPY packages/kernel/package.json packages/kernel/package.json
+#14 CACHED
+
+#15 [build  7/11] COPY packages/ports/package.json packages/ports/package.json
+#15 CACHED
+
+#16 [build  8/11] COPY --from=ca ca-bundle.crt /ca.crt
+#16 CACHED
+
+#17 [build  9/11] RUN npm_config_cafile=/ca.crt npm ci
+#17 CACHED
+
+#18 [build 10/11] COPY . .
+#18 CACHED
+
+#19 [build 11/11] RUN npx tsc -p packages/kernel/tsconfig.json && npm run build --workspace @ankanu/web
+#19 1.256 
+#19 1.256 > @ankanu/web@0.0.0 build
+#19 1.256 > next build
+#19 1.256 
+#19 1.911 ▲ Next.js 16.3.6 (Turbopack)
+#19 2.005 ✓ Running next.config.ts took 92ms
+#19 2.013 Attention: Next.js now collects completely anonymous telemetry regarding usage.
+#19 2.013 This information is used to shape Next.js' roadmap and prioritize features.
+#19 2.013 You can learn more, including how to opt-out if you'd not like to participate in this anonymous program, by visiting the following URL:
+#19 2.013 https://nextjs.org/telemetry
+#19 2.013 
+#19 2.045 
+#19 2.060 ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+#19 2.060 
+#19 2.060   To migrate automatically, run:
+#19 2.060   npx @next/codemod@canary middleware-to-proxy .
+#19 2.060 
+#19 2.060   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+#19 2.109   Creating an optimized production build ...
+#19 11.68 ✓ Compiled successfully in 8.7s
+#19 11.69   Running TypeScript ...
+#19 12.30   Finished TypeScript in 618ms ...
+#19 12.31   Collecting page data using 3 workers ...
+#19 13.13   Generating static pages using 3 workers (0/27) ...
+#19 13.16   Generating static pages using 3 workers (6/27) 
+#19 13.17   Generating static pages using 3 workers (13/27) 
+#19 13.28   Generating static pages using 3 workers (20/27) 
+#19 13.31 ✓ Generating static pages using 3 workers (27/27) in 180ms
+#19 13.32   Finalizing page optimization ...
+#19 13.32 
+#19 13.32 Route (app)
+#19 13.32 ┌ ○ /
+#19 13.32 ├ ○ /_not-found
+#19 13.32 ├ ƒ /age-gate
+#19 13.32 ├ ƒ /auth
+#19 13.32 ├ ƒ /decouvrir
+#19 13.32 ├ ƒ /discussions
+#19 13.32 ├ ƒ /email-verification
+#19 13.32 ├ ƒ /favoris
+#19 13.32 ├ ƒ /id-liveness
+#19 13.32 ├ ƒ /invitations
+#19 13.32 ├ ƒ /onboarding
+#19 13.32 ├ ƒ /otp
+#19 13.32 ├ ƒ /password-reset
+#19 13.32 ├ ƒ /phone
+#19 13.32 ├ ƒ /photo-rules
+#19 13.32 ├ ƒ /pin
+#19 13.32 ├ ƒ /privacy/status/[ticketId]
+#19 13.32 ├ ƒ /profil
+#19 13.32 ├ ƒ /profil/[id]
+#19 13.32 ├ ƒ /profile-edit
+#19 13.32 ├ ƒ /profile-review
+#19 13.32 ├ ƒ /settings
+#19 13.32 ├ ƒ /signup
+#19 13.32 ├ ƒ /signup/account
+#19 13.32 ├ ƒ /signup/identity
+#19 13.32 ├ ƒ /signup/pseudonym
+#19 13.32 ├ ○ /splash
+#19 13.32 └ ƒ /staff/visit-signals
+#19 13.32 
+#19 13.32 
+#19 13.32 ƒ Proxy (Middleware)
+#19 13.32 
+#19 13.33 ○  (Static)   prerendered as static content
+#19 13.33 ƒ  (Dynamic)  server-rendered on demand
+#19 13.33 
+#19 DONE 15.1s
+
+#20 [stage-1  9/37] RUN npm_config_cafile=/ca.crt npm ci --omit=dev
+#20 CACHED
+
+#21 [stage-1 10/37] COPY --from=build /app/packages/kernel/dist packages/kernel/dist
+#21 CACHED
+
+#22 [stage-1 11/37] COPY --from=build /app/apps/web/.next apps/web/.next
+#22 DONE 0.1s
+
+#23 [stage-1 12/37] COPY --from=build /app/apps/web/app apps/web/app
+#23 DONE 0.0s
+
+#24 [stage-1 13/37] COPY --from=build /app/apps/web/next.config.ts apps/web/next.config.ts
+#24 DONE 0.0s
+
+#25 [stage-1 14/37] COPY --from=build /app/design-stitch/ankanu-v2/02-auth/screen.html design-stitch/ankanu-v2/02-auth/screen.html
+#25 DONE 0.0s
+
+#26 [stage-1 15/37] COPY --from=build /app/design-stitch/ankanu-v2/03-age-gate/screen.html design-stitch/ankanu-v2/03-age-gate/screen.html
+#26 DONE 0.0s
+
+#27 [stage-1 16/37] COPY --from=build /app/design-stitch/ankanu-v2/04-email-verification/screen.html design-stitch/ankanu-v2/04-email-verification/screen.html
+#27 DONE 0.0s
+
+#28 [stage-1 17/37] COPY --from=build /app/design-stitch/ankanu-v2/05-password-reset/screen.html design-stitch/ankanu-v2/05-password-reset/screen.html
+#28 DONE 0.0s
+
+#29 [stage-1 18/37] COPY --from=build /app/design-stitch/ankanu-v2/06-otp/screen.html design-stitch/ankanu-v2/06-otp/screen.html
+#29 DONE 0.0s
+
+#30 [stage-1 19/37] COPY --from=build /app/design-stitch/ankanu-v2/07-id-liveness/screen.html design-stitch/ankanu-v2/07-id-liveness/screen.html
+#30 DONE 0.0s
+
+#31 [stage-1 20/37] COPY --from=build /app/design-stitch/ankanu-v2/08-onboarding/screen.html design-stitch/ankanu-v2/08-onboarding/screen.html
+#31 DONE 0.0s
+
+#32 [stage-1 21/37] COPY --from=build /app/design-stitch/ankanu-v2/09-photo-rules/screen.html design-stitch/ankanu-v2/09-photo-rules/screen.html
+#32 DONE 0.0s
+
+#33 [stage-1 22/37] COPY --from=build /app/design-stitch/ankanu-v2/10-pin-lock/screen.html design-stitch/ankanu-v2/10-pin-lock/screen.html
+#33 DONE 0.0s
+
+#34 [stage-1 23/37] COPY --from=build /app/design-stitch/ankanu-v2/11-profile-edit/screen.html design-stitch/ankanu-v2/11-profile-edit/screen.html
+#34 DONE 0.0s
+
+#35 [stage-1 24/37] COPY --from=build /app/design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html
+#35 DONE 0.0s
+
+#36 [stage-1 25/37] COPY --from=build /app/design-stitch/ankanu-v2/13-search/screen.html design-stitch/ankanu-v2/13-search/screen.html
+#36 DONE 0.0s
+
+#37 [stage-1 26/37] COPY --from=build /app/design-stitch/ankanu-v2/14-filters/screen.html design-stitch/ankanu-v2/14-filters/screen.html
+#37 DONE 0.0s
+
+#38 [stage-1 27/37] COPY --from=build /app/design-stitch/ankanu-v2/15-profile-detail/screen.html design-stitch/ankanu-v2/15-profile-detail/screen.html
+#38 DONE 0.0s
+
+#39 [stage-1 28/37] COPY --from=build /app/design-stitch/ankanu-v2/17-favourites/screen.html design-stitch/ankanu-v2/17-favourites/screen.html
+#39 DONE 0.0s
+
+#40 [stage-1 29/37] COPY --from=build /app/design-stitch/ankanu-v2/27-settings/screen.html design-stitch/ankanu-v2/27-settings/screen.html
+#40 DONE 0.0s
+
+#41 [stage-1 30/37] COPY --from=build /app/design-stitch/ankanu-v2/28-delete-export-status/screen.html design-stitch/ankanu-v2/28-delete-export-status/screen.html
+#41 DONE 0.0s
+
+#42 [stage-1 31/37] COPY --from=build /app/design-stitch/ankanu-v2/52-ts-visit-signals/screen.html design-stitch/ankanu-v2/52-ts-visit-signals/screen.html
+#42 DONE 0.0s
+
+#43 [stage-1 32/37] COPY --from=build /app/design-stitch/ankanu-v2/53-barre-de-navigation/screen.html design-stitch/ankanu-v2/53-barre-de-navigation/screen.html
+#43 DONE 0.0s
+
+#44 [stage-1 33/37] COPY --from=build /app/design-stitch/ankanu-v2/54-pseudonym-dob/screen.html design-stitch/ankanu-v2/54-pseudonym-dob/screen.html
+#44 DONE 0.0s
+
+#45 [stage-1 34/37] COPY --from=build /app/design-stitch/ankanu-v2/56-otp-alt/screen.html design-stitch/ankanu-v2/56-otp-alt/screen.html
+#45 DONE 0.0s
+
+#46 [stage-1 35/37] COPY --from=build /app/design-stitch/ankanu-v2/57-discover/grid.html design-stitch/ankanu-v2/57-discover/grid.html
+#46 DONE 0.0s
+
+#47 [stage-1 36/37] COPY --from=build /app/design-stitch/ankanu-v2/57-discover/screen.html design-stitch/ankanu-v2/57-discover/screen.html
+#47 DONE 0.0s
+
+#48 [stage-1 37/37] WORKDIR /app/apps/web
+#48 DONE 0.0s
+
+#49 exporting to image
+#49 exporting layers
+#49 exporting layers 2.6s done
+#49 exporting manifest sha256:4a89430e0b9e56bd963e71afb15fef9211a51afd3583d35cd1a293ccf684d041 done
+#49 exporting config sha256:e7587bec572a06cf6a816dd32880a69aa966d3fd26830f727cd4815c7c9ef3f9 0.0s done
+#49 exporting attestation manifest sha256:c62e6dc15b9f715377964a7cd4d80ac18643e9f4e8f252e831bde7310869bf83 done
+#49 exporting manifest list sha256:8a0f6bab5f493f275966aa956837569a47fbc762ee75147916c75c30a5b504d9 0.0s done
+#49 naming to docker.io/library/ankanu-qa3-web:latest done
+#49 unpacking to docker.io/library/ankanu-qa3-web:latest
+#49 unpacking to docker.io/library/ankanu-qa3-web:latest 0.8s done
+#49 DONE 3.6s
+web-exit=0

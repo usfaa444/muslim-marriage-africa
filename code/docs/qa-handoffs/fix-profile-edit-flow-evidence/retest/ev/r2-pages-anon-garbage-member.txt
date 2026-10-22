@@ -1,0 +1,26 @@
+# page statuses (no redirect follow): path | no cookie | garbage cookie | unlocked member (r2a)
+/ | 200  | 200  | 200 
+/auth | 200  | 200  | 303 /decouvrir
+/password-reset | 200  | 200  | 200 
+/signup | 200  | 200  | 303 /onboarding
+/signup/identity | 200  | 200  | 303 /onboarding
+/age-gate | 303 /signup/identity | 303 /signup/identity | 303 /onboarding
+/pin | 303 /auth | 303 /auth | 200 
+/pin?next=%2Fprofile-edit | 303 /auth | 303 /auth | 200 
+/decouvrir | 303 /auth | 303 /auth | 200 
+/decouvrir?vue=grille | 303 /auth | 303 /auth | 200 
+/favoris | 303 /auth | 303 /auth | 200 
+/profile-edit | 303 /auth | 303 /auth | 200 
+/profile-review | 303 /auth | 303 /auth | 303 /profile-edit
+/settings | 303 /auth | 303 /auth | 200 
+/onboarding | 303 /auth | 303 /auth | 200 
+/photo-rules | 303 /auth | 303 /auth | 200 
+/discussions | 303 /auth | 303 /auth | 401 
+/invitations | 303 /auth | 303 /auth | 401 
+/profil | 303 /auth | 303 /auth | 401 
+/profil/00000000-0000-7000-8000-000000000000 | 303 /auth | 303 /auth | 200 
+/privacy/status | 404  | 404  | 404 
+/email-verification | 303 /auth | 303 /auth | 303 /onboarding
+/phone | 303 /auth | 303 /auth | 303 /onboarding
+/otp | 303 /auth | 303 /auth | 303 /onboarding
+/id-liveness | 303 /auth | 303 /auth | 303 /onboarding

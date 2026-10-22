@@ -1,0 +1,18 @@
+# hostile page paths for a PIN-LOCKED session (r2lock) vs no session; location header only, no redirect follow (curl --path-as-is)
+/profil/%2F%2Fevil.example | locked: 303 http://localhost:4043/pin?next=%2Fprofil%2F%2F%2Fevil.example | anon: 401 
+/profil//evil.example | locked: 308 http://localhost:4043/profil/evil.example | anon: 308 http://localhost:4043/profil/evil.example
+/profil/../..//evil.example | locked: 308 http://localhost:4043/evil.example | anon: 308 http://localhost:4043/evil.example
+//evil.example | locked: 308 http://localhost:4043/evil.example | anon: 308 http://localhost:4043/evil.example
+/%2F%2Fevil.example | locked: 404  | anon: 404 
+/pin//evil.example | locked: 308 http://localhost:4043/pin/evil.example | anon: 308 http://localhost:4043/pin/evil.example
+/pin/%2F%2Fevil.example | locked: 404  | anon: 404 
+/decouvrir%0D%0ALocation:%20http://evil.example | locked: 308 http://localhost:4043/decouvrir%0D%0ALocation:%20http:/evil.example | anon: 308 http://localhost:4043/decouvrir%0D%0ALocation:%20http:/evil.example
+/decouvrir/ | locked: 308 http://localhost:4043/decouvrir | anon: 308 http://localhost:4043/decouvrir
+/decouvrir// | locked: 308 http://localhost:4043/decouvrir/ | anon: 308 http://localhost:4043/decouvrir/
+/DECOUVRIR | locked: 404  | anon: 404 
+/profile-edit/ | locked: 308 http://localhost:4043/profile-edit | anon: 308 http://localhost:4043/profile-edit
+/profile-edit%2F | locked: 404  | anon: 404 
+/settings?next=//evil.example | locked: 303 http://localhost:4043/pin?next=%2Fsettings | anon: 303 http://localhost:4043/auth
+/pin?next=%2F%2Fevil.example | locked: 200  | anon: 303 http://localhost:4043/auth
+/favoris;x=1 | locked: 404  | anon: 404 
+/profile-edit%00 | locked: 404  | anon: 404 

@@ -1,0 +1,18 @@
+     × reads the profile and the PIN state without the HTTP cache 17ms
+     × reads fresh photo grants when the page comes back from the back/forward cache 13ms
+     × reads fresh grants on Back instead of the cached profile, so no photo is broken 16261ms
+ Test Files  2 failed (2)
+      Tests  3 failed | 21 passed (24)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/profile-edit-back.test.ts > profile edit photos after a back navigation in Chromium > reads fresh grants on Back instead of the cached profile, so no photo is broken
+AssertionError: expected false to be true // Object.is equality
+- Expected
++ Received
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > reads the profile and the PIN state without the HTTP cache
+AssertionError: expected false to be true // Object.is equality
+- Expected
++ Received
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit photos after back, forward and expiry > reads fresh photo grants when the page comes back from the back/forward cache
+AssertionError: expected undefined to be 'no-store' // Object.is equality
+- Expected:
++ Received:

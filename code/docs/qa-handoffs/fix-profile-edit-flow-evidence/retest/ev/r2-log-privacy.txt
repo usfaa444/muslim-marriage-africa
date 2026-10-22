@@ -1,0 +1,13 @@
+# log privacy check (retest)
+api log lines: 87
+api: lines containing media/get?token=: 0
+api: lines containing a PIN digit string after pin=: 0
+api: lines with 'token=' other than the log-mail email-verification links: 0
+api: 'not on disk' lines: 0
+api: 'Unhandled|Error:' lines: 0
+web log lines: 10
+web: lines containing media/get?token=: 0
+web: lines containing a PIN digit string after pin=: 0
+web: lines with 'token=' other than the log-mail email-verification links: 0
+web: 'not on disk' lines: 0
+web: 'Unhandled|Error:' lines: 0

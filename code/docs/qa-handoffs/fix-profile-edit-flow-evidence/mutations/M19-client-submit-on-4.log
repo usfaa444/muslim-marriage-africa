@@ -1,0 +1,28 @@
+     × fills all six dots and saves a new PIN only after the sixth digit 70ms
+     × unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button 43ms
+     × reads the answer to the write before leaving, so the browser does not cancel it 47ms
+     × clears the dots and stays after a refused PIN 48ms
+     × returns only to a same-origin path 45ms
+ Test Files  1 failed (1)
+      Tests  5 failed | 2 passed (7)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > fills all six dots and saves a new PIN only after the sixth digit
+AssertionError: expected [ { url: '/v1/pin', …(3) } ] to deeply equal []
+- Expected
++ Received
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+AssertionError: expected [ { url: '/v1/pin/unlock', …(3) } ] to deeply equal []
+- Expected
++ Received
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > reads the answer to the write before leaving, so the browser does not cancel it
+AssertionError: expected [] to deeply equal [ 'read PUT /v1/pin', …(1) ]
+- Expected
++ Received
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > clears the dots and stays after a refused PIN
+AssertionError: expected 2 to be +0 // Object.is equality
+- Expected
++ Received
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+AssertionError: expected [] to deeply equal [ '/profile-edit' ]
+- Expected
++ Received

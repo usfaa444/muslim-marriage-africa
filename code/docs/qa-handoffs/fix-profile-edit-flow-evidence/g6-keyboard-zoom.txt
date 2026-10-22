@@ -1,0 +1,12 @@
+tabs from #origin to the PIN switch: 12
+focus on PIN switch: {"activeIsPin":true,"trackBoxShadow":"none","trackOutline":"solid","ariaLabel":"Activer le code PIN d'accès"}
+after Space: /pin?next=%2Fprofile-edit
+tab order on /pin: ["1","2","3","4","5","6","7","8","9","btn-clear","0","btn-backspace","btn-submit","","",""]
+focus ring on key 1: {"outline":"solid 0px","boxShadow":"rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px"}
+six digits by keyboard (Space/Enter on keys) -> /profile-edit
+origin after return: Clavier seul
+typing 123456 on a physical keyboard on /pin: url=/pin, dots=
+zoom 200%-of-360: /pin scrollWidth 180 vs 180; /profile-edit scrollWidth 180 vs 180
+zoom 200%-of-390: /pin scrollWidth 195 vs 195; /profile-edit scrollWidth 195 vs 195
+profile-save-status role=status aria-live=null
+problems: []

@@ -1,0 +1,10 @@
+import { launch, memberContext, sleep, BASE, SC } from './lib.mjs'
+const browser = await launch()
+const ctx = await memberContext(browser, process.argv[2], { width: 390, height: 800 })
+const page = await ctx.newPage()
+await page.goto(`${BASE}/profile-edit`, { waitUntil: 'load' })
+await page.waitForFunction(() => /^\d{4}-/.test(document.getElementById('dob').value))
+await page.setInputFiles('#profile-photo-file', `${SC}/photo.png`)
+await page.waitForURL('**/profile-review', { timeout: 20000 })
+console.log('uploaded; at', page.url())
+await browser.close()

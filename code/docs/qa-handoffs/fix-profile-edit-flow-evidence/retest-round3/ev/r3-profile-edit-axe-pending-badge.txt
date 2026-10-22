@@ -1,0 +1,8 @@
+# Why /profile-edit has 11 color-contrast nodes in r3-styled-metrics.json and 10 in round 2 (styled, 390 px, axe wcag2a/2aa/21a/21aa/22aa).
+# The 11th node is the pre-existing « En revue » photo badge (class text-soft-gold, 2:1 on cream), which is in the page only for a member who has a photo in review.
+# Members r3kbd and r3b have no photo in review: 10 nodes. r3perf and r3photo have one: 11 nodes. Not introduced by the story (the badge is in apps/web/src/v2-client.ts and the Stitch screens; the diff does not touch it).
+# A member whose PIN session has idled out is sent to /pin (no violations): not used here.
+r3kbd landed /profile-edit color-contrast serious x10 | pending-photo badge present: false
+r3b landed /profile-edit color-contrast serious x10 | pending-photo badge present: false
+r3perf landed /profile-edit color-contrast serious x11 | pending-photo badge present: true
+r3photo landed /profile-edit color-contrast serious x11 | pending-photo badge present: true

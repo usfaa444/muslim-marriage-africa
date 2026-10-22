@@ -1,0 +1,5 @@
+# Mutation M1 on the real image: Dockerfile without the COPY of 12-profile-not-yet-public (everything else identical)
+GET /profile-review (member with pending photo) -> 500
+GET /profile-edit -> 200
+web log:
+⨯ Error: code/design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html is not on disk

@@ -1,0 +1,12 @@
+# Part 2 (PIN endpoints, paced 12 s because they share the 10/min auth rate limit): member r3lock is locked from part 1, 2026-10-22T14:07:01Z
+locked    | PUT    /v1/pin                  | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | PUT    /v1/pin                  | 401 | cache-control=<none>    | UNAUTHENTICATED
+garbage   | PUT    /v1/pin                  | 401 | cache-control=<none>    | UNAUTHENTICATED
+locked    | POST   /v1/pin/unlock           | 400 | cache-control=<none>    | PIN_INVALID
+locked    | POST   /v1/pin/unlock           | 400 | cache-control=<none>    | UNHANDLED
+anon      | POST   /v1/pin/unlock           | 401 | cache-control=<none>    | UNAUTHENTICATED
+locked    | GET    /v1/me/profile           | 401 | cache-control=no-store  | PIN_REQUIRED
+locked    | POST   /v1/pin/unlock           | 200 | cache-control=<none>    | 
+unlocked  | GET    /v1/me/profile           | 200 | cache-control=no-store  | 
+unlocked  | GET    /v1/accounts/gate        | 200 | cache-control=<none>    | 
+unlocked  | GET    /v1/health               | 200 | cache-control=<none>    | 

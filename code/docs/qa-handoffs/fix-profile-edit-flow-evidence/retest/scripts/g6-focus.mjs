@@ -1,0 +1,21 @@
+import { launch, memberContext, sleep, BASE, SC, EV } from './lib.mjs'
+import { readFileSync, writeFileSync } from 'node:fs'
+const out = []; const say = (s) => { out.push(s); console.log(s) }
+const browser = await launch()
+const ctx = await memberContext(browser, 'photo1', { width: 390, height: 800 })
+await ctx.route(/cdn\.tailwindcss\.com/, (r) => r.fulfill({ status: 200, contentType: 'application/javascript', body: readFileSync(`${SC}/tw3/shim.union.js`, 'utf8') }))
+await ctx.route(/fonts\.googleapis\.com/, (r) => r.fulfill({ status: 200, contentType: 'text/css', body: '.material-symbols-outlined{display:inline-block;width:1.25em;height:1.25em;overflow:hidden;font-size:24px;line-height:1;white-space:nowrap;color:transparent}' }))
+const page = await ctx.newPage()
+await page.goto(`${BASE}/pin`, { waitUntil: 'load' })
+await page.keyboard.press('Tab'); await page.keyboard.press('Tab'); await sleep(500)
+say('pin keypad key focused by keyboard: ' + JSON.stringify(await page.evaluate(() => { const a = document.activeElement; const cs = getComputedStyle(a); return { key: a.getAttribute('data-key'), outline: cs.outlineStyle + ' ' + cs.outlineWidth, boxShadow: cs.boxShadow, focusVisible: a.matches(':focus-visible') } })))
+await page.screenshot({ path: `${EV}/g6-focus-pin-key.png`, clip: { x: 0, y: 300, width: 390, height: 300 } })
+await page.goto(`${BASE}/profile-edit`, { waitUntil: 'load' })
+await page.waitForFunction(() => /^\d{4}-/.test(document.getElementById('dob').value))
+await page.focus('#profile-pin'); await page.keyboard.press('Shift+Tab'); await page.keyboard.press('Tab'); await sleep(500)
+const info = await page.evaluate(() => { const i = document.getElementById('profile-pin'); const sibs = [...i.parentElement.children].map((c) => ({ tag: c.tagName, cls: c.className.toString().slice(0, 90), shadow: getComputedStyle(c).boxShadow.slice(0, 60), outline: getComputedStyle(c).outlineStyle })); return { active: document.activeElement === i, focusVisible: i.matches(':focus-visible'), sibs } })
+say('pin switch focused by keyboard: ' + JSON.stringify(info))
+await page.evaluate(() => document.getElementById('profile-pin').scrollIntoView({ block: 'center' })); await sleep(300)
+await page.screenshot({ path: `${EV}/g6-focus-pin-switch.png` })
+writeFileSync(`${EV}/g6-focus.txt`, out.join('\n') + '\n')
+await browser.close()

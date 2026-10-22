@@ -1,0 +1,12 @@
+# Round 3 / G7: owner's real signed media URL, head d47d354, member r3photo (owner), r3b (another member, PIN-less and unlocked), 2026-10-22T15:02:03Z
+## unlocked owner session (control)
+owner, unlocked        | 200 | cache-control=<none>    | image/bytes
+another member         | 403 | cache-control=<none>    | FORBIDDEN
+no cookie              | 401 | cache-control=<none>    | UNAUTHENTICATED
+## the owner turns the PIN on and locks the session, with a fresh URL read just before
+PUT /v1/pin: 200
+POST /v1/pin/lock: 200
+owner, LOCKED          | 401 | cache-control=no-store  | PIN_REQUIRED
+another member         | 403 | cache-control=<none>    | FORBIDDEN
+no cookie              | 401 | cache-control=<none>    | UNAUTHENTICATED
+garbage cookie         | 401 | cache-control=<none>    | UNAUTHENTICATED

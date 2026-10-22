@@ -1,0 +1,14 @@
+{"el":"1","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"2","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"3","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"4","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"5","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"6","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"7","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"8","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"9","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"btn-clear","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"none","border":"rgba(0, 0, 0, 0)"}
+{"el":"0","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"rgb(255, 255, 255) 0px 0px 0px 0px, rgb(201, 168, 108) 0px 0px 0px 1px,","border":"rgba(226, 212, 184, 0.8)"}
+{"el":"btn-backspace","outline":"solid 2px rgba(0, 0, 0, 0)","shadow":"none","border":"rgba(0, 0, 0, 0)"}
+{"el":"btn-submit","outline":"auto 1px rgb(16, 16, 16)","shadow":"none","border":"rgb(229, 231, 235)"}
+{"el":"","outline":"auto 1px rgb(16, 16, 16)","shadow":"none","border":"rgb(229, 231, 235)"}

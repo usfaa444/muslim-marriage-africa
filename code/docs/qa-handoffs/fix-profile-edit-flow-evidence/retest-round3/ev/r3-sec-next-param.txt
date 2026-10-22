@@ -1,0 +1,58 @@
+same origin  | plain path | query=next=%2Fprofile-edit | goes to /profile-edit
+same origin  | path with query and hash | query=next=%2Fdecouvrir%3Fvue%3Dgrille%23x | goes to /decouvrir?vue=grille
+same origin  | profile id path | query=next=%2Fprofil%2Fabc | goes to /profil/abc
+same origin  | root | query=next=%2F | goes to /
+same origin  | protocol-relative // | query=next=%2F%2Fevil.example%2Fx | goes to /onboarding
+same origin  | triple slash | query=next=%2F%2F%2Fevil.example | goes to /onboarding
+same origin  | /\ | query=next=%2F%5Cevil.example%2Fx | goes to /onboarding
+same origin  | backslash first | query=next=%5Cevil.example | goes to /onboarding
+same origin  | double backslash | query=next=%5C%5Cevil.example | goes to /onboarding
+same origin  | https absolute | query=next=https%3A%2F%2Fevil.example%2Fx | goes to /onboarding
+same origin  | HTTPS upper | query=next=HTTPS%3A%2F%2FEVIL.EXAMPLE | goes to /onboarding
+same origin  | http: no slashes | query=next=http%3Aevil.example | goes to /onboarding
+same origin  | javascript: | query=next=javascript%3Aalert(1) | goes to /onboarding
+same origin  | data: | query=next=data%3Atext%2Fhtml%2Cx | goes to /onboarding
+same origin  | bare host | query=next=evil.example | goes to /onboarding
+same origin  | empty | query=next= | goes to /onboarding
+same origin  | /<TAB>/ | query=next=%2F%09%2Fevil.example%2Fx | goes to /onboarding
+same origin  | /<LF>/ | query=next=%2F%0A%2Fevil.example%2Fx | goes to /onboarding
+same origin  | /<CR>/ | query=next=%2F%0D%2Fevil.example%2Fx | goes to /onboarding
+same origin  | /<TAB>\ | query=next=%2F%09%5Cevil.example | goes to /onboarding
+same origin  | /<VT>/ | query=next=%2F%0B%2Fevil.example | goes to /onboarding
+same origin  | /<FF>/ | query=next=%2F%0C%2Fevil.example | goes to /onboarding
+same origin  | /<NUL>/ | query=next=%2F%00%2Fevil.example | goes to /onboarding
+same origin  | /<US>/ | query=next=%2F%1F%2Fevil.example | goes to /onboarding
+same origin  | /<DEL>/ | query=next=%2F%7F%2Fevil.example | goes to /onboarding
+same origin  | /<CRLF>/ | query=next=%2F%0D%0A%2Fevil.example | goes to /onboarding
+same origin  | //<TAB>evil | query=next=%2F%2F%09evil.example | goes to /onboarding
+same origin  | /<TAB><TAB>/ | query=next=%2F%09%09%2Fevil.example | goes to /onboarding
+same origin  | dot segment /.// | query=next=%2F.%2F%2Fevil.example | goes to /onboarding
+same origin  | dot segment /..// | query=next=%2F..%2F%2Fevil.example | goes to /onboarding
+same origin  | /a/..// | query=next=%2Fa%2F..%2F%2Fevil.example | goes to /onboarding
+same origin  | encoded dots /%2e%2e// | query=next=%2F%252e%252e%2F%2Fevil.example | goes to /onboarding
+same origin  | mixed /%2E./ / | query=next=%2F%252E.%2F%2Fevil.example | goes to /onboarding
+same origin  | /./\ | query=next=%2F.%2F%5Cevil.example | goes to /onboarding
+same origin  | /a/./..// | query=next=%2Fa%2F.%2F..%2F%2Fevil.example | goes to /onboarding
+same origin  | literal %2F// | query=next=%2F%252F%2Fevil.example | goes to /%2F/evil.example
+same origin  | literal %2F%2F no slash first | query=next=%252F%252Fevil.example | goes to /onboarding
+same origin  | literal %5C | query=next=%2F%255Cevil.example | goes to /%5Cevil.example
+same origin  | double-encoded | query=next=%25252F%25252Fevil.example | goes to /onboarding
+same origin  | U+2028 | query=next=%2F%E2%80%A8%2Fevil.example | goes to /%E2%80%A8/evil.example
+same origin  | NBSP | query=next=%2F%C2%A0%2Fevil.example | goes to /%C2%A0/evil.example
+same origin  | ideographic space | query=next=%2F%E3%80%80%2Fevil.example | goes to /%E3%80%80/evil.example
+same origin  | fullwidth solidus | query=next=%2F%EF%BC%8F%2Fevil.example | goes to /%EF%BC%8F/evil.example
+same origin  | division slash | query=next=%2F%E2%88%95%2Fevil.example | goes to /%E2%88%95/evil.example
+same origin  | NEL | query=next=%2F%C2%85%2Fevil.example | goes to /%C2%85/evil.example
+same origin  | @host | query=next=%2F%40evil.example | goes to /@evil.example
+same origin  | query // | query=next=%2F%3F%2F%2Fevil.example | goes to /?//evil.example
+same origin  | hash // | query=next=%2F%23%2F%2Fevil.example | goes to /
+same origin  | leading space | query=next=%20%2Fevil.example | goes to /onboarding
+same origin  | leading TAB | query=next=%09%2Fevil.example | goes to /onboarding
+same origin  | space inside | query=next=%2F%20%2Fevil.example | goes to /%20/evil.example
+same origin  | raw: first next wins, ok then evil | query=next=%2Fprofile-edit&next=%2F%2Fevil.example | goes to /profile-edit
+same origin  | raw: first next wins, evil then ok | query=next=%2F%2Fevil.example&next=%2Fprofile-edit | goes to /onboarding
+same origin  | raw: no next | query=x=1 | goes to /onboarding
+same origin  | raw: next in hash only | query=x=1#next=//evil.example | goes to /onboarding
+same origin  | raw: plus sign as space | query=next=/+/evil.example | goes to /%20/evil.example
+same origin  | raw: unencoded tab char (browser encodes) | query=next=/%09/evil.example | goes to /onboarding
+SUMMARY: 57 cases, leaving the origin: 0

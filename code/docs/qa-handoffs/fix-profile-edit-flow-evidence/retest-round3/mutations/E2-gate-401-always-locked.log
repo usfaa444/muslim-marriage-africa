@@ -1,0 +1,137 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/pin-locked-entry.test.ts (4 tests | 2 failed) 43ms
+   ❯ a session locked by its PIN (4)
+     × reads the gate 401 PIN_REQUIRED as locked, and any other 401 as signed out 12ms
+     × still sends a visitor whose session is gone from /pin and member pages to sign-in 5ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [NestFactory] Starting Nest application...
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [InstanceLoader] AppModule dependencies initialized +17ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] HealthController {/v1}: +8ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +3ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +3ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +4ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +13ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] StaffController {/v1/staff}: +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +1ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +2ms
+[Nest] 20280  - 10/22/2026, 2:45:13 PM     LOG [NestApplication] Nest application successfully started +1ms
+ ❯ apps/web/src/v2-flow.test.ts (28 tests | 1 failed) 303ms
+   ❯ server entry guard (6)
+     × reads the gate 401 as a signed-out visitor and anything unexpected as an error 80ms
+
+ Test Files  2 failed | 7 passed (9)
+      Tests  3 failed | 98 passed (101)
+   Start at  14:45:11
+   Duration  6.75s (tests 69%, transform 15%, import 15%, setup 1%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > reads the gate 401 PIN_REQUIRED as locked, and any other 401 as signed out
+AssertionError: expected 'locked' to be 'anon' // Object.is equality
+
+Expected: "anon"
+Received: "locked"
+
+ ❯ apps/web/src/pin-locked-entry.test.ts:43:64
+     41|     expect(await fetchGateStep('ankanu_session=real-session')).toBe('l…
+     42|     gate = Response.json(SIGNED_OUT, { status: 401 })
+     43|     expect(await fetchGateStep('ankanu_session=real-session')).toBe('a…
+       |                                                                ^
+     44|     gate = new Response('not json', { status: 401 })
+     45|     expect(await fetchGateStep('ankanu_session=real-session')).toBe('a…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > still sends a visitor whose session is gone from /pin and member pages to sign-in
+AssertionError: /pin: expected undefined to be 303 // Object.is equality
+
+- Expected:
+303
+
++ Received:
+undefined
+
+ ❯ apps/web/src/pin-locked-entry.test.ts:96:38
+     94|     for (const path of ['/pin', '/decouvrir', '/profile-edit']) {
+     95|       const redirect = await entryRedirect(member(path), path)
+     96|       expect(redirect?.status, path).toBe(303)
+       |                                      ^
+     97|       expect(redirect?.headers.get('location'), path).toBe('http://loc…
+     98|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  apps/web/src/v2-flow.test.ts > server entry guard > reads the gate 401 as a signed-out visitor and anything unexpected as an error
+AssertionError: expected 'locked' to be 'anon' // Object.is equality
+
+Expected: "anon"
+Received: "locked"
+
+ ❯ apps/web/src/v2-flow.test.ts:736:58
+    734|       }) as typeof fetch
+    735|       answers.push(Response.json({ error: { code: 'UNAUTHENTICATED' } …
+    736|       expect(await fetchGateStep('ankanu_session=gone')).toBe('anon')
+       |                                                          ^
+    737|       answers.push(Response.json({ step: 'account' }))
+    738|       expect(await fetchGateStep('ankanu_session=live')).toBe('account…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+

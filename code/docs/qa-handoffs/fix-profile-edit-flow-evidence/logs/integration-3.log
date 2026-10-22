@@ -1,0 +1,210 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [InstanceLoader] AppModule dependencies initialized +8ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] HealthController {/v1}: +5ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +3ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:37 AM     LOG [NestApplication] Nest application successfully started +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [NestFactory] Starting Nest application... +875ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [InstanceLoader] AppModule dependencies initialized +4ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] HealthController {/v1}: +3ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [NestApplication] Nest application successfully started +3ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [NestFactory] Starting Nest application... +343ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [InstanceLoader] AppModule dependencies initialized +2ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] HealthController {/v1}: +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/health, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] AccountsController {/v1/accounts}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/precheck, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/gate, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/accounts/email-verifications/consume, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] SessionsController {/v1/sessions}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/sessions, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/sessions/current, DELETE} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] PasswordResetsController {/v1/password-resets}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/password-resets, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/password-resets/consume, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] VerificationsController {/v1/verifications}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/otp, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/liveness, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/id, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/verifications/id, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] PinController {/v1/pin}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin, PUT} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin/lock, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/pin/unlock, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] MeController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/deactivate, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/reactivate, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] ProfileController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, PUT} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/profile, PATCH} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] ProfilesController {/v1/profiles}: +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/profiles/:id, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] BrowseController {/v1/browse}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/browse, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/browse/pass, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] FavouritesController {/v1/favourites}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/favourites, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/favourites, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/favourites/:target_id, DELETE} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] FiltersController {/v1/filters}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/filters, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] MediaController {/v1/media}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media, POST} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media/get, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media/:id/main, PUT} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/media/:id, DELETE} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] StaffController {/v1/staff}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/cases, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/cases, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/metrics, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/verifications/grant, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] VisitSignalsController {/v1/staff}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/staff/signals/visits, GET} route +1ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RoutesResolver] CilController {/v1/me}: +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/delete, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/export, POST} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/export, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [RouterExplorer] Mapped {/v1/me/export-status, GET} route +0ms
+[Nest] 18855  - 10/22/2026, 11:12:38 AM     LOG [NestApplication] Nest application successfully started +1ms
+
+ Test Files  3 passed (3)
+      Tests  15 passed (15)
+   Start at  11:12:27
+   Duration  14.27s (tests 80%, transform 10%, import 10%)
+

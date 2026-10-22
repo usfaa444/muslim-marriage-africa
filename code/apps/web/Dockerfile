@@ -31,10 +31,19 @@ COPY --from=build /app/design-stitch/ankanu-v2/08-onboarding/screen.html design-
 COPY --from=build /app/design-stitch/ankanu-v2/09-photo-rules/screen.html design-stitch/ankanu-v2/09-photo-rules/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/10-pin-lock/screen.html design-stitch/ankanu-v2/10-pin-lock/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/11-profile-edit/screen.html design-stitch/ankanu-v2/11-profile-edit/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/13-search/screen.html design-stitch/ankanu-v2/13-search/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/14-filters/screen.html design-stitch/ankanu-v2/14-filters/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/15-profile-detail/screen.html design-stitch/ankanu-v2/15-profile-detail/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/17-favourites/screen.html design-stitch/ankanu-v2/17-favourites/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/27-settings/screen.html design-stitch/ankanu-v2/27-settings/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/28-delete-export-status/screen.html design-stitch/ankanu-v2/28-delete-export-status/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/52-ts-visit-signals/screen.html design-stitch/ankanu-v2/52-ts-visit-signals/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/53-barre-de-navigation/screen.html design-stitch/ankanu-v2/53-barre-de-navigation/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/54-pseudonym-dob/screen.html design-stitch/ankanu-v2/54-pseudonym-dob/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/56-otp-alt/screen.html design-stitch/ankanu-v2/56-otp-alt/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/57-discover/grid.html design-stitch/ankanu-v2/57-discover/grid.html
+COPY --from=build /app/design-stitch/ankanu-v2/57-discover/screen.html design-stitch/ankanu-v2/57-discover/screen.html
 ENV NODE_ENV=production
 WORKDIR /app/apps/web
 CMD ["node", "/app/node_modules/next/dist/bin/next", "start", "--hostname", "0.0.0.0", "--port", "3000"]

@@ -436,4 +436,40 @@ describe('profile fields and completeness', () => {
       life_plans: 'tf:6months\nUnion stable',
     })
   })
+
+  it('answers the profile read and both writes with no-store, so a back navigation never reuses expired photo grants', async () => {
+    const missing = await fetch(`${base}/v1/me/profile`)
+    expect(missing.status).toBe(401)
+    expect(missing.headers.get('cache-control')).toBe('no-store')
+
+    const created = await createAccount('sister')
+    const cookie = await signIn(created.email)
+    const read = await fetch(`${base}/v1/me/profile`, { headers: { cookie } })
+    expect(read.status).toBe(200)
+    expect(read.headers.get('cache-control')).toBe('no-store')
+
+    const saved = await fetch(`${base}/v1/me/profile`, {
+      method: 'PUT',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ dob: '1990-01-15', ...readyIslamic }),
+    })
+    expect(saved.status).toBe(200)
+    expect(saved.headers.get('cache-control')).toBe('no-store')
+
+    const refused = await fetch(`${base}/v1/me/profile`, {
+      method: 'PUT',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ dob: '' }),
+    })
+    expect(refused.status).toBe(400)
+    expect(refused.headers.get('cache-control')).toBe('no-store')
+
+    const blurred = await fetch(`${base}/v1/me/profile`, {
+      method: 'PATCH',
+      headers: { cookie, 'content-type': 'application/json' },
+      body: JSON.stringify({ photo_blur: false }),
+    })
+    expect(blurred.status).toBe(200)
+    expect(blurred.headers.get('cache-control')).toBe('no-store')
+  })
 })

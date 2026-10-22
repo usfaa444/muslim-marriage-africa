@@ -1,0 +1,7 @@
+# Round 3, AC5 lockout: after the fifth wrong PIN of the in-view walks (r3x at 360x780, r3b2 at 1280x800; real API) the session is gone, 2026-10-22T15:05:08Z
+r3x: GET /v1/accounts/gate -> 401 UNAUTHENTICATED
+r3x: GET /decouvrir -> 303 /auth
+r3x: GET /pin -> 303 /auth
+r3b2: GET /v1/accounts/gate -> 401 UNAUTHENTICATED
+r3b2: GET /decouvrir -> 303 /auth
+r3b2: GET /pin -> 303 /auth

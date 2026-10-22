@@ -1,0 +1,40 @@
+# Round 3 / finding 20: Cache-Control on the locked 401 PIN_REQUIRED, real stack (ankanu-qa3, head d47d354), member r3lock, 2026-10-22T13:59:15Z
+## setup (rate limit: auth calls paced 7 s)
+setup     | PUT    /v1/pin                  | 200 | cache-control=<none>    | 
+setup     | GET    /v1/me/profile           | 200 | cache-control=no-store  | 
+unlocked  | GET    /v1/browse               | 403 | cache-control=no-store  | FORBIDDEN
+setup     | POST   /v1/pin/lock             | 200 | cache-control=<none>    | 
+## locked session vs signed-out vs garbage cookie
+locked    | GET    /v1/me/profile           | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | GET    /v1/me/profile           | 401 | cache-control=no-store  | UNAUTHENTICATED
+garbage   | GET    /v1/me/profile           | 401 | cache-control=no-store  | UNAUTHENTICATED
+locked    | PUT    /v1/me/profile           | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | PUT    /v1/me/profile           | 401 | cache-control=no-store  | UNAUTHENTICATED
+garbage   | PUT    /v1/me/profile           | 401 | cache-control=no-store  | UNAUTHENTICATED
+locked    | PATCH  /v1/me/profile           | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | PATCH  /v1/me/profile           | 401 | cache-control=no-store  | UNAUTHENTICATED
+garbage   | PATCH  /v1/me/profile           | 401 | cache-control=no-store  | UNAUTHENTICATED
+locked    | GET    /v1/accounts/gate        | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | GET    /v1/accounts/gate        | 401 | cache-control=<none>    | UNAUTHENTICATED
+garbage   | GET    /v1/accounts/gate        | 401 | cache-control=<none>    | UNAUTHENTICATED
+locked    | GET    /v1/browse               | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | GET    /v1/browse               | 401 | cache-control=no-store  | UNAUTHENTICATED
+garbage   | GET    /v1/browse               | 401 | cache-control=no-store  | UNAUTHENTICATED
+locked    | GET    /v1/pin                  | 200 | cache-control=<none>    | 
+anon      | GET    /v1/pin                  | 401 | cache-control=<none>    | UNAUTHENTICATED
+garbage   | GET    /v1/pin                  | 401 | cache-control=<none>    | UNAUTHENTICATED
+locked    | PUT    /v1/pin                  | 429 | cache-control=<none>    | RATE_LIMITED
+anon      | PUT    /v1/pin                  | 429 | cache-control=<none>    | RATE_LIMITED
+garbage   | PUT    /v1/pin                  | 429 | cache-control=<none>    | RATE_LIMITED
+locked    | GET    /v1/health               | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | GET    /v1/health               | 200 | cache-control=<none>    | 
+garbage   | GET    /v1/health               | 200 | cache-control=<none>    | 
+locked    | GET    /v1/media/get?token=x    | 401 | cache-control=no-store  | PIN_REQUIRED
+anon      | GET    /v1/media/get?token=x    | 401 | cache-control=<none>    | UNAUTHENTICATED
+garbage   | GET    /v1/media/get?token=x    | 401 | cache-control=<none>    | UNAUTHENTICATED
+## a wrong PIN while locked, then the right one
+locked    | POST   /v1/pin/unlock           | 429 | cache-control=<none>    | RATE_LIMITED
+locked    | GET    /v1/me/profile           | 401 | cache-control=no-store  | PIN_REQUIRED
+locked    | POST   /v1/pin/unlock           | 429 | cache-control=<none>    | RATE_LIMITED
+unlocked  | GET    /v1/me/profile           | 401 | cache-control=no-store  | PIN_REQUIRED
+unlocked  | GET    /v1/accounts/gate        | 401 | cache-control=no-store  | PIN_REQUIRED

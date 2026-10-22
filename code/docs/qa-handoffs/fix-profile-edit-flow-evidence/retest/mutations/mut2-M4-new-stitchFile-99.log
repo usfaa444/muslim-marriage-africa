@@ -1,0 +1,36 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-profile-fix/code
+
+ ❯ apps/web/src/web-image.test.ts (7 tests | 1 failed) 76ms
+   ❯ web image design files (7)
+     × copies every Stitch file the web reads at runtime into the image 24ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  12:47:58
+   Duration  363ms (transform 41%, tests 41%, import 10%, setup 6%, worker 2%)
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/web-image.test.ts > web image design files > copies every Stitch file the web reads at runtime into the image
+AssertionError: expected [ '99-new-screen/screen.html' ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "99-new-screen/screen.html",
++ ]
+
+ ❯ apps/web/src/web-image.test.ts:160:21
+    158|     const copies = dockerCopies(dockerfile())
+    159|     const missing = stitchReads(runtimeSources()).filter((read) => !co…
+    160|     expect(missing).toEqual([])
+       |                     ^
+    161|   })
+    162|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+

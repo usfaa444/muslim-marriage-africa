@@ -1,0 +1,8 @@
+     × stays on the profile with the save error and the switch off when the save fails 13ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 22 passed (23)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails
+AssertionError: expected '/pin?next=%2Fprofile-edit' to be '' // Object.is equality
+- Expected
++ Received

@@ -1,0 +1,2 @@
+Slow 3G: switch tapped twice -> /pin after 1211 ms; calls=["PUT /v1/me/profile","NAV /pin"]
+Slow 3G: 6th digit -> /profile-edit after 2566 ms; calls=["PUT /v1/pin","NAV /profile-edit"]

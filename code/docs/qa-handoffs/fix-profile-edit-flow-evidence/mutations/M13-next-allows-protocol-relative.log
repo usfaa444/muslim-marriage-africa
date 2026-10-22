@@ -1,0 +1,8 @@
+     × returns only to a same-origin path 94ms
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+AssertionError: expected [ '//evil.example' ] to deeply equal [ '/onboarding' ]
+- Expected
++ Received

@@ -1,0 +1,5 @@
+brother profile loaded; pin checked=false
+brother, unsaved edit, PIN switch -> url=/profile-edit pinChecked=false status="marital_status : la situation matrimoniale est requise." puts=1
+brother, no unsaved edit, PIN switch -> url=/pin?next=%2Fprofile-edit
+[390x800] refused pre-PIN save: {"text":"marital_status : la situation matrimoniale est requise.","statusTop":953,"statusBottom":969,"switchTop":388,"viewportH":800,"statusInViewport":false,"scrollY":3247}
+[1440x900] refused pre-PIN save: {"text":"marital_status : la situation matrimoniale est requise.","statusTop":900,"statusBottom":916,"switchTop":438,"viewportH":900,"statusInViewport":false,"scrollY":2410}

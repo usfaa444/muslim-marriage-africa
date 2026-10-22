@@ -1,0 +1,5 @@
+#22 exporting manifest list sha256:cece155f7a9721e9de9b63ed23ec0f4d8d58d980c4cf1297b437b4c604c28aa7 done
+#22 naming to docker.io/library/ankanu-qa3-api:latest done
+#22 unpacking to docker.io/library/ankanu-qa3-api:latest 0.0s done
+#22 DONE 0.2s
+api-exit=0

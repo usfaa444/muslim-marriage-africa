@@ -1,0 +1,10 @@
+8c8,9
+< RUN npm ci
+---
+> COPY --from=ca ca-bundle.crt /ca.crt
+> RUN npm_config_cafile=/ca.crt npm ci
+19c20,21
+< RUN npm ci --omit=dev
+---
+> COPY --from=ca ca-bundle.crt /ca.crt
+> RUN npm_config_cafile=/ca.crt npm ci --omit=dev

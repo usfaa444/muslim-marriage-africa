@@ -1,0 +1,6 @@
+Slow 3G profile-edit: landed /profile-edit LCP 1764 ms, CLS 0.211, load event 1315 ms, transferSize(doc) 56408 B, requests {"GET /profile-edit":1,"GET /v1/me/profile":1,"GET /v1/pin":2,"GET /v1/media/get":1}
+Slow 3G pin: landed /pin LCP 524 ms, CLS 0.004, load event 659 ms, transferSize(doc) 15682 B, requests {"GET /pin":1}
+Slow 3G profile-review: landed /profile-review LCP 540 ms, CLS 0.058, load event 595 ms, transferSize(doc) 11462 B, requests {"GET /profile-review":1,"GET /v1/me/profile":1,"GET /v1/pin":1,"GET /v1/media/get":1}
+Fast 3G profile-edit: landed /profile-edit LCP 708 ms, CLS 0.211, load event 523 ms, transferSize(doc) 56408 B, requests {"GET /profile-edit":1,"GET /v1/pin":2,"GET /v1/me/profile":1,"GET /v1/media/get":1}
+Fast 3G pin: landed /pin LCP 264 ms, CLS 0.000, load event 269 ms, transferSize(doc) 15682 B, requests {"GET /pin":1}
+Fast 3G profile-review: landed /profile-review LCP 312 ms, CLS 0.058, load event 308 ms, transferSize(doc) 11462 B, requests {"GET /profile-review":1,"GET /v1/me/profile":1,"GET /v1/pin":1,"GET /v1/media/get":1}

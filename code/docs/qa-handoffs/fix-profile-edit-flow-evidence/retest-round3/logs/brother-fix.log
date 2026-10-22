@@ -1,0 +1,4 @@
+step 1 (marital only): {"alert":"polygamy_intent : l'intention de polygamie est requise.","hidden":false,"pin":false} url=/profile-edit
+step 2 (marital + polygyny): url=/pin?next=%2Fprofile-edit
+API after: marital_status=single polygamy_intent=no
+exit=0

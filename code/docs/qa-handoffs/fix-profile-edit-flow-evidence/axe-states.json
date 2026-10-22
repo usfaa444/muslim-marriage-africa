@@ -1,0 +1,46 @@
+{
+ "profile-edit-error-line": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 15,
+   "sample": [
+    ".text-lg",
+    ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+    ".space-y-5.pt-8:nth-child(2) > div:nth-child(1) > .mt-1.text-deep-navy\\/60"
+   ]
+  }
+ ],
+ "profile-edit-photos-live-and-pending": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 16,
+   "sample": [
+    ".text-lg",
+    ".sm\\:flex-row > div > .mt-1.text-deep-navy\\/60",
+    ".px-2.py-0\\.5.text-soft-gold"
+   ]
+  }
+ ],
+ "pin-4-dots": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 3,
+   "sample": [
+    "#btn-clear",
+    "span[data-icon=\"verified_user\"]",
+    "#status-hint > span:nth-child(2)"
+   ]
+  },
+  {
+   "id": "label-content-name-mismatch",
+   "impact": "serious",
+   "nodes": 1,
+   "sample": [
+    "#btn-backspace"
+   ]
+  }
+ ]
+}

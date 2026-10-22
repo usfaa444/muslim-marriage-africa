@@ -1,0 +1,127 @@
+[N1-next-no-control-char-check] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+     × returns only to a same-origin path
+[N2-next-allows-backslash] SURVIVED exit=0 Tests  99 passed (99)
+[N3-next-allows-tab-lf-cr] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+     × returns only to a same-origin path
+[N4-next-no-origin-check] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+     FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+     × asks for a reset link and unlocks a six-digit PIN
+     × returns only to a same-origin path
+[N5-next-no-single-slash-check] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+     × returns only to a same-origin path
+[N6-next-returns-raw-next] SURVIVED exit=0 Tests  99 passed (99)
+[N7-next-round1-validator] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > returns only to a same-origin path
+     FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+     × asks for a reset link and unlocks a six-digit PIN
+     × returns only to a same-origin path
+[N8-next-catch-returns-next] SURVIVED exit=0 Tests  99 passed (99)
+[E1-gate-401-always-anon] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > reads the gate 401 PIN_REQUIRED as locked, and any other 401 as signed out
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > serves /pin to a locked session and sends its member pages to /pin with a return path
+     × reads the gate 401 PIN_REQUIRED as locked, and any other 401 as signed out
+     × serves /pin to a locked session and sends its member pages to /pin with a return path
+[E2-gate-401-always-locked] CAUGHT exit=1 Tests  3 failed | 96 passed (99)
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > reads the gate 401 PIN_REQUIRED as locked, and any other 401 as signed out
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > still sends a visitor whose session is gone from /pin and member pages to sign-in
+     FAIL  apps/web/src/v2-flow.test.ts > server entry guard > reads the gate 401 as a signed-out visitor and anything unexpected as an error
+     × reads the gate 401 PIN_REQUIRED as locked, and any other 401 as signed out
+[E3-locked-cannot-open-pin] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > opens the PIN screen and sends every member page there, coming back to it after the unlock
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > serves /pin to a locked session and sends its member pages to /pin with a return path
+     × opens the PIN screen and sends every member page there, coming back to it after the unlock
+     × serves /pin to a locked session and sends its member pages to /pin with a return path
+[E4-locked-auth-goes-to-pin] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > opens the PIN screen and sends every member page there, coming back to it after the unlock
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > serves /pin to a locked session and sends its member pages to /pin with a return path
+     × opens the PIN screen and sends every member page there, coming back to it after the unlock
+     × serves /pin to a locked session and sends its member pages to /pin with a return path
+[E5-locked-next-not-encoded] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > opens the PIN screen and sends every member page there, coming back to it after the unlock
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > serves /pin to a locked session and sends its member pages to /pin with a return path
+     × opens the PIN screen and sends every member page there, coming back to it after the unlock
+     × serves /pin to a locked session and sends its member pages to /pin with a return path
+[E6-locked-next-dropped] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > opens the PIN screen and sends every member page there, coming back to it after the unlock
+     FAIL  apps/web/src/pin-locked-entry.test.ts > a session locked by its PIN > serves /pin to a locked session and sends its member pages to /pin with a return path
+     × opens the PIN screen and sends every member page there, coming back to it after the unlock
+     × serves /pin to a locked session and sends its member pages to /pin with a return path
+[P1-no-scroll-into-view] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails
+     × stays on the profile with the save error and the switch off when the save fails
+[P2-refusal-on-bottom-line] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails
+     FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > waits for the profile read before saving edits typed early, and stays when that read fails
+     × stays on the profile with the save error and the switch off when the save fails
+     × waits for the profile read before saving edits typed early, and stays when that read fails
+[P3-alert-role-removed] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/profile-edit-page.test.ts > profile edit load and meter > puts a status line right under the PIN switch, read out when written
+     × puts a status line right under the PIN switch, read out when written
+[P4-status-not-cleared-on-save] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails
+     × stays on the profile with the save error and the switch off when the save fails
+[P5-status-not-cleared-on-tap] SURVIVED exit=0 Tests  99 passed (99)
+[P6-status-never-shown] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/profile-edit-page.test.ts > profile edit PIN switch > stays on the profile with the save error and the switch off when the save fails
+     × stays on the profile with the save error and the switch off when the save fails
+[S1-say-noop] CAUGHT exit=1 Tests  5 failed | 94 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > clears the dots, stays and says why after a refused PIN
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > fills all six dots and saves a new PIN only after the sixth digit
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > says the session is locked after the last wrong PIN, and that sign-in is needed after that
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > shows the Stitch progress line while the PIN is checked, and a connection error when the API cannot be reached
+[S2-no-set-length-hint] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > fills all six dots and saves a new PIN only after the sixth digit
+     × fills all six dots and saves a new PIN only after the sixth digit
+[S3-unlock-hint-says-six] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+     × unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+[S4-button-only-4-or-6] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > fills all six dots and saves a new PIN only after the sixth digit
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+     × fills all six dots and saves a new PIN only after the sixth digit
+     × unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+[S5-no-refusal-message] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > clears the dots, stays and says why after a refused PIN
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > says the session is locked after the last wrong PIN, and that sign-in is needed after that
+     × clears the dots, stays and says why after a refused PIN
+     × says the session is locked after the last wrong PIN, and that sign-in is needed after that
+[S6-no-network-message] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > shows the Stitch progress line while the PIN is checked, and a connection error when the API cannot be reached
+     × shows the Stitch progress line while the PIN is checked, and a connection error when the API cannot be reached
+[S7-no-progress-line] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > shows the Stitch progress line while the PIN is checked, and a connection error when the API cannot be reached
+     × shows the Stitch progress line while the PIN is checked, and a connection error when the API cannot be reached
+[S8-key-does-not-restore-hint] CAUGHT exit=1 Tests  2 failed | 97 passed (99)
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > clears the dots, stays and says why after a refused PIN
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > fills all six dots and saves a new PIN only after the sixth digit
+     × clears the dots, stays and says why after a refused PIN
+     × fills all six dots and saves a new PIN only after the sixth digit
+[S9-signin-link-hash] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+     × asks for a reset link and unlocks a six-digit PIN
+[S10-status-role-removed] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+     × asks for a reset link and unlocks a six-digit PIN
+[S11-hint-contrast-back-to-50] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+     × asks for a reset link and unlocks a six-digit PIN
+[S12-backspace-icon-text-back] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+     × asks for a reset link and unlocks a six-digit PIN
+[S13-clear-contrast-back-to-60] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/web/src/v2-flow.test.ts > v2 signup and sign-in screens > asks for a reset link and unlocks a six-digit PIN
+     × asks for a reset link and unlocks a six-digit PIN
+[A1-unlock-message-says-six] CAUGHT exit=1 Tests  1 failed | 98 passed (99)
+     FAIL  apps/api/src/pin.test.ts > shared-device PIN > sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule
+     × sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule
+[K1-kernel-unlock-message-six] CAUGHT exit=1 Tests  3 failed | 96 passed (99)
+     FAIL  apps/api/src/pin.test.ts > shared-device PIN > sets only a six-digit PIN and still unlocks a four-digit PIN saved before that rule
+     FAIL  apps/web/src/pin-screen.test.ts > PIN screen length > unlocks a six-digit PIN on the sixth digit and a stored four-digit PIN with the unlock button
+     FAIL  packages/kernel/src/kernel.test.ts > shared-device PIN length > names the lengths each refusal accepts, for the API and the PIN screen alike
+     × names the lengths each refusal accepts, for the API and the PIN screen alike
+[W1-alias-read-in-loader] SURVIVED exit=0 Tests  99 passed (99)
+done

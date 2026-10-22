@@ -1,0 +1,14 @@
+[360] session pin state before: {"enabled":true,"locked":false} (a locked session is redirected to /auth by the server, see finding; this run uses a fresh signed-in session)
+[360] 4 digits typed: calls=[] dots=111100 url=/pin
+[360] after unlock button: url=/profile-edit calls=["POST /v1/pin/unlock {\"pin\":\"2468\"}"]
+[360] pin state {"enabled":true,"locked":false}
+[360] wrong 1111: dots after=000000 url=/pin
+[360] wrong 222222: dots after=000000 url=/pin
+[360] wrong 3333: dots after=000000 url=/pin
+[360] wrong 444444: dots after=000000 url=/pin
+[360] wrong 5555: dots after=000000 url=/pin
+[360] calls: ["POST /v1/pin/unlock {\"pin\":\"1111\"}","POST /v1/pin/unlock {\"pin\":\"222222\"}","POST /v1/pin/unlock {\"pin\":\"3333\"}","POST /v1/pin/unlock {\"pin\":\"444444\"}","POST /v1/pin/unlock {\"pin\":\"5555\"}"]
+[360] after lockout /v1/me/profile -> 401
+[360] visible text on screen after lockout: "lock Code d'accès confidentiel Saisissez votre code PIN pour accéder à votre espace noble et préserver la confidentialité de vos échanges. 1 2 3 4 5 6 7 8 9 Effacer 0 backspace Déverrouiller l'espace arrow_forward Code oublié ? • S'identifier à nouveau verified_user Chiffrement et vérification local"
+[360] 6 more digits after lockout: url=/pin dots=000000 text="lock Code d'accès confidentiel Saisissez votre code PIN pour accéder à votre espace noble et préserver la confidentialité de vos échanges. 1 2 3 4 5 6 7 8 9 Effacer 0 backspace Déverrouiller l'espace "
+[360] problems: ["http 400: POST http://localhost:4043/v1/pin/unlock","console.error: Failed to load resource: the server responded with a status of 400 (Bad Request)","http 400: POST http://localhost:4043/v1/pin/unlock","console.error: Failed to load resource: the server responded with a status of 400 (Bad Request)","http 400: POST http://localhost:4043/v1/pin/unlock","console.error: Failed to load resource: the server responded with a status of 400 (Bad Request)","http 400: POST http://localhost:4043/v1/pin/unlock","console.error: Failed to load resource: the server responded with a status of 400 (Bad Request)","http 401: POST http://localhost:4043/v1/pin/unlock","console.error: Failed to load resource: the server responded with a status of 401 (Unauthorized)","http 401: GET http://localhost:4043/v1/pin","console.error: Failed to load resource: the server responded with a status of 401 (Unauthorized)","http 401: POST http://localhost:4043/v1/pin/unlock","console.error: Failed to load resource: the server responded with a status of 401 (Unauthorized)"]

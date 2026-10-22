@@ -1,0 +1,39 @@
+# GET status per route against the built web image (ankanu-qa3), signed-in member sis1 (cookie) and anonymous
+/  member=200 anon=200  title=Public landing
+/splash  member=200 anon=200  title=AnKanu — Splash
+/age-gate  member=303 anon=303  title=
+/auth  member=303 anon=200  title=
+/signup  member=303 anon=200  title=
+/signup/identity  member=303 anon=200  title=
+/signup/pseudonym  member=303 anon=200  title=
+/signup/account  member=303 anon=200  title=
+/email-verification  member=303 anon=303  title=
+/phone  member=303 anon=303  title=
+/otp  member=303 anon=303  title=
+/id-liveness  member=303 anon=303  title=
+/password-reset  member=200 anon=200  title=AnKanu — Réinitialisation du mot de passe
+/onboarding  member=200 anon=303  title=AnKanu — Parcours d'intégration &amp; Profil
+/photo-rules  member=200 anon=303  title=AnKanu — Règles relatives aux photographies
+/pin  member=200 anon=303  title=Verrouillage de Sécurité — AnKanu
+/pin?next=%2Fprofile-edit  member=200 anon=303  title=Verrouillage de Sécurité — AnKanu
+/profile-edit  member=200 anon=303  title=AnKanu - Édition du profil
+/profile-review  member=303 anon=303  title=
+/settings  member=200 anon=303  title=AnKanu — Paramètres &amp; Confidentialité
+/favoris  member=200 anon=303  title=Mes profils mis en réserve — AnKanu | Ta'aruf &amp; Mariage 
+/decouvrir  member=200 anon=303  title=AnKanu - Découvrir
+/decouvrir?vue=grille  member=200 anon=303  title=AnKanu - Découvrir
+/decouvrir/  member=308 anon=308  title=
+/privacy/status/abc  member=200 anon=303  title=AnKanu — Statut d'export et d'effacement sécurisé
+/staff/visit-signals  member=303 anon=303  title=
+/profil  member=401 anon=303  title=
+/discussions  member=401 anon=303  title=
+/invitations  member=401 anon=303  title=
+web log lines with "not on disk": 0
+/profile-review -> 200  title=AnKanu — Espace Personnel &amp; Statut du Profil Délai habituel de modération : 24 heures
+/staff/visit-signals -> 200  title=AnKanu • Surveillance T&amp;S Déontologique 
+/profile-edit -> 200  title=AnKanu - Édition du profil 
+/decouvrir -> 200  title=AnKanu - Découvrir 
+/favoris -> 200  title=Mes profils mis en réserve — AnKanu | Ta'aruf &amp; Mariage Noble 
+web log lines with not-on-disk or error: 0
+bro1 -> /profil/01a16325-bdc1-7224-8379-427acb9fd58f: 200 
+final count of "not on disk" lines in web log: 0
