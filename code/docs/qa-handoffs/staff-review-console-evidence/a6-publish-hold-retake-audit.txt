@@ -1,0 +1,45 @@
+=== A (order: liveness granted earlier) ===
+A vis before unpublished
+A approve ID -> 200 vis unpublished (expect unpublished: profile review pending)
+A profile review allow -> 200 "public" DB vis public
+A public profile as member B -> 403
+=== C (profile review first, then ID, then selfie) ===
+C profile allow -> 200 vis unpublished (expect unpublished)
+C approve ID -> 200 vis unpublished (unpublished: selfie pending)
+C approve selfie -> 200 {"account_id":"01a165b4-dc49-7130-99ae-1550a46d2f05","kind":"liveness","record_id":"01a165b4-e48d-755e-ac60-c5ce076957c6","status":"granted","reason":null,"visibility":"public","account_status":"Active"} vis public (expect public)
+=== G (ID rejected, selfie approved, profile allowed) ===
+G reject ID -> 200
+G vis (expect unpublished) unpublished
+G member sees ID row: {"id":"01a165b4-ef1c-7281-a901-3efa219e36df","kind":"id_document","status":"rejected","reason":"not_an_id"}
+G member sees liveness row: {"id":"01a165b4-ef38-70e9-ad7e-41eff84689c2","kind":"liveness","status":"granted"}
+G retake ID -> 201
+G decide OLD id record -> 409 REVIEW_STALE (expect 409)
+G approve NEW ID -> 200 vis public (expect public)
+=== H (suspected minor) ===
+H suspected minor -> 200 {"account_id":"01a165b4-f130-7cff-9ce4-9ba4f5febad4","kind":"id_document","record_id":"01a165b4-f981-7733-8a4e-1564eb3afc9a","status":"held","reason":"suspected_minor","visibility":"held","account_status":"held"}
+H account held vis held id row held|suspected_minor
+H approve selfie -> 200 vis held acct held
+H profile allow -> 200 "held" vis held
+H approve held ID again -> 409 REVIEW_STALE
+H member id row: {"id":"01a165b4-f981-7733-8a4e-1564eb3afc9a","kind":"id_document","status":"held"}
+H (held) uploads new ID -> 201 {"id":"01a165b4-fe18-7cd0-8928-401342b4b893","kind":"id_document","status":"held"}
+H (held) new challenge -> 201
+H after: acct held vis held
+H profile visible to other member -> 403
+=== F (retake after case opened) ===
+F decide old selfie -> 409 REVIEW_STALE (expect 409)
+F old row status pending new row pending
+=== audit ===
+moderator_evidence_view|3
+moderator_photo_unblur|4
+moderator_profile_review_decision|4
+moderator_profile_review_view|1
+moderator_review_case_view|8
+moderator_verification_decision|10
+{"kind": "liveness", "note": "no", "reason": "", "decision": "approve", "record_id": "01a165b4-f99c-7d55-b8d4-1a9b6a4e8875", "account_id": "01a165b4-f130-7cff-9ce4-9ba4f5febad4"}
+{"kind": "id_document", "note": "yes", "reason": "suspected_minor", "decision": "suspected_minor", "record_id": "01a165b4-f981-7733-8a4e-1564eb3afc9a", "account_id": "01a165b4-f130-7cff-9ce4-9ba4f5febad4"}
+{"kind": "id_document", "note": "no", "reason": "", "decision": "approve", "record_id": "01a165b4-f062-779d-b005-64785eb5ae43", "account_id": "01a165b4-e6dd-7eed-89c3-603a2ba1d900"}
+{"kind": "liveness", "note": "no", "reason": "", "decision": "approve", "record_id": "01a165b4-ef38-70e9-ad7e-41eff84689c2", "account_id": "01a165b4-e6dd-7eed-89c3-603a2ba1d900"}
+note text leaked in audit? 0
+note in row: SECRET-NOTE-TEXT
+audit chain sane (prev_hash present?): 60

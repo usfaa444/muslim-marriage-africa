@@ -1,0 +1,18 @@
+=== MUTATION superseded label reverted
+       × labels a capture replaced by a retake before any decision as superseded, never as waiting (QA round 1, F3) 504ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 44 passed (45)
+=== MUTATION Retry-After removed
+       × rate-limits evidence views per staff session, counting parallel requests atomically 553ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 44 passed (45)
+=== MUTATION no-store removed from GET /v1/staff/metrics
+       × answers no-store on the reused profile-review and metrics routes (QA round 1, F6) 464ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 44 passed (45)
+=== MUTATION held controls stay active
+      Tests  45 passed (45)
+=== MUTATION evidence limit 30 -> 3000
+       × rate-limits evidence views per staff session, counting parallel requests atomically 565ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 44 passed (45)

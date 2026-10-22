@@ -1,0 +1,35 @@
+
+ RUN  v5.0.3 /home/claude/ankanu-qa-review/code
+
+ ❯ apps/web/src/photo-rules.test.ts (3 tests | 1 failed) 24ms
+   ❯ photo rules (3)
+     × keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/photo-rules.test.ts > photo rules > keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ apps/web/src/photo-rules.test.ts:256:20
+    254|       '/usr/bin/chromium',
+    255|     ].find((path) => existsSync(path))
+    256|     expect(binary).toBeTruthy()
+       |                    ^
+    257|     const html = photoHtml(stitch())
+    258|     const server = createServer((request, response) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 69 passed | 2 skipped (72)
+      Tests  1 failed | 481 passed | 12 skipped (494)
+   Start at  23:30:11
+   Duration  74.04s (tests 83%, import 14%, transform 4%)
+
+exit 1

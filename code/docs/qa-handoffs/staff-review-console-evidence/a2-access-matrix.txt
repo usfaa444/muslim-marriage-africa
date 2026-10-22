@@ -1,0 +1,100 @@
+signed-out         GET  /v1/staff/review/queue                   401 UNAUTHENTICATED   cc=no-store
+signed-out         GET  /v1/staff/review/cases/:acct             401 UNAUTHENTICATED   cc=no-store
+signed-out         GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+signed-out         GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+signed-out         POST /v1/staff/review/photos/unblur           401 UNAUTHENTICATED   cc=no-store
+signed-out         GET  /v1/staff/review/photo                   401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+signed-out         POST /v1/staff/review/decisions               401 UNAUTHENTICATED   cc=no-store
+signed-out         GET  /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+signed-out         POST /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+signed-out         GET  /v1/staff/metrics                        401 UNAUTHENTICATED   cc=-
+forged-uuid        GET  /v1/staff/review/queue                   401 UNAUTHENTICATED   cc=no-store
+forged-uuid        GET  /v1/staff/review/cases/:acct             401 UNAUTHENTICATED   cc=no-store
+forged-uuid        GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-uuid        GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-uuid        POST /v1/staff/review/photos/unblur           401 UNAUTHENTICATED   cc=no-store
+forged-uuid        GET  /v1/staff/review/photo                   401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-uuid        POST /v1/staff/review/decisions               401 UNAUTHENTICATED   cc=no-store
+forged-uuid        GET  /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+forged-uuid        POST /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+forged-uuid        GET  /v1/staff/metrics                        401 UNAUTHENTICATED   cc=-
+forged-stub-staff  GET  /v1/staff/review/queue                   401 UNAUTHENTICATED   cc=no-store
+forged-stub-staff  GET  /v1/staff/review/cases/:acct             401 UNAUTHENTICATED   cc=no-store
+forged-stub-staff  GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-stub-staff  GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-stub-staff  POST /v1/staff/review/photos/unblur           401 UNAUTHENTICATED   cc=no-store
+forged-stub-staff  GET  /v1/staff/review/photo                   401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-stub-staff  POST /v1/staff/review/decisions               401 UNAUTHENTICATED   cc=no-store
+forged-stub-staff  GET  /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+forged-stub-staff  POST /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+forged-stub-staff  GET  /v1/staff/metrics                        401 UNAUTHENTICATED   cc=-
+forged-garbage     GET  /v1/staff/review/queue                   401 UNAUTHENTICATED   cc=no-store
+forged-garbage     GET  /v1/staff/review/cases/:acct             401 UNAUTHENTICATED   cc=no-store
+forged-garbage     GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-garbage     GET  /v1/staff/review/evidence/:rec           401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-garbage     POST /v1/staff/review/photos/unblur           401 UNAUTHENTICATED   cc=no-store
+forged-garbage     GET  /v1/staff/review/photo                   401 UNAUTHENTICATED   cc=no-store, private, max-age=0
+forged-garbage     POST /v1/staff/review/decisions               401 UNAUTHENTICATED   cc=no-store
+forged-garbage     GET  /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+forged-garbage     POST /v1/staff/cases                          401 UNAUTHENTICATED   cc=-
+forged-garbage     GET  /v1/staff/metrics                        401 UNAUTHENTICATED   cc=-
+member-sister      GET  /v1/staff/review/queue                   403 FORBIDDEN   cc=no-store
+member-sister      GET  /v1/staff/review/cases/:acct             403 FORBIDDEN   cc=no-store
+member-sister      GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN   cc=no-store, private, max-age=0
+member-sister      GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN   cc=no-store, private, max-age=0
+member-sister      POST /v1/staff/review/photos/unblur           403 FORBIDDEN   cc=no-store
+member-sister      GET  /v1/staff/review/photo                   403 FORBIDDEN   cc=no-store, private, max-age=0
+member-sister      POST /v1/staff/review/decisions               403 FORBIDDEN   cc=no-store
+member-sister      GET  /v1/staff/cases                          403 FORBIDDEN   cc=-
+member-sister      POST /v1/staff/cases                          403 FORBIDDEN   cc=-
+member-sister      GET  /v1/staff/metrics                        403 FORBIDDEN   cc=-
+member-brother     GET  /v1/staff/review/queue                   403 FORBIDDEN   cc=no-store
+member-brother     GET  /v1/staff/review/cases/:acct             403 FORBIDDEN   cc=no-store
+member-brother     GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN   cc=no-store, private, max-age=0
+member-brother     GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN   cc=no-store, private, max-age=0
+member-brother     POST /v1/staff/review/photos/unblur           403 FORBIDDEN   cc=no-store
+member-brother     GET  /v1/staff/review/photo                   403 FORBIDDEN   cc=no-store, private, max-age=0
+member-brother     POST /v1/staff/review/decisions               403 FORBIDDEN   cc=no-store
+member-brother     GET  /v1/staff/cases                          403 FORBIDDEN   cc=-
+member-brother     POST /v1/staff/cases                          403 FORBIDDEN   cc=-
+member-brother     GET  /v1/staff/metrics                        403 FORBIDDEN   cc=-
+mahram             GET  /v1/staff/review/queue                   403 FORBIDDEN   cc=no-store
+mahram             GET  /v1/staff/review/cases/:acct             403 FORBIDDEN   cc=no-store
+mahram             GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN   cc=no-store, private, max-age=0
+mahram             GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN   cc=no-store, private, max-age=0
+mahram             POST /v1/staff/review/photos/unblur           403 FORBIDDEN   cc=no-store
+mahram             GET  /v1/staff/review/photo                   403 FORBIDDEN   cc=no-store, private, max-age=0
+mahram             POST /v1/staff/review/decisions               403 FORBIDDEN   cc=no-store
+mahram             GET  /v1/staff/cases                          403 FORBIDDEN   cc=-
+mahram             POST /v1/staff/cases                          403 FORBIDDEN   cc=-
+mahram             GET  /v1/staff/metrics                        403 FORBIDDEN   cc=-
+staff-mfa-pending  GET  /v1/staff/review/queue                   403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  GET  /v1/staff/review/cases/:acct             403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  POST /v1/staff/review/photos/unblur           403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  GET  /v1/staff/review/photo                   403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  POST /v1/staff/review/decisions               403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  GET  /v1/staff/cases                          403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  POST /v1/staff/cases                          403 FORBIDDEN staff_mfa_pending  cc=no-store
+staff-mfa-pending  GET  /v1/staff/metrics                        403 FORBIDDEN staff_mfa_pending  cc=no-store
+operator           GET  /v1/staff/review/queue                   200    cc=no-store
+operator           GET  /v1/staff/review/cases/:acct             403 FORBIDDEN moderator_required  cc=no-store
+operator           GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN moderator_required  cc=no-store, private, max-age=0
+operator           GET  /v1/staff/review/evidence/:rec           403 FORBIDDEN moderator_required  cc=no-store, private, max-age=0
+operator           POST /v1/staff/review/photos/unblur           403 FORBIDDEN moderator_required  cc=no-store
+operator           GET  /v1/staff/review/photo                   403 FORBIDDEN moderator_required  cc=no-store, private, max-age=0
+operator           POST /v1/staff/review/decisions               403 FORBIDDEN moderator_required  cc=no-store
+operator           GET  /v1/staff/cases                          403 FORBIDDEN moderator_required  cc=-
+operator           POST /v1/staff/cases                          403 FORBIDDEN moderator_required  cc=-
+operator           GET  /v1/staff/metrics                        200    cc=-
+moderator          GET  /v1/staff/review/queue                   200    cc=no-store
+moderator          GET  /v1/staff/review/cases/:acct             200    cc=no-store
+moderator          GET  /v1/staff/review/evidence/:rec           200   IMAGE-BYTES cc=no-store, private, max-age=0
+moderator          GET  /v1/staff/review/evidence/:rec           200   IMAGE-BYTES cc=no-store, private, max-age=0
+moderator          POST /v1/staff/review/photos/unblur           201    cc=no-store
+moderator          GET  /v1/staff/review/photo                   403 FORBIDDEN   cc=no-store, private, max-age=0
+moderator          POST /v1/staff/review/decisions               400 UNHANDLED   cc=no-store
+moderator          GET  /v1/staff/cases                          200    cc=-
+moderator          POST /v1/staff/cases                          400 UNHANDLED   cc=-
+moderator          GET  /v1/staff/metrics                        200    cc=-

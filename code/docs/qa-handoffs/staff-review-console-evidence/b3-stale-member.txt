@@ -1,0 +1,25 @@
+side decision 200
+stale UI alert -> [] status -> []
+ID form after 409: 0 | history: ["Décisions antérieuresSelfie du 22 oct. 2026, 22:24 : En attentePièce d'identité du 22 oct. 2026, 22:24 : En attente"]
+bad (expected 409 only): ["409 POST http://localhost:4022/v1/staff/review/decisions"] console: ["Failed to load resource: the server responded with a status of 409 (Conflict) http://localhost:4022/v1/staff/review/decisions"]
+member URL http://localhost:4022/id-liveness
+notices: ["Votre pièce d'identité n'a pas été acceptée : la pièce est expirée. Envoyez une nouvelle photo de votre pièce avec le bouton « Remplacer ».","Votre selfie n'a pas été accepté : le selfie n'est pas assez net. Reprenez le selfie en faisant le nouveau geste demandé."]
+pose card: ["\n\n\nGeste demandé pour le selfie\nTouchez votre oreille gauche\nFaites ce geste face à la caméra au moment de la photo.\n\n\n"]
+member id-liveness@360 sw=360 iw=360
+member id-liveness@390 sw=390 iw=390
+member id-liveness@768 sw=768 iw=768
+member id-liveness@1024 sw=1024 iw=1024
+member id-liveness@1280 sw=1280 iw=1280
+member id-liveness@1440 sw=1440 iw=1440
+AXE member id-liveness 390: 1 rules, serious/critical=1
+   serious color-contrast .text-3xl :: Element has insufficient color contrast of 1.92 (foreground color: #c9a86c, background color: #f4ecdd, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast section:nth-child(4) > .justify-between.items-center > .text-deep-navy\/60.text-\[11px\].font-medium :: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1
+   serious color-contrast span[data-icon="badge"] :: Element has insufficient color contrast of 1.89 (foreground color: #c9a86c, background color: #f3eadb, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast section:nth-child(5) > .justify-between.items-center > .text-deep-navy\/60.text-\[11px\].font-medium :: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1
+   serious color-contrast span[data-icon="lock"] :: Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+"pay|Premium|payer|paiement" text on page: false
+console [] bad [] storage {"ls":[],"ss":[]}
+member page targets <44px: ["Remplacer:61x16","switch-account:308x16"]
+H login 201
+H url http://localhost:4022/id-liveness
+H body: verified_user Vérification d'identité Étape confidentielle et inviolable destinée à préserver l'authenticité, la sincérité et le respect mutuel au sein de la communauté Ta'aruf. Votre compte est en attente d'une vérification complémentaire. Aucune action n'est demandée pour le moment. 1 Pièce officielle d'identité CNIB • Passeport • Carte Consulaire badge Délivrée par l'Office National d'Identification (Burkina Faso) Remplacer 2 Vérification de présence réelle (Liveness) Caméra frontale photo_camera_front radio_button_checked État : Caméra au repos / Prête Placez votre visage au centre du cadre ovale sous un éclairage doux et naturel. videocam Activer la caméra pour la capture refresh Repren

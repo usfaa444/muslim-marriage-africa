@@ -1,0 +1,26 @@
+--- /staff/revue page gate (no redirect follow)
+signed-out     303 http://localhost:4022/staff/connexion  0
+forged uuid    303 http://localhost:4022/staff/connexion  0
+stub staff     303 http://localhost:4022/staff/connexion  0
+member sister  303 http://localhost:4022/decouvrir  0
+mahram         303 http://localhost:4022/decouvrir  0
+mfa-pending    303 http://localhost:4022/staff/connexion  0
+operator       200  no-store 36458
+moderator      200  no-store 36460
+operator counts En attente : 9 • Hors délai (24 h) : 1 • Premium : 0 | msg Les dossiers, les pièces et les décisions sont réservés aux modérateurs. Vous voyez les compteurs de la file.
+operator queue buttons 0
+operator network 200 GET http://localhost:4022/v1/staff/review/queue
+operator bad [] []
+AXE operator: 0 rules, serious/critical=0
+session expiry mid-case -> redirected to http://localhost:4022/staff/connexion
+keyboard: reached a queue row after 3 tabs true
+keyboard open -> focus H2
+submit empty -> Choisissez une décision.
+reject without reason -> Choisissez un motif de refus.
+reason select options ["Choisissez un motif","Illisible","Pas une pièce d'identité","Nom ou visage différent","Pièce expirée"]
+side decision J selfie 200
+double-click POSTs sent 1
+stale message -> 
+after 409 selfie form present? 0 (case reloaded)
+ID approve double-click POSTs 1 | status Décision enregistrée : Approuvé. Visibilité du profil : non publiée.
+console [] bad []

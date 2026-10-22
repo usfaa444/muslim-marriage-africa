@@ -1,0 +1,35 @@
+unblur reason 9 chars                                      400 UNHANDLED {"field":"reason"} 
+unblur reason 9 + spaces padding                           400 UNHANDLED {"field":"reason"} 
+unblur reason 301 chars                                    400 UNHANDLED {"field":"reason"} 
+unblur reason missing                                      400 UNHANDLED {"field":"reason"} 
+unblur reason non-string                                   400 UNHANDLED {"field":"reason"} 
+unblur asset of other member (IDOR) acct=A asset=B         404 NOT_FOUND  
+unblur acct=B asset=A                                      404 NOT_FOUND  
+unblur asset id = acct id                                  404 NOT_FOUND  
+unblur sqli reason ok-length (stored literal)              201   
+unblur valid                                               201   
+grant url /v1/staff/review/photo?token=01a165b3-1ac5-76c9-9ec0-08d5d8c19d44 expires in s 59.995
+photo with grant, same mod1                                200   IMG
+photo headers no-store, private, max-age=0 inline image/png 101
+photo with grant, other moderator mod2                     403 FORBIDDEN  
+photo with grant, operator                                 403 FORBIDDEN {"reason":"moderator_required"} 
+photo with grant, member A                                 403 FORBIDDEN  
+photo with grant, signed out                               401 UNAUTHENTICATED  
+grant on /v1/media/get as member A (owner)                 403 FORBIDDEN  
+grant on /v1/media/get as member B                         403 FORBIDDEN  
+grant on /v1/media/get as mod1                             403 REVEAL_DENIED  
+grant on /v1/media/get anon                                401 UNAUTHENTICATED  
+photo token garbage                                        404 NOT_FOUND  
+photo token missing                                        404 NOT_FOUND  
+photo token array                                          404 NOT_FOUND  
+member-gateway blur grant used on staff photo endpoint     403 FORBIDDEN  
+blur via gateway 200 image/jpeg undefined 617
+photo after grant expiry (DB-forced)                       403 FORBIDDEN  
+waiting 62s for natural expiry
+photo after 62s natural expiry                             403 FORBIDDEN  
+moderator_photo_unblur|{"reason": "Comparer avec le selfie et la pièce", "asset_id": "01a165b2-4f37-7e2d-b60d-cfe566b2c7ac", "grant_id": "01a165b3-1c36-7315-a069-7f7305ef79b6", "account_id": "01a165b2-46d8-7568-8d03-62b4d1d5855a"}
+moderator_photo_unblur|{"reason": "Comparer avec le selfie et la pièce", "asset_id": "01a165b2-4f37-7e2d-b60d-cfe566b2c7ac", "grant_id": "01a165b3-1ac5-76c9-9ec0-08d5d8c19d44", "account_id": "01a165b2-46d8-7568-8d03-62b4d1d5855a"}
+moderator_photo_unblur|{"reason": "x'); drop table audit_event;-- <script>alert(1)</script>", "asset_id": "01a165b2-4f37-7e2d-b60d-cfe566b2c7ac", "grant_id": "01a165b3-1ab5-713c-bfef-107bba516a99", "account_id": "01a165b2-46d8-7568-8d03-62b4d1d5855a"}
+01a165b3-1c36-7315-a069-7f7305ef79b6|staff_unblur|2026-10-22 22:20:59.414+00|
+01a165b3-1ac5-76c9-9ec0-08d5d8c19d44|staff_unblur|2026-10-22 22:19:58.385393+00|
+01a165b3-1ab5-713c-bfef-107bba516a99|staff_unblur|2026-10-22 22:20:59.029+00|

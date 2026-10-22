@@ -1,0 +1,57 @@
+GET /staff/revue 200 no-store
+title AnKanu — Revue des inscriptions | h1 Revue des inscriptions
+counts En attente : 9 • Hors délai (24 h) : 1 • Premium : 0
+badge Réservé Staff / Confidentiel
+row 0: Revue_K_74456GratuitHors délaiProfilPrésentationPhotos : 1Pièce d'identitéSelfieEn attente depuis le 21 oct. 2026, 16:24
+row 1: Qa_072604500GratuitProfilPrésentationPièce d'identitéSelfieEn attente depuis le 22 oct. 2026, 22:14
+row 2: Qa_072628511GratuitProfilPrésentationSelfieEn attente depuis le 22 oct. 2026, 22:14
+row 3: Qa_072649952GratuitProfilPrésentationEn attente depuis le 22 oct. 2026, 22:14
+row 4: Qa_073818360GratuitProfilPrésentationPhotos : 1Pièce d'identitéSelfieEn attente depuis le 22 oct. 2026, 22:16
+row 5: Qa_075470431GratuitProfilPrésentationPhotos : 1SelfieEn attente depuis le 22 oct. 2026, 22:19
+row 6: Qa_075492762GratuitProfilPrésentationEn attente depuis le 22 oct. 2026, 22:19
+row 7: Qa_077231423GratuitProfilPrésentationPhotos : 1Pièce d'identitéSelfieEn attente depuis le 22 oct. 2026, 22:22
+row 8: Revue_J_72127GratuitProfilPrésentationPhotos : 1Pièce d'identitéSelfieEn attente depuis le 22 oct. 2026, 22:24
+queue@360 sw=360 iw=360 stacked=true
+queue@390 sw=390 iw=390 stacked=true
+queue@768 sw=768 iw=768 side-by-side=true
+queue@1024 sw=1024 iw=1024 side-by-side=true
+queue@1280 sw=1280 iw=1280 side-by-side=true
+queue@1440 sw=1440 iw=1440 side-by-side=true
+AXE queue-1440: 0 rules, serious/critical=0
+K row Revue_K_74456GratuitHors délaiProfilPrésentationPhotos : 1Pièce d'identitéSelfieEn attente depuis le 21 oct. 2026, 16:24
+K pose label Regardez vers la gauche (api pose look_left)
+focus after open: H2:Revue_K_74456
+case@360 sw=360 iw=360
+case@390 sw=390 iw=390
+case@768 sw=768 iw=768
+case@1024 sw=1024 iw=1024
+case@1280 sw=1280 iw=1280
+case@1440 sw=1440 iw=1440
+AXE case-1440-before-evidence: 0 rules, serious/critical=0
+evidence requests before click 0
+img src blob:http://localhost:4022/08831726-f302-4842-82ed-ea9a80bd6552
+img natural size 480x300
+evidence reqs 200 GET http://localhost:4022/v1/staff/review/evidence/01a165b7-7d0b-777d-8c18-61a7f6feadf7 | 200 GET http://localhost:4022/v1/staff/review/evidence/01a165b7-7d53-75cc-ab41-74e7b3e1671a
+download attr / links to evidence: 0
+draggable/contextmenu handlers? img draggable= 
+photo class review-blur absolute inset-0 w-full h-full object-cover
+unblur disabled initially true
+unblur disabled with 5 chars true
+unblur disabled with 9 chars true
+unblur disabled with valid false
+unblurred src blob:http://localhost:4022/bb84ed99-1636-4b00-881a-2b64296e0652
+unblur token appears in page URL? http://localhost:4022/staff/revue
+storage {"ls":[],"ss":[],"cookie":"ankanu_session=01a165b1-452a-7d14-a017-077868d0695c"}
+AXE case-1440-evidence-unblurred: 0 rules, serious/critical=0
+console errors: []
+failed requests: []
+4xx/5xx: []
+all /v1 + page requests:
+  200 GET http://localhost:4022/staff/revue
+  200 GET http://localhost:4022/v1/staff/review/queue
+  200 GET http://localhost:4022/v1/staff/review/cases/01a165b7-4e9e-7321-b90f-961b9ad7f29c
+  200 GET http://localhost:4022/v1/media/get?token=01a165b7-cf13-7205-938b-ee73dc36dbf9
+  200 GET http://localhost:4022/v1/staff/review/evidence/01a165b7-7d0b-777d-8c18-61a7f6feadf7
+  200 GET http://localhost:4022/v1/staff/review/evidence/01a165b7-7d53-75cc-ab41-74e7b3e1671a
+  201 POST http://localhost:4022/v1/staff/review/photos/unblur
+  200 GET http://localhost:4022/v1/staff/review/photo?token=01a165b7-db09-7ab1-9bb9-22aa25ba0229

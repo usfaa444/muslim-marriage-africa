@@ -1,0 +1,19 @@
+## migration-check
+> @ankanu/api@0.0.0 migration-check
+> drizzle-kit check
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/home/claude/ankanu-qa-review/code/apps/api/drizzle.config.ts'
+Everything's fine 🐶🔥
+## npm audit --omit=dev --audit-level=high
+fix available via `npm audit fix --force`
+Will install next@16.4.2, which is outside the stated dependency range
+node_modules/next
+
+1 critical severity vulnerability
+
+To address all issues, run:
+  npm audit fix --force
+audit exit 1
+## secrets / debug scan of the story diff (added lines)
+(end scan)

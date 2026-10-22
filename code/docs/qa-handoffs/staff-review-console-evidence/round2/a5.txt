@@ -1,0 +1,23 @@
+--- validation (member A)
+operator decides                                                   403 FORBIDDEN Réservé aux modérateurs. 
+reject no reason                                                   400 UNHANDLED reason : choisissez un motif de la liste. 
+reject bad reason                                                  400 UNHANDLED reason : choisissez un motif de la liste. 
+reject liveness reason on id                                       400 UNHANDLED reason : choisissez un motif de la liste. 
+approve with reason                                                400 UNHANDLED reason : aucun motif pour une approbation. 
+note 501 chars                                                     400 UNHANDLED note : 500 caractères au plus. 
+note non-string                                                    400 UNHANDLED note : 500 caractères au plus. 
+kind mismatch (liveness rec as id)                                 404 NOT_FOUND Ce dossier n'est pas dans la file. 
+wrong account for record                                           404 NOT_FOUND Ce dossier n'est pas dans la file. 
+unknown record                                                     404 NOT_FOUND Ce dossier n'est pas dans la file. 
+decision bogus                                                     400 UNHANDLED decision : approve, reject ou suspected_minor. 
+body array                                                         400 UNHANDLED kind : id_document ou liveness. 
+empty body                                                         400 UNHANDLED kind : id_document ou liveness. 
+status still pending: pending
+--- concurrency: mod1 approve vs mod2 reject on A liveness, in parallel
+parallel 0                                                         200   {"account_id":"01a165dc-d5c9-7228-a6f3-1cdc5ede42d4","kind":"liveness","record_id":"01a165dc-e1f6-7370-8fa4-33c8ca3abbb5","status":"granted","reason":null,"visibility":"unpublished","account_status":"Active"}
+parallel 1                                                         409 REVIEW_STALE La file a changé. Rechargez avant de décider. 
+final status: granted||01a165db-c7bb-7a6b-a29d-91f80350286e
+third decision on decided record                                   409 REVIEW_STALE La file a changé. Rechargez avant de décider. 
+--- 10x parallel on member B ID record
+statuses: 200,409,409,409,409,409,409,409,409,409 DB: rejected|expired
+audit decision rows for B id: 1

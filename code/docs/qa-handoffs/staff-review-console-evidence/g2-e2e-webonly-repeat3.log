@@ -1,0 +1,1425 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 150 tests using 1 worker
+
+  ✘    1 [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (3.5s)
+  ✓    2 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (1.8s)
+  ✓    3 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (1.8s)
+  ✘    4 [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.1s)
+  ✘    5 [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (2.0s)
+  ✓    6 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (1.5s)
+  ✓    7 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (1.4s)
+  ✘    8 [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (5.4s)
+  ✓    9 [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (1.7s)
+  ✓   10 [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (1.6s)
+  -   11 [mobile] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -   12 [mobile] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✓   13 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.1s)
+  -   14 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -   15 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓   16 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.1s)
+  ✓   17 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (325ms)
+  ✓   18 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (191ms)
+  -   19 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✘   20 [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (2.8s)
+  ✓   21 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (1.9s)
+  ✓   22 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (1.9s)
+  ✘   23 [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.2s)
+  ✘   24 [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (2.1s)
+  ✓   25 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (1.4s)
+  ✓   26 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (1.5s)
+  ✘   27 [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (4.7s)
+  ✓   28 [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (1.6s)
+  ✓   29 [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (1.6s)
+  -   30 [mobile] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -   31 [mobile] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✓   32 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (994ms)
+  -   33 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -   34 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓   35 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (908ms)
+  ✓   36 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (283ms)
+  ✓   37 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (186ms)
+  -   38 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✘   39 [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (2.8s)
+  ✓   40 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (1.8s)
+  ✓   41 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (1.9s)
+  ✘   42 [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.1s)
+  ✘   43 [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (1.9s)
+  ✓   44 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (1.5s)
+  ✓   45 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (1.4s)
+  ✘   46 [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (5.0s)
+  ✓   47 [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (1.8s)
+  ✓   48 [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (1.7s)
+  -   49 [mobile] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -   50 [mobile] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✓   51 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.1s)
+  -   52 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -   53 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓   54 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (967ms)
+  ✓   55 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (273ms)
+  ✓   56 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (192ms)
+  -   57 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓   58 [mobile] › e2e/staff-review.spec.ts:168:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.2s)
+  ✓   59 [mobile] › e2e/staff-review.spec.ts:262:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (971ms)
+  ✓   60 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › the staff home links to the console (423ms)
+  ✓   61 [mobile] › e2e/staff-review.spec.ts:282:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (200ms)
+  ✓   62 [mobile] › e2e/staff-review.spec.ts:288:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (174ms)
+  -   63 [mobile] › e2e/staff-review.spec.ts:353:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓   64 [mobile] › e2e/staff-review.spec.ts:168:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.3s)
+  ✓   65 [mobile] › e2e/staff-review.spec.ts:262:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (905ms)
+  ✓   66 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › the staff home links to the console (391ms)
+  ✓   67 [mobile] › e2e/staff-review.spec.ts:282:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (188ms)
+  ✓   68 [mobile] › e2e/staff-review.spec.ts:288:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (216ms)
+  -   69 [mobile] › e2e/staff-review.spec.ts:353:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓   70 [mobile] › e2e/staff-review.spec.ts:168:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.7s)
+  ✓   71 [mobile] › e2e/staff-review.spec.ts:262:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (1.0s)
+  ✓   72 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › the staff home links to the console (427ms)
+  ✓   73 [mobile] › e2e/staff-review.spec.ts:282:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (183ms)
+  ✓   74 [mobile] › e2e/staff-review.spec.ts:288:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (201ms)
+  -   75 [mobile] › e2e/staff-review.spec.ts:353:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✘   76 [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (2.8s)
+  ✓   77 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (1.7s)
+  ✓   78 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (1.5s)
+  ✘   79 [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.1s)
+  ✘   80 [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (2.0s)
+  ✓   81 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (1.4s)
+  ✓   82 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (1.3s)
+  ✘   83 [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (5.0s)
+  ✓   84 [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (1.6s)
+  ✓   85 [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (1.5s)
+  -   86 [desktop] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -   87 [desktop] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✓   88 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (994ms)
+  ✓   89 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (596ms)
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓   90 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width (1.4s)
+  ✓   91 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.3s)
+  ✓   92 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (354ms)
+  ✓   93 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (225ms)
+  -   94 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✘   95 [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (2.9s)
+  ✓   96 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (1.6s)
+  ✓   97 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (1.5s)
+  ✘   98 [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.1s)
+  ✘   99 [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (2.0s)
+  ✓  100 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (1.4s)
+  ✓  101 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (1.3s)
+  ✘  102 [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (4.9s)
+  ✓  103 [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (1.7s)
+  ✓  104 [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (1.7s)
+  -  105 [desktop] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -  106 [desktop] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✓  107 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (959ms)
+  ✓  108 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (672ms)
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  109 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width (1.1s)
+  ✓  110 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.2s)
+  ✓  111 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (339ms)
+  ✓  112 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (191ms)
+  -  113 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✘  114 [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (3.1s)
+  ✓  115 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (1.7s)
+  ✓  116 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (1.6s)
+  ✘  117 [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (1.1s)
+  ✘  118 [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (2.2s)
+  ✓  119 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (1.4s)
+  ✓  120 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (1.3s)
+  ✘  121 [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (4.9s)
+  ✓  122 [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (1.6s)
+  ✓  123 [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (1.5s)
+  -  124 [desktop] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -  125 [desktop] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✓  126 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (994ms)
+  ✓  127 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (682ms)
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  128 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width (1.1s)
+  ✓  129 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.2s)
+  ✓  130 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (305ms)
+  ✓  131 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (242ms)
+  -  132 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  133 [desktop] › e2e/staff-review.spec.ts:168:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.4s)
+  ✓  134 [desktop] › e2e/staff-review.spec.ts:262:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (886ms)
+  ✓  135 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › the staff home links to the console (407ms)
+  ✓  136 [desktop] › e2e/staff-review.spec.ts:282:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (178ms)
+  ✓  137 [desktop] › e2e/staff-review.spec.ts:288:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (173ms)
+  -  138 [desktop] › e2e/staff-review.spec.ts:353:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  139 [desktop] › e2e/staff-review.spec.ts:168:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.3s)
+  ✓  140 [desktop] › e2e/staff-review.spec.ts:262:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (892ms)
+  ✓  141 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › the staff home links to the console (381ms)
+  ✓  142 [desktop] › e2e/staff-review.spec.ts:282:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (158ms)
+  ✓  143 [desktop] › e2e/staff-review.spec.ts:288:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (235ms)
+  -  144 [desktop] › e2e/staff-review.spec.ts:353:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  145 [desktop] › e2e/staff-review.spec.ts:168:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.4s)
+  ✓  146 [desktop] › e2e/staff-review.spec.ts:262:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (860ms)
+  ✓  147 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › the staff home links to the console (412ms)
+  ✓  148 [desktop] › e2e/staff-review.spec.ts:282:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (241ms)
+  ✓  149 [desktop] › e2e/staff-review.spec.ts:288:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (206ms)
+  -  150 [desktop] › e2e/staff-review.spec.ts:353:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+
+
+  1) [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:252:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:306:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:340:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:405:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:252:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:306:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:340:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:405:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:252:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:306:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:340:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:405:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:252:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:306:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:340:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:405:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:252:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:306:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:340:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:405:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:252:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:306:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:340:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious color-contrast at span[data-icon=\"lock\"]: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/ankanu-qa-review/code/e2e/fixtures.ts:55:5)
+        at expectAccessibleAsShipped (/home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:204:3)
+        at /home/claude/ankanu-qa-review/code/e2e/profile-edit-flow.spec.ts:405:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24 failed
+    [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+  30 skipped
+  96 passed (3.8m)
+exit 1

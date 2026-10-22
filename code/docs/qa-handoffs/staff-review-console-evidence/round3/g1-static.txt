@@ -1,0 +1,9 @@
+
+apps/web/src/v2-flow.test.ts:497:9: warning eslint(no-unused-vars): Variable 'editBtn' is declared but never used. Unuse
+apps/web/src/photo-rules.test.ts:60:9: warning typescript(no-this-alias): Unexpected aliasing of 'this' to local variabl
+apps/api/src/life-pause.ts:18:19: warning eslint(no-control-regex): Unexpected control characters help: Avoid matching c
+typecheck-exit 0
+Everything's fine 🐶🔥
+Severity: critical
+1 critical severity vulnerability
+scan-done

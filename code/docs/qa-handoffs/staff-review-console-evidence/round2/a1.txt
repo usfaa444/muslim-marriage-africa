@@ -1,0 +1,23 @@
+PASS A1.1 challenge signed-out 401 401
+FAIL A1.2 challenge before phone OTP 403 403{"error":{"code":"FORBIDDEN","message":"Vérification du téléphone requise.","details":{"required":"phone_otp"},"request_id":"01a165de-5a82-717b-9d2f-866d83872944","retryable":false}}
+PASS A1.3 challenge 201 shape {"challenge_id":"01a165de-5a8a-78e9-bd0c-d34e4f8ac9a6","pose":"two_fingers","pose_label":"Montrez deux doigts","expires_at":"2026-10-22T23:17:13.418Z"}
+PASS A1.3b no-store on challenge no-store
+PASS A1.4 all 6 poses appear in 60 draws {"look_left":11,"two_fingers":10,"thumbs_up":14,"hand_on_chin":9,"touch_left_ear":10,"raise_right_hand":6}
+FAIL A1.5 replaced challenge refused 400 VERIFICATION_RETAKE 400{"error":{"code":"VERIFICATION_RETAKE","message":"Reprenez la capture.","details":{"field":"challenge_id","reason":"challenge"},"request_id":"01a165de-5ce2-780d-bce6-45a8ebb2cca5","retryable":true}}
+FAIL A1.6 missing challenge_id refused 400
+PASS A1.7 garbage challenge_id refused 400
+PASS A1.8 other member challenge refused 400
+PASS A1.9 owner can still use hers (not burned by foreign attempt) 201{"id":"01a165de-5d18-76ac-bf17-bbc425913140","kind":"liveness","status":"pending"}
+PASS A1.10 valid selfie 201 201{"id":"01a165de-5d29-7773-91cb-bbd1081ab5e3","kind":"liveness","status":"pending"}
+PASS A1.11 replay of used challenge refused 400
+PASS A1.12 5 parallel uses -> exactly one 201 201,400,400,400,400
+liveness|pending|thumbs_up|103
+liveness|pending|touch_left_ear|103
+PASS A1.13 pose stored on liveness row matches hand_on_chin
+PASS A1.14 expired challenge refused 400
+PASS A1.15 ttl ~600s 599.996
+PASS A1.16 huge challenge_id 400 400
+PASS A1.17 ID upload still works without challenge 201
+GET challenge -> 404
+PASS A1.18 SQLi challenge_id 400 400
+PASS A1.19 client pose ignored, server pose stored raise_right_hand vs raise_right_hand

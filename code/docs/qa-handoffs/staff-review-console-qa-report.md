@@ -195,3 +195,45 @@ I rate R2-1 Major because the severity rule counts an axe `serious` result as bl
 ## Not tested in round 2
 
 Same as round 1: WebKit, Lighthouse under the real CDN, ZAP, exact Stitch pixel match, Premium ordering end to end, and baseline-commit runs of the 5 public smoke failures. `compose.test.ts` was not run.
+
+---
+
+# Retest, round 3
+
+model: Claude Sonnet 5.5 (claude-sonnet-5-5)
+
+Verdict: **PASS** (2026-10-22), commit `de14803`. R2-1 is fixed. No open finding above Minor. The remaining test-environment limits are listed at the end.
+
+- Environment: fresh stack from this commit (compose project `ankanu-qa-review`, new images, **fresh database**, migrations 0000 to 0020, bucket created). No pg-data-deleting test ran next to the stack. Cleanup done: stack `down -v`, images and scratch files removed, `/etc/hosts` and `next-env.d.ts` restored, no standin or dev server left, worktree clean apart from the evidence folder.
+- Evidence: `staff-review-console-evidence/round3/`.
+- One change to my sandbox stand-in this round: the Material icon ligature text is set to `font-size:0` (the icon font cannot load here), so axe no longer reports gold icon text. This removes the artefact that produced the icon-contrast noise in rounds 1 and 2. Real text is unaffected.
+
+## R2-1 and the new work
+
+| Item | Result | How verified |
+| --- | --- | --- |
+| R2-1 "Caméra frontale" contrast | **FIXED** | The label and its 11 px neighbour ("Délivrée par l'Office…") are now `text-deep-navy/80`. My own axe pass (WCAG 2.0, 2.1, 2.2 A and AA) on the **real stack**, at 360, 390 and 1440 px, 27 runs: 0 violations (serious or critical total: 0). States reached: ID and selfie steps with a pose; both refusal notices with a new pose; held notice; pose-unavailable message (5xx, plus a 4xx and a network failure); staff queue; staff case with ID, selfie, decision forms, photo and profile form; staff alert after a real 409; Operator view. No horizontal overflow in any of them. Evidence: `b10-axe-sweep-real-stack.txt`. |
+| Pose service failure message | PASS | A 503 on the challenge gives "Le geste à faire n'a pas pu être chargé. Réessayez."; a network failure gives the same; a 4xx keeps the API's French message ("Vérification du téléphone requise."). |
+| New web-only axe sweep catches a regression | PASS, with a caveat about how I proved it | Mutation: I put the "Caméra frontale" label back to `navy/60`. The unit test "keeps no 11 px text on the page lighter than navy/70" fails (`Tests 1 failed | 21 passed`). The sweep first appeared to pass with the mutation, but that was my stand-in stylesheet, which did not contain the `/60` class (computed colour was full navy, so no contrast issue existed). After I added the class to the stand-in CSS, the sweep fails on the id-liveness test with `serious color-contrast at .text-deep-navy\/60`, and passes again once the code is restored. With the real Tailwind CDN the class is generated on demand, so this stand-in gap does not apply there. Evidence: `g2-mutation-sweep.txt`. |
+
+## Gates re-run
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS. Lint exit 0 (same 3 old warnings), typecheck pass, migration-check "Everything's fine", no secrets or debug leftovers in the round 3 diff, audit unchanged (the old `next` critical, F10). | `g1-static.txt` |
+| G2 Tests | PASS. Unit `Tests 1 failed | 481 passed | 12 skipped (494)`; the one failure is the known `photo-rules.test.ts`. Stack e2e: 33 passed, 56 skipped, 3 failed. The full-stack capture-to-publish test **passes** (1.2 min, a real member, random pose, real Moderator with TOTP, stale 409, unblur, publish, Operator counts only), and so does the staff first sign-in test. The 3 failures are on pages this commit does not touch: `/auth` (`target-size` on the remember-me checkbox and a 125x16 link) in two projects, and `/` at 1024 px (1068 > 1024). They are the same items as rounds 1 and 2 (a smaller set now that the icon text is neutralised). Web-only `staff-review` and `staff-shell` with `--repeat-each=3`: 84 passed, 24 skipped, 0 failed, so no flakes. | `unit-run.txt`, `g2-e2e-*.log` |
+| G3 to G5 | PASS. All of F1 to F9 from round 2 are unchanged and the new message paths work. | `b10` |
+| G6 Accessibility | PASS. The touched states are clean (see R2-1). | `b10-axe-sweep-real-stack.txt` |
+| G7 Non-functional | PASS. Access matrix identical to rounds 1 and 2 (10 callers over 10 endpoints; non-staff callers 401 or 403; the Operator gets the queue and metrics only; `no-store` on cases and metrics), evidence headers (`no-store, private, max-age=0`, `inline`, `nosniff`), pose and challenge checks (17 pass; the 3 "FAIL" lines are my harness reading `error.code` at the wrong depth, not product failures). | `a1.txt`, `a2.txt`, `a3.txt` |
+| G8 Regression | PASS apart from the 3 old smoke items above. | `g2-e2e-stack-full.log` |
+
+## Findings
+
+| # | Severity | Note |
+| --- | --- | --- |
+| R3-1 | Minor | The "pose expired" state could not be reached through my own browser run: the stubbed 400 gave "La photo de présence est manquante." because the fake-camera frame was not ready in my flow. The e2e sweep covers that state (it passes), and the message styling is the same as the other error lines. |
+| — | Info | The 3 old smoke failures and the `next` audit are not caused by this story. |
+
+## Not tested in round 3
+
+Same as before: WebKit, Lighthouse under the real CDN, ZAP, exact Stitch pixel match, Premium ordering end to end (the billing port is `unavailable`), baseline-commit runs of the old smoke items, and `compose.test.ts`. The axe results depend on my Tailwind stand-in rather than the CDN, so I checked contrast with computed colours and a deliberate regression, as described above.

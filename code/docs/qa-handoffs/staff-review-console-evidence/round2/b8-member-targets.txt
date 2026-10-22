@@ -1,0 +1,11 @@
+J latest ID row: granted|-|01a165db-cfe8-7d04-a77e-ca3291ebfb4a (approved by mod2 01a165db-cfe8-7d04-a77e-ca3291ebfb4a)
+J audit decisions: approve|01a165db-cfe8-7d04-a77e-ca3291ebfb4a
+member new @360: overflow {"sw":360,"iw":360} targets<44: [] pose card: true
+member new @390: overflow {"sw":390,"iw":390} targets<44: [] pose card: true
+AXE member id-liveness 390 (round2): 1 rules, serious/critical=1
+   serious color-contrast .text-3xl :: Element has insufficient color contrast of 1.92 (foreground color: #c9a86c, background color: #f4ecdd, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast span[data-icon="badge"] :: Element has insufficient color contrast of 1.89 (foreground color: #c9a86c, background color: #f3eadb, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast .text-deep-navy\/60 :: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1
+   serious color-contrast span[data-icon="lock"] :: Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+member new @768: overflow {"sw":768,"iw":768} targets<44: [] pose card: true
+member new @1440: overflow {"sw":1440,"iw":1440} targets<44: [] pose card: true
