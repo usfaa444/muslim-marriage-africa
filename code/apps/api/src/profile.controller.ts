@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpException, Patch, Put, Req } from '@nestjs/common'
+import { Body, Controller, Get, Header, HttpException, Patch, Put, Req, Res } from '@nestjs/common'
 import { ageOn } from './create-account.js'
 import { authNow } from './auth-clock.js'
 import { getAccountStore } from './account-store.js'
@@ -11,6 +11,10 @@ import { getProfileStore, type StoredProfile } from './profile-store.js'
 
 type CookieRequest = {
   headers?: { cookie?: string | string[] }
+}
+
+type HeaderResponse = {
+  setHeader(name: string, value: string): void
 }
 
 function reject(status: 400 | 503, error: { field: string; message: string }, retryable = false): never {
@@ -87,10 +91,14 @@ async function memberAccount(request: CookieRequest): Promise<{ accountId: strin
   return { accountId: session.account_id, gender: session.gender }
 }
 
+// Every body carries signed photo URLs that expire after signed_url_ttl_seconds. A browser
+// must never reuse one, including on a back/forward navigation, so nothing here is stored.
 @Controller('me')
 export class ProfileController {
   @Get('profile')
-  async read(@Req() request: CookieRequest) {
+  @Header('Cache-Control', 'no-store')
+  async read(@Req() request: CookieRequest, @Res({ passthrough: true }) response: HeaderResponse) {
+    response.setHeader('Cache-Control', 'no-store')
     const member = await memberAccount(request)
     const row = await getProfileStore().read(member.accountId)
     if (!row) {
@@ -105,7 +113,13 @@ export class ProfileController {
   }
 
   @Put('profile')
-  async save(@Req() request: CookieRequest, @Body() body: unknown) {
+  @Header('Cache-Control', 'no-store')
+  async save(
+    @Req() request: CookieRequest,
+    @Res({ passthrough: true }) response: HeaderResponse,
+    @Body() body: unknown,
+  ) {
+    response.setHeader('Cache-Control', 'no-store')
     const member = await memberAccount(request)
     const current = await getProfileStore().read(member.accountId)
     if (!current) {
@@ -135,7 +149,13 @@ export class ProfileController {
   }
 
   @Patch('profile')
-  async blur(@Req() request: CookieRequest, @Body() body: unknown) {
+  @Header('Cache-Control', 'no-store')
+  async blur(
+    @Req() request: CookieRequest,
+    @Res({ passthrough: true }) response: HeaderResponse,
+    @Body() body: unknown,
+  ) {
+    response.setHeader('Cache-Control', 'no-store')
     const member = await memberAccount(request)
     const accepted = acceptPhotoBlur(body)
     if ('field' in accepted) {

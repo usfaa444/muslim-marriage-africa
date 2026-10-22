@@ -1211,7 +1211,7 @@ export function reviewScript(): string {
         window.location.assign(reviewReturn())
       })
     }
-    fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
+    fetch('/v1/me/profile', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
       return response.json().then(function (body) {
         var photo = body && body.photo
         var pending = photo && photo.moderation_state === 'pending'
@@ -1323,12 +1323,56 @@ export function profileScript(): string {
 
     var touched = {}
     var profileLoaded = false
+    // The controls payload() sends. Edits to them are unsaved until a PUT that carried them succeeds.
+    var PROFILE_FIELDS = {
+      dob: 1, origin: 1, country_residence: 1, city_residence: 1, education: 1, job: 1, marital_status: 1,
+      polygyny_intent: 1, madhhab: 1, religious_practice: 1, marriage_timeframe: 1, intentions: 1, bio: 1
+    }
+    var editCount = 0
+    var savedCount = 0
 
     function markTouched(event) {
       var el = event && event.target
       if (!el) return
       var key = el.id || el.name
       if (key) touched[key] = true
+      if (key && Object.prototype.hasOwnProperty.call(PROFILE_FIELDS, key)) editCount += 1
+    }
+
+    function hasUnsavedEdits() {
+      return editCount !== savedCount
+    }
+
+    // Each read signs fresh photo URLs that expire after signed_url_ttl_seconds. Never reuse a stored copy,
+    // which a back/forward navigation would otherwise serve.
+    function readProfile() {
+      return fetch('/v1/me/profile', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+        return response.json().then(function (body) {
+          return { ok: response.ok, body: body }
+        }, function () {
+          return { ok: false, body: null }
+        })
+      })
+    }
+
+    function saveProfile() {
+      var sentAt = editCount
+      return fetch('/v1/me/profile', {
+        method: 'PUT',
+        credentials: 'same-origin',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload())
+      }).then(function (response) {
+        return response.json().then(function (body) {
+          if (response.ok) savedCount = sentAt
+          return { ok: response.ok, body: body }
+        })
+      })
+    }
+
+    function saveFailure(result) {
+      var message = result && result.body && result.body.error && result.body.error.message
+      showStatus(message || 'Enregistrement impossible.')
     }
 
     function paintMeter(completeness) {
@@ -1499,17 +1543,14 @@ export function profileScript(): string {
       form.addEventListener('change', markTouched)
     }
 
-    fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (response) {
-      return response.json().then(function (body) {
-        return { ok: response.ok, body: body }
-      }, function () {
-        return { ok: false, body: null }
-      })
-    }).then(function (result) {
-      if (!result.ok || !result.body || typeof result.body.dob !== 'string') return
+    var profileRead = readProfile().then(function (result) {
+      if (!result.ok || !result.body || typeof result.body.dob !== 'string') return false
       applyProfile(result.body, true)
       profileLoaded = true
-    }).catch(function () {})
+      return true
+    }).catch(function () {
+      return false
+    })
 
     var photoPickerUntil = 0
     var photoFile = document.getElementById('profile-photo-file')
@@ -1543,13 +1584,7 @@ export function profileScript(): string {
               showStatus(uploadFailure(result.body))
               return
             }
-            return fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (profileResponse) {
-              return profileResponse.json().then(function (profile) {
-                return { ok: profileResponse.ok, body: profile }
-              }, function () {
-                return { ok: false, body: null }
-              })
-            }).then(function (read) {
+            return readProfile().then(function (read) {
               var photos = read.ok && read.body ? photoList(read.body) : []
               var live = false
               for (var photoIndex = 0; photoIndex < photos.length; photoIndex += 1) {
@@ -1618,13 +1653,7 @@ export function profileScript(): string {
             showStatus(message || 'Modification de la photo impossible.')
             return
           }
-          return fetch('/v1/me/profile', { credentials: 'same-origin' }).then(function (profileResponse) {
-            return profileResponse.json().then(function (profile) {
-              return { ok: profileResponse.ok, body: profile }
-            }, function () {
-              return { ok: false, body: null }
-            })
-          }).then(function (read) {
+          return readProfile().then(function (read) {
             if (!read.ok || !read.body) {
               var message = read.body && read.body.error && read.body.error.message
               showStatus(message || 'Modification de la photo impossible.')
@@ -1636,6 +1665,30 @@ export function profileScript(): string {
           showStatus('Modification de la photo impossible.')
         })
       })
+    }
+
+    // A photo URL is a short-lived grant. When one fails (expired while the page stayed open, or the page
+    // came back from the back/forward cache), read fresh grants and repaint the grid only. Two repairs per view.
+    var photoRepair = null
+    var photoRepairs = 0
+    function repairPhotos() {
+      if (photoRepair) return photoRepair
+      photoRepair = readProfile().then(function (read) {
+        photoRepair = null
+        if (read.ok && read.body && typeof read.body.dob === 'string') paintPhoto(read.body)
+      }, function () {
+        photoRepair = null
+      })
+      return photoRepair
+    }
+    if (photoGrid) {
+      photoGrid.addEventListener('error', function (event) {
+        var target = event && event.target
+        if (!target || String(target.tagName || '').toUpperCase() !== 'IMG') return
+        if (photoRepair || photoRepairs >= 2) return
+        photoRepairs += 1
+        repairPhotos()
+      }, true)
     }
 
     document.querySelectorAll('button').forEach(function (button) {
@@ -1657,19 +1710,9 @@ export function profileScript(): string {
       button.addEventListener('click', function () {
         if (!profileLoaded) return
         showStatus('')
-        fetch('/v1/me/profile', {
-          method: 'PUT',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(payload())
-        }).then(function (response) {
-          return response.json().then(function (body) {
-            return { ok: response.ok, body: body }
-          })
-        }).then(function (result) {
+        saveProfile().then(function (result) {
           if (!result.ok) {
-            var message = result.body && result.body.error && result.body.error.message
-            showStatus(message || 'Enregistrement impossible.')
+            saveFailure(result)
             return
           }
           applyProfile(result.body)
@@ -1682,19 +1725,67 @@ export function profileScript(): string {
 
     var pinInput = document.getElementById('profile-pin')
     var pinEnabled = false
-    fetch('/v1/pin', { credentials: 'same-origin' }).then(function (response) {
-      return response.json()
-    }).then(function (body) {
-      pinEnabled = !!(body && body.enabled)
+    var pinLeaving = false
+    function readPinState() {
+      fetch('/v1/pin', { credentials: 'same-origin', cache: 'no-store' }).then(function (response) {
+        return response.json()
+      }).then(function (body) {
+        pinEnabled = !!(body && body.enabled)
+        if (pinInput && !pinLeaving) pinInput.checked = pinEnabled
+      }).catch(function () {})
+    }
+    readPinState()
+    function openPin() {
+      window.location.assign('/pin?next=' + encodeURIComponent('/profile-edit'))
+    }
+    function stayForPin(result) {
+      pinLeaving = false
       if (pinInput) pinInput.checked = pinEnabled
-    }).catch(function () {})
+      saveFailure(result)
+    }
     if (pinInput) {
       pinInput.addEventListener('change', function () {
-        if (pinInput.checked && !pinEnabled) {
-          window.location.assign('/pin')
+        if (pinLeaving) {
+          pinInput.checked = true
           return
         }
-        pinInput.checked = pinEnabled
+        if (!pinInput.checked || pinEnabled) {
+          pinInput.checked = pinEnabled
+          return
+        }
+        pinLeaving = true
+        if (!hasUnsavedEdits()) {
+          openPin()
+          return
+        }
+        // Save what the member typed through the same save as the button, then open /pin.
+        // A save before the profile is read would blank the fields she did not touch, so wait for it.
+        showStatus('')
+        profileRead.then(function (loaded) {
+          if (!loaded) {
+            stayForPin(null)
+            return
+          }
+          return saveProfile().then(function (result) {
+            if (!result.ok) {
+              stayForPin(result)
+              return
+            }
+            openPin()
+          })
+        }).catch(function () {
+          stayForPin(null)
+        })
+      })
+    }
+
+    if (window.addEventListener) {
+      window.addEventListener('pageshow', function (event) {
+        if (!event || !event.persisted) return
+        pinLeaving = false
+        photoRepairs = 0
+        readPinState()
+        repairPhotos()
       })
     }
 
