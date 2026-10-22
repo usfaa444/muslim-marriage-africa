@@ -1,0 +1,146 @@
+{
+ "phone-360": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".mt-2 > span:nth-child(2)",
+    ".text-deep-navy\\/55 > span:nth-child(2)"
+   ]
+  }
+ ],
+ "phone-390": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".mt-2 > span:nth-child(2)",
+    ".text-deep-navy\\/55 > span:nth-child(2)"
+   ]
+  }
+ ],
+ "phone-768": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".mt-2 > span:nth-child(2)",
+    ".text-deep-navy\\/55 > span:nth-child(2)"
+   ]
+  }
+ ],
+ "phone-1024": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".mt-2 > span:nth-child(2)",
+    ".text-deep-navy\\/55 > span:nth-child(2)"
+   ]
+  }
+ ],
+ "phone-1280": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".mt-2 > span:nth-child(2)",
+    ".text-deep-navy\\/55 > span:nth-child(2)"
+   ]
+  }
+ ],
+ "phone-1440": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".mt-2 > span:nth-child(2)",
+    ".text-deep-navy\\/55 > span:nth-child(2)"
+   ]
+  }
+ ],
+ "otp-360": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".text-deep-navy\\/60",
+    ".text-\\[11px\\] > span:nth-child(2)"
+   ]
+  }
+ ],
+ "otp-390": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".text-deep-navy\\/60",
+    ".text-\\[11px\\] > span:nth-child(2)"
+   ]
+  }
+ ],
+ "otp-768": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".text-deep-navy\\/60",
+    ".text-\\[11px\\] > span:nth-child(2)"
+   ]
+  }
+ ],
+ "otp-1024": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".text-deep-navy\\/60",
+    ".text-\\[11px\\] > span:nth-child(2)"
+   ]
+  }
+ ],
+ "otp-1280": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".text-deep-navy\\/60",
+    ".text-\\[11px\\] > span:nth-child(2)"
+   ]
+  }
+ ],
+ "otp-1440": [
+  {
+   "id": "color-contrast",
+   "impact": "serious",
+   "nodes": 2,
+   "help": "Elements must meet minimum color contrast ratio thresholds",
+   "targets": [
+    ".text-deep-navy\\/60",
+    ".text-\\[11px\\] > span:nth-child(2)"
+   ]
+  }
+ ]
+}

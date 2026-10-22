@@ -1,0 +1,10 @@
+# api.env (env_file) holds SMS_PROVIDER=aqilas, AQILAS_API_KEY=test-key; the --env-file (interpolation) file has no SMS lines
+      AQILAS_API_KEY: ""
+      AQILAS_API_URL: ""
+      AQILAS_SENDER_ID: ""
+      SMS_PROVIDER: log
+# now the same values in the interpolation env file instead (README advice)
+      AQILAS_API_KEY: test-key
+      AQILAS_API_URL: http://sms-stub:8099/api/v1/sms
+      AQILAS_SENDER_ID: ""
+      SMS_PROVIDER: aqilas

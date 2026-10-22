@@ -1,0 +1,16 @@
+PASS F2pre otp-step account prepared via API | 201
+FAIL F2-phone-360 /phone @360: no horizontal scroll; axe 0 serious/critical | scrollWidth=360 innerWidth=360 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-390 /phone @390: no horizontal scroll; axe 0 serious/critical | scrollWidth=390 innerWidth=390 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-768 /phone @768: no horizontal scroll; axe 0 serious/critical | scrollWidth=768 innerWidth=768 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1024 /phone @1024: no horizontal scroll; axe 0 serious/critical | scrollWidth=1024 innerWidth=1024 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1280 /phone @1280: no horizontal scroll; axe 0 serious/critical | scrollWidth=1280 innerWidth=1280 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-phone-1440 /phone @1440: no horizontal scroll; axe 0 serious/critical | scrollWidth=1440 innerWidth=1440 axe=color-contrast:serious smallTargets=a#switch-account.inline-block max-w-f 203x16
+FAIL F2-otp-360 /otp @360: no horizontal scroll; axe 0 serious/critical | scrollWidth=360 innerWidth=360 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 94x32; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-390 /otp @390: no horizontal scroll; axe 0 serious/critical | scrollWidth=390 innerWidth=390 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-768 /otp @768: no horizontal scroll; axe 0 serious/critical | scrollWidth=768 innerWidth=768 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1024 /otp @1024: no horizontal scroll; axe 0 serious/critical | scrollWidth=1024 innerWidth=1024 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1280 /otp @1280: no horizontal scroll; axe 0 serious/critical | scrollWidth=1280 innerWidth=1280 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+FAIL F2-otp-1440 /otp @1440: no horizontal scroll; axe 0 serious/critical | scrollWidth=1440 innerWidth=1440 axe=color-contrast:serious smallTargets=button#resend-btn.font-medium text-dee 99x16; a#.font-body text-xs te 105x16; a#switch-account.inline-block max-w-f 201x16
+
+SUMMARY 1 pass, 12 fail, 0 notes
+FAILED: F2-phone-360, F2-phone-390, F2-phone-768, F2-phone-1024, F2-phone-1280, F2-phone-1440, F2-otp-360, F2-otp-390, F2-otp-768, F2-otp-1024, F2-otp-1280, F2-otp-1440

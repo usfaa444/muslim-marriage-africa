@@ -1,0 +1,23 @@
+PASS F1a /phone renders for a phone-step account (no redirect) | http://localhost:4021/phone
+PASS F1b submit -> /otp, vendor received exactly one SMS to +226<digits> | url=http://localhost:4021/otp calls=1 to=+22600001201
+PASS F1c OTP screen shows only the masked number | +226 00 •• •• 01
+PASS F1d reload on /otp keeps the pending state (masked number re-read from server) | http://localhost:4021/otp
+PASS F1e code from the vendor SMS typed in the 6 boxes -> /id-liveness | http://localhost:4021/id-liveness
+PASS F1f persisted: verification_record status granted | granted
+FAIL F1g no console errors, page errors, failed requests or 4xx/5xx during the happy path | POST http://localhost:4021/v1/verifications/otp net::ERR_ABORTED
+PASS F3a API answers 503 UNHANDLED retryable for the browser call | 503 {"error":{"code":"UNHANDLED","message":"L'envoi du code a échoué.","details":null,"request_id":"01a1628a-7688-7aa7-be56-9924ae9441da","retryable":true}}
+FAIL F3b member is told the send failed and can retry (error message visible on /phone) | visible text mentions failure: false; role=alert/status/aria-live regions: []; url=http://localhost:4021/phone
+PASS F3c form keeps the typed number after the failure | 00001202
+PASS F3d after the vendor recovers, pressing Enter again sends and reaches /otp | http://localhost:4021/otp
+NOTE F3e console during failure | expected 503 responses=1; console=["Failed to load resource: the server responded with a status of 503 (Service Unavailable) http://localhost:4021/v1/verifications/otp"]; other problems=["POST http://localhost:4021/v1/verifications/otp net::ERR_ABORTED"]
+PASS F4a Resend inside 60 s: no second SMS (Story 2.7 cooldown) | calls=1
+FAIL F4b Resend while vendor fails: vendor tried once; member sees an error | calls=2 errorVisible=false
+PASS F4c after the failed resend the first code is still the stored one | 1
+PASS F4d Resend with vendor healthy: new SMS with a different code | calls=3 first=495764 second=784420
+PASS F4e old code rejected (400), new code accepted (200) | 400/200
+PASS F6a Slow 3G + 1.5 s vendor: reaches /otp; triple submit sends ONE SMS | 28436 ms to /otp; vendorCalls=1
+NOTE F6b time to feedback | submit->/otp 28436 ms (3G + 1.5 s vendor). The send button shows no pending/disabled state in this screen.
+FAIL F10 non-digit junk in the field never reaches the vendor (client needs 8 digits; server validates E.164) | typed="<img src=x onerror=alert(1)>'; DROP--" vendorCalls=1
+
+SUMMARY 14 pass, 4 fail, 2 notes
+FAILED: F1g, F3b, F4b, F10

@@ -1,0 +1,2 @@
+boot: accepted a key containing a newline
+send -> aqilas send failed | log: ["sms aqilas network error\n"]

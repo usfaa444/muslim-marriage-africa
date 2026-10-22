@@ -1,0 +1,47 @@
+
+ RUN  v5.0.3 /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/parent/code
+
+ ❯ apps/api/src/compose.test.ts (10 tests | 2 skipped) 85589ms
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/api/src/compose.test.ts > docker compose up
+Error: docker compose -p ankanu --env-file /tmp/ankanu-compose-R3LUUx/empty.env -f /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/parent/code/compose.yaml up -d --build --wait --wait-timeout 600 failed (1)
+ Image web Building 
+ Image api Building 
+Dockerfile:19
+
+--------------------
+
+  17 |     COPY packages/kernel/package.json packages/kernel/package.json
+
+  18 |     COPY packages/ports/package.json packages/ports/package.json
+
+  19 | >>> RUN npm ci --omit=dev
+
+  20 |     COPY --from=build /app/packages/kernel/dist packages/kernel/dist
+
+  21 |     COPY --from=build /app/packages/ports/dist packages/ports/dist
+
+--------------------
+
+target api: failed to solve: process "/bin/sh -c npm ci --omit=dev" did not complete successfully: exit code: 1
+
+
+ ❯ apps/api/src/compose.test.ts:63:18
+     61|         const code = error === null ? 0 : typeof error.code === 'numbe…
+     62|         if (error && options?.allowFailure !== true) {
+     63|           reject(new Error(`docker ${args.join(' ')} failed (${code})\…
+       |                  ^
+     64|           return
+     65|         }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 passed | 2 skipped (10)
+   Start at  07:17:24
+   Duration  85.90s (tests 100%)
+
+exit 1

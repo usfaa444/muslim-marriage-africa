@@ -1,0 +1,9 @@
+ankanu-qa-api-1 Up 4 minutes (healthy)
+ankanu-qa-bucket-1 Up 42 minutes (healthy)
+ankanu-qa-google-stub-1 Up 42 minutes
+ankanu-qa-postgres-1 Up 42 minutes (healthy)
+ankanu-qa-redis-1 Up 42 minutes (healthy)
+ankanu-qa-sms-stub-1 Up 4 minutes
+ankanu-qa-web-1 Up 42 minutes (healthy)
+ankanu-qa-worker-1 Up 42 minutes (healthy)
+{"status":"ok","role":"api","request_id":"01a1628e-0568-7926-accc-d47482715c05"}

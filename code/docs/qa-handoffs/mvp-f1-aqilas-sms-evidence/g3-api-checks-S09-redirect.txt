@@ -1,0 +1,4 @@
+FAIL S09 vendor 307 to ANOTHER host: the key must not follow it (expect no second request carrying X-AUTH-TOKEN) | status=201 requests=2 second={"host":"172.18.0.6:8099","token":"test-key","url":"/redirected-target"}
+
+SUMMARY 0/1 passed
+FAILED: S09

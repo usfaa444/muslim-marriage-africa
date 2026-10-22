@@ -1,0 +1,5 @@
+PASS S01 signed out / bogus session: send is 401, GET is 401, vendor never called | send=401 get=401 bogus=401 vendorCalls=0
+Error: signup failed 429 {"error":{"code":"RATE_LIMITED","message":"Cadence de requêtes régulée.","details":null,"request_id":"01a16269-84b0-7940-9ce4-16b67bc6066b","retryable":false}}
+    at signup (file:///tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa/api-checks.mjs:60:33)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async main (file:///tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa/api-checks.mjs:101:17)

@@ -1,0 +1,8 @@
+ankanu-qa-api-1 api:qa2 Up 33 seconds (healthy)
+ankanu-qa-bucket-1 pgsty/minio:RELEASE.2026-08-04T00-00-00Z Up 8 minutes (healthy)
+ankanu-qa-google-stub-1 api:qa2 Up 8 minutes
+ankanu-qa-postgres-1 postgres:17.11 Up 8 minutes (healthy)
+ankanu-qa-redis-1 redis:8.6.3 Up 8 minutes (healthy)
+ankanu-qa-sms-stub-1 api:qa2 Up 4 minutes
+ankanu-qa-web-1 web:qa Up 8 minutes (healthy)
+ankanu-qa-worker-1 api:qa2 Up 8 minutes (healthy)
