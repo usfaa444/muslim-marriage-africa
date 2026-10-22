@@ -313,7 +313,7 @@ function clickInChrome(wsUrl: string, origin: string): Promise<{
   const ws = new WebSocket(wsUrl)
   let seq = 0
   const pending = new Map<number, { resolve: (value: Record<string, unknown>) => void; reject: (error: Error) => void }>()
-  const waits: Array<{ method: string; sessionId?: string; resolve: () => void }> = []
+  const waits: Array<{ method: string; sessionId?: string | undefined; resolve: () => void }> = []
   ws.addEventListener('message', (event) => {
     const message = JSON.parse(String(event.data)) as {
       id?: number

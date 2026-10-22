@@ -1,4 +1,5 @@
-import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
+import { spawn, type ChildProcessByStdio } from 'node:child_process'
+import type { Readable } from 'node:stream'
 import { createServer, type Server } from 'node:http'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
@@ -244,7 +245,7 @@ function connect(
   const ws = new WebSocket(wsUrl)
   let seq = 0
   const pending = new Map<number, { resolve: (value: CdpResult) => void; reject: (error: Error) => void }>()
-  const waits: Array<{ method: string; sessionId?: string; resolve: () => void }> = []
+  const waits: Array<{ method: string; sessionId?: string | undefined; resolve: () => void }> = []
   ws.addEventListener('message', (event) => {
     const message = JSON.parse(String(event.data)) as {
       id?: number
@@ -300,7 +301,7 @@ function connect(
   })
 }
 
-function launch(binary: string, profile: string): Promise<{ proc: ChildProcessWithoutNullStreams; ws: string }> {
+function launch(binary: string, profile: string): Promise<{ proc: ChildProcessByStdio<null, Readable, Readable>; ws: string }> {
   const proc = spawn(
     binary,
     ['--headless=new', '--no-sandbox', '--disable-gpu', '--remote-debugging-port=0', `--user-data-dir=${profile}`],
@@ -488,8 +489,9 @@ describe('v2 screens fit the required widths', () => {
           caption: 'Photo en revue — pas encore publique.',
           url: '/v1/media/get?token=pending',
         }
-        let photos = [pending]
-        let photo = photos[0]
+        type Photo = { id: string; moderation_state: string; is_main?: boolean; caption?: string | null; url?: string; blur_url?: string }
+        let photos: Photo[] = [pending]
+        let photo: Photo | undefined = photos[0]
         if (referer.includes('13b-profile-review') || referer.includes('13c-profile-review')) {
           photo = { id: 'pending', moderation_state: 'pending', blur_url: '/v1/media/get?token=pending' }
         }

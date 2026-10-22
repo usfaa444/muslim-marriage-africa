@@ -91,9 +91,9 @@ describe('v2 signup and sign-in screens', () => {
     new Function('document', 'sessionStorage', script)(document, sessionStorage)
     expect(store.get('ankanu.signup.v2')).toBe('{"pseudonym":"awa"}')
     expect(clicks.signin).toHaveLength(0)
-    clicks.continue[0]?.({ button: 0, ctrlKey: true })
+    clicks.continue?.[0]?.({ button: 0, ctrlKey: true })
     expect(store.get('ankanu.signup.v2')).toBe('{"pseudonym":"awa"}')
-    clicks.continue[0]?.({ button: 0 })
+    clicks.continue?.[0]?.({ button: 0 })
     expect(store.has('ankanu.signup.v2')).toBe(false)
     expect(store.has('ankanu.signup')).toBe(false)
     const login = authHtml(stitch('02-auth'), 'login', SITE)
@@ -430,7 +430,7 @@ function fakeNode(id = ''): FakeNode {
     parentNode: null,
     children: [],
     listener: null,
-  } as FakeNode
+  } as unknown as FakeNode
   node.classList = {
     contains(name: string) {
       return node.className.split(/\s+/).includes(name)
@@ -609,7 +609,7 @@ describe('email link result', () => {
     const page = emailPage()
     const link = fakeNode('switch-account')
     page.nodes.set('switch-account', link)
-    const calls: Array<{ url: string; method?: string }> = []
+    const calls: Array<{ url: string; method?: string | undefined }> = []
     const removed: string[] = []
     const moves: string[] = []
     const scripts = [...emailHtml(stitch('04-email-verification')).matchAll(/<script>([\s\S]*?)<\/script>/g)]

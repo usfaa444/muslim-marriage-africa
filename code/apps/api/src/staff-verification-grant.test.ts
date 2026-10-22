@@ -22,7 +22,7 @@ import { getProfileStore, memoryProfileStore, setProfileStore } from './profile-
 import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 import { grantStagingVerification } from './staff-verification-grant.js'
-import { entryLocation } from '../../web/src/entry-guard.ts'
+import { entryLocation } from '../../web/src/entry-guard.js'
 
 const memory = memoryAccountStore()
 const sessions = memorySessionStore(memory)

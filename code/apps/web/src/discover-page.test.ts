@@ -1,4 +1,5 @@
-import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
+import { spawn, type ChildProcessByStdio } from 'node:child_process'
+import type { Readable } from 'node:stream'
 import { createServer, type Server } from 'node:http'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
@@ -219,7 +220,7 @@ function chromeBinary(): string | null {
   return found.find((path) => path.length > 0 && existsSync(path)) ?? null
 }
 
-function launch(binary: string, profile: string): Promise<{ proc: ChildProcessWithoutNullStreams; ws: string }> {
+function launch(binary: string, profile: string): Promise<{ proc: ChildProcessByStdio<null, Readable, Readable>; ws: string }> {
   const proc = spawn(
     binary,
     ['--headless=new', '--no-sandbox', '--disable-gpu', '--remote-debugging-port=0', `--user-data-dir=${profile}`],
@@ -644,7 +645,7 @@ describe('discover grid in a browser', () => {
     }
     let passed = false
     let favouritePosts = 0
-    let releasePass: (() => void) | null = null
+    let releasePass = null as (() => void) | null
     const server: Server = createServer((request, response) => {
       const url = new URL(request.url || '/', 'http://127.0.0.1')
       if (request.method === 'POST' && url.pathname === '/v1/favourites') {

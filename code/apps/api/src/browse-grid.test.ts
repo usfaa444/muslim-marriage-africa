@@ -471,12 +471,12 @@ describe('browse grid', () => {
     await publish(staff.id, await signIn(staff.email))
     const staffAccount = memory.accounts.find((row) => row.id === staff.id)
     if (staffAccount) {
-      staffAccount.roles = ['moderator']
+      staffAccount.roles = ['moderator'] as unknown as ['member']
     }
     await publish(mahram.id, await signIn(mahram.email))
     const mahramAccount = memory.accounts.find((row) => row.id === mahram.id)
     if (mahramAccount) {
-      mahramAccount.roles = ['mahram']
+      mahramAccount.roles = ['mahram'] as unknown as ['member']
     }
     await publish(shown.id, await signIn(shown.email))
     grant(shown.id, 'phone_otp')
@@ -652,7 +652,7 @@ describe('browse grid', () => {
 
     const staff = memory.accounts.find((row) => row.id === sister.id)
     if (staff) {
-      staff.roles = ['moderator']
+      staff.roles = ['moderator'] as unknown as ['member']
     }
     const staffRead = await browse(sisterCookie, '?view=grid')
     expect(staffRead.status).toBe(403)
@@ -665,7 +665,7 @@ describe('browse grid', () => {
       },
     })
     if (staff) {
-      staff.roles = ['mahram']
+      staff.roles = ['mahram'] as unknown as ['member']
     }
     const mahramRead = await browse(sisterCookie, '?view=grid')
     expect(mahramRead.status).toBe(403)

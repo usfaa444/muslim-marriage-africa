@@ -332,7 +332,7 @@ describe('public profile read', () => {
     const mahramAccount = memory.accounts.find((row) => row.id === mahramOnly.id)
     expect(mahramAccount).toBeTruthy()
     if (mahramAccount) {
-      mahramAccount.roles = ['mahram']
+      mahramAccount.roles = ['mahram'] as unknown as ['member']
     }
 
     const missing = newId(now)
@@ -398,7 +398,7 @@ describe('public profile read', () => {
     const staff = memory.accounts.find((row) => row.id === sister.id)
     expect(staff).toBeTruthy()
     if (staff) {
-      staff.roles = ['moderator']
+      staff.roles = ['moderator'] as unknown as ['member']
     }
     const staffRead = await read(sisterCookie, brother.id)
     expect(staffRead.status).toBe(403)
@@ -411,7 +411,7 @@ describe('public profile read', () => {
       },
     })
     if (staff) {
-      staff.roles = ['mahram']
+      staff.roles = ['mahram'] as unknown as ['member']
     }
     const mahramRead = await read(sisterCookie, brother.id)
     expect(mahramRead.status).toBe(403)

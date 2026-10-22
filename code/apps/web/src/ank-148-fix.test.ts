@@ -1,4 +1,5 @@
-import { spawn, type ChildProcessWithoutNullStreams } from 'node:child_process'
+import { spawn, type ChildProcessByStdio } from 'node:child_process'
+import type { Readable } from 'node:stream'
 import { createServer, type Server } from 'node:http'
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
@@ -45,7 +46,7 @@ function connect(wsUrl: string): Promise<{
   const ws = new WebSocket(wsUrl)
   let seq = 0
   const pending = new Map<number, { method: string; resolve: (value: CdpResult) => void; reject: (error: Error) => void }>()
-  const waits: Array<{ method: string; sessionId?: string; resolve: () => void }> = []
+  const waits: Array<{ method: string; sessionId?: string | undefined; resolve: () => void }> = []
   ws.addEventListener('message', (event) => {
     const message = JSON.parse(String(event.data)) as {
       id?: number
@@ -94,7 +95,7 @@ function connect(wsUrl: string): Promise<{
   })
 }
 
-function launch(binary: string, profile: string): Promise<{ proc: ChildProcessWithoutNullStreams; ws: string }> {
+function launch(binary: string, profile: string): Promise<{ proc: ChildProcessByStdio<null, Readable, Readable>; ws: string }> {
   const proc = spawn(
     binary,
     ['--headless=new', '--no-sandbox', '--disable-gpu', '--remote-debugging-port=0', `--user-data-dir=${profile}`],

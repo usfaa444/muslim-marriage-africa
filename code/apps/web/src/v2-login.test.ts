@@ -77,7 +77,7 @@ function element(id: string, className = ''): El {
       return name === 'hidden' ? node.hidden : null
     },
   }
-  node.childNodes.push(node.lastChild)
+  if (node.lastChild) node.childNodes.push(node.lastChild)
   return node
 }
 
@@ -338,7 +338,7 @@ describe('sign-in routing and inline errors', () => {
   it('hides the restored login form and sends a signed-in account home', async () => {
     const form = element('login-form')
     const assigned: string[] = []
-    let pageshow: ((event: { persisted: boolean }) => void) | null = null
+    let pageshow = null as ((event: { persisted: boolean }) => void) | null
     const windowRef = {
       addEventListener(type: string, fn: (event: { persisted: boolean }) => void) {
         if (type === 'pageshow') pageshow = fn
