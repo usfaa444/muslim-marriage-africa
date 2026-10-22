@@ -16,7 +16,7 @@ import { writeTestObjectAndEnqueueNoOp } from './substrate.js'
 
 const apiRoot = fileURLToPath(new URL('..', import.meta.url))
 const tsc = fileURLToPath(new URL('../../../node_modules/typescript/bin/tsc', import.meta.url))
-const minioImage = 'quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z'
+const minioImage = 'pgsty/minio:RELEASE.2026-08-04T00-00-00Z'
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
@@ -149,7 +149,10 @@ describe('redis and S3-compatible substrate', () => {
   }
 
   beforeAll(async () => {
-    execFileSync(process.execPath, [tsc, '-p', 'tsconfig.json'], { cwd: apiRoot, stdio: 'inherit' })
+    // The api build reads @ankanu/kernel and @ankanu/ports from their dist output.
+    for (const project of ['../../packages/kernel/tsconfig.json', '../../packages/ports/tsconfig.json', 'tsconfig.json']) {
+      execFileSync(process.execPath, [tsc, '-p', project], { cwd: apiRoot, stdio: 'inherit' })
+    }
     redisContainer = `ankanu-redis-${randomBytes(4).toString('hex')}`
     bucketContainer = `ankanu-s3-${randomBytes(4).toString('hex')}`
     await run('docker', [

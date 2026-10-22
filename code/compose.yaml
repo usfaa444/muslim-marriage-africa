@@ -124,7 +124,7 @@ services:
       start_period: 5s
 
   bucket:
-    image: quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z
+    image: pgsty/minio:RELEASE.2026-08-04T00-00-00Z
     entrypoint: ["/bin/sh", "-c"]
     command:
       - 'case "$$MINIO_ROOT_USER" in *[![:space:]]*) ;; *) exit 1 ;; esac; case "$$MINIO_ROOT_PASSWORD" in *[![:space:]]*) ;; *) exit 1 ;; esac; exec minio server /data'

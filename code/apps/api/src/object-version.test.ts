@@ -3,7 +3,7 @@ import { randomBytes } from 'node:crypto'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { ObjectStorageAdapter, objectStorageSettings } from './object-storage-adapter.js'
 
-const minioImage = 'quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z'
+const minioImage = 'pgsty/minio:RELEASE.2026-08-04T00-00-00Z'
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
