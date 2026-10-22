@@ -165,6 +165,7 @@ describe('POST /v1/verifications/otp', () => {
     expect(JSON.stringify(sent.json)).not.toContain(logged[0]?.code ?? 'missing')
     expect(logged).toHaveLength(1)
     expect(logged[0]?.code).toMatch(/^\d{6}$/)
+    expect(logged[0]?.phone_e164).toBe(phone)
     expect(otp.rows).toHaveLength(1)
     expect(otp.rows[0]).toMatchObject({
       kind: 'phone_otp',

@@ -1,0 +1,64 @@
+=== B1-aqilas-no-key (expect: refuse, names AQILAS_API_KEY) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:42
+            throw new Error('AQILAS_API_KEY is required when SMS_PROVIDER=aqilas');
+Error: AQILAS_API_KEY is required when SMS_PROVIDER=aqilas
+=== B2-unknown-provider (expect: refuse, value not echoed) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:38
+        throw new Error('SMS_PROVIDER must be log or aqilas');
+Error: SMS_PROVIDER must be log or aqilas
+=== B3-prod-log-explicit (expect: refuse log SMS in production) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:57
+        throw new Error('log SMS is refused in production');
+Error: log SMS is refused in production
+=== B4-prod-unset (expect: refuse log SMS in production) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:57
+        throw new Error('log SMS is refused in production');
+Error: log SMS is refused in production
+=== B5-prod-aqilas-ok (expect: boots, production-valid) state=running exit=0
+[Nest] 1  - 10/22/2026, 7:57:55 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 1  - 10/22/2026, 7:57:55 AM     LOG [NestApplication] Nest application successfully started +3ms
+=== B6-staging-log-optin (expect: boots) state=running exit=0
+[Nest] 1  - 10/22/2026, 7:57:57 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 1  - 10/22/2026, 7:57:57 AM     LOG [NestApplication] Nest application successfully started +1ms
+=== B7-bad-url (expect: refuse URL, key not echoed) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:52
+            throw new Error('AQILAS_API_URL must be an http or https URL');
+Error: AQILAS_API_URL must be an http or https URL
+=== B8-blank-key (expect: refuse) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:42
+            throw new Error('AQILAS_API_KEY is required when SMS_PROVIDER=aqilas');
+Error: AQILAS_API_KEY is required when SMS_PROVIDER=aqilas
+=== B10-key-embedded-newline (expect: F-2: refuse, names AQILAS_API_KEY only) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:45
+            throw new Error('AQILAS_API_KEY must not contain control characters');
+Error: AQILAS_API_KEY must not contain control characters
+=== B11-key-embedded-CR (expect: F-2: refuse) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:45
+            throw new Error('AQILAS_API_KEY must not contain control characters');
+Error: AQILAS_API_KEY must not contain control characters
+=== B12-key-trailing-newline (expect: F-2: refuse (pasted with newline)) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:45
+            throw new Error('AQILAS_API_KEY must not contain control characters');
+Error: AQILAS_API_KEY must not contain control characters
+=== B13-key-tab (expect: F-2: refuse) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:45
+            throw new Error('AQILAS_API_KEY must not contain control characters');
+Error: AQILAS_API_KEY must not contain control characters
+=== B14-key-leading-newline (expect: F-2: refuse) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:45
+            throw new Error('AQILAS_API_KEY must not contain control characters');
+Error: AQILAS_API_KEY must not contain control characters
+=== B15-sender-newline (expect: F-2: refuse, names AQILAS_SENDER_ID only) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:48
+            throw new Error('AQILAS_SENDER_ID must not contain control characters');
+Error: AQILAS_SENDER_ID must not contain control characters
+=== B16-good-key-and-sender (expect: boots) state=running exit=0
+[Nest] 1  - 10/22/2026, 7:58:11 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 1  - 10/22/2026, 7:58:11 AM     LOG [NestApplication] Nest application successfully started +1ms
+=== B17-log-mode-ignores-aqilas-vars (expect: boots (log mode does not read them)) state=running exit=0
+[Nest] 1  - 10/22/2026, 7:58:13 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 1  - 10/22/2026, 7:58:13 AM     LOG [NestApplication] Nest application successfully started +1ms
+=== B18-key-en-dash-nonlatin1 (expect: probe: key with U+2013 (outside Latin-1)) state=running exit=0
+[Nest] 1  - 10/22/2026, 7:58:16 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 1  - 10/22/2026, 7:58:16 AM     LOG [NestApplication] Nest application successfully started +2ms
+=== B9-worker-ignores-sms (expect: worker boots even with bad SMS settings) state=running exit=0

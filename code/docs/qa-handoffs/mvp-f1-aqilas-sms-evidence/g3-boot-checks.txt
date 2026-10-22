@@ -1,0 +1,67 @@
+=== B1-aqilas-no-key (expect: refuse, names AQILAS_API_KEY)
+file:///app/apps/api/dist/sms-port.js:42
+            throw new Error('AQILAS_API_KEY is required when SMS_PROVIDER=aqilas');
+                  ^
+
+Error: AQILAS_API_KEY is required when SMS_PROVIDER=aqilas
+    at assertSmsBoot (file:///app/apps/api/dist/sms-port.js:42:19)
+    at file:///app/apps/api/dist/main.js:22:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0
+=== B2-unknown-provider (expect: refuse, SMS_PROVIDER must be log or aqilas, value not echoed)
+file:///app/apps/api/dist/sms-port.js:38
+        throw new Error('SMS_PROVIDER must be log or aqilas');
+              ^
+
+Error: SMS_PROVIDER must be log or aqilas
+    at assertSmsBoot (file:///app/apps/api/dist/sms-port.js:38:15)
+    at file:///app/apps/api/dist/main.js:22:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0
+=== B3-prod-log-explicit (expect: refuse log SMS in production)
+file:///app/apps/api/dist/sms-port.js:51
+        throw new Error('log SMS is refused in production');
+              ^
+
+Error: log SMS is refused in production
+    at assertSmsBoot (file:///app/apps/api/dist/sms-port.js:51:15)
+    at file:///app/apps/api/dist/main.js:22:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0
+=== B4-prod-unset (expect: refuse log SMS in production)
+file:///app/apps/api/dist/sms-port.js:51
+        throw new Error('log SMS is refused in production');
+              ^
+
+Error: log SMS is refused in production
+    at assertSmsBoot (file:///app/apps/api/dist/sms-port.js:51:15)
+    at file:///app/apps/api/dist/main.js:22:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.21.0
+=== B5-prod-aqilas-ok (expect: boots, production-valid) state=running exit=0
+[Nest] 1  - 10/22/2026, 7:05:31 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 1  - 10/22/2026, 7:05:31 AM     LOG [NestApplication] Nest application successfully started +2ms
+=== B6-staging-log-optin (expect: boots) state=running exit=0
+[Nest] 1  - 10/22/2026, 7:05:33 AM     LOG [NestFactory] Starting Nest application...
+[Nest] 1  - 10/22/2026, 7:05:34 AM     LOG [NestApplication] Nest application successfully started +1ms
+=== B7-bad-url (expect: refuse AQILAS_API_URL, key value not echoed) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:46
+            throw new Error('AQILAS_API_URL must be an http or https URL');
+Error: AQILAS_API_URL must be an http or https URL
+=== B8-blank-key (expect: refuse) state=exited exit=1
+file:///app/apps/api/dist/sms-port.js:42
+            throw new Error('AQILAS_API_KEY is required when SMS_PROVIDER=aqilas');
+Error: AQILAS_API_KEY is required when SMS_PROVIDER=aqilas
+=== B9-worker-ignores-sms (expect: worker boots even with unknown SMS provider) state=running exit=0

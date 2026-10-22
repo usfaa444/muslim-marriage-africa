@@ -1,0 +1,37 @@
+M14 [F-1 remove redirect:manual (back to follow by default)] -> CAUGHT; Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > does not follow a 307 to another host and answers 503
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 301 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 302 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 303 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 307 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 308 to another host
+M15 [F-1 explicit redirect:follow] -> CAUGHT; Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > does not follow a 307 to another host and answers 503
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 301 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 302 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 303 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 307 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 308 to another host
+M16 [F-2 disable the AQILAS_API_KEY control-character check] -> CAUGHT; Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a DEL and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a NUL and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a carriage return and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a newline and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a tab and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a trailing newline and names only the variable
+M17 [F-2 disable the AQILAS_SENDER_ID control-character check] -> CAUGHT; Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_SENDER_ID with a control character and names only the variable
+M18 [F-2 let newline and carriage return through (code < 9)] -> CAUGHT; Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a carriage return and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a newline and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a tab and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_API_KEY with a trailing newline and names only the variable
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses an AQILAS_SENDER_ID with a control character and names only the variable
+    apps/api/src/worker-shell.test.ts > worker shell > refuses to boot the api when the SMS settings are incomplete or unknown
+M19 [F-1 treat 3xx as success] -> CAUGHT; Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > does not follow a 307 to another host and answers 503
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 301 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 302 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 303 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 307 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 308 to another host

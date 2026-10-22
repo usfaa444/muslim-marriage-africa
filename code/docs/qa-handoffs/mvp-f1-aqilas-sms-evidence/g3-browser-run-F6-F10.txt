@@ -1,0 +1,14 @@
+PASS F6a Slow 3G + 1.5 s vendor: reaches /otp; triple submit sends ONE SMS | 28416 ms to /otp; vendorCalls=1
+NOTE F6b time to feedback | submit->/otp 28416 ms (3G + 1.5 s vendor). The send button shows no pending/disabled state in this screen.
+NOTE F7 session cleared mid-flow then submit | api=401 vendorCalls=0 url=http://localhost:4021/phone (UI shows no message on 401)
+PASS F7a expired session: API 401 and no SMS sent | 401 calls=0
+PASS F7b deep link /phone while signed out -> /auth | http://localhost:4021/auth
+NOTE F8a Back from /otp | lands on /otp
+PASS F8b deep link /phone while code pending is redirected to /otp (server-side step guard) | http://localhost:4021/otp
+PASS F8c deep link to a later step while pending -> /otp | http://localhost:4021/otp
+NOTE F8d change-number link on /otp | /phone
+PASS F9-320 /phone reflows at 320 (400% of 1280): no horizontal scroll | 320/320
+PASS F9-720 /phone reflows at 720 (200% of 1440): no horizontal scroll | 720/720
+PASS F10 non-digit junk in the field never reaches the vendor (client needs 8 digits; server validates E.164) | typed="<img src=x onerror=alert(1)>'; DROP--" vendorCalls=0
+
+SUMMARY 8 pass, 0 fail, 4 notes

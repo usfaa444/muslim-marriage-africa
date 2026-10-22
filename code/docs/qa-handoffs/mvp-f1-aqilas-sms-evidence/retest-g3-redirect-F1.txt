@@ -1,0 +1,10 @@
+PASS 301 to another host (172.18.0.3): api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS 302 to another host (172.18.0.3): api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS 303 to another host (172.18.0.3): api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS 307 to another host (172.18.0.3): api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS 308 to another host (172.18.0.3): api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS 307 to the same host, relative Location: api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS 307 without a Location header: api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS 302 to a hostile external name: api=503 vendorRequests=1 followedRequests=0 keySeenElsewhere=0 logLine+1 storedRows=0 dispatch=0
+PASS control: healthy vendor after the redirect cases -> 201, 1 vendor request
+ALL PASS

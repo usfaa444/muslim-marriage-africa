@@ -1,0 +1,55 @@
+M1 [AC2 non-2xx must fail: treat 4xx as success] -> CAUGHT; Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > does not follow a 307 to another host and answers 503
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 400
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 401
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 301 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 302 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 303 to another host
+M2 [AC1 send without the X-AUTH-TOKEN header] -> CAUGHT; Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > posts once to Aqilas with the stored code and answers the Story 2.7 201
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > posts one JSON request with the token header, sender, phone list and French text
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > sends the real HTTP headers and body to a stub server and accepts 200
+M3 [AC3 leak the phone into the failure log line] -> CAUGHT; Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > does not follow a 307 to another host and answers 503
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 400
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 401
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 500
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 301 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 302 to another host
+M4 [AC5 drop the boot assertion from main.ts] -> CAUGHT; Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/worker-shell.test.ts > worker shell > refuses to boot the api when the SMS settings are incomplete or unknown
+M5 [AC4 log/unset provider picks Aqilas instead] -> CAUGHT; Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > does not follow a 307 to another host and answers 503
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > posts once to Aqilas with the stored code and answers the Story 2.7 201
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 400
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 401
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 500
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when the network fails
+M6 [AC2 no request timeout (drop abort signal)] -> CAUGHT; Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > aborts a hanging vendor after the timeout
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > posts one JSON request with the token header, sender, phone list and French text
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > times out after 10 seconds by default
+M7 [AC1 send the code to the wrong phone] -> CAUGHT; Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > posts once to Aqilas with the stored code and answers the Story 2.7 201
+    apps/api/src/phone-otp.test.ts > POST /v1/verifications/otp > sends a hashed code, stores template and ids, and leaves visibility unset
+M8 [AC5 invert the production log opt-in rule] -> CAUGHT; Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/sms-port.test.ts > assertSmsBoot > refuses log SMS in a production boot without the test-keys opt-in
+M9 [AC1 SMS text says 15 minutes] -> CAUGHT; Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > posts once to Aqilas with the stored code and answers the Story 2.7 201
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > posts one JSON request with the token header, sender, phone list and French text
+M10 [AC1 SMS carries a different code than the stored hash] -> CAUGHT; Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > posts once to Aqilas with the stored code and answers the Story 2.7 201
+    apps/api/src/phone-otp.test.ts > POST /v1/verifications/otp > does not clear a granted phone when send is posted again
+    apps/api/src/phone-otp.test.ts > POST /v1/verifications/otp > does not grant an expired code
+    apps/api/src/phone-otp.test.ts > POST /v1/verifications/otp > leaves no live code when the log write fails
+    apps/api/src/phone-otp.test.ts > POST /v1/verifications/otp > refuses a wrong code and grants a correct unexpired code without listing the profile
+    apps/api/src/phone-otp.test.ts > POST /v1/verifications/otp > replaces the pending hash on resend so the older code fails
+M11 [AC2 swallow the vendor failure (no throw on non-2xx)] -> CAUGHT; Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > does not follow a 307 to another host and answers 503
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 400
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 401
+    apps/api/src/phone-otp-aqilas.test.ts > POST /v1/verifications/otp with SMS_PROVIDER=aqilas > rolls back and answers 503 when Aqilas answers 500
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 301 to another host
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > never follows a 302 to another host
+M12 [AC2 network error not logged as fixed line (leak url)] -> CAUGHT; Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+    apps/api/src/sms-port.test.ts > Aqilas SMS adapter > throws on a network error without echoing the request

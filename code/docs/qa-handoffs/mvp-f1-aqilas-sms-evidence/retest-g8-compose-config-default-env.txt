@@ -1,0 +1,4 @@
+      AQILAS_API_KEY: ""
+      AQILAS_API_URL: ""
+      AQILAS_SENDER_ID: ""
+      SMS_PROVIDER: log

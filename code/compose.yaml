@@ -45,6 +45,11 @@ services:
       S3_BUCKET: ankanu
       S3_ACCESS_KEY_ID: "${S3_ACCESS_KEY_ID}"
       S3_SECRET_ACCESS_KEY: "${S3_SECRET_ACCESS_KEY}"
+      # SMS: log by default. Aqilas only when the host env file names it and holds the key.
+      SMS_PROVIDER: "${SMS_PROVIDER:-log}"
+      AQILAS_API_KEY: "${AQILAS_API_KEY:-}"
+      AQILAS_SENDER_ID: "${AQILAS_SENDER_ID:-}"
+      AQILAS_API_URL: "${AQILAS_API_URL:-}"
     depends_on:
       postgres:
         condition: service_healthy
