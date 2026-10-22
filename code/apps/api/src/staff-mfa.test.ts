@@ -563,6 +563,22 @@ describe('staff identity and authenticator MFA (Story 12.1)', () => {
       expect(locked.status).toBe(401)
       expect(await locked.json()).toMatchObject({ error: { code: 'PIN_REQUIRED' } })
 
+      // Only the two sign-in routes skip the member PIN gate: every other staff route still asks for the PIN.
+      for (const [method, path] of [
+        ['GET', '/v1/staff/metrics'],
+        ['POST', '/v1/staff/sessions/mfa'],
+        ['GET', '/v1/staff/sessions/enrollment'],
+        ['POST', '/v1/staff/sessions/password'],
+      ] as const) {
+        const response = await fetch(`${base}${path}`, {
+          method,
+          headers: { cookie: memberSession, 'content-type': 'application/json' },
+          ...(method === 'POST' ? { body: JSON.stringify({ code: '123456', new_password: 'phrase tres longue ici' }) } : {}),
+        })
+        expect(response.status, `${method} ${path}`).toBe(401)
+        expect(await response.json(), `${method} ${path}`).toMatchObject({ error: { code: 'PIN_REQUIRED' } })
+      }
+
       // The staff sign-in page probes the current staff session with whatever cookie the browser has.
       const probe = await get('/v1/staff/sessions/current', memberSession)
       expect(probe.status).not.toBe(401)

@@ -243,3 +243,4 @@ Self-check, round 2:
 - Postgres migrate integration: 13 passed.
 - Staff e2e on the web-only server: 10 passed, 4 skipped. The skipped ones are the stack-only tests and the desktop-only width sweeps on mobile.
 - I did not rebuild the stack for this round. The API change is covered by the Postgres HTTP test above.
+- QA round 3 F15 (Minor), test only: the memory-store test now also checks that a PIN-locked member cookie still gets 401 `PIN_REQUIRED` on `GET /v1/staff/metrics`, `POST /v1/staff/sessions/mfa`, `GET /v1/staff/sessions/enrollment` and `POST /v1/staff/sessions/password`. With QA's mutation (`route.includes(' /v1/staff/')` in place of `STAFF_SIGN_IN_ROUTES.has(route)`), the test fails.
