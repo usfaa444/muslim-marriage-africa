@@ -3,10 +3,11 @@ import { join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 
-// The web image copies Stitch screens one by one (apps/web/Dockerfile). The web
-// reads them from disk at request time, so a screen read by the source but not
-// copied answers 500 in the image while every unit test, which reads the repo,
-// stays green. This test ties the two lists together.
+// The web image copies Stitch screens one by one (apps/web/Dockerfile), from a build
+// context that .dockerignore narrows to an allow list. The web reads the screens from
+// disk at request time, so a screen read by the source but not copied (or not in the
+// context) answers 500 in the image while every unit test, which reads the repo, stays
+// green. This test ties the three lists together.
 
 const webRoot = fileURLToPath(new URL('..', import.meta.url))
 const codeRoot = fileURLToPath(new URL('../../..', import.meta.url))
@@ -80,6 +81,38 @@ function dockerCopies(dockerfile: string): string[] {
   return copies.sort()
 }
 
+/** Docker's .dockerignore rule: the last pattern matching the path or one of its parents wins. */
+function ignoredByDocker(path: string, dockerignore: string): boolean {
+  const parents: string[] = []
+  const parts = path.split('/')
+  for (let index = 1; index <= parts.length; index += 1) {
+    parents.push(parts.slice(0, index).join('/'))
+  }
+  let ignored = false
+  for (const raw of dockerignore.split('\n')) {
+    const line = raw.trim()
+    if (line === '' || line.startsWith('#')) {
+      continue
+    }
+    const negated = line.startsWith('!')
+    const pattern = (negated ? line.slice(1) : line).trim().replace(/^\/+/, '').replace(/\/+$/, '')
+    const source = pattern
+      .split('**')
+      .map((piece) =>
+        piece
+          .split('*')
+          .map((part) => part.replace(/[.+^${}()|[\]\\]/g, '\\$&').replaceAll('?', '[^/]'))
+          .join('[^/]*'),
+      )
+      .join('.*')
+    const matcher = new RegExp(`^${source}$`)
+    if (parents.some((candidate) => matcher.test(candidate))) {
+      ignored = !negated
+    }
+  }
+  return ignored
+}
+
 function covered(read: string, copies: string[]): boolean {
   return copies.some((copy) => copy === read || read.startsWith(`${copy}/`))
 }
@@ -102,6 +135,15 @@ describe('web image design files', () => {
     const copies = dockerCopies(dockerfile())
     const missing = stitchReads(runtimeSources()).filter((read) => !covered(read, copies))
     expect(missing).toEqual([])
+  })
+
+  it('keeps every copied Stitch file in the build context that .dockerignore allows', () => {
+    const dockerignore = readFileSync(join(codeRoot, '.dockerignore'), 'utf8')
+    const ignored = dockerCopies(dockerfile()).filter((copy) => ignoredByDocker(`${STITCH_ROOT}${copy}`, dockerignore))
+    expect(ignored).toEqual([])
+    // The allow list still keeps the captures and the screens the web does not read out of the context.
+    expect(ignoredByDocker(`${STITCH_ROOT}12-profile-not-yet-public/screen.png`, dockerignore)).toBe(true)
+    expect(ignoredByDocker(`${STITCH_ROOT}01-splash/screen.html`, dockerignore)).toBe(true)
   })
 
   it('copies only Stitch files that exist and that the web still reads', () => {
@@ -130,5 +172,18 @@ describe('web image design files', () => {
     const old = 'COPY --from=build /app/design-stitch/ankanu-v2/02-auth/screen.html design-stitch/ankanu-v2/02-auth/screen.html'
     expect(dockerCopies(old)).toEqual(['02-auth/screen.html'])
     expect(covered('12-profile-not-yet-public/screen.html', dockerCopies(old))).toBe(false)
+    const allow = [
+      'design-stitch/*',
+      '!design-stitch/ankanu-v2/',
+      'design-stitch/ankanu-v2/*',
+      '!design-stitch/ankanu-v2/02-auth/',
+      'design-stitch/ankanu-v2/02-auth/*',
+      '!design-stitch/ankanu-v2/02-auth/screen.html',
+    ].join('\n')
+    expect(ignoredByDocker('design-stitch/ankanu-v2/02-auth/screen.html', allow)).toBe(false)
+    expect(ignoredByDocker('design-stitch/ankanu-v2/02-auth/screen.png', allow)).toBe(true)
+    expect(ignoredByDocker('design-stitch/ankanu-v2/12-profile-not-yet-public/screen.html', allow)).toBe(true)
+    expect(ignoredByDocker('apps/web/src/v2-serve.ts', allow)).toBe(false)
+    expect(ignoredByDocker('apps/web/node_modules/x/index.js', '**/node_modules')).toBe(true)
   })
 })
