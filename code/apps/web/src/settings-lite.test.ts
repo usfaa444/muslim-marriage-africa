@@ -48,7 +48,7 @@ describe('settings lite switch', () => {
     const store = new Map<string, string>()
     let failWrite = false
     const classes = new Map<string, Set<string>>()
-    const made: Array<{ id: string; attrs: Map<string, string>; text: string; click?: () => void }> = []
+    const made: Array<{ id: string; attrs: Map<string, string>; text: string; click?: (() => void) | undefined }> = []
     function element(id: string, className: string, text = '') {
       const attrs = new Map<string, string>()
       const names = new Set(className.split(/\s+/).filter(Boolean))
@@ -87,7 +87,7 @@ describe('settings lite switch', () => {
     toggleNode.setAttribute('aria-checked', 'false')
     const thumb = element('lite-mode-thumb', 'translate-x-0.5')
     const download = element('export', '', 'Télécharger mes données')
-    let storageHandler: ((event: { key: string }) => void) | null = null
+    let storageHandler = null as ((event: { key: string }) => void) | null
     const context = createContext({
       document: {
         getElementById(id: string) {

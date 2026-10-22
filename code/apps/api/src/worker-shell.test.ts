@@ -4,6 +4,7 @@ import net from 'node:net'
 import { fileURLToPath } from 'node:url'
 import { beforeAll, describe, expect, it } from 'vitest'
 import { processRole, runWorkerShell } from './worker-shell.js'
+import { RECAPTCHA_TEST_SECRET_KEY, RECAPTCHA_TEST_SITE_KEY } from './recaptcha.js'
 
 const BANNED = /dating|rencontre romantique/i
 const appRoot = fileURLToPath(new URL('..', import.meta.url))
@@ -39,7 +40,14 @@ function connect(port: number): Promise<void> {
 }
 
 function childEnv(port: number, role: string | undefined): NodeJS.ProcessEnv {
-  const env: NodeJS.ProcessEnv = { ...process.env, PORT: String(port) }
+  // Story 2.2 refuses to boot without reCAPTCHA keys; the documented test pair is enough here.
+  const env: NodeJS.ProcessEnv = {
+    ...process.env,
+    PORT: String(port),
+    RECAPTCHA_SITE_KEY: RECAPTCHA_TEST_SITE_KEY,
+    RECAPTCHA_SECRET_KEY: RECAPTCHA_TEST_SECRET_KEY,
+    RECAPTCHA_ALLOW_TEST_KEYS: '1',
+  }
   for (const key of [
     'REDIS_HOST',
     'REDIS_PORT',
@@ -126,7 +134,10 @@ async function expectApiHealth(role: string | undefined): Promise<void> {
 
 describe('worker shell', () => {
   beforeAll(() => {
-    execFileSync(process.execPath, [tsc, '-p', 'tsconfig.json'], { cwd: appRoot, stdio: 'inherit' })
+    // The api build reads @ankanu/kernel and @ankanu/ports from their dist output.
+    for (const project of ['../../packages/kernel/tsconfig.json', '../../packages/ports/tsconfig.json', 'tsconfig.json']) {
+      execFileSync(process.execPath, [tsc, '-p', project], { cwd: appRoot, stdio: 'inherit' })
+    }
   })
 
   it('keeps Story 1.2 unless PROCESS_ROLE is worker', () => {
@@ -156,7 +167,7 @@ describe('worker shell', () => {
     await expectApiHealth('')
     await expectApiHealth('   ')
     await expectApiHealth('api')
-  })
+  }, 30_000)
 })
 
 async function waitForHealth(port: number): Promise<Record<string, unknown>> {

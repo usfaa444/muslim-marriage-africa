@@ -67,7 +67,9 @@ jobs:
           cache: npm
           cache-dependency-path: code/package-lock.json
       - run: npm ci
-      - run: npm run test:integration
+      # The restore drill reads pg-base and pg-wal, which the postgres container
+      # creates as its own user. The runbook runs as root on the host, so CI does too.
+      - run: sudo -E env "PATH=$PATH" npm run test:integration
   migration-check:
     name: migration check
     runs-on: ubuntu-latest

@@ -50,7 +50,7 @@ function control(id: string, extra: Partial<Control> = {}): Control {
     style: { width: '', backgroundColor: '' },
     listeners: {} as Record<string, Listener[]>,
     closest: () => null,
-  } as Control
+  } as unknown as Control
   node.classList = {
     contains(name: string) {
       return node.className.split(/\s+/).includes(name)
@@ -160,9 +160,10 @@ function mount() {
       this.href = path
     },
   }
-  const calls: Array<{ url: string; method: string; body?: string }> = []
-  let release: (body: typeof stored) => void = () => {}
-  const gate = new Promise<typeof stored>((resolve) => {
+  const calls: Array<{ url: string; method: string; body?: string | undefined }> = []
+  // A later story's read can carry fields the base profile does not.
+  let release: (body: typeof stored & Record<string, unknown>) => void = () => {}
+  const gate = new Promise<typeof stored & Record<string, unknown>>((resolve) => {
     release = resolve
   })
   let completeness = stored.completeness

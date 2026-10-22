@@ -13,10 +13,17 @@ import {
   redisSettings,
 } from './redis-substrate.js'
 import { writeTestObjectAndEnqueueNoOp } from './substrate.js'
+import { RECAPTCHA_TEST_SECRET_KEY, RECAPTCHA_TEST_SITE_KEY } from './recaptcha.js'
 
 const apiRoot = fileURLToPath(new URL('..', import.meta.url))
+// Story 2.2 refuses to boot without reCAPTCHA keys; the documented test pair is enough here.
+const RECAPTCHA_TEST_ENV = {
+  RECAPTCHA_SITE_KEY: RECAPTCHA_TEST_SITE_KEY,
+  RECAPTCHA_SECRET_KEY: RECAPTCHA_TEST_SECRET_KEY,
+  RECAPTCHA_ALLOW_TEST_KEYS: '1',
+}
 const tsc = fileURLToPath(new URL('../../../node_modules/typescript/bin/tsc', import.meta.url))
-const minioImage = 'minio/minio:RELEASE.2025-07-23T15-54-02Z'
+const minioImage = 'pgsty/minio:RELEASE.2026-08-04T00-00-00Z'
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
@@ -149,7 +156,10 @@ describe('redis and S3-compatible substrate', () => {
   }
 
   beforeAll(async () => {
-    execFileSync(process.execPath, [tsc, '-p', 'tsconfig.json'], { cwd: apiRoot, stdio: 'inherit' })
+    // The api build reads @ankanu/kernel and @ankanu/ports from their dist output.
+    for (const project of ['../../packages/kernel/tsconfig.json', '../../packages/ports/tsconfig.json', 'tsconfig.json']) {
+      execFileSync(process.execPath, [tsc, '-p', project], { cwd: apiRoot, stdio: 'inherit' })
+    }
     redisContainer = `ankanu-redis-${randomBytes(4).toString('hex')}`
     bucketContainer = `ankanu-s3-${randomBytes(4).toString('hex')}`
     await run('docker', [
@@ -265,6 +275,7 @@ describe('redis and S3-compatible substrate', () => {
       cwd: apiRoot,
       env: {
         ...process.env,
+        ...RECAPTCHA_TEST_ENV,
         PROCESS_ROLE: 'worker',
         PORT: String(httpPort),
         REDIS_HOST: '127.0.0.1',
@@ -309,6 +320,7 @@ describe('redis and S3-compatible substrate', () => {
       cwd: apiRoot,
       env: {
         ...process.env,
+        ...RECAPTCHA_TEST_ENV,
         PROCESS_ROLE: 'worker',
         PORT: String(httpPort),
         REDIS_HOST: '127.0.0.1',
