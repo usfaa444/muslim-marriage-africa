@@ -1,0 +1,60 @@
+import { launch, newCtx, watch, record, save, accounts, BASE, EV } from './lib.mjs'
+const browser = await launch()
+const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b)
+
+// T01/T02/T03 signed out, both profiles
+for (const kind of ['mobile', 'desktop']) {
+  { const ctx = await newCtx(browser, kind); const page = await ctx.newPage(); const w = watch(page)
+    const r = await page.goto('/auth'.replace(/^/, BASE))
+    await page.waitForLoadState('networkidle')
+    const visible = await page.locator('#login-form').isVisible()
+    await page.screenshot({ path: `${EV}/g3-${kind}-auth-signed-out.png` })
+    record(`T01-${kind}`, 'signed-out fresh /auth: 200, form visible, 0 browser gate reads, 0 console errors, 0 4xx/5xx', r.status() === 200 && visible && w.gateReads.length === 0 && w.consoleErrors.length === 0 && w.badResponses.length === 0, { status: r.status(), visible, gateReads: w.gateReads, consoleErrors: w.consoleErrors, badResponses: w.badResponses, sandboxIgnored: w.sandboxIgnored, requests: w.requests })
+    await ctx.close() }
+  { const ctx = await newCtx(browser, kind); const page = await ctx.newPage(); const w = watch(page)
+    const chain = []; page.on('response', (r) => { if ([301,302,303,307,308].includes(r.status())) chain.push(`${r.status()} ${new URL(r.url()).pathname} -> ${r.headers().location}`) })
+    const r = await page.goto(BASE + '/decouvrir'); await page.waitForLoadState('networkidle')
+    record(`T02-${kind}`, 'signed-out /decouvrir -> 303 -> /auth, form visible, 0 gate reads, 0 console errors, 0 4xx/5xx', new URL(page.url()).pathname === '/auth' && r.status() === 200 && await page.locator('#login-form').isVisible() && w.gateReads.length === 0 && w.consoleErrors.length === 0 && w.badResponses.length === 0, { url: page.url(), chain, gateReads: w.gateReads, consoleErrors: w.consoleErrors, badResponses: w.badResponses })
+    await ctx.close() }
+  { const ctx = await newCtx(browser, kind); const page = await ctx.newPage(); const w = watch(page)
+    await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+    await page.evaluate(() => { window.__old = true })
+    let loads = 0; page.on('load', () => loads++)
+    await page.evaluate(() => setTimeout(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })), 0))
+    await page.waitForEvent('load'); await page.waitForLoadState('networkidle'); await page.waitForTimeout(500)
+    const stale = await page.evaluate(() => window.__old === true)
+    record(`T03-${kind}`, 'signed-out restored /auth: exactly 1 reload, fresh form, 0 gate reads, 0 console errors', loads === 1 && !stale && await page.locator('#login-form').isVisible() && w.gateReads.length === 0 && w.consoleErrors.length === 0 && w.badResponses.length === 0, { loads, stale, gateReads: w.gateReads, consoleErrors: w.consoleErrors, badResponses: w.badResponses })
+    // a non-persisted pageshow must do nothing
+    let loads2 = 0; page.on('load', () => loads2++)
+    await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: false })))
+    await page.waitForTimeout(800)
+    record(`T03b-${kind}`, 'pageshow persisted=false does nothing', loads2 === 0 && await page.locator('#login-form').isVisible() && w.gateReads.length === 0, { loads2 })
+    await ctx.close() }
+}
+
+// T04/T05 signed in, one per gate step
+const expected = { a: '/email-verification', b: '/phone', c: '/otp', d: '/id-liveness', e: '/decouvrir' }
+for (const [label, want] of Object.entries(expected)) {
+  const acc = accounts[label]
+  for (const kind of ['mobile', 'desktop']) {
+    { const ctx = await newCtx(browser, kind, acc.cookie); const page = await ctx.newPage(); const w = watch(page)
+      const chain = []; page.on('response', (r) => { if (r.status() === 303) chain.push(`303 ${new URL(r.url()).pathname} -> ${r.headers().location}`) })
+      await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+      const form = await page.locator('#login-form').count()
+      record(`T04-${label}-${kind}`, `signed-in (gate step ${acc.gate.step}) fresh /auth -> 303 ${want}, no sign-in form`, new URL(page.url()).pathname === want && form === 0 && w.gateReads.every((g) => true) && w.consoleErrors.length === 0, { url: page.url().replace(BASE, ''), chain, loginFormCount: form, consoleErrors: w.consoleErrors, badResponses: w.badResponses, gateReadsFromTargetPage: w.gateReads.length })
+      await ctx.close() }
+    { // restored /auth while signed in: load signed-out, then cookie arrives (signed in in another tab), then bfcache-style restore
+      const ctx = await newCtx(browser, kind); const page = await ctx.newPage(); const w = watch(page)
+      await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+      const [name, value] = acc.cookie.split('='); await ctx.addCookies([{ name, value, url: BASE }])
+      const nav = page.waitForURL((u) => u.pathname === want, { timeout: 8000 }).then(() => true).catch(() => false)
+      await page.evaluate(() => setTimeout(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })), 0))
+      // the form must be hidden immediately (before the reload lands)
+      const moved = await nav
+      await page.waitForLoadState('networkidle')
+      record(`T05-${label}-${kind}`, `signed-in restored /auth -> reload -> ${want}, no sign-in form shown`, moved && await page.locator('#login-form').count() === 0 && w.consoleErrors.length === 0, { url: page.url().replace(BASE, ''), navs: w.navs, consoleErrors: w.consoleErrors, badResponses: w.badResponses })
+      await ctx.close() }
+  }
+}
+save('g3-core.json'); await browser.close()
+const failed = (await import('./lib.mjs')).results.filter((r) => !r.pass).length; console.log('failed', failed); process.exit(failed ? 1 : 0)

@@ -1,0 +1,136 @@
+=== M1: reintroduce a browser gate read on pageshow (the original defect) in v2-client.ts
+mutated apps/web/src/v2-client.ts
+ 1 file changed, 1 insertion(+)
+-- unit (v2-login.test.ts):
+     × ships the hidden v2 error and a post form, with no onboarding fallback 28ms
+     × reads no gate on a fresh sign-in page and reloads a restored one so the server guard decides 6ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/v2-login.test.ts > sign-in routing and inline errors > ships the hidden v2 error and a post form, with no onboarding fallback
+AssertionError: expected '\n  var DRAFT = "ankanu.signup.v2"\n …' not to contain 'fetch(\'/v1/accounts/gate\', { creden…'
+ FAIL  apps/web/src/v2-login.test.ts > sign-in routing and inline errors > reads no gate on a fresh sign-in page and reloads a restored one so the server guard decides
+AssertionError: expected [ 'fetch /v1/accounts/gate' ] to deeply equal []
+ Test Files  1 failed (1)
+      Tests  2 failed | 4 passed (6)
+(restored)
+=== M1 at e2e level (web-only dev server, mutated v2-client.ts): gate read on every pageshow
+mutated apps/web/src/v2-client.ts
+  ✘   1 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (2.0s)
+  ✘   2 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (2.1s)
+  ✘   4 [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.6s)
+  ✘   6 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.5s)
+  ✘   7 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.4s)
+  ✓   9 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (19ms)
+  ✓  10 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › never tolerates the sign-in gate 401 against a running stack (3ms)
+  ✘   8 [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.6s)
+    e2e/test-results/auth-entry-a-signed-out-vi-f2858-m-with-no-browser-gate-read-mobile/test-failed-1.png
+    e2e/test-results/auth-entry-a-signed-out-vi-2af63-m-with-no-browser-gate-read-mobile/test-failed-1.png
+    e2e/test-results/auth-entry-a-sign-in-page--f7bc7-so-the-server-guard-decides-mobile/test-failed-1.png
+    e2e/test-results/auth-entry-a-signed-out-vi-f2858-m-with-no-browser-gate-read-desktop/test-failed-1.png
+    e2e/test-results/auth-entry-a-signed-out-vi-2af63-m-with-no-browser-gate-read-desktop/test-failed-1.png
+    e2e/test-results/auth-entry-a-sign-in-page--f7bc7-so-the-server-guard-decides-desktop/test-failed-1.png
+  6 failed
+  2 skipped
+  2 passed (12.7s)
+(restored)
+
+=== M2: remove window.location.reload() from the restore handler
+mutated apps/web/src/v2-client.ts
+-- unit:
+     × ships the hidden v2 error and a post form, with no onboarding fallback 19ms
+     × reads no gate on a fresh sign-in page and reloads a restored one so the server guard decides 6ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/v2-login.test.ts > sign-in routing and inline errors > ships the hidden v2 error and a post form, with no onboarding fallback
+AssertionError: expected '\n  var DRAFT = "ankanu.signup.v2"\n …' to contain 'window.location.reload()'
+ FAIL  apps/web/src/v2-login.test.ts > sign-in routing and inline errors > reads no gate on a fresh sign-in page and reloads a restored one so the server guard decides
+AssertionError: expected +0 to be 1 // Object.is equality
+      Tests  2 failed | 4 passed (6)
+-- e2e:
+  ✓   1 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.8s)
+  ✓   2 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.9s)
+  ✓   6 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.0s)
+  ✓   7 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.6s)
+  ✘   3 [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (30.2s)
+  ✓   9 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (14ms)
+  ✓  10 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › never tolerates the sign-in gate 401 against a running stack (2ms)
+  ✘   8 [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (30.2s)
+    e2e/test-results/auth-entry-a-sign-in-page--f7bc7-so-the-server-guard-decides-mobile/test-failed-1.png
+    e2e/test-results/auth-entry-a-sign-in-page--f7bc7-so-the-server-guard-decides-desktop/test-failed-1.png
+  2 failed
+  2 skipped
+  6 passed (40.0s)
+(restored)
+=== M3: widen the known-issue regex (drop the site-key constraint)
+mutated e2e/known-issues.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  ✘  3 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (18ms)
+  ✓  4 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › never tolerates the sign-in gate 401 against a running stack (10ms)
+    Received: {"pattern": /^requestStorageAccess: Permission denied\. https:\/\/www\.google\.com\/recaptcha\/api2\/(?:anchor|bframe)\?(?:\S*&)?k=[^&\s]+(?:&\S*)?$/, "reason": "Google's reCAPTCHA ifram
+  1 failed
+  2 skipped
+  1 passed (4.8s)
+(restored)
+
+=== M3b: widen the host (allow any host ending in .google.com.* by dropping the escaped dots)
+mutated e2e/known-issues.ts
+  ✓  4 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › never tolerates the sign-in gate 401 against a running stack (7ms)
+  ✘  3 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (14ms)
+  1 failed
+  2 skipped
+  1 passed (4.6s)
+(restored)
+
+=== M4: gate answers 200 {step:'anon'} instead of 401 for a signed-out caller (API)
+mutated apps/api/src/accounts.controller.ts
+     × answers the signup gate with 401 UNAUTHENTICATED when no live session is sent 86ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/create-session.test.ts > POST /v1/sessions > answers the signup gate with 401 UNAUTHENTICATED when no live session is sent
+AssertionError: expected 200 to be 401 // Object.is equality
+      Tests  1 failed | 37 passed (38)
+(restored)
+=== M5: do not hide the login form on a restored page
+mutated apps/web/src/v2-client.ts
+     × ships the hidden v2 error and a post form, with no onboarding fallback 24ms
+     × reads no gate on a fresh sign-in page and reloads a restored one so the server guard decides 6ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/v2-login.test.ts > sign-in routing and inline errors > ships the hidden v2 error and a post form, with no onboarding fallback
+AssertionError: expected '\n  var DRAFT = "ankanu.signup.v2"\n …' to contain 'form.setAttribute(\'hidden\', \'hidde…'
+ FAIL  apps/web/src/v2-login.test.ts > sign-in routing and inline errors > reads no gate on a fresh sign-in page and reloads a restored one so the server guard decides
+AssertionError: expected null to be 'hidden' // Object.is equality
+      Tests  2 failed | 4 passed (6)
+(restored)
+
+=== M6: server entry guard stops redirecting a signed-in account away from /auth (AC b, server side)
+mutated apps/web/src/entry-guard.ts
+     × sends each account to the first unfinished step 11ms
+     × sends a signed-in account away from the login form to in-app home 5ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/v2-flow.test.ts > server entry guard > sends each account to the first unfinished step
+AssertionError: expected null to be '/decouvrir' // Object.is equality
+ FAIL  apps/web/src/v2-flow.test.ts > server entry guard > sends a signed-in account away from the login form to in-app home
+AssertionError: expected 200 to be 303 // Object.is equality
+      Tests  2 failed | 32 passed (34)
+(restored)
+
+=== M7: fetchGateStep maps a 401 to 'error' instead of 'anon' (guard would then redirect a signed-out visitor away from /auth? or fail-open)
+mutated apps/web/src/entry-guard.ts
+     × reads the gate 401 as a signed-out visitor and anything unexpected as an error 29ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/v2-flow.test.ts > server entry guard > reads the gate 401 as a signed-out visitor and anything unexpected as an error
+AssertionError: expected 'error' to be 'anon' // Object.is equality
+      Tests  1 failed | 27 passed (28)
+(restored)
+
+=== M8: /auth no longer sent with cache-control: no-store
+53:      'cache-control': 'no-store',
+83:      cache: 'no-store',
+138:      cache: 'no-store',
+249:      cache: 'no-store',
+324:      'cache-control': 'no-store',
+=== M8: /auth html response no longer no-store (a cached fresh /auth would skip the server guard)
+mutated apps/web/src/v2-serve.ts
+     × reads the v2 screens when the process cwd is the web package 13ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/web/src/v2-flow.test.ts > route files > reads the v2 screens when the process cwd is the web package
+AssertionError: expected 'public, max-age=60' to be 'no-store' // Object.is equality
+      Tests  1 failed | 27 passed (28)
+(restored)

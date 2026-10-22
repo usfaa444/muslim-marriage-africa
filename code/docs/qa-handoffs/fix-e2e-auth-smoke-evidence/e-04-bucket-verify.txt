@@ -1,0 +1,5 @@
+buckets [ 'ankanu' ]
+versioning Enabled
+policy: NoSuchBucketPolicy
+grants [{"Grantee":{"Type":"CanonicalUser"},"Permission":"FULL_CONTROL"}]
+anonymous GET bucket listing: HTTP 403

@@ -5,7 +5,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { describe, expect, it } from 'vitest'
 import { GET as getDecouvrir } from '../app/decouvrir/route.js'
-import { entryLocation, entryRedirect } from './entry-guard.js'
+import { entryLocation, entryRedirect, fetchGateStep } from './entry-guard.js'
 import { authResponse } from './v2-serve.js'
 import { LandingPage } from './landing.js'
 import {
@@ -712,6 +712,30 @@ describe('server entry guard', () => {
     expect(entryLocation('/profil/01990000-0000-7000-8000-000000000001', 'email')).toBe('/email-verification')
   })
 
+  it('reads the gate 401 as a signed-out visitor and anything unexpected as an error', async () => {
+    const original = globalThis.fetch
+    const answers: Array<Response | Error> = []
+    try {
+      globalThis.fetch = (async () => {
+        const next = answers.shift()
+        if (!next || next instanceof Error) throw next ?? new Error('no answer')
+        return next
+      }) as typeof fetch
+      answers.push(Response.json({ error: { code: 'UNAUTHENTICATED' } }, { status: 401 }))
+      expect(await fetchGateStep('ankanu_session=gone')).toBe('anon')
+      answers.push(Response.json({ step: 'account' }))
+      expect(await fetchGateStep('ankanu_session=live')).toBe('account')
+      answers.push(Response.json({ step: 'anon' }))
+      expect(await fetchGateStep('ankanu_session=live')).toBe('error')
+      answers.push(Response.json({ error: { code: 'UNHANDLED' } }, { status: 500 }))
+      expect(await fetchGateStep('ankanu_session=live')).toBe('error')
+      answers.push(new Error('down'))
+      expect(await fetchGateStep('ankanu_session=live')).toBe('error')
+    } finally {
+      globalThis.fetch = original
+    }
+  })
+
   it('sends a signed-in account away from the login form to in-app home', async () => {
     const home = await authResponse(
       new Request('http://127.0.0.1/auth', { headers: { cookie: 'ankanu_session=real-session' } }),
@@ -847,6 +871,8 @@ describe('route files', () => {
       expect(splashBody).toContain('<a class="signin" href="/auth">Se connecter</a>')
       const signIn = await authResponse(new Request('http://127.0.0.1/auth'))
       expect(signIn.status).toBe(200)
+      // Never served from the HTTP cache, so a fresh /auth document always went through the entry guard.
+      expect(signIn.headers.get('cache-control')).toBe('no-store')
       const body = await signIn.text()
       expect(body).toContain('Se connecter')
       const loginMode = await authResponse(new Request('http://127.0.0.1/auth?mode=login'))

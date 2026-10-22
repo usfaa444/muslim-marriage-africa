@@ -1,0 +1,28 @@
+### smoke.spec.ts (unchanged by the story) against the origin/main web image (7505c57) on the same api
+  ✓   1 [mobile] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.5s)
+  ✘   3 [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.7s)
+  ✓   5 [mobile] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.7s)
+  ✘   9 [mobile] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (1.1s)
+  ✓   7 [mobile] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (2.1s)
+  ✓  11 [desktop] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width (1.5s)
+  ✓  10 [desktop] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.3s)
+  ✘  12 [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.3s)
+  ✘  13 [desktop] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width (2.4s)
+  ✓  15 [desktop] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width (948ms)
+  ✓  14 [desktop] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (2.0s)
+  ✓  16 [desktop] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (1.9s)
+  ✓  17 [desktop] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width (1.9s)
+  ✘  18 [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (891ms)
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+    +   "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4014/v1/accounts/gate",
+  5 failed
+  4 skipped
+  9 passed (19.1s)

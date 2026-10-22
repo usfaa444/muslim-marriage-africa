@@ -1,0 +1,19 @@
+import { launch, newCtx, watch, BASE, EV } from './lib.mjs'
+const STUB = `window.grecaptcha={render:function(el,o){setTimeout(function(){o.callback()},20);return 0},getResponse:function(){return 'test-ok'},reset:function(){}};`
+const browser = await launch()
+for (const kind of ['mobile', 'desktop']) {
+  const ctx = await newCtx(browser, kind); const page = await ctx.newPage(); const w = watch(page)
+  await page.addInitScript(() => { sessionStorage.setItem('ankanu.signup.v2', JSON.stringify({ pseudonym: 'qa2ui' + Math.floor(Math.random() * 1e6), dob: '1996-05-17', civil_given_name: 'Fatoumata', civil_family_name: 'Sawadogo', gender: 'sister' })) })
+  await page.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: STUB + 'if(window.onRecaptchaLoad)window.onRecaptchaLoad()' }))
+  await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+  const posts = []; page.on('response', (r) => { if (r.url().endsWith('/v1/accounts') && r.request().method() === 'POST') posts.push(r.status()) })
+  const r = await page.goto(BASE + '/signup/account'); await page.waitForLoadState('networkidle')
+  const email = `qa2.ui.${kind}.${Date.now()}@example.test`
+  await page.locator('#signup-email').fill(email); await page.locator('#signup-password').fill('correct horse battery staple'); await page.locator('#signup-pledge').check()
+  await page.waitForFunction(() => !document.getElementById('signup-submit').disabled, null, { timeout: 5000 })
+  await page.locator('#signup-submit').click()
+  await page.waitForURL((u) => u.pathname === '/email-verification', { timeout: 10000 }).catch(() => {})
+  console.log(kind, 'signup UI: GET /signup/account', r.status(), '| POST /v1/accounts', JSON.stringify(posts), '| landed', page.url().replace(BASE, ''), '| consoleErrors', JSON.stringify(w.consoleErrors), '| gateReads', w.gateReads.length)
+  await ctx.close()
+}
+await browser.close()

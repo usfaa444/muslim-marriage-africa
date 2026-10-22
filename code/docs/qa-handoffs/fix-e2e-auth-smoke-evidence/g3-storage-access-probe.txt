@@ -1,0 +1,14 @@
+--- handled (chromium_headless_shell-1194/chrome-linux/headless_shell) version 141.0.7390.37
+   console.error text="requestStorageAccess: Permission denied." url=http://127.0.0.1:37847/recaptcha/api2/anchor?ar=1&k=KEY
+   console.log text="rejected NotAllowedError: requestStorageAccess not allowed" url=http://127.0.0.1:37847/recaptcha/api2/anchor?ar=1&k=KEY
+--- unhandled (chromium_headless_shell-1194/chrome-linux/headless_shell) version 141.0.7390.37
+   console.error text="requestStorageAccess: Permission denied." url=http://127.0.0.1:44587/recaptcha/api2/anchor?ar=1&k=KEY
+   pageerror name=NotAllowedError message="requestStorageAccess not allowed"
+--- hasAccessThenRequest (chromium_headless_shell-1194/chrome-linux/headless_shell) version 141.0.7390.37
+   (nothing)
+--- handled (chromium-1194/chrome-linux/chrome) version 141.0.7390.37
+   console.log text="granted" url=http://127.0.0.1:33653/recaptcha/api2/anchor?ar=1&k=KEY
+--- unhandled (chromium-1194/chrome-linux/chrome) version 141.0.7390.37
+   (nothing)
+--- hasAccessThenRequest (chromium-1194/chrome-linux/chrome) version 141.0.7390.37
+   (nothing)

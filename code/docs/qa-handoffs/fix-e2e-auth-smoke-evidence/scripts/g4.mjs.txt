@@ -1,0 +1,33 @@
+import { launch, newCtx, EV, accounts } from './lib.mjs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { PNG } from '/home/claude/ankanu-e2e-fix/code/node_modules/pngjs/lib/png.js'
+const shim = readFileSync('/tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/tw/cdn-shim.js', 'utf8')
+const WIDTHS = [360, 390, 768, 1024, 1280, 1440]
+const browser = await launch()
+mkdirSync(`${EV}/widths`, { recursive: true })
+const rows = []
+for (const w of WIDTHS) {
+  const shots = {}
+  for (const [name, base] of [['main', 'http://localhost:4014'], ['head', 'http://localhost:4012']]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, locale: 'fr-FR' })
+    const page = await ctx.newPage()
+    const errs = []
+    page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text() + ' ' + m.location().url) })
+    await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: shim }))
+    await page.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: '' }))
+    await page.route('https://fonts.googleapis.com/**', (r) => r.fulfill({ contentType: 'text/css', body: '' }))
+    await page.route('https://fonts.gstatic.com/**', (r) => r.abort())
+    await page.goto(base + '/auth'); await page.waitForLoadState('networkidle'); await page.waitForTimeout(300)
+    const m = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, iw: window.innerWidth, signupHidden: getComputedStyle(document.getElementById('panel-signup')).display === 'none', loginVisible: document.getElementById('login-form').offsetParent !== null }))
+    const buf = await page.screenshot({ fullPage: true, path: `${EV}/widths/auth-${name}-${w}.png` })
+    shots[name] = { buf, m, errs }
+    await ctx.close()
+  }
+  const a = PNG.sync.read(shots.main.buf), b = PNG.sync.read(shots.head.buf)
+  let diff = -1
+  if (a.width === b.width && a.height === b.height) { diff = 0; for (let i = 0; i < a.data.length; i += 4) if (a.data[i] !== b.data[i] || a.data[i + 1] !== b.data[i + 1] || a.data[i + 2] !== b.data[i + 2]) diff++ }
+  rows.push({ width: w, overflow: shots.head.m.sw > shots.head.m.iw, scrollWidth: shots.head.m.sw, innerWidth: shots.head.m.iw, signupPanelHidden: shots.head.m.signupHidden, loginVisible: shots.head.m.loginVisible, size: `${b.width}x${b.height}`, diffPixelsVsMain: diff, errors: shots.head.errs.filter((e) => !/fonts|ERR_TUNNEL|tailwind/.test(e)) })
+  console.log(JSON.stringify(rows.at(-1)))
+}
+writeFileSync(`${EV}/g4-widths.json`, JSON.stringify(rows, null, 2))
+await browser.close()

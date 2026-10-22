@@ -1,0 +1,5 @@
+issue 201
+log line (literal config.md grep): api-1  | email qa2.f@example.test AnKanu http://localhost:4012/email-verification?token=t8IFUOeaMX5v5XSNPwNDy1-2lAkaO_srvrkVrHXdXcU
+after following the link in a browser: url /phone gate {"step":"phone"} console errors [] bad []
+body text: smartphone Vérification du numéro de téléphone Étape préalable requise avant toute visibilité publique au sein de l’espace Ta’aruf. Un code confidentiel vous sera adressé. Numéro de téléphone mobile 🇧🇫 +226 info Un code confidentiel à 6 chiffres vous sera transmis par SMS. Recevoir le code par SMS
+re-using the token -> 400

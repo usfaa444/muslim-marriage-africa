@@ -1,0 +1,32 @@
+[
+  {
+    "id": "T11",
+    "name": "keyboard-only sign-in (type, Tab, type, Enter) reaches the member step",
+    "pass": true,
+    "detail": {
+      "url": "/phone",
+      "consoleErrors": []
+    }
+  },
+  {
+    "id": "T12",
+    "name": "double-click on sign-in sends exactly one POST /v1/sessions",
+    "pass": true,
+    "detail": {
+      "posts": 1
+    }
+  },
+  {
+    "id": "T13",
+    "name": "very long and non-Latin credentials: handled inline error, no 5xx, no crash",
+    "pass": true,
+    "detail": {
+      "badResponses": [
+        "401 POST http://localhost:4012/v1/sessions"
+      ],
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4012/v1/sessions"
+      ]
+    }
+  }
+]

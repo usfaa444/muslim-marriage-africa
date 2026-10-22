@@ -1,0 +1,15 @@
+### Input validation on session create (server side): script / SQL-style payloads
+<img src=x onerror=alert(1)>... -> 401
+' OR 1=1 --... -> 401
+qa2.e@example.test' --... -> 401
+"; DROP TABLE account; --... -> 401
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA... -> 401
+### Response headers for /auth and session cookie flags
+HTTP/1.1 200 OK
+cache-control: no-store
+$ cookie flags from sign-in
+HTTP/1.1 201 Created
+set-cookie: ankanu_session=01a162e8-e3f6-718c-a8db-92295fae961a; Path=/; HttpOnly; SameSite=Lax
+### table still intact after payloads
+6
+### post-run api log: errors / 5xx

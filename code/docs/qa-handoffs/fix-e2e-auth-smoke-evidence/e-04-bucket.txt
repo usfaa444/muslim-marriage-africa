@@ -1,0 +1,4 @@
+$ docker compose -p ankanu-qa2 exec -T api node -e "import(...).then(...createPrivateBucket())"   (config.md command, project name swapped)
+exit 0
+--- run it a second time (idempotent?)
+exit 0

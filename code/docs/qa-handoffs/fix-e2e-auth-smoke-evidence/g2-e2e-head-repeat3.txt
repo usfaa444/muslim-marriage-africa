@@ -1,0 +1,7 @@
+### full suite --repeat-each=3 (flake check), head, stack
+
+Running 84 tests using 2 workers
+··°°·°·°·°·°····°°·°·°··°°····°°·°·°·°·°········································
+····
+  18 skipped
+  66 passed (1.0m)

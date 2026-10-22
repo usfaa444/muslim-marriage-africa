@@ -1,0 +1,46 @@
+const { knownIssue } = await import('/home/claude/ankanu-e2e-fix/code/e2e/known-issues.ts')
+const K = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+const D = 'requestStorageAccess: Permission denied.'
+const real = `https://www.google.com/recaptcha/api2/anchor?ar=1&k=${K}&co=aHR0cDovL2xvY2FsaG9zdDo0MDEy&hl=fr&v=abc_DEF-123&size=normal&s=Zm9v%3D&anchor-ms=20000&execute-ms=15000&cb=xyz123`
+const cases = [
+  ['MATCH real anchor url (k in the middle)', `${D} ${real}`, true],
+  ['MATCH bframe, k first', `${D} https://www.google.com/recaptcha/api2/bframe?k=${K}&hl=fr`, true],
+  ['MATCH bframe, k last', `${D} https://www.google.com/recaptcha/api2/bframe?hl=fr&v=x&k=${K}`, true],
+  ['MATCH k only', `${D} https://www.google.com/recaptcha/api2/anchor?k=${K}`, true],
+  ['MISS other site key', `${D} ${real.replace(K, '6LcRealProductionKey_xxxxxxxxxxxxxxxxxxxxxxxx')}`, false],
+  ['MISS key with extra suffix', `${D} ${real.replace(K, K + 'X')}`, false],
+  ['MISS key with extra prefix (kk=)', `${D} https://www.google.com/recaptcha/api2/anchor?ar=1&xk=${K}`, false],
+  ['MISS no key', `${D} https://www.google.com/recaptcha/api2/anchor?ar=1`, false],
+  ['MISS our origin', `${D} http://localhost:4012/auth`, false],
+  ['MISS our origin carrying the google url as a param', `${D} http://localhost:4012/auth?next=${encodeURIComponent(real)}`, false],
+  ['MISS http scheme', `${D} ${real.replace('https:', 'http:')}`, false],
+  ['MISS other host (suffix)', `${D} ${real.replace('www.google.com', 'www.google.com.evil.example')}`, false],
+  ['MISS other host (prefix)', `${D} ${real.replace('www.google.com', 'evil-www.google.com')}`, false],
+  ['MISS google.com without www', `${D} ${real.replace('www.google.com', 'google.com')}`, false],
+  ['MISS recaptcha.net host', `${D} ${real.replace('www.google.com', 'www.recaptcha.net')}`, false],
+  ['MISS other reCAPTCHA path (enterprise)', `${D} ${real.replace('/api2/anchor', '/enterprise/anchor')}`, false],
+  ['MISS other path /api2/userverify', `${D} ${real.replace('/api2/anchor', '/api2/userverify')}`, false],
+  ['MISS api2/anchor2', `${D} ${real.replace('/api2/anchor', '/api2/anchor2')}`, false],
+  ['MISS different message', `requestStorageAccess: Permission denied by user ${real}`, false],
+  ['MISS message without the dot', `requestStorageAccess: Permission denied ${real}`, false],
+  ['MISS other error from the same iframe', `Uncaught TypeError: x is not a function ${real}`, false],
+  ['MISS CSP violation from the same iframe', `Refused to load the script because it violates CSP ${real}`, false],
+  ['MISS prefixed text', `Error: ${D} ${real}`, false],
+  ['MISS 401 gate (stack)', 'Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4012/v1/accounts/gate', false],
+  ['MISS 500', 'Failed to load resource: the server responded with a status of 500 (Internal Server Error) http://localhost:4012/decouvrir', false],
+  ['MISS newline smuggling', `${D} ${real}\nTypeError: boom`, false],
+  ['MISS space smuggling', `${D} ${real} extra`, false],
+]
+let bad = 0
+for (const [name, text, want] of cases) {
+  const got = knownIssue(text) !== undefined
+  if (got !== want) bad++
+  console.log(`${got === want ? 'ok  ' : 'WRONG'} ${name} -> ${got ? 'tolerated' : 'fails the test'}`)
+}
+for (const base of ['unset', 'http://localhost:4012']) {
+  if (base === 'unset') delete process.env.E2E_BASE_URL; else process.env.E2E_BASE_URL = base
+  const g = 'Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4012/v1/accounts/gate'
+  const g2 = 'Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:3100/v1/accounts/gate'
+  console.log(`E2E_BASE_URL=${base}: gate 401 on :4012 tolerated=${knownIssue(g) !== undefined}; on :3100 tolerated=${knownIssue(g2) !== undefined}`)
+}
+console.log(bad ? `${bad} WRONG` : 'all as expected')

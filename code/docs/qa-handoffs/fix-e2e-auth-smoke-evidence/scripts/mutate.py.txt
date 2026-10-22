@@ -1,0 +1,6 @@
+import sys, subprocess
+path, old, new = sys.argv[1], sys.argv[2], sys.argv[3]
+s = open(path, encoding='utf8').read()
+assert s.count(old) == 1, f'expected exactly one occurrence of {old!r}, found {s.count(old)}'
+open(path, 'w', encoding='utf8').write(s.replace(old, new))
+print('mutated', path)

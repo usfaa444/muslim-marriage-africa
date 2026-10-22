@@ -1,0 +1,24 @@
+               List of relations
+ Schema |        Name         | Type  | Owner  
+--------+---------------------+-------+--------
+ public | account             | table | ankanu
+ public | audit_event         | table | ankanu
+ public | cil_ticket          | table | ankanu
+ public | credential          | table | ankanu
+ public | derivative          | table | ankanu
+ public | discovery_exclusion | table | ankanu
+ public | email_verification  | table | ankanu
+ public | favourite           | table | ankanu
+ public | operator_config     | table | ankanu
+ public | password_reset      | table | ankanu
+ public | photo_asset         | table | ankanu
+ public | pin_lock            | table | ankanu
+ public | profile             | table | ankanu
+ public | profile_visit       | table | ankanu
+ public | session             | table | ankanu
+ public | signed_grant        | table | ankanu
+ public | sms_dispatch        | table | ankanu
+ public | strike              | table | ankanu
+ public | verification_record | table | ankanu
+(19 rows)
+
