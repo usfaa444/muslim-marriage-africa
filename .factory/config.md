@@ -61,7 +61,25 @@ First time only, create:
   services:
     web:
       ports: ["4012:3000"]
+    postgres:
+      ports: ["127.0.0.1:55432:5432"]
+    api:
+      env_file:
+        - path: /Users/<you>/.ankanu/api.env
+          required: true
   ```
+
+  The Postgres port is bound to this computer only, so the migrations can run from the host. The api's own env file stands in for staging's `/var/lib/ankanu/api.env`, which does not exist locally.
+
+- `~/.ankanu/api.env` (mode 600):
+
+  ```bash
+  SMTP_URL=log://
+  EVIDENCE_KEY=<openssl rand -base64 32>
+  EVIDENCE_KID=local-ankanu-1
+  ```
+
+  Without `SMTP_URL` every email send is 503 `EMAIL_DELIVERY_FAILED`; with `log://` the api log prints `email <address> AnKanu <link>`. Without the evidence key, ID and liveness uploads are 503.
 
 - `~/.ankanu/local.env`:
 
@@ -74,17 +92,29 @@ First time only, create:
 
   `compose.yaml` reads both origins from the env file (staging keeps its own in `/var/lib/ankanu/compose.interpolate.env`), and the api refuses to boot without them. Object storage uses the `pgsty/minio` image, since `minio/minio` is no longer published.
 
+After the first `up` (and after any reset of `code/pg-data` or the bucket's data), set up the database and the bucket. Nothing in the stack does this on start:
+
+```bash
+# from code/apps/api: apply every Drizzle migration (the repo's only runner)
+DATABASE_URL=postgres://ankanu@127.0.0.1:55432/ankanu npx drizzle-kit migrate
+# from code/: create the private, versioned evidence bucket with the app's own adapter
+docker compose -p ankanu-local exec -T api node -e "import('/app/apps/api/dist/object-storage-adapter.js').then((m) => m.ObjectStorageAdapter.fromSettings(m.objectStorageSettings(process.env)).createPrivateBucket())"
+```
+
+Without the migrations every database call is 500 `Request failed`; without the bucket, ID and liveness uploads are 503. Run the migrate command again whenever a story adds a migration.
+
 Each story, from `code/` on the story branch:
 
 ```bash
 git fetch origin && git checkout <story-branch> && git pull
 docker compose -p ankanu-local --env-file ~/.ankanu/local.env \
   -f compose.yaml -f ~/.ankanu/compose.local.yml up -d --build --wait
+(cd apps/api && DATABASE_URL=postgres://ankanu@127.0.0.1:55432/ankanu npx drizzle-kit migrate)
 curl -fsS http://localhost:4012/ >/dev/null && curl -fsS http://localhost:4012/v1/health
 E2E_BASE_URL=http://localhost:4012 npm run test:e2e
 ```
 
-Then send Fay `http://localhost:4012` and the story's test steps from the QA handoff. Use the project name `ankanu-local` so the local stack never touches another project. Do not run `down -v`: it deletes the local database. To reset local data, ask Fay first.
+Then send Fay `http://localhost:4012` and the story's test steps from the QA handoff. Phone codes and emails go to the api log locally: `docker compose -p ankanu-local logs api | grep -E 'otp |email '`. Use the project name `ankanu-local` so the local stack never touches another project. Do not run `down -v`: it deletes the local database. To reset local data, ask Fay first.
 
 ## Handoffs and reports
 
