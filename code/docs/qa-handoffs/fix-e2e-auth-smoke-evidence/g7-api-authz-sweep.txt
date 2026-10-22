@@ -1,0 +1,86 @@
+### Gate contract
+$ curl -i /v1/accounts/gate (no cookie)
+HTTP/1.1 401 Unauthorized
+content-type: application/json; charset=utf-8
+{"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a162e1-9da8-7ec6-a376-85a466851a7c","retryable":false}}
+$ with unknown session id
+HTTP/1.1 401 Unauthorized
+{"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a162e1-9dbf-776e-ba0b-a4ceb210711f","retryable":false}}
+$ with garbage cookie
+HTTP/1.1 401 Unauthorized
+{"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a162e1-9dcd-7a93-bffc-5e928a7ea4aa","retryable":false}}
+$ with empty cookie value
+HTTP/1.1 401 Unauthorized
+{"error":{"code":"UNAUTHENTICATED","message":"Authentification requise.","details":null,"request_id":"01a162e1-9dda-7d15-a062-ab595e25e9a8","retryable":false}}
+$ with valid session (member d, identity step)
+HTTP/1.1 200 OK
+{"step":"identity"}
+$ POST /v1/accounts/gate (method not allowed?)
+HTTP/1.1 404 Not Found
+
+### Unauthenticated sweep of every mapped route (no cookie)
+200 GET /v1/health
+204 DELETE /v1/sessions/current
+400 POST /v1/accounts
+400 POST /v1/accounts/email-verifications/consume
+400 POST /v1/accounts/precheck
+400 POST /v1/password-resets
+400 POST /v1/password-resets/consume
+400 POST /v1/sessions
+401 DELETE /v1/favourites/:target_id
+401 DELETE /v1/media/:id
+401 GET /v1/accounts/email-verifications
+401 GET /v1/accounts/gate
+401 GET /v1/browse
+401 GET /v1/favourites
+401 GET /v1/filters
+401 GET /v1/me/deactivate
+401 GET /v1/me/export
+401 GET /v1/me/export-status
+401 GET /v1/me/profile
+401 GET /v1/media/get
+401 GET /v1/pin
+401 GET /v1/profiles/:id
+401 GET /v1/staff/cases
+401 GET /v1/staff/metrics
+401 GET /v1/staff/signals/visits
+401 GET /v1/verifications/id
+401 GET /v1/verifications/liveness
+401 GET /v1/verifications/otp
+401 PATCH /v1/me/profile
+401 POST /v1/accounts/email
+401 POST /v1/accounts/email-verifications
+401 POST /v1/browse/pass
+401 POST /v1/favourites
+401 POST /v1/me/deactivate
+401 POST /v1/me/delete
+401 POST /v1/me/export
+401 POST /v1/me/reactivate
+401 POST /v1/media
+401 POST /v1/pin/lock
+401 POST /v1/pin/unlock
+401 POST /v1/staff/cases
+401 POST /v1/verifications/id
+401 POST /v1/verifications/liveness
+401 POST /v1/verifications/otp
+401 PUT /v1/me/profile
+401 PUT /v1/media/:id/main
+401 PUT /v1/pin
+404 POST /v1/staff/verifications/grant
+---
+401: 39 routes
+204: 1 routes
+400: 6 routes
+200: 1 routes
+404: 1 routes
+### lower role (member session) on staff routes
+GET /v1/staff/cases -> 403
+GET /v1/staff/metrics -> 403
+GET /v1/staff/signals/visits -> 403
+POST /v1/staff/cases -> 403
+### other member session reading own state only: member d gate vs member e gate
+{"step":"identity"}
+{"step":"account"}
+### member session reading verifications of "another user": endpoints take no id; GET /v1/verifications/id returns only own row
+{"status":"none"}
+{"id":"01a162d8-3638-78ca-b444-9bad27963df9","kind":"id_document","status":"pending"}

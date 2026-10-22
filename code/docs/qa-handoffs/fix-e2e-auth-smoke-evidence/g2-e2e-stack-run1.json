@@ -1,0 +1,2257 @@
+{
+  "config": {
+    "argv": [
+      "/opt/node22/bin/node",
+      "/home/claude/ankanu-e2e-fix/code/node_modules/.bin/playwright",
+      "test",
+      "--reporter=list,json"
+    ],
+    "configFile": "/home/claude/ankanu-e2e-fix/code/playwright.config.ts",
+    "rootDir": "/home/claude/ankanu-e2e-fix/code/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/claude/ankanu-e2e-fix/code/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/home/claude/ankanu-e2e-fix/code/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/home/claude/ankanu-e2e-fix/code/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "desktop",
+        "name": "desktop",
+        "testDir": "/home/claude/ankanu-e2e-fix/code/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/claude/ankanu-e2e-fix/code/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "name": "mobile",
+        "testDir": "/home/claude/ankanu-e2e-fix/code/e2e",
+        "snapshotDir": "/home/claude/ankanu-e2e-fix/code/e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 30000,
+        "use": {
+          "baseURL": "http://localhost:4012",
+          "locale": "fr-FR",
+          "timezoneId": "Africa/Ouagadougou",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "executablePath": "/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell"
+          },
+          "userAgent": "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Mobile Safari/537.36",
+          "viewport": {
+            "width": 360,
+            "height": 780
+          },
+          "screen": {
+            "width": 412,
+            "height": 915
+          },
+          "deviceScaleFactor": 2.625,
+          "isMobile": true,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "mobile"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/claude/ankanu-e2e-fix/code/e2e/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "name": "desktop",
+        "testDir": "/home/claude/ankanu-e2e-fix/code/e2e",
+        "snapshotDir": "/home/claude/ankanu-e2e-fix/code/e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 30000,
+        "use": {
+          "baseURL": "http://localhost:4012",
+          "locale": "fr-FR",
+          "timezoneId": "Africa/Ouagadougou",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "video": "off",
+          "launchOptions": {
+            "executablePath": "/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell"
+          },
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "desktop"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "auth-entry.spec.ts",
+      "file": "auth-entry.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "a signed-out visitor opening /auth gets the sign-in form with no browser gate read",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1464,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:38.245Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "848dfafcdc40e0991fd3-75249a684ae8bc7666b2",
+          "file": "auth-entry.spec.ts",
+          "line": 15,
+          "column": 3
+        },
+        {
+          "title": "a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1372,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:38.174Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "848dfafcdc40e0991fd3-121bd82bd0b28ad6f5ab",
+          "file": "auth-entry.spec.ts",
+          "line": 15,
+          "column": 3
+        },
+        {
+          "title": "a sign-in page restored from the back-forward cache reloads so the server guard decides",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1649,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:39.686Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "848dfafcdc40e0991fd3-76c3f2642e33824ab841",
+          "file": "auth-entry.spec.ts",
+          "line": 27,
+          "column": 1
+        },
+        {
+          "title": "a signed-out visitor opening /auth gets the sign-in form with no browser gate read",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1211,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:45.666Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "848dfafcdc40e0991fd3-e60b1e03794866e53f93",
+          "file": "auth-entry.spec.ts",
+          "line": 15,
+          "column": 3
+        },
+        {
+          "title": "a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1265,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:46.295Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "848dfafcdc40e0991fd3-8464a43a60b88e55e477",
+          "file": "auth-entry.spec.ts",
+          "line": 15,
+          "column": 3
+        },
+        {
+          "title": "a sign-in page restored from the back-forward cache reloads so the server guard decides",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1503,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:47.016Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "848dfafcdc40e0991fd3-d1bbfb32350d9c426311",
+          "file": "auth-entry.spec.ts",
+          "line": 27,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "known-issues.spec.ts",
+      "file": "known-issues.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "known issues",
+          "file": "known-issues.spec.ts",
+          "line": 23,
+          "column": 6,
+          "specs": [
+            {
+              "title": "tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "the allow-list check runs once",
+                      "location": {
+                        "file": "/home/claude/ankanu-e2e-fix/code/e2e/known-issues.spec.ts",
+                        "line": 25,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 2,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:39.881Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "the allow-list check runs once",
+                          "location": {
+                            "file": "/home/claude/ankanu-e2e-fix/code/e2e/known-issues.spec.ts",
+                            "line": 25,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "de2387da05f47f8bdae4-5b8c076c053281e4719c",
+              "file": "known-issues.spec.ts",
+              "line": 28,
+              "column": 3
+            },
+            {
+              "title": "never tolerates the sign-in gate 401 against a running stack",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "the allow-list check runs once",
+                      "location": {
+                        "file": "/home/claude/ankanu-e2e-fix/code/e2e/known-issues.spec.ts",
+                        "line": 25,
+                        "column": 10
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 1,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:39.909Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "the allow-list check runs once",
+                          "location": {
+                            "file": "/home/claude/ankanu-e2e-fix/code/e2e/known-issues.spec.ts",
+                            "line": 25,
+                            "column": 10
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "de2387da05f47f8bdae4-03eafc98e98cae24038a",
+              "file": "known-issues.spec.ts",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:47.689Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de2387da05f47f8bdae4-687e3d431f4d3ac07427",
+              "file": "known-issues.spec.ts",
+              "line": 28,
+              "column": 3
+            },
+            {
+              "title": "never tolerates the sign-in gate 401 against a running stack",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:47.719Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "de2387da05f47f8bdae4-7eb7366d483fce9beb4a",
+              "file": "known-issues.spec.ts",
+              "line": 42,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "smoke.spec.ts",
+      "file": "smoke.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "a signed-out visitor is sent from Discover to sign-in",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "mobile",
+              "projectName": "mobile",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 783,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:43.786Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4219922fea2e2bd3c691-8a8f933efe6802de60a1",
+          "file": "smoke.spec.ts",
+          "line": 26,
+          "column": 1
+        },
+        {
+          "title": "a signed-out visitor is sent from Discover to sign-in",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                },
+                {
+                  "type": "known-issue",
+                  "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "desktop",
+              "projectName": "desktop",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 868,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-22T08:57:54.938Z",
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "4219922fea2e2bd3c691-2bc009a5df5d41e42f17",
+          "file": "smoke.spec.ts",
+          "line": 26,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "public page /",
+          "file": "smoke.spec.ts",
+          "line": 6,
+          "column": 8,
+          "specs": [
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1935,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:39.930Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-58733887dc2ad76f424a",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "width sweep runs once",
+                      "location": {
+                        "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                        "line": 16,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 138,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:41.362Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "width sweep runs once",
+                          "location": {
+                            "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                            "line": 16,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-de1849617ffcc80b3a4b",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            },
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2348,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:47.749Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-f1e72d28fd48833c4f44",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1265,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:48.552Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-560c7c900c376f2fb0a0",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "public page /auth",
+          "file": "smoke.spec.ts",
+          "line": 6,
+          "column": 8,
+          "specs": [
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1945,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:41.520Z",
+                      "annotations": [
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-609846f1de9995f206d9",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "width sweep runs once",
+                      "location": {
+                        "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                        "line": 16,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "skipped",
+                      "duration": 141,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:41.886Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "width sweep runs once",
+                          "location": {
+                            "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                            "line": 16,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-e45202b464d894e73a35",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            },
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2051,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:49.833Z",
+                      "annotations": [
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-03718716d4350e84c56e",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1928,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:50.107Z",
+                      "annotations": [
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www\\.google\\.com/recaptcha/api\\.js\\?onload=onRecaptchaLoad&render=explicit$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit)"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-b6073214b2500e976fbe",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "public page /signup",
+          "file": "smoke.spec.ts",
+          "line": 6,
+          "column": 8,
+          "specs": [
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1432,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:42.050Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-db41227403621c615fcb",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "width sweep runs once",
+                      "location": {
+                        "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                        "line": 16,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 153,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:43.481Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "width sweep runs once",
+                          "location": {
+                            "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                            "line": 16,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-fca65cb821dc3a89a919",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            },
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1818,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:51.896Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-957530f048107ecbcbb2",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1143,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:52.051Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-2dc594ce5e8246e0310c",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            }
+          ]
+        },
+        {
+          "title": "public page /password-reset",
+          "file": "smoke.spec.ts",
+          "line": 6,
+          "column": 8,
+          "specs": [
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1777,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:43.502Z",
+                      "annotations": [
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-cc0d540706fd8c417799",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "width sweep runs once",
+                      "location": {
+                        "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                        "line": 16,
+                        "column": 12
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "mobile",
+                  "projectName": "mobile",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "skipped",
+                      "duration": 122,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:43.649Z",
+                      "annotations": [
+                        {
+                          "type": "skip",
+                          "description": "width sweep runs once",
+                          "location": {
+                            "file": "/home/claude/ankanu-e2e-fix/code/e2e/smoke.spec.ts",
+                            "line": 16,
+                            "column": 12
+                          }
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-0e59b611139c1e8e9602",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            },
+            {
+              "title": "renders without console errors and passes axe AA",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1711,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:53.210Z",
+                      "annotations": [
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-b518d7301cd9d5129ad8",
+              "file": "smoke.spec.ts",
+              "line": 7,
+              "column": 5
+            },
+            {
+              "title": "fits every factory width",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                    },
+                    {
+                      "type": "known-issue",
+                      "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                    }
+                  ],
+                  "expectedStatus": "passed",
+                  "projectId": "desktop",
+                  "projectName": "desktop",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 1696,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-22T08:57:53.730Z",
+                      "annotations": [
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^GET https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries net::ERR_TUNNEL_CONNECTION_FAILED$ (GET https://cdn.tailwindcss.com/?plugins=forms,container-queries net::ERR_TUNNEL_CONNECTION_FAILED)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn\\.tailwindcss\\.com/\\?plugins=forms.container-queries$ (Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries)"
+                        },
+                        {
+                          "type": "known-issue",
+                          "description": "E2E_ALLOW_ERRORS: ^tailwind is not defined$ (tailwind is not defined)"
+                        }
+                      ],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4219922fea2e2bd3c691-327512ec083bfe8fcefa",
+              "file": "smoke.spec.ts",
+              "line": 15,
+              "column": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-22T08:57:37.059Z",
+    "duration": 18830.122,
+    "expected": 22,
+    "skipped": 6,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,39 @@
+// QA helper: create a disposable account through the real API and move it to a signup step.
+// usage: node mkacct.mjs <label> <email|phone|otp|identity|account>
+import { execSync } from 'node:child_process'
+const B = 'http://localhost:4012'
+const [label, target] = process.argv.slice(2)
+const H = { 'content-type': 'application/json', origin: B }
+const JPG = Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0, 0x10, 0x4a, 0x46, 0x49, 0x46, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0xff, 0xd9]).toString('base64')
+let cookie = ''
+async function call(method, path, body) {
+  const r = await fetch(B + path, { method, headers: { ...H, ...(cookie ? { cookie } : {}) }, body: body ? JSON.stringify(body) : undefined })
+  const sc = r.headers.get('set-cookie')
+  if (sc) cookie = sc.split(';')[0]
+  const text = await r.text()
+  return { status: r.status, body: text ? JSON.parse(text) : null }
+}
+const logs = () => execSync('docker compose -p ankanu-qa2 logs api --no-log-prefix', { cwd: '/home/claude/ankanu-e2e-fix/code', encoding: 'utf8' })
+const email = `qa2.${label}@example.test`
+let r = await call('POST', '/v1/accounts', { civil_given_name: 'Aïcha', civil_family_name: 'Ouédraogo', pledge_accepted: true, coc_version: '1', email, pseudonym: `qa2${label}`, gender: 'sister', password: 'correct horse battery staple', dob: '1995-04-12', recaptcha_token: 'test-ok' })
+if (r.status !== 201) { console.error('create', r); process.exit(1) }
+const order = ['email', 'phone', 'otp', 'identity', 'account']
+const want = order.indexOf(target)
+if (want >= 1) {
+  r = await call('POST', '/v1/accounts/email-verifications'); if (r.status !== 201) { console.error('issue', r); process.exit(1) }
+  const line = logs().split('\n').filter((l) => l.startsWith(`email ${email}`)).pop()
+  const token = line.split('token=')[1].trim()
+  r = await call('POST', '/v1/accounts/email-verifications/consume', { token }); if (r.status !== 200) { console.error('consume', r); process.exit(1) }
+}
+if (want >= 2) {
+  r = await call('POST', '/v1/verifications/otp', { action: 'send', phone_e164: `+2267${String(Math.floor(Math.random() * 1e7)).padStart(7, '0')}` }); if (r.status !== 201) { console.error('otp send', r); process.exit(1) }
+}
+if (want >= 3) {
+  const code = logs().split('\n').filter((l) => /^otp \d{6}$/.test(l)).pop().split(' ')[1]
+  r = await call('POST', '/v1/verifications/otp', { action: 'verify', code }); if (r.status !== 200) { console.error('otp verify', r); process.exit(1) }
+}
+if (want >= 4) {
+  for (const k of ['id', 'liveness']) { r = await call('POST', `/v1/verifications/${k}`, { image: JPG }); if (r.status !== 201) { console.error(k, r); process.exit(1) } }
+}
+const gate = await call('GET', '/v1/accounts/gate')
+console.log(JSON.stringify({ label, target, gate: gate.body, cookie, email }))

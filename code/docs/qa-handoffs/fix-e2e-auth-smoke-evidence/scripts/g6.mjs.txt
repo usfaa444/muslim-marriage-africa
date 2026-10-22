@@ -1,0 +1,36 @@
+import { launch, EV, accounts } from './lib.mjs'
+import { readFileSync, writeFileSync } from 'node:fs'
+import AxeBuilder from '/home/claude/ankanu-e2e-fix/code/node_modules/@axe-core/playwright/dist/index.mjs'
+const shim = readFileSync('/tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/tw/cdn-shim.js', 'utf8')
+const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']
+const browser = await launch()
+const out = []
+for (const [name, base] of [['head', 'http://localhost:4012'], ['main', 'http://localhost:4014']]) {
+  for (const w of [360, 1440]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, locale: 'fr-FR' })
+    const page = await ctx.newPage()
+    await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: shim }))
+    await page.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: '' }))
+    await page.route('https://fonts.googleapis.com/**', (r) => r.fulfill({ contentType: 'text/css', body: '' }))
+    await page.route('https://fonts.gstatic.com/**', (r) => r.abort())
+    const states = {}
+    await page.goto(base + '/auth'); await page.waitForLoadState('networkidle')
+    states.default = await new AxeBuilder({ page }).withTags(TAGS).analyze()
+    // state: restored (reloaded) signed-out page
+    if (name === 'head') {
+      await page.evaluate(() => setTimeout(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })), 0)); await page.waitForEvent('load'); await page.waitForLoadState('networkidle')
+      states.afterRestoreReload = await new AxeBuilder({ page }).withTags(TAGS).analyze()
+    }
+    // state: inline error shown
+    await page.evaluate(() => { const n = document.getElementById('login-error'); n.classList.remove('hidden'); n.lastChild.textContent = ' Identifiant ou mot de passe incorrect.' })
+    states.errorShown = await new AxeBuilder({ page }).withTags(TAGS).analyze()
+    for (const [state, r] of Object.entries(states)) {
+      const v = r.violations.map((x) => ({ id: x.id, impact: x.impact, nodes: x.nodes.length }))
+      out.push({ build: name, width: w, state, serious_or_critical: v.filter((x) => x.impact === 'serious' || x.impact === 'critical'), other: v.filter((x) => x.impact !== 'serious' && x.impact !== 'critical'), passes: r.passes.length })
+      console.log(name, w, state, 'serious/critical:', JSON.stringify(v.filter((x) => x.impact === 'serious' || x.impact === 'critical')), 'other:', JSON.stringify(v.filter((x) => x.impact !== 'serious' && x.impact !== 'critical')))
+    }
+    await ctx.close()
+  }
+}
+writeFileSync(`${EV}/g6-axe.json`, JSON.stringify(out, null, 2))
+await browser.close()

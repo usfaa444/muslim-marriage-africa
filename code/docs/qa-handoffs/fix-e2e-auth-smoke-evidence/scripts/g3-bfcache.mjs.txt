@@ -1,0 +1,23 @@
+import { launch, newCtx, watch, BASE, accounts } from './lib.mjs'
+for (const [name, args] of [['default (bfcache disabled by Playwright)', {}], ['bfcache enabled', { ignoreDefaultArgs: ['--disable-back-forward-cache'], args: ['--enable-features=BackForwardCache'] }]]) {
+  const browser = await launch(args); const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); const w = watch(page)
+  await page.addInitScript(() => { window.addEventListener('pageshow', (e) => { (window.__ps ||= []).push(e.persisted) }) })
+  await page.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: '' }))
+  await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+  const r1 = await page.goto(BASE + '/auth'); console.log(`[${name}] /auth cache-control:`, r1.headers()['cache-control'])
+  await page.evaluate(() => { window.__mark = 'first-document' })
+  await page.goto(BASE + '/password-reset'); await page.waitForLoadState('networkidle')
+  await page.goBack({ waitUntil: 'load' }); await page.waitForTimeout(800)
+  const mark = await page.evaluate(() => window.__mark); const ps = await page.evaluate(() => window.__ps)
+  console.log(`[${name}] signed-out Back to /auth: document restored from bfcache=${mark === 'first-document'}, pageshow.persisted log=${JSON.stringify(ps)}, url=${page.url().replace(BASE,'')}, form visible=${await page.locator('#login-form').isVisible()}, gateReads=${w.gateReads.length}, consoleErrors=${JSON.stringify(w.consoleErrors)}`)
+  // signed-in variant: sign in elsewhere (cookie), go to another page, Back to cached /auth
+  const ctx2 = await newCtx(browser, 'desktop'); const p2 = await ctx2.newPage(); const w2 = watch(p2)
+  await p2.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: '' }))
+  await p2.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+  await p2.goto(BASE + '/auth'); await p2.evaluate(() => { window.__mark = 'first-document' })
+  await p2.goto(BASE + '/password-reset'); await p2.waitForLoadState('networkidle')
+  const [cn, cv] = accounts.d.cookie.split('='); await ctx2.addCookies([{ name: cn, value: cv, url: BASE }])
+  await p2.goBack({ waitUntil: 'load' }); await p2.waitForTimeout(1500)
+  console.log(`[${name}] signed-in Back to /auth: final url=${p2.url().replace(BASE,'')}, login form count=${await p2.locator('#login-form').count()}, navs=${JSON.stringify(w2.navs)}, consoleErrors=${JSON.stringify(w2.consoleErrors)}`)
+  await browser.close()
+}

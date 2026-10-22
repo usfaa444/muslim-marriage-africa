@@ -1,0 +1,14 @@
+$ curl -fsS http://localhost:4012/ >/dev/null && curl -fsS http://localhost:4012/v1/health
+{"status":"ok","role":"api","request_id":"01a162d1-d529-74f0-bb4a-06b7fffd0f1c"}
+--- BEFORE migrations: POST /v1/accounts/precheck and /v1/accounts
+HTTP/1.1 500 Internal Server Error
+x-powered-by: Express
+content-type: application/json; charset=utf-8
+content-length: 142
+etag: W/"8e-NHVWnahh/8Zodw/BmZ/xiasCW9M"
+date: Thu, 22 Oct 2026 08:54:41 GMT
+connection: keep-alive
+keep-alive: timeout=5
+Vary: Accept-Encoding
+
+{"error":{"code":"UNHANDLED","message":"Request failed","details":null,"request_id":"01a162d1-d556-7b46-8c1b-fb88c31dd467","retryable":false}}

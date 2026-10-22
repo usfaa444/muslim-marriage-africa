@@ -1,0 +1,13 @@
+import { launch } from './lib.mjs'
+import { readFileSync } from 'node:fs'
+import AxeBuilder from '/home/claude/ankanu-e2e-fix/code/node_modules/@axe-core/playwright/dist/index.mjs'
+const shim = readFileSync('/tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/tw/cdn-shim.js', 'utf8')
+const browser = await launch(); const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, locale: 'fr-FR' }); const page = await ctx.newPage()
+await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: shim }))
+await page.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: '' }))
+await page.route('https://fonts.googleapis.com/**', (r) => r.fulfill({ contentType: 'text/css', body: '' }))
+await page.route('https://fonts.gstatic.com/**', (r) => r.abort())
+await page.goto('http://localhost:4012/auth'); await page.waitForLoadState('networkidle')
+const r = await new AxeBuilder({ page }).withTags(['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']).analyze()
+for (const v of r.violations) for (const n of v.nodes) console.log(v.id, v.impact, n.target.join(' '), '|', (n.any[0]?.message || n.failureSummary || '').slice(0, 220), '|', n.html.slice(0, 160))
+await browser.close()

@@ -1,0 +1,40 @@
+import { launch, newCtx, watch, record, save, accounts, BASE, EV, results } from './lib.mjs'
+const browser = await launch()
+const STUB = `window.grecaptcha={_cb:null,render:function(el,o){this._cb=o.callback;setTimeout(function(){o.callback()},20);return 0},getResponse:function(){return 'test-ok'},reset:function(){}};setTimeout(function(){},0)`
+async function stubGoogle(page) {
+  await page.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: `${STUB};if(window.onRecaptchaLoad)window.onRecaptchaLoad()` }))
+  await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+}
+async function fill(page, email, pw) {
+  await page.locator('#login-email').fill(email)
+  await page.locator('#login-password').fill(pw)
+  await page.waitForFunction(() => !document.getElementById('login-submit').disabled, null, { timeout: 5000 })
+}
+const PW = 'correct horse battery staple'
+// T11 keyboard-only sign-in
+{ const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); const w = watch(page); await stubGoogle(page)
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  await page.locator('#login-email').focus()
+  await page.keyboard.type(accounts.b.email); await page.keyboard.press('Tab'); await page.keyboard.press('Tab'); await page.keyboard.type(PW)
+  await page.waitForFunction(() => !document.getElementById('login-submit').disabled)
+  await page.keyboard.press('Enter')
+  await page.waitForURL((u) => u.pathname === '/phone', { timeout: 10000 }).catch(() => {})
+  record('T11', 'keyboard-only sign-in (type, Tab, type, Enter) reaches the member step', new URL(page.url()).pathname === '/phone', { url: page.url().replace(BASE, ''), consoleErrors: w.consoleErrors }) 
+  await ctx.close() }
+// T12 double submit sends one POST
+{ const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); await stubGoogle(page)
+  let posts = 0; page.on('request', (r) => { if (r.method() === 'POST' && r.url().endsWith('/v1/sessions')) posts++ })
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle'); await fill(page, accounts.c.email, PW)
+  await page.locator('#login-submit').dblclick(); await page.waitForURL((u) => u.pathname === '/otp', { timeout: 10000 }).catch(() => {})
+  record('T12', 'double-click on sign-in sends exactly one POST /v1/sessions', posts === 1, { posts }) 
+  await ctx.close() }
+// T13 very long / non-Latin input does not produce a 5xx
+{ const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); const w = watch(page); await stubGoogle(page)
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  for (const [id, pw] of [['x'.repeat(10000) + '@example.test', 'p'.repeat(5000)], ['Ouédraogo_Aïcha_مرحبا_日本語@example.test', 'ça marche très bien — 密码 كلمة السر 1234']]) {
+    await fill(page, id, pw); await page.locator('#login-submit').click(); await page.locator('#login-error:not(.hidden)').waitFor({ timeout: 8000 }); await page.waitForTimeout(300)
+  }
+  record('T13', 'very long and non-Latin credentials: handled inline error, no 5xx, no crash', w.badResponses.every((b) => !/^5/.test(b)), { badResponses: w.badResponses, consoleErrors: w.consoleErrors.slice(0, 3) }) 
+  await ctx.close() }
+save('g3-signin2.json'); await browser.close()
+const failed = results.filter((r) => !r.pass).length; console.log('failed', failed); process.exit(failed ? 1 : 0)

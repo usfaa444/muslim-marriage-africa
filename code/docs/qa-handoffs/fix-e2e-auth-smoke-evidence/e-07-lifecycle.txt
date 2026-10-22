@@ -1,0 +1,16 @@
+### L1: re-run the per-story 'up -d --build --wait' with nothing changed
+exit 0
+buckets ["ankanu"] object versions in ankanu: 4
+accounts: 7
+### L3: 'docker compose down' (no -v) then 'up -d --build --wait' (what a person does between stories)
+down exit 0
+up exit 0
+buckets [] object versions in ankanu: -
+accounts: 7
+### after L3: upload with the bucket gone (new member g at identity step)
+{"label":"g","target":"identity","gate":{"step":"identity"},"cookie":"ankanu_session=01a162eb-e805-7b89-a415-50b77a8d7e6
+ID upload without bucket: HTTP 503
+### recovery: config.md bucket command, then upload again
+exit 0
+ID upload with bucket: HTTP 201
+liveness upload with bucket: HTTP 201

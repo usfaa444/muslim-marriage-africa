@@ -1,0 +1,42 @@
+PASS T07-a UI sign-in (member at email) -> POST /v1/sessions 201 -> exactly one gate read after submit -> /email-verification :: {"posts":[201],"gateBefore":0,"gateReadsTotal":1,"url":"/email-verification","consoleErrors":[],"badResponses":[]}
+PASS T07-b UI sign-in (member at phone) -> POST /v1/sessions 201 -> exactly one gate read after submit -> /phone :: {"posts":[201],"gateBefore":0,"gateReadsTotal":1,"url":"/phone","consoleErrors":[],"badResponses":[]}
+PASS T07-c UI sign-in (member at otp) -> POST /v1/sessions 201 -> exactly one gate read after submit -> /otp :: {"posts":[201],"gateBefore":0,"gateReadsTotal":1,"url":"/otp","consoleErrors":[],"badResponses":[]}
+PASS T07-d UI sign-in (member at identity) -> POST /v1/sessions 201 -> exactly one gate read after submit -> /id-liveness :: {"posts":[201],"gateBefore":0,"gateReadsTotal":1,"url":"/id-liveness","consoleErrors":[],"badResponses":[]}
+PASS T07-e UI sign-in (member at account) -> POST /v1/sessions 201 -> exactly one gate read after submit -> /onboarding :: {"posts":[201],"gateBefore":0,"gateReadsTotal":1,"url":"/onboarding","consoleErrors":[],"badResponses":[]}
+PASS T07b wrong password: inline error, stays on /auth, form usable, password cleared :: {"msg":"error Identifiant ou mot de passe incorrect.","badResponses":["401 POST http://localhost:4012/v1/sessions"],"gateReads":0,"consoleErrors":["Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4012/v1/sessions"]}
+PASS T08 gate 401 after a 201 sign-in still shows « La session n'a pas été conservée. » and ends the session :: {"msg":"error La session n'a pas été conservée.","deletes":1}
+PASS T09-garbage cookie garbage: /auth 200, form visible, 0 gate reads, 0 console errors :: {"consoleErrors":[],"badResponses":[]}
+PASS T09-unknown-uuid cookie unknown-uuid: /auth 200, form visible, 0 gate reads, 0 console errors :: {"consoleErrors":[],"badResponses":[]}
+PASS T09-stub-web cookie stub-web: /auth 200, form visible, 0 gate reads, 0 console errors :: {"consoleErrors":[],"badResponses":[]}
+PASS T10 Slow 3G (400 kbit/s, 400 ms RTT) signed-out /auth: 200, form visible, 0 gate reads, 0 console errors :: {"loadMs":23941,"consoleErrors":[]}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+page.waitForFunction: Timeout 30000ms exceeded.
+    at /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/scripts/g3-signin.mjs:65:14 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v22.22.0
+file:///tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/scripts/g3-signin2.mjs:14
+const PW = 'correct horse battery staple'
+      ^
+
+SyntaxError: Identifier 'PW' has already been declared
+    at compileSourceTextModule (node:internal/modules/esm/utils:346:16)
+    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:107:18)
+    at #translate (node:internal/modules/esm/loader:546:20)
+    at afterLoad (node:internal/modules/esm/loader:596:29)
+    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:601:12)
+    at #createModuleJob (node:internal/modules/esm/loader:624:36)
+    at #getJobFromResolveResult (node:internal/modules/esm/loader:343:34)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:311:41)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:664:25)
+
+Node.js v22.22.0
+PASS T11 keyboard-only sign-in (type, Tab, type, Enter) reaches the member step :: {"url":"/phone","consoleErrors":[]}
+PASS T12 double-click on sign-in sends exactly one POST /v1/sessions :: {"posts":1}
+PASS T13 very long and non-Latin credentials: handled inline error, no 5xx, no crash :: {"badResponses":["401 POST http://localhost:4012/v1/sessions"],"consoleErrors":["Failed to load resource: the server responded with a status of 401 (Unauthorized) http://localhost:4012/v1/sessions"]}
+failed 0

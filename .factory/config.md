@@ -100,7 +100,7 @@ First time only, create:
 
   `compose.yaml` reads both origins from the env file (staging keeps its own in `/var/lib/ankanu/compose.interpolate.env`), and the api refuses to boot without them. Object storage uses the `pgsty/minio` image, since `minio/minio` is no longer published.
 
-After the first `up` (and after any reset of `code/pg-data` or the bucket's data), set up the database and the bucket. Nothing in the stack does this on start:
+After the first `up`, set up the database and the bucket. Nothing in the stack does this on start. Run `npm ci` in `code/` first if `node_modules` is missing.
 
 ```bash
 # from code/apps/api: apply every Drizzle migration (the repo's only runner)
@@ -109,7 +109,7 @@ DATABASE_URL=postgres://ankanu@127.0.0.1:55432/ankanu npx drizzle-kit migrate
 docker compose -p ankanu-local exec -T api node -e "import('/app/apps/api/dist/object-storage-adapter.js').then((m) => m.ObjectStorageAdapter.fromSettings(m.objectStorageSettings(process.env)).createPrivateBucket())"
 ```
 
-Without the migrations every database call is 500 `Request failed`; without the bucket, ID and liveness uploads are 503. Run the migrate command again whenever a story adds a migration.
+Without the migrations every database call is 500 `Request failed`; without the bucket, ID and liveness uploads are 503. Run the migrate command again whenever a story adds a migration. The database lives in the bind mount `code/pg-data` and survives `down`. The bucket lives in an anonymous volume, so after any `down` (with or without `-v`) run the bucket command again; uploads stored before are gone.
 
 Each story, from `code/` on the story branch:
 
@@ -122,7 +122,7 @@ curl -fsS http://localhost:4012/ >/dev/null && curl -fsS http://localhost:4012/v
 E2E_BASE_URL=http://localhost:4012 npm run test:e2e
 ```
 
-Then send Fay `http://localhost:4012` and the story's test steps from the QA handoff. Phone codes and emails go to the api log locally: `docker compose -p ankanu-local logs api | grep -E 'otp |email '`. Use the project name `ankanu-local` so the local stack never touches another project. Do not run `down -v`: it deletes the local database. To reset local data, ask Fay first.
+Then send Fay `http://localhost:4012` and the story's test steps from the QA handoff. Phone codes and emails go to the api log locally: `docker compose -p ankanu-local logs api | grep -E 'otp |email '`. Use the project name `ankanu-local` so the local stack never touches another project. Prefer `up` over `down`: a `down` loses the evidence bucket's contents, and `down -v` also drops the other anonymous volumes. Deleting `code/pg-data` deletes the local database. To reset local data, ask Fay first.
 
 ## Handoffs and reports
 

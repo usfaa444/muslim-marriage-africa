@@ -1,0 +1,192 @@
+[
+  {
+    "build": "head",
+    "width": 360,
+    "state": "default",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "head",
+    "width": 360,
+    "state": "afterRestoreReload",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "head",
+    "width": 360,
+    "state": "errorShown",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "head",
+    "width": 1440,
+    "state": "default",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "head",
+    "width": 1440,
+    "state": "afterRestoreReload",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "head",
+    "width": 1440,
+    "state": "errorShown",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "main",
+    "width": 360,
+    "state": "default",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "main",
+    "width": 360,
+    "state": "errorShown",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "main",
+    "width": 1440,
+    "state": "default",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  },
+  {
+    "build": "main",
+    "width": 1440,
+    "state": "errorShown",
+    "serious_or_critical": [
+      {
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": 1
+      },
+      {
+        "id": "label-content-name-mismatch",
+        "impact": "serious",
+        "nodes": 1
+      }
+    ],
+    "other": [],
+    "passes": 25
+  }
+]

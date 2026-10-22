@@ -1,0 +1,35 @@
+# QA sandbox adaptations only (outside the repo). Not part of config.md.
+services:
+  web:
+    image: ankanu-qa2-web:head
+    build:
+      dockerfile: /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/web.Dockerfile
+      additional_contexts:
+        ca: /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/ca
+  api:
+    image: ankanu-qa2-api:head
+    build:
+      dockerfile: /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/api.Dockerfile
+      additional_contexts:
+        ca: /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/ca
+    volumes:
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/stub/bundle.crt:/etc/ssl/qa-bundle.crt:ro
+    environment:
+      NODE_EXTRA_CA_CERTS: /etc/ssl/qa-bundle.crt
+  worker:
+    image: ankanu-qa2-api:head
+    pull_policy: never
+  postgres:
+    volumes:
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/pg-data:/var/lib/postgresql/data
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/pg-wal:/var/lib/postgresql/wal-archive
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/pg-base:/var/lib/postgresql/basebackups
+  google-stub:
+    image: ankanu-qa2-api:head
+    pull_policy: never
+    command: ["node", "/stub/siteverify-stub.mjs"]
+    volumes:
+      - /tmp/claude-0/-home-claude/6e1b1367-c24b-5f8d-8946-aab9e4dcf519/scratchpad/qa2/stub:/stub:ro
+    networks:
+      default:
+        aliases: [www.google.com]

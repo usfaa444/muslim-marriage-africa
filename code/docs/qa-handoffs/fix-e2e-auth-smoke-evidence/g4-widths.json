@@ -1,0 +1,68 @@
+[
+  {
+    "width": 360,
+    "overflow": false,
+    "scrollWidth": 360,
+    "innerWidth": 360,
+    "signupPanelHidden": true,
+    "loginVisible": true,
+    "size": "360x900",
+    "diffPixelsVsMain": 0,
+    "errors": []
+  },
+  {
+    "width": 390,
+    "overflow": false,
+    "scrollWidth": 390,
+    "innerWidth": 390,
+    "signupPanelHidden": true,
+    "loginVisible": true,
+    "size": "390x900",
+    "diffPixelsVsMain": 0,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "overflow": false,
+    "scrollWidth": 768,
+    "innerWidth": 768,
+    "signupPanelHidden": true,
+    "loginVisible": true,
+    "size": "768x900",
+    "diffPixelsVsMain": 0,
+    "errors": []
+  },
+  {
+    "width": 1024,
+    "overflow": false,
+    "scrollWidth": 1024,
+    "innerWidth": 1024,
+    "signupPanelHidden": true,
+    "loginVisible": true,
+    "size": "1024x900",
+    "diffPixelsVsMain": 0,
+    "errors": []
+  },
+  {
+    "width": 1280,
+    "overflow": false,
+    "scrollWidth": 1280,
+    "innerWidth": 1280,
+    "signupPanelHidden": true,
+    "loginVisible": true,
+    "size": "1280x900",
+    "diffPixelsVsMain": 0,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "overflow": false,
+    "scrollWidth": 1440,
+    "innerWidth": 1440,
+    "signupPanelHidden": true,
+    "loginVisible": true,
+    "size": "1440x900",
+    "diffPixelsVsMain": 0,
+    "errors": []
+  }
+]

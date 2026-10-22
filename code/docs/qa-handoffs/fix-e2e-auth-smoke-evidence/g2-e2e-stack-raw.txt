@@ -1,0 +1,80 @@
+         |                                                      ^
+      35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+      36 |     },
+      37 |     { auto: true },
+        at Object.base.extend.guards.auto (/home/claude/ankanu-e2e-fix/code/e2e/fixtures.ts:34:54)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/smoke-public-page-password-reset-fits-every-factory-width-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/smoke-public-page-password-reset-fits-every-factory-width-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/smoke-public-page-password-reset-fits-every-factory-width-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/smoke-public-page-password-reset-fits-every-factory-width-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  14) [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in ───
+
+    Error: console errors
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 5
+
+    - Array []
+    + Array [
+    +   "Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit",
+    +   "Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED https://cdn.tailwindcss.com/?plugins=forms,container-queries",
+    +   "tailwind is not defined",
+    + ]
+
+       at fixtures.ts:34
+
+      32 |       })
+      33 |       await use(guards)
+    > 34 |       expect(guards.consoleErrors, 'console errors').toEqual([])
+         |                                                      ^
+      35 |       expect(guards.failedRequests, 'failed requests').toEqual([])
+      36 |     },
+      37 |     { auto: true },
+        at Object.base.extend.guards.auto (/home/claude/ankanu-e2e-fix/code/e2e/fixtures.ts:34:54)
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/smoke-a-signed-out-visitor-is-sent-from-Discover-to-sign-in-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/smoke-a-signed-out-visitor-is-sent-from-Discover-to-sign-in-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/smoke-a-signed-out-visitor-is-sent-from-Discover-to-sign-in-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/smoke-a-signed-out-visitor-is-sent-from-Discover-to-sign-in-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+  14 failed
+    [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read 
+    [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read 
+    [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides 
+    [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+    [mobile] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA 
+    [mobile] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in ──────
+    [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read 
+    [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read 
+    [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides 
+    [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA 
+    [desktop] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width ──────────────
+    [desktop] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA 
+    [desktop] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width ────
+    [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in ─────
+  6 skipped
+  8 passed (29.2s)

@@ -1,0 +1,86 @@
+import { launch, newCtx, watch, record, save, accounts, BASE, EV, results } from './lib.mjs'
+const browser = await launch()
+const STUB = `window.grecaptcha={_cb:null,render:function(el,o){this._cb=o.callback;setTimeout(function(){o.callback()},20);return 0},getResponse:function(){return 'test-ok'},reset:function(){}};setTimeout(function(){},0)`
+async function stubGoogle(page) {
+  await page.route('https://www.google.com/recaptcha/api.js*', (r) => r.fulfill({ contentType: 'text/javascript', body: `${STUB};if(window.onRecaptchaLoad)window.onRecaptchaLoad()` }))
+  await page.route('https://cdn.tailwindcss.com/**', (r) => r.fulfill({ contentType: 'text/javascript', body: 'window.tailwind={}' }))
+}
+async function fill(page, email, pw) {
+  await page.locator('#login-email').fill(email)
+  await page.locator('#login-password').fill(pw)
+  await page.waitForFunction(() => !document.getElementById('login-submit').disabled, null, { timeout: 5000 })
+}
+const PW = 'correct horse battery staple'
+// T07 successful sign-in for members at different steps (UI -> POST /v1/sessions -> gate -> step)
+for (const [label, want] of [['a', '/email-verification'], ['b', '/phone'], ['c', '/otp'], ['d', '/id-liveness'], ['e', '/onboarding']]) {
+  const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); const w = watch(page); await stubGoogle(page)
+  const posts = []; page.on('response', (r) => { if (r.url().endsWith('/v1/sessions') && r.request().method() === 'POST') posts.push(r.status()) })
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  const gateBefore = w.gateReads.length
+  await fill(page, accounts[label].email, PW)
+  await page.locator('#login-submit').click()
+  await page.waitForURL((u) => u.pathname !== '/auth', { timeout: 10000 }).catch(() => {})
+  await page.waitForLoadState('networkidle')
+  record(`T07-${label}`, `UI sign-in (member at ${accounts[label].gate.step}) -> POST /v1/sessions 201 -> exactly one gate read after submit -> ${want}`, posts.join() === '201' && gateBefore === 0 && w.gateReads.length === 1 && new URL(page.url()).pathname === want, { posts, gateBefore, gateReadsTotal: w.gateReads.length, url: page.url().replace(BASE, ''), consoleErrors: w.consoleErrors, badResponses: w.badResponses })
+  await ctx.close()
+}
+// T07b wrong password -> inline error, form stays, no navigation
+{ const ctx = await newCtx(browser, 'mobile'); const page = await ctx.newPage(); const w = watch(page); await stubGoogle(page)
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  await fill(page, accounts.e.email, 'wrong password wrong password')
+  await page.locator('#login-submit').click()
+  await page.locator('#login-error:not(.hidden)').waitFor({ timeout: 8000 })
+  const msg = (await page.locator('#login-error').innerText()).trim()
+  await page.screenshot({ path: `${EV}/g3-mobile-signin-wrong-password.png` })
+  record('T07b', 'wrong password: inline error, stays on /auth, form usable, password cleared', new URL(page.url()).pathname === '/auth' && /incorrect/i.test(msg) && (await page.locator('#login-password').inputValue()) === '', { msg, badResponses: w.badResponses, gateReads: w.gateReads.length, consoleErrors: w.consoleErrors }) 
+  await ctx.close() }
+// T08 session cookie dropped between POST and gate (gate 401 after a 201) -> unchanged message and session cleanup
+{ const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); const w = watch(page); await stubGoogle(page)
+  await page.route('**/v1/accounts/gate', (r) => r.fulfill({ status: 401, contentType: 'application/json', body: JSON.stringify({ error: { code: 'UNAUTHENTICATED', message: 'Authentification requise.', details: null, request_id: 'x', retryable: false } }) }))
+  const deletes = []; page.on('request', (r) => { if (r.method() === 'DELETE' && r.url().endsWith('/v1/sessions/current')) deletes.push(r.url()) })
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  await fill(page, accounts.e.email, PW); await page.locator('#login-submit').click()
+  await page.locator('#login-error:not(.hidden)').waitFor({ timeout: 8000 })
+  const msg = (await page.locator('#login-error').innerText()).trim()
+  record('T08', "gate 401 after a 201 sign-in still shows « La session n'a pas été conservée. » and ends the session", /La session n'a pas été conservée\./.test(msg) && deletes.length === 1 && new URL(page.url()).pathname === '/auth', { msg, deletes: deletes.length }) 
+  await ctx.close() }
+// T09 stale/garbage cookie and expired session -> anonymous, form shown
+for (const [name, cookie] of [['garbage', 'ankanu_session=garbage'], ['unknown-uuid', 'ankanu_session=01990000-0000-7000-8000-000000000000'], ['stub-web', 'ankanu_session=web']]) {
+  const ctx = await newCtx(browser, 'desktop', cookie); const page = await ctx.newPage(); const w = watch(page)
+  const r = await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  record(`T09-${name}`, `cookie ${name}: /auth 200, form visible, 0 gate reads, 0 console errors`, r.status() === 200 && await page.locator('#login-form').isVisible() && w.gateReads.length === 0 && w.consoleErrors.length === 0, { consoleErrors: w.consoleErrors, badResponses: w.badResponses })
+  await ctx.close() }
+// T10 slow network (Slow 3G) signed-out /auth
+{ const ctx = await newCtx(browser, 'mobile'); const page = await ctx.newPage(); const w = watch(page)
+  const cdp = await ctx.newCDPSession(page); await cdp.send('Network.enable'); await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 400, downloadThroughput: (400 * 1024) / 8, uploadThroughput: (400 * 1024) / 8 })
+  const t0 = Date.now(); const r = await page.goto(BASE + '/auth', { waitUntil: 'load', timeout: 60000 }); const ms = Date.now() - t0
+  await page.waitForLoadState('networkidle')
+  record('T10', 'Slow 3G (400 kbit/s, 400 ms RTT) signed-out /auth: 200, form visible, 0 gate reads, 0 console errors', r.status() === 200 && await page.locator('#login-form').isVisible() && w.gateReads.length === 0 && w.consoleErrors.length === 0, { loadMs: ms, consoleErrors: w.consoleErrors }) 
+  await ctx.close() }
+// T11 keyboard-only sign-in
+{ const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); const w = watch(page); await stubGoogle(page)
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  await page.locator('#login-email').focus()
+  await page.keyboard.type(accounts.b.email); await page.keyboard.press('Tab'); await page.keyboard.type(PW)
+  await page.waitForFunction(() => !document.getElementById('login-submit').disabled)
+  await page.keyboard.press('Enter')
+  await page.waitForURL((u) => u.pathname === '/phone', { timeout: 10000 }).catch(() => {})
+  record('T11', 'keyboard-only sign-in (type, Tab, type, Enter) reaches the member step', new URL(page.url()).pathname === '/phone', { url: page.url().replace(BASE, ''), consoleErrors: w.consoleErrors }) 
+  await ctx.close() }
+// T12 double submit sends one POST
+{ const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); await stubGoogle(page)
+  let posts = 0; page.on('request', (r) => { if (r.method() === 'POST' && r.url().endsWith('/v1/sessions')) posts++ })
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle'); await fill(page, accounts.c.email, PW)
+  await page.locator('#login-submit').dblclick(); await page.waitForURL((u) => u.pathname === '/otp', { timeout: 10000 }).catch(() => {})
+  record('T12', 'double-click on sign-in sends exactly one POST /v1/sessions', posts === 1, { posts }) 
+  await ctx.close() }
+// T13 very long / non-Latin input does not produce a 5xx
+{ const ctx = await newCtx(browser, 'desktop'); const page = await ctx.newPage(); const w = watch(page); await stubGoogle(page)
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  for (const [id, pw] of [['x'.repeat(10000) + '@example.test', 'p'.repeat(5000)], ['Ouédraogo_Aïcha_مرحبا_日本語@example.test', 'ça marche très bien — 密码 كلمة السر 1234']]) {
+    await fill(page, id, pw); await page.locator('#login-submit').click(); await page.locator('#login-error:not(.hidden)').waitFor({ timeout: 8000 }); await page.waitForTimeout(300)
+  }
+  record('T13', 'very long and non-Latin credentials: handled inline error, no 5xx, no crash', w.badResponses.every((b) => !/^5/.test(b)), { badResponses: w.badResponses, consoleErrors: w.consoleErrors.slice(0, 3) }) 
+  await ctx.close() }
+save('g3-signin.json'); await browser.close()
+const failed = results.filter((r) => !r.pass).length; console.log('failed', failed); process.exit(failed ? 1 : 0)

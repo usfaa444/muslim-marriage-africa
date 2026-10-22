@@ -1,0 +1,5 @@
+sign-in 201
+live session -> /auth lands on /email-verification form count 0
+expired session -> /auth status 200 url /auth form visible true gate reads 0 console errors [] bad []
+gate with the expired session -> 401
+expired session -> /decouvrir ends at /auth form visible true

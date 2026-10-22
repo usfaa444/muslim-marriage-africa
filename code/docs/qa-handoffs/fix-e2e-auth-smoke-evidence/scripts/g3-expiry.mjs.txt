@@ -1,0 +1,17 @@
+import { execSync } from 'node:child_process'
+import { launch, newCtx, watch, BASE, accounts } from './lib.mjs'
+const browser = await launch()
+// fresh session for member a through the real API
+const r = await fetch(BASE + '/v1/sessions', { method: 'POST', headers: { 'content-type': 'application/json', origin: BASE }, body: JSON.stringify({ identifier: accounts.a.email, password: 'correct horse battery staple', remember_me: false, recaptcha_token: 'test-ok' }) })
+const cookie = r.headers.get('set-cookie').split(';')[0]; const id = cookie.split('=')[1]
+console.log('sign-in', r.status)
+{ const ctx = await newCtx(browser, 'desktop', cookie); const page = await ctx.newPage(); const w = watch(page)
+  await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  console.log('live session -> /auth lands on', page.url().replace(BASE, ''), 'form count', await page.locator('#login-form').count()); await ctx.close() }
+execSync(`docker exec ankanu-qa2-postgres-1 psql -U ankanu -d ankanu -c "update session set expires_at = now() - interval '1 minute' where id = '${id}'"`, { stdio: 'pipe' })
+{ const ctx = await newCtx(browser, 'desktop', cookie); const page = await ctx.newPage(); const w = watch(page)
+  const resp = await page.goto(BASE + '/auth'); await page.waitForLoadState('networkidle')
+  console.log('expired session -> /auth status', resp.status(), 'url', page.url().replace(BASE, ''), 'form visible', await page.locator('#login-form').isVisible(), 'gate reads', w.gateReads.length, 'console errors', JSON.stringify(w.consoleErrors), 'bad', JSON.stringify(w.badResponses))
+  const g = await fetch(BASE + '/v1/accounts/gate', { headers: { cookie } }); console.log('gate with the expired session ->', g.status)
+  const d = await page.goto(BASE + '/decouvrir'); console.log('expired session -> /decouvrir ends at', page.url().replace(BASE, ''), 'form visible', await page.locator('#login-form').isVisible()); await ctx.close() }
+await browser.close()
