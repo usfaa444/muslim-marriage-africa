@@ -195,6 +195,15 @@ describe('web image design files', () => {
     )
   })
 
+  // QA round 2 (discover-app-shell): the production bundler turns `new URL(`…${name}`, import.meta.url)` into one fixed
+  // asset, so loadStitch('14-filters/screen.html') read another file and the filters overlay shipped empty.
+  it('never builds a design path from a template URL relative to import.meta.url', () => {
+    const templated = /new URL\(\s*`[^`]*\$\{[^`]*`\s*,\s*import\.meta\.url\s*\)/
+    expect(runtimeSources().filter((source) => templated.test(source.text)).map((source) => source.path)).toEqual([])
+    expect(templated.test('new URL(`../../../design-stitch/ankanu-v2/${name}`, import.meta.url)')).toBe(true)
+    expect(templated.test("new URL('./fixed.css', import.meta.url)")).toBe(false)
+  })
+
   it('catches a design file read directly inside a reader', () => {
     const loader = [
       'function loadStitch(name: string): string {',

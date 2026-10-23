@@ -154,3 +154,30 @@ Screenshots in `discover-app-shell-evidence/` were taken at 360 and 1440 px for 
   - `web-image.test.ts`: `app-shell.ts` was added as a design reader, as that test's own comment asks.
   - No assertion was weakened.
 - The unit browser tests in `discover-page.test.ts` write screenshots into tracked `docs/qa-handoffs/epic-3-*` folders. Those were restored and are not part of this change.
+
+## Retest (round 2)
+
+QA report: `code/docs/qa-handoffs/discover-app-shell-qa-report.md` (commit c2c5f8a). Fay also found a blocker on the local Docker stack (commit e80d21e).
+
+| Finding | Fix | Regression test |
+| --- | --- | --- |
+| **Blocker: Filtres opens a blank cream overlay with no form and no close button** (production build). In `discover-page.ts`, `loadStitch` tried `new URL(\`../../../design-stitch/ankanu-v2/${name}\`, import.meta.url)` first. The production bundler replaces that template with one fixed asset, so `14-filters/screen.html` (filters form) and `13-search/screen.html` (card with 2+ filters) read the wrong file and `#filters-canvas` shipped empty. This is the round-1 QA minor #4. | That candidate is removed. `loadStitch` now resolves only from the working directory (`design-stitch/…`, `../design-stitch/…`, `../../design-stitch/…`) and the image path `/app/design-stitch/…`, like `stitchFile` in `v2-serve.ts` and the nav loader in `app-shell.ts`. The image runs from `/app/apps/web`, so `../../design-stitch` resolves, and the Dockerfile already copies 13 and 14. | `web-image.test.ts` › "never builds a design path from a template URL relative to import.meta.url": scans every runtime web source and fails on any `new URL(\`…${…}\`, import.meta.url)`, with self-checks. It would have failed on e80d21e. `app-shell.test.tsx` › "ships the filters form from screen 14, the search card from screen 13, and a close control" checks that `#filters-canvas` holds `<form id="filters-form">`, « Filtres de convenance » and `#filters-apply` in both the default and the 2-filter page, and that the 2-filter card is screen 13's `<section id="discover-focus">` with `data-chip-shell="search"`. |
+| **Overlay must always have a working close control** | New `FILTERS_CLOSE` button, drawn outside the Stitch card, so it is present even if the card is missing. It sticks to the top right of the overlay, is 44 × 44 px, shows an inline SVG ✕ (no icon font needed), and has `aria-label="Fermer les filtres"`. The overlay is now `role="dialog" aria-modal="true" aria-label="Filtres"`. Opening moves focus to the close button. Closing (button, Escape or a click on the backdrop) hides the overlay and returns focus to « Filtres ». | `app-shell-browser.test.ts`, at all 6 widths in real Chromium: open Filtres, the form is visible, the close button is visible, at least 44 px and focused, clicking it hides the overlay, focus is back on Filtres. The unit test above checks the dialog markup and the click handler. |
+| **Minor #2: `memberGuarded` does not validate the cookie** | No change needed. `memberGuarded` already calls `entryRedirect` before rendering. For any non-stub cookie that calls the API gate (`/v1/accounts/gate`), the same check as every other member page (`/settings`, `/profile-edit`, `/decouvrir`). An expired or forged session (gate 401) goes to `/auth`. An unfinished account goes to its step. An unreachable or failing gate goes to `/auth`. The shell renders only when the gate answers `step: account`. | `app-shell.test.tsx` › "sends an expired or forged session to sign-in, and an unfinished account to its step": gate 401 on `/invitations`, `/discussions` and `/profil` gives 303 `/auth`; gate `step: phone` gives 303 `/phone`; gate 503 gives 303 `/auth`. |
+| Minor #1 (npm audit, next), minor #3 (Stitch axe findings on /settings and /profile-edit) | Not in scope, pre-existing. They need their own tickets. | - |
+
+**Production build check (run here).** I ran `npm run build -w @ankanu/web` (Next 16 production build) and started it with `next start` from `apps/web`, like the image does. A small stand-in API answered the gate (`step: account`) and `/v1/me/profile`. Results for a real (non-stub) cookie:
+- `GET /decouvrir`: the HTML contains `id="filters-form"` ×1, « Filtres de convenance », `data-close-filters`, the bottom nav, « Faites connaissance » and screen 57's `<article id="discover-focus">`.
+- `GET /decouvrir?city=ouagadougou&practice=assidue`: the form is present, with screen 13's `<section id="discover-focus">` and `data-chip-shell="search"`.
+- `/invitations` 200, `/profil` 303 → `/profile-edit`, `/settings` 200.
+- No server errors.
+
+I did not rebuild e80d21e to reproduce the blank overlay. The cause matches the QA report and the round-1 note.
+
+**Round-2 self-check**
+- Lint exit 0 (same 3 pre-existing warnings). Typecheck exit 0.
+- `npm run test:unit`: 561 passed, 3 failed. The 3 failures are the same pre-existing Chrome tests that need the Tailwind CDN.
+- `e2e/app-shell.spec.ts` + `e2e/smoke.spec.ts` (web-only): 35 passed, 7 skipped.
+- Flake noted, not caused by this story: `discover-page.test.ts` › "toggles to a real grid…" sometimes reads `#discover-tiles img` before the double-`requestAnimationFrame` insert. I reproduced it on untouched `main` (f80e259): 1 failure in 4 runs. On this branch it was 1 in 3 runs. The test was left as it is.
+
+**For QA on the local stack:** on `/decouvrir`, Filtres opens the « Filtres de convenance » form, and the ✕ button, Escape and a backdrop click all close it. The same holds with `?city=…&practice=…` (grid first, screen 13 card).

@@ -275,6 +275,24 @@ describe('Discover: one layout for both views', () => {
     expect(html).toContain('Envoyer une invitation Ta')
   })
 
+  it('ships the filters form from screen 14, the search card from screen 13, and a close control', () => {
+    for (const page of [html, filtered]) {
+      const canvas = page.slice(page.indexOf('id="filters-canvas"'), page.indexOf('</main>', page.indexOf('id="filters-canvas"')))
+      expect(canvas).toContain('<form id="filters-form"')
+      expect(canvas).toContain('Filtres de convenance')
+      expect(canvas).toContain('id="filters-apply"')
+      const modal = page.slice(page.indexOf('<div id="filters-modal"'), page.indexOf('id="filters-canvas"'))
+      expect(modal).toContain('role="dialog" aria-modal="true"')
+      expect(modal).toContain('data-close-filters aria-label="Fermer les filtres"')
+    }
+    expect(html).toContain("closer = event.target && event.target.closest ? event.target.closest('[data-close-filters]')")
+    // Two filters or more: the single card comes from screen 13 (search), the default from screen 57.
+    expect(filtered).toContain('data-chip-shell="search"')
+    expect(html).toContain('data-chip-shell="discover"')
+    expect(filtered).toContain('<section id="discover-focus"')
+    expect(html).toContain('<article id="discover-focus"')
+  })
+
   it('hides the shared Discover layout when the hold shows', () => {
     expect(html).toContain('#discover-main[hidden]')
     expect(html).toContain("var discoverMain = document.getElementById('discover-main')")
@@ -299,11 +317,11 @@ describe('pages that keep their own chrome', () => {
 })
 
 describe('member section routes for a live session', () => {
-  async function withGate<T>(run: () => Promise<T>): Promise<T> {
+  async function withGate<T>(run: () => Promise<T>, gate: { status: number; body: unknown } = { status: 200, body: { step: 'account' } }): Promise<T> {
     const original = globalThis.fetch
     globalThis.fetch = (async (input: RequestInfo | URL) => {
       if (String(input).endsWith('/v1/accounts/gate')) {
-        return new Response(JSON.stringify({ step: 'account' }), { status: 200, headers: { 'content-type': 'application/json' } })
+        return new Response(JSON.stringify(gate.body), { status: gate.status, headers: { 'content-type': 'application/json' } })
       }
       return original(input)
     }) as typeof fetch
@@ -331,6 +349,36 @@ describe('member section routes for a live session', () => {
       expect(profil.status).toBe(303)
       expect(profil.headers.get('location')).toBe('http://localhost/profile-edit')
     })
+  })
+
+  // QA round 2, minor 2: the cookie is checked by the API gate before any page renders, like every member page.
+  it('sends an expired or forged session to sign-in, and an unfinished account to its step', async () => {
+    await withGate(
+      async () => {
+        for (const [get, path] of [[getInvitations, '/invitations'], [getDiscussions, '/discussions'], [getProfil, '/profil']] as const) {
+          const response = await get(live(path))
+          expect(response.status).toBe(303)
+          expect(response.headers.get('location')).toBe('http://localhost/auth')
+        }
+      },
+      { status: 401, body: { error: { code: 'UNAUTHENTICATED', message: 'Session non authentifiée.' } } },
+    )
+    await withGate(
+      async () => {
+        const response = await getInvitations(live('/invitations'))
+        expect(response.status).toBe(303)
+        expect(response.headers.get('location')).toBe('http://localhost/phone')
+      },
+      { status: 200, body: { step: 'phone' } },
+    )
+    await withGate(
+      async () => {
+        const response = await getDiscussions(live('/discussions'))
+        expect(response.status).toBe(303)
+        expect(response.headers.get('location')).toBe('http://localhost/auth')
+      },
+      { status: 503, body: {} },
+    )
   })
 
   it('keeps stub cookies on the JSON envelope and sends a signed-out visitor to sign-in', async () => {

@@ -131,6 +131,18 @@ describe('app shell in a browser', () => {
         await page.waitForFunction("document.getElementById('discover-card').hidden === false")
         const back = await page.evaluate(CHROME)
         if (JSON.stringify(card) !== JSON.stringify(back)) failures.push(`moved back@${width}`)
+        // QA round 2: the filters overlay shows its form and always has a close control that works.
+        await page.click('[data-open-filters]')
+        await page.waitForFunction("document.getElementById('filters-modal').hidden === false")
+        expect(await page.isVisible('#filters-form')).toBe(true)
+        const close = page.locator('[data-close-filters]')
+        expect(await close.isVisible()).toBe(true)
+        const closeBox = await close.boundingBox()
+        expect(Math.min(closeBox?.width ?? 0, closeBox?.height ?? 0)).toBeGreaterThanOrEqual(44)
+        expect(await close.evaluate((node) => node === document.activeElement)).toBe(true)
+        await close.click()
+        expect(await page.evaluate("document.getElementById('filters-modal').hidden")).toBe(true)
+        expect(await page.evaluate("document.activeElement && document.activeElement.hasAttribute('data-open-filters')")).toBe(true)
         for (const path of ['/decouvrir', '/settings', '/invitations', '/auth']) {
           await page.goto(`${origin}${path}`)
           const clear = (await page.evaluate(FOOTER_CLEAR)) as { scrollWidth: number; width: number; gap: number | null; navItems: number[] }

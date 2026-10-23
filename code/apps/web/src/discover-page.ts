@@ -1,6 +1,5 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import { fileURLToPath } from 'node:url'
 import { liteModeSource } from './lite-mode'
 import { NOT_LISTABLE_CLIENT, discoverHoldShell } from './not-listable'
 import { balancedEnd, withAppShell } from './app-shell'
@@ -153,6 +152,12 @@ function mountLiteThumb(photo, url) {
   requestAnimationFrame(function () { requestAnimationFrame(consider) })
 }
 document.addEventListener('click', function (event) {
+  var closer = event.target && event.target.closest ? event.target.closest('[data-close-filters]') : null
+  if (closer) {
+    event.preventDefault()
+    closeFilters()
+    return
+  }
   var opener = event.target && event.target.closest ? event.target.closest('[data-open-filters]') : null
   if (opener) {
     event.preventDefault()
@@ -1015,13 +1020,18 @@ function openFilters() {
   var modal = document.getElementById('filters-modal')
   if (!modal) return
   modal.hidden = false
+  var close = modal.querySelector('[data-close-filters]')
+  if (close && close.focus) close.focus()
   ensureCatalogue().then(function (ok) {
     if (ok) applyUrlToForm()
   })
 }
 function closeFilters() {
   var modal = document.getElementById('filters-modal')
-  if (modal) modal.hidden = true
+  if (!modal || modal.hidden) return
+  modal.hidden = true
+  var back = document.querySelector('[data-open-filters]')
+  if (back && back.focus) back.focus()
 }
 var canvas = document.getElementById('filters-canvas')
 if (canvas) canvas.addEventListener('click', function (event) {
@@ -1319,10 +1329,12 @@ function markFiltersButton(html: string): string {
   return next
 }
 
+/**
+ * Paths from the working directory and the image's /app only. A `new URL(template, import.meta.url)` candidate is
+ * rewritten by the bundler into one fixed asset, so the production build read the wrong screen (QA round 2: blank filters).
+ */
 function loadStitch(name: string): string {
-  const beside = fileURLToPath(new URL(`../../../design-stitch/ankanu-v2/${name}`, import.meta.url))
   const candidates = [
-    beside,
     resolve(process.cwd(), `design-stitch/ankanu-v2/${name}`),
     resolve(process.cwd(), `../design-stitch/ankanu-v2/${name}`),
     resolve(process.cwd(), `../../design-stitch/ankanu-v2/${name}`),
@@ -1342,6 +1354,9 @@ function loadFiltersSource(): string {
 function loadSearchSource(): string {
   return loadStitch('13-search/screen.html')
 }
+
+/** Always drawn, outside the Stitch card, so the overlay can be left even if the card is missing. */
+export const FILTERS_CLOSE = `<div class="sticky top-0 z-10 flex justify-end px-4 pt-4 sm:px-6 pointer-events-none"><button type="button" data-close-filters aria-label="Fermer les filtres" title="Fermer les filtres" class="pointer-events-auto inline-flex items-center justify-center rounded-full border border-hairline bg-[#FBF8F1] text-deep-navy hover:border-soft-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-soft-gold" style="width:44px;height:44px;color:#0B1D36;background:#FBF8F1;border:1px solid #E2D4B8;border-radius:9999px"><svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"></line><line x1="18" y1="6" x2="6" y2="18"></line></svg></button></div>`
 
 function filterModal(source: string): string {
   const start = source.indexOf('<!-- Filter Modal Card Container -->')
@@ -1402,7 +1417,8 @@ function filterModal(source: string): string {
 <button id="filters-retry" hidden type="button" class="inline-flex items-center border border-[#E2D4B8] text-deep-navy bg-cream rounded-lg px-4 py-2.5 text-sm font-medium min-h-[44px]">Réessayer</button>
 <!-- Modal Actions -->`,
   )
-  return `<div id="filters-modal" hidden class="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-cream">
+  return `<div id="filters-modal" hidden role="dialog" aria-modal="true" aria-label="Filtres" class="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-cream">
+${FILTERS_CLOSE}
 <style>
 #filters-modal label:has(input:checked) { border-color: #C9A86C; background-color: rgba(230, 213, 168, 0.2); }
 #filters-modal label:has(input:disabled) { opacity: 0.45; cursor: not-allowed; }
