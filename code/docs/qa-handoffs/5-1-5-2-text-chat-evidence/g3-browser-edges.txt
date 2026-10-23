@@ -1,0 +1,12 @@
+THREAD messages 500 -> arrow_backRetour aux discussions | Chargement impossible. Vérifiez votre connexion et réessayez. | Réessayer
+visible alerts: [ 'Chargement impossible. Vérifiez votre connexion et réessayez.' ]
+3G (400ms, 50KB/s) thread content visible after 1750 ms
+3G send->bubble 845 ms
+3G list visible 1734 ms
+list resource bytes 1075
+UNAVAILABLE thread -> arrow_backRetour aux discussions | Q | QA_Soeur | Étape : discussion | Ce profil n'est plus disponible. | Aujourd'hui |  As-salāmu ʿalaykum — السلام عليكم 🌙 <script>alert(1)</script> '; drop table message;-- | 20:06 |  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+composer disabled: true send disabled: true
+LIST unavailable -> Échanges concertés & bienséance | Discussions Ta'aruf | Q | QA_Soeur | Vous : « Envoi 3G » | scheduleAujourd'hui à 20:14 | Accéder à la conversationarrow_forward | Pour les invitations envoyées en attente, le fil de discussion ne s'ouvre qu'après acceptation formelle de la sœur. | Registre des échan
+PAUSED send alerts: [ 'Cette discussion est fermée.' ] text kept: Après pause
+ENDED via api: {"error":{"code":"UNHANDLED","message":"Cette discussion est fermée.","details":{"reason":"conversation_closed"},"request_id":"01a16a66-858d-7b00-ae64-a08f3be7d90d","retryable":false}} [409] 
+EXPIRED send -> [ 'Authentification requise.' ] http://localhost:4012/discussions/01990000-0000-7000-8000-00000000c001 kept: Session expirée

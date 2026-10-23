@@ -1,0 +1,225 @@
+{
+  "live": {
+    "typingSeenMs": 392,
+    "typingClearedAfterStopMs": 3862,
+    "senderBubbleMs": 135,
+    "recipientLiveMs": 160,
+    "statusText": [
+      "",
+      "Message envoyé"
+    ],
+    "replyLiveMs": 120,
+    "forbidden_brother": null,
+    "forbidden_sister": null
+  },
+  "widths": [
+    {
+      "screen": "list",
+      "width": 360,
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread",
+      "width": 360,
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "list",
+      "width": 390,
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread",
+      "width": 390,
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "list",
+      "width": 768,
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread",
+      "width": 768,
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "list",
+      "width": 1024,
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread",
+      "width": 1024,
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "list",
+      "width": 1280,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread",
+      "width": 1280,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "list",
+      "width": 1440,
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread",
+      "width": 1440,
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    }
+  ],
+  "console": [],
+  "thumbnail": {
+    "src": "/v1/media/get?token=01a16a8e-32e3-7d3b-aa0c-87e2f11e6e8f",
+    "natural": [
+      32,
+      32
+    ],
+    "complete": true,
+    "box": [
+      46,
+      46
+    ],
+    "filter": "none",
+    "alt": ""
+  },
+  "emptyListText": "ÉCHANGES CONCERTÉS & BIENSÉANCE\n\nDiscussions Ta'aruf\nBilal819895, 34 ans\n·\nOuagadougou\nverified_user\nIdentité vérifiée\nAucun message pour l'instant.\nAccéder à la conversation\navec Bilal819895\narrow_forward\n\nPour les invitations envoyées en attente, le fil de discussion ne s'ouvre qu'après acceptation formelle de la sœur.\n\nRegistre des échanges : 1 fil actif"
+}

@@ -3,6 +3,7 @@ import { createRequire } from 'node:module'
 import { NestFactory } from '@nestjs/core'
 import type { INestApplication } from '@nestjs/common'
 import { AppModule } from './app.module.js'
+import { attachRealtime, closeRealtime } from './chat-realtime.js'
 import { InboundExceptionFilter, toPublicEnvelope } from './inbound-exception.filter.js'
 import { edgeContext } from './edge-request.js'
 import { sessionTouch } from './session-touch.js'
@@ -38,6 +39,13 @@ export async function createApp(): Promise<INestApplication> {
   app.setGlobalPrefix('v1')
   app.useGlobalFilters(new InboundExceptionFilter())
   await app.init()
+  // Socket.IO answers its own path (`/v1/realtime`) before Express sees the request (AD-15).
+  attachRealtime(app.getHttpServer())
+  const close = app.close.bind(app)
+  app.close = async () => {
+    await closeRealtime()
+    await close()
+  }
   const server = app.getHttpAdapter().getInstance() as ExpressLike
   server.use((_req, res) => {
     const envelope = toPublicEnvelope({

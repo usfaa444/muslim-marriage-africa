@@ -80,3 +80,18 @@ export type ChatPort = {
   openFromInvite(tx: unknown, input: { inviteId: string; now: Date }): Promise<OpenedConversation>
   conversationsForInvites(inviteIds: readonly string[]): Promise<OpenedConversation[]>
 }
+
+/** What a background scan covers: a Chat message, a pre-conversation Message Flash, or a media asset (AD-10). */
+export type ScanItemKind = 'message' | 'flash' | 'asset'
+
+/** Plaintext from the owner (Chat decrypts). Text only until Chat Photo and Voice note (Stories 5.3, 5.4). */
+export type ScanPayload = { kind: 'text'; text: string }
+
+/**
+ * Moderation is the only writer of `moderation_job` (AD-3, AD-10). Chat calls `enqueueScan` **after** a message is
+ * persisted `delivered`; the call never decides delivery and the caller must not fail its send when it throws.
+ * Moderation never reads `message` and never writes `message.state`.
+ */
+export type ModerationPort = {
+  enqueueScan(input: { itemId: string; itemKind: ScanItemKind; accountId: string; payload: ScanPayload }): Promise<{ jobId: string }>
+}

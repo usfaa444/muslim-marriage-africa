@@ -54,7 +54,7 @@ export const POLYGAMY_LABEL: Record<string, string> = {
   yes: 'Ouvert à la polygamie',
 }
 
-/** Chat has no screen before Epic 5; an accepted row opens the Discussions section. */
+/** An accepted row opens its Chat thread (Stories 5.1, 5.2), or the Discussions list when it has no conversation id. */
 export const CHAT_PATH = '/discussions'
 
 const STYLE = `<style id="invite-inbox-style">
@@ -226,9 +226,9 @@ function pill(state) {
   wait.appendChild(document.createTextNode(COPY.pending))
   return wait
 }
-function chatLink() {
+function chatLink(item) {
   var link = make('a', 'inline-flex items-center gap-2 min-h-[44px] px-4 rounded-md bg-deep-navy text-cream text-xs font-medium hover:bg-deep-navy/90 transition-colors')
-  link.href = CHAT_PATH
+  link.href = item && item.conversation_id ? CHAT_PATH + '/' + encodeURIComponent(item.conversation_id) : CHAT_PATH
   var icon = make('span', 'material-symbols-outlined text-sm text-gold-soft', 'chat')
   icon.setAttribute('aria-hidden', 'true')
   link.appendChild(icon)
@@ -263,7 +263,7 @@ function sentRow(item) {
   row.appendChild(left)
   var right = make('div', 'flex flex-wrap items-center gap-3')
   right.appendChild(pill(item.state))
-  if (item.state === 'accepted') right.appendChild(chatLink())
+  if (item.state === 'accepted') right.appendChild(chatLink(item))
   row.appendChild(right)
   return row
 }
@@ -296,7 +296,7 @@ function acceptedRow(item) {
   left.appendChild(who)
   row.appendChild(left)
   var right = make('div', 'shrink-0')
-  right.appendChild(chatLink())
+  right.appendChild(chatLink(item))
   row.appendChild(right)
   return row
 }

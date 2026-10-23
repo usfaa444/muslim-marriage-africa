@@ -4,23 +4,30 @@ import { eq, inArray } from 'drizzle-orm'
 import type { NodePgDatabase } from 'drizzle-orm/node-postgres'
 import { conversation } from './account-schema.js'
 import { accountStoreIsMemory, getIdentityDatabase } from './account-store.js'
-import { getInvitesPort } from './invites-port.js'
-import { assertBrowseViewer, type PublicProfileFailure } from './public-profile.js'
-import type { ResolvedSession } from './session-store.js'
 
 /**
- * Minimal chat module (Story 4.5). It owns `conversation` and nothing else yet: no message, no Socket.IO, no screen
- * (Epic 5). `openFromInvite` is the only code in the api that inserts a conversation (AD-23).
+ * Chat module. It owns `conversation` (Story 4.5) and `message` (Stories 5.1, 5.2, `chat-messages.ts`).
+ * `openFromInvite` is the only code in the api that inserts a conversation (AD-23).
  */
 
 function stageOf(value: string): OpenedConversation['stage'] {
   return value === 'invite' || value === 'meeting' || value === 'married' ? value : 'chat'
 }
 
-export function memoryChatPort(): ChatPort & { conversations: OpenedConversation[] } {
-  const conversations: OpenedConversation[] = []
+/** A conversation as chat itself reads it: open unless paused or ended. */
+export type ConversationRow = OpenedConversation & { paused_by: string | null; ended_at: string | null }
+
+/** The ChatPort adapters also answer chat's own lookup by id. */
+export type ChatStore = ChatPort & { find(id: string): Promise<ConversationRow | null> }
+
+export function memoryChatPort(): ChatStore & { conversations: (OpenedConversation & Partial<ConversationRow>)[] } {
+  const conversations: (OpenedConversation & Partial<ConversationRow>)[] = []
   return {
     conversations,
+    async find(id) {
+      const row = conversations.find((item) => item.id === id)
+      return row ? { id: row.id, invite_id: row.invite_id, stage: row.stage, paused_by: row.paused_by ?? null, ended_at: row.ended_at ?? null } : null
+    },
     async openFromInvite(_tx, input) {
       const existing = conversations.find((row) => row.invite_id === input.inviteId)
       if (existing) {
@@ -39,8 +46,19 @@ export function memoryChatPort(): ChatPort & { conversations: OpenedConversation
 
 const columns = { id: conversation.id, invite_id: conversation.invite_id, stage: conversation.stage }
 
-function postgresChatPort(): ChatPort {
+function postgresChatPort(): ChatStore {
   return {
+    async find(id) {
+      const rows = await getIdentityDatabase()
+        .select({ ...columns, paused_by: conversation.paused_by, ended_at: conversation.ended_at })
+        .from(conversation)
+        .where(eq(conversation.id, id))
+        .limit(1)
+      const row = rows[0]
+      return row
+        ? { id: row.id, invite_id: row.invite_id, stage: stageOf(row.stage), paused_by: row.paused_by, ended_at: row.ended_at }
+        : null
+    },
     async openFromInvite(tx, input) {
       const db = (tx ?? getIdentityDatabase()) as NodePgDatabase
       const inserted = await db
@@ -76,8 +94,13 @@ export function setChatPort(next: ChatPort | undefined): void {
 
 /** The override, else memory beside a memory account store (tests), else Postgres. */
 export function getChatPort(): ChatPort {
+  return getChatStore()
+}
+
+/** Chat's own view of the same adapter. An override without `find` reads by id from Postgres. */
+export function getChatStore(): ChatStore {
   if (override) {
-    return override
+    return 'find' in override ? (override as ChatStore) : { ...override, find: postgresChatPort().find }
   }
   if (accountStoreIsMemory()) {
     memoryFallback ??= memoryChatPort()
@@ -86,42 +109,3 @@ export function getChatPort(): ChatPort {
   return postgresChatPort()
 }
 
-export type ConversationItem = {
-  id: string
-  invite_id: string
-  stage: OpenedConversation['stage']
-  other_id: string
-}
-
-export type ChatFailure = {
-  ok: false
-  status: 403 | 500
-  code: 'FORBIDDEN' | 'UNHANDLED'
-  message: string
-  details: PublicProfileFailure['details']
-  retryable: boolean
-}
-
-/**
- * `GET /v1/conversations`. The viewer's conversations, found through the accepted invites invites reports for them
- * (chat never reads the invite table). A pending or declined invite has none. No BillingPort.
- */
-export async function listConversations(
-  session: ResolvedSession,
-): Promise<{ ok: true; body: { count: number; items: ConversationItem[] } } | ChatFailure> {
-  const gate = await assertBrowseViewer(session)
-  if (!gate.ok) {
-    if (gate.status === 403 && gate.code === 'FORBIDDEN') {
-      return { ok: false, status: 403, code: 'FORBIDDEN', message: gate.message, details: gate.details, retryable: false }
-    }
-    return { ok: false, status: 500, code: 'UNHANDLED', message: 'Request failed', details: null, retryable: false }
-  }
-  const accepted = await getInvitesPort().acceptedFor(gate.account.id)
-  const otherByInvite = new Map(accepted.map((row) => [row.inviteId, row.otherId]))
-  const rows = await getChatPort().conversationsForInvites([...otherByInvite.keys()])
-  const items = rows
-    .map((row) => ({ id: row.id, invite_id: row.invite_id, stage: row.stage, other_id: otherByInvite.get(row.invite_id) ?? '' }))
-    .filter((row) => row.other_id !== '')
-    .sort((left, right) => right.id.localeCompare(left.id))
-  return { ok: true, body: { count: items.length, items } }
-}

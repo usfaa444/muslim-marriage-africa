@@ -1,0 +1,27 @@
+--- API GET messages headers
+HTTP/1.1 200 OK
+x-powered-by: Express
+cache-control: no-store
+content-type: application/json; charset=utf-8
+content-length: 29
+etag: W/"1d-qnZ7hmANZWQq5B4E//Zc9i5q29Q"
+date: Fri, 23 Oct 2026 20:28:43 GMT
+connection: keep-alive
+--- page headers /discussions/<id>
+HTTP/1.1 200 OK
+vary: rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch
+cache-control: no-store
+content-type: text/html; charset=utf-8
+Date: Fri, 23 Oct 2026 20:28:43 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Transfer-Encoding: chunked
+
+--- realtime script
+200 application/javascript; charset=utf-8 47295
+--- storage/innerHTML use in thread page (counts)
+      5 localStorage
+(no lines above = none)
+--- POST from foreign Origin (CSRF)
+{"error":{"code":"FORBIDDEN","message":"Origine refusée.","details":null,"request_id":"01a16a73-9ac9-7281-a25a-f41875a3127f","retryable":false}}[403]
+--- message ids/text in URLs: thread URL carries only conversation id

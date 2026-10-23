@@ -1,0 +1,61 @@
+list 360 overflow no axe label-content-name-mismatch:serious
+thread 360 overflow no axe none
+list 390 overflow no axe label-content-name-mismatch:serious
+thread 390 overflow no axe none
+list 768 overflow no axe label-content-name-mismatch:serious
+thread 768 overflow no axe none
+list 1024 overflow no axe label-content-name-mismatch:serious
+thread 1024 overflow no axe none
+list 1280 overflow no axe label-content-name-mismatch:serious
+thread 1280 overflow no axe none
+list 1440 overflow no axe label-content-name-mismatch:serious
+thread 1440 overflow no axe none
+targets <44: [{"t":"arrow_backRetour aux discussio","w":223,"h":17},{"t":"Retour aux discussions","w":0,"h":0},{"t":"Réessayer","w":0,"h":0},{"t":"Messages précédents","w":0,"h":0},{"t":"TEXTAREA","w":182,"h":36},{"t":"Envoyerarrow_forward","w":150,"h":21}]
+tab order: [
+  'thread-input|TEXTAREA|outline:solid2px',
+  'Confidentialité|A|outline:solid2px',
+  'Découvrir|A|outline:solid2px',
+  'Invitations|A|outline:solid2px',
+  'Discussions|A|outline:solid2px',
+  'Profil|A|outline:solid2px',
+  'AnKanu\n\n\n\n\n\narrow_backRetour aux discuss|BODY|outline:none3px',
+  'AnKanu, accueil|A|outline:solid2px',
+  'arrow_backRetour aux discussions|A|outline:solid2px',
+  'thread-input|TEXTAREA|outline:solid2px',
+  'Confidentialité|A|outline:solid2px',
+  'Découvrir|A|outline:solid2px',
+  'Invitations|A|outline:solid2px',
+  'Discussions|A|outline:solid2px'
+]
+ctrl+enter sent: 1 status: Message envoyé focus now: thread-input
+counter @1850: [ '1850/2000' ]
+counter @2001: [ '2001/2000' ] maxlength attr: null
+2001 send alert: [
+  "Cette discussion n'existe pas.",
+  'Chargement impossible. Vérifiez votre connexion et réessayez.',
+  'Message trop long (2000 caractères au plus).'
+] text kept len: 2001
+spaces-only disabled: true
+offline send alert: [
+  "Cette discussion n'existe pas.",
+  'Chargement impossible. Vérifiez votre connexion et réessayez.',
+  'Envoi impossible. Vérifiez votre connexion et réessayez.'
+] kept: Test hors ligne
+thread load 500 -> arrow_backRetour aux discussions | Q | QA_Soeur, 30 ans | verified |  | location_onbobo-dioulasso |  | Étape : discussion | Aujourd'hui | Vous : |  | As-salāmu ʿalaykum — السلام عليكم 🌙 <script>alert(1)</script> '; drop table message;-- |  | 20:06 |  | Vous : |  | aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+IDOR page -> arrow_backRetour aux discussions |  | Cette discussion n'existe pas. |  | Retour aux discussions
+abc -> http://localhost:4012/discussions
+list 500 -> Échanges concertés & bienséance |  | Discussions Ta'aruf |  | Chargement impossible. Vérifiez votre connexion et réessayez. |  | Réessayer |  | Pour les invitations envoyées en attente, le fil de discussion ne s'ouvre qu'après acceptation formelle de
+signed-out -> http://localhost:4012/auth
+errors [
+  '400 http://localhost:4012/v1/conversations/01990000-0000-7000-8000-00000000c001/messages',
+  'Failed to load resource: the server responded with a status of 400 (Bad Request)',
+  'Failed to load resource: net::ERR_FAILED',
+  '500 http://localhost:4012/v1/conversations/01990000-0000-7000-8000-00000000c001/messages?after=01a16a64-e802-7bd2-9858-9d4e82c95ad3',
+  'Failed to load resource: the server responded with a status of 500 (Internal Server Error)',
+  '404 http://localhost:4012/v1/conversations/01990000-0000-7000-8000-00000000c002',
+  'Failed to load resource: the server responded with a status of 404 (Not Found)',
+  '404 http://localhost:4012/v1/conversations/01990000-0000-7000-8000-00000000c002/messages',
+  'Failed to load resource: the server responded with a status of 404 (Not Found)',
+  '500 http://localhost:4012/v1/conversations',
+  'Failed to load resource: the server responded with a status of 500 (Internal Server Error)'
+]

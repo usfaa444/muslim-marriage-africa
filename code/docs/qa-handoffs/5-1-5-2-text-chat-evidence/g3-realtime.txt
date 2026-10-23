@@ -1,0 +1,16 @@
++71ms brother true sister true other true
++80ms foreign origin -> refused websocket error undefined
++92ms no session -> refused UNAUTHENTICATED {"code":"UNAUTHENTICATED"}
++105ms staff -> refused FORBIDDEN {"code":"FORBIDDEN"}
++126ms unlisted -> refused FORBIDDEN {"code":"FORBIDDEN"}
++137ms mahram -> refused UNAUTHENTICATED {"code":"UNAUTHENTICATED"}
++1846ms typing events sister got: [[146,"conversation.typing",[{"conversation_id":"01990000-0000-7000-8000-00000000c001","account_id":"01990000-0000-7000-8000-00000000a001"}]]]
++1846ms typing events brother got (should be 0): 0  other got: 0
++3048ms after 1s window, sister typing count: 2
++3092ms POST 201 ack ms 1
++3893ms bro events: [[3083,"message.delivered",[{"conversation_id":"01990000-0000-7000-8000-00000000c001","message_id":"01a16a62-709d-790d-9498-e76018151ee8","sender_id":"01990000-0000-7000-8000-00000000a001"}]]]
++3893ms sis events: [[3083,"message.delivered",[{"conversation_id":"01990000-0000-7000-8000-00000000c001","message_id":"01a16a62-709d-790d-9498-e76018151ee8","sender_id":"01990000-0000-7000-8000-00000000a001"}]]]
++3893ms oth events: []
++3893ms event names seen [ 'message.delivered', 'conversation.typing' ]
++4418ms C2 post 201 brother/sister events for C2: 0
+"01a16a62-709d-790d-9498-e76018151ee8"
