@@ -191,7 +191,8 @@ test.describe('Invite inbox (Stories 4.4, 4.5)', () => {
     await expect(panel.getByTestId('invite-row')).toHaveCount(3)
     await expect(row(page, 'Mariam_K')).toContainText('En attente')
     await expect(row(page, 'Fatoumata_O')).toContainText('Acceptée')
-    await expect(row(page, 'Fatoumata_O').getByRole('link', { name: 'Ouvrir la discussion' })).toHaveAttribute('href', '/discussions')
+    // Stories 5.1, 5.2: an accepted row opens its own thread.
+    await expect(row(page, 'Fatoumata_O').getByRole('link', { name: 'Ouvrir la discussion' })).toHaveAttribute('href', '/discussions/01990000-0000-7000-8000-0000000004b2')
     const declined = row(page, 'Aissata_B')
     await expect(declined).toHaveAttribute('data-state', 'declined')
     // Name, age, city, the send date and the state. Nothing else: no lecture, no « she saw it », no countdown.
@@ -220,7 +221,7 @@ test.describe('Invite inbox (Stories 4.4, 4.5)', () => {
     const moved = accepted.getByTestId('invite-row').filter({ hasText: 'Al-Hassan_BF' })
     await expect(moved).toContainText('Démarche confirmée')
     await expect(moved).toContainText('Reçue le 12 octobre 2026')
-    await expect(moved.getByRole('link', { name: 'Ouvrir la discussion' })).toHaveAttribute('href', '/discussions')
+    await expect(moved.getByRole('link', { name: 'Ouvrir la discussion' })).toHaveAttribute('href', '/discussions/01990000-0000-7000-8000-0000000009ff')
     await expectAccessible(page)
   })
 

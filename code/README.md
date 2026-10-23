@@ -57,3 +57,18 @@ The TOTP secrets are stored encrypted (AES-256-GCM) with a server key. Put both 
 | `STAFF_MFA_KID` | A name for the key, written in each stored envelope, e.g. `local-staff-mfa-1`. |
 
 Without them the api refuses to boot when `NODE_ENV=production` and `RECAPTCHA_ALLOW_TEST_KEYS` is not `1` (a real production boot). On a stack with the reCAPTCHA test keys (local, staging) it boots, and staff sign-in answers 503 until the key is set. Changing the key makes every enrolled secret unreadable: run `reset-mfa` for each staff account afterwards.
+
+## Chat (text messages and realtime)
+
+Chat text is stored encrypted (AES-256-GCM, envelope `{v, alg, kid, iv, ct}`, bound to its conversation and message id). Put both variables in the api's env file (`~/.ankanu/api.env` locally, `/var/lib/ankanu/api.env` on staging), never in the repo:
+
+| Variable | Meaning |
+| --- | --- |
+| `CHAT_KEY` | `openssl rand -base64 32`. A value that is not base64 for 32 bytes, or one set without the other, refuses to boot. |
+| `CHAT_KID` | A name for the key, written in each stored envelope, e.g. `local-chat-1`. |
+
+Without them the api refuses to boot when `NODE_ENV=production` and `RECAPTCHA_ALLOW_TEST_KEYS` is not `1` (a real production boot). On a stack with the reCAPTCHA test keys (local, staging) it boots, the Discussions screens open, and every send answers 503 « Envoi indisponible pour le moment. Réessayez plus tard. » with nothing stored until the key is set. Changing the key makes older messages unreadable (they show « Message indisponible. »); key rotation with several kids is not built yet.
+
+Realtime is Socket.IO on `/v1/realtime`, served by the api process. The web container's `/v1/:path*` rewrite proxies both the polling requests and the WebSocket upgrade, so the browser only ever talks to the web origin (`http://localhost:4012` locally). The client script is `/v1/realtime/socket.io.min.js`. Events carry ids only (`message.delivered`, `conversation.typing`); the page then reads the text over HTTP. A handshake from an `Origin` outside `ANKANU_ALLOWED_ORIGINS` is refused, like a cookie POST. Rooms live in the api process (one api container in compose); a second api process would need the Socket.IO Redis adapter first.
+
+Each sent message also queues one `moderation_job` row (`outcome` null) after it is delivered. Nothing scans it yet (Epic 8), and a failure to queue never fails the send: the api log shows `chat scan_enqueue_failed message=<id>`.

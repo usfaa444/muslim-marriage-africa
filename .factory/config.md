@@ -80,9 +80,11 @@ First time only, create:
   EVIDENCE_KID=local-ankanu-1
   STAFF_MFA_KEY=<openssl rand -base64 32>
   STAFF_MFA_KID=local-staff-mfa-1
+  CHAT_KEY=<openssl rand -base64 32>
+  CHAT_KID=local-chat-1
   ```
 
-  Without `SMTP_URL` every email send is 503 `EMAIL_DELIVERY_FAILED`; with `log://` the api log prints `email <address> AnKanu <link>`. Without the evidence key, ID and liveness uploads are 503. Without the staff MFA key, staff sign-in is 503 (a real production boot refuses to start); staging needs the same two lines in `/var/lib/ankanu/api.env`.
+  Without `SMTP_URL` every email send is 503 `EMAIL_DELIVERY_FAILED`; with `log://` the api log prints `email <address> AnKanu <link>`. Without the evidence key, ID and liveness uploads are 503. Without the staff MFA key, staff sign-in is 503 (a real production boot refuses to start); staging needs the same two lines in `/var/lib/ankanu/api.env`. Without the chat key (Stories 5.1, 5.2), the Discussions screens open but every Chat send is 503 « Envoi indisponible pour le moment. Réessayez plus tard. » and nothing is stored; staging needs `CHAT_KEY` and `CHAT_KID` in `/var/lib/ankanu/api.env` too. To add them to an existing file: `printf 'CHAT_KEY=%s\nCHAT_KID=local-chat-1\n' "$(openssl rand -base64 32)" >> ~/.ankanu/api.env`, then `up -d` again (the api reads the file at start).
 
 - `~/.ankanu/local.env`:
 

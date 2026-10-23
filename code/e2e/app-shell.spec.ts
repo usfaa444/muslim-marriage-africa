@@ -16,6 +16,8 @@ const MEMBER_PAGES = [
   { path: '/profile-edit', active: 'Profil', wholePage: false },
   { path: `/invitations/envoyer/${TARGET}`, active: 'Invitations', wholePage: true },
   { path: '/invitations', active: 'Invitations', wholePage: true },
+  { path: '/discussions', active: 'Discussions', wholePage: true },
+  { path: `/discussions/${TARGET}`, active: 'Discussions', wholePage: true },
 ] as const
 
 /** Zero serious or critical WCAG 2.2 AA violations inside the shared header, footer and bottom nav. */
