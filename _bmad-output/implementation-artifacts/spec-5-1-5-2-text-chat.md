@@ -99,11 +99,11 @@ Interpretation notes (flagged in the handoff):
 - `code/packages/ports/src/index.ts`: `ModerationPort`, `ScanItemKind`, `ScanPayload`.
 - `code/apps/api/src/account-schema.ts`: `message`, `moderationJob`; `drizzle/0023_message.sql` (+ snapshot, journal).
 - `code/apps/api/src/chat-key.ts` (new): `CHAT_KEY` / `CHAT_KID`, seal and open with AAD, boot check. `main.ts`: boot check.
-- `code/apps/api/src/chat.ts`: conversation lookup, list with other member and last message.
-- `code/apps/api/src/chat-messages.ts` (new): message store (memory + Postgres), read thread, list messages, `sendText`, `checkMessageCap` seam.
+- `code/apps/api/src/chat.ts`: conversation lookup (`find`) on the chat store.
+- `code/apps/api/src/chat-messages.ts` (new): message store (memory + Postgres), Discussions list with other member and last message, read thread, list messages, `sendText`, `checkMessageCap` seam.
 - `code/apps/api/src/moderation.ts` (new): `ModerationPort` adapters, only writer of `moderation_job`.
 - `code/apps/api/src/chat-realtime.ts` (new): Socket.IO server on `/v1/realtime`, handshake gate, rooms, typing relay, `message.delivered` emit. `create-app.ts`: attach.
 - `code/apps/api/src/conversations.controller.ts`: three routes.
-- Web: `apps/web/src/discussions-page.ts` (new, screen 20), `apps/web/src/chat-thread-page.ts` (new, screen 21), `src/v2-serve.ts`, `app/discussions/route.ts`, `app/discussions/[id]/route.ts`, `src/member-section-page.ts` (removed), `apps/web/Dockerfile` + `.dockerignore` (Stitch 20, 21).
+- Web: `apps/web/src/discussions-page.ts` (new, screens 20 and 21), `src/entry-guard.ts` (thread path is account-gated), `src/invite-inbox-page.ts` (« Ouvrir la discussion » goes to the thread), `src/v2-serve.ts`, `app/discussions/route.ts`, `app/discussions/[id]/route.ts`, `src/member-section-page.ts` (removed), `apps/web/Dockerfile` + `.dockerignore` (Stitch 20, 21).
 - Tests: `apps/api/src/chat-messages.test.ts` (new, memory stores + real Socket.IO client), `operator-config.migrate.test.ts` (Postgres), `apps/web/src/discussions-page.test.ts` (new), `app-shell.test.tsx`, `member-route.test.ts`, `e2e/chat.spec.ts` (new), `e2e/app-shell.spec.ts`.
 - Docs: `.factory/config.md`, `code/README.md` (`CHAT_KEY`, `CHAT_KID`).
