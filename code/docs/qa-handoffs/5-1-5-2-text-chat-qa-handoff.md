@@ -13,9 +13,9 @@ Every route runs the same viewer gate as Stories 4.1 to 4.5: live session (`requ
 
 **`GET /v1/conversations`** (extends 4.5): `{ count, items }`, latest activity first (last message time, or the conversation's own time when it has none). Item: `{ id, invite_id, stage, other_id, pseudonym, other, last_message }`.
 - `other`: `{ available: true, age, city, verified, photo }` while the other account is an Active member with a public profile, else `{ available: false }`. `photo` is the live MAIN photo as a **blur** grant `{ id, url }`, or null.
-- `last_message`: `{ id, mine, kind, preview, created_at }` or null. `preview` is the decrypted text cut to 120 characters (null if it cannot be decrypted). No unread count, no read receipt.
+- `last_message`: `{ id, mine, kind, preview, created_at }` or null. `preview` is the decrypted text cut to 120 characters, counted as graphemes so an emoji is never split (retest F2), (null if it cannot be decrypted). No unread count, no read receipt.
 
-**`GET /v1/conversations/:id`**: `{ conversation: { id, stage, other_id, pseudonym, other }, me: { id } }`.
+**`GET /v1/conversations/:id`**: `{ conversation: { id, stage, other_id, pseudonym, other, closed }, me: { id } }`. `closed` is true when the conversation is paused or ended (retest F3).
 
 **`GET /v1/conversations/:id/messages`** `?limit=1..50` (default 30), and at most one of `before=<message id>` (older page) or `after=<message id>` (catch-up after an event).
 - Items oldest first: `{ id, conversation_id, sender_id, mine, kind: 'text', state: 'delivered', text, created_at }`, plus `has_more`. With `after`, `has_more` means newer messages exist past this page; otherwise it means older messages exist before the first item.
@@ -76,7 +76,8 @@ Every route runs the same viewer gate as Stories 4.1 to 4.5: live session (`requ
   - the last message in « … », prefixed « Vous : » when mine, or « Aucun message pour l'instant. » when there is none,
   - the time (« Aujourd'hui à 10:15 », « Hier à 17:40 », « 12 octobre à 09:05 »),
   - the link « Accéder à la conversation », whose accessible name includes the pseudonym.
-- An unavailable member shows « Profil indisponible ».
+- An unavailable member shows « Profil indisponible », with no pseudonym and no link (retest F5).
+- The link's accessible name comes from its content (« Accéder à la conversation » plus a screen-reader-only « avec <pseudonyme> »), not from an `aria-label` (retest F1).
 - Footer: « Pour les invitations envoyées en attente, le fil de discussion ne s'ouvre qu'après acceptation formelle de la sœur. » and « Registre des échanges : N fil(s) actif(s) ».
 - States:
   - « Chargement… ».
@@ -101,6 +102,8 @@ Every route runs the same viewer gate as Stories 4.1 to 4.5: live session (`requ
 - Golden rule, with Stitch's spelling corrected: « Règle d'or AnKanu : Évitez d'échanger vos contacts personnels, gardez toute discussion sur la plateforme AnKanu afin de préserver votre sécurité. »
 - A conversation that is not mine: « Cette discussion n'existe pas. » + « Retour aux discussions ».
 - An unavailable member: « Ce profil n'est plus disponible. », and the composer is disabled.
+- A paused or ended conversation: « Cette discussion est fermée. » up front, and the composer is disabled. A 409 `conversation_closed` or `other_unavailable` on send also disables it (retest F3).
+- Session expired (a 401 on send or load): « Votre session a expiré. Reconnectez-vous : votre message est gardé pour cette discussion. » with the link « Se reconnecter » (`/auth`). The unsent text is kept in `sessionStorage` for this conversation and returned once on the next successful load of the same thread (retest F4). `/auth` has no `next` parameter, so the member reopens the thread after signing in.
 - If the realtime script or socket fails, the page still loads and sends, with no error shown.
 - Dropped Stitch lines (the product does not do these):
   - « Wali notifié », « Accord mutuel validé », « Un wali peut lire cette conversation! », « Demander la levée du flou », « Signaler / Bloquer »;
@@ -287,3 +290,28 @@ The test names in `chat-messages.test.ts` number the Story 5.2 criteria 5.2-1 to
   stranger session GET thread 401
   ```
   The seeded rows were deleted afterwards.
+
+## 9. Retest: QA round 1 (report `5-1-5-2-text-chat-qa-report.md`, commit be0e671)
+
+| Finding | Fix | Regression test |
+|---|---|---|
+| F1 (minor, a11y) `label-content-name-mismatch` on the list link when the icon font is missing | The link no longer has an `aria-label`. Its name comes from its content: visible « Accéder à la conversation », a screen-reader-only « avec <pseudonyme> », and the icon span stays `aria-hidden`. | `e2e/chat.spec.ts` « QA F1: the row link is named by its visible words, with no aria-label and the icon kept out of the name » (fails on the old markup; checked by reverting); `discussions-page.test.ts` (no `aria-label` set on the row link) |
+| F2 (minor) The preview cut split an emoji | `preview()` cuts on graphemes with `Intl.Segmenter`, so it never lands inside a surrogate pair or a ZWJ sequence | `chat-messages.test.ts` « AC 5.1-1: the Discussions list… » now sends 300 × 🌙 and 200 × 👨‍👩‍👧 and checks the exact cut and `isWellFormed()` |
+| F3 (minor) A closed conversation was only discovered on send | `GET /v1/conversations/:id` returns `closed`. The thread shows « Cette discussion est fermée. » and disables the composer. A 409 `conversation_closed` or `other_unavailable` on send disables it too. | `chat-messages.test.ts` « a pending Invite has no thread; a closed conversation… » (`closed` false, then true when ended, true when paused, 409 when paused); e2e « QA F3: a paused or ended conversation says so up front… » and the extended « a refused send keeps the text… » |
+| F4 (minor) An expired session gave no way back | A 401 on send shows the expiry message with « Se reconnecter » (`/auth`) and keeps the text in the box and in `sessionStorage` for this thread. A 401 on load shows the same message and link. The next successful load of the thread restores the draft once. | e2e « QA F4: a session that expires mid-thread offers « Se reconnecter » and keeps the draft for the next visit » |
+| F5 (minor) The row for an unavailable member still showed the name and link | The row shows « Profil indisponible », the initial « ? », the last message and time, and no link | e2e « QA F5: a row for a member who is no longer available… »; `discussions-page.test.ts` |
+| F6 (minor) Malformed JSON gives the parser's English text | Not changed, as asked. This is the global body parser, not chat. Noted under Deferred in the spec. | n/a |
+| F7 (design note) No job and no retry after an enqueue failure | Not changed, as asked. Noted for Epic 8 (reconciliation sweep) under Deferred in the spec. | n/a |
+| F8 (process) `test:integration` wiped `pg-data` of the running local stack | `test:integration` was **not** run in this retest; the `ankanu-local` stack is still up. Run it only with the local stack stopped. | n/a |
+
+Retest self-check (real output):
+- `npm run lint`: exit 0, only the 3 pre-existing warnings.
+- `npm run typecheck`: exit 0.
+- `npx vitest run apps/api/src/chat-messages.test.ts`: `Tests 18 passed (18)`.
+- `discussions-page.test.ts` + `app-shell.test.tsx`: `Tests 53 passed (53)`.
+- `npm run test:unit`: `Test Files 2 failed | 78 passed (80)`, `Tests 2 failed | 609 passed (611)`. The 2 failures are the pre-existing Chrome checks `photo-rules` and `v2-responsive` (`ank-148-fix` passed this run).
+- `npx playwright test e2e/chat.spec.ts`: `31 passed`, `3 skipped` (the width sweeps and the throttled test run on one project each).
+  - Run with `E2E_ALLOW_ERRORS` for the Tailwind CDN, Google Fonts and `ERR_NETWORK_CHANGED`, this environment only.
+- `npm run test:integration`: not run (F8).
+
+F1 has not been checked with the Material Symbols font loaded; that check is for the Mac. The e2e test proves there is no `aria-label`, and axe passes with the ligature shown as text.
