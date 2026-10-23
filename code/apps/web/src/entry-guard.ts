@@ -96,13 +96,18 @@ export function entryLocation(path: string, step: GateStep): string | null {
     }
     return step === owned ? null : STEP_PATH[step]
   }
-  if (ACCOUNT.has(normalized) || isPublicProfilePath(normalized) || isInviteComposePath(normalized)) {
+  if (ACCOUNT.has(normalized) || isPublicProfilePath(normalized) || isInviteComposePath(normalized) || isChatThreadPath(normalized)) {
     if (step === 'anon') {
       return '/auth'
     }
     return step === 'account' ? null : STEP_PATH[step]
   }
   return null
+}
+
+/** Screen 21. One Chat thread (Stories 5.1, 5.2). */
+export function isChatThreadPath(path: string): boolean {
+  return /^\/discussions\/[^/]+$/.test(path)
 }
 
 /** Screen 18. Invite compose for one recipient (Stories 4.1, 4.2). */

@@ -21,7 +21,7 @@ import { favouritesHtml } from './favourites-page.js'
 import { inviteComposeHtml } from './invite-compose-page.js'
 import { inviteInboxHtml } from './invite-inbox-page.js'
 import { LandingPage } from './landing.js'
-import { memberSectionHtml } from './member-section-page.js'
+import { chatThreadHtml, discussionsHtml } from './discussions-page.js'
 import { notListablePage } from './not-listable.js'
 import { profileDetailHtml, type ProfileDetailView } from './profile-detail.js'
 import { staffHomeHtml, staffSignInHtml } from './staff-pages.js'
@@ -82,7 +82,8 @@ function pages(): Page[] {
     { name: '/profil/<id> (hold)', html: notListablePage(stitch('12-profile-not-yet-public'), { reasons: [] }), nav: 'decouvrir' },
     { name: '/invitations/envoyer/<id>', html: inviteComposeHtml(stitch('18-invite-compose-flash'), TARGET), nav: 'invitations' },
     { name: '/invitations', html: inviteInboxHtml(stitch('19-invite-inbox')), nav: 'invitations' },
-    { name: '/discussions', html: memberSectionHtml(stitch('57-discover'), 'discussions'), nav: 'discussions' },
+    { name: '/discussions', html: discussionsHtml(stitch('20-discussions-list')), nav: 'discussions' },
+    { name: '/discussions/<id>', html: chatThreadHtml(stitch('21-chat-thread'), TARGET), nav: 'discussions' },
     { name: '/profile-edit', html: profileHtml(stitch('11-profile-edit')), nav: 'profil' },
     { name: '/profile-review', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }), nav: 'profil' },
     { name: '/settings', html: settingsHtml(stitch('27-settings')), nav: 'profil' },
@@ -346,7 +347,10 @@ describe('member section routes for a live session', () => {
       expect(invitationsHtml).toContain('role="tablist"')
       const discussions = await getDiscussions(live('/discussions'))
       expect(discussions.status).toBe(200)
-      expect(await discussions.text()).toContain('data-nav-item="discussions" aria-current="page"')
+      const discussionsPage = await discussions.text()
+      expect(discussionsPage).toContain('data-nav-item="discussions" aria-current="page"')
+      // Stories 5.1, 5.2: the Discussions tab is the Discussions list (screen 20), no longer the title-only placeholder.
+      expect(discussionsPage).toContain("<title>AnKanu • Discussions Ta'aruf</title>")
       const profil = await getProfil(live('/profil'))
       expect(profil.status).toBe(303)
       expect(profil.headers.get('location')).toBe('http://localhost/profile-edit')
@@ -390,10 +394,12 @@ describe('member section routes for a live session', () => {
       const mahram = await get(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=mahram' } }))
       expect(mahram.headers.get('content-type')).toContain('application/json')
     }
-    for (const get of [getDiscussions, getProfil]) {
-      const web = await get(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=web' } }))
-      expect(web.headers.get('content-type')).toContain('application/json')
-    }
+    const web = await getProfil(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=web' } }))
+    expect(web.headers.get('content-type')).toContain('application/json')
+    // Stories 5.1, 5.2: the Discussions list renders for the member dev stub like the inbox below.
+    const list = await getDiscussions(new Request('http://localhost/discussions', { headers: { cookie: 'ankanu_session=web' } }))
+    expect(list.status).toBe(200)
+    expect(list.headers.get('content-type')).toContain('text/html')
     // Stories 4.4, 4.5: like the Invite compose page, the inbox renders for the member dev stub (its data loads in
     // the browser, so the API still decides every refusal). A built image ignores stub cookies.
     const inbox = await getInvitations(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=web' } }))

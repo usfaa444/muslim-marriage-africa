@@ -84,9 +84,14 @@ describe('member routes', () => {
     const mahram = await getDecouvrir(new Request('http://localhost/decouvrir', { headers: { cookie: MAHRAM } }))
     expect(mahram.status).toBe(403)
     expect(mahram.headers.get('content-type')).toContain('application/json')
+    // Stories 5.1, 5.2: /discussions is now the Discussions list, rendered for the member dev stub like the inbox;
+    // staff (above) and mahram still get the JSON refusal.
     const web = await getDiscussions(new Request('http://localhost/discussions', { headers: { cookie: 'ankanu_session=web' } }))
-    expect(web.status).toBe(401)
-    expect(web.headers.get('content-type')).toContain('application/json')
+    expect(web.status).toBe(200)
+    expect(web.headers.get('content-type')).toContain('text/html')
+    const mahramDiscussions = await getDiscussions(new Request('http://localhost/discussions', { headers: { cookie: MAHRAM } }))
+    expect(mahramDiscussions.status).toBe(403)
+    expect(mahramDiscussions.headers.get('content-type')).toContain('application/json')
     // Stories 4.4, 4.5: /invitations is now the Invite inbox page, rendered for the member dev stub like the compose
     // page; staff (above) and mahram still get the JSON refusal.
     const mahramInbox = await getInvitations(new Request('http://localhost/invitations', { headers: { cookie: MAHRAM } }))

@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
 import { discoverHtml } from './discover-page'
-import { memberSectionHtml } from './member-section-page'
+import { chatThreadHtml, discussionsHtml, isConversationId } from './discussions-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { inviteComposeHtml, isInviteTargetId } from './invite-compose-page'
@@ -393,8 +393,8 @@ export function statusResponse(request: Request, path: string): Promise<Response
 }
 
 /**
- * `/discussions`, `/profil`. Stub cookies keep the JSON envelope. A live member session gets a page the bottom nav
- * can open: `/profil` is the member's own profile (`/profile-edit`), `/discussions` the shared shell until Epic 5.
+ * `/profil`. Stub cookies keep the JSON envelope. A live member session goes to the member's own profile
+ * (`/profile-edit`). `/discussions` has its own screens since Stories 5.1 and 5.2 (`discussionsResponse`).
  */
 export async function memberGuarded(request: Request, path: MemberPath): Promise<Response> {
   const redirect = await entryRedirect(request, path)
@@ -405,9 +405,6 @@ export async function memberGuarded(request: Request, path: MemberPath): Promise
   if (sessionKind(cookie) === null && readSessionCookie(cookie) !== null) {
     if (path === '/profil') {
       return redirectTo(request, '/profile-edit')
-    }
-    if (path === '/discussions') {
-      return htmlResponse(memberSectionHtml(stitchFile('57-discover'), 'discussions'))
     }
   }
   return memberRouteResponse(cookie, path)
@@ -429,6 +426,41 @@ export async function invitationsResponse(request: Request): Promise<Response> {
     return memberRouteResponse(cookie, '/invitations')
   }
   return htmlResponse(inviteInboxHtml(stitchFile('19-invite-inbox')))
+}
+
+/**
+ * Screen 20, Discussions (Stories 5.1, 5.2). Like the Invite inbox: staff and mahram stubs get the member-route
+ * refusal; a member page (live session, or the `web` / `capacitor` dev stub) loads its conversations in the browser,
+ * so the API decides every refusal.
+ */
+export async function discussionsResponse(request: Request): Promise<Response> {
+  const redirect = await entryRedirect(request, '/discussions')
+  if (redirect) {
+    return redirect
+  }
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  if (kind === 'staff' || kind === 'mahram' || (kind === null && readSessionCookie(cookie) === null)) {
+    return memberRouteResponse(cookie, '/discussions')
+  }
+  return htmlResponse(discussionsHtml(stitchFile('20-discussions-list')))
+}
+
+/** Screen 21, Chat thread (Stories 5.1, 5.2). Same gates as the list; a malformed id goes back to the list. */
+export async function chatThreadResponse(request: Request, id: string): Promise<Response> {
+  const redirect = await entryRedirect(request, `/discussions/${id}`)
+  if (redirect) {
+    return redirect
+  }
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  if (kind === 'staff' || kind === 'mahram' || (kind === null && readSessionCookie(cookie) === null)) {
+    return memberRouteResponse(cookie, '/discussions')
+  }
+  if (!isConversationId(id)) {
+    return redirectTo(request, '/discussions')
+  }
+  return htmlResponse(chatThreadHtml(stitchFile('21-chat-thread'), id))
 }
 
 /**

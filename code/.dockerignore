@@ -89,6 +89,12 @@ design-stitch/ankanu-v2/18-invite-compose-flash/*
 !design-stitch/ankanu-v2/19-invite-inbox/
 design-stitch/ankanu-v2/19-invite-inbox/*
 !design-stitch/ankanu-v2/19-invite-inbox/screen.html
+!design-stitch/ankanu-v2/20-discussions-list/
+design-stitch/ankanu-v2/20-discussions-list/*
+!design-stitch/ankanu-v2/20-discussions-list/screen.html
+!design-stitch/ankanu-v2/21-chat-thread/
+design-stitch/ankanu-v2/21-chat-thread/*
+!design-stitch/ankanu-v2/21-chat-thread/screen.html
 !design-stitch/ankanu-v2/27-settings/
 design-stitch/ankanu-v2/27-settings/*
 !design-stitch/ankanu-v2/27-settings/screen.html
