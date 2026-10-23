@@ -2,10 +2,11 @@ import { navLabel, withAppShell, type NavSection } from './app-shell'
 import { pinGuardScript } from './pin-guard'
 import { prepareV2 } from './v2-document'
 
-export type SectionPlaceholder = Extract<NavSection, 'invitations' | 'discussions'>
+export type SectionPlaceholder = Extract<NavSection, 'discussions'>
 
 /**
- * `/invitations` and `/discussions` for a live member session until their own screens ship (screens 19 and 20).
+ * `/discussions` for a live member session until its own screen ships (screen 20, Epic 5). `/invitations` has its
+ * own screen since Stories 4.4 and 4.5 (`invite-inbox-page.ts`).
  * Only the shared shell and the section's nav label, so the bottom nav never leads to a raw JSON error.
  */
 export function memberSectionHtml(headSource: string, section: SectionPlaceholder): string {

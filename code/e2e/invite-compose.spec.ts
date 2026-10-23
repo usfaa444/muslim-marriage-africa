@@ -191,6 +191,54 @@ test.describe('Invite compose (Stories 4.1, 4.2)', () => {
     await expectAccessible(page)
   })
 
+  test('Story 4.5: after her decline the send stays closed, with a quiet message (no resend)', async ({ page, context, baseURL }) => {
+    const api = newApi({
+      sendReply: {
+        status: 403,
+        body: {
+          error: {
+            code: 'FORBIDDEN',
+            message: "Vous ne pouvez plus envoyer d'invitation à ce profil.",
+            details: { reason: 'invite_declined' },
+            request_id: 'r',
+            retryable: false,
+          },
+        },
+      },
+    })
+    await serveApi(context, baseURL ?? '', api)
+    await openCompose(page)
+    await page.getByRole('button', { name: "Envoyer l'invitation Ta'aruf" }).click()
+    await expect(page.getByTestId('invite-error')).toHaveText("Vous ne pouvez plus envoyer d'invitation à ce profil.")
+    await expect(page.getByRole('button', { name: "Envoyer l'invitation Ta'aruf" })).toBeDisabled()
+    expect(api.sends).toHaveLength(1)
+    await expectAccessible(page)
+  })
+
+  test('Story 4.5: when she already invited him, the send points to the inbox instead', async ({ page, context, baseURL }) => {
+    const api = newApi({
+      sendReply: {
+        status: 409,
+        body: {
+          error: {
+            code: 'UNHANDLED',
+            message: 'Cette personne vous a déjà invité. Répondez à son invitation.',
+            details: { reason: 'invite_received' },
+            request_id: 'r',
+            retryable: false,
+          },
+        },
+      },
+    })
+    await serveApi(context, baseURL ?? '', api)
+    await openCompose(page)
+    await page.getByRole('button', { name: "Envoyer l'invitation Ta'aruf" }).click()
+    await expect(page.getByTestId('invite-error')).toHaveText('Cette personne vous a déjà invité. Répondez à son invitation.')
+    await expect(page.getByRole('link', { name: 'Voir mes invitations' })).toHaveAttribute('href', '/invitations')
+    await expect(page.getByRole('button', { name: "Envoyer l'invitation Ta'aruf" })).toBeDisabled()
+    await expectAccessible(page)
+  })
+
   test('a Sister in free_unlimited sees unlimited Invites with no count and no pack offer', async ({ page, context, baseURL }) => {
     await serveApi(
       context,

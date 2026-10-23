@@ -225,7 +225,7 @@ async function latestStatuses(accountId: string): Promise<Map<string, string>> {
   return new Map([...chosen.entries()].map(([kind, row]) => [kind, row.status]))
 }
 
-async function verificationFlags(accountId: string, gender: Gender): Promise<PublicProfileBody['verification']> {
+export async function verificationFlags(accountId: string, gender: Gender): Promise<PublicProfileBody['verification']> {
   const latest = await latestStatuses(accountId)
   const mahram = gender === 'sister' ? await getMahramPort().verifiedWali(accountId) : false
   return {

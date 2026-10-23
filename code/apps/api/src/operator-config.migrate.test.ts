@@ -23,6 +23,7 @@ import { createApp } from './create-app.js'
 import { setEmailPort } from './email-port.js'
 import { setEmailVerificationStore } from './email-verification-store.js'
 import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
+import { getChatPort, setChatPort } from './chat.js'
 import { getInviteStore, readInviteConfig, setInviteConfigReader, setInviteStore, type InviteRow } from './invites.js'
 import { PASSWORD_RESET_SESSION_MS, PASSWORD_RESET_TTL_MS } from './password-reset.js'
 import { resetPasswordResetRateWindow } from './password-reset-rate.js'
@@ -190,6 +191,7 @@ function migrationSql(): string {
     '0019_staff_mfa.sql',
     '0020_review_console.sql',
     '0021_invite.sql',
+    '0022_conversation.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -286,6 +288,7 @@ describe('operator_config migration', () => {
       'account',
       'audit_event',
       'cil_ticket',
+      'conversation',
       'credential',
       'derivative',
       'discovery_exclusion',
@@ -312,6 +315,7 @@ describe('operator_config migration', () => {
       'public.account',
       'public.audit_event',
       'public.cil_ticket',
+      'public.conversation',
       'public.credential',
       'public.derivative',
       'public.discovery_exclusion',
@@ -337,7 +341,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('22')
+    expect(applied.rows[0]?.count).toBe('23')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -866,6 +870,7 @@ describe('operator_config migration', () => {
       'account',
       'audit_event',
       'cil_ticket',
+      'conversation',
       'credential',
       'derivative',
       'discovery_exclusion',
@@ -892,6 +897,7 @@ describe('operator_config migration', () => {
       'public.account',
       'public.audit_event',
       'public.cil_ticket',
+      'public.conversation',
       'public.credential',
       'public.derivative',
       'public.discovery_exclusion',
@@ -1190,6 +1196,111 @@ describe('operator_config migration', () => {
       expect((await readInviteConfig())?.sisterReachMode).toBe(free_unlimited)
       await db().query(`update "operator_config" set "value" = $1 where "key" = 'sister_reach_mode'`, [same_quota_as_brothers])
     } finally {
+      await db().query(`delete from "invite_quota" where "account_id" = $1`, [brother])
+      await db().query(`delete from "invite" where "from_id" = $1`, [brother])
+      await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, ...sisters]])
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('accepts in one transaction with ChatPort.openFromInvite, declines quietly, and keeps one conversation per invite on migrated Postgres (Stories 4.4, 4.5)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setInviteStore(undefined)
+    setChatPort(undefined)
+    const at = new Date('2026-10-23T10:00:00.000Z')
+    const brother = newId(at)
+    const sisters = Array.from({ length: 3 }, () => newId(at))
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, $4, $5, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    await db().query(insertAccount, [brother, 'inbox-b@example.bf', 'Inbox_B', 'brother', ['member']])
+    for (const [index, id] of sisters.entries()) {
+      await db().query(insertAccount, [id, `inbox-s${index}@example.bf`, `Inbox_S${index}`, 'sister', ['member']])
+    }
+    const rows = sisters.map((to, index): InviteRow => {
+      const when = new Date(at.getTime() + index + 1)
+      return { id: newId(when), from_id: brother, to_id: to, state: 'pending', created_at: when.toISOString() }
+    })
+    try {
+      const store = getInviteStore()
+      for (const row of rows) {
+        expect((await store.send(row, { day: '2026-10-23', cap: null })).ok).toBe(true)
+      }
+      const [first, second, third] = rows as [InviteRow, InviteRow, InviteRow]
+      expect(await store.quotaCount(brother, '2026-10-23')).toBe(3)
+      const acceptedAt = '2026-10-23T11:00:00.000Z'
+
+      // Only the recipient can move the row: the sender's id matches nothing.
+      expect(await store.accept(first.id, brother, acceptedAt, at)).toEqual({ ok: false, reason: 'missing' })
+      const raced = await Promise.all([
+        store.accept(first.id, first.to_id, acceptedAt, at),
+        store.accept(first.id, first.to_id, acceptedAt, at),
+      ])
+      expect(raced.every((item) => item.ok)).toBe(true)
+      expect(raced.filter((item) => item.ok && item.changed)).toHaveLength(1)
+      const opened = raced[0]?.ok ? raced[0].conversation : null
+      expect(opened).toMatchObject({ invite_id: first.id, stage: 'chat' })
+      expect(raced[1]?.ok ? raced[1].conversation?.id : null).toBe(opened?.id)
+      const conversations = await db().query<{ invite_id: string; stage: string }>(
+        `select "invite_id", "stage" from "conversation" where "invite_id" = any($1::uuid[])`,
+        [rows.map((row) => row.id)],
+      )
+      expect(conversations.rows).toEqual([{ invite_id: first.id, stage: 'chat' }])
+      const stored = await db().query<{ state: string; sister_accepted_at: Date }>(
+        `select "state", "sister_accepted_at" from "invite" where "id" = $1`,
+        [first.id],
+      )
+      expect(stored.rows[0]?.state).toBe('accepted')
+      expect(stored.rows[0]?.sister_accepted_at.toISOString()).toBe(acceptedAt)
+
+      // Decline: no conversation, idempotent, then accept refused. An accepted invite cannot be declined.
+      expect(await store.decline(second.id, second.to_id)).toMatchObject({ ok: true, changed: true, row: { state: 'declined' } })
+      expect(await store.decline(second.id, second.to_id)).toMatchObject({ ok: true, changed: false })
+      expect(await store.accept(second.id, second.to_id, acceptedAt, at)).toMatchObject({ ok: false, reason: 'not_pending' })
+      expect(await store.decline(first.id, first.to_id)).toMatchObject({ ok: false, reason: 'not_pending', row: { state: 'accepted' } })
+
+      // A parallel accept and decline leave exactly one outcome, with a conversation only for accepted.
+      const mixed = await Promise.all([store.accept(third.id, third.to_id, acceptedAt, at), store.decline(third.id, third.to_id)])
+      expect(mixed.filter((item) => item.ok)).toHaveLength(1)
+      const thirdState = (await store.find(third.id))?.state
+      const thirdConversations = await db().query(`select 1 from "conversation" where "invite_id" = $1`, [third.id])
+      expect(thirdConversations.rowCount).toBe(thirdState === 'accepted' ? 1 : 0)
+
+      expect((await store.list(brother, 'accepted')).map((row) => row.id)).toEqual(
+        thirdState === 'accepted' ? [third.id, first.id] : [first.id],
+      )
+      expect((await store.list(first.to_id, 'accepted')).map((row) => row.id)).toEqual([first.id])
+      expect((await store.between(brother, second.to_id)).map((row) => row.state)).toEqual(['declined'])
+      expect((await getChatPort().conversationsForInvites([first.id, second.id])).map((row) => row.invite_id)).toEqual([first.id])
+
+      // The schema keeps one conversation per invite and the four stages only.
+      let duplicate = false
+      try {
+        await db().query(`insert into "conversation" ("id", "invite_id", "stage") values ($1, $2, 'chat')`, [newId(at), first.id])
+      } catch (error) {
+        duplicate = true
+        expect(postgresCode(error)).toBe('23505')
+      }
+      expect(duplicate).toBe(true)
+      let badStage = false
+      try {
+        await db().query(`insert into "conversation" ("id", "invite_id", "stage") values ($1, $2, 'pending')`, [newId(at), second.id])
+      } catch (error) {
+        badStage = true
+        expect(postgresCode(error)).toBe('23514')
+      }
+      expect(badStage).toBe(true)
+      // The quota is never touched by accept or decline (no count, no refund).
+      expect(await store.quotaCount(brother, '2026-10-23')).toBe(3)
+    } finally {
+      await db().query(`delete from "conversation" where "invite_id" = any($1::uuid[])`, [rows.map((row) => row.id)])
       await db().query(`delete from "invite_quota" where "account_id" = $1`, [brother])
       await db().query(`delete from "invite" where "from_id" = $1`, [brother])
       await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, ...sisters]])

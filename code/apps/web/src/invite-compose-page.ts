@@ -38,6 +38,7 @@ export const INVITE_COPY = {
   alreadySent: 'Invitation déjà envoyée.',
   sendError: 'Envoi impossible. Vérifiez votre connexion et réessayez.',
   cancel: 'Annuler et revenir au profil',
+  inboxLink: 'Voir mes invitations',
 } as const
 
 /**
@@ -214,6 +215,19 @@ function sendInvite() {
       return
     }
     if (result.status === 404) { unavailable(); return }
+    if (result.status === 403 && details.reason === 'invite_declined') {
+      done = true
+      text('invite-error', errorMessage(payload, COPY.sendError))
+      show('invite-error', true)
+      return
+    }
+    if (result.status === 409 && details.reason === 'invite_received') {
+      done = true
+      text('invite-error', errorMessage(payload, COPY.sendError))
+      show('invite-error', true)
+      show('invite-inbox-link', true)
+      return
+    }
     if (result.status === 403 && details.reason === 'photo_required') {
       paintReadiness({ photo: false, profile_ready: true })
       text('invite-error', errorMessage(payload, COPY.sendError))
@@ -355,6 +369,7 @@ function composeSection(profileHref: string): string {
 </button>
 <p id="invite-status" role="status" aria-live="polite" class="text-sm text-deep-navy font-medium"></p>
 <p id="invite-error" data-testid="invite-error" hidden role="alert" class="text-sm text-deep-navy break-words text-center"></p>
+<a id="invite-inbox-link" hidden class="${quiet}" href="/invitations">${INVITE_COPY.inboxLink}</a>
 <a class="inline-flex items-center min-h-[44px] text-xs text-deep-navy/80 hover:text-deep-navy underline underline-offset-4 decoration-hairline transition-colors" href="${profileHref}">${INVITE_COPY.cancel}</a>
 </div>
 </div>

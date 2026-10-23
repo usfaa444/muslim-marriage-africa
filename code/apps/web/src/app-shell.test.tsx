@@ -19,6 +19,7 @@ import {
 import { DISCOVER_EYEBROW, discoverHtml } from './discover-page.js'
 import { favouritesHtml } from './favourites-page.js'
 import { inviteComposeHtml } from './invite-compose-page.js'
+import { inviteInboxHtml } from './invite-inbox-page.js'
 import { LandingPage } from './landing.js'
 import { memberSectionHtml } from './member-section-page.js'
 import { notListablePage } from './not-listable.js'
@@ -80,7 +81,7 @@ function pages(): Page[] {
     { name: '/profil/<id>', html: profileDetailHtml(stitch('15-profile-detail'), VIEW), nav: 'decouvrir' },
     { name: '/profil/<id> (hold)', html: notListablePage(stitch('12-profile-not-yet-public'), { reasons: [] }), nav: 'decouvrir' },
     { name: '/invitations/envoyer/<id>', html: inviteComposeHtml(stitch('18-invite-compose-flash'), TARGET), nav: 'invitations' },
-    { name: '/invitations', html: memberSectionHtml(stitch('57-discover'), 'invitations'), nav: 'invitations' },
+    { name: '/invitations', html: inviteInboxHtml(stitch('19-invite-inbox')), nav: 'invitations' },
     { name: '/discussions', html: memberSectionHtml(stitch('57-discover'), 'discussions'), nav: 'discussions' },
     { name: '/profile-edit', html: profileHtml(stitch('11-profile-edit')), nav: 'profil' },
     { name: '/profile-review', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }), nav: 'profil' },
@@ -340,8 +341,9 @@ describe('member section routes for a live session', () => {
       expect(invitations.headers.get('content-type')).toContain('text/html')
       const invitationsHtml = await invitations.text()
       expect(invitationsHtml).toContain('data-nav-item="invitations" aria-current="page"')
-      expect(invitationsHtml).toContain('<title>AnKanu - Invitations</title>')
-      expect(invitationsHtml).toContain('>Invitations</h1>')
+      // Stories 4.4, 4.5: the Invitations tab is the Invite inbox (screen 19), no longer the title-only placeholder.
+      expect(invitationsHtml).toContain("<title>AnKanu • Invitations Ta'aruf</title>")
+      expect(invitationsHtml).toContain('role="tablist"')
       const discussions = await getDiscussions(live('/discussions'))
       expect(discussions.status).toBe(200)
       expect(await discussions.text()).toContain('data-nav-item="discussions" aria-current="page"')
@@ -385,9 +387,18 @@ describe('member section routes for a live session', () => {
     for (const get of [getInvitations, getDiscussions, getProfil]) {
       const staff = await get(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=staff' } }))
       expect(staff.headers.get('content-type')).toContain('application/json')
+      const mahram = await get(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=mahram' } }))
+      expect(mahram.headers.get('content-type')).toContain('application/json')
+    }
+    for (const get of [getDiscussions, getProfil]) {
       const web = await get(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=web' } }))
       expect(web.headers.get('content-type')).toContain('application/json')
     }
+    // Stories 4.4, 4.5: like the Invite compose page, the inbox renders for the member dev stub (its data loads in
+    // the browser, so the API still decides every refusal). A built image ignores stub cookies.
+    const inbox = await getInvitations(new Request('http://localhost/invitations', { headers: { cookie: 'ankanu_session=web' } }))
+    expect(inbox.status).toBe(200)
+    expect(inbox.headers.get('content-type')).toContain('text/html')
     const anon = await getInvitations(new Request('http://localhost/invitations'))
     expect(anon.status).toBe(303)
     expect(anon.headers.get('location')).toBe('http://localhost/auth')
