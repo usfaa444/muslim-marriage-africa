@@ -1,0 +1,11 @@
+http 429 POST http://localhost:3100/v1/invites
+console: Failed to load resource: the server responded with a status of 429 (Too Many Requests)
+http 403 POST http://localhost:3100/v1/invites
+console: Failed to load resource: the server responded with a status of 403 (Forbidden)
+http 404 GET http://localhost:3100/v1/profiles/01a166dd-6f23-7572-b14d-524f62c22464
+console: Failed to load resource: the server responded with a status of 404 (Not Found)
+http 404 GET http://localhost:3100/v1/profiles/01a166d8-da04-70cc-9557-000000000000
+console: Failed to load resource: the server responded with a status of 404 (Not Found)
+console: Failed to load resource: net::ERR_FAILED
+http 500 POST http://localhost:3100/v1/invites
+console: Failed to load resource: the server responded with a status of 500 (Internal Server Error)

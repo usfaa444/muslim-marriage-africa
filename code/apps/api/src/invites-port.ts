@@ -1,22 +1,20 @@
-/**
- * Invites owns invite counts (AD-3). Story 4.1 replaces this adapter with the
- * real count of invite rows whose UUID v7 `id` falls in the window. No invite
- * table exists until then, so zero is true.
- */
+import { getInviteStore } from './invites.js'
+
+/** Invites owns invite counts (AD-3). The default counts real invite rows whose UUID v7 `id` falls in the window. */
 export type InvitesPort = {
   sentCountSince(accountId: string, since: Date): Promise<number>
 }
 
-const zeroInvites: InvitesPort = {
-  async sentCountSince() {
-    return 0
+const storeInvites: InvitesPort = {
+  async sentCountSince(accountId, since) {
+    return getInviteStore().countSentSince(accountId, since)
   },
 }
 
-let port: InvitesPort = zeroInvites
+let port: InvitesPort = storeInvites
 
 export function setInvitesPort(next: InvitesPort | undefined): void {
-  port = next ?? zeroInvites
+  port = next ?? storeInvites
 }
 
 export function getInvitesPort(): InvitesPort {

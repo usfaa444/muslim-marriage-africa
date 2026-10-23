@@ -145,7 +145,8 @@ function isGender(value: string): value is Gender {
   return value === 'sister' || value === 'brother'
 }
 
-async function loadAccount(id: string): Promise<BrowseViewer | null> {
+/** Member account by id with gender, roles and status. Null for staff (gender `none`) or an unknown id. */
+export async function loadAccount(id: string): Promise<BrowseViewer | null> {
   if (accountStoreIsMemory()) {
     const store = getAccountStore() as { accounts?: CreatedAccount[] }
     const row = store.accounts?.find((item) => item.id === id)

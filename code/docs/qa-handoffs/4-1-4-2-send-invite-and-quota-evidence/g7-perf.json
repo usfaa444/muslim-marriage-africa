@@ -1,0 +1,12 @@
+{
+ "lcp_ms": 400,
+ "cls": 0.0022971740539849514,
+ "send_ack_ms_slow3g_cpu4x": 237,
+ "api_calls": [
+  "/v1/invites/quota",
+  "/v1/profiles/01a166d8-da04-70cc-9557-f06c07b474c6",
+  "/v1/pin",
+  "/v1/invites"
+ ],
+ "total_bytes": 3765731
+}

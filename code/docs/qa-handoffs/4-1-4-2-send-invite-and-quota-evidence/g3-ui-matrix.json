@@ -1,0 +1,487 @@
+[
+ {
+  "id": "G4",
+  "what": "free state 360px no h-scroll",
+  "ok": true,
+  "actual": [
+   360,
+   360
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "free state 390px no h-scroll",
+  "ok": true,
+  "actual": [
+   390,
+   390
+  ]
+ },
+ {
+  "id": "G6",
+  "what": "axe free state serious/critical",
+  "ok": true,
+  "actual": []
+ },
+ {
+  "id": "G4",
+  "what": "elements marked [hidden] are really not displayed (Tailwind CSS override check)",
+  "ok": true,
+  "actual": {
+   "#invite-photo-missing": false,
+   "#invite-profile-missing": false,
+   "#invite-quota-wall": false,
+   "#invite-unavailable": false,
+   "#invite-load-error": false,
+   "#invite-loading": false,
+   "#invite-error": false
+  }
+ },
+ {
+  "id": "G4",
+  "what": "copy: Transmettre une invitation Ta'aruf",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "copy: Conforme",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "copy: Invitations restantes aujourd'hui : 3",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "copy: Invitations illimitées pour les abonnements engagés.",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "copy: Envoyer l'invitation Ta'aruf",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "copy: Protocole & Rôle du Tuteur (Wali)",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "no pack/aucune IA wording",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G5",
+  "what": "send button >=44px",
+  "ok": true,
+  "actual": {
+   "x": 16,
+   "y": 1107.5,
+   "width": 358,
+   "height": 48
+  }
+ },
+ {
+  "id": "G5",
+  "what": "touch targets in main >= 44x44",
+  "ok": true,
+  "actual": []
+ },
+ {
+  "id": "G4",
+  "what": "free state 768px no h-scroll",
+  "ok": true,
+  "actual": [
+   768,
+   768
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "free state 1024px no h-scroll",
+  "ok": true,
+  "actual": [
+   1024,
+   1024
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "free state 1280px no h-scroll",
+  "ok": true,
+  "actual": [
+   1280,
+   1280
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "free state 1440px no h-scroll",
+  "ok": true,
+  "actual": [
+   1440,
+   1440
+  ]
+ },
+ {
+  "id": "G6",
+  "what": "send button reachable with Tab",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G6",
+  "what": "focus indicator on send (outline/box-shadow)",
+  "ok": true,
+  "actual": [
+   "auto",
+   "0px",
+   "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px"
+  ]
+ },
+ {
+  "id": "AC1",
+  "what": "keyboard Enter sends -> 201",
+  "ok": true,
+  "actual": 201
+ },
+ {
+  "id": "G5",
+  "what": "success message",
+  "ok": true,
+  "actual": "Invitation envoyée."
+ },
+ {
+  "id": "G5",
+  "what": "button locked after success",
+  "ok": true,
+  "actual": [
+   true,
+   "Invitation envoyée"
+  ]
+ },
+ {
+  "id": "G6",
+  "what": "status is aria-live",
+  "ok": true,
+  "actual": "polite"
+ },
+ {
+  "id": "AC1",
+  "what": "persisted in DB",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G3",
+  "what": "after reload remaining = 2",
+  "ok": true,
+  "actual": "Invitations restantes aujourd'hui : 2"
+ },
+ {
+  "id": "E-1",
+  "what": "resend after reload -> already sent message",
+  "ok": true,
+  "actual": "Invitation déjà envoyée."
+ },
+ {
+  "id": "E-1",
+  "what": "still 1 row, quota 1",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "E-1",
+  "what": "double-click on slow 3G -> one POST",
+  "ok": true,
+  "actual": 1
+ },
+ {
+  "id": "G7",
+  "what": "compose loads on throttled 3G (ms)",
+  "ok": true,
+  "actual": 1679
+ },
+ {
+  "id": "E-1",
+  "what": "one row",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "wall 360px no h-scroll",
+  "ok": true,
+  "actual": [
+   360,
+   360
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "wall 390px no h-scroll",
+  "ok": true,
+  "actual": [
+   390,
+   390
+  ]
+ },
+ {
+  "id": "AC12",
+  "what": "wall visible on load",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "AC12",
+  "what": "wall copy",
+  "ok": true,
+  "actual": "hourglass_disabled\nEnvoi refusé. Quota du jour atteint.\n\nNouvelles invitations demain à partir de 00:00 (heure de Ouagadougou).\n\nAvec Premium, invitations et messages illimités.\n\nDécouvrir Premium"
+ },
+ {
+  "id": "AC12",
+  "what": "exactly one Premium link, no pack",
+  "ok": true,
+  "actual": 1
+ },
+ {
+  "id": "AC6",
+  "what": "send disabled at wall",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G4",
+  "what": "inline count/upsell hidden at wall",
+  "ok": true,
+  "actual": "\n\n\nhourglass_empty\nDisponibilité journalière\n\n\nVous voulez des invitations illimitées ? Abonnez-vous !\n\n\n\nInvitations illimitées pour les abonnements engagés.\n\n"
+ },
+ {
+  "id": "G6",
+  "what": "axe wall serious/critical",
+  "ok": true,
+  "actual": []
+ },
+ {
+  "id": "G5",
+  "what": "Premium link >=44px",
+  "ok": true,
+  "actual": {
+   "x": 33,
+   "y": 980,
+   "width": 159.875,
+   "height": 44
+  }
+ },
+ {
+  "id": "KNOWN",
+  "what": "/premium is 404 (Epic 10 placeholder, flagged)",
+  "ok": true,
+  "actual": 404
+ },
+ {
+  "id": "G4",
+  "what": "wall 768px no h-scroll",
+  "ok": true,
+  "actual": [
+   768,
+   768
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "wall 1024px no h-scroll",
+  "ok": true,
+  "actual": [
+   1024,
+   1024
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "wall 1280px no h-scroll",
+  "ok": true,
+  "actual": [
+   1280,
+   1280
+  ]
+ },
+ {
+  "id": "G4",
+  "what": "wall 1440px no h-scroll",
+  "ok": true,
+  "actual": [
+   1440,
+   1440
+  ]
+ },
+ {
+  "id": "AC6",
+  "what": "stale page: 4th send opens wall",
+  "ok": true,
+  "actual": "Nouvelles invitations demain à partir de 00:00 (heure de Ouagadougou)."
+ },
+ {
+  "id": "AC2",
+  "what": "no-photo block visible with link",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "AC2",
+  "what": "send refused with prompt, focus on add-photo link",
+  "ok": true,
+  "actual": [
+   "Ajoutez une photo de profil pour envoyer une invitation.",
+   "invite-photo-link"
+  ]
+ },
+ {
+  "id": "AC2",
+  "what": "no invite row",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G6",
+  "what": "axe nophoto serious/critical",
+  "ok": true,
+  "actual": []
+ },
+ {
+  "id": "AC3",
+  "what": "unavailable block visible, send hidden",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G3",
+  "what": "bad id -> /decouvrir",
+  "ok": true,
+  "actual": "http://localhost:3100/decouvrir"
+ },
+ {
+  "id": "G3",
+  "what": "unknown id -> unavailable",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "SEC",
+  "what": "anon deep link -> /auth",
+  "ok": true,
+  "actual": "http://localhost:3100/auth"
+ },
+ {
+  "id": "AC5",
+  "what": "Sister 4th: wall in UI (default mode)",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "AC4",
+  "what": "free_unlimited UI: Invitations illimitées., no count/pack",
+  "ok": true,
+  "actual": "hourglass_empty\nDISPONIBILITÉ JOURNALIÈRE\n\nInvitations illimitées."
+ },
+ {
+  "id": "AC4",
+  "what": "free_unlimited 4th send OK",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "G7",
+  "what": "send network error: message + button re-enabled",
+  "ok": true,
+  "actual": "Envoi impossible. Vérifiez votre connexion et réessayez."
+ },
+ {
+  "id": "G7",
+  "what": "send 500: handled error shown",
+  "ok": true,
+  "actual": "Request failed"
+ },
+ {
+  "id": "G7",
+  "what": "quota load failure -> retry state",
+  "ok": true,
+  "actual": "Chargement impossible. Vérifiez votre connexion et réessayez.\n\nRéessayer"
+ },
+ {
+  "id": "G7",
+  "what": "retry recovers",
+  "ok": true,
+  "actual": ""
+ },
+ {
+  "id": "AC1",
+  "what": "Discover card button opens compose",
+  "ok": true,
+  "actual": [
+   "BUTTON",
+   null,
+   "http://localhost:3100/invitations/envoyer/01a166dd-80ad-7373-926c-a1eec4ff166c"
+  ]
+ },
+ {
+  "id": "G3",
+  "what": "back returns to Discover",
+  "ok": true,
+  "actual": "http://localhost:3100/decouvrir"
+ },
+ {
+  "id": "AC1",
+  "what": "profile detail has invite link",
+  "ok": true,
+  "actual": 1
+ },
+ {
+  "id": "AC1",
+  "what": "profile detail opens compose",
+  "ok": true,
+  "actual": "http://localhost:3100/invitations/envoyer/01a166dc-e60a-7cd4-8084-8690ff20f202"
+ },
+ {
+  "id": "G5",
+  "what": "cancel returns to profile",
+  "ok": true,
+  "actual": "http://localhost:3100/profil/01a166dc-e60a-7cd4-8084-8690ff20f202"
+ },
+ {
+  "id": "G6",
+  "what": "200% zoom equiv (640px css) no h-scroll",
+  "ok": true,
+  "actual": [
+   640,
+   640
+  ]
+ },
+ {
+  "id": "G6",
+  "what": "200% zoom equiv (180px css) no h-scroll",
+  "ok": true,
+  "actual": [
+   180,
+   180
+  ]
+ },
+ {
+  "id": "G7",
+  "what": "no unexpected console errors / 4xx/5xx (filtered CDN/fonts)",
+  "ok": false,
+  "actual": [
+   "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+ }
+]

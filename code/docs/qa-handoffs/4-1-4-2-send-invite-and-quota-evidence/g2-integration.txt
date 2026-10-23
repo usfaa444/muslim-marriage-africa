@@ -1,0 +1,30 @@
+[32m[Nest] 31410  - [39m10/23/2026, 3:27:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/export, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 31410  - [39m10/23/2026, 3:27:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/export, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 31410  - [39m10/23/2026, 3:27:12 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/export-status, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 31410  - [39m10/23/2026, 3:27:12 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +0ms[39m
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/compose.test.ts > docker compose up
+Error: docker compose -p ankanu --env-file /tmp/ankanu-compose-jJtik6/empty.env -f /home/claude/muslim-marriage-africa/code/compose.yaml up -d --build --wait --wait-timeout 600 failed (1)
+ Image web Building 
+ Image api Building 
+Dockerfile:19
+--------------------
+  17 |     COPY packages/kernel/package.json packages/kernel/package.json
+  18 |     COPY packages/ports/package.json packages/ports/package.json
+  19 | >>> RUN npm ci --omit=dev
+  20 |     COPY --from=build /app/packages/kernel/dist packages/kernel/dist
+  21 |     COPY --from=build /app/packages/ports/dist packages/ports/dist
+--------------------
+target api: failed to solve: process "/bin/sh -c npm ci --omit=dev" did not complete successfully: exit code: 1
+ ❯ apps/api/src/compose.test.ts:63:18
+     61|         const code = error === null ? 0 : typeof error.code === 'numbe…
+     62|         if (error && options?.allowFailure !== true) {
+     63|           reject(new Error(`docker ${args.join(' ')} failed (${code})\…
+       |                  ^
+     64|           return
+     65|         }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+ Test Files  1 failed | 4 passed (5)
+      Tests  30 passed | 2 skipped (32)
+   Start at  03:25:17
+   Duration  121.68s (tests 98%, transform 1%, import 1%)

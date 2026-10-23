@@ -1,0 +1,30 @@
+[32m[Nest] 26600  - [39m10/23/2026, 3:25:10 AM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/export-status, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 26600  - [39m10/23/2026, 3:25:10 AM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +2ms[39m
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  apps/web/src/photo-rules.test.ts > photo rules > keeps a 32px play circle in Chrome and opens profile edit from the acknowledgement button
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ apps/web/src/photo-rules.test.ts:256:20
+    254|       '/usr/bin/chromium',
+    255|     ].find((path) => existsSync(path))
+    256|     expect(binary).toBeTruthy()
+       |                    ^
+    257|     const html = photoHtml(stitch())
+    258|     const server = createServer((request, response) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 71 passed | 2 skipped (74)
+      Tests  1 failed | 506 passed | 12 skipped (519)
+   Start at  03:23:46
+   Duration  87.58s (tests 86%, import 11%, transform 3%)
+
