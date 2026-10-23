@@ -1,5 +1,6 @@
 import { pinGuardScript } from './pin-guard'
 import { prepareV2 } from './v2-document'
+import { withAppShell } from './app-shell'
 
 export type ProfileDetailPhoto = {
   id: string
@@ -451,7 +452,7 @@ export function profileDetailHtml(stitch: string, view: ProfileDetailView): stri
       encodeURIComponent(view.profile.id) +
       '"><span class="material-symbols-outlined text-soft-gold text-lg" data-icon="send" aria-hidden="true">send</span><span>Envoyer une invitation Ta\'aruf</span></a>',
   )
-  const page = prepareV2(html, BOOKMARK_SCRIPT)
+  const page = prepareV2(withAppShell(html, { kind: 'member', active: 'decouvrir' }), BOOKMARK_SCRIPT)
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`
 }

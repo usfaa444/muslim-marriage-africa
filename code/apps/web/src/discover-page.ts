@@ -3,6 +3,7 @@ import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { liteModeSource } from './lite-mode'
 import { NOT_LISTABLE_CLIENT, discoverHoldShell } from './not-listable'
+import { balancedEnd, withAppShell } from './app-shell'
 import { pinGuardScript } from './pin-guard'
 import { prepareV2, stripInlineHandlers } from './v2-document'
 
@@ -24,6 +25,7 @@ const DOT_PATTERN = `<style id="discover-grid-pattern">
 [data-missing][hidden],
 [data-verified][hidden],
 #discover-hold[hidden],
+#discover-main[hidden],
 #discover-focus[hidden],
 [data-card-missing][hidden],
 [data-card-verified][hidden],
@@ -73,6 +75,10 @@ const TILE = `<template id="discover-tile">
 const GRID_STATUS = `<p id="discover-empty" hidden class="text-sm text-deep-navy/80 m-0">Aucun profil pour ces filtres.</p>
 <p id="discover-error" hidden class="text-sm text-deep-navy/80 m-0 break-words"></p>
 <button id="discover-retry" hidden type="button" class="mt-3 inline-flex items-center border border-[#E2D4B8] text-deep-navy bg-cream rounded-lg px-4 py-2.5 text-sm font-medium">Réessayer</button>`
+
+/** View toggle states, drawn on the server and on every switch (grid toolbar of screen 57). */
+export const TOGGLE_ON = 'p-1.5 rounded bg-deep-navy text-cream shadow-sm inline-flex items-center justify-center'
+export const TOGGLE_OFF = 'p-1.5 rounded text-deep-navy/60 hover:text-deep-navy transition-colors inline-flex items-center justify-center'
 
 /** Text paints before any thumbnail request. Photo URLs stay out of sessionStorage. */
 const SCRIPT = `${liteModeSource}
@@ -190,11 +196,19 @@ document.addEventListener('click', function (event) {
   if (!card || !grid) return
   card.hidden = mode === 'grid'
   grid.hidden = mode !== 'grid'
+  syncToggle(mode === 'grid' ? 'grid' : 'card')
   pending = 0
   generation += 1
   if (mode === 'grid') loadGrid()
   else loadCard()
 })
+function syncToggle(mode) {
+  document.querySelectorAll('[data-discover-view]').forEach(function (button) {
+    var on = button.getAttribute('data-discover-view') === mode
+    button.setAttribute('aria-pressed', on ? 'true' : 'false')
+    button.className = on ? ${JSON.stringify(TOGGLE_ON)} : ${JSON.stringify(TOGGLE_OFF)}
+  })
+}
 var account = document.body.getAttribute('data-discover-account') || ''
 var memory = null
 var memoryAt = 0
@@ -1055,6 +1069,7 @@ if (filterParams().length >= 2) {
   var homeGrid = document.getElementById('discover-grid')
   if (homeCard) homeCard.hidden = true
   if (homeGrid) homeGrid.hidden = false
+  syncToggle('grid')
   ensureCatalogue()
   loadGrid()
 } else {
@@ -1062,19 +1077,6 @@ if (filterParams().length >= 2) {
   loadCard()
 }
 `
-
-function innerBody(html: string): string {
-  const open = html.search(/<body\b[^>]*>/i)
-  if (open < 0) {
-    return html
-  }
-  const start = html.indexOf('>', open)
-  const end = html.lastIndexOf('</body>')
-  if (start < 0 || end < start) {
-    return html
-  }
-  return html.slice(start + 1, end)
-}
 
 function removeSpanAt(html: string, start: number): string {
   let depth = 0
@@ -1280,20 +1282,6 @@ function prepareFocus(html: string): string {
   return next
 }
 
-function replaceHrefs(html: string, hrefs: string[]): string {
-  let next = html
-  for (const href of hrefs) {
-    const at = next.indexOf('href="#"')
-    if (at < 0) {
-      return next
-    }
-    next = `${next.slice(0, at)}href="${href}"${next.slice(at + 'href="#"'.length)}`
-  }
-  return next
-}
-
-const MEMBER_HREFS = ['/decouvrir', '/invitations', '/discussions', '/profil']
-
 const CARD_STATUS = `<div id="discover-card-status" class="max-w-2xl mx-auto w-full mt-2 min-w-0">
 <p id="discover-card-empty" hidden class="text-sm text-deep-navy/80 m-0">Aucun profil pour ces filtres.</p>
 <p id="discover-card-error" hidden class="text-sm text-deep-navy/80 m-0 break-words"></p>
@@ -1424,29 +1412,48 @@ function filterModal(source: string): string {
 </div>`
 }
 
-function stripCard(html: string): string {
-  let next = prepareFocus(html)
-  const under = next.indexOf('<!-- 4. UNDER-CARD')
-  const disclaimer = next.indexOf('<!-- Ethical Disclaimer')
-  if (under >= 0) {
-    next = next.slice(0, under) + CARD_STATUS + next.slice(under)
-  } else if (disclaimer >= 0) {
-    next = next.slice(0, disclaimer) + CARD_STATUS + next.slice(disclaimer)
+/** The single-view card exactly as screen 57 (or 13 with two filters or more) draws it, without its page. */
+function focusCard(html: string): string {
+  const next = prepareFocus(html)
+  const at = next.indexOf('id="discover-focus"')
+  const start = at < 0 ? -1 : next.lastIndexOf('<', at)
+  const tag = start < 0 ? '' : (/^<([a-z]+)/i.exec(next.slice(start))?.[1] ?? '')
+  const end = tag ? balancedEnd(next, tag, start) : -1
+  if (start < 0 || end < 0) {
+    throw new Error('The Discover card design no longer has the focused profile card')
   }
-  next = dropChipContaining(next, 'Ville : Ouagadougou')
-  next = dropChipContaining(next, "Tranche d'âge")
-  next = dropChipContaining(next, 'Pratique assidue')
-  next = markFiltersButton(next)
-  next = markToggle(next, 'Affichage unitaire soigné', 'card')
-  next = markToggle(next, 'Grille panoramique', 'grid')
-  next = next.replace(
-    'class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-8 w-full flex flex-col"',
-    'class="flex-1 max-w-4xl mx-auto px-4 sm:px-6 pt-6 pb-8 w-full flex flex-col min-w-0"',
-  )
-  return replaceHrefs(next, MEMBER_HREFS)
+  return next.slice(start, end)
 }
 
-function stripGrid(html: string): string {
+function between(html: string, startMarker: string, endMarker: string): string {
+  const start = html.indexOf(startMarker)
+  const end = start < 0 ? -1 : html.indexOf(endMarker, start)
+  if (start < 0 || end < 0) {
+    throw new Error(`57-discover/grid.html no longer has: ${start < 0 ? startMarker : endMarker}`)
+  }
+  return html.slice(start, end)
+}
+
+export const DISCOVER_EYEBROW = 'Faites connaissance'
+const STITCH_EYEBROW = 'ESPACE DE CONVENANCE MATRIMONIALE'
+const STITCH_INTRO =
+  /\s*<p class="text-xs sm:text-sm text-deep-navy\/70 font-normal">\s*Consultation sobre des profils engagés dans une démarche de mariage honorifique au Burkina Faso\.\s*<\/p>/
+
+
+function toggleButtons(html: string, view: 'card' | 'grid'): string {
+  let next = html.replace(/<button type="button" data-discover-view="(card|grid)"[^>]*>/g, (_full, mode: string) => {
+    const label = mode === 'card' ? 'Affichage unitaire' : 'Grille panoramique'
+    const on = mode === view
+    return `<button type="button" data-discover-view="${mode}" aria-label="${label}" title="${label}" aria-pressed="${on ? 'true' : 'false'}" class="${on ? TOGGLE_ON : TOGGLE_OFF}" style="min-width:44px;min-height:44px">`
+  })
+  next = next.replace('<span class="material-symbols-outlined text-lg text-cream" data-icon="grid_view">', '<span class="material-symbols-outlined text-lg" data-icon="grid_view">')
+  return next
+}
+
+type GridParts = { mainOpen: string; intro: string; toolbar: string; tiles: string; proverb: string }
+
+/** Grid view page (screen 57 grid) without its header, navs and footer: the reference layout for both views. */
+function gridParts(html: string, view: 'card' | 'grid'): GridParts {
   const label = 'aria-label="Profils en découverte"'
   const at = html.indexOf(label)
   const open = at < 0 ? -1 : html.indexOf('>', at)
@@ -1467,18 +1474,35 @@ function stripGrid(html: string): string {
   next = markFiltersButton(next)
   next = markToggle(next, 'Affichage unitaire', 'card')
   next = markToggle(next, 'Grille panoramique', 'grid')
-  next = next.replace(
-    'class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 flex flex-col gap-6 pb-8"',
-    'class="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-8 py-8 flex flex-col gap-6 pb-8 min-w-0"',
-  )
-  next = next.replace(
+  next = toggleButtons(next, view)
+  const mainOpen = /<main\b[^>]*>/i.exec(next)?.[0]
+  if (!mainOpen) {
+    throw new Error('57-discover/grid.html no longer has a <main>')
+  }
+  let intro = between(next, '<!-- Screen Intent Headline -->', '<!-- 3. HEADER ROW')
+  if (!intro.includes(STITCH_EYEBROW) || !STITCH_INTRO.test(intro)) {
+    throw new Error('57-discover/grid.html intro changed')
+  }
+  intro = intro.replace(STITCH_EYEBROW, DISCOVER_EYEBROW).replace(STITCH_INTRO, '')
+  intro = intro.replace(
     'class="font-display text-2xl sm:text-3xl text-deep-navy font-normal tracking-tight"',
     'class="font-display text-2xl sm:text-3xl text-deep-navy font-normal tracking-tight break-words"',
   )
-  return replaceHrefs(next, ['/decouvrir', ...MEMBER_HREFS, ...MEMBER_HREFS])
+  return {
+    mainOpen: mainOpen
+      .replace('<main ', '<main id="discover-main" ')
+      .replace(' pb-8"', ' pb-8 min-w-0"'),
+    intro,
+    toolbar: between(next, '<!-- 3. HEADER ROW', '<!-- 4. GRID BODY'),
+    tiles: between(next, '<!-- 4. GRID BODY', '<div class="mt-10 mb-8 w-fit mx-auto hidden md:flex">'),
+    proverb: between(next, '<!-- Subdued spiritual proverb banner -->', '</main>'),
+  }
 }
 
-/** Card chrome from screen 57, grid from grid.html. Sample profiles never stay. */
+/**
+ * One Discover page: the grid view's layout (screen 57 grid) with the shared app header, footer and bottom nav.
+ * Switching views only swaps the card area between the single card (screen 57) and the tiles. Sample profiles never stay.
+ */
 export function discoverHtml(
   card: string,
   grid: string,
@@ -1495,14 +1519,18 @@ export function discoverHtml(
   const cardSource = many ? loadSearchSource() : card
   const headEnd = cardSource.indexOf('</head>')
   const head = headEnd < 0 ? cardSource : cardSource.slice(0, headEnd)
+  const parts = gridParts(grid, many ? 'grid' : 'card')
   const document = `${head}${DOT_PATTERN}</head>
-<body data-discover-account="${account}" data-viewer-gender="${viewer}" class="min-h-full bg-cream text-deep-navy font-body flex flex-col antialiased selection:bg-gold-soft selection:text-deep-navy pb-20 md:pb-8">
-${discoverHoldShell(card, loadStitch('53-barre-de-navigation/screen.html'))}
-<div id="discover-card"${many ? ' hidden' : ''} style="min-width:0;max-width:100%">${innerBody(stripCard(cardSource))}</div>
-<div id="discover-grid"${many ? '' : ' hidden'} style="min-width:0;max-width:100%">${innerBody(stripGrid(grid))}${TILE}</div>
+<body data-discover-account="${account}" data-viewer-gender="${viewer}" class="min-h-full bg-cream text-deep-navy font-body flex flex-col antialiased selection:bg-gold-soft selection:text-deep-navy">
+${discoverHoldShell()}
+${parts.mainOpen}
+${parts.intro}${parts.toolbar}
+<div id="discover-card"${many ? ' hidden' : ''} style="min-width:0;max-width:100%">${focusCard(cardSource)}${CARD_STATUS}</div>
+<div id="discover-grid"${many ? '' : ' hidden'} style="min-width:0;max-width:100%">${parts.tiles}${TILE}</div>
+${parts.proverb}</main>
 ${filterModal(loadFiltersSource())}
 </body></html>`
-  const page = prepareV2(document, SCRIPT)
+  const page = prepareV2(withAppShell(document, { kind: 'member', active: 'decouvrir' }), SCRIPT)
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`
 }

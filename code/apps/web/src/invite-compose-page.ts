@@ -1,5 +1,6 @@
 import { pinGuardScript } from './pin-guard'
 import { prepareV2 } from './v2-document'
+import { withAppShell } from './app-shell'
 
 /**
  * Screen 18, Invite compose (Stories 4.1, 4.2). The Message Flash composer and Ice Breakers on the Stitch screen are
@@ -381,7 +382,7 @@ export function inviteComposeHtml(stitch: string, targetId: string): string {
   html = html.replace(/<section class="space-y-6">[\s\S]*<\/section>/, composeSection(profileHref))
   html = html.replace('class="flex-grow w-full max-w-4xl mx-auto px-6 md:px-8 pt-8 pb-28"', 'class="flex-grow w-full max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-8 pb-28 min-w-0"')
   html = html.includes('</head>') ? html.replace('</head>', `${HIDDEN}</head>`) : `${HIDDEN}${html}`
-  const page = prepareV2(html, SCRIPT)
+  const page = prepareV2(withAppShell(html, { kind: 'member', active: 'invitations' }), SCRIPT)
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`
 }

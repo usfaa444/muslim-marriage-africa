@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
 import { discoverHtml } from './discover-page'
+import { memberSectionHtml } from './member-section-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { inviteComposeHtml, isInviteTargetId } from './invite-compose-page'
@@ -390,12 +391,25 @@ export function statusResponse(request: Request, path: string): Promise<Response
   return send(request, path, statusHtml(stitchFile('28-delete-export-status')))
 }
 
+/**
+ * `/invitations`, `/discussions`, `/profil`. Stub cookies keep the JSON envelope. A live member session gets a page
+ * the bottom nav can open: `/profil` is the member's own profile (`/profile-edit`), the two others the shared shell.
+ */
 export async function memberGuarded(request: Request, path: MemberPath): Promise<Response> {
   const redirect = await entryRedirect(request, path)
   if (redirect) {
     return redirect
   }
-  return memberRouteResponse(request.headers.get('cookie'), path)
+  const cookie = request.headers.get('cookie')
+  if (sessionKind(cookie) === null && readSessionCookie(cookie) !== null) {
+    if (path === '/profil') {
+      return redirectTo(request, '/profile-edit')
+    }
+    if (path === '/invitations' || path === '/discussions') {
+      return htmlResponse(memberSectionHtml(stitchFile('57-discover'), path === '/invitations' ? 'invitations' : 'discussions'))
+    }
+  }
+  return memberRouteResponse(cookie, path)
 }
 
 /**
@@ -567,12 +581,7 @@ export async function profileDetailResponse(request: Request, id: string): Promi
         ? (payload as { error?: { details?: unknown } }).error?.details ?? null
         : null
     return htmlResponse(
-      notListablePage(
-        stitchFile('12-profile-not-yet-public'),
-        stitchFile('57-discover'),
-        stitchFile('53-barre-de-navigation'),
-        details,
-      ),
+      notListablePage(stitchFile('12-profile-not-yet-public'), details),
     )
   }
   if (payload !== null) {

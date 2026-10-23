@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { discoverHtml } from './discover-page.js'
-import { NOT_LISTABLE_CLIENT, desktopDiscoverNav, holdCard, mobileDiscoverNav, notListablePage } from './not-listable.js'
+import { NOT_LISTABLE_CLIENT, holdCard, notListablePage } from './not-listable.js'
 
 function stitch(folder: string, name = 'screen.html'): string {
   return readFileSync(
@@ -13,7 +13,7 @@ function stitch(folder: string, name = 'screen.html'): string {
 
 describe('not-listable hold', () => {
   it('names only the real pending items and links profile edit for an incomplete profile', () => {
-    const html = notListablePage(stitch('12-profile-not-yet-public'), stitch('57-discover'), stitch('53-barre-de-navigation'), {
+    const html = notListablePage(stitch('12-profile-not-yet-public'), {
       reason: 'viewer_not_listable',
       reasons: [
         { code: 'viewer_not_listable' },
@@ -55,22 +55,18 @@ describe('not-listable hold', () => {
     expect(card).not.toContain('Photo en revue')
   })
 
-  it('keeps Discover selected on the desktop bar and the mobile bar', () => {
-    const desktop = desktopDiscoverNav(stitch('53-barre-de-navigation'))
-    expect(desktop).toContain('id="discover-desktop-nav"')
-    expect(desktop).toContain('@media (min-width:768px){#discover-desktop-nav{display:flex !important}}')
-    expect(desktop).toContain('href="/decouvrir" aria-current="page"')
-    expect(desktop).toContain('flex-wrap')
-    expect(desktop).not.toContain('hidden md:flex')
-    expect(desktop.match(/aria-current="page"/g)).toHaveLength(1)
-    expect(desktop).not.toContain('href="#')
-    const mobile = mobileDiscoverNav(stitch('57-discover'))
-    expect(mobile).toContain('id="discover-mobile-nav"')
-    expect(mobile).toContain('href="/decouvrir"')
-    expect(mobile).toContain('aria-current="page"')
-    expect(mobile).not.toContain('href="#"')
+  it('keeps Discover selected on the one shared bottom nav', () => {
+    const hold = notListablePage(stitch('12-profile-not-yet-public'), { reasons: [] })
+    expect(hold.match(/data-app-shell="bottom-nav"/g)).toHaveLength(1)
+    expect(hold.match(/aria-current="page"/g)).toHaveLength(1)
+    expect(hold).toContain('href="/decouvrir" data-nav-item="decouvrir" aria-current="page"')
+    expect(hold).not.toContain('id="discover-desktop-nav"')
+    expect(hold).not.toContain('id="discover-mobile-nav"')
+    expect(hold).not.toContain('href="#')
     const page = discoverHtml(stitch('57-discover'), stitch('57-discover', 'grid.html'))
     expect(page).toContain('id="discover-hold" hidden')
+    expect(page.match(/data-app-shell="bottom-nav"/g)).toHaveLength(1)
+    expect(NOT_LISTABLE_CLIENT).toContain("document.getElementById('discover-main')")
     expect(page).toContain('function showNotListable')
     expect(page).toContain("classList.remove('hidden')")
     expect(NOT_LISTABLE_CLIENT).toContain('paintHold(sla, hours > 0)')

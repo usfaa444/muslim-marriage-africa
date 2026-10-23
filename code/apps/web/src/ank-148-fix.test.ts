@@ -152,8 +152,6 @@ describe('founder staging fixes', () => {
     const discover = discoverHtml(stitch('57-discover'), stitch('57-discover', 'grid.html'))
     const hold = notListablePage(
       stitch('12-profile-not-yet-public'),
-      stitch('57-discover'),
-      stitch('53-barre-de-navigation'),
       HOLD,
     )
     const png = Buffer.from(

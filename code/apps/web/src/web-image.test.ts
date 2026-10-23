@@ -14,7 +14,7 @@ const codeRoot = fileURLToPath(new URL('../../..', import.meta.url))
 const STITCH_ROOT = 'design-stitch/ankanu-v2/'
 
 /** The only web files allowed to read design files at runtime. A new reader must be added here and parsed below. */
-const READERS = ['src/discover-page.ts', 'src/v2-serve.ts']
+const READERS = ['src/app-shell.ts', 'src/discover-page.ts', 'src/v2-serve.ts']
 
 type Source = { path: string; text: string }
 
@@ -152,6 +152,8 @@ describe('web image design files', () => {
     expect(reads).toContain('13-search/screen.html')
     expect(reads).toContain('14-filters/screen.html')
     expect(reads).toContain('11-profile-edit/screen.html')
+    // The shared bottom nav (story discover-app-shell) is built from screen 53 at request time.
+    expect(reads).toContain('53-barre-de-navigation/screen.html')
   })
 
   it('copies every Stitch file the web reads at runtime into the image', () => {
@@ -176,7 +178,7 @@ describe('web image design files', () => {
     expect(copies.filter((copy) => !reads.some((read) => covered(read, [copy])))).toEqual([])
   })
 
-  it('reads design files only through the two parsed loaders', () => {
+  it('reads design files only through the parsed loaders', () => {
     const sources = runtimeSources()
     const readers = sources
       .filter(
@@ -187,7 +189,7 @@ describe('web image design files', () => {
       .map((source) => source.path.replaceAll('\\', '/'))
       .sort()
     expect(readers).toEqual(READERS)
-    // Inside the two readers too: no literal design path and no second read beside the loader.
+    // Inside the readers too: no literal design path and no second read beside the loader.
     expect(sources.filter((source) => READERS.includes(source.path.replaceAll('\\', '/'))).flatMap(loaderBypasses)).toEqual(
       [],
     )

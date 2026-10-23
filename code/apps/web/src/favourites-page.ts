@@ -1,5 +1,6 @@
 import { pinGuardScript } from './pin-guard'
 import { prepareV2 } from './v2-document'
+import { withAppShell } from './app-shell'
 
 export type FavouriteCard = {
   target_id: string
@@ -295,7 +296,7 @@ export function favouritesHtml(stitch: string, cards: FavouriteCard[] | null = n
   const head = document.includes('</head>')
     ? document.replace('</head>', `${HIDDEN}</head>`)
     : `${HIDDEN}${document}`
-  const page = prepareV2(head, live ? SCRIPT : '')
+  const page = prepareV2(withAppShell(head, { kind: 'member', active: 'decouvrir' }), live ? SCRIPT : '')
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`
 }

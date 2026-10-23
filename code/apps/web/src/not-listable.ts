@@ -1,5 +1,6 @@
-/** Honest browse hold. Screen 12 card, Discover nav from screens 57 and 53. No sample profile. */
+/** Honest browse hold. Screen 12 card inside the shared app shell. No sample profile. */
 
+import { withAppShell } from './app-shell'
 import { pinGuardScript } from './pin-guard'
 import { prepareV2 } from './v2-document'
 
@@ -17,8 +18,6 @@ const EN_COURS = "En cours d'évaluation"
 const LINK_LABEL = 'fiche personnelle'
 const PRIVACY =
   "Aucune photographie personnelle ni élément privé n'est indexé par les moteurs de recherche ni exposé sans consentement mutuel préalable et protocole d'introduction noble."
-
-const MEMBER_HREFS = ['/decouvrir', '/invitations', '/discussions', '/profil'] as const
 
 export type HoldReason = {
   code: string
@@ -139,73 +138,18 @@ export function holdCard(details: unknown): string {
 </div>`
 }
 
-function sliceNav(source: string, marker: string): string {
-  const start = source.indexOf(marker)
-  if (start < 0) {
-    return ''
-  }
-  const end = source.indexOf('</nav>', start)
-  if (end < 0) {
-    return ''
-  }
-  return source.slice(start, end + '</nav>'.length)
+/** The hold card alone. The page around it (header, footer, bottom nav) is the shared app shell. */
+export function discoverHoldShell(): string {
+  return `<div id="discover-hold" hidden class="w-full min-w-0 max-w-full"><main class="flex-grow flex items-center justify-center px-4 sm:px-6 py-12 md:py-20 min-w-0">${holdCard({ reasons: [] })}</main></div>`
 }
 
-export function mobileDiscoverNav(source: string): string {
-  let nav = sliceNav(source, '<nav aria-label="Navigation mobile"')
-  nav = nav.replace('<nav ', '<nav id="discover-mobile-nav" ')
-  for (const href of MEMBER_HREFS) {
-    nav = nav.replace('href="#"', `href="${href}"`)
-  }
-  return nav
-}
-
-export function desktopDiscoverNav(source: string): string {
-  let nav = sliceNav(source, '<nav')
-  nav = nav.replace(
-    'class="inline-flex items-center bg-[#0B1D36]',
-    'class="inline-flex flex-wrap justify-center max-w-full items-center bg-[#0B1D36]',
-  )
-  nav = nav.replace('href="#decouvrir"', 'href="/decouvrir"')
-  nav = nav.replace('href="#invitations"', 'href="/invitations"')
-  nav = nav.replace('href="#discussions"', 'href="/discussions"')
-  nav = nav.replace('href="#profil"', 'href="/profil"')
-  nav = nav.replace(' aria-current="page"', '')
-  nav = nav.replace(
-    'bg-[#C9A86C] text-[#0B1D36] shadow-sm transition-all"',
-    'text-[#F7F1E3]/80 hover:text-[#F7F1E3] transition-colors"',
-  )
-  nav = nav.replace(
-    'href="/decouvrir" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium text-[#F7F1E3]/80 hover:text-[#F7F1E3] transition-colors"',
-    'href="/decouvrir" aria-current="page" class="flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium bg-[#C9A86C] text-[#0B1D36] shadow-sm transition-all"',
-  )
-  return `<style>
-#discover-desktop-nav{display:none !important;width:100%;justify-content:center;padding:1rem 1rem 0;min-width:0;box-sizing:border-box}
-@media (min-width:768px){#discover-desktop-nav{display:flex !important}}
-#discover-mobile-nav{display:flex}
-@media (min-width:768px){#discover-mobile-nav{display:none !important}}
-</style><div id="discover-desktop-nav">${nav}</div>`
-}
-
-export function discoverHoldShell(discoverSource: string, barSource: string): string {
-  return `<div id="discover-hold" hidden class="w-full min-w-0 max-w-full">${desktopDiscoverNav(barSource)}<main class="flex-grow flex items-center justify-center px-4 sm:px-6 py-12 md:py-20 min-w-0">${holdCard({ reasons: [] })}</main>${mobileDiscoverNav(discoverSource)}</div>`
-}
-
-export function notListablePage(
-  reviewSource: string,
-  discoverSource: string,
-  barSource: string,
-  details: unknown,
-): string {
+export function notListablePage(reviewSource: string, details: unknown): string {
   const headEnd = reviewSource.indexOf('</head>')
   const head = headEnd < 0 ? '<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>AnKanu</title>' : reviewSource.slice(0, headEnd)
-  const body = `<body class="min-h-full flex flex-col bg-[#F7F1E3] text-deep-navy font-body antialiased selection:bg-gold-soft selection:text-deep-navy pb-24 md:pb-10">
-<header class="w-full top-0 sticky z-50 bg-[#F7F1E3] border-b border-hairline/60"></header>
-${desktopDiscoverNav(barSource)}
+  const body = `<body class="min-h-full flex flex-col bg-[#F7F1E3] text-deep-navy font-body antialiased selection:bg-gold-soft selection:text-deep-navy">
 <main class="flex-grow flex items-center justify-center px-4 sm:px-6 py-12 md:py-20 min-w-0">${holdCard(details)}</main>
-${mobileDiscoverNav(discoverSource)}
 </body></html>`
-  const page = prepareV2(`${head}</head>${body}`, '')
+  const page = prepareV2(withAppShell(`${head}</head>${body}`, { kind: 'member', active: 'decouvrir' }), '')
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`
 }
@@ -226,6 +170,8 @@ function showNotListable(message, details) {
   var cardPane = document.getElementById('discover-card')
   var gridPane = document.getElementById('discover-grid')
   var modal = document.getElementById('filters-modal')
+  var discoverMain = document.getElementById('discover-main')
+  if (discoverMain) discoverMain.hidden = true
   if (cardPane) cardPane.hidden = true
   if (gridPane) gridPane.hidden = true
   if (modal) modal.hidden = true
