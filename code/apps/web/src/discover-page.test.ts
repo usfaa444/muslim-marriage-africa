@@ -457,7 +457,7 @@ describe('discover grid in a browser', () => {
         'Runtime.evaluate',
         {
           expression:
-            "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.body.innerText || ''; if (text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne') || Date.now() - start > 4000) resolve(text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne')); else setTimeout(tick, 50) }; tick() })",
+            "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.body.innerText || ''; const ready = text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne') && !!document.querySelector('#discover-tiles img'); if (ready || Date.now() - start > 4000) resolve(ready); else setTimeout(tick, 50) }; tick() })",
           awaitPromise: true,
           returnByValue: true,
         },

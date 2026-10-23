@@ -314,8 +314,8 @@ describe('founder staging fixes', () => {
           const chrome = (await read(`(() => {
             const sla = document.getElementById('discover-hold-sla')
             const tag = document.getElementById('discover-hold-tag')
-            const desk = document.getElementById('discover-desktop-nav')
-            const mobile = document.getElementById('discover-mobile-nav')
+            const navs = document.querySelectorAll('nav')
+            const shared = document.querySelector('#app-bottom-nav nav')
             const link = document.querySelector('#discover-hold a[href="/profile-edit"]')
             const card = document.querySelector('#discover-hold .max-w-xl')
             const shown = (node) => node ? getComputedStyle(node).display : ''
@@ -326,8 +326,8 @@ describe('founder staging fixes', () => {
               tag: shown(tag),
               slaHiddenClass: sla ? sla.classList.contains('hidden') : true,
               tagHiddenClass: tag ? tag.classList.contains('hidden') : true,
-              desk: shown(desk),
-              mobile: shown(mobile),
+              navCount: navs.length,
+              shared: shown(shared),
               text: document.body.innerText || '',
               linkText: link ? link.textContent : '',
               linkInside: !!(lr && cr && lr.width > 20 && lr.left >= cr.left - 1 && lr.right <= cr.right + 1 && link.scrollWidth <= link.clientWidth + 1)
@@ -337,8 +337,8 @@ describe('founder staging fixes', () => {
             tag: string
             slaHiddenClass: boolean
             tagHiddenClass: boolean
-            desk: string
-            mobile: string
+            navCount: number
+            shared: string
             text: string
             linkText: string
             linkInside: boolean
@@ -352,10 +352,10 @@ describe('founder staging fixes', () => {
           if (chrome.linkText !== 'fiche personnelle' || !chrome.linkInside) {
             failures.push(`${name}@${width} link ${chrome.linkText} inside=${chrome.linkInside}`)
           }
-          if (width >= 768 && chrome.desk !== 'flex') failures.push(`${name}@${width} desktop nav ${chrome.desk}`)
-          if (width >= 768 && chrome.mobile !== 'none') failures.push(`${name}@${width} mobile nav ${chrome.mobile}`)
-          if (width < 768 && chrome.desk !== 'none') failures.push(`${name}@${width} desktop nav ${chrome.desk}`)
-          if (width < 768 && chrome.mobile === 'none') failures.push(`${name}@${width} mobile nav ${chrome.mobile}`)
+          // One shared bottom nav (screen 53) at every width, no per-page Stitch nav.
+          if (chrome.navCount !== 1 || chrome.shared === '' || chrome.shared === 'none') {
+            failures.push(`${name}@${width} shared nav count=${chrome.navCount} display=${chrome.shared}`)
+          }
         }
         if (width === 360 || width === 1440) {
           const shot = await cdp.send('Page.captureScreenshot', { format: 'png' }, sessionId)
