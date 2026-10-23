@@ -186,8 +186,10 @@ function row(item) {
   line.appendChild(make('h2', 'chat-name font-display text-lg md:text-xl text-deep-navy font-medium', nameLine(pseudonym, other)))
   var city = cityText(other)
   if (city) {
-    var group = make('span', 'inline-flex items-center gap-x-2 whitespace-nowrap text-xs text-deep-navy/80 font-medium')
-    var dot = make('span', '', '·')
+    // On phones the city always takes its own line with no « · » (QA D2: a wrapped line started with a lone dot);
+    // from md up it sits after the name, behind the dot.
+    var group = make('span', 'chat-city w-full md:w-auto inline-flex items-center gap-x-2 whitespace-nowrap text-xs text-deep-navy/80 font-medium')
+    var dot = make('span', 'hidden md:inline', '·')
     dot.setAttribute('aria-hidden', 'true')
     group.appendChild(dot)
     group.appendChild(make('span', '', city))

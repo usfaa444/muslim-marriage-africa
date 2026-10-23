@@ -80,6 +80,9 @@ describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
     // QA F1, F5: the row link is named by its content (no aria-label); an unavailable member gets no link.
     expect(html).not.toContain("link.setAttribute('aria-label'")
     expect(html).toContain("if (!other.available) {")
+    // QA D2: on phones the city has its own line and no « · »; the dot shows only from md up.
+    expect(html).toContain("'chat-city w-full md:w-auto inline-flex")
+    expect(html).toContain("make('span', 'hidden md:inline', '·')")
     // API text goes through textContent, never innerHTML.
     expect(html).not.toMatch(/\.innerHTML\s*=/)
   })
