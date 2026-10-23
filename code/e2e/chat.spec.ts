@@ -479,10 +479,12 @@ test.describe('Chat thread (screen 21)', () => {
     const state = api()
     await serveApi(context, baseURL ?? '', state)
     // First-party cost only: the Tailwind Play CDN script and Google Fonts that every v2 page loads from its Stitch
-    // head are answered empty here (this sandbox cannot reach them). Their weight on 3G is a site-wide known issue
+    // head are answered with stubs here (this sandbox cannot reach them). Their weight on 3G is a site-wide known issue
     // listed in the QA handoff, not part of this story's thread payload.
     for (const host of ['https://cdn.tailwindcss.com/**', 'https://fonts.googleapis.com/**', 'https://fonts.gstatic.com/**']) {
-      await context.route(host, (route) => route.fulfill({ status: 200, contentType: host.includes('tailwind') ? 'application/javascript' : 'text/css', body: '' }))
+      // The Tailwind stub still defines the global, since each page's inline `tailwind.config = …` assigns to it.
+      const tailwind = host.includes('tailwind')
+      await context.route(host, (route) => route.fulfill({ status: 200, contentType: tailwind ? 'application/javascript' : 'text/css', body: tailwind ? 'window.tailwind = {}' : '' }))
     }
     await openThread(page)
     const cdp = await context.newCDPSession(page)
