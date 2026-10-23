@@ -1,0 +1,41 @@
+   state   | kind |   alg   |     kid      | plain | length 
+-----------+------+---------+--------------+-------+--------
+ delivered | text | A256GCM | local-chat-1 | f     |    245
+ delivered | text | A256GCM | local-chat-1 | f     |   2773
+ delivered | text | A256GCM | local-chat-1 | f     |  10773
+(3 rows)
+
+ jobs | with_outcome 
+------+--------------
+    3 |            0
+(1 row)
+
+ count 
+-------
+     0
+(1 row)
+
+                                                                                                                         body                                                                                                                          
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"v": 1, "ct": "QFeH12whLXV3B4i90/LIYslPhgAYxswU6TCUCjEaPo7LUNFAPwxt8NMm2TSvpPWNherqg4+Su5EmXvQFGjfRY4ZhrXaBzNLig38sPGIOFmZ70LRBYnBrwco8EaEXQEwEjM4wemCG5uzH2OfeDdw/U4mRcGs1Oe/M", "iv": "WspSNbPn+d2l+V2p", "alg": "A256GCM", "kid": "local-chat-1"}
+(1 row)
+
+             Table "public.moderation_job"
+   Column   |  Type   | Collation | Nullable | Default 
+------------+---------+-----------+----------+---------
+ id         | uuid    |           | not null | 
+ message_id | uuid    |           |          | 
+ asset_id   | uuid    |           |          | 
+ flash_id   | uuid    |           |          | 
+ scores     | jsonb   |           |          | 
+ outcome    | text    |           |          | 
+ vendor     | text    |           |          | 
+ latency_ms | integer |           |          | 
+Indexes:
+    "moderation_job_pkey" PRIMARY KEY, btree (id)
+    "moderation_job_one_per_message" UNIQUE, btree (message_id)
+Check constraints:
+    "moderation_job_one_item_check" CHECK (num_nonnulls(message_id, asset_id, flash_id) = 1)
+    "moderation_job_outcome_check" CHECK (outcome IS NULL OR (outcome = ANY (ARRAY['flag-for-admin'::text, 'clean'::text, 'scan-deferred'::text, 'scan-failed'::text])))
+
+log lines mentioning chat:

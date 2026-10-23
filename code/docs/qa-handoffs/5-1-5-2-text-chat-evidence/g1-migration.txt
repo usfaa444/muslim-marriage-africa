@@ -1,0 +1,12 @@
+
+> migration-check
+> npm run migration-check -w @ankanu/api
+
+
+> @ankanu/api@0.0.0 migration-check
+> drizzle-kit check
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/home/claude/muslim-marriage-africa/code/apps/api/drizzle.config.ts'
+Everything's fine 🐶🔥
+exit 0

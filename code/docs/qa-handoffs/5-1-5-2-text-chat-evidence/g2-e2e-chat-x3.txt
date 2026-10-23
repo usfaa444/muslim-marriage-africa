@@ -1,0 +1,91 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 78 tests using 2 workers
+
+  ✓   2 [mobile] › e2e/chat.spec.ts:217:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (2.5s)
+  ✓   1 [mobile] › e2e/chat.spec.ts:195:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (3.5s)
+  -   4 [mobile] › e2e/chat.spec.ts:245:3 › Discussions list (screen 20) › fits every factory width
+  ✓   3 [mobile] › e2e/chat.spec.ts:233:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.2s)
+  ✓   5 [mobile] › e2e/chat.spec.ts:259:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (3.9s)
+  ✓   6 [mobile] › e2e/chat.spec.ts:284:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (4.5s)
+  ✓   8 [mobile] › e2e/chat.spec.ts:326:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (1.2s)
+  ✓   7 [mobile] › e2e/chat.spec.ts:312:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (3.1s)
+  ✓  10 [mobile] › e2e/chat.spec.ts:378:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.4s)
+  ✓  11 [mobile] › e2e/chat.spec.ts:394:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (1.0s)
+  ✓   9 [mobile] › e2e/chat.spec.ts:351:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (5.8s)
+  -  13 [mobile] › e2e/chat.spec.ts:433:3 › Chat thread (screen 21) › fits every factory width
+  ✓  12 [mobile] › e2e/chat.spec.ts:400:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload) (2.9s)
+  ✓  14 [mobile] › e2e/chat.spec.ts:195:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (2.4s)
+  ✓  15 [mobile] › e2e/chat.spec.ts:217:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (1.9s)
+  -  17 [mobile] › e2e/chat.spec.ts:245:3 › Discussions list (screen 20) › fits every factory width
+  ✓  16 [mobile] › e2e/chat.spec.ts:233:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.3s)
+  ✓  18 [mobile] › e2e/chat.spec.ts:259:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (2.8s)
+  ✓  19 [mobile] › e2e/chat.spec.ts:284:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (2.8s)
+  ✓  21 [mobile] › e2e/chat.spec.ts:326:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (1.0s)
+  ✓  20 [mobile] › e2e/chat.spec.ts:312:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (2.0s)
+  ✓  23 [mobile] › e2e/chat.spec.ts:378:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.4s)
+  ✓  24 [mobile] › e2e/chat.spec.ts:394:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (1.0s)
+  ✓  22 [mobile] › e2e/chat.spec.ts:351:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (5.9s)
+  -  26 [mobile] › e2e/chat.spec.ts:433:3 › Chat thread (screen 21) › fits every factory width
+  ✓  25 [mobile] › e2e/chat.spec.ts:400:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload) (2.8s)
+  ✓  28 [mobile] › e2e/chat.spec.ts:217:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (1.9s)
+  ✓  27 [mobile] › e2e/chat.spec.ts:195:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (2.6s)
+  -  30 [mobile] › e2e/chat.spec.ts:245:3 › Discussions list (screen 20) › fits every factory width
+  ✓  29 [mobile] › e2e/chat.spec.ts:233:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.2s)
+  ✓  31 [mobile] › e2e/chat.spec.ts:259:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (2.6s)
+  ✓  32 [mobile] › e2e/chat.spec.ts:284:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (3.5s)
+  ✓  33 [mobile] › e2e/chat.spec.ts:312:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (2.1s)
+  ✓  34 [mobile] › e2e/chat.spec.ts:326:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (1.1s)
+  ✓  36 [mobile] › e2e/chat.spec.ts:378:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.1s)
+  ✓  37 [mobile] › e2e/chat.spec.ts:394:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (939ms)
+  ✓  35 [mobile] › e2e/chat.spec.ts:351:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (5.8s)
+  -  39 [mobile] › e2e/chat.spec.ts:433:3 › Chat thread (screen 21) › fits every factory width
+  ✓  38 [mobile] › e2e/chat.spec.ts:400:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload) (2.8s)
+  ✓  40 [desktop] › e2e/chat.spec.ts:195:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (2.0s)
+  ✓  41 [desktop] › e2e/chat.spec.ts:217:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (1.8s)
+  ✓  42 [desktop] › e2e/chat.spec.ts:233:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.3s)
+  ✓  44 [desktop] › e2e/chat.spec.ts:259:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (2.6s)
+  ✓  43 [desktop] › e2e/chat.spec.ts:245:3 › Discussions list (screen 20) › fits every factory width (4.6s)
+  ✓  45 [desktop] › e2e/chat.spec.ts:284:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (2.7s)
+  ✓  46 [desktop] › e2e/chat.spec.ts:312:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (1.9s)
+  ✓  47 [desktop] › e2e/chat.spec.ts:326:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (970ms)
+  ✓  49 [desktop] › e2e/chat.spec.ts:378:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.1s)
+  ✓  50 [desktop] › e2e/chat.spec.ts:394:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (970ms)
+  -  51 [desktop] › e2e/chat.spec.ts:400:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload)
+  ✓  48 [desktop] › e2e/chat.spec.ts:351:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (5.8s)
+  ✓  52 [desktop] › e2e/chat.spec.ts:433:3 › Chat thread (screen 21) › fits every factory width (4.2s)
+  ✓  53 [desktop] › e2e/chat.spec.ts:195:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (2.7s)
+  ✓  55 [desktop] › e2e/chat.spec.ts:233:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.2s)
+  ✓  54 [desktop] › e2e/chat.spec.ts:217:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (1.8s)
+  ✓  57 [desktop] › e2e/chat.spec.ts:259:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (2.7s)
+  ✓  56 [desktop] › e2e/chat.spec.ts:245:3 › Discussions list (screen 20) › fits every factory width (4.7s)
+  ✓  58 [desktop] › e2e/chat.spec.ts:284:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (2.9s)
+  ✓  59 [desktop] › e2e/chat.spec.ts:312:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (2.1s)
+  ✓  60 [desktop] › e2e/chat.spec.ts:326:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (895ms)
+  ✓  62 [desktop] › e2e/chat.spec.ts:378:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.3s)
+  ✓  63 [desktop] › e2e/chat.spec.ts:394:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (899ms)
+  -  64 [desktop] › e2e/chat.spec.ts:400:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload)
+  ✓  61 [desktop] › e2e/chat.spec.ts:351:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (5.9s)
+  ✓  65 [desktop] › e2e/chat.spec.ts:433:3 › Chat thread (screen 21) › fits every factory width (4.7s)
+  ✓  66 [desktop] › e2e/chat.spec.ts:195:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (2.2s)
+  ✓  68 [desktop] › e2e/chat.spec.ts:233:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.4s)
+  ✓  67 [desktop] › e2e/chat.spec.ts:217:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (1.6s)
+  ✓  70 [desktop] › e2e/chat.spec.ts:259:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (3.1s)
+  ✓  69 [desktop] › e2e/chat.spec.ts:245:3 › Discussions list (screen 20) › fits every factory width (4.1s)
+  ✓  72 [desktop] › e2e/chat.spec.ts:312:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (1.6s)
+  ✓  71 [desktop] › e2e/chat.spec.ts:284:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (3.4s)
+  ✓  73 [desktop] › e2e/chat.spec.ts:326:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (1.1s)
+  ✓  75 [desktop] › e2e/chat.spec.ts:378:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.4s)
+  ✓  76 [desktop] › e2e/chat.spec.ts:394:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (2.4s)
+  -  77 [desktop] › e2e/chat.spec.ts:400:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload)
+  ✓  74 [desktop] › e2e/chat.spec.ts:351:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (6.0s)
+  ✓  78 [desktop] › e2e/chat.spec.ts:433:3 › Chat thread (screen 21) › fits every factory width (3.4s)
+
+  9 skipped
+  69 passed (1.7m)
+exit 0

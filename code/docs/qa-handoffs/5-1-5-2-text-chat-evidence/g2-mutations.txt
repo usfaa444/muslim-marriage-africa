@@ -1,0 +1,59 @@
+## M1 remove enqueueAfterPersist call (AC 5.2-1 enqueue after persist)
+     × AC 5.2-1: a sent text is stored delivered as ciphertext, the recipient reads it at once, and the scan is enqueued after persist 568ms
+     × AC 5.2-3: when AI is down or slow the send still acknowledges, and nothing else changes 399ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/chat-messages.test.ts > Text Chat: delivered, then enqueue scan, realtime without a hold state (Stories 5.1, 5.2) > AC 5.2-1: a sent text is stored delivered as ciphertext, the recipient reads it at once, and the scan is enqueued after persist
+ FAIL  apps/api/src/chat-messages.test.ts > Text Chat: delivered, then enqueue scan, realtime without a hold state (Stories 5.1, 5.2) > AC 5.2-3: when AI is down or slow the send still acknowledges, and nothing else changes
+      Tests  2 failed | 16 passed (18)
+## M2 emit event before nothing: drop messageDelivered emit
+     × AC 5.2-1 realtime: the recipient gets message.delivered with ids only, at persist, before any scan 2583ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/chat-messages.test.ts > Text Chat: delivered, then enqueue scan, realtime without a hold state (Stories 5.1, 5.2) > AC 5.2-1 realtime: the recipient gets message.delivered with ids only, at persist, before any scan
+      Tests  1 failed | 17 passed (18)
+## M3 TEXT_MAX 2000 -> 3000
+     × validates kind and text, and writes nothing on a refusal 473ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/chat-messages.test.ts > Text Chat: delivered, then enqueue scan, realtime without a hold state (Stories 5.1, 5.2) > validates kind and text, and writes nothing on a refusal
+      Tests  1 failed | 17 passed (18)
+## M4 skip closed-conversation check
+     × a pending Invite has no thread; a closed conversation or an unavailable member refuses the send 850ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/chat-messages.test.ts > Text Chat: delivered, then enqueue scan, realtime without a hold state (Stories 5.1, 5.2) > a pending Invite has no thread; a closed conversation or an unavailable member refuses the send
+      Tests  1 failed | 17 passed (18)
+## M5 let a non-participant in (participantConversation ignores viewer)
+const row = await getChatStore().find(conversationId)
+  if (!row) {
+    return null
+  }
+  const accepted = await getInvitesPort().acceptedFor(viewerId)
+  const match = accepted.find((item) => item.inviteId === row.invite_id)
+  return match ? { row, otherId: match.otherId } : null
+}
+
+export type MessageItem = {
+  id: string
+  conversation_id: string
+  sender_id: string
+  mine: boolean
+  kind: MessageKind
+  state: 'delivered'
+  text: string | null
+  created_at: string
+}
+
+function present(row: StoredMessage, viewerId: string): MessageItem {
+  return {
+    id: row.id,
+    conversation_id: row.conversation_id,
+    sender_id: row.sender_id,
+    mine: row.sender_id === viewerId,
+    kind: row.kind,
+    state: 'delivered',
+    text: openChatText(row.body, readChatKey(), row.conversation_id, row.id),
+    created_at: row.created_at,
+  }
+}
+
+export type ConversationItem = {
+  id: string
+  invite_id:

@@ -1,0 +1,55 @@
+--- empty thread
+{"items":[],"has_more":false}
+[200]
+--- send ok (accents, emoji, arabic)
+{"message":{"id":"01a16a5f-6edd-72dc-af72-08ff6555bb4c","conversation_id":"01990000-0000-7000-8000-00000000c001","sender_id":"01990000-0000-7000-8000-00000000a001","mine":true,"kind":"text","state":"delivered","text":"As-salāmu ʿalaykum — السلام عليكم 🌙 <script>alert(1)</script> '; drop table message;--","created_at":"2026-10-23T20:06:41.629Z"}}
+[201]
+--- sister reads
+{"items":[{"id":"01a16a5f-6edd-72dc-af72-08ff6555bb4c","conversation_id":"01990000-0000-7000-8000-00000000c001","sender_id":"01990000-0000-7000-8000-00000000a001","mine":false,"kind":"text","state":"delivered","text":"As-salāmu ʿalaykum — السلام عليكم 🌙 <script>alert(1)</script> '; drop table message;--","created_at":"2026-10-23T20:06:41.629Z"}],"has_more":false}
+[200]
+--- empty/space
+{"error":{"code":"UNHANDLED","message":"Écrivez un message.","details":{"field":"text"},"request_id":"01a16a5f-6f21-787d-b75b-1859639c12d1","retryable":false}}
+[400]
+--- missing text
+{"error":{"code":"UNHANDLED","message":"Écrivez un message.","details":{"field":"text"},"request_id":"01a16a5f-6f3e-7291-b93b-9eb6213ec670","retryable":false}}
+[400]
+--- non-string text
+{"error":{"code":"UNHANDLED","message":"Écrivez un message.","details":{"field":"text"},"request_id":"01a16a5f-6f60-7f2b-924e-e82a763bd61d","retryable":false}}
+[400]
+--- 2000 ok
+{"message":{"id":"01a16a5f-6f8d-79b1-8531-c4e45f47a995","conversation_id":"01990000-0000-7000-8000-00000000c001","sender
+[201]
+--- 2001
+{"error":{"code":"UNHANDLED","message":"Message trop long (2000 caractères au plus).","details":{"field":"text","max":2000},"request_id":"01a16a5f-6fbc-75f5-af52-9e8c85f409a6","retryable":false}}
+[400]
+--- 2000 emoji (astral)
+{"message":{"id":"01a16a5f-7005-71da-bf2a-f7f743f67cc6","conversation_id":"01990000-0000-7000-8000-00000000c001","sender
+[201]
+--- photo kind
+{"error":{"code":"UNHANDLED","message":"kind : valeur non reconnue.","details":{"field":"kind"},"request_id":"01a16a5f-702f-728e-9957-dff6ae8bc253","retryable":false}}
+[400]
+--- no kind
+{"error":{"code":"UNHANDLED","message":"kind : valeur non reconnue.","details":{"field":"kind"},"request_id":"01a16a5f-7047-7d01-977a-b1b2605036dd","retryable":false}}
+[400]
+--- bad json
+{"error":{"code":"UNHANDLED","message":"Expected property name or '}' in JSON at position 1 (line 1 column 2)","details":null,"request_id":"01a16a5f-705f-7564-8c91-3d73c10a086e","retryable":false}}
+[400]
+--- bad ids
+{"error":{"code":"NOT_FOUND","message":"Cette discussion n'existe pas.","details":null,"request_id":"01a16a5f-707f-7c61-9f08-ef224278aa7f","retryable":false}}
+[404]
+{"error":{"code":"NOT_FOUND","message":"Cette discussion n'existe pas.","details":null,"request_id":"01a16a5f-7099-7c8c-afb2-d86f23b6c9e5","retryable":false}}
+[404]
+--- limit/cursor
+{"error":{"code":"UNHANDLED","message":"limit : valeur non reconnue.","details":{"field":"limit","max":50},"request_id":"01a16a5f-70b3-77c5-b00d-0531521ca7dd","retryable":false}}
+[400]
+{"error":{"code":"UNHANDLED","message":"limit : valeur non reconnue.","details":{"field":"limit","max":50},"request_id":"01a16a5f-70cd-7751-821c-d8279512b620","retryable":false}}
+[400]
+{"items":[{"id":"01a16a5f-6f8d-79b1-8531-c4e45f47a995","conversation_id":"01990000-0000-7000-8000-00000000c001","sender_id":"01990000-0000-7000-8000-00000000a001","mine":true,"kind":"text","state":"delivered","text":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+[200]
+{"error":{"code":"UNHANDLED","message":"before : valeur non reconnue.","details":{"field":"before"},"request_id":"01a16a5f-711f-7a17-8bbc-a7d8837aeebd","retryable":false}}
+[400]
+{"error":{"code":"UNHANDLED","message":"before : valeur non reconnue.","details":{"field":"before"},"request_id":"01a16a5f-714b-77ef-89cd-75d28ad5ecfb","retryable":false}}
+[400]
+--- list after
+{"count":1,"items":[{"id":"01990000-0000-7000-8000-00000000c001","invite_id":"01990000-0000-7000-8000-00000000b001","stage":"chat","other_id":"01990000-0000-7000-8000-00000000a001","pseudonym":"QA_Frere","other":{"available":true,"age":32,"city":"ouagadougou","verified":false,"photo":null},"last_message":{"id":"01a16a5f-7005-71da-bf2a-f7f743f67cc6","mine":false,"kind":"text","preview":"😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀�
+[200]
