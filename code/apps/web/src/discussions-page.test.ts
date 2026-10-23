@@ -77,6 +77,9 @@ describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
     expect(html).toContain('link.href = "/discussions" + \'/\' + encodeURIComponent(item.id)')
     expect(html).toContain("'message.delivered': reloadSoon")
     expect(html).toContain(REALTIME_SCRIPT)
+    // QA F1, F5: the row link is named by its content (no aria-label); an unavailable member gets no link.
+    expect(html).not.toContain("link.setAttribute('aria-label'")
+    expect(html).toContain("if (!other.available) {")
     // API text goes through textContent, never innerHTML.
     expect(html).not.toMatch(/\.innerHTML\s*=/)
   })
@@ -119,6 +122,12 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     expect(html).toContain("socket.emit('conversation.typing', { conversation_id: ID })")
     expect(html).toContain('if (now - lastEmit < 1500) return')
     expect(html).toContain('typingTimer = setTimeout(hideTyping, 4000)')
+    // QA F3, F4: a closed conversation disables the composer; an expired session keeps the draft and offers sign-in.
+    expect(html).toContain(`<p id="thread-closed" hidden`)
+    expect(html).toContain(CHAT_COPY.closed)
+    expect(html).toContain('input.disabled = unavailable || closed')
+    expect(html).toContain("var DRAFT_KEY = 'ankanu_chat_draft:' + ID")
+    expect(html).toContain(`<a id="thread-signin" hidden href="/auth"`)
     expect(html).not.toMatch(/\.innerHTML\s*=/)
   })
 

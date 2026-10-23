@@ -342,7 +342,9 @@ function preview(text: string | null): string | null {
     return null
   }
   const flat = text.replace(/\s+/g, ' ').trim()
-  return flat.length > PREVIEW_MAX ? `${flat.slice(0, PREVIEW_MAX - 1)}…` : flat
+  // Cut on user-perceived characters (graphemes), never inside a surrogate pair or an emoji sequence.
+  const graphemes = Array.from(new Intl.Segmenter('fr', { granularity: 'grapheme' }).segment(flat), (part) => part.segment)
+  return graphemes.length > PREVIEW_MAX ? `${graphemes.slice(0, PREVIEW_MAX - 1).join('')}…` : flat
 }
 
 /**
@@ -394,7 +396,14 @@ export async function readConversation(
   | {
       ok: true
       body: {
-        conversation: { id: string; stage: ConversationStage; other_id: string; pseudonym: string | null; other: ChatOther }
+        conversation: {
+          id: string
+          stage: ConversationStage
+          other_id: string
+          pseudonym: string | null
+          other: ChatOther
+          closed: boolean
+        }
         me: { id: string }
       }
     }
@@ -418,6 +427,8 @@ export async function readConversation(
         other_id: found.otherId,
         pseudonym: other?.pseudonym ?? null,
         other: await presentOther(gate.account.id, other),
+        // Paused or ended: the thread stays readable, and a send is refused with `conversation_closed`.
+        closed: found.row.ended_at !== null || found.row.paused_by !== null,
       },
       me: { id: gate.account.id },
     },

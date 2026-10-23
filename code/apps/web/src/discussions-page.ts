@@ -26,7 +26,7 @@ export const CHAT_COPY = {
   emptyLink: 'Voir mes invitations',
   verified: 'Identité vérifiée',
   open: 'Accéder à la conversation',
-  openWith: 'Accéder à la conversation avec',
+  openWithSuffix: 'avec',
   noMessage: "Aucun message pour l'instant.",
   you: 'Vous',
   unavailableName: 'Profil indisponible',
@@ -36,6 +36,9 @@ export const CHAT_COPY = {
   back: 'Retour aux discussions',
   missing: "Cette discussion n'existe pas.",
   unavailable: "Ce profil n'est plus disponible.",
+  closed: 'Cette discussion est fermée.',
+  sessionExpired: 'Votre session a expiré. Reconnectez-vous : votre message est gardé pour cette discussion.',
+  signInAgain: 'Se reconnecter',
   messagesLabel: 'Messages',
   older: 'Messages précédents',
   threadEmpty: "Aucun message pour l'instant. Commencez la discussion avec bienséance.",
@@ -169,16 +172,18 @@ const LIST_SCRIPT = `${COMMON}
 var data = []
 function row(item) {
   var other = item.other || {}
+  // An unavailable member shows no name details and no way into the thread (QA F5).
+  var pseudonym = other.available ? item.pseudonym : null
   var li = make('li', 'p-5 md:p-6 rounded-md bg-[#FAF6EC] border border-hairline')
   li.setAttribute('data-testid', 'conversation-row')
   li.setAttribute('data-conversation-id', item.id)
   var wrap = make('div', 'flex flex-col md:flex-row md:items-center justify-between gap-4')
   var main = make('div', 'flex-1 space-y-3')
   var head = make('div', 'flex items-center gap-3.5')
-  head.appendChild(avatar(item.pseudonym, other, 'w-12 h-12 md:w-14 md:h-14 rounded-lg'))
+  head.appendChild(avatar(pseudonym, other, 'w-12 h-12 md:w-14 md:h-14 rounded-lg'))
   var who = make('div', 'flex-1')
   var line = make('div', 'flex flex-wrap items-center gap-x-2 gap-y-1')
-  line.appendChild(make('h2', 'chat-name font-display text-lg md:text-xl text-deep-navy font-medium', nameLine(item.pseudonym, other)))
+  line.appendChild(make('h2', 'chat-name font-display text-lg md:text-xl text-deep-navy font-medium', nameLine(pseudonym, other)))
   var city = cityText(other)
   if (city) {
     var group = make('span', 'inline-flex items-center gap-x-2 whitespace-nowrap text-xs text-deep-navy/80 font-medium')
@@ -216,10 +221,18 @@ function row(item) {
     main.appendChild(meta)
   }
   wrap.appendChild(main)
+  if (!other.available) {
+    li.setAttribute('data-unavailable', 'true')
+    li.appendChild(wrap)
+    return li
+  }
   var link = make('a', 'inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-md bg-deep-navy text-cream hover:bg-deep-navy/90 text-xs md:text-sm font-medium transition-colors shrink-0 self-start md:self-center')
   link.href = ${JSON.stringify(DISCUSSIONS_PATH)} + '/' + encodeURIComponent(item.id)
-  link.setAttribute('aria-label', COPY.openWith + ' ' + (item.pseudonym || COPY.unavailableName))
-  link.appendChild(make('span', '', COPY.open))
+  // The name comes from the content (visible label + screen-reader suffix), so it always starts with the visible
+  // words and the icon ligature (aria-hidden) never takes part in it (QA F1, WCAG 2.5.3).
+  var label = make('span', '', COPY.open)
+  label.appendChild(make('span', 'chat-sr', ' ' + COPY.openWithSuffix + ' ' + (pseudonym || '')))
+  link.appendChild(label)
   link.appendChild(icon('arrow_forward', 'text-sm text-gold-soft'))
   wrap.appendChild(link)
   li.appendChild(wrap)
@@ -350,9 +363,25 @@ function header() {
   show('thread-city', !!city)
   el('thread-stage').textContent = STAGE[conversation.stage] || STAGE.chat
   var unavailable = !other.available
+  var closed = !!conversation.closed
   show('thread-unavailable', unavailable)
-  input.disabled = unavailable
+  show('thread-closed', closed && !unavailable)
+  input.disabled = unavailable || closed
   updateSend()
+}
+var DRAFT_KEY = 'ankanu_chat_draft:' + ID
+function saveDraft(text) { try { sessionStorage.setItem(DRAFT_KEY, text) } catch (error) { /* no storage: the text stays in the box */ } }
+function takeDraft() {
+  try { var text = sessionStorage.getItem(DRAFT_KEY); sessionStorage.removeItem(DRAFT_KEY); return text || '' } catch (error) { return '' }
+}
+function sessionExpired() {
+  var box = el('thread-error')
+  while (box.firstChild) box.removeChild(box.firstChild)
+  box.appendChild(document.createTextNode(COPY.sessionExpired + ' '))
+  var link = make('a', 'underline font-medium', COPY.signInAgain)
+  link.href = '/auth'
+  box.appendChild(link)
+  show('thread-error', true)
 }
 function updateSend() {
   var length = Array.from ? Array.from(input.value.trim()).length : input.value.trim().length
@@ -367,6 +396,7 @@ function load() {
   var root = el('chat-thread')
   root.setAttribute('aria-busy', 'true')
   show('thread-load-error', false)
+  show('thread-signin', false)
   show('thread-loading', true)
   var base = '/v1/conversations/' + encodeURIComponent(ID)
   return Promise.all([
@@ -377,13 +407,16 @@ function load() {
     show('thread-loading', false)
     var head = results[0]
     var page = results[1]
-    if (head.status === 404 || page.status === 404) { show('thread-missing', true); return false }
+    if (head.status === 404 || page.status === 404) { takeDraft(); show('thread-missing', true); return false }
+    if (head.status === 401 || page.status === 401) { el('thread-load-error-text').textContent = COPY.sessionExpired; show('thread-load-error', true); show('thread-signin', true); return false }
     if (head.status !== 200 || page.status !== 200 || !head.payload || !page.payload || !Array.isArray(page.payload.items)) {
       fail('thread-load-error', errorMessage(head.status !== 200 ? head : page, COPY.loadError))
       return false
     }
     conversation = head.payload.conversation
     me = head.payload.me && head.payload.me.id
+    var draft = takeDraft()
+    if (draft && !input.value) input.value = draft
     messages = []
     known = {}
     for (var index = 0; index < page.payload.items.length; index += 1) {
@@ -475,7 +508,14 @@ function send() {
       appendItems([result.payload.message])
       input.value = ''
       el('thread-status').textContent = COPY.sent
+    } else if (result.status === 401) {
+      // Session expired mid-thread (QA F4): keep the text here and for the next visit, offer the sign-in.
+      saveDraft(text)
+      sessionExpired()
     } else {
+      var reason = result.payload && result.payload.error && result.payload.error.details && result.payload.error.details.reason
+      if (result.status === 409 && reason === 'conversation_closed') { conversation.closed = true; header() }
+      if (result.status === 409 && reason === 'other_unavailable') { conversation.other = { available: false }; header() }
       el('thread-error').textContent = errorMessage(result, COPY.sendError)
       show('thread-error', true)
     }
@@ -547,6 +587,7 @@ function threadMain(id: string): string {
 <div id="thread-load-error" hidden class="rounded-md border border-hairline/70 bg-hairline/20 px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
 <p id="thread-load-error-text" role="alert" class="text-sm text-deep-navy break-words">${CHAT_COPY.loadError}</p>
 <button id="thread-retry" type="button" class="${quiet}">${CHAT_COPY.retry}</button>
+<a id="thread-signin" hidden href="/auth" class="${quiet}">${CHAT_COPY.signInAgain}</a>
 </div>
 <section id="thread" hidden aria-labelledby="thread-title" class="bg-white/90 rounded-xl sm:rounded-2xl border border-hairline shadow-sm flex flex-col overflow-hidden">
 <div class="px-3.5 sm:px-6 py-3.5 sm:py-4 border-b border-hairline/70 flex flex-wrap items-center justify-between gap-3 bg-white">
@@ -563,6 +604,7 @@ function threadMain(id: string): string {
 <span id="thread-stage" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold-soft/40 text-deep-navy border border-soft-gold/40"></span>
 </div>
 <p id="thread-unavailable" hidden class="px-3.5 sm:px-6 py-2.5 bg-cream border-b border-hairline text-sm text-deep-navy">${CHAT_COPY.unavailable}</p>
+<p id="thread-closed" hidden class="px-3.5 sm:px-6 py-2.5 bg-cream border-b border-hairline text-sm text-deep-navy">${CHAT_COPY.closed}</p>
 <div class="px-3 sm:px-6 py-4 sm:py-6 flex flex-col gap-3.5 sm:gap-5 bg-[#FAF7F0]/60 min-h-[320px]">
 <button id="thread-older" type="button" hidden class="self-center ${quiet}">${CHAT_COPY.older}</button>
 <p id="thread-empty" hidden class="text-center text-sm text-deep-navy/80 py-8">${CHAT_COPY.threadEmpty}</p>

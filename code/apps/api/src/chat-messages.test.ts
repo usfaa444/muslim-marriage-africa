@@ -539,14 +539,32 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
 
     const pair = await connected()
     const row = chat.conversations.find((item) => item.id === pair.conversationId)
+    const openThread = (await (await call(`/v1/conversations/${pair.conversationId}`, pair.sister.cookie)).json()) as {
+      conversation: { closed: boolean }
+    }
+    expect(openThread.conversation.closed).toBe(false)
     if (row) {
       row.ended_at = '2026-10-23T09:00:00.000Z'
     }
+    // QA F3: the thread says up front that it is closed, so the page can disable the composer before a send.
+    const endedThread = (await (await call(`/v1/conversations/${pair.conversationId}`, pair.sister.cookie)).json()) as {
+      conversation: { closed: boolean }
+    }
+    expect(endedThread.conversation.closed).toBe(true)
     const closed = await sendText(pair.sister, pair.conversationId, 'Encore là ?')
     expect(closed.status).toBe(409)
     expect(await closed.json()).toMatchObject({ error: { message: 'Cette discussion est fermée.', details: { reason: 'conversation_closed' } } })
     if (row) {
       row.ended_at = null
+      row.paused_by = pair.brother.id
+    }
+    const pausedThread = (await (await call(`/v1/conversations/${pair.conversationId}`, pair.sister.cookie)).json()) as {
+      conversation: { closed: boolean }
+    }
+    expect(pausedThread.conversation.closed).toBe(true)
+    expect((await sendText(pair.sister, pair.conversationId, 'Encore là ?')).status).toBe(409)
+    if (row) {
+      row.paused_by = null
     }
     const other = memory.accounts.find((item) => item.id === pair.brother.id) as { status: string }
     other.status = 'Suspended'
@@ -606,13 +624,23 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect(listed.items[0]?.last_message).toMatchObject({ mine: false, kind: 'text' })
     expect([...(listed.items[0]?.last_message.preview ?? '')].length).toBe(PREVIEW_MAX)
     expect(listed.items[0]?.last_message.preview.endsWith('…')).toBe(true)
+    // QA F2: the cut never splits an emoji (surrogate pair) or a joined emoji sequence.
+    const family = '👨‍👩‍👧'
+    expect((await sendText(brother, conversationId, `a${'🌙'.repeat(300)}`)).status).toBe(201)
+    const astral = (await (await call('/v1/conversations', sister.cookie)).json()) as { items: Array<{ last_message: { preview: string } }> }
+    const cut = astral.items[0]?.last_message.preview ?? ''
+    expect(cut).toBe(`a${'🌙'.repeat(PREVIEW_MAX - 2)}…`)
+    expect(cut.isWellFormed()).toBe(true)
+    expect((await sendText(brother, conversationId, family.repeat(200))).status).toBe(201)
+    const joined = (await (await call('/v1/conversations', sister.cookie)).json()) as { items: Array<{ last_message: { preview: string } }> }
+    expect(joined.items[0]?.last_message.preview).toBe(`${family.repeat(PREVIEW_MAX - 1)}…`)
     const mineList = (await (await call('/v1/conversations', brother.cookie)).json()) as { items: Array<{ last_message: { mine: boolean } }> }
     expect(mineList.items[0]?.last_message.mine).toBe(true)
 
     const thread = await call(`/v1/conversations/${conversationId}`, sister.cookie)
     expect(thread.status).toBe(200)
     expect(await thread.json()).toEqual({
-      conversation: { id: conversationId, stage: 'chat', other_id: brother.id, pseudonym: expect.any(String), other: expect.objectContaining({ available: true }) },
+      conversation: { id: conversationId, stage: 'chat', other_id: brother.id, pseudonym: expect.any(String), other: expect.objectContaining({ available: true }), closed: false },
       me: { id: sister.id },
     })
     expect(billingCalls).toBe(0)

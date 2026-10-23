@@ -23,6 +23,7 @@ type Api = {
   messages: Message[]
   posts: Array<{ kind: unknown; text: unknown }>
   available: boolean
+  closed?: boolean
   listStatus?: number
   threadStatus?: number
   failNextPost?: { status: number; body: unknown }
@@ -131,12 +132,16 @@ async function serveApi(context: BrowserContext, baseURL: string, state: Api): P
         return
       }
       if (state.threadStatus && state.threadStatus !== 200 && method === 'GET') {
-        await route.fulfill(json({ error: { code: 'UNHANDLED', message: 'Request failed', details: null, request_id: 'r', retryable: true } }, state.threadStatus))
+        const error =
+          state.threadStatus === 401
+            ? { code: 'UNAUTHENTICATED', message: 'Authentification requise.', details: null, request_id: 'r', retryable: false }
+            : { code: 'UNHANDLED', message: 'Request failed', details: null, request_id: 'r', retryable: true }
+        await route.fulfill(json({ error }, state.threadStatus))
         return
       }
       if (!thread[2] && method === 'GET') {
         const other = state.available ? conversation['other'] : { available: false }
-        await route.fulfill(json({ conversation: { id: conversation['id'], stage: 'chat', other_id: conversation['other_id'], pseudonym: conversation['pseudonym'], other }, me: { id: ME } }))
+        await route.fulfill(json({ conversation: { id: conversation['id'], stage: 'chat', other_id: conversation['other_id'], pseudonym: conversation['pseudonym'], other, closed: !!state.closed }, me: { id: ME } }))
         return
       }
       if (thread[2] && method === 'GET') {
@@ -212,6 +217,31 @@ test.describe('Discussions list (screen 20)', () => {
     await expect(page.locator('main')).not.toContainText(HOLD_COPY)
     await expectAccessible(page)
     await expectNoHorizontalOverflow(page)
+  })
+
+  test('QA F5: a row for a member who is no longer available says « Profil indisponible » and has no link', async ({ page, context, baseURL }) => {
+    const state = api()
+    state.conversations[0] = { ...state.conversations[0], other: { available: false } }
+    await serveApi(context, baseURL ?? '', state)
+    await openList(page)
+    const gone = page.getByTestId('conversation-row').first()
+    await expect(gone.getByRole('heading', { level: 2 })).toHaveText('Profil indisponible')
+    await expect(gone).not.toContainText('Al-Hassan_BF')
+    await expect(gone.getByRole('link')).toHaveCount(0)
+    await expect(page.getByTestId('conversation-row').nth(1).getByRole('link', { name: 'Accéder à la conversation avec Oumar_K' })).toBeVisible()
+    await expectAccessible(page)
+  })
+
+  test('QA F1: the row link is named by its visible words, with no aria-label and the icon kept out of the name', async ({ page, context, baseURL }) => {
+    await serveApi(context, baseURL ?? '', api())
+    await openList(page)
+    const link = page.getByTestId('conversation-row').first().getByRole('link')
+    await expect(link).toHaveAccessibleName('Accéder à la conversation avec Al-Hassan_BF')
+    await expect(link).not.toHaveAttribute('aria-label', /.*/)
+    await expect(link.locator('.material-symbols-outlined')).toHaveAttribute('aria-hidden', 'true')
+    // Without the icon font the ligature is visible text; the rule must still hold (axe label-content-name-mismatch).
+    await page.addStyleTag({ content: '.material-symbols-outlined { font-family: serif !important; }' })
+    await expectAccessible(page)
   })
 
   test('shows the empty state with a way to the invitations, and a retry after a load error', async ({ page, context, baseURL }) => {
@@ -320,7 +350,54 @@ test.describe('Chat thread (screen 21)', () => {
     await expect(page.getByRole('alert')).toHaveText('Cette discussion est fermée.')
     await expect(input).toHaveValue('Encore là ?')
     await expect(bubbles(page)).toHaveCount(2)
+    // The 409 closes the composer as well (QA F3).
+    await expect(input).toBeDisabled()
+    await expect(page.getByRole('button', { name: 'Envoyer' })).toBeDisabled()
     await expectAccessible(page)
+  })
+
+  test('QA F3: a paused or ended conversation says so up front and the composer is disabled before any send', async ({ page, context, baseURL }) => {
+    const state = api()
+    state.closed = true
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    await expect(page.locator('#thread-closed')).toHaveText('Cette discussion est fermée.')
+    await expect(page.locator('#thread-closed')).toBeVisible()
+    await expect(bubbles(page)).toHaveCount(2)
+    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeDisabled()
+    await expect(page.getByRole('button', { name: 'Envoyer' })).toBeDisabled()
+    expect(state.posts).toHaveLength(0)
+    await expectAccessible(page)
+  })
+
+  test('QA F4: a session that expires mid-thread offers « Se reconnecter » and keeps the draft for the next visit', async ({ page, context, baseURL }) => {
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    const input = page.getByLabel('Réponse réfléchie et posée')
+    state.failNextPost = { status: 401, body: { error: { code: 'UNAUTHENTICATED', message: 'Authentification requise.', details: null, request_id: 'r', retryable: false } } }
+    await input.fill('Mon message gardé')
+    await page.getByRole('button', { name: 'Envoyer' }).click()
+    const alert = page.getByRole('alert')
+    await expect(alert).toContainText('Votre session a expiré. Reconnectez-vous : votre message est gardé pour cette discussion.')
+    await expect(alert.getByRole('link', { name: 'Se reconnecter' })).toHaveAttribute('href', '/auth')
+    await expect(input).toHaveValue('Mon message gardé')
+    await expectAccessible(page)
+
+    // A thread load that finds the session gone offers the same way back.
+    state.threadStatus = 401
+    await openThread(page)
+    await expect(page.locator('#thread-load-error-text')).toHaveText('Votre session a expiré. Reconnectez-vous : votre message est gardé pour cette discussion.')
+    await expect(page.getByRole('link', { name: 'Se reconnecter' })).toHaveAttribute('href', '/auth')
+
+    // Signed in again, the same thread gives the draft back once.
+    state.threadStatus = 200
+    await openThread(page)
+    await expect(input).toHaveValue('Mon message gardé')
+    await page.getByRole('button', { name: 'Envoyer' }).click()
+    await expect(bubbles(page)).toHaveCount(3)
+    await openThread(page)
+    await expect(input).toHaveValue('')
   })
 
   test('AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log', async ({ page, context, baseURL }) => {
