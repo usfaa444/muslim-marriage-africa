@@ -1,0 +1,18 @@
+M1-sister-mode-inverted: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+M1-sister-mode-inverted:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.1-4 and 4.2-3: a Sister in free_unlimited sends her Nth Invite with no quota and no BillingPort call
+M1-sister-mode-inverted:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.1-5: a Sister in same_quota_as_brothers with no pack gets QUOTA_EXCEEDED on her 4th Invite that Ouaga day
+M1-sister-mode-inverted:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.2-2: Premium has no daily Invite cap (the 4th and the 16th succeed), Brother and Sister alike
+M2-photo-not-required: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+M2-photo-not-required:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.1-2: no Profile Photo blocks the send with a prompt to add one, and writes nothing
+M2-photo-not-required:       Tests  1 failed | 19 passed (20)
+M3-cap-off-by-one:       Tests  20 passed (20)
+M4-pending-dup-skipped:       Tests  20 passed (20)
+M5-billing-always-entitled: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+M5-billing-always-entitled:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.1-1: a ready Brother sends an Invite and it is on the Sister’s received list
+M5-billing-always-entitled:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > a double submit to the same recipient keeps one pending Invite and counts once
+M5-billing-always-entitled:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.1-5: a Sister in same_quota_as_brothers with no pack gets QUOTA_EXCEEDED on her 4th Invite that Ouaga day
+M3b-both-cap-guards-off-by-one: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+M3b-both-cap-guards-off-by-one:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.1-5: a Sister in same_quota_as_brothers with no pack gets QUOTA_EXCEEDED on her 4th Invite that Ouaga day
+M3b-both-cap-guards-off-by-one:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.2-1: a Free Brother gets QUOTA_EXCEEDED on the 4th, and a new Ouaga day resets it
+M3b-both-cap-guards-off-by-one:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > two parallel sends cannot both take the last free slot
+M3b-both-cap-guards-off-by-one:  FAIL  apps/api/src/invites.test.ts > send an Invite and the daily Invite quota (Stories 4.1, 4.2) > AC 4.2-4: billing unavailable means the Free cap for a Sister in same_quota_as_brothers, and safety still works

@@ -1,0 +1,94 @@
+PASS G4 free state 360px no h-scroll => [360,360]
+PASS G4 free state 390px no h-scroll => [390,390]
+PASS G6 axe free state serious/critical => []
+PASS G4 elements marked [hidden] are really not displayed (Tailwind CSS override check) => {"#invite-photo-missing":false,"#invite-profile-missing":false,"#invite-quota-wall":false,"#invite-unavailable":false,"#invite-load-error":false,"#invite-loading":false,"#invite-error":false}
+PASS G4 copy: Transmettre une invitation Ta'aruf => 
+PASS G4 copy: Conforme => 
+PASS G4 copy: Invitations restantes aujourd'hui : 3 => 
+PASS G4 copy: Invitations illimitées pour les abonnements engagés. => 
+PASS G4 copy: Envoyer l'invitation Ta'aruf => 
+PASS G4 copy: Protocole & Rôle du Tuteur (Wali) => 
+PASS G4 no pack/aucune IA wording => 
+PASS G5 send button >=44px => {"x":16,"y":1107.5,"width":358,"height":48}
+PASS G5 touch targets in main >= 44x44 => []
+PASS G4 free state 768px no h-scroll => [768,768]
+PASS G4 free state 1024px no h-scroll => [1024,1024]
+PASS G4 free state 1280px no h-scroll => [1280,1280]
+PASS G4 free state 1440px no h-scroll => [1440,1440]
+PASS G6 send button reachable with Tab => 
+PASS G6 focus indicator on send (outline/box-shadow) => ["auto","0px","rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 1px 2px 0px"]
+PASS AC1 keyboard Enter sends -> 201 => 201
+PASS G5 success message => Invitation envoyée.
+PASS G5 button locked after success => [true,"Invitation envoyée"]
+PASS G6 status is aria-live => polite
+PASS AC1 persisted in DB => 
+PASS G3 after reload remaining = 2 => Invitations restantes aujourd'hui : 2
+PASS E-1 resend after reload -> already sent message => Invitation déjà envoyée.
+PASS E-1 still 1 row, quota 1 => 
+PASS E-1 double-click on slow 3G -> one POST => 1
+PASS G7 compose loads on throttled 3G (ms) => 1679
+PASS E-1 one row => 
+PASS G4 wall 360px no h-scroll => [360,360]
+PASS G4 wall 390px no h-scroll => [390,390]
+PASS AC12 wall visible on load => 
+PASS AC12 wall copy => hourglass_disabled
+Envoi refusé. Quota du jour atteint.
+
+Nouvelles invitations demain à partir de 00:00 (heure de Ouagadougou).
+
+Avec Premium, invitations et messages illimités.
+
+Découvrir Premium
+PASS AC12 exactly one Premium link, no pack => 1
+PASS AC6 send disabled at wall => 
+PASS G4 inline count/upsell hidden at wall => 
+
+
+hourglass_empty
+Disponibilité journalière
+
+
+Vous voulez des invitations illimitées ? Abonnez-vous !
+
+
+
+Invitations illimitées pour les abonnements engagés.
+
+
+PASS G6 axe wall serious/critical => []
+PASS G5 Premium link >=44px => {"x":33,"y":980,"width":159.875,"height":44}
+PASS KNOWN /premium is 404 (Epic 10 placeholder, flagged) => 404
+PASS G4 wall 768px no h-scroll => [768,768]
+PASS G4 wall 1024px no h-scroll => [1024,1024]
+PASS G4 wall 1280px no h-scroll => [1280,1280]
+PASS G4 wall 1440px no h-scroll => [1440,1440]
+PASS AC6 stale page: 4th send opens wall => Nouvelles invitations demain à partir de 00:00 (heure de Ouagadougou).
+PASS AC2 no-photo block visible with link => 
+PASS AC2 send refused with prompt, focus on add-photo link => ["Ajoutez une photo de profil pour envoyer une invitation.","invite-photo-link"]
+PASS AC2 no invite row => 
+PASS G6 axe nophoto serious/critical => []
+PASS AC3 unavailable block visible, send hidden => 
+PASS G3 bad id -> /decouvrir => http://localhost:3100/decouvrir
+PASS G3 unknown id -> unavailable => 
+PASS SEC anon deep link -> /auth => http://localhost:3100/auth
+PASS AC5 Sister 4th: wall in UI (default mode) => 
+PASS AC4 free_unlimited UI: Invitations illimitées., no count/pack => hourglass_empty
+DISPONIBILITÉ JOURNALIÈRE
+
+Invitations illimitées.
+PASS AC4 free_unlimited 4th send OK => 
+PASS G7 send network error: message + button re-enabled => Envoi impossible. Vérifiez votre connexion et réessayez.
+PASS G7 send 500: handled error shown => Request failed
+PASS G7 quota load failure -> retry state => Chargement impossible. Vérifiez votre connexion et réessayez.
+
+Réessayer
+PASS G7 retry recovers => 
+PASS AC1 Discover card button opens compose => ["BUTTON",null,"http://localhost:3100/invitations/envoyer/01a166dd-80ad-7373-926c-a1eec4ff166c"]
+PASS G3 back returns to Discover => http://localhost:3100/decouvrir
+PASS AC1 profile detail has invite link => 1
+PASS AC1 profile detail opens compose => http://localhost:3100/invitations/envoyer/01a166dc-e60a-7cd4-8084-8690ff20f202
+PASS G5 cancel returns to profile => http://localhost:3100/profil/01a166dc-e60a-7cd4-8084-8690ff20f202
+PASS G6 200% zoom equiv (640px css) no h-scroll => [640,640]
+PASS G6 200% zoom equiv (180px css) no h-scroll => [180,180]
+FAIL G7 no unexpected console errors / 4xx/5xx (filtered CDN/fonts) => ["console: Failed to load resource: the server responded with a status of 404 (Not Found)","console: Failed to load resource: the server responded with a status of 404 (Not Found)"]
+FAILS 1 of 68
