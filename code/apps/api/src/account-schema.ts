@@ -471,6 +471,63 @@ export const conversation = pgTable(
   ],
 )
 
+/**
+ * Chat-owned message (Stories 5.1, 5.2). `state` is `delivered` and nothing else: there is no pending or held Chat
+ * state (AD-10). `body` is the ciphertext envelope `{ v, alg, kid, iv, ct }` under `CHAT_KEY`, never plaintext.
+ * Every message belongs to a conversation (AD-23).
+ */
+export const message = pgTable(
+  'message',
+  {
+    id: uuid('id').primaryKey(),
+    conversation_id: uuid('conversation_id')
+      .notNull()
+      .references(() => conversation.id),
+    sender_id: uuid('sender_id')
+      .notNull()
+      .references(() => account.id),
+    kind: text('kind').notNull(),
+    state: text('state').notNull(),
+    body: jsonb('body').notNull(),
+    media_id: uuid('media_id'),
+    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  },
+  (table) => [
+    check('message_kind_check', sql`${table.kind} in ('text', 'photo', 'voice')`),
+    check('message_state_check', sql`${table.state} = 'delivered'`),
+    index('message_conversation_id_idx').on(table.conversation_id, table.id),
+  ],
+)
+
+/**
+ * Moderation-owned scan job (AD-10). Inserted only by `ModerationPort.enqueueScan`, after the item is delivered.
+ * `outcome` is null while the job is queued; the Epic 8 worker sets it. It never writes `message.state`.
+ */
+export const moderationJob = pgTable(
+  'moderation_job',
+  {
+    id: uuid('id').primaryKey(),
+    message_id: uuid('message_id'),
+    asset_id: uuid('asset_id'),
+    flash_id: uuid('flash_id'),
+    scores: jsonb('scores'),
+    outcome: text('outcome'),
+    vendor: text('vendor'),
+    latency_ms: integer('latency_ms'),
+  },
+  (table) => [
+    check(
+      'moderation_job_outcome_check',
+      sql`${table.outcome} is null or ${table.outcome} in ('flag-for-admin', 'clean', 'scan-deferred', 'scan-failed')`,
+    ),
+    check(
+      'moderation_job_one_item_check',
+      sql`num_nonnulls(${table.message_id}, ${table.asset_id}, ${table.flash_id}) = 1`,
+    ),
+    uniqueIndex('moderation_job_one_per_message').on(table.message_id),
+  ],
+)
+
 /** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */
 export const auditEvent = pgTable('audit_event', {
   id: uuid('id').primaryKey(),

@@ -24,6 +24,9 @@ import { setEmailPort } from './email-port.js'
 import { setEmailVerificationStore } from './email-verification-store.js'
 import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
 import { getChatPort, setChatPort } from './chat.js'
+import { openChatText, sealChatText } from './chat-key.js'
+import { getMessageStore, setMessageStore, type StoredMessage } from './chat-messages.js'
+import { getModerationPort, setModerationPort } from './moderation.js'
 import { getInviteStore, readInviteConfig, setInviteConfigReader, setInviteStore, type InviteRow } from './invites.js'
 import { PASSWORD_RESET_SESSION_MS, PASSWORD_RESET_TTL_MS } from './password-reset.js'
 import { resetPasswordResetRateWindow } from './password-reset-rate.js'
@@ -192,6 +195,7 @@ function migrationSql(): string {
     '0020_review_console.sql',
     '0021_invite.sql',
     '0022_conversation.sql',
+    '0023_message.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -297,6 +301,8 @@ describe('operator_config migration', () => {
       'invite',
       'invite_quota',
       'liveness_challenge',
+      'message',
+      'moderation_job',
       'operator_config',
       'password_reset',
       'photo_asset',
@@ -324,6 +330,8 @@ describe('operator_config migration', () => {
       'public.invite',
       'public.invite_quota',
       'public.liveness_challenge',
+      'public.message',
+      'public.moderation_job',
       'public.operator_config',
       'public.password_reset',
       'public.photo_asset',
@@ -341,7 +349,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('23')
+    expect(applied.rows[0]?.count).toBe('24')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -879,6 +887,8 @@ describe('operator_config migration', () => {
       'invite',
       'invite_quota',
       'liveness_challenge',
+      'message',
+      'moderation_job',
       'operator_config',
       'password_reset',
       'photo_asset',
@@ -906,6 +916,8 @@ describe('operator_config migration', () => {
       'public.invite',
       'public.invite_quota',
       'public.liveness_challenge',
+      'public.message',
+      'public.moderation_job',
       'public.operator_config',
       'public.password_reset',
       'public.photo_asset',
@@ -1304,6 +1316,112 @@ describe('operator_config migration', () => {
       await db().query(`delete from "invite_quota" where "account_id" = $1`, [brother])
       await db().query(`delete from "invite" where "from_id" = $1`, [brother])
       await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, ...sisters]])
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('stores Chat text delivered as ciphertext, pages it, and queues one moderation_job per message on migrated Postgres (Stories 5.1, 5.2)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setInviteStore(undefined)
+    setChatPort(undefined)
+    setMessageStore(undefined)
+    setModerationPort(undefined)
+    const at = new Date('2026-10-23T12:00:00.000Z')
+    const brother = newId(at)
+    const sister = newId(at)
+    const inviteId = newId(at)
+    const key = { key: randomBytes(32), kid: 'pg-chat-1' }
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, $4, $5, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    await db().query(insertAccount, [brother, 'chat-b@example.bf', 'Chat_B', 'brother', ['member']])
+    await db().query(insertAccount, [sister, 'chat-s@example.bf', 'Chat_S', 'sister', ['member']])
+    await db().query(`insert into "invite" ("id", "from_id", "to_id", "state", "created_at") values ($1, $2, $3, 'pending', $4)`, [inviteId, brother, sister, at.toISOString()])
+    let conversationId = ''
+    try {
+      const accepted = await getInviteStore().accept(inviteId, sister, at.toISOString(), at)
+      expect(accepted.ok).toBe(true)
+      conversationId = accepted.ok && accepted.conversation ? accepted.conversation.id : ''
+      expect(await getChatPort().conversationsForInvites([inviteId])).toHaveLength(1)
+
+      const store = getMessageStore()
+      const rows: StoredMessage[] = []
+      for (let index = 1; index <= 4; index += 1) {
+        const when = new Date(at.getTime() + index * 1000)
+        const id = newId(when)
+        const row: StoredMessage = {
+          id,
+          conversation_id: conversationId,
+          sender_id: index % 2 === 0 ? brother : sister,
+          kind: 'text',
+          state: 'delivered',
+          body: sealChatText(`Texte ${index}`, key, conversationId, id),
+          media_id: null,
+          created_at: when.toISOString(),
+        }
+        await store.insert(row)
+        rows.push(row)
+        const job = await getModerationPort().enqueueScan({ itemId: id, itemKind: 'message', accountId: row.sender_id, payload: { kind: 'text', text: `Texte ${index}` } })
+        expect(job.jobId).toEqual(expect.any(String))
+      }
+      // A second enqueue for the same message keeps one job.
+      await getModerationPort().enqueueScan({ itemId: rows[0]!.id, itemKind: 'message', accountId: sister, payload: { kind: 'text', text: 'Texte 1' } })
+
+      const stored = await db().query<{ state: string; body: Record<string, unknown> }>(
+        `select "state", "body" from "message" where "conversation_id" = $1 order by "id"`,
+        [conversationId],
+      )
+      expect(stored.rows.map((row) => row.state)).toEqual(['delivered', 'delivered', 'delivered', 'delivered'])
+      expect(Object.keys(stored.rows[0]?.body ?? {}).sort()).toEqual(['alg', 'ct', 'iv', 'kid', 'v'])
+      expect(JSON.stringify(stored.rows)).not.toContain('Texte')
+      expect(openChatText(stored.rows[2]?.body, key, conversationId, rows[2]!.id)).toBe('Texte 3')
+
+      const latest = await store.page(conversationId, {}, 2)
+      expect(latest.rows.map((row) => row.id)).toEqual([rows[2]!.id, rows[3]!.id])
+      expect(latest.hasMore).toBe(true)
+      const older = await store.page(conversationId, { before: rows[2]!.id }, 2)
+      expect(older).toMatchObject({ rows: [{ id: rows[0]!.id }, { id: rows[1]!.id }], hasMore: false })
+      const after = await store.page(conversationId, { after: rows[1]!.id }, 1)
+      expect(after).toMatchObject({ rows: [{ id: rows[2]!.id }], hasMore: true })
+      expect((await store.lastFor([conversationId])).get(conversationId)?.id).toBe(rows[3]!.id)
+
+      const jobs = await db().query<{ message_id: string; outcome: string | null }>(
+        `select "message_id", "outcome" from "moderation_job" where "message_id" = any($1::uuid[]) order by "message_id"`,
+        [rows.map((row) => row.id)],
+      )
+      expect(jobs.rows).toEqual(rows.map((row) => ({ message_id: row.id, outcome: null })))
+
+      // The schema allows only delivered, a known kind, an existing conversation, and known scan outcomes.
+      for (const [sqlText, values, code] of [
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body") values ($1, $2, $3, 'text', 'pending', '{}')`, [newId(at), conversationId, sister], '23514'],
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body") values ($1, $2, $3, 'text', 'held', '{}')`, [newId(at), conversationId, sister], '23514'],
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body") values ($1, $2, $3, 'gif', 'delivered', '{}')`, [newId(at), conversationId, sister], '23514'],
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body") values ($1, $2, $3, 'text', 'delivered', '{}')`, [newId(at), newId(at), sister], '23503'],
+        [`insert into "moderation_job" ("id", "message_id", "outcome") values ($1, $2, 'held')`, [newId(at), newId(at)], '23514'],
+        [`insert into "moderation_job" ("id") values ($1)`, [newId(at)], '23514'],
+      ] as const) {
+        let refused = false
+        try {
+          await db().query(sqlText, [...values])
+        } catch (error) {
+          refused = true
+          expect(postgresCode(error), sqlText).toBe(code)
+        }
+        expect(refused, sqlText).toBe(true)
+      }
+    } finally {
+      await db().query(`delete from "moderation_job" where "message_id" in (select "id" from "message" where "conversation_id" = $1)`, [conversationId || newId(at)])
+      await db().query(`delete from "message" where "conversation_id" = $1`, [conversationId || newId(at)])
+      await db().query(`delete from "conversation" where "invite_id" = $1`, [inviteId])
+      await db().query(`delete from "invite" where "id" = $1`, [inviteId])
+      await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, sister]])
       await closeAccountStore()
       if (previousDatabaseUrl === undefined) {
         delete process.env['DATABASE_URL']

@@ -1,3 +1,4 @@
+import { assertChatKeyBoot } from './chat-key.js'
 import { assertEmailBoot } from './email-port.js'
 import { installScanMetrics } from './otel-contract.js'
 import { assertRecaptchaBoot } from './recaptcha.js'
@@ -23,6 +24,7 @@ if (processRole() === 'worker') {
   // Only the api sends codes. The worker does not read the SMS settings.
   assertSmsBoot(process.env)
   assertStaffMfaBoot(process.env)
+  assertChatKeyBoot(process.env)
   const { createApp } = await import('./create-app.js')
   const { listenPort } = await import('./listen-port.js')
 

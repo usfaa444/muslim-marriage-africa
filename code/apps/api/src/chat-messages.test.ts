@@ -1,0 +1,769 @@
+import { createRequire } from 'node:module'
+import { randomBytes } from 'node:crypto'
+import { readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import type { AddressInfo } from 'node:net'
+import type { INestApplication } from '@nestjs/common'
+import { newId } from '@ankanu/kernel'
+import type { ModerationPort } from '@ankanu/ports'
+import { io as connectSocket, type Socket } from 'socket.io-client'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { memoryAccountStore, setAccountStore } from './account-store.js'
+import { setAuthClock } from './auth-clock.js'
+import { setAuthLimitReader } from './auth-limit.js'
+import { resetAuthRateWindow } from './auth-rate.js'
+import { setBillingPort } from './billing-port.js'
+import { setBrowseLimitReader } from './browse-rate.js'
+import { memoryChatPort, setChatPort } from './chat.js'
+import { openChatText, sealChatText, setChatKey } from './chat-key.js'
+import {
+  memoryMessageStore,
+  PREVIEW_MAX,
+  SCAN_ENQUEUE_WAIT_MS,
+  setMessageCapCheck,
+  setMessageStore,
+  TEXT_MAX,
+} from './chat-messages.js'
+import { createApp } from './create-app.js'
+import { memoryFavouriteStore, setFavouriteStore } from './favourites.js'
+import { memoryCaptureStore, setCaptureStore } from './id-liveness-store.js'
+import { setInvitesPort } from './invites-port.js'
+import { memoryInviteStore, setInviteConfigReader, setInviteStore, type InviteConfig } from './invites.js'
+import { setMediaClock, setSignedTtlReader } from './media.js'
+import { memoryMediaStore, setMediaStore } from './media-store.js'
+import { setMahramPort } from './mahram-port.js'
+import { memoryModerationPort, setModerationPort } from './moderation.js'
+import { same_quota_as_brothers } from './operator-config.js'
+import { memoryPhoneOtpStore, setPhoneOtpStore } from './phone-otp-store.js'
+import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
+import { resetPinEntries } from './pin-lock-state.js'
+import { setPhotoStrikeConfigReader } from './photo-strike.js'
+import { setFreeReviewSlaReader } from './profile-review.js'
+import { memoryProfileStore, setProfileStore } from './profile-store.js'
+import { SESSION_COOKIE } from './session-cookie.js'
+import { memorySessionStore, setSessionStore } from './session-store.js'
+
+const require = createRequire(import.meta.url)
+const { PNG } = require('pngjs') as {
+  PNG: {
+    new (options: { width: number; height: number }): { data: Buffer; width: number; height: number }
+    sync: { write(png: { data: Buffer; width: number; height: number }): Buffer }
+  }
+}
+
+const srcDir = fileURLToPath(new URL('.', import.meta.url))
+const memory = memoryAccountStore()
+const sessions = memorySessionStore(memory)
+const pins = memoryPinLockStore()
+const media = memoryMediaStore()
+const otp = memoryPhoneOtpStore()
+const favourites = memoryFavouriteStore()
+const invites = memoryInviteStore()
+const chat = memoryChatPort()
+const messages = memoryMessageStore()
+const moderation = memoryModerationPort()
+const captures = memoryCaptureStore({ accounts: memory.accounts, profiles: memory.profiles, phoneRows: [] })
+const chatKey = { key: randomBytes(32), kid: 'test-chat-1' }
+
+let now = new Date('2026-10-23T10:00:00.000Z')
+let serial = 0
+let billingCalls = 0
+const config: InviteConfig = { sisterReachMode: same_quota_as_brothers, freeCap: 50, premiumCap: null }
+
+/** The moderation adapter the send command sees; a test swaps it to simulate AI down or slow. */
+let moderationMode: 'ok' | 'throw' | 'hang' = 'ok'
+const switchingModeration: ModerationPort = {
+  async enqueueScan(input) {
+    if (moderationMode === 'throw') {
+      throw new Error('moderation vendor 503')
+    }
+    if (moderationMode === 'hang') {
+      return new Promise(() => undefined)
+    }
+    // The row must already be stored when moderation is called (persist first, AD-10).
+    expect(messages.rows.some((row) => row.id === input.itemId)).toBe(true)
+    return moderation.enqueueScan(input)
+  },
+}
+
+function samplePng(): Buffer {
+  const png = new PNG({ width: 8, height: 8 })
+  for (let index = 0; index < png.data.length; index += 4) {
+    png.data[index] = 40
+    png.data[index + 1] = 80
+    png.data[index + 2] = 120
+    png.data[index + 3] = 255
+  }
+  return PNG.sync.write(png)
+}
+
+type Member = { id: string; email: string; cookie: string }
+
+describe('Text Chat: delivered, then enqueue scan, realtime without a hold state (Stories 5.1, 5.2)', { timeout: 60_000 }, () => {
+  let app: INestApplication
+  let base: string
+  const png = samplePng()
+  const sockets: Socket[] = []
+
+  beforeAll(async () => {
+    setAuthClock(() => now)
+    setMediaClock(() => now)
+    setSignedTtlReader(async () => 60)
+    setPhotoStrikeConfigReader(async () => ({ count: '3', hours: '24' }))
+    setFreeReviewSlaReader(async () => 24)
+    setAuthLimitReader(async () => 1000)
+    setBrowseLimitReader(async () => 1000)
+    setMahramPort(undefined)
+    setBillingPort({
+      async isEntitled() {
+        billingCalls += 1
+        return false
+      },
+    })
+    setInviteConfigReader(async () => config)
+    setAccountStore(memory)
+    setSessionStore(sessions)
+    setProfileStore(memoryProfileStore(memory.accounts, memory.profiles))
+    setFavouriteStore(favourites)
+    setInviteStore(invites)
+    setChatPort(chat)
+    setMessageStore(messages)
+    setModerationPort(switchingModeration)
+    setChatKey(chatKey)
+    setInvitesPort(undefined)
+    setMediaStore(media)
+    setPhoneOtpStore(otp)
+    setCaptureStore(captures)
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
+    app = await createApp()
+    await app.listen(0, '127.0.0.1')
+    const address = app.getHttpServer().address() as AddressInfo | string | null
+    if (address === null || typeof address === 'string') {
+      throw new Error('expected the api test server to bind a TCP port')
+    }
+    base = `http://127.0.0.1:${address.port}`
+  })
+
+  beforeEach(() => {
+    for (const socket of sockets.splice(0)) {
+      socket.disconnect()
+    }
+    memory.accounts.length = 0
+    memory.credentials.length = 0
+    memory.profiles.length = 0
+    media.assets.length = 0
+    media.derivatives.length = 0
+    media.grants.length = 0
+    otp.rows.length = 0
+    captures.rows.length = 0
+    favourites.rows.length = 0
+    invites.rows.length = 0
+    invites.quota.length = 0
+    invites.sisterAcceptedAt.clear()
+    chat.conversations.length = 0
+    messages.rows.length = 0
+    moderation.jobs.length = 0
+    moderation.calls.length = 0
+    moderationMode = 'ok'
+    billingCalls = 0
+    setChatKey(chatKey)
+    setMessageCapCheck(undefined)
+    now = new Date('2026-10-23T10:00:00.000Z')
+    resetAuthRateWindow()
+  })
+
+  afterAll(async () => {
+    for (const socket of sockets.splice(0)) {
+      socket.disconnect()
+    }
+    setAuthClock(undefined)
+    setMediaClock(undefined)
+    setSignedTtlReader(undefined)
+    setPhotoStrikeConfigReader(undefined)
+    setFreeReviewSlaReader(undefined)
+    setAuthLimitReader(undefined)
+    setBrowseLimitReader(undefined)
+    setMahramPort(undefined)
+    setBillingPort(undefined)
+    setInviteConfigReader(undefined)
+    setInviteStore(undefined)
+    setChatPort(undefined)
+    setMessageStore(undefined)
+    setModerationPort(undefined)
+    setMessageCapCheck(undefined)
+    setChatKey(undefined)
+    setInvitesPort(undefined)
+    setPhoneOtpStore(undefined)
+    setCaptureStore(undefined)
+    resetAuthRateWindow()
+    setAccountStore(undefined)
+    setSessionStore(undefined)
+    setProfileStore(undefined)
+    setFavouriteStore(undefined)
+    setMediaStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
+    if (app) {
+      await app.close()
+    }
+  })
+
+  function call(path: string, cookie: string | undefined, method = 'GET', body?: unknown): Promise<Response> {
+    const headers: Record<string, string> = {}
+    if (cookie) {
+      headers.cookie = cookie
+    }
+    if (body !== undefined) {
+      headers['content-type'] = 'application/json'
+    }
+    const init: RequestInit = { method, headers }
+    if (body !== undefined) {
+      init.body = JSON.stringify(body)
+    }
+    return fetch(`${base}${path}`, init)
+  }
+
+  async function member(gender: 'sister' | 'brother'): Promise<Member> {
+    serial += 1
+    const email = `chat${serial}@example.bf`
+    const created = await call('/v1/accounts', undefined, 'POST', {
+      email,
+      password: 'phrase avec espaces',
+      pseudonym: `Chat_${serial}`,
+      gender,
+      pledge_accepted: true,
+      civil_given_name: 'Awa',
+      civil_family_name: 'Sawadogo',
+      recaptcha_token: 'test-ok',
+      coc_version: 'FR-089',
+      dob: '1990-01-15',
+    })
+    expect(created.status).toBe(201)
+    const id = ((await created.json()) as { id: string }).id
+    const session = await call('/v1/sessions', undefined, 'POST', {
+      identifier: email,
+      password: 'phrase avec espaces',
+      remember_me: false,
+      recaptcha_token: 'test-ok',
+    })
+    expect(session.status).toBe(201)
+    const match = new RegExp(`${SESSION_COOKIE}=([^;]+)`).exec(session.headers.getSetCookie().join('\n'))
+    const cookie = `${SESSION_COOKIE}=${match?.[1] ?? ''}`
+    const saved = await call('/v1/me/profile', cookie, 'PUT', {
+      dob: '1990-01-15',
+      city: 'ouagadougou',
+      country: 'BF',
+      profession: 'ingenierie',
+      marital_status: 'single',
+      polygamy_intent: 'no',
+      madhhab: 'maliki',
+      practice: 'assidue',
+      life_plans: 'tf:6months\nUnion stable',
+    })
+    expect(saved.status).toBe(200)
+    const profile = memory.profiles.find((item) => item.account_id === id)
+    if (profile) {
+      profile.visibility = 'public'
+    }
+    const posted = await call('/v1/media', cookie, 'POST', { kind: 'profile_photo', image: png.toString('base64') })
+    expect(posted.status).toBe(201)
+    const assetId = ((await posted.json()) as { id: string }).id
+    const asset = media.assets.find((row) => row.id === assetId)
+    if (asset) {
+      asset.moderation_state = 'live'
+      asset.is_main = true
+    }
+    return { id, email, cookie }
+  }
+
+  /** Brother invites, Sister accepts: one conversation between them. */
+  async function connected(): Promise<{ brother: Member; sister: Member; conversationId: string }> {
+    const brother = await member('brother')
+    const sister = await member('sister')
+    now = new Date(now.getTime() + 1000)
+    const sent = await call('/v1/invites', brother.cookie, 'POST', { to_id: sister.id })
+    expect(sent.status).toBe(201)
+    const inviteId = ((await sent.json()) as { invite: { id: string } }).invite.id
+    const accepted = await call(`/v1/invites/${inviteId}/accept`, sister.cookie, 'POST')
+    expect(accepted.status).toBe(200)
+    const conversationId = ((await accepted.json()) as { conversation: { id: string } }).conversation.id
+    billingCalls = 0
+    return { brother, sister, conversationId }
+  }
+
+  function sendText(who: Member, conversationId: string, text: unknown, kind: unknown = 'text'): Promise<Response> {
+    now = new Date(now.getTime() + 1000)
+    return call(`/v1/conversations/${conversationId}/messages`, who.cookie, 'POST', { kind, text })
+  }
+
+  type Item = { id: string; sender_id: string; mine: boolean; kind: string; state: string; text: string | null; created_at: string }
+
+  async function page(who: Member, conversationId: string, query = ''): Promise<{ items: Item[]; has_more: boolean }> {
+    const listed = await call(`/v1/conversations/${conversationId}/messages${query}`, who.cookie)
+    expect(listed.status).toBe(200)
+    expect(listed.headers.get('cache-control')).toBe('no-store')
+    return (await listed.json()) as { items: Item[]; has_more: boolean }
+  }
+
+  function socketFor(who: Member | undefined, origin?: string): Socket {
+    const extraHeaders: Record<string, string> = {}
+    if (who) {
+      extraHeaders['cookie'] = who.cookie
+    }
+    if (origin) {
+      extraHeaders['origin'] = origin
+    }
+    const socket = connectSocket(base, {
+      path: '/v1/realtime',
+      addTrailingSlash: false,
+      transports: ['websocket'],
+      extraHeaders,
+      reconnection: false,
+      forceNew: true,
+    })
+    sockets.push(socket)
+    return socket
+  }
+
+  function connectedSocket(who: Member): Promise<Socket> {
+    const socket = socketFor(who)
+    return new Promise((resolve, reject) => {
+      socket.once('connect', () => resolve(socket))
+      socket.once('connect_error', (error) => reject(error))
+    })
+  }
+
+  function refusedWith(socket: Socket): Promise<string> {
+    return new Promise((resolve, reject) => {
+      socket.once('connect', () => reject(new Error('expected a refused handshake')))
+      socket.once('connect_error', (error: Error & { data?: { code?: string } }) => resolve(error.data?.code ?? error.message))
+    })
+  }
+
+  function nextEvent<T>(socket: Socket, name: string, timeoutMs = 2000): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`no ${name} within ${timeoutMs} ms`)), timeoutMs)
+      socket.once(name, (payload: T) => {
+        clearTimeout(timer)
+        resolve(payload)
+      })
+    })
+  }
+
+  function noEvent(socket: Socket, name: string, waitMs = 600): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const onEvent = () => reject(new Error(`unexpected ${name}`))
+      socket.once(name, onEvent)
+      setTimeout(() => {
+        socket.off(name, onEvent)
+        resolve()
+      }, waitMs)
+    })
+  }
+
+  it('AC 5.2-1: a sent text is stored delivered as ciphertext, the recipient reads it at once, and the scan is enqueued after persist', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const started = Date.now()
+    const sent = await sendText(sister, conversationId, '  As-salāmu ʿalaykum, je vous remercie.  ')
+    const ackMs = Date.now() - started
+    expect(sent.status).toBe(201)
+    expect(sent.headers.get('cache-control')).toBe('no-store')
+    const body = (await sent.json()) as { message: Item & { conversation_id: string } }
+    expect(body).toEqual({
+      message: {
+        id: expect.any(String),
+        conversation_id: conversationId,
+        sender_id: sister.id,
+        mine: true,
+        kind: 'text',
+        state: 'delivered',
+        text: 'As-salāmu ʿalaykum, je vous remercie.',
+        created_at: expect.any(String),
+      },
+    })
+    // NFR-005: send-text acknowledgement ≤ 2 s (measured here without network latency).
+    expect(ackMs).toBeLessThan(2000)
+
+    // Stored: state delivered, body a ciphertext envelope only.
+    expect(messages.rows).toHaveLength(1)
+    const row = messages.rows[0]
+    expect(row).toMatchObject({ id: body.message.id, conversation_id: conversationId, sender_id: sister.id, kind: 'text', state: 'delivered', media_id: null })
+    expect(Object.keys(row?.body ?? {}).sort()).toEqual(['alg', 'ct', 'iv', 'kid', 'v'])
+    expect(row?.body).toMatchObject({ v: 1, alg: 'A256GCM', kid: 'test-chat-1' })
+    expect(JSON.stringify(row)).not.toContain('remercie')
+
+    // The recipient sees it now, with no extra state or flag.
+    const theirs = await page(brother, conversationId)
+    expect(theirs).toEqual({
+      items: [{ ...body.message, mine: false }],
+      has_more: false,
+    })
+
+    // Then exactly one scan job, keyed by the message, with the decrypted text handed over by Chat.
+    expect(moderation.calls).toEqual([
+      { itemId: body.message.id, itemKind: 'message', accountId: sister.id, payload: { kind: 'text', text: 'As-salāmu ʿalaykum, je vous remercie.' } },
+    ])
+    expect(moderation.jobs).toEqual([{ id: expect.any(String), message_id: body.message.id, asset_id: null, flash_id: null, outcome: null }])
+
+    // No BillingPort and no message quota in this story (AC 5.2-1 « Premium does not increment message_quota »).
+    expect(billingCalls).toBe(0)
+  })
+
+  it('AC 5.1-3: every created message is delivered; no member-facing pending, held or verification state exists', async () => {
+    const { brother, sister, conversationId } = await connected()
+    for (const [who, text] of [[sister, 'Un'], [brother, 'Deux'], [sister, 'Trois']] as const) {
+      expect((await sendText(who, conversationId, text)).status).toBe(201)
+    }
+    expect(new Set(messages.rows.map((row) => row.state))).toEqual(new Set(['delivered']))
+    const raw = JSON.stringify([await page(sister, conversationId), await (await call('/v1/conversations', sister.cookie)).json()])
+    expect(raw).not.toMatch(/pending|held|hold|scan|moderation|vérification/i)
+
+    const sql = readFileSync(join(srcDir, '..', 'drizzle', '0023_message.sql'), 'utf8')
+    expect(sql).toContain(`CONSTRAINT "message_state_check" CHECK ("message"."state" = 'delivered')`)
+  })
+
+  it('AC 5.2-3: when AI is down or slow the send still acknowledges, and nothing else changes', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const writes: string[] = []
+    const original = process.stderr.write.bind(process.stderr)
+    process.stderr.write = ((chunk: string | Uint8Array) => {
+      writes.push(String(chunk))
+      return true
+    }) as typeof process.stderr.write
+    try {
+      moderationMode = 'throw'
+      const thrown = await sendText(sister, conversationId, 'Le service est-il disponible ?')
+      expect(thrown.status).toBe(201)
+
+      moderationMode = 'hang'
+      const started = Date.now()
+      const slow = await sendText(brother, conversationId, 'Oui, merci.')
+      const ackMs = Date.now() - started
+      expect(slow.status).toBe(201)
+      expect(ackMs).toBeLessThan(SCAN_ENQUEUE_WAIT_MS + 1000)
+      expect(ackMs).toBeLessThan(2000)
+    } finally {
+      process.stderr.write = original
+    }
+    expect(messages.rows.map((row) => row.state)).toEqual(['delivered', 'delivered'])
+    expect((await page(brother, conversationId)).items.map((item) => item.text)).toEqual(['Le service est-il disponible ?', 'Oui, merci.'])
+    // The log line carries the message id only, never the text.
+    const logged = writes.filter((line) => line.startsWith('chat scan_enqueue_failed'))
+    expect(logged).toEqual(messages.rows.map((row) => `chat scan_enqueue_failed message=${row.id}\n`))
+    expect(logged.join('')).not.toMatch(/disponible|merci/)
+    expect(moderation.jobs).toHaveLength(0)
+  })
+
+  it('AC 5.2-2 seam (deferred to Story 5.11): a refusing cap check stores nothing and enqueues nothing; today it always allows', async () => {
+    const { sister, conversationId } = await connected()
+    setMessageCapCheck(async () => ({ allowed: false, cap: 10, resets_at: '2026-10-24T00:00:00.000Z' }))
+    const refused = await sendText(sister, conversationId, 'Au-delà du plafond')
+    expect(refused.status).toBe(429)
+    expect(await refused.json()).toMatchObject({ error: { code: 'MESSAGE_CAP_EXCEEDED', details: { cap: 10 } } })
+    expect(messages.rows).toHaveLength(0)
+    expect(moderation.calls).toHaveLength(0)
+
+    setMessageCapCheck(undefined)
+    for (let index = 0; index < 12; index += 1) {
+      expect((await sendText(sister, conversationId, `Message ${index}`)).status).toBe(201)
+    }
+    expect(billingCalls).toBe(0)
+  })
+
+  it('validates kind and text, and writes nothing on a refusal', async () => {
+    const { sister, conversationId } = await connected()
+    const cases: Array<[unknown, unknown, string, Record<string, unknown>]> = [
+      ['photo', 'x', 'kind : valeur non reconnue.', { field: 'kind' }],
+      [null, 'x', 'kind : valeur non reconnue.', { field: 'kind' }],
+      ['text', '   ', 'Écrivez un message.', { field: 'text' }],
+      ['text', 42, 'Écrivez un message.', { field: 'text' }],
+      ['text', 'é'.repeat(TEXT_MAX + 1), 'Message trop long (2000 caractères au plus).', { field: 'text', max: TEXT_MAX }],
+    ]
+    for (const [kind, text, message, details] of cases) {
+      const response = await sendText(sister, conversationId, text, kind)
+      expect(response.status).toBe(400)
+      expect(await response.json()).toMatchObject({ error: { code: 'UNHANDLED', message, details } })
+    }
+    expect(messages.rows).toHaveLength(0)
+    expect(moderation.calls).toHaveLength(0)
+    expect((await sendText(sister, conversationId, 'é'.repeat(TEXT_MAX))).status).toBe(201)
+  })
+
+  it('participants only: no session, staff, mahram, another member and malformed ids are refused on every route and socket', async () => {
+    const { sister, conversationId } = await connected()
+    const stranger = await member('brother')
+    const paths = [`/v1/conversations/${conversationId}`, `/v1/conversations/${conversationId}/messages`]
+
+    for (const path of paths) {
+      expect((await call(path, undefined)).status).toBe(401)
+      const foreign = await call(path, stranger.cookie)
+      expect(foreign.status).toBe(404)
+      expect(await foreign.json()).toMatchObject({ error: { code: 'NOT_FOUND', message: "Cette discussion n'existe pas.", details: null } })
+    }
+    expect((await call(`/v1/conversations/${conversationId}/messages`, undefined, 'POST', { kind: 'text', text: 'x' })).status).toBe(401)
+    const foreignSend = await sendText(stranger, conversationId, 'Intrusion')
+    expect(foreignSend.status).toBe(404)
+    for (const bad of ['not-a-uuid', newId(now), '00000000-0000-0000-0000-000000000000']) {
+      expect((await call(`/v1/conversations/${bad}`, sister.cookie)).status).toBe(404)
+      expect((await sendText(sister, bad, 'x')).status).toBe(404)
+    }
+    const strangerList = (await (await call('/v1/conversations', stranger.cookie)).json()) as { count: number }
+    expect(strangerList.count).toBe(0)
+
+    const account = memory.accounts.find((item) => item.id === sister.id) as { roles: string[] }
+    for (const [roles, reason] of [[['moderator'], 'staff_session'], [['mahram'], 'mahram_session']] as const) {
+      account.roles = [...roles]
+      for (const path of paths) {
+        const refused = await call(path, sister.cookie)
+        expect(refused.status).toBe(403)
+        expect(await refused.json()).toMatchObject({ error: { code: 'FORBIDDEN', details: { reason } } })
+      }
+      expect((await sendText(sister, conversationId, 'x')).status).toBe(403)
+      expect(await refusedWith(socketFor(sister))).toBe('FORBIDDEN')
+    }
+    account.roles = ['member']
+    expect(messages.rows).toHaveLength(0)
+    expect(await refusedWith(socketFor(undefined))).toBe('UNAUTHENTICATED')
+    expect(billingCalls).toBe(0)
+  })
+
+  it('a pending Invite has no thread; a closed conversation or an unavailable member refuses the send', async () => {
+    const brother = await member('brother')
+    const sister = await member('sister')
+    now = new Date(now.getTime() + 1000)
+    expect((await call('/v1/invites', brother.cookie, 'POST', { to_id: sister.id })).status).toBe(201)
+    expect(((await (await call('/v1/conversations', brother.cookie)).json()) as { count: number }).count).toBe(0)
+
+    const pair = await connected()
+    const row = chat.conversations.find((item) => item.id === pair.conversationId)
+    if (row) {
+      row.ended_at = '2026-10-23T09:00:00.000Z'
+    }
+    const closed = await sendText(pair.sister, pair.conversationId, 'Encore là ?')
+    expect(closed.status).toBe(409)
+    expect(await closed.json()).toMatchObject({ error: { message: 'Cette discussion est fermée.', details: { reason: 'conversation_closed' } } })
+    if (row) {
+      row.ended_at = null
+    }
+    const other = memory.accounts.find((item) => item.id === pair.brother.id) as { status: string }
+    other.status = 'Suspended'
+    const gone = await sendText(pair.sister, pair.conversationId, 'Encore là ?')
+    expect(gone.status).toBe(409)
+    expect(await gone.json()).toMatchObject({ error: { message: "Ce profil n'est plus disponible.", details: { reason: 'other_unavailable' } } })
+    const thread = (await (await call(`/v1/conversations/${pair.conversationId}`, pair.sister.cookie)).json()) as {
+      conversation: { other: { available: boolean } }
+    }
+    expect(thread.conversation.other).toEqual({ available: false })
+    other.status = 'Active'
+    expect(messages.rows).toHaveLength(0)
+  })
+
+  it('without CHAT_KEY a send is 503 and stores nothing; a moved or foreign envelope never decrypts', async () => {
+    const { sister, conversationId } = await connected()
+    setChatKey(null)
+    const refused = await sendText(sister, conversationId, 'Sans clé')
+    expect(refused.status).toBe(503)
+    expect(await refused.json()).toMatchObject({
+      error: { code: 'UNHANDLED', message: 'Envoi indisponible pour le moment. Réessayez plus tard.', retryable: true },
+    })
+    expect(messages.rows).toHaveLength(0)
+    expect(moderation.calls).toHaveLength(0)
+
+    const sealed = sealChatText('secret', chatKey, conversationId, 'message-a')
+    expect(openChatText(sealed, chatKey, conversationId, 'message-a')).toBe('secret')
+    expect(openChatText(sealed, chatKey, conversationId, 'message-b')).toBeNull()
+    expect(openChatText(sealed, { key: randomBytes(32), kid: 'test-chat-1' }, conversationId, 'message-a')).toBeNull()
+    expect(openChatText(sealed, { ...chatKey, kid: 'other' }, conversationId, 'message-a')).toBeNull()
+    expect(openChatText(sealed, null, conversationId, 'message-a')).toBeNull()
+  })
+
+  it('AC 5.1-1: the Discussions list and the thread show the other member blurred, the last message and no hold badge', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const empty = (await (await call('/v1/conversations', sister.cookie)).json()) as { items: Array<Record<string, unknown>> }
+    expect(empty.items).toEqual([
+      {
+        id: conversationId,
+        invite_id: expect.any(String),
+        stage: 'chat',
+        other_id: brother.id,
+        pseudonym: expect.stringMatching(/^Chat_/),
+        other: { available: true, age: expect.any(Number), city: 'ouagadougou', verified: false, photo: { id: expect.any(String), url: expect.stringMatching(/^\/v1\/media\/get\?token=/) } },
+        last_message: null,
+      },
+    ])
+    const firstOther = empty.items[0]?.['other'] as { photo: { url: string } } | undefined
+    const token = new URL(firstOther?.photo.url ?? '', 'http://x').searchParams.get('token')
+    expect(media.grants.find((row) => row.id === token)).toMatchObject({ viewer_id: sister.id, derivative: 'blur' })
+
+    const long = `Bonjour ${'très '.repeat(60)}`
+    expect((await sendText(brother, conversationId, long)).status).toBe(201)
+    const listed = (await (await call('/v1/conversations', sister.cookie)).json()) as {
+      items: Array<{ last_message: { mine: boolean; preview: string; kind: string } }>
+    }
+    expect(listed.items[0]?.last_message).toMatchObject({ mine: false, kind: 'text' })
+    expect([...(listed.items[0]?.last_message.preview ?? '')].length).toBe(PREVIEW_MAX)
+    expect(listed.items[0]?.last_message.preview.endsWith('…')).toBe(true)
+    const mineList = (await (await call('/v1/conversations', brother.cookie)).json()) as { items: Array<{ last_message: { mine: boolean } }> }
+    expect(mineList.items[0]?.last_message.mine).toBe(true)
+
+    const thread = await call(`/v1/conversations/${conversationId}`, sister.cookie)
+    expect(thread.status).toBe(200)
+    expect(await thread.json()).toEqual({
+      conversation: { id: conversationId, stage: 'chat', other_id: brother.id, pseudonym: expect.any(String), other: expect.objectContaining({ available: true }) },
+      me: { id: sister.id },
+    })
+    expect(billingCalls).toBe(0)
+  })
+
+  it('orders Discussions by latest activity and pages messages with before, after and limit', async () => {
+    const first = await connected()
+    const second = await connected()
+    expect((await sendText(first.sister, first.conversationId, 'Plus récent')).status).toBe(201)
+    // first.conversation now has the latest activity although second was opened later.
+    const brotherTwo = second.brother
+    const ids = ((await (await call('/v1/conversations', brotherTwo.cookie)).json()) as { items: Array<{ id: string }> }).items.map((item) => item.id)
+    expect(ids).toEqual([second.conversationId])
+
+    for (let index = 1; index <= 5; index += 1) {
+      expect((await sendText(second.sister, second.conversationId, `M${index}`)).status).toBe(201)
+    }
+    const latest = await page(second.brother, second.conversationId, '?limit=2')
+    expect(latest.items.map((item) => item.text)).toEqual(['M4', 'M5'])
+    expect(latest.has_more).toBe(true)
+    const older = await page(second.brother, second.conversationId, `?limit=2&before=${latest.items[0]?.id}`)
+    expect(older.items.map((item) => item.text)).toEqual(['M2', 'M3'])
+    const oldest = await page(second.brother, second.conversationId, `?limit=2&before=${older.items[0]?.id}`)
+    expect(oldest).toMatchObject({ items: [expect.objectContaining({ text: 'M1' })], has_more: false })
+    const after = await page(second.brother, second.conversationId, `?after=${older.items[1]?.id}`)
+    expect(after.items.map((item) => item.text)).toEqual(['M4', 'M5'])
+    expect(after.has_more).toBe(false)
+
+    for (const query of ['?limit=0', '?limit=51', '?limit=abc', '?before=nope', '?after=nope', `?before=${latest.items[0]?.id}&after=${latest.items[0]?.id}`]) {
+      const bad = await call(`/v1/conversations/${second.conversationId}/messages${query}`, second.brother.cookie)
+      expect(bad.status, query).toBe(400)
+    }
+  })
+
+  it('AC 5.2-1 realtime: the recipient gets message.delivered with ids only, at persist, before any scan', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const herSocket = await connectedSocket(sister)
+    const hisSocket = await connectedSocket(brother)
+    const stranger = await member('brother')
+    const strangerSocket = await connectedSocket(stranger)
+    moderationMode = 'hang'
+    const arrived = nextEvent<Record<string, unknown>>(hisSocket, 'message.delivered')
+    const echoed = nextEvent<Record<string, unknown>>(herSocket, 'message.delivered')
+    const quiet = noEvent(strangerSocket, 'message.delivered')
+    const started = Date.now()
+    const sending = sendText(sister, conversationId, 'Le texte ne voyage pas dans l’événement.')
+    const event = await arrived
+    // The event is emitted at persist, while the scan enqueue is still hanging.
+    expect(Date.now() - started).toBeLessThan(SCAN_ENQUEUE_WAIT_MS)
+    expect(Object.keys(event).sort()).toEqual(['conversation_id', 'message_id', 'sender_id'])
+    expect(event).toEqual({ conversation_id: conversationId, message_id: messages.rows[0]?.id, sender_id: sister.id })
+    expect(await echoed).toEqual(event)
+    expect((await sending).status).toBe(201)
+    await quiet
+  })
+
+  it('AC 5.1-2: typing reaches the other member within 2 s, only the other member, at most once a second', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const herSocket = await connectedSocket(sister)
+    const hisSocket = await connectedSocket(brother)
+    const stranger = await member('sister')
+    const strangerSocket = await connectedSocket(stranger)
+
+    const seen = nextEvent<Record<string, unknown>>(hisSocket, 'conversation.typing', 2000)
+    const notEchoed = noEvent(herSocket, 'conversation.typing')
+    const notLeaked = noEvent(strangerSocket, 'conversation.typing')
+    const started = Date.now()
+    herSocket.emit('conversation.typing', { conversation_id: conversationId })
+    expect(await seen).toEqual({ conversation_id: conversationId, account_id: sister.id })
+    expect(Date.now() - started).toBeLessThan(2000)
+    await Promise.all([notEchoed, notLeaked])
+
+    // Within a second a second signal is not relayed.
+    const throttled = noEvent(hisSocket, 'conversation.typing', 500)
+    herSocket.emit('conversation.typing', { conversation_id: conversationId })
+    await throttled
+
+    // A non-participant's typing reaches nobody.
+    const blocked = noEvent(hisSocket, 'conversation.typing')
+    strangerSocket.emit('conversation.typing', { conversation_id: conversationId })
+    await blocked
+    expect(billingCalls).toBe(0)
+  })
+
+  it('refuses a socket from another origin, without a session, or behind a PIN lock', async () => {
+    const { sister } = await connected()
+    const previous = process.env['ANKANU_ALLOWED_ORIGINS']
+    process.env['ANKANU_ALLOWED_ORIGINS'] = 'http://localhost:4012'
+    try {
+      const foreign = socketFor(sister, 'https://evil.example')
+      await expect(refusedWith(foreign)).resolves.toBeTruthy()
+      const same = await connectedSocket(sister)
+      expect(same.connected).toBe(true)
+    } finally {
+      if (previous === undefined) {
+        delete process.env['ANKANU_ALLOWED_ORIGINS']
+      } else {
+        process.env['ANKANU_ALLOWED_ORIGINS'] = previous
+      }
+    }
+    expect(await refusedWith(socketFor({ id: '', email: '', cookie: `${SESSION_COOKIE}=unknown` }))).toBe('UNAUTHENTICATED')
+
+    // A shared-device PIN that this session has not unlocked: the handshake stops like an HTTP call would.
+    pins.rows.push({ id: newId(now), account_id: sister.id, pin_hash: 'not-a-real-hash' })
+    resetPinEntries()
+    try {
+      expect(await refusedWith(socketFor(sister))).toBe('PIN_REQUIRED')
+      expect((await call('/v1/conversations', sister.cookie)).status).toBe(401)
+    } finally {
+      pins.rows.length = 0
+      resetPinEntries()
+    }
+  })
+
+  it('serves the Socket.IO client script on the realtime path', async () => {
+    const script = await fetch(`${base}/v1/realtime/socket.io.min.js`)
+    expect(script.status).toBe(200)
+    expect(script.headers.get('content-type')).toMatch(/javascript/)
+    expect((await script.text()).length).toBeGreaterThan(1000)
+    // The polling transport answers without a trailing slash, the only form the web's Next rewrite passes unchanged.
+    const polling = await fetch(`${base}/v1/realtime?EIO=4&transport=polling`)
+    expect(polling.status).toBe(200)
+    expect(await polling.text()).toMatch(/^0\{"sid":/)
+  })
+})
+
+describe('chat and moderation boundaries (AD-10, AD-21, AD-15)', () => {
+  const sources = readdirSync(srcDir).filter((name) => name.endsWith('.ts') && !name.endsWith('.test.ts'))
+
+  it('only moderation.ts inserts moderation_job, and moderation never reads message', () => {
+    const writers = sources.filter((name) => /\.insert\(\s*moderationJob\b/.test(readFileSync(join(srcDir, name), 'utf8')))
+    expect(writers).toEqual(['moderation.ts'])
+    expect(readFileSync(join(srcDir, 'moderation.ts'), 'utf8')).not.toMatch(/\bmessage\b\s*[,}]|from\(\s*message\b|chat-messages/)
+  })
+
+  it('only chat-messages.ts inserts message', () => {
+    const writers = sources.filter((name) => /\.insert\(\s*message\b/.test(readFileSync(join(srcDir, name), 'utf8')))
+    expect(writers).toEqual(['chat-messages.ts'])
+  })
+
+  it('chat routes, send, typing and the socket never reach BillingPort in this story', () => {
+    for (const name of ['chat.ts', 'chat-messages.ts', 'chat-realtime.ts', 'conversations.controller.ts', 'moderation.ts']) {
+      expect(readFileSync(join(srcDir, name), 'utf8'), name).not.toMatch(/billing-port|isEntitled|getBillingPort/)
+    }
+  })
+
+  it('no pending, held or blocked Chat event or state exists in the chat sources', () => {
+    for (const name of ['chat-messages.ts', 'chat-realtime.ts']) {
+      const source = readFileSync(join(srcDir, name), 'utf8')
+      expect(source, name).not.toMatch(/'message\.(pending|held|blocked)'|state: '(pending|held)'/)
+      expect(source, name).not.toMatch(/En cours de vérification/)
+    }
+  })
+})

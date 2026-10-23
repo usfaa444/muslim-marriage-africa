@@ -459,8 +459,9 @@ describe('Invite inbox, accept and quiet decline (Stories 4.4, 4.5)', { timeout:
     expect(chat.conversations).toHaveLength(1)
 
     // Either member now finds the thread (FR-041) and the Accepted box links it.
-    expect(await threads(sister)).toEqual([{ id: body.conversation.id, invite_id: id, stage: 'chat', other_id: brother.id }])
-    expect(await threads(brother)).toEqual([{ id: body.conversation.id, invite_id: id, stage: 'chat', other_id: sister.id }])
+    // Stories 5.1/5.2 added the other member and the last message to each item.
+    expect(await threads(sister)).toEqual([expect.objectContaining({ id: body.conversation.id, invite_id: id, stage: 'chat', other_id: brother.id })])
+    expect(await threads(brother)).toEqual([expect.objectContaining({ id: body.conversation.id, invite_id: id, stage: 'chat', other_id: sister.id })])
     expect(await box(sister, 'accepted')).toEqual([
       expect.objectContaining({ id, direction: 'received', state: 'accepted', conversation_id: body.conversation.id }),
     ])
