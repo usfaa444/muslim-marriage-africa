@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 import { chromium } from '@playwright/test'
 import { describe, expect, it } from 'vitest'
 import { discoverHtml } from './discover-page.js'
-import { memberSectionHtml } from './member-section-page.js'
+import { inviteInboxHtml } from './invite-inbox-page.js'
 import { authHtml, settingsHtml } from './v2-pages.js'
 
 // Story discover-app-shell, AC 1, 4, 6, 7: in a real browser, switching Discover views leaves every piece of chrome
@@ -87,7 +87,7 @@ describe('app shell in a browser', () => {
     const pages: Record<string, string> = {
       '/decouvrir': discoverHtml(stitch('57-discover'), stitch('57-discover', 'grid.html'), ACCOUNT),
       '/settings': settingsHtml(stitch('27-settings')),
-      '/invitations': memberSectionHtml(stitch('57-discover'), 'invitations'),
+      '/invitations': inviteInboxHtml(stitch('19-invite-inbox')),
       '/auth': authHtml(stitch('02-auth'), 'login', ''),
     }
     const server: Server = createServer((request, response) => {
@@ -97,6 +97,23 @@ describe('app shell in a browser', () => {
         const grid = url.searchParams.get('view') === 'grid'
         const items = ['1', '2', '3'].map((n) => item(`01990000-0000-7000-8000-00000000000${n}`, `Membre_${n}`))
         response.end(JSON.stringify(grid ? { view: 'grid', next_cursor: null, items } : { view: 'card', item: { ...items[0], sharedTraits: [] } }))
+        return
+      }
+      if (url.pathname === '/v1/invites') {
+        // Stories 4.4, 4.5: one long-named row per box, so the width sweep covers real inbox rows.
+        response.setHeader('content-type', 'application/json; charset=utf-8')
+        const box = url.searchParams.get('box') ?? 'received'
+        const row = {
+          id: '01990000-0000-7000-8000-0000000000a1',
+          state: box === 'accepted' ? 'accepted' : 'pending',
+          created_at: '2026-10-23T10:00:00.000Z',
+          direction: box === 'sent' ? 'sent' : 'received',
+          other_id: '01990000-0000-7000-8000-000000000001',
+          pseudonym: 'Abdoul_Rahmane_Ouedraogo_Bobo',
+          conversation_id: box === 'accepted' ? '01990000-0000-7000-8000-0000000000c1' : null,
+          other: { available: true, age: 34, city: 'fada', marital_status: 'married', polygamy_intent: 'yes', verified: true, photo: null },
+        }
+        response.end(JSON.stringify({ box, count: 1, items: [row] }))
         return
       }
       if (url.pathname.startsWith('/v1/')) {

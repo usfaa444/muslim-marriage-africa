@@ -295,7 +295,18 @@ describe('send an Invite and the daily Invite quota (Stories 4.1, 4.2)', { timeo
       box: 'received',
       count: 1,
       items: [
-        { id: body.invite.id, state: 'pending', created_at: now.toISOString(), from_id: brother.id, pseudonym: expect.stringMatching(/^Inv_/) },
+        {
+          id: body.invite.id,
+          state: 'pending',
+          created_at: now.toISOString(),
+          from_id: brother.id,
+          pseudonym: expect.stringMatching(/^Inv_/),
+          // Story 4.4 grows each row with the inbox fields; the 4.1 fields above are unchanged.
+          direction: 'received',
+          other_id: brother.id,
+          conversation_id: null,
+          other: expect.objectContaining({ available: true, marital_status: 'single', polygamy_intent: 'no' }),
+        },
       ],
     })
     const byDefault = (await (await call('/v1/invites', sister.cookie)).json()) as { box: string; count: number }

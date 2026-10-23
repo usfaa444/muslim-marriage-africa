@@ -62,3 +62,21 @@ export type BillingAnswer = boolean | 'unavailable'
 export type BillingPort = {
   isEntitled(accountId: string): Promise<BillingAnswer>
 }
+
+export type ConversationStage = 'invite' | 'chat' | 'meeting' | 'married'
+
+export type OpenedConversation = {
+  id: string
+  invite_id: string
+  stage: ConversationStage
+}
+
+/**
+ * Chat owns `conversation` (AD-23). `openFromInvite` is the only insert: invites call it inside the accept
+ * transaction (`tx`), after Sister consent. A second call for the same invite returns the existing conversation.
+ * It never calls BillingPort and never touches `message_quota`.
+ */
+export type ChatPort = {
+  openFromInvite(tx: unknown, input: { inviteId: string; now: Date }): Promise<OpenedConversation>
+  conversationsForInvites(inviteIds: readonly string[]): Promise<OpenedConversation[]>
+}

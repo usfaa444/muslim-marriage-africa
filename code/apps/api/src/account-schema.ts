@@ -449,6 +449,28 @@ export const inviteQuota = pgTable(
   ],
 )
 
+/**
+ * Chat-owned conversation (Story 4.5). Inserted only by `ChatPort.openFromInvite` after Sister consent (AD-23), so at
+ * most one per invite. `stage` is the Ta'aruf stage (not a table). `flash_id` stays null until Message Flash (4.3).
+ */
+export const conversation = pgTable(
+  'conversation',
+  {
+    id: uuid('id').primaryKey(),
+    invite_id: uuid('invite_id')
+      .notNull()
+      .references(() => invite.id),
+    stage: text('stage').notNull(),
+    paused_by: uuid('paused_by').references(() => account.id),
+    ended_at: timestamp('ended_at', { withTimezone: true, mode: 'string' }),
+    flash_id: uuid('flash_id'),
+  },
+  (table) => [
+    check('conversation_stage_check', sql`${table.stage} in ('invite', 'chat', 'meeting', 'married')`),
+    uniqueIndex('conversation_one_per_invite').on(table.invite_id),
+  ],
+)
+
 /** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */
 export const auditEvent = pgTable('audit_event', {
   id: uuid('id').primaryKey(),

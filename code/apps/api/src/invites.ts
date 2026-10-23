@@ -1,11 +1,13 @@
 import { civilDayOuagadougou, isUuidV7, newId, toOuagadougouDisplay } from '@ankanu/kernel'
-import type { BillingAnswer } from '@ankanu/ports'
-import { and, count, desc, eq, gte, sql } from 'drizzle-orm'
+import type { BillingAnswer, OpenedConversation } from '@ankanu/ports'
+import { and, count, desc, eq, gte, or, sql } from 'drizzle-orm'
 import { invite, inviteQuota } from './account-schema.js'
 import { accountStoreIsMemory, getIdentityDatabase } from './account-store.js'
 import { authNow } from './auth-clock.js'
 import { getBillingPort } from './billing-port.js'
-import { discoveryPhoto } from './media.js'
+import { getChatPort } from './chat.js'
+import { ageOn } from './create-account.js'
+import { discoveryPhoto, signMedia } from './media.js'
 import { getMediaStore } from './media-store.js'
 import {
   DEFAULT_SISTER_REACH_MODE,
@@ -21,6 +23,7 @@ import {
   assertBrowseViewer,
   loadAccount,
   PROFILE_UNAVAILABLE,
+  verificationFlags,
   type BrowseViewer,
   type PublicDetails,
   type PublicProfileFailure,
@@ -32,6 +35,13 @@ export const BOX_MESSAGE = 'box : valeur non reconnue.'
 export const PHOTO_REQUIRED_MESSAGE = 'Ajoutez une photo de profil pour envoyer une invitation.'
 export const PROFILE_INCOMPLETE_MESSAGE = 'Complétez votre profil pour envoyer une invitation.'
 export const QUOTA_EXCEEDED_MESSAGE = 'Envoi refusé. Quota du jour atteint.'
+export const INVITE_MISSING_MESSAGE = "Cette invitation n'existe pas."
+export const NOT_RECIPIENT_MESSAGE = 'Seule la personne invitée peut répondre à cette invitation.'
+export const NOT_PENDING_MESSAGE = "Cette invitation n'est plus en attente."
+export const DECLINED_RESEND_MESSAGE = "Vous ne pouvez plus envoyer d'invitation à ce profil."
+export const INVITE_RECEIVED_MESSAGE = 'Cette personne vous a déjà invité. Répondez à son invitation.'
+
+export type InviteBox = 'received' | 'sent' | 'accepted'
 
 /** One invite row. `id` is UUID v7, so it carries the send instant. */
 export type InviteRow = {
@@ -53,13 +63,42 @@ export type SendOutcome =
   | { ok: false; reason: 'quota' }
   | { ok: false; reason: 'duplicate'; row: InviteRow }
 
+/**
+ * Result of an accept or decline. `changed` is false when the invite already had the asked state (double tap).
+ * `conversation` is set on accept only.
+ */
+export type DecideOutcome =
+  | { ok: true; row: InviteRow; changed: boolean; conversation: OpenedConversation | null }
+  | { ok: false; reason: 'missing' }
+  | { ok: false; reason: 'not_pending'; row: InviteRow }
+
 export type InviteStore = {
   findPending(fromId: string, toId: string): Promise<InviteRow | null>
+  find(id: string): Promise<InviteRow | null>
+  /** Every invite between two members, in either direction. */
+  between(left: string, right: string): Promise<InviteRow[]>
   quotaCount(accountId: string, day: string): Promise<number>
   /** One unit of work: guarded quota increment, then the invite. Either both are stored or neither. */
   send(row: InviteRow, charge: QuotaCharge | null): Promise<SendOutcome>
-  list(accountId: string, box: 'received' | 'sent'): Promise<InviteRow[]>
+  list(accountId: string, box: InviteBox): Promise<InviteRow[]>
   countSentSince(accountId: string, since: Date): Promise<number>
+  /**
+   * One unit of work: the guarded `pending -> accepted` update by the recipient, then `ChatPort.openFromInvite` in the
+   * same transaction. An invite already accepted returns its conversation. Never writes `invite_quota`.
+   */
+  accept(id: string, recipientId: string, sisterAcceptedAt: string, now: Date): Promise<DecideOutcome>
+  /** Guarded `pending -> declined` by the recipient. No conversation, no quota refund. */
+  decline(id: string, recipientId: string): Promise<DecideOutcome>
+}
+
+function inBox(row: InviteRow, accountId: string, box: InviteBox): boolean {
+  if (box === 'received') {
+    return row.to_id === accountId
+  }
+  if (box === 'sent') {
+    return row.from_id === accountId
+  }
+  return row.state === 'accepted' && (row.from_id === accountId || row.to_id === accountId)
 }
 
 type QuotaRow = { account_id: string; civil_day_ouaga: string; sent_count: number }
@@ -70,14 +109,24 @@ export function uuidV7Floor(since: Date): string {
   return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-7000-8000-000000000000`
 }
 
-export function memoryInviteStore(): InviteStore & { rows: InviteRow[]; quota: QuotaRow[] } {
+export function memoryInviteStore(): InviteStore & { rows: InviteRow[]; quota: QuotaRow[]; sisterAcceptedAt: Map<string, string> } {
   const rows: InviteRow[] = []
   const quota: QuotaRow[] = []
+  const sisterAcceptedAt = new Map<string, string>()
   return {
     rows,
     quota,
+    sisterAcceptedAt,
     async findPending(fromId, toId) {
       return rows.find((row) => row.from_id === fromId && row.to_id === toId && row.state === 'pending') ?? null
+    },
+    async find(id) {
+      return rows.find((row) => row.id === id) ?? null
+    },
+    async between(left, right) {
+      return rows.filter(
+        (row) => (row.from_id === left && row.to_id === right) || (row.from_id === right && row.to_id === left),
+      )
     },
     async quotaCount(accountId, day) {
       return quota.find((row) => row.account_id === accountId && row.civil_day_ouaga === day)?.sent_count ?? 0
@@ -106,12 +155,41 @@ export function memoryInviteStore(): InviteStore & { rows: InviteRow[]; quota: Q
     },
     async list(accountId, box) {
       return rows
-        .filter((row) => (box === 'received' ? row.to_id === accountId : row.from_id === accountId))
+        .filter((row) => inBox(row, accountId, box))
         .sort((left, right) => right.id.localeCompare(left.id))
+        .slice(0, 200)
     },
     async countSentSince(accountId, since) {
       const floor = uuidV7Floor(since)
       return rows.filter((row) => row.from_id === accountId && row.id >= floor).length
+    },
+    async accept(id, recipientId, acceptedAt, now) {
+      const row = rows.find((item) => item.id === id && item.to_id === recipientId)
+      if (!row) {
+        return { ok: false, reason: 'missing' }
+      }
+      if (row.state === 'declined') {
+        return { ok: false, reason: 'not_pending', row: { ...row } }
+      }
+      const changed = row.state === 'pending'
+      if (changed) {
+        row.state = 'accepted'
+        sisterAcceptedAt.set(row.id, acceptedAt)
+      }
+      const conversation = await getChatPort().openFromInvite(null, { inviteId: row.id, now })
+      return { ok: true, row: { ...row }, changed, conversation }
+    },
+    async decline(id, recipientId) {
+      const row = rows.find((item) => item.id === id && item.to_id === recipientId)
+      if (!row) {
+        return { ok: false, reason: 'missing' }
+      }
+      if (row.state === 'accepted') {
+        return { ok: false, reason: 'not_pending', row: { ...row } }
+      }
+      const changed = row.state === 'pending'
+      row.state = 'declined'
+      return { ok: true, row: { ...row }, changed, conversation: null }
     },
   }
 }
@@ -140,6 +218,22 @@ function postgresInviteStore(): InviteStore {
         .where(and(eq(invite.from_id, fromId), eq(invite.to_id, toId), eq(invite.state, 'pending')))
         .limit(1)
       return found[0] ? toRow(found[0]) : null
+    },
+    async find(id) {
+      const found = await getIdentityDatabase().select(columns).from(invite).where(eq(invite.id, id)).limit(1)
+      return found[0] ? toRow(found[0]) : null
+    },
+    async between(left, right) {
+      const found = await getIdentityDatabase()
+        .select(columns)
+        .from(invite)
+        .where(
+          or(
+            and(eq(invite.from_id, left), eq(invite.to_id, right)),
+            and(eq(invite.from_id, right), eq(invite.to_id, left)),
+          ),
+        )
+      return found.map(toRow)
     },
     async quotaCount(accountId, day) {
       const found = await getIdentityDatabase()
@@ -191,13 +285,66 @@ function postgresInviteStore(): InviteStore {
       }
     },
     async list(accountId, box) {
-      const found = await getIdentityDatabase()
+      const where =
+        box === 'received'
+          ? eq(invite.to_id, accountId)
+          : box === 'sent'
+            ? eq(invite.from_id, accountId)
+            : and(eq(invite.state, 'accepted'), or(eq(invite.from_id, accountId), eq(invite.to_id, accountId)))
+      const found = await getIdentityDatabase().select(columns).from(invite).where(where).orderBy(desc(invite.id)).limit(200)
+      return found.map(toRow)
+    },
+    async accept(id, recipientId, acceptedAt, now) {
+      return getIdentityDatabase().transaction(async (tx) => {
+        const updated = await tx
+          .update(invite)
+          .set({ state: 'accepted', sister_accepted_at: acceptedAt })
+          .where(and(eq(invite.id, id), eq(invite.to_id, recipientId), eq(invite.state, 'pending')))
+          .returning(columns)
+        let row = updated[0] ? toRow(updated[0]) : null
+        const changed = row !== null
+        if (!row) {
+          const found = await tx
+            .select(columns)
+            .from(invite)
+            .where(and(eq(invite.id, id), eq(invite.to_id, recipientId)))
+            .for('update')
+            .limit(1)
+          if (!found[0]) {
+            return { ok: false as const, reason: 'missing' as const }
+          }
+          row = toRow(found[0])
+          if (row.state !== 'accepted') {
+            return { ok: false as const, reason: 'not_pending' as const, row }
+          }
+        }
+        const conversation = await getChatPort().openFromInvite(tx, { inviteId: row.id, now })
+        return { ok: true as const, row, changed, conversation }
+      })
+    },
+    async decline(id, recipientId) {
+      const db = getIdentityDatabase()
+      const updated = await db
+        .update(invite)
+        .set({ state: 'declined' })
+        .where(and(eq(invite.id, id), eq(invite.to_id, recipientId), eq(invite.state, 'pending')))
+        .returning(columns)
+      if (updated[0]) {
+        return { ok: true, row: toRow(updated[0]), changed: true, conversation: null }
+      }
+      const found = await db
         .select(columns)
         .from(invite)
-        .where(box === 'received' ? eq(invite.to_id, accountId) : eq(invite.from_id, accountId))
-        .orderBy(desc(invite.id))
-        .limit(200)
-      return found.map(toRow)
+        .where(and(eq(invite.id, id), eq(invite.to_id, recipientId)))
+        .limit(1)
+      if (!found[0]) {
+        return { ok: false, reason: 'missing' }
+      }
+      const row = toRow(found[0])
+      if (row.state === 'declined') {
+        return { ok: true, row, changed: false, conversation: null }
+      }
+      return { ok: false, reason: 'not_pending', row }
     },
     async countSentSince(accountId, since) {
       const found = await getIdentityDatabase()
@@ -339,10 +486,12 @@ function afterSend(state: QuotaState, sentCount: number | null): QuotaBody {
 
 export type InviteFailure = {
   ok: false
-  status: 400 | 403 | 404 | 429 | 500
+  status: 400 | 403 | 404 | 409 | 429 | 500
   code: 'UNHANDLED' | 'FORBIDDEN' | 'NOT_FOUND' | 'QUOTA_EXCEEDED'
   message: string
-  details: PublicDetails | { reason: string; missing?: string[]; cap?: number; remaining?: number; resets_at?: string }
+  details:
+    | PublicDetails
+    | { reason: string; missing?: string[]; cap?: number; remaining?: number; resets_at?: string; state?: string }
   retryable: boolean
 }
 
@@ -448,10 +597,21 @@ export async function sendInvite(
     return fail(500, 'UNHANDLED', 'Request failed', null)
   }
   const now = authNow()
+  const history = await getInviteStore().between(sender.id, recipient.id)
   const state = await quotaState(sender, config, now)
-  const pending = await getInviteStore().findPending(sender.id, recipient.id)
-  if (pending) {
-    return { ok: true, status: 200, body: { invite: view(pending), quota: state.body } }
+  // Already pending from me, or already connected either way: the same invite again, no new row, no quota.
+  const existing =
+    history.find((row) => row.from_id === sender.id && row.state === 'pending') ?? history.find((row) => row.state === 'accepted')
+  if (existing) {
+    return { ok: true, status: 200, body: { invite: view(existing), quota: state.body } }
+  }
+  // FR-043: after a decline the same sender cannot invite that recipient again. Checked before the quota.
+  if (history.some((row) => row.from_id === sender.id && row.state === 'declined')) {
+    return fail(403, 'FORBIDDEN', DECLINED_RESEND_MESSAGE, { reason: 'invite_declined' })
+  }
+  // A pending invite from the recipient: answer it instead, so two crossing invites never open two conversations.
+  if (history.some((row) => row.from_id === recipient.id && row.state === 'pending')) {
+    return fail(409, 'UNHANDLED', INVITE_RECEIVED_MESSAGE, { reason: 'invite_received' })
   }
   if (state.body.capped && state.body.remaining <= 0) {
     return quotaExceeded(state.body, now, state.charge?.cap ?? null)
@@ -492,40 +652,185 @@ export async function readInviteQuota(
   return { ok: true, body: { ...state.body, sender: { photo: ready.photo, profile_ready: ready.profile_ready } } }
 }
 
+/** The other member as the inbox shows them. Field values only while their profile is listable. */
+export type InviteOther =
+  | {
+      available: true
+      age: number | null
+      city: string | null
+      marital_status: string | null
+      polygamy_intent: string | null
+      verified: boolean
+      photo: { id: string; url: string } | null
+    }
+  | { available: false }
+
 export type InviteListItem = {
   id: string
   state: InviteRow['state']
   created_at: string
+  direction: 'received' | 'sent'
   from_id?: string
   to_id?: string
+  other_id: string
   pseudonym: string | null
+  conversation_id: string | null
+  other: InviteOther
 }
 
-/** `GET /v1/invites?box=received|sent`. Own rows only. The full inbox is Story 4.4. No BillingPort. */
+/**
+ * Before accept, a Sister sees his marital status and polygamy intent (FR-037). The photo is always the blur
+ * derivative. No read time, decision time or `sister_accepted_at` is ever exposed (FR-042, no read receipt).
+ */
+async function presentOther(viewerId: string, other: BrowseViewer | null): Promise<InviteOther> {
+  if (!other || !other.roles.includes('member')) {
+    return { available: false }
+  }
+  const profile = await getProfileStore().read(other.id)
+  if (!profile || !isListableProfile(profile.visibility, other.status)) {
+    return { available: false }
+  }
+  const mains = await getMediaStore().liveMainProfilePhotos([other.id])
+  const asset = mains.find((item) => item.owner_id === other.id) ?? null
+  let photo: { id: string; url: string } | null = null
+  if (asset && discoveryPhoto(asset)) {
+    const signed = await signMedia(getMediaStore(), asset.id, 'blur', viewerId)
+    photo = signed.ok ? { id: asset.id, url: signed.url } : null
+  }
+  const verification = await verificationFlags(other.id, other.gender)
+  return {
+    available: true,
+    age: ageOn(profile.dob, authNow()),
+    city: profile.city,
+    marital_status: profile.marital_status,
+    polygamy_intent: profile.polygamy_intent,
+    verified: verification.id,
+    photo,
+  }
+}
+
+/** `GET /v1/invites?box=received|sent|accepted`. Own rows only. No BillingPort. */
 export async function listInvites(
   session: ResolvedSession,
   boxParam: unknown,
-): Promise<{ ok: true; body: { box: 'received' | 'sent'; count: number; items: InviteListItem[] } } | InviteFailure> {
+): Promise<{ ok: true; body: { box: InviteBox; count: number; items: InviteListItem[] } } | InviteFailure> {
   const gate = await assertBrowseViewer(session)
   if (!gate.ok) {
     return fromViewer(gate)
   }
   const box = boxParam === undefined || boxParam === '' ? 'received' : boxParam
-  if (box !== 'received' && box !== 'sent') {
+  if (box !== 'received' && box !== 'sent' && box !== 'accepted') {
     return fail(400, 'UNHANDLED', BOX_MESSAGE, { field: 'box' })
   }
-  const rows = await getInviteStore().list(gate.account.id, box)
+  const me = gate.account.id
+  const rows = await getInviteStore().list(me, box)
+  const accepted = rows.filter((row) => row.state === 'accepted').map((row) => row.id)
+  const conversations = new Map(
+    (await getChatPort().conversationsForInvites(accepted)).map((item) => [item.invite_id, item.id]),
+  )
   const items: InviteListItem[] = []
   for (const row of rows) {
-    const otherId = box === 'received' ? row.from_id : row.to_id
+    const direction = row.to_id === me ? 'received' : 'sent'
+    const otherId = direction === 'received' ? row.from_id : row.to_id
     const other = await loadAccount(otherId)
     items.push({
       id: row.id,
       state: row.state,
       created_at: row.created_at,
-      ...(box === 'received' ? { from_id: row.from_id } : { to_id: row.to_id }),
+      direction,
+      ...(direction === 'received' ? { from_id: row.from_id } : { to_id: row.to_id }),
+      other_id: otherId,
       pseudonym: other?.pseudonym ?? null,
+      conversation_id: conversations.get(row.id) ?? null,
+      other: await presentOther(me, other),
     })
   }
   return { ok: true, body: { box, count: items.length, items } }
+}
+
+export type DecisionBody = {
+  invite: { id: string; state: InviteRow['state']; created_at: string }
+  conversation?: { id: string; stage: OpenedConversation['stage'] }
+}
+
+type Decision = { ok: true; body: DecisionBody } | InviteFailure
+
+/** Steps shared by accept and decline: viewer gate, then the invite seen by its recipient only. */
+async function recipientInvite(
+  session: ResolvedSession,
+  id: unknown,
+): Promise<{ ok: true; viewer: BrowseViewer; row: InviteRow } | InviteFailure> {
+  const gate = await assertBrowseViewer(session)
+  if (!gate.ok) {
+    return fromViewer(gate)
+  }
+  const row = typeof id === 'string' && isUuidV7(id) ? await getInviteStore().find(id) : null
+  if (!row || (row.from_id !== gate.account.id && row.to_id !== gate.account.id)) {
+    return fail(404, 'NOT_FOUND', INVITE_MISSING_MESSAGE, null)
+  }
+  if (row.to_id !== gate.account.id) {
+    return fail(403, 'FORBIDDEN', NOT_RECIPIENT_MESSAGE, { reason: 'not_recipient' })
+  }
+  return { ok: true, viewer: gate.account, row }
+}
+
+function notPending(row: InviteRow): InviteFailure {
+  return fail(409, 'UNHANDLED', NOT_PENDING_MESSAGE, { reason: 'invite_not_pending', state: row.state })
+}
+
+function decided(row: InviteRow): DecisionBody['invite'] {
+  return { id: row.id, state: row.state, created_at: row.created_at }
+}
+
+/**
+ * `POST /v1/invites/:id/accept`. Recipient only. Her accept, or his accept of an invite she sent, is the Sister's
+ * consent (FR-039): the invite becomes accepted and `ChatPort.openFromInvite` opens the conversation at stage `chat`
+ * in the same transaction. No BillingPort, no `invite_quota` write.
+ */
+export async function acceptInvite(session: ResolvedSession, id: unknown): Promise<Decision> {
+  const found = await recipientInvite(session, id)
+  if (!found.ok) {
+    return found
+  }
+  const { viewer, row } = found
+  if (row.state === 'declined') {
+    return notPending(row)
+  }
+  if (row.state === 'pending') {
+    const sender = await loadAccount(row.from_id)
+    const profile = sender ? await getProfileStore().read(sender.id) : null
+    if (!sender || !profile || !sender.roles.includes('member') || !isListableProfile(profile.visibility, sender.status)) {
+      return fail(404, 'NOT_FOUND', PROFILE_UNAVAILABLE, null)
+    }
+  }
+  const now = authNow()
+  const sisterAcceptedAt = viewer.gender === 'sister' ? now.toISOString() : row.created_at
+  const saved = await getInviteStore().accept(row.id, viewer.id, sisterAcceptedAt, now)
+  if (!saved.ok) {
+    return saved.reason === 'missing' ? fail(404, 'NOT_FOUND', INVITE_MISSING_MESSAGE, null) : notPending(saved.row)
+  }
+  const conversation = saved.conversation
+  return {
+    ok: true,
+    body: {
+      invite: decided(saved.row),
+      ...(conversation ? { conversation: { id: conversation.id, stage: conversation.stage } } : {}),
+    },
+  }
+}
+
+/** `POST /v1/invites/:id/decline`. Recipient only. Quiet: no conversation, nothing sent to the sender, no refund. */
+export async function declineInvite(session: ResolvedSession, id: unknown): Promise<Decision> {
+  const found = await recipientInvite(session, id)
+  if (!found.ok) {
+    return found
+  }
+  if (found.row.state === 'accepted') {
+    return notPending(found.row)
+  }
+  const saved = await getInviteStore().decline(found.row.id, found.viewer.id)
+  if (!saved.ok) {
+    return saved.reason === 'missing' ? fail(404, 'NOT_FOUND', INVITE_MISSING_MESSAGE, null) : notPending(saved.row)
+  }
+  return { ok: true, body: { invite: decided(saved.row) } }
 }

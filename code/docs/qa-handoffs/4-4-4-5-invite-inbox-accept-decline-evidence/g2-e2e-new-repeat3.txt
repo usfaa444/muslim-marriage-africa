@@ -1,0 +1,40 @@
+          |                                                           ^
+      180 |     }
+      181 |     await expectAccessible(page)
+      182 |     await expectNoHorizontalOverflow(page)
+        at /home/claude/muslim-marriage-africa/code/e2e/invite-inbox.spec.ts:179:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop-repeat2/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop-repeat2/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[180/186] [desktop] › e2e/invite-inbox.spec.ts:185:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-2: Sent shows pending, accepted and declined, and a declined row carries no guilt copy, receipt or timer
+[181/186] [desktop] › e2e/invite-inbox.spec.ts:205:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-1: accept posts once, then the row moves to Acceptées with the discussion link
+[182/186] [desktop] › e2e/invite-inbox.spec.ts:227:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-2: decline is quiet: one post, a short status, the row leaves Reçues, no confirmation or lecture
+[183/186] [desktop] › e2e/invite-inbox.spec.ts:252:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message
+[184/186] [desktop] › e2e/invite-inbox.spec.ts:268:3 › Invite inbox (Stories 4.4, 4.5) › the tabs work from the keyboard, and accept is reachable without a mouse
+[185/186] [desktop] › e2e/invite-inbox.spec.ts:288:3 › Invite inbox (Stories 4.4, 4.5) › a load failure shows the retry, and the retry loads the inbox
+[186/186] [desktop] › e2e/invite-inbox.spec.ts:303:3 › Invite inbox (Stories 4.4, 4.5) › fits every factory width on each tab
+  9 failed
+    [mobile] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+    [mobile] › e2e/invite-inbox.spec.ts:252:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message 
+    [mobile] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+    [mobile] › e2e/invite-inbox.spec.ts:252:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message 
+    [mobile] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+    [mobile] › e2e/invite-inbox.spec.ts:252:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message 
+    [desktop] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+    [desktop] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+    [desktop] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+  15 skipped
+  162 passed (2.7m)

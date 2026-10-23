@@ -464,6 +464,9 @@ describe('staff visit signals', () => {
       async sentCountSince() {
         return 1
       },
+      async acceptedFor() {
+        return []
+      },
     })
     const invited = await fetch(`${base}/v1/staff/signals/visits`, { headers: { cookie: staffCookie } })
     expect(await invited.json()).toMatchObject({ count: 0, rows: [] })

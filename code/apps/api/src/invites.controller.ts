@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Header, HttpException, Post, Query, Req, Res } from '@nestjs/common'
-import { listInvites, readInviteQuota, sendInvite, type InviteFailure } from './invites.js'
+import { Body, Controller, Get, Header, HttpCode, HttpException, Param, Post, Query, Req, Res } from '@nestjs/common'
+import { acceptInvite, declineInvite, listInvites, readInviteQuota, sendInvite, type InviteFailure } from './invites.js'
 import { requireLiveSession } from './pin-session.js'
 
 type CookieRequest = {
@@ -67,6 +67,42 @@ export class InvitesController {
       raise(result)
     }
     response.status(result.status)
+    return result.body
+  }
+
+  /** Recipient only. Opens the conversation through `ChatPort.openFromInvite` (Story 4.5). */
+  @Post(':id/accept')
+  @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
+  async accept(
+    @Param('id') id: string,
+    @Req() request: CookieRequest,
+    @Res({ passthrough: true }) response: StatusResponse,
+  ) {
+    response.setHeader('Cache-Control', 'no-store')
+    const session = await requireLiveSession(request.headers?.cookie)
+    const result = await acceptInvite(session, id)
+    if (!result.ok) {
+      raise(result)
+    }
+    return result.body
+  }
+
+  /** Recipient only. Quiet: no conversation, nothing sent to the sender (Story 4.5). */
+  @Post(':id/decline')
+  @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
+  async decline(
+    @Param('id') id: string,
+    @Req() request: CookieRequest,
+    @Res({ passthrough: true }) response: StatusResponse,
+  ) {
+    response.setHeader('Cache-Control', 'no-store')
+    const session = await requireLiveSession(request.headers?.cookie)
+    const result = await declineInvite(session, id)
+    if (!result.ok) {
+      raise(result)
+    }
     return result.body
   }
 }

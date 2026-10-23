@@ -6,6 +6,7 @@ import { memberSectionHtml } from './member-section-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { inviteComposeHtml, isInviteTargetId } from './invite-compose-page'
+import { inviteInboxHtml } from './invite-inbox-page'
 import { visitSignalsHtml } from './visit-signals-page'
 import { staffReviewHtml } from './staff-review-page'
 import { fillStaffHeader, staffHomeHtml, staffSignInHtml, type StaffIdentity, type StaffMfaState } from './staff-pages'
@@ -392,8 +393,8 @@ export function statusResponse(request: Request, path: string): Promise<Response
 }
 
 /**
- * `/invitations`, `/discussions`, `/profil`. Stub cookies keep the JSON envelope. A live member session gets a page
- * the bottom nav can open: `/profil` is the member's own profile (`/profile-edit`), the two others the shared shell.
+ * `/discussions`, `/profil`. Stub cookies keep the JSON envelope. A live member session gets a page the bottom nav
+ * can open: `/profil` is the member's own profile (`/profile-edit`), `/discussions` the shared shell until Epic 5.
  */
 export async function memberGuarded(request: Request, path: MemberPath): Promise<Response> {
   const redirect = await entryRedirect(request, path)
@@ -405,11 +406,29 @@ export async function memberGuarded(request: Request, path: MemberPath): Promise
     if (path === '/profil') {
       return redirectTo(request, '/profile-edit')
     }
-    if (path === '/invitations' || path === '/discussions') {
-      return htmlResponse(memberSectionHtml(stitchFile('57-discover'), path === '/invitations' ? 'invitations' : 'discussions'))
+    if (path === '/discussions') {
+      return htmlResponse(memberSectionHtml(stitchFile('57-discover'), 'discussions'))
     }
   }
   return memberRouteResponse(cookie, path)
+}
+
+/**
+ * Screen 19, Invite inbox (Stories 4.4, 4.5). Like the Invite compose page: staff and mahram stubs get the member-route
+ * refusal; a member page (live session, or the `web` / `capacitor` dev stub) loads its three boxes in the browser, so
+ * the API decides every refusal.
+ */
+export async function invitationsResponse(request: Request): Promise<Response> {
+  const redirect = await entryRedirect(request, '/invitations')
+  if (redirect) {
+    return redirect
+  }
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  if (kind === 'staff' || kind === 'mahram' || (kind === null && readSessionCookie(cookie) === null)) {
+    return memberRouteResponse(cookie, '/invitations')
+  }
+  return htmlResponse(inviteInboxHtml(stitchFile('19-invite-inbox')))
 }
 
 /**
