@@ -1,0 +1,23 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 12 tests using 2 workers
+
+  ✓   1 [mobile] › e2e/qa-report-block.spec.ts:81:3 › QA 8.5 / 8.6 › block only (2.6s)
+  ✓   3 [mobile] › e2e/qa-report-block.spec.ts:90:3 › QA 8.5 / 8.6 › failure states keep the input; retry works (3.3s)
+  ✓   2 [mobile] › e2e/qa-report-block.spec.ts:57:3 › QA 8.5 / 8.6 › widths, screenshots, axe on every state (8.4s)
+  ✓   4 [mobile] › e2e/qa-report-block.spec.ts:115:3 › QA 8.5 / 8.6 › double submit posts once, slow network shows busy, details counter and 1000 cap (2.7s)
+  ✓   5 [mobile] › e2e/qa-report-block.spec.ts:128:3 › QA 8.5 / 8.6 › XSS pseudonym is escaped; reload and back button; flag only on his bubble (2.2s)
+  ✓   6 [mobile] › e2e/qa-report-block.spec.ts:144:3 › QA 8.5 / 8.6 › keyboard-only and 3G-like latency (1.9s)
+  ✓   8 [desktop] › e2e/qa-report-block.spec.ts:81:3 › QA 8.5 / 8.6 › block only (2.0s)
+  ✓   9 [desktop] › e2e/qa-report-block.spec.ts:90:3 › QA 8.5 / 8.6 › failure states keep the input; retry works (3.0s)
+  ✓   7 [desktop] › e2e/qa-report-block.spec.ts:57:3 › QA 8.5 / 8.6 › widths, screenshots, axe on every state (5.8s)
+  ✓  11 [desktop] › e2e/qa-report-block.spec.ts:128:3 › QA 8.5 / 8.6 › XSS pseudonym is escaped; reload and back button; flag only on his bubble (1.2s)
+  ✓  10 [desktop] › e2e/qa-report-block.spec.ts:115:3 › QA 8.5 / 8.6 › double submit posts once, slow network shows busy, details counter and 1000 cap (2.6s)
+  ✓  12 [desktop] › e2e/qa-report-block.spec.ts:144:3 › QA 8.5 / 8.6 › keyboard-only and 3G-like latency (1.5s)
+
+  12 passed (24.3s)

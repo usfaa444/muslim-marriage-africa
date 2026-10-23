@@ -1,0 +1,517 @@
+import { createRequire } from 'node:module'
+import { randomBytes } from 'node:crypto'
+import { readdirSync, readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import type { AddressInfo } from 'node:net'
+import type { INestApplication } from '@nestjs/common'
+import { newId, REPORT_REASON_CODES, REPORT_REASONS } from '@ankanu/kernel'
+import { io as connectSocket, type Socket } from 'socket.io-client'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { memoryAccountStore, setAccountStore } from './account-store.js'
+import { memoryAuditPort, setAuditPort } from './audit-port.js'
+import { setAuthClock } from './auth-clock.js'
+import { setAuthLimitReader } from './auth-limit.js'
+import { resetAuthRateWindow } from './auth-rate.js'
+import { setBillingPort } from './billing-port.js'
+import { setBrowseLimitReader } from './browse-rate.js'
+import { memoryChatPort, setChatPort } from './chat.js'
+import { setChatKey } from './chat-key.js'
+import { memoryMessageStore, setMessageStore } from './chat-messages.js'
+import { createApp } from './create-app.js'
+import { memoryFavouriteStore, setFavouriteStore } from './favourites.js'
+import { memoryCaptureStore, setCaptureStore } from './id-liveness-store.js'
+import { setInvitesPort } from './invites-port.js'
+import { memoryInviteStore, setInviteConfigReader, setInviteStore, type InviteConfig } from './invites.js'
+import { setMediaClock, setSignedTtlReader } from './media.js'
+import { memoryMediaStore, setMediaStore } from './media-store.js'
+import { setMahramPort } from './mahram-port.js'
+import { memoryModerationPort, setModerationPort } from './moderation.js'
+import { same_quota_as_brothers } from './operator-config.js'
+import { memoryPhoneOtpStore, setPhoneOtpStore } from './phone-otp-store.js'
+import { memoryPinLockStore, setPinLockStore } from './pin-lock-store.js'
+import { resetPinEntries } from './pin-lock-state.js'
+import { setPhotoStrikeConfigReader } from './photo-strike.js'
+import { setFreeReviewSlaReader } from './profile-review.js'
+import { memoryProfileStore, setProfileStore } from './profile-store.js'
+import { SESSION_COOKIE } from './session-cookie.js'
+import { memorySessionStore, setSessionStore } from './session-store.js'
+import { memoryStaffStore } from './staff-store.js'
+import { installTestStaff, openTestStaff, signInTestStaff } from './test-staff-session.js'
+import { caseSlaState, memoryTrustStore, setReportRateReader, setReportSlaReader, setTrustStore } from './trust.js'
+import { setTrustPort } from './trust-port.js'
+
+const require = createRequire(import.meta.url)
+const { PNG } = require('pngjs') as {
+  PNG: {
+    new (options: { width: number; height: number }): { data: Buffer; width: number; height: number }
+    sync: { write(png: { data: Buffer; width: number; height: number }): Buffer }
+  }
+}
+
+const srcDir = fileURLToPath(new URL('.', import.meta.url))
+const memory = memoryAccountStore()
+const sessions = memorySessionStore(memory)
+const pins = memoryPinLockStore()
+const media = memoryMediaStore()
+const otp = memoryPhoneOtpStore()
+const favourites = memoryFavouriteStore()
+const invites = memoryInviteStore()
+const chat = memoryChatPort()
+const messages = memoryMessageStore()
+const moderation = memoryModerationPort()
+const trust = memoryTrustStore()
+const captures = memoryCaptureStore({ accounts: memory.accounts, profiles: memory.profiles, phoneRows: [] })
+const staffStore = memoryStaffStore({ memberEmailTaken: (email) => memory.emailTaken(email) })
+const chatKey = { key: randomBytes(32), kid: 'test-chat-1' }
+
+let now = new Date('2026-10-23T10:00:00.000Z')
+let serial = 0
+let billingCalls = 0
+let reportRate: number | null = 10
+let slaHours: number | null = 24
+const config: InviteConfig = { sisterReachMode: same_quota_as_brothers, freeCap: 50, premiumCap: null }
+
+function samplePng(): Buffer {
+  const png = new PNG({ width: 8, height: 8 })
+  for (let index = 0; index < png.data.length; index += 4) {
+    png.data[index] = 40
+    png.data[index + 1] = 80
+    png.data[index + 2] = 120
+    png.data[index + 3] = 255
+  }
+  return PNG.sync.write(png)
+}
+
+type Member = { id: string; email: string; cookie: string }
+
+describe('QA independent checks: Report (8.5) and Block (8.6)', { timeout: 60_000 }, () => {
+  let app: INestApplication
+  let base: string
+  const png = samplePng()
+  const sockets: Socket[] = []
+
+  beforeAll(async () => {
+    setAuthClock(() => now)
+    setMediaClock(() => now)
+    setSignedTtlReader(async () => 60)
+    setPhotoStrikeConfigReader(async () => ({ count: '3', hours: '24' }))
+    setFreeReviewSlaReader(async () => 24)
+    setAuthLimitReader(async () => 1000)
+    setBrowseLimitReader(async () => 1000)
+    setReportRateReader(async () => reportRate)
+    setReportSlaReader(async () => slaHours)
+    setMahramPort(undefined)
+    setBillingPort({
+      async isEntitled() {
+        billingCalls += 1
+        return false
+      },
+    })
+    setInviteConfigReader(async () => config)
+    setAccountStore(memory)
+    setSessionStore(sessions)
+    setProfileStore(memoryProfileStore(memory.accounts, memory.profiles))
+    setFavouriteStore(favourites)
+    setInviteStore(invites)
+    setChatPort(chat)
+    setMessageStore(messages)
+    setModerationPort(moderation)
+    setTrustStore(trust)
+    setTrustPort(undefined)
+    setChatKey(chatKey)
+    setInvitesPort(undefined)
+    setMediaStore(media)
+    setPhoneOtpStore(otp)
+    setCaptureStore(captures)
+    installTestStaff(staffStore)
+    setAuditPort(memoryAuditPort([]))
+    pins.rows.length = 0
+    resetPinEntries()
+    setPinLockStore(pins)
+    app = await createApp()
+    await app.listen(0, '127.0.0.1')
+    const address = app.getHttpServer().address() as AddressInfo | string | null
+    if (address === null || typeof address === 'string') {
+      throw new Error('expected the api test server to bind a TCP port')
+    }
+    base = `http://127.0.0.1:${address.port}`
+  })
+
+  beforeEach(() => {
+    for (const socket of sockets.splice(0)) {
+      socket.disconnect()
+    }
+    memory.accounts.length = 0
+    memory.credentials.length = 0
+    memory.profiles.length = 0
+    media.assets.length = 0
+    media.derivatives.length = 0
+    media.grants.length = 0
+    otp.rows.length = 0
+    captures.rows.length = 0
+    favourites.rows.length = 0
+    invites.rows.length = 0
+    invites.quota.length = 0
+    invites.sisterAcceptedAt.clear()
+    chat.conversations.length = 0
+    messages.rows.length = 0
+    moderation.jobs.length = 0
+    moderation.calls.length = 0
+    trust.reports.length = 0
+    trust.cases.length = 0
+    trust.blocks.length = 0
+    billingCalls = 0
+    reportRate = 10
+    slaHours = 24
+    now = new Date('2026-10-23T10:00:00.000Z')
+    resetAuthRateWindow()
+  })
+
+  afterAll(async () => {
+    for (const socket of sockets.splice(0)) {
+      socket.disconnect()
+    }
+    setAuthClock(undefined)
+    setMediaClock(undefined)
+    setSignedTtlReader(undefined)
+    setPhotoStrikeConfigReader(undefined)
+    setFreeReviewSlaReader(undefined)
+    setAuthLimitReader(undefined)
+    setBrowseLimitReader(undefined)
+    setReportRateReader(undefined)
+    setReportSlaReader(undefined)
+    setMahramPort(undefined)
+    setBillingPort(undefined)
+    setInviteConfigReader(undefined)
+    setInviteStore(undefined)
+    setChatPort(undefined)
+    setMessageStore(undefined)
+    setModerationPort(undefined)
+    setTrustStore(undefined)
+    setTrustPort(undefined)
+    setChatKey(undefined)
+    setInvitesPort(undefined)
+    setPhoneOtpStore(undefined)
+    setCaptureStore(undefined)
+    installTestStaff(undefined)
+    setAuditPort(undefined)
+    resetAuthRateWindow()
+    setAccountStore(undefined)
+    setSessionStore(undefined)
+    setProfileStore(undefined)
+    setFavouriteStore(undefined)
+    setMediaStore(undefined)
+    setPinLockStore(undefined)
+    resetPinEntries()
+    if (app) {
+      await app.close()
+    }
+  })
+
+  function call(path: string, cookie: string | undefined, method = 'GET', body?: unknown): Promise<Response> {
+    const headers: Record<string, string> = {}
+    if (cookie) {
+      headers.cookie = cookie
+    }
+    if (body !== undefined) {
+      headers['content-type'] = 'application/json'
+    }
+    const init: RequestInit = { method, headers }
+    if (body !== undefined) {
+      init.body = JSON.stringify(body)
+    }
+    return fetch(`${base}${path}`, init)
+  }
+
+  async function member(gender: 'sister' | 'brother'): Promise<Member> {
+    serial += 1
+    const email = `trust${serial}@example.bf`
+    const created = await call('/v1/accounts', undefined, 'POST', {
+      email,
+      password: 'phrase avec espaces',
+      pseudonym: `Trust_${serial}`,
+      gender,
+      pledge_accepted: true,
+      civil_given_name: 'Awa',
+      civil_family_name: 'Sawadogo',
+      recaptcha_token: 'test-ok',
+      coc_version: 'FR-089',
+      dob: '1990-01-15',
+    })
+    expect(created.status).toBe(201)
+    const id = ((await created.json()) as { id: string }).id
+    const session = await call('/v1/sessions', undefined, 'POST', {
+      identifier: email,
+      password: 'phrase avec espaces',
+      remember_me: false,
+      recaptcha_token: 'test-ok',
+    })
+    expect(session.status).toBe(201)
+    const match = new RegExp(`${SESSION_COOKIE}=([^;]+)`).exec(session.headers.getSetCookie().join('\n'))
+    const cookie = `${SESSION_COOKIE}=${match?.[1] ?? ''}`
+    const saved = await call('/v1/me/profile', cookie, 'PUT', {
+      dob: '1990-01-15',
+      city: 'ouagadougou',
+      country: 'BF',
+      profession: 'ingenierie',
+      marital_status: 'single',
+      polygamy_intent: 'no',
+      madhhab: 'maliki',
+      practice: 'assidue',
+      life_plans: 'tf:6months\nUnion stable',
+    })
+    expect(saved.status).toBe(200)
+    const profile = memory.profiles.find((item) => item.account_id === id)
+    if (profile) {
+      profile.visibility = 'public'
+    }
+    const posted = await call('/v1/media', cookie, 'POST', { kind: 'profile_photo', image: png.toString('base64') })
+    expect(posted.status).toBe(201)
+    const assetId = ((await posted.json()) as { id: string }).id
+    const asset = media.assets.find((row) => row.id === assetId)
+    if (asset) {
+      asset.moderation_state = 'live'
+      asset.is_main = true
+    }
+    return { id, email, cookie }
+  }
+
+  async function connected(): Promise<{ brother: Member; sister: Member; conversationId: string }> {
+    const brother = await member('brother')
+    const sister = await member('sister')
+    now = new Date(now.getTime() + 1000)
+    const sent = await call('/v1/invites', brother.cookie, 'POST', { to_id: sister.id })
+    expect(sent.status).toBe(201)
+    const inviteId = ((await sent.json()) as { invite: { id: string } }).invite.id
+    const accepted = await call(`/v1/invites/${inviteId}/accept`, sister.cookie, 'POST')
+    expect(accepted.status).toBe(200)
+    const conversationId = ((await accepted.json()) as { conversation: { id: string } }).conversation.id
+    billingCalls = 0
+    return { brother, sister, conversationId }
+  }
+
+  async function sendText(who: Member, conversationId: string, text: string): Promise<Response> {
+    now = new Date(now.getTime() + 1000)
+    return call(`/v1/conversations/${conversationId}/messages`, who.cookie, 'POST', { kind: 'text', text })
+  }
+
+  function report(who: Member | undefined, body: unknown): Promise<Response> {
+    return call('/v1/reports', who?.cookie, 'POST', body)
+  }
+
+  async function browseIds(who: Member): Promise<string[]> {
+    const grid = await call('/v1/browse?view=grid', who.cookie)
+    expect(grid.status).toBe(200)
+    return ((await grid.json()) as { items: Array<{ id: string }> }).items.map((item) => item.id)
+  }
+
+  async function staffMetrics(cookie: string): Promise<{ reports: { sla_hours: number; open: number; sla_breach: number; oldest_open_started_at: string | null } }> {
+    const response = await call('/v1/staff/metrics', cookie)
+    expect(response.status).toBe(200)
+    return (await response.json()) as { reports: { sla_hours: number; open: number; sla_breach: number; oldest_open_started_at: string | null } }
+  }
+
+  function connectedSocket(who: Member): Promise<Socket> {
+    const socket = connectSocket(base, {
+      path: '/v1/realtime',
+      addTrailingSlash: false,
+      transports: ['websocket'],
+      extraHeaders: { cookie: who.cookie },
+      reconnection: false,
+      forceNew: true,
+    })
+    sockets.push(socket)
+    return new Promise((resolve, reject) => {
+      socket.once('connect', () => resolve(socket))
+      socket.once('connect_error', (error) => reject(error))
+    })
+  }
+
+  function noEvent(socket: Socket, name: string, waitMs = 600): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const onEvent = () => reject(new Error(`unexpected ${name}`))
+      socket.once(name, onEvent)
+      setTimeout(() => {
+        socket.off(name, onEvent)
+        resolve()
+      }, waitMs)
+    })
+  }
+
+  it('QA: AC 8.5-1 persistence, no personal data in the response, no-store', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const first = await sendText(brother, conversationId, 'Bonjour')
+    if (first.status !== 201) throw new Error(`send ${first.status} ${await first.text()}`)
+    now = new Date('2026-10-23T10:30:15.500Z')
+    const response = await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'harassment', details: '  Accents éàç 中文 <script>alert(1)</script>  ', block: false })
+    expect(response.status).toBe(201)
+    expect(response.headers.get('cache-control')).toContain('no-store')
+    const body = (await response.json()) as any
+    expect(body.case.sla_started_at).toBe(now.toISOString())
+    expect(body.report.sla_started_at).toBe(now.toISOString())
+    expect(body.case.sla_state).toBe('open')
+    expect(body.sla_hours).toBe(24)
+    expect(JSON.stringify(body)).not.toContain(sister.email)
+    expect(JSON.stringify(body)).not.toContain(brother.email)
+    expect(trust.reports).toHaveLength(1)
+    expect(trust.cases).toHaveLength(1)
+    const row = trust.reports[0]!
+    expect(row.sla_started_at).toBe(now.toISOString())
+    expect(row.first_human_at).toBeNull()
+    expect(row.details).toBe('Accents éàç 中文 <script>alert(1)</script>')
+    expect(trust.cases[0]!.report_id).toBe(row.id)
+    expect(trust.cases[0]!.sla_started_at).toBe(row.sla_started_at)
+    expect(trust.cases[0]!.first_human_at).toBeNull()
+    expect(trust.blocks).toHaveLength(0)
+    expect(billingCalls).toBe(0)
+  })
+
+  it('QA: details boundary 1000 vs 1001 characters, and a 1001-char refusal writes nothing', async () => {
+    const { brother, sister } = await connected()
+    const ok = await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'indecency', details: 'é'.repeat(1000) })
+    expect(ok.status).toBe(201)
+    const tooLong = await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'indecency', details: 'é'.repeat(1001) })
+    expect(tooLong.status).toBe(400)
+    expect(((await tooLong.json()) as any).error.message).toBe('Précisions trop longues (1000 caractères au plus).')
+    expect(trust.reports).toHaveLength(1)
+  })
+
+  it('QA: IDOR — a third member cannot report a message from a conversation she is not in, and blocks are isolated', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const sent = await sendText(brother, conversationId, 'Salam')
+    const messageId = ((await sent.json()) as any).message.id
+    const stranger = await member('sister')
+    const theft = await report(stranger, { target_kind: 'message', target_id: messageId, reason: 'harassment' })
+    expect(theft.status).toBe(404)
+    expect(((await theft.json()) as any).error.message).toBe('Ce message est introuvable.')
+    expect(trust.reports).toHaveLength(0)
+    // a sister cannot report her own message
+    const mine = await sendText(sister, conversationId, 'Wa alaykum')
+    const mineId = ((await mine.json()) as any).message.id
+    expect((await report(sister, { target_kind: 'message', target_id: mineId, reason: 'harassment' })).status).toBe(404)
+    // block isolation: stranger still sees the brother after sister blocks him
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect(await browseIds(stranger)).toContain(brother.id)
+    expect((await call(`/v1/profiles/${brother.id}`, stranger.cookie)).status).toBe(200)
+    expect((await call(`/v1/profiles/${brother.id}`, sister.cookie)).status).toBe(404)
+  })
+
+  it('QA: a message Report never stores the message text', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const secret = 'mon numéro est 70000000'
+    const sent = await sendText(brother, conversationId, secret)
+    const messageId = ((await sent.json()) as any).message.id
+    expect((await report(sister, { target_kind: 'message', target_id: messageId, reason: 'money_scam' })).status).toBe(201)
+    expect(JSON.stringify(trust.reports)).not.toContain(secret)
+    expect(trust.reports[0]!.target_id).toBe(messageId)
+    expect(trust.reports[0]!.conversation_id).toBe(conversationId)
+    expect(trust.reports[0]!.reported_account_id).toBe(brother.id)
+  })
+
+  it('QA: authorization — no session 401, staff session 403, metrics need staff', async () => {
+    const { brother, sister } = await connected()
+    expect((await report(undefined, { target_kind: 'profile', target_id: brother.id, reason: 'indecency' })).status).toBe(401)
+    expect((await call('/v1/blocks', undefined, 'POST', { blocked_id: brother.id })).status).toBe(401)
+    const staff = await openTestStaff(base, staffStore, 'moderator')
+    const staffCookie = await signInTestStaff(base, staffStore, staff)
+    const staffReport = await call('/v1/reports', staffCookie, 'POST', { target_kind: 'profile', target_id: brother.id, reason: 'indecency' })
+    expect(staffReport.status).toBe(403)
+    expect((await call('/v1/blocks', staffCookie, 'POST', { blocked_id: brother.id })).status).toBe(403)
+    expect((await call('/v1/staff/metrics', sister.cookie)).status).toBe(403)
+    expect(trust.reports).toHaveLength(0)
+    expect(trust.blocks).toHaveLength(0)
+  })
+
+  it('QA: AC 8.5-2 SLA boundary exactly at 24 h, and the breach follows a changed report_sla_hours', async () => {
+    const { brother, sister } = await connected()
+    expect((await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'hateful' })).status).toBe(201)
+    const staff = await openTestStaff(base, staffStore, 'operator')
+    const metrics = async (at: Date) => {
+      now = new Date(Math.max(now.getTime() + 31_000, at.getTime() - 120_000))
+      const cookie = await signInTestStaff(base, staffStore, staff)
+      now = at
+      return staffMetrics(cookie)
+    }
+    const start = new Date(trust.cases[0]!.sla_started_at).getTime()
+    expect((await metrics(new Date(start + 24 * 3600_000))).reports).toMatchObject({ open: 1, sla_breach: 0, sla_hours: 24 })
+    expect((await metrics(new Date(start + 24 * 3600_000 + 1000))).reports).toMatchObject({ open: 1, sla_breach: 1 })
+    slaHours = 6
+    expect((await metrics(new Date(start + 25 * 3600_000))).reports).toMatchObject({ open: 1, sla_breach: 1, sla_hours: 6 })
+    slaHours = null
+    now = new Date(now.getTime() + 31_000)
+    expect((await call('/v1/staff/metrics', await signInTestStaff(base, staffStore, staff))).status).toBe(503)
+    slaHours = 24
+    trust.cases[0]!.first_human_at = new Date(start + 48 * 3600_000).toISOString()
+    expect((await metrics(new Date(start + 72 * 3600_000))).reports).toMatchObject({ open: 0, sla_breach: 0, oldest_open_started_at: null })
+    expect(caseSlaState(trust.cases[0]!, now, 24)).toBe('first_touch_late')
+  })
+
+  it('QA: rate limit refuses the 11th Report in an hour and writes nothing; the window slides', async () => {
+    const { brother, sister } = await connected()
+    reportRate = 3
+    for (let i = 0; i < 3; i += 1) {
+      now = new Date(now.getTime() + 60_000)
+      expect((await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'indecency' })).status).toBe(201)
+    }
+    now = new Date(now.getTime() + 60_000)
+    const limited = await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'indecency' })
+    expect(limited.status).toBe(429)
+    const body = (await limited.json()) as any
+    expect(body.error.code).toBe('RATE_LIMITED')
+    expect(body.error.retryable).toBe(true)
+    expect(trust.reports).toHaveLength(3)
+    now = new Date(now.getTime() + 61 * 60_000)
+    expect((await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'indecency' })).status).toBe(201)
+    reportRate = null
+    expect((await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'indecency' })).status).toBe(503)
+    expect(trust.reports).toHaveLength(4)
+  })
+
+  it('QA: injection-shaped and odd bodies are refused or stored verbatim, never executed', async () => {
+    const { brother, sister } = await connected()
+    const bad: unknown[] = [
+      null,
+      'string-body',
+      { target_kind: 'profile', target_id: brother.id },
+      { target_kind: 'profile', target_id: `${brother.id}' OR 1=1--`, reason: 'indecency' },
+      { target_kind: 'profile', target_id: brother.id, reason: "indecency'; DROP TABLE report;--" },
+      { target_kind: 'PROFILE', target_id: brother.id, reason: 'indecency' },
+      { target_kind: 'profile', target_id: brother.id, reason: 'indecency', block: 'true' },
+      { target_kind: 'profile', target_id: brother.id, reason: 'indecency', details: 42 },
+      { target_kind: 'profile', target_id: sister.id, reason: 'indecency' },
+    ]
+    for (const body of bad) {
+      const response = await report(sister, body)
+      expect([400, 404]).toContain(response.status)
+    }
+    expect(trust.reports).toHaveLength(0)
+    expect(trust.cases).toHaveLength(0)
+  })
+
+  it('QA: AC 8.6 — Block closes browse, profile, favourites, invites and the thread both ways', async () => {
+    const { brother, sister, conversationId } = await connected()
+    expect((await sendText(brother, conversationId, 'Salam')).status).toBe(201)
+    expect((await call('/v1/favourites', sister.cookie, 'POST', { target_id: brother.id })).status).toBe(201)
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(200)
+    expect(trust.blocks).toHaveLength(1)
+    expect(await browseIds(brother)).not.toContain(sister.id)
+    expect(await browseIds(sister)).not.toContain(brother.id)
+    expect((await call(`/v1/profiles/${sister.id}`, brother.cookie)).status).toBe(404)
+    const favouriteList = await call('/v1/favourites', sister.cookie)
+    expect(JSON.stringify(await favouriteList.json())).not.toContain(brother.id)
+    const invite = await call('/v1/invites', brother.cookie, 'POST', { to_id: sister.id })
+    expect(invite.status).toBe(404)
+    const send = await sendText(brother, conversationId, 'encore')
+    expect(send.status).toBe(409)
+    expect(((await send.json()) as any).error.details?.reason).toBe('conversation_closed')
+    const sendBack = await sendText(sister, conversationId, 'encore')
+    expect(sendBack.status).toBe(409)
+    const thread = await call(`/v1/conversations/${conversationId}`, brother.cookie)
+    expect(thread.status).toBe(200)
+    const threadBody = (await thread.json()) as any
+    expect(threadBody.conversation.closed).toBe(true)
+    expect(threadBody.conversation.other.available).toBe(false)
+  })
+})

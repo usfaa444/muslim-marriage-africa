@@ -1,0 +1,12 @@
+Next.js: Unauthenticated Remote Code Execution in `use cache` functions returning typed arrays - https://github.com/advisories/GHSA-673q-mjm6-r5xr
+fix available via `npm audit fix --force`
+Will install next@16.4.3, which is outside the stated dependency range
+node_modules/next
+
+5 vulnerabilities (4 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force

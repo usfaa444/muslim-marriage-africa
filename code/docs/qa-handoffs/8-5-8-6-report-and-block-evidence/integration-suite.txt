@@ -1,0 +1,8 @@
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  33 passed | 2 skipped (35)
+   Start at  23:53:40
+   Duration  50.08s (tests 94%, transform 3%, import 3%)
+
