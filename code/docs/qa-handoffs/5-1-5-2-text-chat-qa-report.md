@@ -108,3 +108,43 @@ Known tolerated e2e issues: `E2E_ALLOW_ERRORS` for the Tailwind CDN and Google F
 ## What Faycal needs to run on the Mac
 
 The handoff's manual walk (section 3) with two browsers: rows 4 to 7 (typing, send, no hold wording), row 1 of this list (visual compare), and axe on `/discussions` with real fonts.
+
+## Live QA on Faycal's Mac (2026-10-23, branch `factory/text-chat` at d99654a)
+
+Stack: `ankanu-local` rebuilt with `up -d --build --wait`, all 6 services healthy; `drizzle-kit migrate` applied (24 migrations, `0023_message` included); `CHAT_KEY` and `CHAT_KID=local-chat-1` added to `~/.ankanu/api.env` (mode 600) and confirmed set inside the api container. `curl /` OK, `/v1/health` `{"status":"ok"}`. `npm run test:integration` was not run (F8). Normal network: Tailwind CDN, Google Fonts and the Material Symbols font all loaded (checked with `document.fonts.check` and `window.tailwind` on every page measured).
+
+Evidence: `5-1-5-2-text-chat-evidence/mac/` (`e2e-local.txt`, `e2e-fullstack.txt`, `live-qa.json`, `shots/`, `scripts/live-qa.mjs`, `scripts/footer-and-targets.mjs`).
+
+Accounts: two disposable members created through the real API (`/v1/accounts` with `recaptcha_token: test-ok`, email link and phone code from the api log, real ID and liveness uploads, real JPEG main photo), approved through the real staff API by a disposable moderator (`staff-cli create`, password change, TOTP), then a real invite from the brother and a real accept by the sister.
+
+### E2E
+
+| Run | Result |
+|---|---|
+| `npm run test:e2e` (web-only) | 166 passed, 1 failed, 31 skipped. `chat.spec.ts`: 30 passed, 1 failed, 3 skipped. |
+| `E2E_BASE_URL=http://localhost:4012 npm run test:e2e` | 44 passed, 0 failed, 154 skipped. `chat.spec.ts`: 34 skipped (all its tests are stub-based and skip on the full stack). |
+
+The one failure is a test defect (D1 below), not a product defect.
+
+### Mac-only checks
+
+| Check | Result | Detail |
+|---|---|---|
+| Visual match, `/discussions` vs Stitch 20, 6 widths | PASS (one Minor, D2) | Eyebrow, serif title, card, verified chip, gold-rule quote, clock and time, navy CTA with arrow, footer note and register line all match. Not shown, by scope: tabs « Toutes / Non lues / Sans réponse », « Lu » and « non lu », « Wali notifié ». `shots/list-{360..1440}.png`, `list-empty-390.png` |
+| Visual match, thread vs Stitch 21, 6 widths | PASS | Back link, header card with blurred round avatar, name, verified seal, city pin, « AUJOURD'HUI » separator, beige incoming and navy outgoing bubbles with time, composer label, placeholder, Envoyer with arrow, golden rule. « Étape : discussion » chip in place of the out-of-scope blur-lift and report buttons; no wali banner, voice note, quota or camera/mic (out of scope). `shots/thread-{360..1440}.png` |
+| No horizontal scroll | PASS | `scrollWidth <= innerWidth` on both screens at all 6 widths |
+| 44 px touch targets | PASS | Every visible link, button and textarea is at least 44 px high and wide at all 6 widths (textarea 52 px, Envoyer 44 px, back link 175x44, row CTA 201x44, bottom nav 81x44 and up). The full-page shots show the fixed bottom nav over the footer; scrolled to the bottom in a real viewport nothing is covered (`*-scrolled-bottom.png`) |
+| axe WCAG 2.0 to 2.2 AA, icon font loaded (F1 retest) | PASS | 0 serious, 0 critical on both screens at all 6 widths, colour-contrast included. F1 closed. `live-qa.json` |
+| Typing indicator between two browsers | PASS | « Bilal819895 écrit… » shown to the sister 392 ms after the brother started typing; cleared 3.9 s after he stopped. `shots/live-typing-sister-390.png` |
+| Live delivery between two browsers | PASS | Sender bubble 135 ms after Envoyer, « Message envoyé » announced; recipient bubble without reload after 160 ms; reply back in 120 ms. No « vérification », « modération », « scan », « Lu », « non lu » on either page. `shots/live-brother-390.png`, `live-sister-390.png` |
+| Real blurred thumbnail | PASS | List avatar is the live main photo's blur derivative (32x32 natural, shown 46x46, loaded, `alt=""`); thread header shows the same blur. `shots/list-thumbnail-zoom.png` |
+| Console errors | PASS | 0 across all pages and both contexts |
+
+### Defects
+
+| # | Severity | Steps | Expected | Actual | Evidence |
+|---|---|---|---|---|---|
+| D1 | Minor (test defect) | `npm run test:e2e` on a network that reaches the CDN, without `E2E_ALLOW_ERRORS` | Throttled 3G test passes | `[mobile] chat.spec.ts:477` fails with console errors « tailwind is not defined » x2: the test answers the Tailwind CDN with an empty script, so the page's inline `tailwind.config = …` throws. It passed in the cloud only because `E2E_ALLOW_ERRORS` was set. Fix: stub with `window.tailwind = { config: {} }` instead of an empty body, or allow that one error in this test. | `mac/e2e-local.txt` |
+| D2 | Minor (visual) | Open `/discussions` at 360 or 390 | « · » stays with the name or is dropped when the city wraps | The city wraps to its own line and starts with a lone « · » (« · Ouagadougou »), the same pattern fixed on the invite inbox in cb8ed9c | `shots/list-390.png`, `list-360.png` |
+
+Verdict for the styled checks: PASS. With the cloud report's checks, stories 5.1 and 5.2 have no blocker, critical or major finding open.
