@@ -36,6 +36,13 @@ function view(patch: Partial<ProfileDetailView> = {}): ProfileDetailView {
 }
 
 describe('screen 15 public profile', () => {
+  it('Stories 8.5, 8.6: « Signaler / Bloquer le profil » is a link to the Report / Block screen for this member', () => {
+    const html = profileDetailHtml(stitch(), view())
+    expect(html).toContain('data-report-link')
+    expect(html).toContain('href="/signaler/01990000-0000-7000-8000-000000000099"><span class="material-symbols-outlined text-base" data-icon="flag" aria-hidden="true">flag</span><span>Signaler / Bloquer le profil</span></a>')
+    expect(html).not.toMatch(/<button[^>]*>\s*<span[^>]*>flag<\/span>/)
+  })
+
   it('shows only the earned phone level and the API values', () => {
     const html = profileDetailHtml(stitch(), view())
     expect(html).toContain('Aminata_BF, 36 ans')

@@ -9,6 +9,7 @@ import { getMediaStore } from './media-store.js'
 import { parseBrowseFilters } from './browse-filters.js'
 import { sharedTraits, type SharedTrait } from './browse-traits.js'
 import { getExclusionStore } from './discovery-exclusion.js'
+import { getTrustPort } from './trust-port.js'
 import { profileStoreIsMemory, getProfileStore } from './profile-store.js'
 import { verificationRecord } from './account-schema.js'
 import {
@@ -238,7 +239,12 @@ export async function readBrowseGrid(
   }
 
   const opposite = gate.account.gender === 'brother' ? 'sister' : 'brother'
-  const excludeIds = await getExclusionStore().targetIds(gate.account.id)
+  // Passed profiles, plus every member kept apart by a Block either way (Story 8.6).
+  const [passed, blocked] = await Promise.all([
+    getExclusionStore().targetIds(gate.account.id),
+    getTrustPort().hiddenFor(gate.account.id),
+  ])
+  const excludeIds = [...new Set([...passed, ...blocked])]
   const pageLimit = mode === 'card' ? 1 : GRID_PAGE_SIZE
   const fetched = await getProfileStore().browseGrid({
     viewerId: gate.account.id,

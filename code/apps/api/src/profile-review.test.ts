@@ -241,7 +241,10 @@ describe('human review before anyone else sees a profile', () => {
     billingCalls = 0
     const empty = await fetch(`${base}/v1/staff/metrics`, { headers: { cookie: operatorCookie } })
     expect(empty.status).toBe(200)
-    expect(await empty.json()).toEqual({ free_review: { sla_hours: 24, waiting: 0, sla_breach: 0 } })
+    expect(await empty.json()).toEqual({
+      free_review: { sla_hours: 24, waiting: 0, sla_breach: 0 },
+      reports: { sla_hours: 24, open: 0, sla_breach: 0, oldest_open_started_at: null },
+    })
     expect(billingCalls).toBe(0)
 
     const member = await createAccount()

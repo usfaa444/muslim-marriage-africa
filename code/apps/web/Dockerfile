@@ -40,6 +40,7 @@ COPY --from=build /app/design-stitch/ankanu-v2/18-invite-compose-flash/screen.ht
 COPY --from=build /app/design-stitch/ankanu-v2/19-invite-inbox/screen.html design-stitch/ankanu-v2/19-invite-inbox/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/20-discussions-list/screen.html design-stitch/ankanu-v2/20-discussions-list/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/21-chat-thread/screen.html design-stitch/ankanu-v2/21-chat-thread/screen.html
+COPY --from=build /app/design-stitch/ankanu-v2/23-report-block/screen.html design-stitch/ankanu-v2/23-report-block/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/27-settings/screen.html design-stitch/ankanu-v2/27-settings/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/28-delete-export-status/screen.html design-stitch/ankanu-v2/28-delete-export-status/screen.html
 COPY --from=build /app/design-stitch/ankanu-v2/52-ts-visit-signals/screen.html design-stitch/ankanu-v2/52-ts-visit-signals/screen.html

@@ -29,6 +29,7 @@ import {
   type PublicProfileFailure,
 } from './public-profile.js'
 import type { ResolvedSession } from './session-store.js'
+import { getTrustPort } from './trust-port.js'
 
 export const TO_ID_MESSAGE = 'to_id : valeur non reconnue.'
 export const BOX_MESSAGE = 'box : valeur non reconnue.'
@@ -589,7 +590,8 @@ export async function sendInvite(
     return fail(403, 'FORBIDDEN', PROFILE_INCOMPLETE_MESSAGE, { reason: 'profile_incomplete', missing: ready.missing })
   }
   const recipient = await eligibleRecipient(sender, toId)
-  if (!recipient) {
+  // A Block either way (Story 8.6) is the same 404 as any unavailable profile: nothing says who blocked whom.
+  if (!recipient || (await getTrustPort().blockedBetween(sender.id, recipient.id))) {
     return fail(404, 'NOT_FOUND', PROFILE_UNAVAILABLE, null)
   }
   const config = await readInviteConfig()
@@ -682,8 +684,8 @@ export type InviteListItem = {
  * Before accept, a Sister sees his marital status and polygamy intent (FR-037). The photo is always the blur
  * derivative. No read time, decision time or `sister_accepted_at` is ever exposed (FR-042, no read receipt).
  */
-async function presentOther(viewerId: string, other: BrowseViewer | null): Promise<InviteOther> {
-  if (!other || !other.roles.includes('member')) {
+async function presentOther(viewerId: string, other: BrowseViewer | null, blocked = false): Promise<InviteOther> {
+  if (blocked || !other || !other.roles.includes('member')) {
     return { available: false }
   }
   const profile = await getProfileStore().read(other.id)
@@ -728,6 +730,7 @@ export async function listInvites(
   const conversations = new Map(
     (await getChatPort().conversationsForInvites(accepted)).map((item) => [item.invite_id, item.id]),
   )
+  const hidden = new Set(await getTrustPort().hiddenFor(me))
   const items: InviteListItem[] = []
   for (const row of rows) {
     const direction = row.to_id === me ? 'received' : 'sent'
@@ -742,7 +745,7 @@ export async function listInvites(
       other_id: otherId,
       pseudonym: other?.pseudonym ?? null,
       conversation_id: conversations.get(row.id) ?? null,
-      other: await presentOther(me, other),
+      other: await presentOther(me, other, hidden.has(otherId)),
     })
   }
   return { ok: true, body: { box, count: items.length, items } }
@@ -799,7 +802,13 @@ export async function acceptInvite(session: ResolvedSession, id: unknown): Promi
   if (row.state === 'pending') {
     const sender = await loadAccount(row.from_id)
     const profile = sender ? await getProfileStore().read(sender.id) : null
-    if (!sender || !profile || !sender.roles.includes('member') || !isListableProfile(profile.visibility, sender.status)) {
+    if (
+      !sender ||
+      !profile ||
+      !sender.roles.includes('member') ||
+      !isListableProfile(profile.visibility, sender.status) ||
+      (await getTrustPort().blockedBetween(viewer.id, sender.id))
+    ) {
       return fail(404, 'NOT_FOUND', PROFILE_UNAVAILABLE, null)
     }
   }

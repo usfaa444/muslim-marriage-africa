@@ -10,7 +10,7 @@ import { prepareV2 } from './v2-document'
  *
  * Dropped from the Stitch exports because the product does not do them (yet), or because they would be a read
  * receipt, a hold state or a quota this story does not ship: « Wali notifié », « Accord mutuel validé », « Un wali peut
- * lire cette conversation! », « Demander la levée du flou », « Signaler / Bloquer », « Quota du jour », the camera and
+ * lire cette conversation! », « Demander la levée du flou », « Quota du jour », the camera and
  * microphone buttons, the tabs « Non lues » and « Sans réponse », « 1 non lu », « Lu », and the « sécurisés » pill.
  * There is no pending, held or scan wording anywhere (AD-10, DESIGN.md chat-bubble).
  */
@@ -54,6 +54,8 @@ export const CHAT_COPY = {
   yesterday: 'Hier',
   at: 'à',
   textUnavailable: 'Message indisponible.',
+  reportBlock: 'Signaler / Bloquer',
+  reportMessage: 'Signaler ce message',
 } as const
 
 export const STAGE_LABEL: Record<string, string> = {
@@ -69,6 +71,8 @@ export const TYPING_EMIT_MS = 1500
 export const TYPING_SHOW_MS = 4000
 export const REALTIME_SCRIPT = '/v1/realtime/socket.io.min.js'
 export const DISCUSSIONS_PATH = '/discussions'
+/** Screen 23 (Stories 8.5, 8.6): « Signaler / Bloquer » in the thread header, « Signaler ce message » under theirs. */
+export const REPORT_PATH = '/signaler'
 
 const STYLE = `<style id="chat-style">
 #discussions [hidden], #chat-thread [hidden] { display: none !important; }
@@ -307,6 +311,15 @@ function messageNode(item) {
   var time = make('time', '', timeText(item.created_at))
   time.setAttribute('datetime', item.created_at)
   meta.appendChild(time)
+  if (!mine && conversation && conversation.other_id) {
+    meta.className = 'mt-0.5 px-1 flex items-center gap-1 text-[11px] text-deep-navy/80'
+    var flag = make('a', 'inline-flex shrink-0 items-center justify-center w-[44px] h-[44px] rounded-md text-deep-navy/80 hover:text-deep-navy hover:bg-cream')
+    flag.href = ${JSON.stringify(REPORT_PATH)} + '/' + encodeURIComponent(conversation.other_id) + '?discussion=' + encodeURIComponent(ID) + '&message=' + encodeURIComponent(item.id)
+    flag.setAttribute('data-testid', 'report-message')
+    flag.appendChild(icon('flag', 'text-[16px]'))
+    flag.appendChild(make('span', 'chat-sr', COPY.reportMessage))
+    meta.appendChild(flag)
+  }
   wrap.appendChild(meta)
   return wrap
 }
@@ -364,6 +377,9 @@ function header() {
   el('thread-city-text').textContent = city
   show('thread-city', !!city)
   el('thread-stage').textContent = STAGE[conversation.stage] || STAGE.chat
+  var report = el('thread-report')
+  report.href = ${JSON.stringify(REPORT_PATH)} + '/' + encodeURIComponent(conversation.other_id) + '?discussion=' + encodeURIComponent(ID)
+  report.hidden = !conversation.other_id
   var unavailable = !other.available
   var closed = !!conversation.closed
   show('thread-unavailable', unavailable)
@@ -603,7 +619,10 @@ function threadMain(id: string): string {
 <p id="thread-city" hidden class="flex items-center gap-0.5 mt-1 text-xs text-deep-navy/80"><span class="material-symbols-outlined text-xs text-[#7D5F27]" aria-hidden="true">location_on</span><span id="thread-city-text"></span></p>
 </div>
 </div>
+<div class="flex items-center gap-2 flex-wrap">
 <span id="thread-stage" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold-soft/40 text-deep-navy border border-soft-gold/40"></span>
+<a id="thread-report" hidden href="${REPORT_PATH}" class="inline-flex items-center justify-center gap-1 min-h-[44px] px-3 rounded-md border border-transparent hover:border-hairline hover:bg-cream text-xs text-deep-navy/80 hover:text-deep-navy"><span class="material-symbols-outlined text-base leading-none text-red-700/80" aria-hidden="true">shield</span><span>${CHAT_COPY.reportBlock}</span></a>
+</div>
 </div>
 <p id="thread-unavailable" hidden class="px-3.5 sm:px-6 py-2.5 bg-cream border-b border-hairline text-sm text-deep-navy">${CHAT_COPY.unavailable}</p>
 <p id="thread-closed" hidden class="px-3.5 sm:px-6 py-2.5 bg-cream border-b border-hairline text-sm text-deep-navy">${CHAT_COPY.closed}</p>

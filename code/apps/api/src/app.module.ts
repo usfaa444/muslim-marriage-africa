@@ -15,6 +15,7 @@ import { ProfilesController } from './profiles.controller.js'
 import { PinController } from './pin.controller.js'
 import { SessionsController } from './sessions.controller.js'
 import { StaffController } from './staff.controller.js'
+import { BlocksController, ReportsController } from './trust.controller.js'
 import { StaffReviewController } from './staff-review.controller.js'
 import { StaffSessionsController } from './staff-sessions.controller.js'
 import { VisitSignalsController } from './visit-signals.controller.js'
@@ -35,6 +36,8 @@ import { VerificationsController } from './verifications.controller.js'
     FavouritesController,
     InvitesController,
     ConversationsController,
+    ReportsController,
+    BlocksController,
     FiltersController,
     MediaController,
     StaffSessionsController,

@@ -13,6 +13,7 @@ import { getMediaStore } from './media-store.js'
 import { getModerationPort } from './moderation.js'
 import { isListableProfile } from './profile-review.js'
 import { getProfileStore } from './profile-store.js'
+import { getTrustPort } from './trust-port.js'
 import {
   assertBrowseViewer,
   loadAccount,
@@ -67,6 +68,8 @@ export type MessageStore = {
    */
   page(conversationId: string, cursor: { before?: string; after?: string }, limit: number): Promise<MessagePage>
   lastFor(conversationIds: readonly string[]): Promise<Map<string, StoredMessage>>
+  /** One message by id, for a Report (Story 8.5). */
+  find(id: string): Promise<StoredMessage | null>
 }
 
 function kindOf(value: string): MessageKind {
@@ -107,6 +110,9 @@ export function memoryMessageStore(): MessageStore & { rows: StoredMessage[] } {
         }
       }
       return last
+    },
+    async find(id) {
+      return rows.find((row) => row.id === id) ?? null
     },
   }
 }
@@ -183,6 +189,10 @@ function postgresMessageStore(): MessageStore {
         last.set(row.conversation_id, toStored(row))
       }
       return last
+    },
+    async find(id) {
+      const found = await getIdentityDatabase().select(columns).from(message).where(eq(message.id, id)).limit(1)
+      return found[0] ? toStored(found[0]) : null
     },
   }
 }
@@ -267,8 +277,9 @@ export type ChatOther =
   | { available: true; age: number | null; city: string | null; verified: boolean; photo: { id: string; url: string } | null }
   | { available: false }
 
-async function presentOther(viewerId: string, other: BrowseViewer | null): Promise<ChatOther> {
-  if (!other || !other.roles.includes('member')) {
+async function presentOther(viewerId: string, other: BrowseViewer | null, blocked = false): Promise<ChatOther> {
+  // A Block hides both members from each other (Story 8.6): the thread shows « Profil indisponible », like a member who left.
+  if (blocked || !other || !other.roles.includes('member')) {
     return { available: false }
   }
   const profile = await getProfileStore().read(other.id)
@@ -365,6 +376,7 @@ export async function listConversations(
     otherByInvite.has(row.invite_id),
   )
   const last = await getMessageStore().lastFor(rows.map((row) => row.id))
+  const hidden = new Set(await getTrustPort().hiddenFor(me))
   const items: ConversationItem[] = []
   for (const row of rows) {
     const otherId = otherByInvite.get(row.invite_id) ?? ''
@@ -377,7 +389,7 @@ export async function listConversations(
       stage: row.stage,
       other_id: otherId,
       pseudonym: other?.pseudonym ?? null,
-      other: await presentOther(me, other),
+      other: await presentOther(me, other, hidden.has(otherId)),
       last_message: item
         ? { id: item.id, mine: item.mine, kind: item.kind, preview: preview(item.text), created_at: item.created_at }
         : null,
@@ -418,6 +430,7 @@ export async function readConversation(
     return notFound()
   }
   const other = await loadAccount(found.otherId)
+  const blocked = await getTrustPort().blockedBetween(gate.account.id, found.otherId)
   return {
     ok: true,
     body: {
@@ -426,9 +439,10 @@ export async function readConversation(
         stage: found.row.stage,
         other_id: found.otherId,
         pseudonym: other?.pseudonym ?? null,
-        other: await presentOther(gate.account.id, other),
-        // Paused or ended: the thread stays readable, and a send is refused with `conversation_closed`.
-        closed: found.row.ended_at !== null || found.row.paused_by !== null,
+        other: await presentOther(gate.account.id, other, blocked),
+        // Paused, ended, or a Block either way (Story 8.6): the thread stays readable, and a send is refused with
+        // `conversation_closed`. The blocked member sees the same answer as for any closed thread.
+        closed: blocked || found.row.ended_at !== null || found.row.paused_by !== null,
       },
       me: { id: gate.account.id },
     },
@@ -554,7 +568,7 @@ export async function sendText(
   if (!input.ok) {
     return input
   }
-  if (found.row.ended_at !== null || found.row.paused_by !== null) {
+  if (found.row.ended_at !== null || found.row.paused_by !== null || (await getTrustPort().blockedBetween(me, found.otherId))) {
     return fail(409, 'UNHANDLED', CLOSED_MESSAGE, { reason: 'conversation_closed' })
   }
   const other = await loadAccount(found.otherId)
@@ -599,5 +613,26 @@ export async function typingTarget(session: ResolvedSession, conversationId: unk
     return null
   }
   const found = await participantConversation(gate.account.id, conversationId)
-  return found ? found.otherId : null
+  if (!found || (await getTrustPort().blockedBetween(gate.account.id, found.otherId))) {
+    return null
+  }
+  return found.otherId
+}
+
+/** A message the viewer may Report (Story 8.5): in one of their conversations and sent by the other member. */
+export type ReportableMessage = { messageId: string; conversationId: string; senderId: string }
+
+export async function messageForReport(viewerId: string, messageId: string): Promise<ReportableMessage | null> {
+  if (!isUuidV7(messageId)) {
+    return null
+  }
+  const row = await getMessageStore().find(messageId)
+  if (!row || row.sender_id === viewerId) {
+    return null
+  }
+  const found = await participantConversation(viewerId, row.conversation_id)
+  if (!found || found.otherId !== row.sender_id) {
+    return null
+  }
+  return { messageId: row.id, conversationId: row.conversation_id, senderId: row.sender_id }
 }

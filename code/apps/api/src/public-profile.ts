@@ -14,6 +14,7 @@ import { completenessFor } from './profile-fields.js'
 import { isListableProfile, readFreeReviewSlaHours } from './profile-review.js'
 import { getProfileStore, profileStoreIsMemory, type StoredProfile } from './profile-store.js'
 import type { ResolvedSession } from './session-store.js'
+import { getTrustPort } from './trust-port.js'
 
 export const PROFILE_UNAVAILABLE = "Ce profil n'est pas disponible."
 export const VIEWER_NOT_LISTABLE = "Votre profil doit être validé avant de consulter d'autres profils."
@@ -303,7 +304,8 @@ export async function readPublicProfile(
     !target.roles.includes('member') ||
     !isGender(target.gender) ||
     target.gender === viewer.gender ||
-    !isListableProfile(profile.visibility, target.status)
+    !isListableProfile(profile.visibility, target.status) ||
+    (await getTrustPort().blockedBetween(viewer.account_id, target.id))
   ) {
     return unavailable()
   }

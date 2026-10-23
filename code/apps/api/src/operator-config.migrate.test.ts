@@ -27,6 +27,7 @@ import { getChatPort, setChatPort } from './chat.js'
 import { openChatText, sealChatText } from './chat-key.js'
 import { getMessageStore, setMessageStore, type StoredMessage } from './chat-messages.js'
 import { getModerationPort, setModerationPort } from './moderation.js'
+import { getTrustStore, readReportRatePerHour, readReportSlaHours, setReportRateReader, setReportSlaReader, setTrustStore } from './trust.js'
 import { getInviteStore, readInviteConfig, setInviteConfigReader, setInviteStore, type InviteRow } from './invites.js'
 import { PASSWORD_RESET_SESSION_MS, PASSWORD_RESET_TTL_MS } from './password-reset.js'
 import { resetPasswordResetRateWindow } from './password-reset-rate.js'
@@ -196,6 +197,7 @@ function migrationSql(): string {
     '0021_invite.sql',
     '0022_conversation.sql',
     '0023_message.sql',
+    '0024_report_block.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -291,6 +293,7 @@ describe('operator_config migration', () => {
     expect(await publicTables(db())).toEqual([
       'account',
       'audit_event',
+      'block',
       'cil_ticket',
       'conversation',
       'credential',
@@ -302,6 +305,7 @@ describe('operator_config migration', () => {
       'invite_quota',
       'liveness_challenge',
       'message',
+      'moderation_case',
       'moderation_job',
       'operator_config',
       'password_reset',
@@ -309,6 +313,7 @@ describe('operator_config migration', () => {
       'pin_lock',
       'profile',
       'profile_visit',
+      'report',
       'session',
       'signed_grant',
       'sms_dispatch',
@@ -320,6 +325,7 @@ describe('operator_config migration', () => {
       'drizzle.__drizzle_migrations',
       'public.account',
       'public.audit_event',
+      'public.block',
       'public.cil_ticket',
       'public.conversation',
       'public.credential',
@@ -331,6 +337,7 @@ describe('operator_config migration', () => {
       'public.invite_quota',
       'public.liveness_challenge',
       'public.message',
+      'public.moderation_case',
       'public.moderation_job',
       'public.operator_config',
       'public.password_reset',
@@ -338,6 +345,7 @@ describe('operator_config migration', () => {
       'public.pin_lock',
       'public.profile',
       'public.profile_visit',
+      'public.report',
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
@@ -349,7 +357,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('24')
+    expect(applied.rows[0]?.count).toBe('25')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -877,6 +885,7 @@ describe('operator_config migration', () => {
     expect(await publicTables(db())).toEqual([
       'account',
       'audit_event',
+      'block',
       'cil_ticket',
       'conversation',
       'credential',
@@ -888,6 +897,7 @@ describe('operator_config migration', () => {
       'invite_quota',
       'liveness_challenge',
       'message',
+      'moderation_case',
       'moderation_job',
       'operator_config',
       'password_reset',
@@ -895,6 +905,7 @@ describe('operator_config migration', () => {
       'pin_lock',
       'profile',
       'profile_visit',
+      'report',
       'session',
       'signed_grant',
       'sms_dispatch',
@@ -906,6 +917,7 @@ describe('operator_config migration', () => {
       'drizzle.__drizzle_migrations',
       'public.account',
       'public.audit_event',
+      'public.block',
       'public.cil_ticket',
       'public.conversation',
       'public.credential',
@@ -917,6 +929,7 @@ describe('operator_config migration', () => {
       'public.invite_quota',
       'public.liveness_challenge',
       'public.message',
+      'public.moderation_case',
       'public.moderation_job',
       'public.operator_config',
       'public.password_reset',
@@ -924,6 +937,7 @@ describe('operator_config migration', () => {
       'public.pin_lock',
       'public.profile',
       'public.profile_visit',
+      'public.report',
       'public.session',
       'public.signed_grant',
       'public.sms_dispatch',
@@ -1421,6 +1435,94 @@ describe('operator_config migration', () => {
       await db().query(`delete from "message" where "conversation_id" = $1`, [conversationId || newId(at)])
       await db().query(`delete from "conversation" where "invite_id" = $1`, [inviteId])
       await db().query(`delete from "invite" where "id" = $1`, [inviteId])
+      await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, sister]])
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('files a Report with its moderation_case, keeps Blocks both ways, and counts SLA-breach on migrated Postgres (Stories 8.5, 8.6)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setTrustStore(undefined)
+    setReportSlaReader(undefined)
+    setReportRateReader(undefined)
+    const at = new Date('2026-10-23T08:00:00.000Z')
+    const brother = newId(at)
+    const sister = newId(at)
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, $4, $5, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    await db().query(insertAccount, [brother, 'trust-b@example.bf', 'Trust_B', 'brother', ['member']])
+    await db().query(insertAccount, [sister, 'trust-s@example.bf', 'Trust_S', 'sister', ['member']])
+    const reportId = newId(at)
+    const caseId = newId(at)
+    try {
+      expect(await readReportSlaHours()).toBe(24)
+      expect(await readReportRatePerHour()).toBe(10)
+      const store = getTrustStore()
+      const filed = await store.fileReport({
+        report: {
+          id: reportId,
+          reporter_id: sister,
+          target_kind: 'profile',
+          target_id: brother,
+          reported_account_id: brother,
+          conversation_id: null,
+          reason: 'misrepresented_marital_status',
+          details: 'Se dit célibataire.',
+          sla_started_at: at.toISOString(),
+          first_human_at: null,
+        },
+        case: { id: caseId, report_id: reportId, flag_queue_id: null, sla_started_at: at.toISOString(), first_human_at: null },
+        block: { id: newId(at), blocker_id: sister, blocked_id: brother, created_at: at.toISOString() },
+      })
+      expect(filed).toEqual({ blockCreated: true })
+      const cases = await db().query<{ report_id: string; sla_started_at: Date; first_human_at: Date | null }>(
+        `select "report_id", "sla_started_at", "first_human_at" from "moderation_case" where "id" = $1`,
+        [caseId],
+      )
+      expect(cases.rows).toEqual([{ report_id: reportId, sla_started_at: at, first_human_at: null }])
+      expect(await store.reportsSince(sister, new Date(at.getTime() - 1000).toISOString())).toBe(1)
+
+      // Block both ways through TrustPort; a second insert of the same pair keeps one row.
+      expect(await store.blockedBetween(brother, sister)).toBe(true)
+      expect(await store.hiddenFor(brother)).toEqual([sister])
+      expect(await store.hiddenFor(sister)).toEqual([brother])
+      expect((await store.insertBlock({ id: newId(at), blocker_id: sister, blocked_id: brother, created_at: at.toISOString() })).created).toBe(false)
+
+      // SLA-breach: open and older than the window.
+      expect(await store.openCases(new Date(at.getTime() - 1).toISOString())).toEqual({ open: 1, slaBreach: 0, oldestOpenStartedAt: at.toISOString() })
+      expect(await store.openCases(new Date(at.getTime() + 1).toISOString())).toMatchObject({ open: 1, slaBreach: 1 })
+      await db().query(`update "moderation_case" set "first_human_at" = $2 where "id" = $1`, [caseId, new Date(at.getTime() + 3_600_000)])
+      expect(await store.openCases(new Date(at.getTime() + 1).toISOString())).toEqual({ open: 0, slaBreach: 0, oldestOpenStartedAt: null })
+
+      // The schema refuses an unknown reason, a self-report, a self-block, a case with no origin, and a message Report without its conversation.
+      for (const [sqlText, values] of [
+        [`insert into "report" ("id", "reporter_id", "target_kind", "target_id", "reported_account_id", "reason", "sla_started_at") values ($1, $2, 'profile', $3, $3, 'other', now())`, [newId(at), sister, brother]],
+        [`insert into "report" ("id", "reporter_id", "target_kind", "target_id", "reported_account_id", "reason", "sla_started_at") values ($1, $2, 'profile', $2, $2, 'hateful', now())`, [newId(at), sister]],
+        [`insert into "report" ("id", "reporter_id", "target_kind", "target_id", "reported_account_id", "reason", "sla_started_at") values ($1, $2, 'message', $3, $4, 'hateful', now())`, [newId(at), sister, newId(at), brother]],
+        [`insert into "block" ("id", "blocker_id", "blocked_id") values ($1, $2, $2)`, [newId(at), sister]],
+        [`insert into "moderation_case" ("id", "sla_started_at") values ($1, now())`, [newId(at)]],
+      ] as const) {
+        let refused = false
+        try {
+          await db().query(sqlText, [...values])
+        } catch (error) {
+          refused = true
+          expect(postgresCode(error), sqlText).toBe('23514')
+        }
+        expect(refused, sqlText).toBe(true)
+      }
+    } finally {
+      await db().query(`delete from "moderation_case" where "report_id" in (select "id" from "report" where "reporter_id" = any($1::uuid[]))`, [[brother, sister]])
+      await db().query(`delete from "report" where "reporter_id" = any($1::uuid[])`, [[brother, sister]])
+      await db().query(`delete from "block" where "blocker_id" = any($1::uuid[])`, [[brother, sister]])
       await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, sister]])
       await closeAccountStore()
       if (previousDatabaseUrl === undefined) {

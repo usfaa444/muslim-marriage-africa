@@ -95,3 +95,14 @@ export type ScanPayload = { kind: 'text'; text: string }
 export type ModerationPort = {
   enqueueScan(input: { itemId: string; itemKind: ScanItemKind; accountId: string; payload: ScanPayload }): Promise<{ jobId: string }>
 }
+
+/**
+ * Trust owns `block`, `report` and `moderation_case` (AD-3). Browse, profiles, favourites, invites and chat ask trust
+ * whether two members are kept apart; they never read the `block` table. A Block hides both ways (FR-084).
+ */
+export type TrustPort = {
+  /** True when either member blocked the other. */
+  blockedBetween(a: string, b: string): Promise<boolean>
+  /** Every member kept apart from this one: those they blocked and those who blocked them. */
+  hiddenFor(accountId: string): Promise<string[]>
+}
