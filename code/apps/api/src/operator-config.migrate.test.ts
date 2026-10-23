@@ -23,6 +23,7 @@ import { createApp } from './create-app.js'
 import { setEmailPort } from './email-port.js'
 import { setEmailVerificationStore } from './email-verification-store.js'
 import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
+import { getInviteStore, readInviteConfig, setInviteConfigReader, setInviteStore, type InviteRow } from './invites.js'
 import { PASSWORD_RESET_SESSION_MS, PASSWORD_RESET_TTL_MS } from './password-reset.js'
 import { resetPasswordResetRateWindow } from './password-reset-rate.js'
 import { setPasswordResetStore } from './password-reset-store.js'
@@ -52,6 +53,12 @@ const founderValues = {
   sister_reach_mode: free_unlimited,
   rl_password_reset_per_min: '5',
 } as const
+
+/**
+ * Live values after every migration. Fay, 2026-10-23: the Free Invite quota applies to Sisters too, so 0021 moves
+ * `sister_reach_mode` from the 0000 seed `free_unlimited` to `same_quota_as_brothers`. The seed stays as history.
+ */
+const liveValues = { ...founderValues, sister_reach_mode: same_quota_as_brothers } as const
 
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => {
@@ -182,6 +189,7 @@ function migrationSql(): string {
     '0018_discovery_exclusion.sql',
     '0019_staff_mfa.sql',
     '0020_review_console.sql',
+    '0021_invite.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -283,6 +291,8 @@ describe('operator_config migration', () => {
       'discovery_exclusion',
       'email_verification',
       'favourite',
+      'invite',
+      'invite_quota',
       'liveness_challenge',
       'operator_config',
       'password_reset',
@@ -307,6 +317,8 @@ describe('operator_config migration', () => {
       'public.discovery_exclusion',
       'public.email_verification',
       'public.favourite',
+      'public.invite',
+      'public.invite_quota',
       'public.liveness_challenge',
       'public.operator_config',
       'public.password_reset',
@@ -325,7 +337,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('21')
+    expect(applied.rows[0]?.count).toBe('22')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -821,11 +833,16 @@ describe('operator_config migration', () => {
       `select "key", "value" from "operator_config"`,
     )
     const actual = new Map(result.rows.map((row) => [row.key, row.value]))
-    expect(actual.size).toBe(Object.keys(founderValues).length)
-    for (const [key, value] of Object.entries(founderValues)) {
+    expect(actual.size).toBe(Object.keys(liveValues).length)
+    for (const [key, value] of Object.entries(liveValues)) {
       expect(actual.get(key)).toBe(value)
     }
-    expect(actual.get('sister_reach_mode')).toBe(free_unlimited)
+    // Decision 2026-10-23 (Fay): every Free-tier limit applies the same to Sisters and Brothers.
+    expect(actual.get('sister_reach_mode')).toBe(same_quota_as_brothers)
+    const invitesSql = readFileSync(join(apiRoot, 'drizzle', '0021_invite.sql'), 'utf8')
+    expect(invitesSql).toContain(
+      `UPDATE "operator_config" SET "value" = 'same_quota_as_brothers' WHERE "key" = 'sister_reach_mode' AND "value" = 'free_unlimited'`,
+    )
     expect(actual.get('brother_invite_quota_premium')).toBe('unlimited')
 
     const migratorImport = /from\s+['"]drizzle-orm\/(?:[^'"]*\/)?migrator(?:\.js)?['"]/
@@ -854,6 +871,8 @@ describe('operator_config migration', () => {
       'discovery_exclusion',
       'email_verification',
       'favourite',
+      'invite',
+      'invite_quota',
       'liveness_challenge',
       'operator_config',
       'password_reset',
@@ -878,6 +897,8 @@ describe('operator_config migration', () => {
       'public.discovery_exclusion',
       'public.email_verification',
       'public.favourite',
+      'public.invite',
+      'public.invite_quota',
       'public.liveness_challenge',
       'public.operator_config',
       'public.password_reset',
@@ -905,6 +926,12 @@ describe('operator_config migration', () => {
 
   it('rejects a sister_reach_mode other than the two locked strings', async () => {
     expect(migrated).toBe(true)
+    // Both values stay valid after the 2026-10-23 default change (the Story 4.7 switch writes either).
+    await db().query(`update "operator_config" set "value" = $1 where "key" = 'sister_reach_mode'`, [free_unlimited])
+    const freeAllowed = await db().query<{ value: string }>(
+      `select "value" from "operator_config" where "key" = 'sister_reach_mode'`,
+    )
+    expect(freeAllowed.rows).toEqual([{ value: free_unlimited }])
     await db().query(`update "operator_config" set "value" = $1 where "key" = 'sister_reach_mode'`, [
       same_quota_as_brothers,
     ])
@@ -941,8 +968,9 @@ describe('operator_config migration', () => {
     await db().query(`delete from "operator_config" where "key" = 'story_probe'`)
 
     await db().query(`update "operator_config" set "value" = $1 where "key" = 'sister_reach_mode'`, [
-      free_unlimited,
+      same_quota_as_brothers,
     ])
+    await db().query(`update "operator_config" set "value" = '10' where "key" = 'daily_message_cap'`)
   })
 
   it('keeps 0013 as history and allows many live photos with one main', async () => {
@@ -1092,6 +1120,88 @@ describe('operator_config migration', () => {
     await db().query(`delete from "favourite" where "account_id" = $1`, [owner])
     await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[owner, older, newer]])
   })
+  it('stores invites with one pending per pair and a guarded Ouaga-day quota on migrated Postgres (Stories 4.1, 4.2)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setInviteStore(undefined)
+    setInviteConfigReader(undefined)
+    const at = new Date('2026-10-23T10:00:00.000Z')
+    const brother = newId(at)
+    const sisters = Array.from({ length: 6 }, () => newId(at))
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, $4, $5, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    await db().query(insertAccount, [brother, 'inv-b@example.bf', 'Inv_B', 'brother', ['member']])
+    for (const [index, id] of sisters.entries()) {
+      await db().query(insertAccount, [id, `inv-s${index}@example.bf`, `Inv_S${index}`, 'sister', ['member']])
+    }
+    const row = (to: string, offset = 0): InviteRow => {
+      const when = new Date(at.getTime() + offset)
+      return { id: newId(when), from_id: brother, to_id: to, state: 'pending', created_at: when.toISOString() }
+    }
+    try {
+      expect(await readInviteConfig()).toEqual({ sisterReachMode: same_quota_as_brothers, freeCap: 3, premiumCap: null })
+      const store = getInviteStore()
+      const charge = { day: '2026-10-23', cap: 3 }
+      const first = await store.send(row(sisters[0] ?? '', 1), charge)
+      expect(first).toMatchObject({ ok: true, sentCount: 1 })
+      const duplicate = await store.send(row(sisters[0] ?? '', 2), charge)
+      expect(duplicate).toMatchObject({ ok: false, reason: 'duplicate' })
+      expect(await store.quotaCount(brother, '2026-10-23')).toBe(1)
+      expect((await store.send(row(sisters[1] ?? '', 3), charge)).ok).toBe(true)
+      const raced = await Promise.all([
+        store.send(row(sisters[2] ?? '', 4), charge),
+        store.send(row(sisters[3] ?? '', 5), charge),
+      ])
+      expect(raced.filter((item) => item.ok)).toHaveLength(1)
+      expect(raced.filter((item) => !item.ok && item.reason === 'quota')).toHaveLength(1)
+      expect(await store.quotaCount(brother, '2026-10-23')).toBe(3)
+      const counted = await db().query<{ count: string }>(
+        `select count(*)::text as count from "invite" where "from_id" = $1`,
+        [brother],
+      )
+      expect(counted.rows[0]?.count).toBe('3')
+      expect(await store.send(row(sisters[4] ?? '', 6), { day: '2026-10-23', cap: null })).toMatchObject({ ok: true, sentCount: 4 })
+      expect(await store.send(row(sisters[5] ?? '', 7), { day: '2026-10-24', cap: 3 })).toMatchObject({ ok: true, sentCount: 1 })
+      expect(await store.countSentSince(brother, at)).toBe(5)
+      expect(await store.countSentSince(brother, new Date(at.getTime() + 6))).toBe(2)
+      const received = await store.list(sisters[0] ?? '', 'received')
+      expect(received.map((item) => item.from_id)).toEqual([brother])
+      const sent = await store.list(brother, 'sent')
+      expect(sent).toHaveLength(5)
+      expect(sent.map((item) => item.id)).toEqual(sent.map((item) => item.id).sort().reverse())
+
+      let selfRefused = false
+      try {
+        await db().query(`insert into "invite" ("id", "from_id", "to_id", "state", "created_at") values ($1, $2, $2, 'pending', now())`, [
+          newId(at),
+          brother,
+        ])
+      } catch (error) {
+        selfRefused = true
+        expect(postgresCode(error)).toBe('23514')
+      }
+      expect(selfRefused).toBe(true)
+      await db().query(`update "operator_config" set "value" = 'abc' where "key" = 'brother_invite_quota_free'`)
+      expect(await readInviteConfig()).toBeNull()
+      await db().query(`update "operator_config" set "value" = '3' where "key" = 'brother_invite_quota_free'`)
+      await db().query(`update "operator_config" set "value" = $1 where "key" = 'sister_reach_mode'`, [free_unlimited])
+      expect((await readInviteConfig())?.sisterReachMode).toBe(free_unlimited)
+      await db().query(`update "operator_config" set "value" = $1 where "key" = 'sister_reach_mode'`, [same_quota_as_brothers])
+    } finally {
+      await db().query(`delete from "invite_quota" where "account_id" = $1`, [brother])
+      await db().query(`delete from "invite" where "from_id" = $1`, [brother])
+      await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, ...sisters]])
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
   it('provisions a staff account and signs it in with TOTP on migrated Postgres (Story 12.1)', async () => {
     expect(migrated).toBe(true)
     const previousDatabaseUrl = process.env['DATABASE_URL']

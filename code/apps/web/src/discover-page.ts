@@ -159,6 +159,12 @@ document.addEventListener('click', function (event) {
     passCard()
     return
   }
+  var invite = event.target && event.target.closest ? event.target.closest('[data-card-invite]') : null
+  if (invite) {
+    event.preventDefault()
+    if (cardItem && cardItem.id) window.location.assign('/invitations/envoyer/' + encodeURIComponent(cardItem.id))
+    return
+  }
   var later = event.target && event.target.closest ? event.target.closest('[data-later]') : null
   if (later) {
     event.preventDefault()
@@ -1136,7 +1142,7 @@ function markButton(html: string, needle: string, attrs: string): string {
     return html
   }
   const start = html.lastIndexOf('<button', at)
-  if (start < 0 || html.slice(start, at).includes('data-card-pass') || html.slice(start, at).includes('data-later') || html.slice(start, at).includes('data-bookmark')) {
+  if (start < 0 || html.slice(start, at).includes('data-card-pass') || html.slice(start, at).includes('data-later') || html.slice(start, at).includes('data-card-invite') || html.slice(start, at).includes('data-bookmark')) {
     return html
   }
   return `${html.slice(0, start)}<button type="button" ${attrs} ${html.slice(start + '<button'.length)}`
@@ -1269,7 +1275,7 @@ function prepareFocus(html: string): string {
   next = next.replace(' • <span class="font-semibold text-deep-navy">1 profil correspondant</span>', '')
   next = markButton(next, 'Passer avec égards', 'data-card-pass')
   next = markButton(next, "Message d'introduction", 'data-later="flash"')
-  next = markButton(next, 'Envoyer une invitation Ta\'aruf', 'data-later="invite"')
+  next = markButton(next, 'Envoyer une invitation Ta\'aruf', 'data-card-invite')
   next = markButton(next, 'Enregistrer en toute discrétion', 'data-bookmark')
   return next
 }

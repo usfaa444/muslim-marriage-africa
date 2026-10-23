@@ -5,6 +5,7 @@ import { FavouritesController } from './favourites.controller.js'
 import { FiltersController } from './filters.controller.js'
 import { CilController } from './cil.controller.js'
 import { HealthController } from './health.controller.js'
+import { InvitesController } from './invites.controller.js'
 import { MediaController } from './media.controller.js'
 import { MeController } from './me.controller.js'
 import { PasswordResetsController } from './password-resets.controller.js'
@@ -31,6 +32,7 @@ import { VerificationsController } from './verifications.controller.js'
     ProfilesController,
     BrowseController,
     FavouritesController,
+    InvitesController,
     FiltersController,
     MediaController,
     StaffSessionsController,

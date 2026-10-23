@@ -445,6 +445,12 @@ export function profileDetailHtml(stitch: string, view: ProfileDetailView): stri
     'aria-label="Mémoriser discrètement ce profil"',
     `data-bookmark="true" data-target-id="${escapeHtml(view.profile.id)}" aria-label="Mémoriser discrètement ce profil"`,
   )
+  html = html.replace(
+    /<button class="w-full sm:w-auto flex-1 min-h-\[44px\]([^"]*)" type="button">\s*<span class="material-symbols-outlined text-soft-gold text-lg" data-icon="send">send<\/span>\s*<span class="">Envoyer une invitation Ta'aruf<\/span>\s*<\/button>/,
+    '<a data-invite-link class="w-full sm:w-auto flex-1 min-h-[44px]$1" href="/invitations/envoyer/' +
+      encodeURIComponent(view.profile.id) +
+      '"><span class="material-symbols-outlined text-soft-gold text-lg" data-icon="send" aria-hidden="true">send</span><span>Envoyer une invitation Ta\'aruf</span></a>',
+  )
   const page = prepareV2(html, BOOKMARK_SCRIPT)
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`

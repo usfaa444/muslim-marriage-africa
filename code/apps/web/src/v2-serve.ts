@@ -4,6 +4,7 @@ import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
 import { discoverHtml } from './discover-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
+import { inviteComposeHtml, isInviteTargetId } from './invite-compose-page'
 import { visitSignalsHtml } from './visit-signals-page'
 import { staffReviewHtml } from './staff-review-page'
 import { fillStaffHeader, staffHomeHtml, staffSignInHtml, type StaffIdentity, type StaffMfaState } from './staff-pages'
@@ -395,6 +396,26 @@ export async function memberGuarded(request: Request, path: MemberPath): Promise
     return redirect
   }
   return memberRouteResponse(request.headers.get('cookie'), path)
+}
+
+/**
+ * Screen 18, Invite compose (Stories 4.1, 4.2). Staff and mahram stubs get the member-route refusal; a member page
+ * loads the recipient and quota in the browser, so the API decides every refusal.
+ */
+export async function inviteComposeResponse(request: Request, id: string): Promise<Response> {
+  const redirect = await entryRedirect(request, `/invitations/envoyer/${id}`)
+  if (redirect) {
+    return redirect
+  }
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  if (kind === 'staff' || kind === 'mahram') {
+    return memberRouteResponse(cookie, '/invitations')
+  }
+  if (!isInviteTargetId(id)) {
+    return redirectTo(request, '/decouvrir')
+  }
+  return htmlResponse(inviteComposeHtml(stitchFile('18-invite-compose-flash'), id))
 }
 
 /** Screen 57. Stub cookies stay on the JSON envelope. A live session gets the card chrome. */

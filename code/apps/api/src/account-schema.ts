@@ -403,6 +403,52 @@ export const favourite = pgTable(
   (table) => [primaryKey({ columns: [table.account_id, table.target_id] })],
 )
 
+/**
+ * Invites-owned Invite (Story 4.1). The UUID v7 `id` carries the send instant. `flash_id` arrives with Story 4.3.
+ * At most one pending Invite per `(from_id, to_id)`, so a double submit cannot store two.
+ */
+export const invite = pgTable(
+  'invite',
+  {
+    id: uuid('id').primaryKey(),
+    from_id: uuid('from_id')
+      .notNull()
+      .references(() => account.id),
+    to_id: uuid('to_id')
+      .notNull()
+      .references(() => account.id),
+    state: text('state').notNull(),
+    sister_accepted_at: timestamp('sister_accepted_at', { withTimezone: true, mode: 'string' }),
+    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull(),
+  },
+  (table) => [
+    check('invite_state_check', sql`${table.state} in ('pending', 'accepted', 'declined')`),
+    check('invite_not_self_check', sql`${table.from_id} <> ${table.to_id}`),
+    uniqueIndex('invite_one_pending_per_pair').on(table.from_id, table.to_id).where(sql`${table.state} = 'pending'`),
+    index('invite_to_id_id').on(table.to_id, table.id),
+    index('invite_from_id_id').on(table.from_id, table.id),
+  ],
+)
+
+/**
+ * Invites-owned daily Invite count (Story 4.2). Grain `(account_id, civil_day_ouaga)`, the Africa/Ouagadougou
+ * civil day. Written only by a successful quota-class send. Billing never writes it.
+ */
+export const inviteQuota = pgTable(
+  'invite_quota',
+  {
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => account.id),
+    civil_day_ouaga: date('civil_day_ouaga', { mode: 'string' }).notNull(),
+    sent_count: integer('sent_count').notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.account_id, table.civil_day_ouaga] }),
+    check('invite_quota_sent_count_check', sql`${table.sent_count} >= 0`),
+  ],
+)
+
 /** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */
 export const auditEvent = pgTable('audit_event', {
   id: uuid('id').primaryKey(),

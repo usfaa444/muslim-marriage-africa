@@ -96,13 +96,18 @@ export function entryLocation(path: string, step: GateStep): string | null {
     }
     return step === owned ? null : STEP_PATH[step]
   }
-  if (ACCOUNT.has(normalized) || isPublicProfilePath(normalized)) {
+  if (ACCOUNT.has(normalized) || isPublicProfilePath(normalized) || isInviteComposePath(normalized)) {
     if (step === 'anon') {
       return '/auth'
     }
     return step === 'account' ? null : STEP_PATH[step]
   }
   return null
+}
+
+/** Screen 18. Invite compose for one recipient (Stories 4.1, 4.2). */
+export function isInviteComposePath(path: string): boolean {
+  return /^\/invitations\/envoyer\/[^/]+$/.test(path)
 }
 
 /** Screen 15. `/profil` with no id stays the member stub. */
