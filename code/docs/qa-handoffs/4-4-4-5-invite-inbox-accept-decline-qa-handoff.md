@@ -46,7 +46,7 @@
 
 Renders for a live member session and for the `web` / `capacitor` dev stubs (like `/invitations/envoyer/<id>`); staff and mahram stubs keep the member-route JSON refusal; signed out goes to `/auth`. The page loads the three boxes in the browser.
 
-- Eyebrow « Espace de concertation », title « Invitations Ta'aruf ».
+- Eyebrow « Espace de concertation » in gold (`#7D5F27`, see section 9, finding 2), title « Invitations Ta'aruf ».
 - Tabs (WAI-ARIA tablist, arrow keys / Home / End, `#envoyees` / `#acceptees` in the URL open that tab): « Reçues N » (pending received only), « Envoyées N », « Acceptées N »; the current tab's count is navy.
 - **Reçues** row: initial or blur thumb, « <pseudonyme>, <âge> ans », « Identité vérifiée » if verified, city; then « Situation matrimoniale » (Célibataire / Marié(e) / Divorcé(e) / Veuf(ve) / Non renseignée), « Déclaration de polygamie » (Projet monogame / Ouvert à la polygamie / Non renseignée), « Statut actuel » « Étape : Invitation Ta'aruf ». Buttons « Accepter la démarche » (primary), link « Consulter le profil » (`/profil/<id>`), « Refuser discrètement » (`button-quiet`: text only, no dialog, no confirm). Unavailable sender: « Ce profil n'est plus disponible. » and only « Refuser discrètement ».
 - **Envoyées** row: name, age, city, « Envoyée le <date> » (Ouagadougou, e.g. « 8 octobre 2026 »), pill « En attente » / « Acceptée » (+ « Ouvrir la discussion ») / « Déclinée ». Nothing else on a pending or declined row.
@@ -165,3 +165,15 @@ All from `code/`, on this branch, in this sandbox.
 - E2E (local Tailwind wrapper, both projects): `invite-inbox` + `app-shell` + `invite-compose`: `53 passed, 5 skipped` (skips are existing project-conditional skips). `invite-inbox.spec.ts`: 8 tests × 2 projects all passed.
 - Browser (Playwright Chromium, dev server): `/invitations` all three tabs at 360 and 1440 with sample data: horizontal overflow 0, no console errors, no unexpected failed requests, layout matches Stitch `19-invite-inbox` minus the removed lines (section 1).
 - Full stack (`docker compose`, images built from this branch): `/v1/health` → `{"status":"ok","role":"api"}`; `drizzle-kit migrate` applied through 0022; `select count(*) from conversation` → `0`.
+
+## 9. Retest: QA visual findings (live QA on the owner's Mac, after commit e739572)
+
+| # | Finding | Fix | Test |
+|---|---|---|---|
+| 1 | At 390px on Envoyées, when the city wraps under a long name, a lone « • » is left at the end of the name line. | The separator and the text after it are now one non-breaking group (`withSep`, class `inbox-sep-group`, `inline-flex whitespace-nowrap`) in a `flex-wrap` line, so a wrap moves « • ville » down together. Used on Envoyées (name • city) and Acceptées (city • date, which was a plain string and had the same risk). Reçues puts the city on its own line, so it has no separator. | e2e "when the city wraps under a long name, the « • » wraps with it on Envoyées and Acceptées" (360 and 390, long pseudonyms; checks every « • » sits on the same line as its text, and that the city really wrapped at 390). It fails on the previous page code and passes now. Web unit "renders the three tabs…" / "keeps sent rows…" assert the grouping and no `' • '` concatenation. |
+| 2 | « ESPACE DE CONCERTATION » is navy/grey; Stitch 19 has it in soft gold. | Now gold. Stitch's exact `soft-gold` (#C9A86C) on the cream page is about 2.2:1, below WCAG AA 4.5:1 for 12px text, so axe would fail it. The eyebrow uses `#7D5F27`, the darker gold the project already uses for gold text that must pass AA (`AUTH_LINK_GOLD`, brand hover). | Web unit "renders the three tabs…" asserts the class; every inbox e2e test runs axe. |
+
+Results after the fix (from `code/`):
+- `npm run lint`: exit 0, the same 3 pre-existing warnings. `npm run typecheck`: exit 0.
+- `npx vitest run apps/web/src/invite-inbox-page.test.ts`: `Tests  6 passed (6)`.
+- E2E (local Tailwind wrapper): `invite-inbox` + `app-shell`: `40 passed, 6 skipped`.

@@ -235,6 +235,16 @@ function chatLink() {
   link.appendChild(make('span', '', COPY.openChat))
   return link
 }
+// The separator and the text after it never break apart, so a wrapped line
+// starts with « • ville » instead of leaving a lone « • » at the end of the line above.
+function withSep(text, cls) {
+  var group = make('span', 'inbox-sep-group inline-flex items-center gap-x-2 whitespace-nowrap ' + cls)
+  var sep = make('span', 'text-deep-navy/60', '•')
+  sep.setAttribute('aria-hidden', 'true')
+  group.appendChild(sep)
+  group.appendChild(make('span', '', text))
+  return group
+}
 function sentRow(item) {
   var row = make('li', 'bg-[#FBF8F0] border border-hairline/80 rounded-md p-5 flex flex-col md:flex-row md:items-center justify-between gap-4')
   row.setAttribute('data-testid', 'invite-row')
@@ -246,12 +256,7 @@ function sentRow(item) {
   var line = make('div', 'flex flex-wrap items-center gap-x-2')
   line.appendChild(make('h2', 'inbox-name font-medium text-deep-navy text-sm', nameLine(item)))
   var city = cityText(item)
-  if (city) {
-    var sep = make('span', 'text-deep-navy/60', '•')
-    sep.setAttribute('aria-hidden', 'true')
-    line.appendChild(sep)
-    line.appendChild(make('span', 'text-xs text-deep-navy/80', city))
-  }
+  if (city) line.appendChild(withSep(city, 'text-xs text-deep-navy/80'))
   who.appendChild(line)
   who.appendChild(make('p', 'text-xs text-deep-navy/80 mt-0.5', 'Envoyée le ' + dateText(item.created_at)))
   left.appendChild(who)
@@ -280,7 +285,14 @@ function acceptedRow(item) {
   who.appendChild(line)
   var city = cityText(item)
   var detail = (item.direction === 'received' ? 'Reçue le ' : 'Envoyée le ') + dateText(item.created_at)
-  who.appendChild(make('p', 'text-xs md:text-sm text-deep-navy/80', city ? city + ' • ' + detail : detail))
+  var meta = make('p', 'flex flex-wrap items-center gap-x-2 text-xs md:text-sm text-deep-navy/80')
+  if (city) {
+    meta.appendChild(make('span', '', city))
+    meta.appendChild(withSep(detail, ''))
+  } else {
+    meta.appendChild(make('span', '', detail))
+  }
+  who.appendChild(meta)
   left.appendChild(who)
   row.appendChild(left)
   var right = make('div', 'shrink-0')
@@ -449,7 +461,7 @@ function inboxMain(): string {
     'inline-flex items-center justify-center min-h-[44px] px-4 rounded-md border border-hairline bg-cream text-sm font-medium text-deep-navy hover:border-deep-navy/30'
   return `<main id="invite-inbox" aria-busy="true" class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 md:px-12 py-10 md:py-14 min-w-0">
 <div class="mb-8 max-w-2xl">
-<p class="mb-2 text-xs font-semibold tracking-widest text-deep-navy/80 uppercase">${INBOX_COPY.eyebrow}</p>
+<p class="mb-2 text-xs font-semibold tracking-widest text-[#7D5F27] uppercase">${INBOX_COPY.eyebrow}</p>
 <h1 class="font-display text-3xl md:text-4xl text-deep-navy font-normal tracking-tight">${INBOX_COPY.title}</h1>
 </div>
 <div role="tablist" aria-label="${INBOX_COPY.tabsLabel}" class="flex items-end border-b border-hairline mb-6 gap-1 sm:gap-4 overflow-x-auto">

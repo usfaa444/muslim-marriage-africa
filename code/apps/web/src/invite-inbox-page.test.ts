@@ -24,6 +24,8 @@ describe('screen 19 Invite inbox (Stories 4.4, 4.5)', () => {
     expect(html).toContain("<title>AnKanu • Invitations Ta'aruf</title>")
     expect(html).toContain(`>${INBOX_COPY.title}</h1>`)
     expect(html).toContain(INBOX_COPY.eyebrow)
+    // Stitch 19 sets the eyebrow in gold; #7D5F27 is the project's gold that passes AA on cream (soft gold #C9A86C does not).
+    expect(html).toContain(`text-[#7D5F27] uppercase">${INBOX_COPY.eyebrow}</p>`)
     expect(html).toContain('role="tablist"')
     for (const [name, label] of [
       ['recues', 'Reçues'],
@@ -91,6 +93,9 @@ describe('screen 19 Invite inbox (Stories 4.4, 4.5)', () => {
     expect(INBOX_COPY.acceptedPill).toBe('Acceptée')
     expect(INBOX_COPY.declined).toBe('Déclinée')
     expect(html).toContain("'Envoyée le ' + dateText(item.created_at)")
+    // The « • » before the city or date is grouped with that text, never left alone at a line end.
+    expect(html).toContain('inbox-sep-group inline-flex items-center gap-x-2 whitespace-nowrap')
+    expect(html).not.toContain("' • '")
     expect(html).not.toMatch(/\b(lu|vue|consultée) (le|à)\b/i)
     expect(html).not.toMatch(/read_at|seen_at|decided_at|sister_accepted_at/)
   })

@@ -300,6 +300,47 @@ test.describe('Invite inbox (Stories 4.4, 4.5)', () => {
     await expect(row(page, 'Al-Hassan_BF')).toBeVisible()
   })
 
+  test('when the city wraps under a long name, the « • » wraps with it on Envoyées and Acceptées', async ({ page, context, baseURL }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'narrow widths are set by hand')
+    const api = inbox()
+    api.rows.push(sent('01990000-0000-7000-8000-0000000000b4', 'Mariam_Ouedraogo_Kabore', 'pending'))
+    api.rows.push(sent('01990000-0000-7000-8000-0000000000b5', 'Fatoumata_Sawadogo_Zongo', 'accepted'))
+    await serveApi(context, baseURL ?? '', api)
+    for (const width of [360, 390]) {
+      await page.setViewportSize({ width, height: 900 })
+      await openInbox(page)
+      for (const [tab, name] of [[/Envoyées/, 'Mariam_Ouedraogo_Kabore'], [/Acceptées/, 'Fatoumata_Sawadogo_Zongo']] as const) {
+        await page.getByRole('tab', { name: tab }).click()
+        const target = page.getByRole('tabpanel').locator('[data-testid="invite-row"]:visible').filter({ has: page.getByRole('heading', { name: new RegExp(`^${name}`) }) })
+        await expect(target).toBeVisible()
+        const lines = await target.evaluate((node) => {
+          const top = (el: Element) => Math.round(el.getBoundingClientRect().top)
+          return Array.from(node.querySelectorAll('.inbox-sep-group')).map((group) => {
+            const [sep, text] = Array.from(group.children)
+            return { sep: top(sep!), text: top(text!), bullet: sep!.textContent }
+          })
+        })
+        expect(lines.length).toBeGreaterThan(0)
+        for (const line of lines) {
+          expect(line.bullet).toBe('•')
+          expect(line.sep).toBe(line.text)
+        }
+      }
+      if (width === 390) {
+        await page.getByRole('tab', { name: /Envoyées/ }).click()
+        const sentRow = row(page, 'Mariam_Ouedraogo_Kabore')
+        const wrapped = await sentRow.evaluate((node) => {
+          const name = node.querySelector('h2')!.getBoundingClientRect()
+          const group = node.querySelector('.inbox-sep-group')!.getBoundingClientRect()
+          return group.top >= name.bottom - 1
+        })
+        expect(wrapped).toBe(true)
+      }
+      await expectNoHorizontalOverflow(page)
+    }
+    await expectAccessible(page)
+  })
+
   test('fits every factory width on each tab', async ({ page, context, baseURL }, testInfo) => {
     test.skip(testInfo.project.name !== 'desktop', 'width sweep runs once')
     await serveApi(context, baseURL ?? '', inbox())
