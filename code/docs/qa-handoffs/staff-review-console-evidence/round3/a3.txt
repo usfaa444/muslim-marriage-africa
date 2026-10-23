@@ -1,0 +1,31 @@
+EVIDENCE headers {
+ "cache-control": "no-store, private, max-age=0",
+ "connection": "keep-alive",
+ "content-disposition": "inline",
+ "content-length": "32",
+ "content-security-policy": "default-src 'none'; frame-ancestors 'self'",
+ "content-type": "image/jpeg",
+ "date": "Thu, 22 Oct 2026 23:41:27 GMT",
+ "keep-alive": "timeout=5",
+ "pragma": "no-cache",
+ "x-content-type-options": "nosniff",
+ "x-powered-by": "Express"
+} len 32 first bytes ffd8ffe0
+audit evidence_view before/after 5 6
+moderator_evidence_view|01a165f3-6419-7ad8-8bc4-6b1ccb7fce21|{"at": "2026-10-22T23:41:27.004Z", "kind": "id_document", "record_id": "01a165f4-7ba0-74b4-b81b-4a2ce1697889", "account_id": "01a165f4-70c1-72e7-8803-528a8dc91311"}
+moderator_profile_review_view|01a165f3-6419-7ad8-8bc4-6b1ccb7fce21|{"asset_ids": "01a165f4-7b58-72f0-9b52-eee15b6828d3,01a165f4-85e3-7dd3-b297-ca7f0d5c4c71,01a165f4-97d8-7d62-a1d6-3ae744abed65,01a165f5-92b5-778e-869b-a53022b07456"}
+moderator_photo_unblur|01a165f3-6419-7ad8-8bc4-6b1ccb7fce21|{"reason": "comparer avec le selfie", "asset_id": "01a165f4-7b58-72f0-9b52-eee15b6828d3", "grant_id": "01a165fd-ae9b-720a-b028-ae4eaec1e37e", "account_id": "01a165f4-70c1-72e7-8803-528a8dc91311"}
+evidence abc 404 application/json; charset=utf-8
+evidence ../../etc/passwd 404 application/json; charset=utf-8
+evidence 00000000-0000-0000-0000-000000000000 404 application/json; charset=utf-8
+evidence 01a165f4-7b58-72f0-9b52-eee15b6828d3 404 application/json; charset=utf-8
+evidence 01a165f4-70c1-72e7-8803-528a8dc91311 404 application/json; charset=utf-8
+evidence 01a165f4-7ba0-74b4-b81b-4a2ce1697889%00 404 application/json; charset=utf-8
+evidence xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 404 application/json; charset=utf-8
+phone_otp row as evidence 404
+case view len 1310 contains s3:// false contains evidence_uri false contains bucket false
+{"account_id":"01a165f4-70c1-72e7-8803-528a8dc91311","pseudonym":"Qa_118808850","account_status":"Active","gender":"sister","dob":"1995-03-02","age":31,"priority":"free","profile":{"city":"ouagadougou","country":null,"origin":null,"marital_status":"single","polygamy_intent":"no","education":null,"profession":null,"madhhab":null,"practice":null,"life_plans":null,"bio_live":null,"bio_pending":"Une présentation sobre.","visibility":"unpublished","review_queued_at":"2026-10-22 23:31:23.557+00","review_passed_at":null},"profile_review":{"queued":true,"profile_required":true,"bio_required":true,"photo_ids":["01a165f4-7b58-72f0-9b52-eee15b6828d3"]},"photos":[{"asset_id":"01a165f4-7b58-72f0-9b52-eee15b6828d3","moderation_state":"pending","is_main":false,"blur_url":"/v1/media/get?token=01a165fd-b2f0-7bbd-8bba-dd191c97eee1"}],"id_document":{"record_id":"01a165f4-7ba0-74b4-b81b-4a2ce1697889","status":"pending","captured_at":"2026-10-22T23:31:23.680Z","evidence_url":"/v1/staff/review/evidence/01a165f4-7ba0-74b4-b81b-4a2ce1697889"},"liveness":{"record_id":"01a165f4-7bc3-7208-827b-930c5b54fe00","status":"pending","captured_at":"2026-10-22T23:31:23.715Z","evidence_url":"/v1/staff/review/evidence/01a165f4-7bc3-7208-827b-930c5b54fe00","pose":"look_left","pose_label":"Regardez vers la gauche"},"history":[]}
+case abc 404 NOT_FOUND
+case 01a165b2-46d8-7568-8d03-62b4d1d5855f 404 NOT_FOUND
+case 01a165f3-6419-7ad8-8bc4-6b1ccb7fce21 404 NOT_FOUND
+case 01a165f3-72be-7664-befe-5deb2ffd881f 404 NOT_FOUND

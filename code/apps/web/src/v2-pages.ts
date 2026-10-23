@@ -1,5 +1,6 @@
 import { audioPromptScript } from './audio-prompt'
 import { pinGuardScript } from './pin-guard'
+import { HELD_NOTICE, ID_REJECT_NOTICE, POSE_CARD } from './liveness-pose-ui'
 import {
   accountScript,
   emailScript,
@@ -118,7 +119,7 @@ const OTP_SWITCH = switchAccountLink(
   'inline-block max-w-full text-center whitespace-normal font-body text-xs text-deep-navy/70 hover:text-soft-gold underline underline-offset-4 decoration-hairline transition-colors duration-150',
 )
 const ID_SWITCH = switchAccountLink(
-  'inline-block max-w-full text-center whitespace-normal text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors',
+  'inline-flex items-center justify-center min-h-[44px] max-w-full text-center whitespace-normal text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors',
 )
 const ID_ERROR = `<p class="hidden w-full min-w-0 max-w-full whitespace-normal break-words text-xs text-[#9B2C2C] flex items-start gap-1 font-medium" id="id-error"><span class="material-symbols-outlined text-[14px] shrink-0" data-icon="error">error</span><span class="min-w-0 break-words" id="id-error-text"></span></p>`
 
@@ -191,8 +192,24 @@ export function otpHtml(stitch: string): string {
   return mount(html, otpScript())
 }
 
+function placeOnce(html: string, anchor: string, replacement: string): string {
+  if (!html.includes(anchor)) {
+    throw new Error(`Stitch 07 no longer has: ${anchor}`)
+  }
+  return html.replace(anchor, replacement)
+}
+
 export function idHtml(stitch: string): string {
   let html = stitch.replace('Document téléversé : CNIB_recto_verso.pdf', '')
+  // Staff review console: the held notice, the ID refusal notice, the random pose card and the live preview box.
+  html = placeOnce(html, '<div class="h-px w-full bg-hairline/70"></div>', `<div class="h-px w-full bg-hairline/70"></div>\n${HELD_NOTICE}`)
+  html = placeOnce(html, '</section>\n<!-- ÉTAPE 2', `${ID_REJECT_NOTICE}\n</section>\n<!-- ÉTAPE 2`)
+  html = placeOnce(html, '<!-- Viseur Caméra au Repos -->', `${POSE_CARD}\n<!-- Viseur Caméra au Repos -->`)
+  html = placeOnce(
+    html,
+    '<div class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-deep-navy',
+    '<div id="liveness-viewfinder" class="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-deep-navy',
+  )
   html = html.replace(
     '<div class="pt-2 flex flex-col gap-3">',
     `<div class="pt-2 flex flex-col gap-3">\n${ID_ERROR}`,
@@ -200,6 +217,28 @@ export function idHtml(stitch: string): string {
   html = html.replace(
     'strictement réservées à la validation du compte.\n          </span>\n</div>',
     `strictement réservées à la validation du compte.\n          </span>\n</div>\n${ID_SWITCH}`,
+  )
+  // QA round 1 (F9): 44 px targets for "Remplacer" and readable contrast on the accepted documents line.
+  html = placeOnce(
+    html,
+    '<button class="text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors shrink-0" type="button">',
+    '<button class="inline-flex items-center justify-center min-h-[44px] min-w-[44px] px-2 text-xs text-deep-navy/80 hover:text-soft-gold underline underline-offset-4 font-medium transition-colors shrink-0" type="button">',
+  )
+  html = placeOnce(
+    html,
+    '<span class="text-[11px] text-deep-navy/60 font-medium">CNIB • Passeport • Carte Consulaire</span>',
+    '<span class="text-[11px] text-deep-navy/80 font-medium">CNIB • Passeport • Carte Consulaire</span>',
+  )
+  // QA round 2 (R2-1): the 11 px step labels pass 4.5:1 on cream.
+  html = placeOnce(
+    html,
+    '<span class="text-[11px] text-deep-navy/60 font-medium">Caméra frontale</span>',
+    '<span class="text-[11px] text-deep-navy/80 font-medium">Caméra frontale</span>',
+  )
+  html = placeOnce(
+    html,
+    '<p class="text-[11px] text-deep-navy/65 mt-0.5">Délivrée par',
+    '<p class="text-[11px] text-deep-navy/80 mt-0.5">Délivrée par',
   )
   return mount(html, idScript())
 }

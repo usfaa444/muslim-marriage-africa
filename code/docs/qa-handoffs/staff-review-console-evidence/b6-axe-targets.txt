@@ -1,0 +1,4 @@
+AXE case with decision forms @390: 0 rules, serious/critical=0
+staff targets <44px @390: ["INPUTradio:20x20","INPUTradio:19x20","INPUTradio:20x20","Note interne (facultative):282x16","INPUTradio:20x20","INPUTradio:19x20","INPUTradio:20x20","Note interne (facultative):282x16","Motif pour déflouter (consig:290x16","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","Motif si un élément est refu:282x16"]
+AXE case with decision forms @1440: 0 rules, serious/critical=0
+staff targets <44px @1440: ["INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","Note interne (facultative):577x16","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","Note interne (facultative):577x16","Motif pour déflouter (consig:274x16","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","INPUTradio:20x20","Motif si un élément est refu:577x16"]

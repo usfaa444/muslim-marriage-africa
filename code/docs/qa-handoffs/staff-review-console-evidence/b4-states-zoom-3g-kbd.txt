@@ -1,0 +1,24 @@
+queue 500 -> ["Request failed"] | body has queue region: 1
+queue network fail -> ["La connexion a échoué."]
+evidence 503 -> ["La pièce est indisponible."]
+evidence 429 -> ["Trop de consultations. Réessayez dans une minute."]
+200% zoom (720 css px) overflow {"sw":720,"iw":720}
+3G: page load 1146 ms; queue visible 1983 ms
+3G counts text En attente : 9 • Hors délai (24 h) : 1 • Premium : 0
+3G: case opened in 835 ms
+3G: resource transfer bytes 1932
+LCP(ms, stand-in CSS) 516
+tab order after case open: [
+ "Afficher la pièce [outline auto 1px|shadow false]",
+ "Afficher le selfie [outline auto 1px|shadow false]",
+ "unblur-1 [outline auto 1px|shadow false]",
+ "INPUT [outline auto 1px|shadow false]",
+ "INPUT [outline auto 1px|shadow false]",
+ "INPUT [outline auto 1px|shadow false]",
+ "Aucun refusPhoto non conforme au [outline auto 1px|shadow false]",
+ "Enregistrer la revue du profil [outline auto 1px|shadow false]",
+ "AnKanu\nRéservé Staff / Confident [outline none 0px|shadow false]",
+ "AnKanu [outline auto 1px|shadow false]",
+ "Se déconnecter [outline auto 1px|shadow false]",
+ "arrow_backRetour à la console [outline auto 1px|shadow false]"
+]

@@ -1,0 +1,21 @@
+=== MUTATION: Caméra frontale label back to navy/60
+-- unit
+     × keeps no 11 px text on the page lighter than navy/70 (QA round 2, R2-1) 10ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+      Tests  1 failed | 21 passed (22)
+-- web-only sweep (desktop project)
+  ✓  1 [desktop] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose (12.1s)
+  ✓  2 [desktop] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409 (8.1s)
+  2 passed (23.9s)
+=== MUTATION (stand-in CSS now generates the navy/60 class): Caméra frontale label back to navy/60
+-- web-only sweep (desktop project)
+  ✘  1 [desktop] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose (1.2s)
+  ✓  2 [desktop] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409 (8.0s)
+    +   "serious color-contrast at .text-deep-navy\\/60: 
+    e2e/test-results/staff-review-contrast-swee-8b648-xpired-and-unavailable-pose-desktop/test-failed-1.png
+  1 failed
+  1 passed (11.6s)
+=== restored code, same CSS: sweep
+  ✓  1 [desktop] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose (12.2s)
+  ✓  2 [desktop] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409 (8.1s)
+  2 passed (21.6s)

@@ -123,8 +123,10 @@ export const profile = pgTable(
 )
 
 /**
- * Phone OTP, liveness, and ID. This story writes `kind` `phone_otp` only.
- * `hash` is the code hash. The raw code is never stored. `evidence_uri` stays empty here.
+ * Phone OTP, liveness, and ID. `hash` is the code hash; the raw code is never stored.
+ * `evidence_uri` points at the sealed object for liveness and ID; no image data sits in the row.
+ * Staff review console: `pose` is the random pose asked for a liveness selfie; `decision_*` is the
+ * Moderator's decision on a liveness or ID row (reason category, optional note, who and when).
  */
 export const verificationRecord = pgTable(
   'verification_record',
@@ -140,8 +142,18 @@ export const verificationRecord = pgTable(
     phone_e164: text('phone_e164'),
     hash: text('hash'),
     expires_at: timestamp('expires_at', { withTimezone: true, mode: 'date' }),
+    pose: text('pose'),
+    decision_reason: text('decision_reason'),
+    decision_note: text('decision_note'),
+    decided_at: timestamp('decided_at', { withTimezone: true, mode: 'date' }),
+    decided_by: uuid('decided_by').references(() => account.id),
   },
   (table) => [
+    index('verification_record_account_kind_id').on(table.account_id, table.kind, table.id),
+    check(
+      'verification_record_pose_check',
+      sql`${table.pose} is null or (${table.kind} = 'liveness' and ${table.pose} in ('raise_right_hand', 'touch_left_ear', 'look_left', 'hand_on_chin', 'thumbs_up', 'two_fingers'))`,
+    ),
     check(
       'verification_record_kind_check',
       sql`${table.kind} in ('phone_otp', 'liveness', 'id_document')`,
@@ -149,6 +161,28 @@ export const verificationRecord = pgTable(
     check(
       'verification_record_status_check',
       sql`${table.status} in ('pending', 'granted', 'rejected', 'held')`,
+    ),
+  ],
+)
+
+/**
+ * The random pose asked before a liveness selfie. One live challenge per account: a new one replaces it,
+ * and the selfie upload deletes it in the same unit of work as the liveness row (single use).
+ */
+export const livenessChallenge = pgTable(
+  'liveness_challenge',
+  {
+    account_id: uuid('account_id')
+      .primaryKey()
+      .references(() => account.id),
+    id: uuid('id').notNull().unique(),
+    pose: text('pose').notNull(),
+    expires_at: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+  },
+  (table) => [
+    check(
+      'liveness_challenge_pose_check',
+      sql`${table.pose} in ('raise_right_hand', 'touch_left_ear', 'look_left', 'hand_on_chin', 'thumbs_up', 'two_fingers')`,
     ),
   ],
 )

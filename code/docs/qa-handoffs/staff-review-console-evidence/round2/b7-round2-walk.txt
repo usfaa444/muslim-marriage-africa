@@ -1,0 +1,50 @@
+=== F1 scenario 1: two Moderators decide the same ID (member J)
+mod2 saved: Décision enregistrée : Approuvé. Visibilité du profil : non publiée.
+mod1 alert text: ["Ce dossier a changé depuis son ouverture (autre décision ou nouvelle prise du membre). Votre décision n'a pas été enregistrée : le dossier a été rechargé, vérifiez son état avant de décider."]
+alert visible: true | in viewport: true | focused: true | role/aria-live: alert/null
+POSTs on double click: 1 | mod1 ID form still present: 0 | ID status badge: ["Approuvé","En attente"]
+DB: pending|-| (mod2 = 01a165db-cfe8-7d04-a77e-ca3291ebfb4a)
+DB rows for J ID (latest has decision from mod2): 1 audit decision rows
+console errors mod1 (409 resource line expected): ["Failed to load resource: the server responded with a status of 409 (Conflict) http://localhost:4022/v1/staff/review/decisions"]
+=== F1 scenario 2: member retakes the selfie after the case was opened (member K)
+member K retake 201 new pose touch_left_ear was Levez le pouce
+mod alert text: ["Ce dossier a changé depuis son ouverture (autre décision ou nouvelle prise du membre). Votre décision n'a pas été enregistrée : le dossier a été rechargé, vérifiez son état avant de décider."]
+case reloaded: pose shown now = Touchez votre oreille gauche (expect touch_left_ear)
+history: ["Décisions antérieuresSelfie du 22 oct. 2026, 23:06 : Remplacée par une nouvelle prise (non examinée)Selfie du 22 oct. 2026, 23:06 : Remplacée par une nouvelle prise (non examinée)Pièce d'identité du 22 oct. 2026, 23:06 : Remplacée par une nouvelle prise (non examinée)"]
+DB old selfie status (must stay pending, untouched): pending|-|- | new selfie: pending
+=== F2 case profile values
+marital block: "SITUATION MATRIMONIALE\nCélibataire\nPOLYGAMIE\nNon\nÉTUDES\n—\nPROF"
+contains english tokens single/no/ouagadougou(lowercase): false false false
+profile section text: "Profil\nVILLE\nOuagadougou\nPAYS\n—\nORIGINE\n—\nSITUATION MATRIMONIALE\nCélibataire\nPOLYGAMIE\nNon\nÉTUDES\n—\nPROFESSION\n—\nMADHHAB\n—\nPRATIQUE\n—\nPROJETS DE VIE\n—\nPRÉSENTATION PUBLIÉE\n—\nPRÉSENTATION EN ATTENTE\nUne présentation sobre.\nFiche du profil\nAccepter\nRefuser\nPrésentation en attente\nAccepter\nRefuser\nPhoto en revue 1\nAccepter\nRefuser\nMOTIF SI UN ÉLÉMENT EST REFUSÉ\nAucun refus\nPhoto non conforme aux règles\nPrésentation (bio"
+=== F8 queue 500 -> French
+alert: ["La file n'a pas pu être chargée. Réessayez dans un instant."]
+=== F4 held member page, F9 targets
+held H controls: {"Remplacer":["visible=false disabled=true"],"Activer la caméra":["visible=false disabled=true"],"Reprendre la capture":["visible=false disabled=true"],"Confirmer et transmettre":["visible=false disabled=true"]}
+held H notices: ["Votre compte est en attente d'une vérification complémentaire. Aucune action n'est demandée pour le moment."]
+held H overflow {"sw":390,"iw":390}
+held H targets <44px: []
+AXE held H @390: 1 rules, serious/critical=1
+   serious color-contrast .text-3xl :: Element has insufficient color contrast of 1.92 (foreground color: #c9a86c, background color: #f4ecdd, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast span[data-icon="badge"] :: Element has insufficient color contrast of 1.89 (foreground color: #c9a86c, background color: #f3eadb, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast .text-deep-navy\/60 :: Element has insufficient color contrast of 4.41 (foreground color: #6b7581, background color: #fbf8f1, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1
+   serious color-contrast span[data-icon="lock"] :: Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+held H console [] bad []
+rejected J controls: {"Remplacer":[],"Activer la caméra":[],"Reprendre la capture":[],"Confirmer et transmettre":[]}
+rejected J notices: []
+rejected J overflow {"sw":390,"iw":390}
+rejected J targets <44px: ["lock\nEnvoyer une invitation di:390x34"]
+AXE rejected J @390: 1 rules, serious/critical=1
+   serious color-contrast .tracking-widest :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1
+   serious color-contrast span[data-icon="verified_user"] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast span[data-icon="info"] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast span[data-icon="visibility"] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast .text-deep-navy\/60.leading-relaxed :: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1
+   serious color-contrast span[data-icon="graphic_eq"] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast span[data-icon="edit_note"] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast span[data-icon="supervised_user_circle"] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast span[data-icon="handshake"] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 18.0pt (24px), font weight: normal). Expected contrast ratio of 3:1
+   serious color-contrast .tracking-wider.uppercase.text-\[11px\] :: Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1
+   serious color-contrast .text-deep-navy\/60.pt-2.font-normal :: Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1
+rejected J console [] bad []
+=== F5 Retry-After
+statuses 200/429: 30 3 | Retry-After: 60 | body: Trop de consultations. Réessayez dans une minute.

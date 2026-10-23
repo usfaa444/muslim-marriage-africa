@@ -1,0 +1,361 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 96 tests using 1 worker
+
+  ✓   1 [mobile] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.6s)
+  ✓   2 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (543ms)
+  ✓   3 [mobile] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (447ms)
+  ✓   4 [mobile] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (287ms)
+  ✓   5 [mobile] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (933ms)
+  ✓   6 [mobile] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (659ms)
+  ✓   7 [mobile] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (195ms)
+  ✓   8 [mobile] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (197ms)
+  -   9 [mobile] › e2e/staff-review.spec.ts:415:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  10 [mobile] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.1s)
+  ✓  11 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (595ms)
+  ✓  12 [mobile] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (432ms)
+  ✓  13 [mobile] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (276ms)
+  ✓  14 [mobile] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (979ms)
+  ✓  15 [mobile] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (406ms)
+  ✓  16 [mobile] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (182ms)
+  ✓  17 [mobile] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (179ms)
+  -  18 [mobile] › e2e/staff-review.spec.ts:415:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  19 [mobile] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.1s)
+  ✓  20 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (574ms)
+  ✓  21 [mobile] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (463ms)
+  ✓  22 [mobile] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (300ms)
+  ✓  23 [mobile] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (976ms)
+  ✓  24 [mobile] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (391ms)
+  ✓  25 [mobile] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (178ms)
+  ✓  26 [mobile] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (187ms)
+  -  27 [mobile] › e2e/staff-review.spec.ts:415:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  28 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.1s)
+  -  29 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -  30 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓  31 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.1s)
+  ✓  32 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (275ms)
+  ✓  33 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (182ms)
+  -  34 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  35 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.1s)
+  -  36 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -  37 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓  38 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (956ms)
+  ✓  39 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (276ms)
+  ✓  40 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (179ms)
+  -  41 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  42 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.0s)
+  -  43 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -  44 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓  45 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (957ms)
+  ✓  46 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (353ms)
+  ✓  47 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (206ms)
+  -  48 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  49 [desktop] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.3s)
+  ✓  50 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (517ms)
+  ✓  51 [desktop] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (404ms)
+  ✓  52 [desktop] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (241ms)
+  ✓  53 [desktop] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (914ms)
+  ✓  54 [desktop] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (355ms)
+  ✓  55 [desktop] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (140ms)
+  ✓  56 [desktop] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (160ms)
+  -  57 [desktop] › e2e/staff-review.spec.ts:415:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  58 [desktop] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.3s)
+  ✓  59 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (498ms)
+  ✓  60 [desktop] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (397ms)
+  ✓  61 [desktop] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (261ms)
+  ✓  62 [desktop] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (917ms)
+  ✓  63 [desktop] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (353ms)
+  ✓  64 [desktop] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (156ms)
+  ✓  65 [desktop] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (157ms)
+  -  66 [desktop] › e2e/staff-review.spec.ts:415:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  67 [desktop] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.3s)
+  ✓  68 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (480ms)
+  ✓  69 [desktop] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (392ms)
+  ✓  70 [desktop] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (295ms)
+  ✓  71 [desktop] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (909ms)
+  ✓  72 [desktop] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (332ms)
+  ✓  73 [desktop] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (169ms)
+  ✓  74 [desktop] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (193ms)
+  -  75 [desktop] › e2e/staff-review.spec.ts:415:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  76 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.0s)
+  ✓  77 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (642ms)
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  78 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width (1.6s)
+  ✓  79 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.0s)
+  ✓  80 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (302ms)
+  ✓  81 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (174ms)
+  -  82 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  83 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.2s)
+  ✓  84 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (821ms)
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  85 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width (1.1s)
+  ✓  86 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.1s)
+  ✓  87 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (297ms)
+  ✓  88 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (168ms)
+  -  89 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  90 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (1.1s)
+  ✓  91 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (651ms)
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  92 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width (1.0s)
+  ✓  93 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.1s)
+  ✓  94 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (271ms)
+  ✓  95 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (185ms)
+  -  96 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+
+  18 skipped
+  78 passed (1.3m)
+exit 0

@@ -1,0 +1,7 @@
+40 parallel evidence views on fresh mod2 session: {"200":30,"429":10}
+429 body {"error":{"code":"RATE_LIMITED","message":"Trop de consultations. Réessayez dans une minute.","details":null,"request_id":"01a165b5-5b30-7059-a684-ecb472bad757","retryable":true}} retry-after undefined
+audit rows added 30 (expect 30 = bytes served)
+mod1 other session still ok -> 200
+unblur on exhausted session -> 429
+after 61s -> 200
+after API restart, same session: 30 x200 0 x429 (counter reset: 30 more views in the same minute)

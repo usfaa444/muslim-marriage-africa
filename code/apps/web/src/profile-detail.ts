@@ -98,6 +98,19 @@ const TIMEFRAME: Record<string, string> = {
   serene: "Plus d'un an / Selon cheminement",
 }
 
+/** Stored profile tokens in the member's French words, shared with the staff review console. */
+export const PROFILE_VALUE_LABEL: Record<string, Record<string, string>> = {
+  city: CITY,
+  country: COUNTRY,
+  profession: PROFESSION,
+  marital_status: MARITAL,
+  polygamy_intent: POLYGAMY,
+  madhhab: MADHHAB,
+  practice: PRACTICE,
+}
+
+export const LIFE_PLAN_TIMEFRAME_LABEL = TIMEFRAME
+
 const THUMB_SIZE = 'relative min-w-0 w-12 h-12 min-[768px]:w-20 min-[768px]:h-20 rounded-md overflow-hidden'
 const BOOKMARK_SCRIPT = `document.querySelectorAll('[data-bookmark]').forEach(function (button) {
   button.addEventListener('click', function () {

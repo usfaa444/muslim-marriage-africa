@@ -5,6 +5,7 @@ import { readEvidenceKey } from './evidence-seal.js'
 import { getEvidenceWriter } from './evidence-writer.js'
 import { getCaptureStore } from './id-liveness-store.js'
 import {
+  issueLivenessChallenge,
   readCapture,
   submitCapture,
   unauthenticatedCapture,
@@ -76,6 +77,25 @@ export class VerificationsController {
     @Res({ passthrough: true }) response: { status: (code: number) => void },
   ): Promise<unknown> {
     return postKind('liveness', request, body, response)
+  }
+
+  /** The selfie step's random pose. A new call replaces the earlier challenge. */
+  @Post('liveness-challenge')
+  async livenessChallenge(
+    @Req() request: CookieRequest,
+    @Res({ passthrough: true }) response: { status: (code: number) => void; setHeader: (name: string, value: string) => void },
+  ): Promise<unknown> {
+    response.setHeader('cache-control', 'no-store')
+    const accountId = await sessionAccountId(request)
+    if (!accountId) {
+      throw captureError(unauthenticatedCapture())
+    }
+    const result = await issueLivenessChallenge({ accountId, now: authNow(), store: getCaptureStore() })
+    if (!result.ok) {
+      throw captureError(result)
+    }
+    response.status(result.status)
+    return result.body
   }
 
   @Get('id')

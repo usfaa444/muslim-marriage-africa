@@ -1,0 +1,21 @@
+api log lines: 112, web: 5
+SECRET-NOTE-TEXT                 api=0 web=0
+looks young                      api=0 web=0
+comparer avec le selfie          api=0 web=0
+Comparer avec le selfie          api=0 web=0
+Une présentation                api=0 web=0
+ffd8ff                           api=0 web=0
+/9j/4                            api=0 web=0
+iVBOR                            api=0 web=0
+evidence/0                       api=0 web=0
+staff/review/photo\?token        api=0 web=0
+staff/review/evidence            api=1 web=0
+s3://                            api=0 web=0
+verification/                    api=0 web=0
+EVIDENCE_KEY                     api=0 web=0
+password                         api=4 web=0
+--- api log sample of request lines
+[32m[Nest] 1  - [39m10/22/2026, 10:12:42 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStaffSessionsController {/v1/staff/sessions}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1  - [39m10/22/2026, 10:12:42 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStaffController {/v1/staff}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1  - [39m10/22/2026, 10:12:42 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mStaffReviewController {/v1/staff/review}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1  - [39m10/22/2026, 10:12:42 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mVisitSignalsController {/v1/staff}:[39m[38;5;3m +0ms[39m

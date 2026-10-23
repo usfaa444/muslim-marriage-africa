@@ -1,0 +1,50 @@
+=== MUTATION operator can read evidence (moderatorGate -> null)
+       × refuses Operators, members, Mahrams, MFA-pending and signed-out callers on every console and evidence endpoint 3562ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC3 case, evidence and unblur > refuses Operators, members, Mahrams, MFA-pending and signed-out callers on every console and evidence endpoint
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 33 passed (34)
+=== MUTATION stale decision accepted (memory newerExists ignored)
+       × answers 409 REVIEW_STALE to the later of two Moderators and to a decision on a record replaced by a retake 1090ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC6 stale decisions and audit > answers 409 REVIEW_STALE to the later of two Moderators and to a decision on a record replaced by a retake
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 33 passed (34)
+=== MUTATION pending counts as published gate again
+     × requires an explicit decision, publishes only when the gates and unpublished visibility allow it, and retries after a later grant 997ms
+       × publishes only once ID, liveness, profile review and phone OTP are all granted 446ms
+       × keeps her hidden while the profile review or the selfie is missing, and publishes after the last grant 731ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/profile-review.test.ts > human review before anyone else sees a profile > requires an explicit decision, publishes only when the gates and unpublished visibility allow it, and retries after a later grant
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC4 publishing through publishIfEligible > publishes only once ID, liveness, profile review and phone OTP are all granted
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC4 publishing through publishIfEligible > keeps her hidden while the profile review or the selfie is missing, and publishes after the last grant
+ Test Files  2 failed | 1 passed (3)
+=== MUTATION challenge expiry ignored
+ Test Files  3 passed (3)
+      Tests  34 passed (34)
+=== MUTATION evidence view not audited
+       × shows the ID, selfie and pose from a no-store staff-only endpoint and audits every view 921ms
+       × rate-limits evidence views per staff session, counting parallel requests atomically 1061ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC3 case, evidence and unblur > shows the ID, selfie and pose from a no-store staff-only endpoint and audits every view
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC3 case, evidence and unblur > rate-limits evidence views per staff session, counting parallel requests atomically
+ Test Files  1 failed | 2 passed (3)
+      Tests  2 failed | 32 passed (34)
+=== MUTATION rate limit 30 -> 3000
+ Test Files  3 passed (3)
+      Tests  34 passed (34)
+=== MUTATION foreign challenge accepted (account check dropped in memory consume)
+ Test Files  3 passed (3)
+      Tests  34 passed (34)
+=== MUTATION suspected minor does not hold the account
+       × puts a suspected minor on the age hold and never publishes her 504ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC5 reject and retake, suspected minor > puts a suspected minor on the age hold and never publishes her
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 33 passed (34)
+=== MUTATION unblur reason min 10 -> 1
+       × keeps profile photos blurred until a typed reason, audits the unblur, and keeps the grant to that Moderator 947ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/staff-review.test.ts > staff review console > AC3 case, evidence and unblur > keeps profile photos blurred until a typed reason, audits the unblur, and keeps the grant to that Moderator
+ Test Files  1 failed | 2 passed (3)
+      Tests  1 failed | 33 passed (34)

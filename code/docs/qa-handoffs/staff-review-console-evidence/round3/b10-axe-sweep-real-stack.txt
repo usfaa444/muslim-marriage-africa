@@ -1,0 +1,33 @@
+AXE id-liveness: ID + selfie steps with pose @360 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: ID + selfie steps with pose @390 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: ID + selfie steps with pose @1440 (overflow none): 0 rules, serious/critical=0
+rejected notices: ["Votre pièce d'identité n'a pas été acceptée : la photo de la pièce est illisible. Envoyez une nouvelle photo de votre pièce avec le bouton « Remplacer ».","Votre selfie n'a pas été accepté : le geste demandé n'apparaît pas sur le selfie. Reprenez le selfie en faisant le nouveau geste demandé."]
+AXE id-liveness: both refusal notices + new pose @360 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: both refusal notices + new pose @390 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: both refusal notices + new pose @1440 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: held notice @360 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: held notice @390 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: held notice @1440 (overflow none): 0 rules, serious/critical=0
+expired msg: La photo de présence est manquante.
+AXE id-liveness: pose expired message @360 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: pose expired message @390 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: pose expired message @1440 (overflow none): 0 rules, serious/critical=0
+pose unavailable msg (5xx): Le geste à faire n'a pas pu être chargé. Réessayez.
+pose 4xx msg: Vérification du téléphone requise.
+pose network failure msg: Le geste à faire n'a pas pu être chargé. Réessayez.
+AXE id-liveness: pose unavailable message @360 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: pose unavailable message @390 (overflow none): 0 rules, serious/critical=0
+AXE id-liveness: pose unavailable message @1440 (overflow none): 0 rules, serious/critical=0
+AXE staff: queue @360 (overflow none): 0 rules, serious/critical=0
+AXE staff: queue @390 (overflow none): 0 rules, serious/critical=0
+AXE staff: queue @1440 (overflow none): 0 rules, serious/critical=0
+AXE staff: case with ID, selfie, decision forms, photo, profile form @360 (overflow none): 0 rules, serious/critical=0
+AXE staff: case with ID, selfie, decision forms, photo, profile form @390 (overflow none): 0 rules, serious/critical=0
+AXE staff: case with ID, selfie, decision forms, photo, profile form @1440 (overflow none): 0 rules, serious/critical=0
+AXE staff: alert after a 409 @360 (overflow none): 0 rules, serious/critical=0
+AXE staff: alert after a 409 @390 (overflow none): 0 rules, serious/critical=0
+AXE staff: alert after a 409 @1440 (overflow none): 0 rules, serious/critical=0
+AXE staff: Operator view @360 (overflow none): 0 rules, serious/critical=0
+AXE staff: Operator view @390 (overflow none): 0 rules, serious/critical=0
+AXE staff: Operator view @1440 (overflow none): 0 rules, serious/critical=0
+TOTAL serious/critical across all states and widths: 0
