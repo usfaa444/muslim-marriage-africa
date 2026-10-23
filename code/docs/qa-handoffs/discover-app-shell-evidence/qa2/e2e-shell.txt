@@ -1,0 +1,2860 @@
+
+> test:e2e
+> playwright test e2e/app-shell.spec.ts --repeat-each=3
+
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 72 tests using 2 workers
+
+  -   1 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /settings › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓   2 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /settings › has the one header, footer and bottom nav, with its section current (2.9s)
+  ✓   3 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (2.8s)
+  -   4 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /profile-edit › fits every factory width with the footer above the bar
+  -   6 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓   7 [mobile] › e2e/app-shell.spec.ts:106:3 › bottom nav navigation › each item opens its section, from the keyboard too (3.7s)
+  ✓   5 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (4.4s)
+  ✓   8 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /auth has the header and footer but no bottom nav (2.6s)
+  ✓   9 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /signup/identity has the header and footer but no bottom nav (2.5s)
+  ✓  11 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /password-reset has the header and footer but no bottom nav (2.1s)
+  ✓  10 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.6s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  12 [mobile] › e2e/app-shell.spec.ts:142:1 › the landing page keeps its own header and footer (2.9s)
+  ✓  13 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /settings › has the one header, footer and bottom nav, with its section current (2.6s)
+  -  14 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /settings › fits every factory width with the footer above the bar
+  -  16 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /profile-edit › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  15 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (2.8s)
+  -  18 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  17 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.6s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  19 [mobile] › e2e/app-shell.spec.ts:106:3 › bottom nav navigation › each item opens its section, from the keyboard too (3.6s)
+  ✓  20 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /auth has the header and footer but no bottom nav (2.8s)
+  ✓  21 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /signup/identity has the header and footer but no bottom nav (2.4s)
+  ✓  22 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.4s)
+  ✓  23 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /password-reset has the header and footer but no bottom nav (2.5s)
+  ✓  24 [mobile] › e2e/app-shell.spec.ts:142:1 › the landing page keeps its own header and footer (2.5s)
+  -  26 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /settings › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  25 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /settings › has the one header, footer and bottom nav, with its section current (2.4s)
+  -  28 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /profile-edit › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  27 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (2.8s)
+  -  30 [mobile] › e2e/app-shell.spec.ts:89:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  29 [mobile] › e2e/app-shell.spec.ts:63:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.4s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  31 [mobile] › e2e/app-shell.spec.ts:106:3 › bottom nav navigation › each item opens its section, from the keyboard too (3.4s)
+  ✓  32 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /auth has the header and footer but no bottom nav (2.6s)
+  ✓  33 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /signup/identity has the header and footer but no bottom nav (2.3s)
+  ✓  34 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.5s)
+  ✓  35 [mobile] › e2e/app-shell.spec.ts:128:3 › gated page /password-reset has the header and footer but no bottom nav (2.6s)
+  ✓  36 [mobile] › e2e/app-shell.spec.ts:142:1 › the landing page keeps its own header and footer (2.6s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  37 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /settings › has the one header, footer and bottom nav, with its section current (2.9s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  38 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /settings › fits every factory width with the footer above the bar (3.6s)
+  ✓  39 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (2.9s)
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  40 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /profile-edit › fits every factory width with the footer above the bar (3.6s)
+  ✓  41 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.6s)
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  42 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar (3.7s)
+  ✓  43 [desktop] › e2e/app-shell.spec.ts:106:3 › bottom nav navigation › each item opens its section, from the keyboard too (3.8s)
+  ✓  45 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /signup/identity has the header and footer but no bottom nav (2.3s)
+  ✓  44 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /auth has the header and footer but no bottom nav (2.8s)
+  ✓  46 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.4s)
+  ✓  47 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /password-reset has the header and footer but no bottom nav (2.4s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  48 [desktop] › e2e/app-shell.spec.ts:142:1 › the landing page keeps its own header and footer (2.5s)
+  ✓  49 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /settings › has the one header, footer and bottom nav, with its section current (2.6s)
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  51 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (2.7s)
+  ✓  50 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /settings › fits every factory width with the footer above the bar (3.4s)
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  52 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /profile-edit › fits every factory width with the footer above the bar (3.9s)
+  ✓  53 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.6s)
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  54 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar (4.1s)
+  ✓  55 [desktop] › e2e/app-shell.spec.ts:106:3 › bottom nav navigation › each item opens its section, from the keyboard too (4.3s)
+  ✓  56 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /auth has the header and footer but no bottom nav (2.5s)
+  ✓  57 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /signup/identity has the header and footer but no bottom nav (2.6s)
+  ✓  58 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.7s)
+  ✓  59 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /password-reset has the header and footer but no bottom nav (2.4s)
+  ✓  60 [desktop] › e2e/app-shell.spec.ts:142:1 › the landing page keeps its own header and footer (2.4s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  61 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /settings › has the one header, footer and bottom nav, with its section current (3.1s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  62 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /settings › fits every factory width with the footer above the bar (3.6s)
+  ✓  63 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (3.5s)
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  65 [desktop] › e2e/app-shell.spec.ts:63:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.4s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  64 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /profile-edit › fits every factory width with the footer above the bar (4.6s)
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  66 [desktop] › e2e/app-shell.spec.ts:89:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar (3.9s)
+  ✓  67 [desktop] › e2e/app-shell.spec.ts:106:3 › bottom nav navigation › each item opens its section, from the keyboard too (3.7s)
+  ✓  68 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /auth has the header and footer but no bottom nav (2.4s)
+  ✓  69 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /signup/identity has the header and footer but no bottom nav (2.5s)
+  ✓  70 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.3s)
+  ✓  71 [desktop] › e2e/app-shell.spec.ts:128:3 › gated page /password-reset has the header and footer but no bottom nav (2.3s)
+  ✓  72 [desktop] › e2e/app-shell.spec.ts:142:1 › the landing page keeps its own header and footer (2.2s)
+
+  9 skipped
+  63 passed (1.8m)

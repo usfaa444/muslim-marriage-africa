@@ -162,7 +162,7 @@ function screens(): Array<{ name: string; html: string }> {
     { name: '52b-visit-signals', html: visitSignalsHtml(stitch('52-ts-visit-signals'), visitPaint(1)) },
     {
       name: '17c-not-listable',
-      html: notListablePage(stitch('12-profile-not-yet-public'), stitch('57-discover'), stitch('53-barre-de-navigation'), {
+      html: notListablePage(stitch('12-profile-not-yet-public'), {
         reason: 'viewer_not_listable',
         reasons: [
           { code: 'viewer_not_listable' },

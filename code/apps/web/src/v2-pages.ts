@@ -1,4 +1,5 @@
 import { audioPromptScript } from './audio-prompt'
+import { withAppShell, type ShellOptions } from './app-shell'
 import { pinGuardScript } from './pin-guard'
 import { HELD_NOTICE, ID_REJECT_NOTICE, POSE_CARD } from './liveness-pose-ui'
 import {
@@ -30,17 +31,21 @@ import {
   showAuthPanel,
 } from './v2-document'
 
-function mount(html: string, script: string, extra = ''): string {
-  const page = prepareV2(html, script)
+const GATED: ShellOptions = { kind: 'gated' }
+
+function mount(html: string, script: string, extra = '', shell: ShellOptions = GATED): string {
+  const page = prepareV2(withAppShell(html, shell), script)
   if (!extra) {
     return page
   }
   return page.includes('</body>') ? page.replace('</body>', `${extra}</body>`) : `${page}${extra}`
 }
 
-function guarded(html: string, script: string): string {
-  return mount(html, script, pinGuardScript())
+function guarded(html: string, script: string, shell: ShellOptions = GATED): string {
+  return mount(html, script, pinGuardScript(), shell)
 }
+
+const PROFILE_SECTION: ShellOptions = { kind: 'member', active: 'profil' }
 
 export function splashHtml(): string {
   const html = `<!DOCTYPE html>
@@ -352,6 +357,8 @@ export function pinHtml(stitch: string): string {
       '<div class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5" id="status-hint" role="status" style="scroll-margin-bottom: 24px">\n<span aria-hidden="true" class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user"></span>\n<span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>',
     )
     .replace(/href="#">(\s*S'identifier à nouveau)/, 'href="/auth">$1')
+    // Soft gold on cream is 2.3:1; the recovery links keep navy on hover.
+    .replaceAll('text-deep-navy/70 hover:text-soft-gold', 'text-deep-navy/70 hover:text-deep-navy')
   return mount(html, pinScript())
 }
 
@@ -518,7 +525,7 @@ export function profileHtml(stitch: string): string {
   html = html.replace(/(<textarea\b[^>]*\bid="bio"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
   html = html.replace(/(<textarea\b[^>]*\bid="intentions"[^>]*>)[\s\S]*?(<\/textarea>)/, '$1$2')
   html = html.replace(/<select\b([^>]*)>/g, '<select$1><option selected="" value=""></option>')
-  return guarded(html, profileScript())
+  return guarded(html, profileScript(), PROFILE_SECTION)
 }
 
 function photoIsPending(photo: unknown): boolean {
@@ -546,7 +553,7 @@ export function reviewHtml(stitch: string, state: { slaHours: number; bioPending
     /(<p class="text-xs text-deep-navy\/50">[\s\S]*?<\/p>\s*<\/div>)/,
     `$1${REVIEW_UNDERSTOOD}`,
   )
-  return guarded(html, reviewScript())
+  return guarded(html, reviewScript(), PROFILE_SECTION)
 }
 
 const LITE_HIT = `<style id="lite-hit">#lite-mode-toggle::before{content:"";position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}</style>`
@@ -577,7 +584,7 @@ export function settingsHtml(stitch: string): string {
   const withHit = neutral.includes('</head>')
     ? neutral.replace('</head>', `${LITE_HIT}</head>`)
     : `${LITE_HIT}${neutral}`
-  return guarded(withHit, settingsScript())
+  return guarded(withHit, settingsScript(), PROFILE_SECTION)
 }
 
 export function statusHtml(stitch: string): string {

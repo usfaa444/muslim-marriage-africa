@@ -40,8 +40,9 @@ describe('discover grid page', () => {
     expect(html).toContain('id="discover-hold" hidden')
     expect(html).toContain('function showNotListable')
     expect(html).toContain('id="discover-grid" hidden')
-    expect(html.match(/data-discover-view="card"/g)).toHaveLength(2)
-    expect(html.match(/data-discover-view="grid"/g)).toHaveLength(2)
+    // One toolbar shared by both views (story discover-app-shell).
+    expect(html.match(/data-discover-view="card"/g)).toHaveLength(1)
+    expect(html.match(/data-discover-view="grid"/g)).toHaveLength(1)
     expect(html).toContain('Découverte respectueuse')
     expect(html).toContain('Découvrir selon vos affinités éthiques')
     expect(html).toContain('/v1/browse?view=grid')
@@ -448,7 +449,7 @@ describe('discover grid in a browser', () => {
       await send(
         'Runtime.evaluate',
         {
-          expression: "document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()",
+          expression: "document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()",
         },
         sessionId,
       )
@@ -456,7 +457,7 @@ describe('discover grid in a browser', () => {
         'Runtime.evaluate',
         {
           expression:
-            "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.body.innerText || ''; if (text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne') || Date.now() - start > 4000) resolve(text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne')); else setTimeout(tick, 50) }; tick() })",
+            "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.body.innerText || ''; const ready = text.includes('Amina_Bobo_nom_tres_long_pour_la_ligne') && !!document.querySelector('#discover-tiles img'); if (ready || Date.now() - start > 4000) resolve(ready); else setTimeout(tick, 50) }; tick() })",
           awaitPromise: true,
           returnByValue: true,
         },
@@ -480,7 +481,7 @@ describe('discover grid in a browser', () => {
               missing: text.includes('Photographie non publiée'),
               empty: text.includes('Aucun profil pour ces filtres.'),
               verified: text.includes('VÉRIFIÉ'),
-              chips: document.querySelectorAll('#discover-grid span.inline-flex').length,
+              chips: document.querySelectorAll('#discover-main span.inline-flex').length - document.querySelectorAll('#discover-focus span.inline-flex').length,
               traits: (document.querySelector('#discover-focus [data-card-traits]') || {}).textContent || '',
               retry: retry ? getComputedStyle(retry).display : '',
             }
@@ -527,12 +528,12 @@ describe('discover grid in a browser', () => {
       for (const width of WIDTHS) await measure(width, 'grid')
       await send(
         'Runtime.evaluate',
-        { expression: "document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()" },
+        { expression: "document.querySelector('#discover-main [data-discover-view=\"card\"]').click()" },
         sessionId,
       )
       await send(
         'Runtime.evaluate',
-        { expression: "document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()" },
+        { expression: "document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()" },
         sessionId,
       )
       expect(fetches).toBe(2)
@@ -741,7 +742,7 @@ describe('discover grid in a browser', () => {
         sessionId,
       )
       await loaded
-      await value(sessionId, "document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      await value(sessionId, "document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
       const searchTraits = (await value(
         sessionId,
         `new Promise((resolve) => {
@@ -817,14 +818,14 @@ describe('discover grid in a browser', () => {
       expect(pressed).toBe('true')
       await new Promise((resolve) => setTimeout(resolve, 200))
       expect(favouritePosts).toBe(1)
-      await value(sessionId, "document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value(sessionId, "document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       await value(
         sessionId,
         "new Promise((resolve) => { const start = Date.now(); const tick = () => { const text = document.getElementById('discover-grid')?.innerText || ''; if (text.indexOf('Aminata') >= 0 && text.indexOf('Bocar') >= 0 || Date.now() - start > 4000) resolve(text); else setTimeout(tick, 30) }; tick() })",
       )
-      await value(sessionId, "document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      await value(sessionId, "document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
       await value(sessionId, "document.querySelector('[data-card-pass]').click()")
-      await value(sessionId, "document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value(sessionId, "document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       const during = String(
         await value(sessionId, "document.getElementById('discover-grid') ? document.getElementById('discover-grid').innerText : ''"),
       )
@@ -839,7 +840,7 @@ describe('discover grid in a browser', () => {
       )
       expect(after).not.toContain('Aminata')
       expect(after).toContain('Bocar')
-      await value(sessionId, "document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      await value(sessionId, "document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
       const nextCard = (await value(
         sessionId,
         `new Promise((resolve) => {
@@ -1028,7 +1029,7 @@ describe('discover grid in a browser', () => {
         }
       })()`)
       release(200, clear)
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       const srcFrame = await value(
         "new Promise((resolve) => { const start = Date.now(); const tick = () => { if (window.__srcFrame || Date.now() - start > 4000) resolve(window.__srcFrame || 0); else setTimeout(tick, 20) }; tick() })",
       )
@@ -1060,7 +1061,7 @@ describe('discover grid in a browser', () => {
       expect(clearState.raw).not.toContain('url')
 
       await go('/again')
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       await waitHeld(1)
       const cached = await value('document.body.innerText')
       expect(String(cached)).toContain('Amina, 29 ans')
@@ -1090,7 +1091,7 @@ describe('discover grid in a browser', () => {
       expect(String(fresh)).toContain('Moussa, 36 ans')
 
       await go('/other')
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       await waitHeld(1)
       const foreign = String(await value('document.body.innerText'))
       expect(foreign).not.toContain('Amina')
@@ -1104,14 +1105,14 @@ describe('discover grid in a browser', () => {
       await go('/')
       release(401, { error: { code: 'PIN_REQUIRED', message: 'PIN', retryable: false } })
       const pinLoaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       await pinLoaded
       expect(await value('location.pathname')).toBe('/pin')
 
       await go('/')
       release(401, { error: { code: 'UNAUTHENTICATED', message: 'Signed out', retryable: false } })
       const authLoaded = new Promise<void>((resolve) => waits.push({ method: 'Page.loadEventFired', resolve }))
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       await authLoaded
       expect(await value('location.pathname')).toBe('/auth')
 
@@ -1131,7 +1132,7 @@ describe('discover grid in a browser', () => {
           retryable: false,
         },
       })
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       const heldBrowse = (await value(
         "new Promise((resolve) => { const start = Date.now(); const tick = () => { const title = document.getElementById('discover-hold-title'); const hold = document.getElementById('discover-hold'); if ((title && hold && hold.hidden === false && title.textContent) || Date.now() - start > 4000) resolve({ path: location.pathname, title: title ? title.textContent : '', hidden: hold ? hold.hidden : true, text: document.body.innerText || '', edit: !!document.querySelector('#discover-hold a[href=\"/profile-edit\"]') }); else setTimeout(tick, 30) }; tick() })",
       )) as { path: string; title: string; hidden: boolean; text: string; edit: boolean }
@@ -1145,7 +1146,7 @@ describe('discover grid in a browser', () => {
 
       await go('/')
       release(503, { error: { code: 'UNHANDLED', message: 'Request failed', retryable: true } })
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       const failed = (await value(
         "new Promise((resolve) => { const start = Date.now(); const tick = () => { const node = document.getElementById('discover-error'); const retry = document.getElementById('discover-retry'); if ((node && node.textContent === 'Request failed') || Date.now() - start > 4000) resolve({ message: node ? node.textContent : '', retry: retry ? getComputedStyle(retry).display : '' }); else setTimeout(tick, 30) }; tick() })",
       )) as { message: string; retry: string }
@@ -1154,7 +1155,7 @@ describe('discover grid in a browser', () => {
 
       await go('/')
       release(429, { error: { code: 'RATE_LIMITED', message: 'Cadence de requêtes régulée.', retryable: true } })
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       const limited = (await value(
         "new Promise((resolve) => { const start = Date.now(); const tick = () => { const node = document.getElementById('discover-error'); const retry = document.getElementById('discover-retry'); if ((node && node.hidden === false) || Date.now() - start > 4000) resolve({ message: node ? node.textContent : '', hidden: node ? node.hidden : true, retry: retry ? getComputedStyle(retry).display : '', tiles: document.querySelectorAll('#discover-tiles article').length }); else setTimeout(tick, 30) }; tick() })",
       )) as { message: string; hidden: boolean; retry: string; tiles: number }
@@ -1193,12 +1194,12 @@ describe('discover grid in a browser', () => {
       expect(String(settled)).toContain('Fatou, 31 ans')
       expect(String(settled)).not.toContain('Cadence de requêtes régulée.')
       const beforeExpiry = fetches
-      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       expect(fetches).toBe(beforeExpiry)
       await value('(() => { const base = Date.now(); Date.now = () => base + 61000 })()')
-      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       await waitHeld(1)
       expect(fetches).toBe(beforeExpiry + 1)
     } finally {
@@ -1429,7 +1430,8 @@ describe('discover grid in a browser', () => {
       expect(painted.empty).toBe(false)
       expect(painted.grid).toBe(false)
       expect(painted.card).toBe(true)
-      expect(painted.chips).toBe(2)
+      // One shared toolbar for both views (story discover-app-shell): one chip, not one per view.
+      expect(painted.chips).toBe(1)
       expect(painted.text).toContain('Marié(e)')
       expect(painted.text).not.toContain('Oui')
       expect(painted.text).not.toContain('Al-Hassan')
@@ -1438,7 +1440,7 @@ describe('discover grid in a browser', () => {
       expect(browseUrls.some((search) => search.includes('view=card'))).toBe(false)
       const cacheKey = String(await value(`sessionStorage.getItem('ankanu_browse_grid_text:${ACCOUNT}:marital_status=married&polygamy_intent=yes') || ''`))
       expect(cacheKey).toContain(`"account":"${ACCOUNT}"`)
-      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
       const cardEmpty = (await value(`new Promise((resolve) => {
         const start = Date.now()
         const tick = () => {
@@ -1462,7 +1464,7 @@ describe('discover grid in a browser', () => {
       expect(oneFilter.text).not.toContain('Marié(e)')
       expect(oneFilter.card).toBe(false)
       expect(oneFilter.grid).toBe(true)
-      expect(oneFilter.chips).toBe(2)
+      expect(oneFilter.chips).toBe(1)
       expect(filterFetches).toBe(3)
     } finally {
       ws.close()
@@ -1643,7 +1645,7 @@ describe('discover grid in a browser', () => {
         window.IntersectionObserver = Counting
         window.__liteObserversOpen = function () { return open }
       })()`)
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       const state = (await value(`new Promise((resolve) => {
         const start = Date.now()
         const tick = () => {
@@ -1728,8 +1730,8 @@ describe('discover grid in a browser', () => {
       expect(failures).toEqual([])
       expect(await value('window.__liteObserversOpen()')).toBe(0)
       await value("document.getElementById('discover-grid').style.paddingTop = '4000px'")
-      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       await value('new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))')
       const held = (await value(`new Promise((resolve) => {
         const start = Date.now()
@@ -1751,8 +1753,8 @@ describe('discover grid in a browser', () => {
       expect(held.tiles).toBe(3)
       expect(held.waiting).toBe(true)
       expect(held.open).toBe(2)
-      await value("document.querySelector('#discover-grid [data-discover-view=\"card\"]').click()")
-      await value("document.querySelector('#discover-card [data-discover-view=\"grid\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"card\"]').click()")
+      await value("document.querySelector('#discover-main [data-discover-view=\"grid\"]').click()")
       const repainted = (await value(`new Promise((resolve) => {
         const start = Date.now()
         const tick = () => {
