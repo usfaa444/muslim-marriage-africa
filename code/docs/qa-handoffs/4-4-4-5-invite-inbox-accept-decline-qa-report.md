@@ -56,7 +56,7 @@ Each mutation was applied to `apps/api/src/invites.ts`, the tests run, then the 
 | EDGE | Empty, loading, load error with retry, tab hash, keyboard tabs | As spec | e2e tests pass | PASS | e2e |
 | PRIVACY | No read time, decision time or `sister_accepted_at` in responses; blur photo only | None exposed | API key-scan test | PASS | unit |
 | BILLING | No BillingPort call or quota write | None | Static test and Postgres count | PASS | unit, integration |
-| HEADERS | `Cache-Control: no-store` on invites routes | Present | Seen in `invites.controller.ts`; `conversations.controller.ts` not confirmed by grep | See finding 4 | source read |
+| HEADERS | `Cache-Control: no-store` on invites routes | Present | `no-store` present in `invites.controller.ts` and `conversations.controller.ts` (source read; not checked on a live response) | PASS (static) | source read |
 | XSS | Pseudonym rendering | Text, not HTML | `invite-inbox-page.ts` has no `innerHTML`/`insertAdjacentHTML` | PASS (static) | grep |
 | UI | Widths 360 to 1440, Stitch 19 fidelity, 44 px, contrast, 200 % zoom | Matches | Cannot run unstyled | BLOCKED | n/a |
 | PERF | LCP, CLS, INP, request pattern | Budgets | Needs CDN and Lighthouse | BLOCKED | n/a |
@@ -69,8 +69,7 @@ Each mutation was applied to `apps/api/src/invites.ts`, the tests run, then the 
 | 1 | Minor (accepted risk) | G3 | B and S send an invite to each other in the same instant | One pair, one conversation | The `invite_received` check is read-then-write, so both can be created pending and each can be accepted into its own conversation. Documented by the developer (handoff 7.5). Recommend a pair-level unique index or lock | handoff 7.5, `invites.ts` ~600 to 614 |
 | 2 | Minor (pre-existing) | G1 | `npm audit --omit=dev --audit-level=high` | No high or critical | 1 critical in `next` 16.0 to 16.4; not introduced here, but the owner should plan the upgrade | `g1-audit.txt` |
 | 3 | Minor | G2 | Mutation: stop writing `sister_accepted_at` | A unit test fails | Only the Postgres test fails; the memory-store tests do not assert the value for AC 4.5-3 | `g2-mutation.txt` |
-| 4 | Minor, to confirm | G7 | `GET /v1/conversations` response headers | `no-store` like the other member routes | grep found no `no-store` in `conversations.controller.ts`. The response lists conversation ids and other member ids, so a header check on a live API is worth doing | grep |
-| 5 | Info | Spec | AC 4.4-3 | Report reason exists | Not built, deferred to Story 8.5; the orchestrator must keep it on the 8.5 list | spec |
+| 4 | Info | Spec | AC 4.4-3 | Report reason exists | Not built, deferred to Story 8.5; the orchestrator must keep it on the 8.5 list | spec |
 
 Open `known-issues.ts` entries this run relied on: favicon 404, no API behind `/v1` in web-only runs, and four reCAPTCHA third-party entries. I added no entry; `E2E_ALLOW_ERRORS` (the file's own mechanism) covered only `cdn.tailwindcss.com` and "tailwind is not defined".
 
