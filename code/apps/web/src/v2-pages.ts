@@ -357,6 +357,8 @@ export function pinHtml(stitch: string): string {
       '<div class="mt-6 text-xs text-deep-navy/70 flex items-center gap-1.5" id="status-hint" role="status" style="scroll-margin-bottom: 24px">\n<span aria-hidden="true" class="material-symbols-outlined text-sm text-soft-gold" data-icon="verified_user"></span>\n<span id="pin-status-text" class="">Chiffrement et vérification locale sécurisée</span>',
     )
     .replace(/href="#">(\s*S'identifier à nouveau)/, 'href="/auth">$1')
+    // Soft gold on cream is 2.3:1; the recovery links keep navy on hover.
+    .replaceAll('text-deep-navy/70 hover:text-soft-gold', 'text-deep-navy/70 hover:text-deep-navy')
   return mount(html, pinScript())
 }
 
