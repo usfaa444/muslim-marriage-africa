@@ -1,0 +1,25 @@
+       |   ^
+    251|     const binary = [
+    252|       join(process.env.HOME || '', '.cache/ms-playwright/chromium-1243…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  apps/web/src/v2-responsive.test.ts > v2 screens fit the required widths > keeps scrollWidth within the viewport at every required width
+Error: Test timed out in 360000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ apps/web/src/v2-responsive.test.ts:472:21
+    470| describe('v2 screens fit the required widths', () => {
+    471|   const binary = chromeBinary()
+    472|   it.skipIf(!binary)('keeps scrollWidth within the viewport at every r…
+       |                     ^
+    473|     const pages = screens()
+    474|     const server: Server = createServer((request, response) => {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  3 failed | 75 passed (78)
+      Tests  3 failed | 580 passed (583)
+   Start at  15:25:27
+   Duration  362.15s (tests 96%, import 3%, transform 1%)
+

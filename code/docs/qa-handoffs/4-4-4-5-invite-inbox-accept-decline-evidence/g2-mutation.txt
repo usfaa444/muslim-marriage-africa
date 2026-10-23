@@ -1,0 +1,18 @@
+## M1 remove declined-resend guard
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+     × AC 4.5-2: her quiet decline opens no Chat, shows him declined with no receipt, and he cannot resend 356ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/invite-inbox.test.ts > Invite inbox, accept and quiet decline (Stories 4.4, 4.5) > AC 4.5-2: her quiet decline opens no Chat, shows him declined with no receipt, and he cannot resend
+      Tests  1 failed | 32 passed (33)
+## M2 drop recipient-only check
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+     × AC 4.5-4: on a pending Invite he sent there is no thread, and he cannot accept it himself 344ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/invite-inbox.test.ts > Invite inbox, accept and quiet decline (Stories 4.4, 4.5) > AC 4.5-4: on a pending Invite he sent there is no thread, and he cannot accept it himself
+      Tests  1 failed | 12 passed (13)
+## M3 sister_accepted_at not set
+      Tests  13 passed (13)
+     × accepts in one transaction with ChatPort.openFromInvite, declines quietly, and keeps one conversation per invite on migrated Postgres (Stories 4.4, 4.5) 47ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  apps/api/src/operator-config.migrate.test.ts > operator_config migration > accepts in one transaction with ChatPort.openFromInvite, declines quietly, and keeps one conversation per invite on migrated Postgres (Stories 4.4, 4.5)
+      Tests  1 failed | 15 passed (16)

@@ -1,0 +1,12 @@
+[32m[Nest] 31398  - [39m10/23/2026, 3:38:01 PM [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mCilController {/v1/me}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 31398  - [39m10/23/2026, 3:38:01 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/delete, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 31398  - [39m10/23/2026, 3:38:01 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/export, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 31398  - [39m10/23/2026, 3:38:01 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/export, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 31398  - [39m10/23/2026, 3:38:01 PM [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/v1/me/export-status, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 31398  - [39m10/23/2026, 3:38:01 PM [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +1ms[39m
+
+ Test Files  5 passed (5)
+      Tests  88 passed (88)
+   Start at  15:37:41
+   Duration  25.08s (tests 89%, import 6%, transform 5%)
+
