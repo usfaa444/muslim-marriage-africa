@@ -338,6 +338,28 @@ test.describe('Chat Photo and Voice note (Stories 5.3, 5.4, screen 21)', () => {
     await expectAccessible(page)
   })
 
+  test('outside Lite on a slow link, the blur shows a loading note, never a dead « Afficher la photo » button (Mac live QA D1)', async ({ page, context, baseURL }) => {
+    const state = api()
+    await setLite(context, false)
+    await serveApi(context, baseURL ?? '', state)
+    let release: () => void = () => {}
+    const held = new Promise<void>((resolve) => { release = resolve })
+    // Registered last, so it runs first: hold the signed-URL answer like a 2G link would.
+    await context.route(`**/v1/conversations/${CONVERSATION}/messages/${PHOTO_MESSAGE}/media`, async (route) => {
+      await held
+      await route.fallback()
+    })
+    await openThread(page)
+    const photo = bubbles(page).first()
+    await expect(photo.getByTestId('chat-photo-blur')).toBeVisible()
+    await expect(photo.getByTestId('chat-photo-loading')).toHaveText('Chargement de la photo…')
+    await expect(photo.getByRole('button', { name: 'Afficher la photo' })).toBeHidden()
+    await expectAccessible(page)
+    release()
+    await expect(photo.getByRole('img', { name: 'Photo de Al-Hassan_BF' })).toBeVisible()
+    await expect(photo.getByTestId('chat-photo-loading')).toHaveCount(0)
+  })
+
   test('AC 5.3-1: « Joindre une photo sobre » compresses the Photo to JPEG, previews it, and the sent bubble appears at once', async ({ page, context, baseURL }) => {
     const state = api()
     await setLite(context, false)

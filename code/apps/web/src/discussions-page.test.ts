@@ -194,7 +194,7 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
   it('Story 5.3: a Photo bubble shows the server blur at once and loads the clear image from a fresh signed URL (on tap in Lite)', () => {
     expect(html).toContain('preview.src = media.blur_url')
     expect(html).toContain("'/messages/' + encodeURIComponent(item.id) + '/media'")
-    expect(html).toContain('if (mediaCache[item.id] || !liteEnabled()) setTimeout(reveal, 0)')
+    expect(html).toContain('if (mediaCache[item.id] || !liteEnabled()) setTimeout(function () { reveal(true) }, 0)')
     expect(html).toContain('show.appendChild(make(\'span\', \'\', COPY.photoShow))')
     // No signed URL is ever taken from a realtime event: the event handler only catches up over HTTP.
     expect(html).toContain('function onDelivered(payload) {')

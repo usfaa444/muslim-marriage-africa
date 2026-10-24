@@ -73,6 +73,7 @@ export const CHAT_COPY = {
   photoUnsupported: "Ce format de photo n'est pas pris en charge. Choisissez une photo JPEG ou PNG.",
   photoTooHeavy: 'Photo trop lourde (2 Mo au plus).',
   photoShow: 'Afficher la photo',
+  photoLoading: 'Chargement de la photo…',
   photoAltMine: 'Votre photo',
   photoAltTheirs: 'Photo de {name}',
   photoUnavailable: 'Photo indisponible pour le moment.',
@@ -405,10 +406,17 @@ function photoNode(item) {
   cover.appendChild(show)
   cover.appendChild(note)
   box.appendChild(cover)
-  function reveal() {
+  function reveal(auto) {
     show.disabled = true
     show.setAttribute('aria-busy', 'true')
     note.hidden = true
+    // An automatic load shows a neutral loading note, not a disabled button that seems to do nothing on 2G/3G.
+    if (auto) {
+      show.hidden = true
+      note.textContent = COPY.photoLoading
+      note.setAttribute('data-testid', 'chat-photo-loading')
+      note.hidden = false
+    }
     mediaBlob(item).then(function (url) {
       var clear = make('img', 'absolute inset-0')
       clear.alt = name
@@ -418,15 +426,17 @@ function photoNode(item) {
       cover.remove()
       box.appendChild(clear)
     }).catch(function () {
+      show.hidden = false
       show.disabled = false
       show.removeAttribute('aria-busy')
+      note.removeAttribute('data-testid')
       note.textContent = COPY.photoUnavailable
       note.hidden = false
     })
   }
-  show.addEventListener('click', function (event) { event.preventDefault(); reveal() })
+  show.addEventListener('click', function (event) { event.preventDefault(); reveal(false) })
   // Lite mode (2G/3G, data saver, 1 GB devices) waits for a tap; otherwise the clear image loads at once.
-  if (mediaCache[item.id] || !liteEnabled()) setTimeout(reveal, 0)
+  if (mediaCache[item.id] || !liteEnabled()) setTimeout(function () { reveal(true) }, 0)
   return box
 }
 function voiceNode(item) {
