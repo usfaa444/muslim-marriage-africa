@@ -8,6 +8,7 @@ import {
   chatThreadHtml,
   discussionsHtml,
   PHOTO_MAX_BYTES,
+  READ_RETRY_MS,
   REALTIME_SCRIPT,
   SPLIT_MIN_PX,
   STAGE_LABEL,
@@ -273,6 +274,16 @@ describe('story chat-polish: one page for both routes, split view, read receipts
     expect(list).toContain("if (document.visibilityState === 'hidden') return\n  if (!nearBottom()) return")
     expect(list).toContain("fetch('/v1/conversations/' + encodeURIComponent(conversationId) + '/read', {")
     expect(list).toContain('body: JSON.stringify({ message_id: latest.id })')
+  })
+
+  it('QA F3: a read POST lost to the network or a 5xx is retried once after a delay, a 4xx is final, then no more posts for that message', () => {
+    expect(READ_RETRY_MS).toBe(2000)
+    expect(script).toContain('readFailed(started, latest.id, result.status >= 500)')
+    expect(script).toContain('marking = false; readFailed(started, latest.id, true)')
+    expect(script).toContain('if (!transient || readRetried === messageId) { readStopped = messageId; return }')
+    expect(script).toContain('if (readRetryTimer || latest.id === readStopped) return')
+    expect(script).toContain('}, 2000)')
+    expect(script).toContain('if (readRetryTimer) { clearTimeout(readRetryTimer); readRetryTimer = null }')
   })
 
   it('AC 13 / 14: rows show an unread badge (99+ cap, screen-reader count) and ticks for my last message; refreshes are debounced', () => {

@@ -148,6 +148,12 @@ export const LIST_REFRESH_MS = 300
 /** Within this distance of the end, the thread counts as « at the latest message ». */
 export const BOTTOM_SLACK_PX = 80
 export const UNREAD_CAP = 99
+/**
+ * QA F3: a read POST lost to the network or a 5xx is tried again once, after this delay, for the same message. A 4xx
+ * answer is final (the answer would not change). After that the page stops posting for that message: scrolls and focus
+ * do not post it again, a newer message of theirs or reopening the thread does. The member never sees an error.
+ */
+export const READ_RETRY_MS = 2000
 
 const STYLE = `<style id="chat-style">
 #chat-app [hidden], #photo-viewer[hidden] { display: none !important; }
@@ -588,6 +594,10 @@ var catching = false
 var readMine = null
 var readOther = null
 var marking = false
+/** QA F3: the message whose read POST was already retried, the one given up on, and the pending retry. */
+var readRetried = null
+var readStopped = null
+var readRetryTimer = null
 /** True while the view follows the latest message; false once the member scrolls up to read history. */
 var pinned = true
 var input = el('thread-input')
@@ -978,6 +988,7 @@ function markSeen() {
   if (!nearBottom()) return
   var latest = messages[messages.length - 1]
   if (readMine && latest.id <= readMine) return
+  if (readRetryTimer || latest.id === readStopped) return
   var theirs = false
   for (var index = messages.length - 1; index >= 0; index -= 1) {
     if (readMine && messages[index].id <= readMine) break
@@ -994,14 +1005,24 @@ function markSeen() {
     body: JSON.stringify({ message_id: latest.id })
   }).then(readJson).then(function (result) {
     marking = false
-    if (result.status !== 200 || !result.payload || !result.payload.read) return
+    if (result.status !== 200 || !result.payload || !result.payload.read) { readFailed(started, latest.id, result.status >= 500); return }
     clearUnread(conversationId)
     if (started !== gen) return
     var pointer = result.payload.read.message_id
     if (!readMine || pointer > readMine) readMine = pointer
     // A message may have arrived while the request was out.
     markSeen()
-  }).catch(function () { marking = false })
+  }).catch(function () { marking = false; readFailed(started, latest.id, true) })
+}
+/** One delayed retry per message, only for a transient failure and only while the same thread is open. No loop. */
+function readFailed(started, messageId, transient) {
+  if (started !== gen) return
+  if (!transient || readRetried === messageId) { readStopped = messageId; return }
+  readRetried = messageId
+  readRetryTimer = setTimeout(function () {
+    readRetryTimer = null
+    if (started === gen) markSeen()
+  }, ${READ_RETRY_MS})
 }
 function onRead(payload) {
   if (!payload || typeof payload.message_id !== 'string') return
@@ -1513,6 +1534,9 @@ function leaveThread() {
   busy = false
   catching = false
   marking = false
+  if (readRetryTimer) { clearTimeout(readRetryTimer); readRetryTimer = null }
+  readRetried = null
+  readStopped = null
   readMine = null
   readOther = null
   pinned = true
