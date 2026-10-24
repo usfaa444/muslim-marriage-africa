@@ -287,7 +287,14 @@ test.describe('Chat thread (screen 21)', () => {
   test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
 
   test('AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy', async ({ page, context, baseURL }) => {
-    await serveApi(context, baseURL ?? '', api())
+    // Pin the two messages to yesterday noon and earlier today (Ouagadougou is UTC), so the day
+    // separators read « Hier » / « Aujourd'hui » at any time of day, including just after midnight.
+    const fixture = api()
+    const todayStart = new Date().setUTCHours(0, 0, 0, 0)
+    const [first, second] = fixture.messages
+    if (first) first.created_at = new Date(todayStart - 12 * 3_600_000).toISOString()
+    if (second) second.created_at = new Date(Math.max(todayStart, Date.now() - 25 * 60_000)).toISOString()
+    await serveApi(context, baseURL ?? '', fixture)
     // Warm the dev server's first compile so the timing below measures the page, not the bundler.
     await openThread(page)
     const started = Date.now()
