@@ -502,6 +502,28 @@ export const message = pgTable(
 )
 
 /**
+ * Chat-owned read pointer (story chat-polish): the newest message of a conversation one member has read. Unread counts
+ * and the « Lu » ticks come from it. Only the two members of the conversation ever see it (AD-15 rooms, participant
+ * check). The pointer only moves forward.
+ */
+export const conversationRead = pgTable(
+  'conversation_read',
+  {
+    conversation_id: uuid('conversation_id')
+      .notNull()
+      .references(() => conversation.id),
+    account_id: uuid('account_id')
+      .notNull()
+      .references(() => account.id),
+    last_read_message_id: uuid('last_read_message_id')
+      .notNull()
+      .references(() => message.id),
+    read_at: timestamp('read_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.conversation_id, table.account_id] })],
+)
+
+/**
  * Moderation-owned scan job (AD-10). Inserted only by `ModerationPort.enqueueScan`, after the item is delivered.
  * `outcome` is null while the job is queued; the Epic 8 worker sets it. It never writes `message.state`.
  */

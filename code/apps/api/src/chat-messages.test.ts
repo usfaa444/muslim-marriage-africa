@@ -17,6 +17,7 @@ import { setBillingPort } from './billing-port.js'
 import { setBrowseLimitReader } from './browse-rate.js'
 import { memoryChatPort, setChatPort } from './chat.js'
 import { openChatText, sealChatText, setChatKey } from './chat-key.js'
+import { memoryReadStore, setReadStore } from './chat-read.js'
 import {
   memoryMessageStore,
   PREVIEW_MAX,
@@ -62,6 +63,7 @@ const favourites = memoryFavouriteStore()
 const invites = memoryInviteStore()
 const chat = memoryChatPort()
 const messages = memoryMessageStore()
+const reads = memoryReadStore()
 const moderation = memoryModerationPort()
 const captures = memoryCaptureStore({ accounts: memory.accounts, profiles: memory.profiles, phoneRows: [] })
 const chatKey = { key: randomBytes(32), kid: 'test-chat-1' }
@@ -129,6 +131,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     setInviteStore(invites)
     setChatPort(chat)
     setMessageStore(messages)
+    setReadStore(reads)
     setModerationPort(switchingModeration)
     setChatKey(chatKey)
     setInvitesPort(undefined)
@@ -165,6 +168,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     invites.sisterAcceptedAt.clear()
     chat.conversations.length = 0
     messages.rows.length = 0
+    reads.rows.length = 0
     moderation.jobs.length = 0
     moderation.calls.length = 0
     moderationMode = 'ok'
@@ -192,6 +196,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     setInviteStore(undefined)
     setChatPort(undefined)
     setMessageStore(undefined)
+    setReadStore(undefined)
     setModerationPort(undefined)
     setMessageCapCheck(undefined)
     setChatKey(undefined)
@@ -610,6 +615,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
         pseudonym: expect.stringMatching(/^Chat_/),
         other: { available: true, age: expect.any(Number), city: 'ouagadougou', verified: false, photo: { id: expect.any(String), url: expect.stringMatching(/^\/v1\/media\/get\?token=/) } },
         last_message: null,
+        unread: 0,
       },
     ])
     const firstOther = empty.items[0]?.['other'] as { photo: { url: string } } | undefined
@@ -642,6 +648,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect(await thread.json()).toEqual({
       conversation: { id: conversationId, stage: 'chat', other_id: brother.id, pseudonym: expect.any(String), other: expect.objectContaining({ available: true }), closed: false },
       me: { id: sister.id },
+      read: { me: null, other: null },
     })
     expect(billingCalls).toBe(0)
   })
@@ -695,6 +702,136 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect(await echoed).toEqual(event)
     expect((await sending).status).toBe(201)
     await quiet
+  })
+
+  type ListItem = { id: string; unread: number; last_message: { id: string; mine: boolean; read: boolean | null } | null }
+
+  async function listOf(who: Member): Promise<ListItem[]> {
+    const listed = await call('/v1/conversations', who.cookie)
+    expect(listed.status).toBe(200)
+    return ((await listed.json()) as { items: ListItem[] }).items
+  }
+
+  function markRead(who: Member | undefined, conversationId: string, messageId: unknown): Promise<Response> {
+    return call(`/v1/conversations/${conversationId}/read`, who?.cookie, 'POST', { message_id: messageId })
+  }
+
+  async function sentId(response: Response): Promise<string> {
+    expect(response.status).toBe(201)
+    return ((await response.json()) as { message: { id: string } }).message.id
+  }
+
+  it('chat-polish AC 9-11: unread counts the other member’s messages after my read pointer, and « Lu » follows their pointer', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const one = await sentId(await sendText(brother, conversationId, 'Un'))
+    const two = await sentId(await sendText(brother, conversationId, 'Deux'))
+    const three = await sentId(await sendText(brother, conversationId, 'Trois'))
+
+    // Her list: three unread, the last message is theirs and not read. His list: his own message, not read yet, and
+    // nothing unread for him (his own messages never count).
+    expect(await listOf(sister)).toMatchObject([{ id: conversationId, unread: 3, last_message: { id: three, mine: false, read: false } }])
+    expect(await listOf(brother)).toMatchObject([{ id: conversationId, unread: 0, last_message: { id: three, mine: true, read: false } }])
+
+    const marked = await markRead(sister, conversationId, two)
+    expect(marked.status).toBe(200)
+    expect(marked.headers.get('cache-control')).toBe('no-store')
+    expect(await marked.json()).toEqual({ read: { message_id: two } })
+    expect(await listOf(sister)).toMatchObject([{ unread: 1, last_message: { read: false } }])
+    expect(await listOf(brother)).toMatchObject([{ last_message: { read: false } }])
+    const head = (await (await call(`/v1/conversations/${conversationId}`, brother.cookie)).json()) as { read: unknown }
+    expect(head.read).toEqual({ me: null, other: two })
+
+    expect((await markRead(sister, conversationId, three)).status).toBe(200)
+    expect(await listOf(sister)).toMatchObject([{ unread: 0, last_message: { read: true } }])
+    expect(await listOf(brother)).toMatchObject([{ last_message: { mine: true, read: true } }])
+    const hers = (await (await call(`/v1/conversations/${conversationId}`, sister.cookie)).json()) as { read: unknown }
+    expect(hers.read).toEqual({ me: three, other: null })
+
+    // The pointer never moves back: a late request for an older message keeps the newest one.
+    const late = await markRead(sister, conversationId, one)
+    expect(await late.json()).toEqual({ read: { message_id: three } })
+    expect(reads.rows).toEqual([{ conversation_id: conversationId, account_id: sister.id, message_id: three, read_at: expect.any(String) }])
+
+    // Her reply: his list shows one unread from her, hers shows her own last message not read by him.
+    const reply = await sentId(await sendText(sister, conversationId, 'Réponse'))
+    expect(await listOf(brother)).toMatchObject([{ unread: 1, last_message: { id: reply, mine: false, read: false } }])
+    expect(await listOf(sister)).toMatchObject([{ unread: 0, last_message: { id: reply, mine: true, read: false } }])
+    expect(billingCalls).toBe(0)
+  })
+
+  it('chat-polish AC 12: conversation.read reaches both members’ sockets with ids only, never a stranger', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const id = await sentId(await sendText(brother, conversationId, 'Salam'))
+    const hisSocket = await connectedSocket(brother)
+    const herSocket = await connectedSocket(sister)
+    const stranger = await member('brother')
+    const strangerSocket = await connectedSocket(stranger)
+    const his = nextEvent<Record<string, unknown>>(hisSocket, 'conversation.read')
+    const hers = nextEvent<Record<string, unknown>>(herSocket, 'conversation.read')
+    const quiet = noEvent(strangerSocket, 'conversation.read')
+    expect((await markRead(sister, conversationId, id)).status).toBe(200)
+    const event = await his
+    expect(event).toEqual({ conversation_id: conversationId, account_id: sister.id, message_id: id })
+    expect(await hers).toEqual(event)
+    await quiet
+  })
+
+  it('chat-polish AC 13: participants only; a bad or foreign message id is refused and nothing is stored', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const other = await connected()
+    const id = await sentId(await sendText(brother, conversationId, 'Salam'))
+    const elsewhere = await sentId(await sendText(other.brother, other.conversationId, 'Ailleurs'))
+    const stranger = await member('sister')
+
+    expect((await markRead(undefined, conversationId, id)).status).toBe(401)
+    const foreign = await markRead(stranger, conversationId, id)
+    expect(foreign.status).toBe(404)
+    expect(await foreign.json()).toMatchObject({ error: { code: 'NOT_FOUND', message: "Cette discussion n'existe pas." } })
+    for (const bad of ['not-a-uuid', newId(now)]) {
+      expect((await markRead(sister, bad, id)).status).toBe(404)
+    }
+    for (const value of [undefined, 'nope', 42, null]) {
+      const refused = await markRead(sister, conversationId, value)
+      expect(refused.status).toBe(400)
+      expect(await refused.json()).toMatchObject({ error: { message: 'message_id : valeur non reconnue.', details: { field: 'message_id' } } })
+    }
+    const misplaced = await markRead(sister, conversationId, elsewhere)
+    expect(misplaced.status).toBe(404)
+    expect(await misplaced.json()).toMatchObject({ error: { code: 'NOT_FOUND', message: 'Ce message est introuvable.' } })
+    expect((await markRead(sister, conversationId, newId(now))).status).toBe(404)
+
+    const account = memory.accounts.find((item) => item.id === sister.id) as { roles: string[] }
+    account.roles = ['mahram']
+    expect((await markRead(sister, conversationId, id)).status).toBe(403)
+    account.roles = ['member']
+    expect(reads.rows).toHaveLength(0)
+    // A stranger's list never carries anyone else's read state.
+    expect(await listOf(stranger)).toEqual([])
+  })
+
+  it('chat-polish AC 14: a Block hides the other member’s read state and sends them no read event; my own state still works', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const mine = await sentId(await sendText(sister, conversationId, 'Avant'))
+    expect((await markRead(brother, conversationId, mine)).status).toBe(200)
+    expect(await listOf(sister)).toMatchObject([{ last_message: { mine: true, read: true } }])
+
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect(await listOf(sister)).toMatchObject([{ last_message: { mine: true, read: null } }])
+    const head = (await (await call(`/v1/conversations/${conversationId}`, sister.cookie)).json()) as { read: unknown }
+    expect(head.read).toEqual({ me: null, other: null })
+    const theirs = (await (await call(`/v1/conversations/${conversationId}`, brother.cookie)).json()) as { read: unknown }
+    expect(theirs.read).toEqual({ me: mine, other: null })
+
+    // His read is still kept for him, but she hears nothing of it; his own sockets still sync.
+    const herSocket = await connectedSocket(sister)
+    const hisSocket = await connectedSocket(brother)
+    const quiet = noEvent(herSocket, 'conversation.read')
+    const echo = nextEvent<Record<string, unknown>>(hisSocket, 'conversation.read')
+    expect((await markRead(brother, conversationId, mine)).status).toBe(200)
+    expect(await echo).toMatchObject({ account_id: brother.id })
+    await quiet
+    expect((await call(`/v1/blocks/${brother.id}`, sister.cookie, 'DELETE')).status).toBe(200)
+    expect(await listOf(sister)).toMatchObject([{ last_message: { read: true } }])
   })
 
   it('AC 5.1-2: typing reaches the other member within 2 s, only the other member, at most once a second', async () => {

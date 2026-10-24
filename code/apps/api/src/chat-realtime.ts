@@ -10,7 +10,9 @@ import { assertBrowseViewer } from './public-profile.js'
  * Realtime Chat channel (AD-15, Stories 5.1, 5.2): Socket.IO on `/v1/realtime`. The handshake goes through the same
  * gates as HTTP: Origin (AD-17 CSRF), session and PIN lock, then the member viewer gate. A socket joins only its own
  * room `account:<id>`. Events carry ids only: `message.delivered { conversation_id, message_id, sender_id }` and
- * `conversation.typing { conversation_id, account_id }`. There is no pending, held or blocked event. No BillingPort.
+ * `conversation.typing { conversation_id, account_id }`, and (story chat-polish) `conversation.read { conversation_id,
+ * account_id, message_id }` to the reader and, unless a Block holds, the other member. There is no pending, held or
+ * blocked event. No BillingPort.
  */
 
 export const REALTIME_PATH = '/v1/realtime'
@@ -109,6 +111,10 @@ export function attachRealtime(httpServer: HttpServer): Server {
     messageDelivered({ conversationId, messageId, senderId, recipients }) {
       const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
       io.to(rooms).emit('message.delivered', { conversation_id: conversationId, message_id: messageId, sender_id: senderId })
+    },
+    conversationRead({ conversationId, readerId, messageId, recipients }) {
+      const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
+      io.to(rooms).emit('conversation.read', { conversation_id: conversationId, account_id: readerId, message_id: messageId })
     },
   })
   current = io

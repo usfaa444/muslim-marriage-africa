@@ -507,7 +507,7 @@ describe('Chat Photo and Voice note: delivered, then enqueue scan (Stories 5.3, 
 
     // The Discussions list shows the kind, never a URL or the text of a photo.
     const list = (await (await call('/v1/conversations', brother.cookie)).json()) as { items: Array<{ last_message: unknown }> }
-    expect(list.items[0]?.last_message).toEqual({ id: body.message.id, mine: false, kind: 'photo', preview: null, created_at: body.message.created_at })
+    expect(list.items[0]?.last_message).toEqual({ id: body.message.id, mine: false, kind: 'photo', preview: null, created_at: body.message.created_at, read: false })
 
     // AC 5.3-1 « Premium: message_quota not incremented »: no BillingPort read and no quota exists before Story 5.11.
     expect(billingCalls).toBe(0)
