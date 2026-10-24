@@ -169,6 +169,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     chat.conversations.length = 0
     messages.rows.length = 0
     reads.rows.length = 0
+    reads.settings.clear()
     moderation.jobs.length = 0
     moderation.calls.length = 0
     moderationMode = 'ok'
@@ -648,7 +649,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect(await thread.json()).toEqual({
       conversation: { id: conversationId, stage: 'chat', other_id: brother.id, pseudonym: expect.any(String), other: expect.objectContaining({ available: true }), closed: false },
       me: { id: sister.id },
-      read: { me: null, other: null },
+      read: { me: null, other: null, receipts: 'on' },
     })
     expect(billingCalls).toBe(0)
   })
@@ -739,13 +740,13 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect(await listOf(sister)).toMatchObject([{ unread: 1, last_message: { read: false } }])
     expect(await listOf(brother)).toMatchObject([{ last_message: { read: false } }])
     const head = (await (await call(`/v1/conversations/${conversationId}`, brother.cookie)).json()) as { read: unknown }
-    expect(head.read).toEqual({ me: null, other: two })
+    expect(head.read).toEqual({ me: null, other: two, receipts: 'on' })
 
     expect((await markRead(sister, conversationId, three)).status).toBe(200)
     expect(await listOf(sister)).toMatchObject([{ unread: 0, last_message: { read: true } }])
     expect(await listOf(brother)).toMatchObject([{ last_message: { mine: true, read: true } }])
     const hers = (await (await call(`/v1/conversations/${conversationId}`, sister.cookie)).json()) as { read: unknown }
-    expect(hers.read).toEqual({ me: three, other: null })
+    expect(hers.read).toEqual({ me: three, other: null, receipts: 'on' })
 
     // The pointer never moves back: a late request for an older message keeps the newest one.
     const late = await markRead(sister, conversationId, one)
@@ -818,9 +819,9 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
     expect(await listOf(sister)).toMatchObject([{ last_message: { mine: true, read: null } }])
     const head = (await (await call(`/v1/conversations/${conversationId}`, sister.cookie)).json()) as { read: unknown }
-    expect(head.read).toEqual({ me: null, other: null })
+    expect(head.read).toEqual({ me: null, other: null, receipts: 'blocked' })
     const theirs = (await (await call(`/v1/conversations/${conversationId}`, brother.cookie)).json()) as { read: unknown }
-    expect(theirs.read).toEqual({ me: mine, other: null })
+    expect(theirs.read).toEqual({ me: mine, other: null, receipts: 'blocked' })
 
     // His read is still kept for him, but she hears nothing of it; his own sockets still sync.
     const herSocket = await connectedSocket(sister)
@@ -832,6 +833,185 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     await quiet
     expect((await call(`/v1/blocks/${brother.id}`, sister.cookie, 'DELETE')).status).toBe(200)
     expect(await listOf(sister)).toMatchObject([{ last_message: { read: true } }])
+  })
+
+  function receipts(who: Member | undefined, body?: unknown): Promise<Response> {
+    return body === undefined ? call('/v1/chat/settings', who?.cookie) : call('/v1/chat/settings', who?.cookie, 'PUT', body)
+  }
+
+  it('chat-polish AC 18: « Confirmations de lecture » is on by default, stored per member, members only, booleans only', async () => {
+    const { brother, sister } = await connected()
+    expect((await receipts(undefined)).status).toBe(401)
+    expect((await receipts(undefined, { read_receipts: false })).status).toBe(401)
+    const fresh = await receipts(sister)
+    expect(fresh.status).toBe(200)
+    expect(fresh.headers.get('cache-control')).toContain('no-store')
+    expect(await fresh.json()).toEqual({ read_receipts: true })
+    for (const value of ['false', 0, 1, null, undefined, {}]) {
+      const refused = await receipts(sister, { read_receipts: value })
+      expect(refused.status).toBe(400)
+      expect(await refused.json()).toMatchObject({ error: { message: 'read_receipts : valeur non reconnue.', details: { field: 'read_receipts' } } })
+    }
+    expect(reads.settings.size).toBe(0)
+    const off = await receipts(sister, { read_receipts: false })
+    expect(off.status).toBe(200)
+    expect(await off.json()).toEqual({ read_receipts: false })
+    expect(await (await receipts(sister)).json()).toEqual({ read_receipts: false })
+    // Only her own switch: his stays on.
+    expect(await (await receipts(brother)).json()).toEqual({ read_receipts: true })
+    expect([...reads.settings.keys()]).toEqual([sister.id])
+
+    const account = memory.accounts.find((item) => item.id === brother.id) as { roles: string[] }
+    for (const roles of [['mahram'], ['moderator']]) {
+      account.roles = roles
+      expect((await receipts(brother)).status).toBe(403)
+      expect((await receipts(brother, { read_receipts: false })).status).toBe(403)
+    }
+    account.roles = ['member']
+    expect(await (await receipts(brother)).json()).toEqual({ read_receipts: true })
+    expect(billingCalls).toBe(0)
+  })
+
+  it('chat-polish AC 19: with receipts off on either side, nobody sees « Lu » and no read event crosses; my own unread still clears', async () => {
+    const { brother, sister, conversationId } = await connected()
+    expect((await sendText(sister, conversationId, 'De sa part')).status).toBe(201)
+    const his = await sentId(await sendText(brother, conversationId, 'De la mienne'))
+    expect((await receipts(sister, { read_receipts: false })).status).toBe(200)
+
+    // He reads her message: stored, but she is told nothing and sees no « Lu ».
+    const herSocket = await connectedSocket(sister)
+    const hisSocket = await connectedSocket(brother)
+    const quietForHer = noEvent(herSocket, 'conversation.read')
+    const echo = nextEvent<Record<string, unknown>>(hisSocket, 'conversation.read')
+    expect((await markRead(brother, conversationId, his)).status).toBe(200)
+    expect(await echo).toMatchObject({ account_id: brother.id, message_id: his })
+    await quietForHer
+    // She reads his message: her badge clears, he is told nothing and sees « Envoyé » only.
+    const quietForHim = noEvent(hisSocket, 'conversation.read')
+    const ownEcho = nextEvent<Record<string, unknown>>(herSocket, 'conversation.read')
+    expect((await markRead(sister, conversationId, his)).status).toBe(200)
+    expect(await ownEcho).toMatchObject({ account_id: sister.id })
+    await quietForHim
+    expect(await listOf(sister)).toMatchObject([{ unread: 0, last_message: { id: his, mine: false, read: true } }])
+    expect(await listOf(brother)).toMatchObject([{ unread: 0, last_message: { id: his, mine: true, read: false } }])
+    const herHead = (await (await call(`/v1/conversations/${conversationId}`, sister.cookie)).json()) as { read: unknown }
+    const hisHead = (await (await call(`/v1/conversations/${conversationId}`, brother.cookie)).json()) as { read: unknown }
+    expect(herHead.read).toEqual({ me: his, other: null, receipts: 'off' })
+    expect(hisHead.read).toEqual({ me: his, other: null, receipts: 'off' })
+
+    // Back on: the reads made meanwhile show as « Lu » again (the pointers were kept).
+    expect((await receipts(sister, { read_receipts: true })).status).toBe(200)
+    expect(await listOf(brother)).toMatchObject([{ last_message: { id: his, mine: true, read: true } }])
+    expect(((await (await call(`/v1/conversations/${conversationId}`, brother.cookie)).json()) as { read: unknown }).read).toEqual({ me: his, other: his, receipts: 'on' })
+    // His switch off hides his reads from her too, and hers from him.
+    expect((await receipts(brother, { read_receipts: false })).status).toBe(200)
+    expect(((await (await call(`/v1/conversations/${conversationId}`, sister.cookie)).json()) as { read: unknown }).read).toEqual({ me: his, other: null, receipts: 'off' })
+    expect(await listOf(brother)).toMatchObject([{ last_message: { mine: true, read: false } }])
+  })
+
+  it('chat-polish AC 20: a change reaches my other tabs and my chat partners live (ids only), never a stranger or across a Block', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const stranger = await member('sister')
+    const herSocket = await connectedSocket(sister)
+    const hisSocket = await connectedSocket(brother)
+    const strangerSocket = await connectedSocket(stranger)
+    const toHim = nextEvent<Record<string, unknown>>(hisSocket, 'chat.receipts')
+    const toHer = nextEvent<Record<string, unknown>>(herSocket, 'chat.receipts')
+    const leak = noEvent(strangerSocket, 'chat.receipts')
+    expect((await receipts(sister, { read_receipts: false })).status).toBe(200)
+    expect(await toHim).toEqual({ account_id: sister.id })
+    expect(await toHer).toEqual({ account_id: sister.id })
+    await leak
+    expect(conversationId).not.toBe('')
+
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    const blocked = noEvent(hisSocket, 'chat.receipts')
+    const own = nextEvent<Record<string, unknown>>(herSocket, 'chat.receipts')
+    expect((await receipts(sister, { read_receipts: true })).status).toBe(200)
+    expect(await own).toEqual({ account_id: sister.id })
+    await blocked
+  })
+
+  async function badges(who: Member | undefined): Promise<Response> {
+    return call('/v1/me/badges', who?.cookie)
+  }
+
+  async function badgeCounts(who: Member): Promise<{ invitations: number; discussions: number }> {
+    const answered = await badges(who)
+    expect(answered.status).toBe(200)
+    expect(answered.headers.get('cache-control')).toContain('no-store')
+    return (await answered.json()) as { invitations: number; discussions: number }
+  }
+
+  it('chat-polish AC 21: the bottom-nav badges count pending received invites and conversations with unread messages, members only', async () => {
+    const { brother, sister, conversationId } = await connected()
+    expect((await badges(undefined)).status).toBe(401)
+    expect(await badgeCounts(sister)).toEqual({ invitations: 0, discussions: 0 })
+
+    // Two messages from him in one conversation: one conversation unread, not two.
+    expect((await sendText(brother, conversationId, 'Un')).status).toBe(201)
+    const two = await sentId(await sendText(brother, conversationId, 'Deux'))
+    expect(await badgeCounts(sister)).toEqual({ invitations: 0, discussions: 1 })
+    // My own messages never count for me.
+    expect(await badgeCounts(brother)).toEqual({ invitations: 0, discussions: 0 })
+    expect((await markRead(sister, conversationId, two)).status).toBe(200)
+    expect(await badgeCounts(sister)).toEqual({ invitations: 0, discussions: 0 })
+
+    // Two pending invites to her; one she declines, one stays; sent invites never count for the sender.
+    const second = await member('brother')
+    const third = await member('brother')
+    const pending: string[] = []
+    for (const from of [second, third]) {
+      now = new Date(now.getTime() + 1000)
+      const sent = await call('/v1/invites', from.cookie, 'POST', { to_id: sister.id })
+      expect(sent.status).toBe(201)
+      pending.push(((await sent.json()) as { invite: { id: string } }).invite.id)
+    }
+    // Sending an invite reads the quota (BillingPort); reading badges never does.
+    billingCalls = 0
+    expect(await badgeCounts(sister)).toEqual({ invitations: 2, discussions: 0 })
+    expect(await badgeCounts(second)).toEqual({ invitations: 0, discussions: 0 })
+    expect((await call(`/v1/invites/${pending[0]}/decline`, sister.cookie, 'POST')).status).toBe(200)
+    expect(await badgeCounts(sister)).toEqual({ invitations: 1, discussions: 0 })
+    // A Block hides the blocked member's invite and conversation from the counts.
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: third.id })).status).toBe(201)
+    expect(await badgeCounts(sister)).toEqual({ invitations: 0, discussions: 0 })
+    expect((await sendText(brother, conversationId, 'Trois')).status).toBe(201)
+    expect(await badgeCounts(sister)).toEqual({ invitations: 0, discussions: 1 })
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect(await badgeCounts(sister)).toEqual({ invitations: 0, discussions: 0 })
+
+    const account = memory.accounts.find((item) => item.id === sister.id) as { roles: string[] }
+    for (const roles of [['mahram'], ['moderator']]) {
+      account.roles = roles
+      expect((await badges(sister)).status).toBe(403)
+    }
+    account.roles = ['member']
+    expect(billingCalls).toBe(0)
+  })
+
+  it('chat-polish AC 22: a new invite reaches only its recipient live (ids only); her decline tells only her own tabs', async () => {
+    const sister = await member('sister')
+    const brother = await member('brother')
+    const stranger = await member('sister')
+    const herSocket = await connectedSocket(sister)
+    const hisSocket = await connectedSocket(brother)
+    const strangerSocket = await connectedSocket(stranger)
+    const arrived = nextEvent<Record<string, unknown>>(herSocket, 'invite.changed')
+    const notToSender = noEvent(hisSocket, 'invite.changed')
+    const notLeaked = noEvent(strangerSocket, 'invite.changed')
+    now = new Date(now.getTime() + 1000)
+    const sent = await call('/v1/invites', brother.cookie, 'POST', { to_id: sister.id })
+    expect(sent.status).toBe(201)
+    const inviteId = ((await sent.json()) as { invite: { id: string } }).invite.id
+    expect(await arrived).toEqual({ invite_id: inviteId })
+    await Promise.all([notToSender, notLeaked])
+
+    const answered = nextEvent<Record<string, unknown>>(herSocket, 'invite.changed')
+    const quiet = noEvent(hisSocket, 'invite.changed')
+    expect((await call(`/v1/invites/${inviteId}/decline`, sister.cookie, 'POST')).status).toBe(200)
+    expect(await answered).toEqual({ invite_id: inviteId })
+    await quiet
   })
 
   it('AC 5.1-2: typing reaches the other member within 2 s, only the other member, at most once a second', async () => {

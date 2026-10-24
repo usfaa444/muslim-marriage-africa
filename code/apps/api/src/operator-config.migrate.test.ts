@@ -206,6 +206,7 @@ function migrationSql(): string {
     '0024_report_block.sql',
     '0025_message_media.sql',
     '0026_conversation_read.sql',
+    '0027_read_receipt_setting.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -322,6 +323,7 @@ describe('operator_config migration', () => {
       'pin_lock',
       'profile',
       'profile_visit',
+      'read_receipt_setting',
       'report',
       'session',
       'signed_grant',
@@ -355,6 +357,7 @@ describe('operator_config migration', () => {
       'public.pin_lock',
       'public.profile',
       'public.profile_visit',
+      'public.read_receipt_setting',
       'public.report',
       'public.session',
       'public.signed_grant',
@@ -367,7 +370,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('27')
+    expect(applied.rows[0]?.count).toBe('28')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -916,6 +919,7 @@ describe('operator_config migration', () => {
       'pin_lock',
       'profile',
       'profile_visit',
+      'read_receipt_setting',
       'report',
       'session',
       'signed_grant',
@@ -949,6 +953,7 @@ describe('operator_config migration', () => {
       'public.pin_lock',
       'public.profile',
       'public.profile_visit',
+      'public.read_receipt_setting',
       'public.report',
       'public.session',
       'public.signed_grant',
@@ -1534,7 +1539,25 @@ describe('operator_config migration', () => {
         expect(postgresCode(error)).toBe('23505')
       }
       expect(duplicate).toBe(true)
+
+      // « Confirmations de lecture »: no row is on; a stored choice can change both ways; it must name an account.
+      expect(await reads.receiptsOff([brother, sister])).toEqual(new Set())
+      await reads.setReceipts(sister, false, at)
+      expect(await reads.receiptsOff([brother, sister])).toEqual(new Set([sister]))
+      await reads.setReceipts(sister, true, at)
+      expect(await reads.receiptsOff([sister])).toEqual(new Set())
+      await reads.setReceipts(sister, false, at)
+      expect(await reads.receiptsOff([sister, sister])).toEqual(new Set([sister]))
+      let orphan = false
+      try {
+        await db().query(`insert into "read_receipt_setting" ("account_id", "enabled") values ($1, false)`, [newId(at)])
+      } catch (error) {
+        orphan = true
+        expect(postgresCode(error)).toBe('23503')
+      }
+      expect(orphan).toBe(true)
     } finally {
+      await db().query(`delete from "read_receipt_setting" where "account_id" = any($1::uuid[])`, [[brother, sister]])
       await db().query(`delete from "conversation_read" where "conversation_id" = $1`, [conversationId || newId(at)])
       await db().query(`delete from "message" where "conversation_id" = $1`, [conversationId || newId(at)])
       await db().query(`delete from "conversation" where "invite_id" = $1`, [inviteId])

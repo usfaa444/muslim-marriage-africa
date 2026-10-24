@@ -10,6 +10,7 @@ import {
   appFooter,
   appHeader,
   bottomNav,
+  NAV_BADGE_SCRIPT,
   NAV_HREFS,
   readNavDesign,
   stripStitchChrome,
@@ -69,9 +70,12 @@ const VIEW: ProfileDetailView = {
   photos: [],
 } as ProfileDetailView
 
-type Page = { name: string; html: string; nav: NavSection | null }
+type Page = { name: string; html: string; nav: NavSection | null; public?: true }
 
-/** Every in-app page the web serves from Stitch HTML. `nav: null` is a gated, linear flow. */
+/**
+ * Every in-app page the web serves from Stitch HTML. `nav: null` is a linear flow: signed in (no chrome but the legal
+ * line) or, with `public`, signed out (header and footer, story chat-polish).
+ */
 function pages(): Page[] {
   const discover = [stitch('57-discover'), stitch('57-discover', 'grid.html')] as const
   return [
@@ -87,15 +91,15 @@ function pages(): Page[] {
     { name: '/profile-edit', html: profileHtml(stitch('11-profile-edit')), nav: 'profil' },
     { name: '/profile-review', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }), nav: 'profil' },
     { name: '/settings', html: settingsHtml(stitch('27-settings')), nav: 'profil' },
-    { name: '/auth', html: authHtml(stitch('02-auth'), 'login', ''), nav: null },
-    { name: '/signup/account', html: authHtml(stitch('02-auth'), 'signup', ''), nav: null },
-    { name: '/signup/identity', html: identityHtml(stitch('03-age-gate')), nav: null },
-    { name: '/signup/pseudonym', html: pseudonymHtml(stitch('54-pseudonym-dob')), nav: null },
+    { name: '/auth', html: authHtml(stitch('02-auth'), 'login', ''), nav: null, public: true },
+    { name: '/signup/account', html: authHtml(stitch('02-auth'), 'signup', ''), nav: null, public: true },
+    { name: '/signup/identity', html: identityHtml(stitch('03-age-gate')), nav: null, public: true },
+    { name: '/signup/pseudonym', html: pseudonymHtml(stitch('54-pseudonym-dob')), nav: null, public: true },
     { name: '/email-verification', html: emailHtml(stitch('04-email-verification')), nav: null },
     { name: '/phone', html: phoneHtml(stitch('06-otp')), nav: null },
     { name: '/otp', html: otpHtml(stitch('56-otp-alt')), nav: null },
     { name: '/id-liveness', html: idHtml(stitch('07-id-liveness')), nav: null },
-    { name: '/password-reset', html: resetHtml(stitch('05-password-reset')), nav: null },
+    { name: '/password-reset', html: resetHtml(stitch('05-password-reset')), nav: null, public: true },
     { name: '/pin', html: pinHtml(stitch('10-pin-lock')), nav: null },
     { name: '/onboarding', html: onboardingHtml(stitch('08-onboarding')), nav: null },
     { name: '/photo-rules', html: photoHtml(stitch('09-photo-rules')), nav: null },
@@ -173,12 +177,22 @@ describe('app header and footer', () => {
     const html = `<body><header class="w-full top-0 sticky"><a>x</a></header><main><header class="mb-10">Titre</header><aside class="mt-12">note</aside><nav aria-label="Fil d'Ariane">fil</nav></main><nav aria-label="Navigation mobile"><a>a</a></nav><nav aria-label="Navigation membre"><a>b</a></nav><aside aria-label="Navigation membre" class="fixed"></aside><footer class="w-full border-t">  </footer></body>`
     const stripped = stripStitchChrome(html)
     expect(stripped).toBe(`<body><main><header class="mb-10">Titre</header><aside class="mt-12">note</aside><nav aria-label="Fil d'Ariane">fil</nav></main></body>`)
-    const shelled = withAppShell(`<html><head><meta name="viewport" content="width=device-width"></head>${html}</html>`, { kind: 'member', active: 'profil' })
+    const page = `<html><head><meta name="viewport" content="width=device-width"></head>${html}</html>`
+    const shelled = withAppShell(page, { kind: 'member', active: 'profil' })
     expect(shelled).toContain('content="width=device-width, viewport-fit=cover"')
     expect(shelled).toContain('<body class="ank-shell ank-has-nav">')
-    expect(shelled.indexOf('data-app-shell="header"')).toBeLessThan(shelled.indexOf('<main>'))
-    expect(shelled.indexOf('data-app-shell="footer"')).toBeGreaterThan(shelled.indexOf('</main>'))
-    expect(shelled.indexOf('data-app-shell="bottom-nav"')).toBeGreaterThan(shelled.indexOf('data-app-shell="footer"'))
+    // Story chat-polish: app screens carry the bottom nav only, no header and no footer.
+    expect(shelled).not.toContain('data-app-shell="header"')
+    expect(shelled).not.toContain('data-app-shell="footer"')
+    expect(shelled.indexOf('data-app-shell="bottom-nav"')).toBeGreaterThan(shelled.indexOf('</main>'))
+    const signedIn = withAppShell(page, { kind: 'gated' })
+    expect(signedIn).not.toContain('data-app-shell="header"')
+    expect(signedIn).not.toContain('data-app-shell="footer"')
+    expect(signedIn.indexOf('data-app-shell="legal"')).toBeGreaterThan(signedIn.indexOf('</main>'))
+    const signedOut = withAppShell(page, { kind: 'public' })
+    expect(signedOut.indexOf('data-app-shell="header"')).toBeLessThan(signedOut.indexOf('<main>'))
+    expect(signedOut.indexOf('data-app-shell="footer"')).toBeGreaterThan(signedOut.indexOf('</main>'))
+    expect(signedOut).not.toContain('data-app-shell="bottom-nav"')
   })
 })
 
@@ -186,11 +200,15 @@ describe('one shell on every in-app page', () => {
   const all = pages()
 
   for (const page of all) {
-    it(`${page.name}: one header, one footer, ${page.nav ? `the bottom nav on ${page.nav}` : 'no bottom nav'}`, () => {
+    const chrome = page.nav ? `the bottom nav on ${page.nav}, no header, no footer` : page.public ? 'one header, one footer, no bottom nav' : 'no header, no footer, no bottom nav, the privacy link'
+    it(`${page.name}: ${chrome}`, () => {
       const html = page.html
-      expect(count(html, /data-app-shell="header"/g)).toBe(1)
-      expect(count(html, /data-app-shell="footer"/g)).toBe(1)
-      expect(count(html, /<footer\b/g)).toBe(1)
+      // Story chat-polish (Faycal): header and footer only on the landing page and the signed-out pages.
+      expect(count(html, /data-app-shell="header"/g)).toBe(page.public ? 1 : 0)
+      expect(count(html, /data-app-shell="footer"/g)).toBe(page.public ? 1 : 0)
+      expect(count(html, /<footer\b/g)).toBe(page.public ? 1 : 0)
+      expect(count(html, /data-app-shell="legal"/g)).toBe(!page.nav && !page.public ? 1 : 0)
+      if (!page.nav && !page.public) expect(html).toContain('<a class="ank-footer-link" href="/#legal">Confidentialité</a>')
       expect(count(html, /<header class="w-full/g)).toBe(0)
       expect(count(html, /aria-label="Navigation (?:mobile|membre)"/g)).toBe(0)
       expect(html).not.toContain('id="discover-desktop-nav"')
@@ -201,25 +219,30 @@ describe('one shell on every in-app page', () => {
         expect(count(html, /aria-label="Navigation principale"/g)).toBe(1)
         expect(count(html, /<nav\b[^>]*aria-current|data-nav-item="[a-z]+" aria-current="page"/g)).toBe(1)
         expect(html).toContain(`data-nav-item="${page.nav}" aria-current="page"`)
-        expect(html).toContain('href="/decouvrir" aria-label="AnKanu, accueil"')
+        expect(html).not.toContain('aria-label="AnKanu, accueil"')
         expect(html).toMatch(/<body\b[^>]*class="[^"]*ank-has-nav/)
+        // The live badges (story chat-polish) ship with every bottom nav, and survive the demo-script strip.
+        expect(count(html, /data-nav-badge="invitations"/g)).toBe(1)
+        expect(count(html, /data-nav-badge="discussions"/g)).toBe(1)
+        expect(html).toContain(NAV_BADGE_SCRIPT)
       } else {
         expect(count(html, /data-app-shell="bottom-nav"/g)).toBe(0)
         expect(count(html, /data-nav-item=/g)).toBe(0)
-        expect(html).toContain('<span class="ank-brand">AnKanu</span>')
+        expect(html.includes('<span class="ank-brand">AnKanu</span>')).toBe(!!page.public)
         expect(html).not.toMatch(/<body\b[^>]*class="[^"]*ank-has-nav/)
       }
     })
   }
 
-  it('renders the same header, footer and nav markup on every member page', () => {
+  it('renders the same nav on every member page, and the same header and footer on every signed-out page', () => {
     const members = all.filter((page) => page.nav === 'decouvrir')
+    const signedOut = all.filter((page) => page.public)
     const piece = (html: string, marker: string, close: string) => {
       const start = html.lastIndexOf('<', html.indexOf(marker))
       return html.slice(start, html.indexOf(close, start) + close.length)
     }
-    const headers = new Set(members.map((page) => piece(page.html, 'data-app-shell="header"', '</header>')))
-    const footers = new Set(all.map((page) => piece(page.html, 'data-app-shell="footer"', '</footer>')))
+    const headers = new Set(signedOut.map((page) => piece(page.html, 'data-app-shell="header"', '</header>')))
+    const footers = new Set(signedOut.map((page) => piece(page.html, 'data-app-shell="footer"', '</footer>')))
     const navs = new Set(members.map((page) => piece(page.html, 'data-app-shell="bottom-nav"', '</nav></div>')))
     expect(headers.size).toBe(1)
     expect(footers.size).toBe(1)

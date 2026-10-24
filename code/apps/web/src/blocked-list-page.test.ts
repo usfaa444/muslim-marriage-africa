@@ -27,7 +27,8 @@ describe('Membres bloqués (Story 8.6 follow-up)', () => {
     expect(main).toContain(`href="/settings"`)
     expect(main).toContain(`<span>${BLOCKED_COPY.back}</span>`)
     expect(html).toContain('data-nav-item="profil" aria-current="page"')
-    expect(html.match(/id="app-header"/g)).toHaveLength(1)
+    // Story chat-polish: app screens have no site header or footer, only the bottom nav.
+    expect(html).not.toContain('id="app-header"')
     expect(html.match(/id="app-bottom-nav"/g)).toHaveLength(1)
     expect(html).toContain('ankanu_pin_hidden_at')
     // The Stitch settings modules are replaced, not shown under the list.

@@ -19,7 +19,8 @@ main, section, form, header, footer { min-width: 0; max-width: 100%; }
 
 export function stripDemoScripts(html: string): string {
   return html.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi, (full, attrs: string, body: string) => {
-    if (/\bsrc\s*=/i.test(attrs) || /\bid\s*=\s*["']tailwind-config["']/i.test(attrs)) {
+    // `data-ank-keep` marks the app's own inline scripts (the bottom-nav badges); Stitch exports never carry it.
+    if (/\bsrc\s*=/i.test(attrs) || /\bid\s*=\s*["']tailwind-config["']/i.test(attrs) || /\bdata-ank-keep\b/i.test(attrs)) {
       return full
     }
     if (/^\s*tailwind\.config\s*=/.test(body)) {

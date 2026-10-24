@@ -2,7 +2,8 @@ import AxeBuilder from '@axe-core/playwright'
 import type { Page } from '@playwright/test'
 import { expect, expectAccessible, expectNoHorizontalOverflow, test, WIDTHS } from './fixtures'
 
-// Story discover-app-shell: one app header, one app footer and one bottom nav (screen 53) on every in-app page.
+// Story discover-app-shell: one bottom nav (screen 53) on every member page. Story chat-polish (Faycal): « Header and
+// footer will only be on the landing page »: member pages lose the site header and footer, signed-out pages keep them.
 // Member pages here render for the `web` stub session, a dev-build seam only, so those run on the web-only server.
 // /decouvrir needs a live session; its view toggle is covered in apps/web/src/app-shell-browser.test.ts.
 
@@ -20,11 +21,9 @@ const MEMBER_PAGES = [
   { path: `/discussions/${TARGET}`, active: 'Discussions', wholePage: true },
 ] as const
 
-/** Zero serious or critical WCAG 2.2 AA violations inside the shared header, footer and bottom nav. */
+/** Zero serious or critical WCAG 2.2 AA violations inside the shared bottom nav. */
 async function expectShellAccessible(page: Page) {
   const { violations } = await new AxeBuilder({ page })
-    .include('#app-header')
-    .include('#app-footer')
     .include('#app-bottom-nav')
     .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
     .analyze()
@@ -32,7 +31,8 @@ async function expectShellAccessible(page: Page) {
   expect(blocking.flatMap((v) => v.nodes.map((node) => `${v.impact} ${v.id} at ${node.target.join(' ')}`))).toEqual([])
 }
 
-const GATED_PAGES = ['/auth', '/signup/identity', '/signup/pseudonym', '/password-reset'] as const
+/** Signed-out pages: they keep the site header and footer. */
+const PUBLIC_PAGES = ['/auth', '/signup/identity', '/signup/pseudonym', '/password-reset'] as const
 
 const NAV_ITEMS = [
   ['Découvrir', '/decouvrir'],
@@ -49,34 +49,42 @@ async function signInStub(page: Page, baseURL: string | undefined) {
   await page.context().addCookies([{ name: 'ankanu_session', value: 'web', url: baseURL ?? 'http://localhost:3100' }])
 }
 
-/** After scrolling to the end, the footer's last line sits above the fixed bottom nav. */
-async function footerClearOfNav(page: Page) {
+/** After scrolling to the end, the end of the page's content sits above the fixed bottom nav. */
+async function contentClearOfNav(page: Page) {
   await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
-  const footer = await page.getByRole('contentinfo').boundingBox()
+  const end = await page.evaluate(() => {
+    const main = document.querySelector('main')
+    if (!main) return null
+    let bottom = 0
+    for (const node of Array.from(main.querySelectorAll('*'))) {
+      const rect = node.getBoundingClientRect()
+      if (rect.width > 0 && rect.height > 0 && getComputedStyle(node).position !== 'fixed') bottom = Math.max(bottom, rect.bottom)
+    }
+    return bottom
+  })
   const nav = await bottomNav(page).boundingBox()
-  expect(footer).not.toBeNull()
+  expect(end).not.toBeNull()
   expect(nav).not.toBeNull()
-  expect((footer?.y ?? 0) + (footer?.height ?? 0)).toBeLessThanOrEqual(nav?.y ?? 0)
+  expect(Math.round(end ?? 0)).toBeLessThanOrEqual(Math.round(nav?.y ?? 0))
 }
 
 for (const { path, active, wholePage } of MEMBER_PAGES) {
   test.describe(`member page ${path}`, () => {
     test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
 
-    test('has the one header, footer and bottom nav, with its section current', async ({ page, baseURL }) => {
+    test('has the bottom nav with its section current, and no site header or footer', async ({ page, baseURL }) => {
       await signInStub(page, baseURL)
       const response = await page.goto(path)
       expect(response?.status()).toBe(200)
-      await expect(page.getByRole('banner')).toHaveCount(1)
-      await expect(page.getByRole('banner').getByRole('link', { name: 'AnKanu, accueil' })).toHaveAttribute('href', '/decouvrir')
-      await expect(page.getByRole('contentinfo')).toHaveCount(1)
-      await expect(page.getByRole('contentinfo').getByRole('link', { name: 'Confidentialité' })).toBeVisible()
+      await expect(page.locator('#app-header, #app-footer')).toHaveCount(0)
+      await expect(page.getByRole('link', { name: 'AnKanu, accueil' })).toHaveCount(0)
       await expect(page.getByRole('navigation', { name: /Navigation (mobile|membre)/ })).toHaveCount(0)
       const nav = bottomNav(page)
       await expect(nav).toHaveCount(1)
       await expect(nav).toBeVisible()
       const links = nav.getByRole('link')
-      await expect(links).toHaveText(NAV_ITEMS.map(([label]) => label))
+      // Each link's name is its label, then the badge's count for screen readers when there is one (story chat-polish).
+      await expect(links).toHaveText(NAV_ITEMS.map(([label]) => new RegExp(label)))
       for (const [index, [, href]] of NAV_ITEMS.entries()) await expect(links.nth(index)).toHaveAttribute('href', href)
       await expect(nav.locator('[aria-current="page"]')).toHaveCount(1)
       await expect(nav.getByRole('link', { name: active })).toHaveAttribute('aria-current', 'page')
@@ -84,12 +92,12 @@ for (const { path, active, wholePage } of MEMBER_PAGES) {
         expect(box.width).toBeGreaterThanOrEqual(44)
         expect(box.height).toBeGreaterThanOrEqual(44)
       }
-      await footerClearOfNav(page)
+      await contentClearOfNav(page)
       await expectShellAccessible(page)
       if (wholePage) await expectAccessible(page)
     })
 
-    test('fits every factory width with the footer above the bar', async ({ page, baseURL }, testInfo) => {
+    test('fits every factory width with the end of the page above the bar', async ({ page, baseURL }, testInfo) => {
       test.skip(testInfo.project.name !== 'desktop', 'width sweep runs once')
       await signInStub(page, baseURL)
       for (const width of WIDTHS) {
@@ -97,7 +105,7 @@ for (const { path, active, wholePage } of MEMBER_PAGES) {
         await page.goto(path)
         await expect(bottomNav(page)).toBeVisible()
         await expectNoHorizontalOverflow(page)
-        await footerClearOfNav(page)
+        await contentClearOfNav(page)
       }
     })
   })
@@ -127,8 +135,21 @@ test.describe('bottom nav navigation', () => {
   })
 })
 
-for (const path of GATED_PAGES) {
-  test(`gated page ${path} has the header and footer but no bottom nav`, async ({ page }) => {
+test.describe('links that moved with the footer', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+
+  test('« Confidentialité » is one tap away in Paramètres', async ({ page, baseURL }) => {
+    await signInStub(page, baseURL)
+    await page.goto('/settings')
+    const privacy = page.getByRole('link', { name: /Confidentialité/ })
+    await expect(privacy).toHaveAttribute('href', '/#legal')
+    const box = await privacy.boundingBox()
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(44)
+  })
+})
+
+for (const path of PUBLIC_PAGES) {
+  test(`signed-out page ${path} has the header and footer but no bottom nav`, async ({ page }) => {
     const response = await page.goto(path)
     expect(response?.status()).toBe(200)
     await expect(page.getByRole('banner')).toHaveCount(1)

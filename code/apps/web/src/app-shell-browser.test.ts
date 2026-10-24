@@ -10,7 +10,8 @@ import { inviteInboxHtml } from './invite-inbox-page.js'
 import { authHtml, settingsHtml } from './v2-pages.js'
 
 // Story discover-app-shell, AC 1, 4, 6, 7: in a real browser, switching Discover views leaves every piece of chrome
-// where it was, and the bottom nav never covers the footer, at every factory width.
+// where it was, and the bottom nav never covers the end of the page, at every factory width. Story chat-polish: app
+// screens have no site header or footer any more, so the end of the page is the end of <main>; /auth keeps its footer.
 
 const WIDTHS = [360, 390, 768, 1024, 1280, 1440] as const
 
@@ -56,6 +57,7 @@ const CHROME = `(() => {
   }
   return {
     header: box('#app-header'),
+    footer: box('#app-footer'),
     eyebrow: box('#discover-main h1'),
     toolbar: box('#discover-main section'),
     filters: box('[data-open-filters]'),
@@ -67,7 +69,8 @@ const CHROME = `(() => {
 
 const FOOTER_CLEAR = `(() => {
   window.scrollTo(0, document.documentElement.scrollHeight)
-  const footer = document.getElementById('app-footer').getBoundingClientRect()
+  const last = document.getElementById('app-footer') || document.querySelector('main')
+  const footer = last.getBoundingClientRect()
   const nav = document.querySelector('#app-bottom-nav nav')
   return {
     scrollWidth: document.documentElement.scrollWidth,
@@ -137,6 +140,8 @@ describe('app shell in a browser', () => {
         await page.goto(`${origin}/decouvrir`)
         await page.waitForFunction("!!document.querySelector('#discover-focus') && document.querySelector('#discover-focus').hidden === false")
         const card = await page.evaluate(CHROME)
+        expect((card as { header: string; footer: string }).header).toBe('missing')
+        expect((card as { header: string; footer: string }).footer).toBe('missing')
         expect(await page.getAttribute('[data-discover-view="card"]', 'aria-pressed')).toBe('true')
         await page.click('[data-discover-view="grid"]')
         await page.waitForFunction("document.querySelectorAll('#discover-tiles [data-tile]').length === 3")
@@ -168,7 +173,7 @@ describe('app shell in a browser', () => {
             if (clear.gap !== null) failures.push(`/auth@${width} has a bottom nav`)
             continue
           }
-          if (clear.gap === null || clear.gap < 0) failures.push(`${path}@${width} nav covers the footer (${clear.gap})`)
+          if (clear.gap === null || clear.gap < 0) failures.push(`${path}@${width} nav covers the end of the page (${clear.gap})`)
           if (clear.navItems.length !== 4 || clear.navItems.some((size) => size < 44)) {
             failures.push(`${path}@${width} nav targets ${clear.navItems.join(',')}`)
           }

@@ -20,6 +20,7 @@ import {
   statusScript,
 } from './v2-client'
 import { blockedSettingsSection } from './blocked-list-page'
+import { privacySettingsSection, receiptsSettingsScript, receiptsSettingsSection, receiptsSettingsStyle } from './read-receipts-setting'
 import {
   dropSignupPseudonym,
   guardAuthPost,
@@ -33,6 +34,8 @@ import {
 } from './v2-document'
 
 const GATED: ShellOptions = { kind: 'gated' }
+/** Signed-out pages keep the header and the footer (story chat-polish: only app screens lose them). */
+const PUBLIC: ShellOptions = { kind: 'public' }
 
 function mount(html: string, script: string, extra = '', shell: ShellOptions = GATED): string {
   const page = prepareV2(withAppShell(html, shell), script)
@@ -94,11 +97,11 @@ export function splashHtml(): string {
 }
 
 export function identityHtml(stitch: string): string {
-  return mount(stitch, identityScript())
+  return mount(stitch, identityScript(), '', PUBLIC)
 }
 
 export function pseudonymHtml(stitch: string): string {
-  return mount(stitch, pseudonymScript())
+  return mount(stitch, pseudonymScript(), '', PUBLIC)
 }
 
 export function authHtml(stitch: string, panel: 'signup' | 'login', siteKey: string): string {
@@ -106,7 +109,7 @@ export function authHtml(stitch: string, panel: 'signup' | 'login', siteKey: str
     guardAuthPost(insertLoginError(replaceLoginCaptcha(insertSignupRecaptcha(dropSignupPseudonym(hideGoogleAuth(stitch)))))),
   )
   html = showAuthPanel(html, panel)
-  return mount(html, accountScript(siteKey, panel), recaptchaTag(siteKey))
+  return mount(html, accountScript(siteKey, panel), recaptchaTag(siteKey), PUBLIC)
 }
 
 const EMAIL_LINK_ERROR = `<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="email-link-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span><span id="email-link-error-text"></span></p>`
@@ -335,6 +338,8 @@ export function resetHtml(stitch: string, view: ResetView = 'request'): string {
       doneForm: RESET_DONE_FORM,
       mismatch: 'password : la confirmation ne correspond pas.',
     }),
+    '',
+    PUBLIC,
   )
 }
 
@@ -582,16 +587,20 @@ function neutralizeLiteToggle(html: string): string {
 
 export function settingsHtml(stitch: string): string {
   const neutral = withBlockedSection(neutralizeLiteToggle(stitch))
-  const withHit = neutral.includes('</head>')
-    ? neutral.replace('</head>', `${LITE_HIT}</head>`)
-    : `${LITE_HIT}${neutral}`
-  return guarded(withHit, settingsScript(), PROFILE_SECTION)
+  const style = `${LITE_HIT}${receiptsSettingsStyle()}`
+  const withHit = neutral.includes('</head>') ? neutral.replace('</head>', `${style}</head>`) : `${style}${neutral}`
+  return guarded(withHit, settingsScript() + receiptsSettingsScript(), PROFILE_SECTION)
 }
 
-/** Story 8.6 follow-up: « Membres bloqués » sits after the PIN card, before « Formules & Packs ». */
+/**
+ * Story 8.6 follow-up: « Membres bloqués » sits after the PIN card, before « Formules & Packs ». Story chat-polish puts
+ * « Confirmations de lecture » just before it and « Confidentialité » (from the old footer) just after it.
+ */
 function withBlockedSection(html: string): string {
   const anchor = '<!-- 4. ABONNEMENT & PACKS DE DÉMARCHE -->'
-  return html.includes(anchor) ? html.replace(anchor, `${blockedSettingsSection()}${anchor}`) : html
+  return html.includes(anchor)
+    ? html.replace(anchor, `${receiptsSettingsSection()}${blockedSettingsSection()}${privacySettingsSection()}${anchor}`)
+    : html
 }
 
 export function statusHtml(stitch: string): string {

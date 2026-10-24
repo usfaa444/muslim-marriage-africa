@@ -34,6 +34,15 @@ export type Api = {
   serial: number
   /** Who is on the other side of each conversation; a test may replace a pseudonym (hostile content). */
   people: Record<string, Person>
+  /** How the thread head says my ticks show: 'on', 'off' (« Confirmations de lecture » off) or 'blocked'. */
+  receipts: 'on' | 'off' | 'blocked'
+  /** « Confirmations de lecture » as `GET/PUT /v1/chat/settings` see it, and the PUT bodies. */
+  setting: boolean
+  settingPuts: unknown[]
+  /** The bottom-nav badges `GET /v1/me/badges` answers, and how often it was asked. */
+  badges: { invitations: number; discussions: number | null }
+  badgeCalls: number
+  headCalls: number
 }
 
 export type Person = { other_id: string; pseudonym: string; age: number; city: string }
@@ -125,6 +134,12 @@ export function api(): Api {
     mediaCalls: [],
     serial: 0x300,
     people: { ...PEOPLE },
+    receipts: 'on',
+    setting: true,
+    settingPuts: [],
+    badges: { invitations: 0, discussions: 0 },
+    badgeCalls: 0,
+    headCalls: 0,
   }
 }
 
@@ -199,11 +214,16 @@ export async function serveApi(context: BrowserContext, baseURL: string, state: 
     if (thread && person) {
       const conversation = thread[1] ?? ''
       if (!thread[2] && method === 'GET') {
+        state.headCalls += 1
         await route.fulfill(
           json({
             conversation: { id: conversation, stage: 'chat', other_id: person.other_id, pseudonym: person.pseudonym, other: { available: true, age: person.age, city: person.city, verified: true, photo: null }, closed: false },
             me: { id: ME },
-            read: { me: state.pointers[conversation]?.[ME] ?? null, other: state.pointers[conversation]?.[person.other_id] ?? null },
+            read: {
+              me: state.pointers[conversation]?.[ME] ?? null,
+              other: state.receipts === 'on' ? (state.pointers[conversation]?.[person.other_id] ?? null) : null,
+              receipts: state.receipts,
+            },
           }),
         )
         return
@@ -226,6 +246,22 @@ export async function serveApi(context: BrowserContext, baseURL: string, state: 
         await route.fulfill(json({ message: { ...item, mine: true } }, 201))
         return
       }
+    }
+    if (url.pathname === '/v1/me/badges' && method === 'GET') {
+      state.badgeCalls += 1
+      // `discussions: null`: counted like the API, from the read pointers.
+      const discussions = state.badges.discussions ?? listItems(state).filter((item) => item.unread > 0).length
+      await route.fulfill(json({ invitations: state.badges.invitations, discussions }))
+      return
+    }
+    if (url.pathname === '/v1/chat/settings') {
+      if (method === 'PUT') {
+        const body = request.postDataJSON() as { read_receipts: unknown }
+        state.settingPuts.push(body)
+        if (typeof body.read_receipts === 'boolean') state.setting = body.read_receipts
+      }
+      await route.fulfill(json({ read_receipts: state.setting }))
+      return
     }
     if (url.pathname === '/v1/pin' && method === 'GET') {
       await route.fulfill(json({ enabled: false, locked: false }))
@@ -285,4 +321,15 @@ export async function markPage(page: Page): Promise<void> {
 
 export async function sameDocument(page: Page): Promise<boolean> {
   return page.evaluate(() => (window as unknown as { __sameDocument?: boolean }).__sameDocument === true)
+}
+
+/**
+ * Scrolls the thread up the way a member does, with the mouse wheel over the messages: the page unpins the view only
+ * for a scroll the member started (Mac live QA D1), so a scripted `scrollTop` would be taken for layout settling.
+ */
+export async function wheelThreadToTop(page: Page): Promise<void> {
+  const pane = await page.locator('#thread-scroll').boundingBox()
+  if (pane) await page.mouse.move(pane.x + pane.width / 2, pane.y + Math.min(pane.height / 2, 120))
+  await page.mouse.wheel(0, -30000)
+  await expect(bubbles(page).first()).toBeInViewport()
 }

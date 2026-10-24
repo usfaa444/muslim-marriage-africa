@@ -3,7 +3,7 @@ import { expect, expectAccessible, expectNoHorizontalOverflow, test, WIDTHS } fr
 // Story chat-polish on screens 20 and 21: full-screen Chat Photo, open at the latest message, read receipts, unread
 // badges, and the split view from 768 px. The mock API and the fake Socket.IO live in chat-polish-mock.ts.
 import type { Api } from './chat-polish-mock'
-import { api, bubbles, fire, FIRST, HIM, id, iso, markPage, ME, openList, openThread, OTHER, realtimeReady, row, sameDocument, SECOND, serveApi, setLite, STUB_SKIP, text } from './chat-polish-mock'
+import { api, bubbles, fire, FIRST, HIM, id, iso, markPage, ME, openList, openThread, OTHER, realtimeReady, row, sameDocument, SECOND, serveApi, setLite, STUB_SKIP, text, wheelThreadToTop } from './chat-polish-mock'
 
 test.describe('story chat-polish: Discussions list with unread badges and read ticks', () => {
   test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
@@ -119,12 +119,7 @@ test.describe('story chat-polish: read receipts and open at the latest message',
     await realtimeReady(page)
     await expect.poll(() => state.reads.length).toBe(1)
     // Read history: back to the first message.
-    await bubbles(page).first().scrollIntoViewIfNeeded()
-    await page.evaluate(() => {
-      const box = document.getElementById('thread-scroll')
-      if (box && box.scrollHeight > box.clientHeight) box.scrollTop = 0
-      else window.scrollTo(0, 0)
-    })
+    await wheelThreadToTop(page)
     await expect(bubbles(page).last()).not.toBeInViewport()
     state.serial += 1
     state.messages.push(text(state.serial, FIRST, HIM, 'Êtes-vous toujours là ?', 0))

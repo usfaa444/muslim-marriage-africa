@@ -632,6 +632,7 @@ export async function sendInvite(
     }
     return quotaExceeded(state.body, now, state.charge?.cap ?? null)
   }
+  tellInvite(saved.row.id, [recipient.id])
   return { ok: true, status: 201, body: { invite: view(saved.row), quota: afterSend(state, saved.sentCount) } }
 }
 
@@ -709,6 +710,34 @@ async function presentOther(viewerId: string, other: BrowseViewer | null, blocke
     verified: verification.id,
     photo,
   }
+}
+
+/**
+ * Story chat-polish (bottom nav badges): realtime seam, registered by `chat-realtime.ts`. `invite.changed` (ids only)
+ * goes to the recipient of an invite that arrived, and to the recipient's own sockets after her accept or decline, so
+ * the « Invitations » badge stays right on every screen. Never to the sender of a declined invite (decline is quiet).
+ */
+export type InviteEvents = { inviteChanged(input: { inviteId: string; recipients: readonly string[] }): void }
+
+let inviteEvents: InviteEvents | undefined
+
+export function setInviteEvents(next: InviteEvents | undefined): void {
+  inviteEvents = next
+}
+
+function tellInvite(inviteId: string, recipients: readonly string[]): void {
+  try {
+    inviteEvents?.inviteChanged({ inviteId, recipients })
+  } catch {
+    // Realtime is best effort; the badge reloads on focus and on the next page.
+  }
+}
+
+/** The « Invitations » badge: invites received and still pending, from members not hidden by a Block. */
+export async function pendingReceivedCount(me: string): Promise<number> {
+  const rows = await getInviteStore().list(me, 'received')
+  const hidden = new Set(await getTrustPort().hiddenFor(me))
+  return rows.filter((row) => row.to_id === me && row.state === 'pending' && !hidden.has(row.from_id)).length
 }
 
 /** `GET /v1/invites?box=received|sent|accepted`. Own rows only. No BillingPort. */
@@ -819,6 +848,7 @@ export async function acceptInvite(session: ResolvedSession, id: unknown): Promi
     return saved.reason === 'missing' ? fail(404, 'NOT_FOUND', INVITE_MISSING_MESSAGE, null) : notPending(saved.row)
   }
   const conversation = saved.conversation
+  if (saved.changed) tellInvite(saved.row.id, [viewer.id])
   return {
     ok: true,
     body: {
@@ -841,5 +871,6 @@ export async function declineInvite(session: ResolvedSession, id: unknown): Prom
   if (!saved.ok) {
     return saved.reason === 'missing' ? fail(404, 'NOT_FOUND', INVITE_MISSING_MESSAGE, null) : notPending(saved.row)
   }
+  tellInvite(saved.row.id, [found.viewer.id])
   return { ok: true, body: { invite: decided(saved.row) } }
 }

@@ -2,6 +2,7 @@ import type { Server as HttpServer } from 'node:http'
 import { Server, type Socket } from 'socket.io'
 import { clientIp } from './auth-guard.js'
 import { setChatEvents, typingTarget } from './chat-messages.js'
+import { setInviteEvents } from './invites.js'
 import { originForbidden } from './edge-request.js'
 import { applySessionGate, loadLiveSession } from './pin-session.js'
 import { assertBrowseViewer } from './public-profile.js'
@@ -116,6 +117,16 @@ export function attachRealtime(httpServer: HttpServer): Server {
       const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
       io.to(rooms).emit('conversation.read', { conversation_id: conversationId, account_id: readerId, message_id: messageId })
     },
+    receiptsChanged({ accountId, recipients }) {
+      const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
+      io.to(rooms).emit('chat.receipts', { account_id: accountId })
+    },
+  })
+  setInviteEvents({
+    inviteChanged({ inviteId, recipients }) {
+      const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
+      io.to(rooms).emit('invite.changed', { invite_id: inviteId })
+    },
   })
   current = io
   return io
@@ -126,6 +137,7 @@ export async function closeRealtime(): Promise<void> {
   const io = current
   current = undefined
   setChatEvents(undefined)
+  setInviteEvents(undefined)
   if (io) {
     io.disconnectSockets(true)
     // The HTTP server belongs to Nest; only detach Socket.IO's own engine.

@@ -1,6 +1,6 @@
 import type { BrowserContext, Page, Route } from '@playwright/test'
 import type { Api } from './chat-polish-mock'
-import { api, bubbles, fire, FIRST, HIM, id, iso, ME, openList, openThread, OTHER, PEOPLE, realtimeReady, row, SECOND, serveApi, setLite, STUB_SKIP, text } from './chat-polish-mock'
+import { api, bubbles, fire, FIRST, HIM, id, iso, ME, openList, openThread, OTHER, PEOPLE, realtimeReady, row, SECOND, serveApi, setLite, STUB_SKIP, text, wheelThreadToTop } from './chat-polish-mock'
 import { expect, expectAccessible, expectNoHorizontalOverflow, test } from './fixtures'
 
 // Story chat-polish, QA gates (QA report F1 and F3): the guards behind « marked as read » (hidden tab, scrolled up),
@@ -60,14 +60,6 @@ async function nudge(page: Page): Promise<void> {
   })
 }
 
-async function scrollThreadToTop(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    const box = document.getElementById('thread-scroll')
-    if (box && box.scrollHeight > box.clientHeight) box.scrollTop = 0
-    else window.scrollTo(0, 0)
-  })
-}
-
 async function scrollThreadToEnd(page: Page): Promise<void> {
   await page.evaluate(() => {
     const box = document.getElementById('thread-scroll')
@@ -110,7 +102,7 @@ test.describe('story chat-polish QA gates: when a thread counts as read (AC 7)',
     await openThread(page)
     await realtimeReady(page)
     await expect.poll(() => state.reads.length).toBe(1)
-    await scrollThreadToTop(page)
+    await wheelThreadToTop(page)
     await expect(bubbles(page).last()).not.toBeInViewport()
     state.serial += 1
     state.messages.push(text(state.serial, FIRST, HIM, 'Êtes-vous toujours là ?', 0))
@@ -123,6 +115,27 @@ test.describe('story chat-polish QA gates: when a thread counts as read (AC 7)',
     await scrollThreadToEnd(page)
     await expect.poll(() => state.reads.at(-1)?.message_id).toBe(id(state.serial))
     expect(await readCalls(page)).toEqual([id(0x110 + 23), id(state.serial)])
+  })
+})
+
+test.describe('story chat-polish QA gates: open at the latest message when the layout settles late (CI race)', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+
+  test('AC 4: a stylesheet that lands 1.5 s after opening (the Tailwind CDN on CI) still leaves the latest message and the composer in view', async ({ page, context, baseURL }) => {
+    // Stands in for the CDN, which this sandbox cannot reach and CI loads late: it reshapes every bubble after the
+    // page's first-second follow-up is over.
+    const late = '[data-testid="chat-bubble"] { margin-bottom: 3rem; padding-top: 1rem; }'
+    await context.route(/^https:\/\/cdn\.tailwindcss\.com\//, (route) =>
+      route.fulfill({ status: 200, contentType: 'application/javascript', body: `window.tailwind = { config: {} }; setTimeout(function () { var s = document.createElement('style'); s.id = 'late-style'; s.textContent = ${JSON.stringify(late)}; document.head.appendChild(s) }, 1500)` }),
+    )
+    const state = api()
+    for (let index = 0; index < 24; index += 1) state.messages.push(text(0x110 + index, FIRST, index % 2 ? ME : HIM, `Message d'historique ${index + 1} assez long pour prendre de la place à l'écran.`, 29 - index))
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    await expect(bubbles(page).last()).toBeInViewport()
+    await expect(page.locator('#late-style')).toBeAttached({ timeout: 5000 })
+    await expect(bubbles(page).last()).toBeInViewport()
+    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeInViewport()
   })
 })
 
@@ -260,7 +273,9 @@ test.describe('story chat-polish QA gates: Photo viewer, older messages, links, 
     const width = page.viewportSize()?.width ?? 0
     await openThread(page)
     const older = page.getByRole('button', { name: 'Messages précédents' })
-    await older.scrollIntoViewIfNeeded()
+    // The member scrolls up to the start of the loaded page (Mac QA D1: only a member's scroll unpins the view).
+    await wheelThreadToTop(page)
+    await expect(older).toBeInViewport()
     const anchorId = (await bubbles(page).first().getAttribute('data-message-id')) ?? ''
     const anchor = page.locator(`[data-testid="chat-bubble"][data-message-id="${anchorId}"]`)
     const before = (await anchor.boundingBox())?.y ?? Number.NaN

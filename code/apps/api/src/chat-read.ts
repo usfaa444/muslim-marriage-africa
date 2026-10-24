@@ -1,5 +1,5 @@
 import { and, eq, inArray, lt, sql } from 'drizzle-orm'
-import { conversationRead } from './account-schema.js'
+import { conversationRead, readReceiptSetting } from './account-schema.js'
 import { accountStoreIsMemory, getIdentityDatabase } from './account-store.js'
 
 /**
@@ -16,12 +16,27 @@ export type ReadStore = {
   mark(conversationId: string, accountId: string, messageId: string, at: Date): Promise<string>
   /** Every pointer of these conversations (both members). */
   pointers(conversationIds: readonly string[]): Promise<ReadPointer[]>
+  /** « Confirmations de lecture »: which of these accounts turned read receipts off. No row means on. */
+  receiptsOff(accountIds: readonly string[]): Promise<Set<string>>
+  /** Stores one member's choice. */
+  setReceipts(accountId: string, enabled: boolean, at: Date): Promise<void>
 }
 
-export function memoryReadStore(): ReadStore & { rows: (ReadPointer & { read_at: string })[] } {
+export function memoryReadStore(): ReadStore & {
+  rows: (ReadPointer & { read_at: string })[]
+  settings: Map<string, { enabled: boolean; updated_at: string }>
+} {
   const rows: (ReadPointer & { read_at: string })[] = []
+  const settings = new Map<string, { enabled: boolean; updated_at: string }>()
   return {
     rows,
+    settings,
+    async receiptsOff(accountIds) {
+      return new Set(accountIds.filter((id) => settings.get(id)?.enabled === false))
+    },
+    async setReceipts(accountId, enabled, at) {
+      settings.set(accountId, { enabled, updated_at: at.toISOString() })
+    },
     async mark(conversationId, accountId, messageId, at) {
       const row = rows.find((item) => item.conversation_id === conversationId && item.account_id === accountId)
       if (!row) {
@@ -75,6 +90,22 @@ function postgresReadStore(): ReadStore {
         })
         .from(conversationRead)
         .where(inArray(conversationRead.conversation_id, [...conversationIds]))
+    },
+    async receiptsOff(accountIds) {
+      if (accountIds.length === 0) {
+        return new Set()
+      }
+      const rows = await getIdentityDatabase()
+        .select({ account_id: readReceiptSetting.account_id })
+        .from(readReceiptSetting)
+        .where(and(inArray(readReceiptSetting.account_id, [...new Set(accountIds)]), eq(readReceiptSetting.enabled, false)))
+      return new Set(rows.map((row) => row.account_id))
+    },
+    async setReceipts(accountId, enabled, at) {
+      await getIdentityDatabase()
+        .insert(readReceiptSetting)
+        .values({ account_id: accountId, enabled, updated_at: at.toISOString() })
+        .onConflictDoUpdate({ target: readReceiptSetting.account_id, set: { enabled, updated_at: at.toISOString() } })
     },
   }
 }

@@ -57,6 +57,7 @@ export const KEY_MISSING_MESSAGE = 'Envoi indisponible pour le moment. Réessaye
 export const MESSAGE_CAP_MESSAGE = 'Limite de messages du jour atteinte.'
 export const MEDIA_MISSING_MESSAGE = 'Ce média est introuvable.'
 export const MESSAGE_MISSING_MESSAGE = 'Ce message est introuvable.'
+export const RECEIPTS_FIELD_MESSAGE = 'read_receipts : valeur non reconnue.'
 
 export type MessageKind = 'text' | 'photo' | 'voice'
 
@@ -273,6 +274,8 @@ export type ChatEvents = {
   messageDelivered(input: { conversationId: string; messageId: string; senderId: string; recipients: readonly string[] }): void
   /** Story chat-polish: a member's read pointer moved. Sent to the reader's own sockets and, unless blocked, the other member's. */
   conversationRead(input: { conversationId: string; readerId: string; messageId: string; recipients: readonly string[] }): void
+  /** Story chat-polish: a member turned « Confirmations de lecture » on or off. Their own sockets and their unblocked chat partners. */
+  receiptsChanged(input: { accountId: string; recipients: readonly string[] }): void
 }
 
 let events: ChatEvents | undefined
@@ -492,6 +495,8 @@ export async function listConversations(
   ])
   const hidden = new Set(hiddenIds)
   const pointers = pointerIndex(pointerRows)
+  // « Confirmations de lecture » (WhatsApp rule): « Lu » shows only when both members keep it on.
+  const off = await getReadStore().receiptsOff([me, ...otherByInvite.values()])
   const unread = await getMessageStore().unreadCounts(
     me,
     ids.map((id) => ({ id, after: pointers.get(id)?.get(me) ?? null })),
@@ -503,6 +508,7 @@ export async function listConversations(
     const latest = last.get(row.id)
     const item = latest ? present(latest, me) : null
     const blocked = hidden.has(otherId)
+    const shared = !off.has(me) && !off.has(otherId)
     const reader = item?.mine ? otherId : me
     const pointer = pointers.get(row.id)?.get(reader) ?? null
     items.push({
@@ -519,8 +525,9 @@ export async function listConversations(
             kind: item.kind,
             preview: preview(item.text),
             created_at: item.created_at,
-            // A Block hides the other member's activity too: no « Lu » for them while it holds.
-            read: item.mine && blocked ? null : pointer !== null && pointer >= item.id,
+            // A Block hides the other member's activity too: no tick at all while it holds. With read receipts off on
+            // either side, my message shows « Envoyé » (false), never « Lu ». My own reads always count for me.
+            read: item.mine && blocked ? null : (shared || !item.mine) && pointer !== null && pointer >= item.id,
           }
         : null,
       unread: unread.get(row.id) ?? 0,
@@ -529,6 +536,30 @@ export async function listConversations(
   const activity = (item: ConversationItem) => item.last_message?.id ?? item.id
   items.sort((left, right) => activity(right).localeCompare(activity(left)))
   return { ok: true, body: { count: items.length, items } }
+}
+
+/** Story chat-polish: whether the thread draws ticks on my messages, and which. */
+export type ReceiptsMode = 'on' | 'off' | 'blocked'
+
+/**
+ * The « Discussions » badge (story chat-polish, WhatsApp style): how many of my conversations hold messages from the
+ * other member that I have not read. Hidden (blocked) members do not count. One pointer read and one grouped count.
+ */
+export async function unreadConversationCount(me: string): Promise<number> {
+  const accepted = await getInvitesPort().acceptedFor(me)
+  const otherByInvite = new Map(accepted.map((row) => [row.inviteId, row.otherId]))
+  const rows = (await getChatStore().conversationsForInvites([...otherByInvite.keys()])).filter((row) => otherByInvite.has(row.invite_id))
+  const hidden = new Set(await getTrustPort().hiddenFor(me))
+  const visible = rows.filter((row) => !hidden.has(otherByInvite.get(row.invite_id) ?? ''))
+  if (visible.length === 0) {
+    return 0
+  }
+  const pointers = pointerIndex(await getReadStore().pointers(visible.map((row) => row.id)))
+  const unread = await getMessageStore().unreadCounts(
+    me,
+    visible.map((row) => ({ id: row.id, after: pointers.get(row.id)?.get(me) ?? null })),
+  )
+  return visible.filter((row) => (unread.get(row.id) ?? 0) > 0).length
 }
 
 /** `GET /v1/conversations/:id`. Participants only; any other id is the same 404. */
@@ -548,8 +579,8 @@ export async function readConversation(
           closed: boolean
         }
         me: { id: string }
-        /** Read pointers (story chat-polish): mine, and the other member's (null while a Block holds). */
-        read: { me: string | null; other: string | null }
+        /** Read pointers (story chat-polish): mine, and the other member's (null while a Block holds or receipts are off). */
+        read: { me: string | null; other: string | null; receipts: ReceiptsMode }
       }
     }
   | ChatFailure
@@ -565,6 +596,8 @@ export async function readConversation(
   const other = await loadAccount(found.otherId)
   const blocked = await getTrustPort().blockedBetween(gate.account.id, found.otherId)
   const pointers = pointerIndex(await getReadStore().pointers([found.row.id])).get(found.row.id)
+  const off = await getReadStore().receiptsOff([gate.account.id, found.otherId])
+  const shared = !off.has(gate.account.id) && !off.has(found.otherId)
   return {
     ok: true,
     body: {
@@ -579,7 +612,12 @@ export async function readConversation(
         closed: blocked || found.row.ended_at !== null || found.row.paused_by !== null,
       },
       me: { id: gate.account.id },
-      read: { me: pointers?.get(gate.account.id) ?? null, other: blocked ? null : (pointers?.get(found.otherId) ?? null) },
+      read: {
+        me: pointers?.get(gate.account.id) ?? null,
+        other: blocked || !shared ? null : (pointers?.get(found.otherId) ?? null),
+        // How my messages show: `blocked` no tick at all (Mac QA D2), `off` « Envoyé » only, `on` « Envoyé » or « Lu ».
+        receipts: blocked ? 'blocked' : shared ? 'on' : 'off',
+      },
     },
   }
 }
@@ -615,17 +653,65 @@ export async function markRead(
   }
   const pointer = await getReadStore().mark(found.row.id, me, messageId, authNow())
   const blocked = await getTrustPort().blockedBetween(me, found.otherId)
+  const off = await getReadStore().receiptsOff([me, found.otherId])
+  // The pointer is stored either way (my unread badges); the other member hears of it only when both keep receipts on.
+  const tellOther = !blocked && off.size === 0
   try {
     events?.conversationRead({
       conversationId: found.row.id,
       readerId: me,
       messageId: pointer,
-      recipients: blocked ? [me] : [me, found.otherId],
+      recipients: tellOther ? [me, found.otherId] : [me],
     })
   } catch {
     // Realtime is best effort; the next list or thread load carries the pointer.
   }
   return { ok: true, body: { read: { message_id: pointer } } }
+}
+
+/** `GET /v1/chat/settings` (story chat-polish): the viewer's « Confirmations de lecture » switch. Members only. */
+export async function readChatSettings(
+  session: ResolvedSession,
+): Promise<{ ok: true; body: { read_receipts: boolean } } | ChatFailure> {
+  const gate = await assertBrowseViewer(session)
+  if (!gate.ok) {
+    return fromViewer(gate)
+  }
+  const off = await getReadStore().receiptsOff([gate.account.id])
+  return { ok: true, body: { read_receipts: !off.has(gate.account.id) } }
+}
+
+/**
+ * `PUT /v1/chat/settings` `{ read_receipts: boolean }` (story chat-polish). Off: nobody sees « Lu » for my reads and I
+ * see none on my messages; my reads are still stored, so my own unread badges keep working, and turning it back on
+ * shows the reads again. My other tabs and my unblocked chat partners hear `chat.receipts` (ids only) and reload.
+ */
+export async function updateChatSettings(
+  session: ResolvedSession,
+  body: unknown,
+): Promise<{ ok: true; body: { read_receipts: boolean } } | ChatFailure> {
+  const gate = await assertBrowseViewer(session)
+  if (!gate.ok) {
+    return fromViewer(gate)
+  }
+  const me = gate.account.id
+  const record = typeof body === 'object' && body !== null && !Array.isArray(body) ? (body as Record<string, unknown>) : {}
+  const enabled = record['read_receipts']
+  if (typeof enabled !== 'boolean') {
+    return fail(400, 'UNHANDLED', RECEIPTS_FIELD_MESSAGE, { field: 'read_receipts' })
+  }
+  await getReadStore().setReceipts(me, enabled, authNow())
+  try {
+    const accepted = await getInvitesPort().acceptedFor(me)
+    const otherByInvite = new Map(accepted.map((row) => [row.inviteId, row.otherId]))
+    const rows = await getChatStore().conversationsForInvites([...otherByInvite.keys()])
+    const hidden = new Set(await getTrustPort().hiddenFor(me))
+    const partners = new Set(rows.map((row) => otherByInvite.get(row.invite_id) ?? '').filter((id) => id && !hidden.has(id)))
+    events?.receiptsChanged({ accountId: me, recipients: [me, ...partners] })
+  } catch {
+    // Realtime is best effort; the next list or thread load carries the change.
+  }
+  return { ok: true, body: { read_receipts: enabled } }
 }
 
 function readCursor(value: unknown, field: string): { ok: true; value: string | undefined } | ChatFailure {

@@ -77,18 +77,46 @@ NFR (traced as their own rows):
 16. French only, copy consistent with `CHAT_COPY`; 44 × 44 targets; WCAG 2.2 AA (axe) on both layouts, in the viewer, and with unread badges and ticks; no horizontal scroll at the six widths.
 17. NFR-005: the list is still one request; the thread still opens within 4 s on the throttled Fast 3G profile; the viewer adds no request; the list refresh is debounced and skipped while the list is hidden.
 
+Round 2 (Faycal and Mac live QA, 2026-10-24):
+
+« Confirmations de lecture » (Faycal, option B):
+
+18. **Given** Paramètres, **then** a « Confirmations de lecture » switch (`role="switch"`, named by its title, described by its explanation, 44 px target) shows my stored value, on by default. `GET /v1/chat/settings` returns `{ read_receipts }`; `PUT` takes `{ read_receipts: true | false }` (anything else is 400 « read_receipts : valeur non reconnue. » and stores nothing). Both are members only: 401 without a session, 403 for staff and mahram. The value is stored per member in `read_receipt_setting` (migration `0027`). A failed save puts the switch back and says « Réglage non enregistré. Réessayez. ».
+19. **Given** either member of a conversation has receipts off, **then** the server shows no read state between them: the list's `last_message.read` is `false` on my messages, the thread head carries `read.other: null` and `read.receipts: 'off'`, and no `conversation.read` reaches the other member. My own reads still move my pointer and clear my unread badges. My messages show one tick « Envoyé », never « Lu ». Turned back on, the stored pointers show again (WhatsApp rule: reciprocal).
+20. **Given** I change the switch, **then** `chat.receipts { account_id }` (ids only) reaches my other tabs and my chat partners who are not blocked, never a stranger or across a Block, and their open thread refetches its head and redraws the ticks without a reload.
+
+Bottom nav badges (Faycal):
+
+21. **Given** any member page with the bottom nav, **then** « Invitations » shows the number of invites I received that are still pending (not accepted or declined, not from a member hidden by a Block either way), and « Discussions » the number of conversations with unread messages from the other member (not across a Block). One light request, `GET /v1/me/badges` → `{ invitations, discussions }` (members only, 401/403 like AC 18, `no-store`). Above 99 the badge says « 99+ ». At 0 it is hidden. The badge is a visible number and also text for assistive technology after the label (« 3 discussions non lues », « 2 invitations en attente »), never colour only.
+22. **Given** a member page is open, whatever the screen, **when** a message is delivered to me, I read a thread, an invite reaches me or I answer one, **then** the badges refresh live (one debounced `GET /v1/me/badges` per burst; also on focus, visibility and back-forward). Events are per member: `invite.changed { invite_id }` goes to the recipient's room on send and to her own tabs on accept or decline; nothing new goes to the sender. The Discussions page reuses its own socket (one socket per page).
+
+Pinned thread (Faycal):
+
+23. **Given** an open thread, at every width (phone thread, tablet and desktop split view), **then** the page itself never scrolls: the document fills the viewport (`100vh`, then `100dvh`, then the visual viewport when the keyboard is up), the header with who I talk to and the composer stay pinned, and only the messages scroll; the list column scrolls on its own. With the on-screen keyboard up, the composer and the latest message stay in view and the bottom nav steps aside while I type. On very short screens the header and composer compact (city, stage and rule note hidden). « Nouveaux messages », the older-messages anchor, the Photo viewer and « read at the bottom » all use the message box. The phone list (`/discussions` under 768 px) still scrolls as a page.
+
+Open at the latest message, robust (Mac live QA D1, CI race on `chat-polish.spec.ts:99`):
+
+- AC 4 also holds when the layout settles late (the Tailwind CDN, fonts, a Photo): the thread follows the end until I scroll myself. Only my own scrolling (wheel, touch, a scroll key, a held pointer) leaves the end; a layout change re-pins it (`ResizeObserver` on the message box and its content).
+
+Under a Block (Mac live QA D2):
+
+- AC 11 also means: my messages show no tick at all under a Block, not « Envoyé ».
+
+App screens without the site header and footer (Faycal):
+
+24. **Given** a signed-in screen (every member page and the onboarding steps after sign-in), **then** it has no site header and no site footer: member pages keep only the bottom nav; signed-in steps without a nav keep a one-line « Confidentialité » link. The landing page and the signed-out pages (sign-in, sign-up identity and pseudonym, password reset) keep the header and footer. « Confidentialité » stays one tap away in Paramètres. The staff console keeps its own header (it has no bottom nav and carries sign-out). No horizontal scroll at the six widths.
+
 Interpretation notes (flagged in the handoff):
 
 - « Two grey ticks » (delivered to the device) is not offered: the platform has no device delivery signal, and a third state would differ from « Lu » by colour only.
 - « Whether I read the message or not if the last message was sent by the other user »: shown as the unread badge and a bold name, like WhatsApp and Telegram.
-- « Mode anonyme » / hide last-seen (D36, FR-036) is NEXT and not implemented. Read receipts are not last-seen, but some Sisters may want to hide them. **Open question for the product owner:** should D36 (or a separate setting) also turn read receipts off, both ways like WhatsApp? No setting is invented here.
+- « Mode anonyme » / hide last-seen (D36, FR-036) is NEXT and not implemented. Read receipts are not last-seen, but some Sisters may want to hide them. Answered by Faycal (option B): a separate « Confirmations de lecture » switch, both ways like WhatsApp (AC 18 to 20).
 - The viewer shows the `md` clear copy (≤ 1600 px after browser compression). No larger rendition exists, and the original is never served (Story 5.3).
 
 ## Deferred
 
-- A read-receipts privacy setting (see the open question above).
 - Mahram reads (Epic 6): a mahram reading a granted thread must not move the member's pointer. There is no mahram reading today.
-- Push notifications and badge counts outside the Discussions screen (bottom nav badge): not asked.
+- Push notifications: not asked. (Bottom nav badges are now AC 21 and 22.)
 - Typing and online state in the list rows: not asked (and presence is excluded).
 
 ## Code Map
@@ -98,4 +126,5 @@ Interpretation notes (flagged in the handoff):
 - `code/apps/api/src/chat-messages.ts`: `unreadCounts` on the message store, `unread` and `last_message.read` in the list, `read` in the thread head, `markRead` command, `conversationRead` event hook.
 - `code/apps/api/src/chat-realtime.ts`: `conversation.read` emit. `conversations.controller.ts`: `POST :id/read`.
 - `code/apps/web/src/discussions-page.ts`: one page for both routes (split view, router, live list, receipts, pinned scroll, Photo viewer).
-- Tests: `apps/api/src/chat-messages.test.ts`, `chat-media.test.ts`, `operator-config.migrate.test.ts`, `apps/web/src/discussions-page.test.ts`, `e2e/chat.spec.ts`, `e2e/chat-media.spec.ts`, `e2e/chat-polish.spec.ts` (new).
+- Round 2: `drizzle/0027_read_receipt_setting.sql` (`read_receipt_setting`); `chat-read.ts` (`receiptsOff`, `setReceipts`); `chat-messages.ts` (receipts mode, settings, unread conversation count); `chat-settings.controller.ts`, `nav-badges.ts`, `nav-badges.controller.ts` (new); `invites.ts` (`pendingReceivedCount`, `invite.changed`); `chat-realtime.ts` (`chat.receipts`, `invite.changed`); web `read-receipts-setting.ts` (new), `app-shell.ts` (shell kinds, nav badges), `v2-pages.ts`, `v2-document.ts` (`data-ank-keep`), `discussions-page.ts` (pinned layout, follower, receipts mode).
+- Tests: `e2e/chat-polish-app.spec.ts` (new), `e2e/app-shell.spec.ts`; `apps/api/src/chat-messages.test.ts`, `chat-media.test.ts`, `operator-config.migrate.test.ts`, `apps/web/src/discussions-page.test.ts`, `e2e/chat.spec.ts`, `e2e/chat-media.spec.ts`, `e2e/chat-polish.spec.ts` (new).

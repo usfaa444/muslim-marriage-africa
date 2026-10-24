@@ -524,6 +524,19 @@ export const conversationRead = pgTable(
 )
 
 /**
+ * Chat-owned member setting (story chat-polish, « Confirmations de lecture »): `enabled = false` means this member's
+ * reads are never shown to anyone as « Lu », and they see no « Lu » on their own messages either (WhatsApp rule). No
+ * row means the default, on. Their own unread counts are unaffected.
+ */
+export const readReceiptSetting = pgTable('read_receipt_setting', {
+  account_id: uuid('account_id')
+    .primaryKey()
+    .references(() => account.id),
+  enabled: boolean('enabled').notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+})
+
+/**
  * Moderation-owned scan job (AD-10). Inserted only by `ModerationPort.enqueueScan`, after the item is delivered.
  * `outcome` is null while the job is queued; the Epic 8 worker sets it. It never writes `message.state`.
  */

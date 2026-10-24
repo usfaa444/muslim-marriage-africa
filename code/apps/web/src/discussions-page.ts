@@ -182,8 +182,41 @@ const STYLE = `<style id="chat-style">
 .chat-receipt svg { width: 18px; height: 12px; display: block; }
 .chat-receipt-sent { color: rgba(11, 29, 54, 0.62); }
 .chat-receipt-read { color: #7D5F27; }
-/* Phones scroll the page, so the button floats above the composer and the bottom nav; the split view keeps it in its pane. */
-#thread-jump { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); z-index: 35; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.375rem; min-height: 44px; padding: 0 1rem; border-radius: 9999px; border: 1px solid #C9A86C; background: #0B1D36; color: #F7F1E3; font-size: 0.8125rem; font-weight: 600; box-shadow: 0 4px 14px rgba(11, 29, 54, 0.18); cursor: pointer; }
+/*
+ * Messaging app layout (Faycal, story chat-polish): on a thread, and always in the split view, the page itself never
+ * scrolls. The thread's header and the composer stay put and only the messages scroll, at every width. The frame is
+ * the visible viewport (--chat-vh follows the on-screen keyboard) minus the bottom nav, which the body pads for.
+ */
+html.chat-fixed, html.chat-fixed body { overflow: hidden !important; }
+html.chat-fixed body.ank-shell { position: relative; margin: 0 !important; height: 100vh !important; height: 100dvh !important; height: var(--chat-vh, 100dvh) !important; min-height: 0 !important; display: flex !important; flex-direction: column !important; }
+html.chat-fixed.chat-typing body.ank-has-nav { padding-bottom: 0 !important; }
+html.chat-fixed.chat-typing #app-bottom-nav { display: none; }
+html.chat-fixed #chat-app { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+html.chat-fixed #chat-app[data-view="thread"] #chat-thread { flex: 1 1 auto; min-height: 0; padding-top: 0.5rem; padding-bottom: 0.5rem; gap: 0.5rem; }
+#chat-app #thread:not([hidden]) { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+#chat-app #thread-scroll { position: relative; flex: 1 1 auto; min-height: 0 !important; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; }
+#chat-app #thread-form { flex: none; }
+#chat-app #thread-media:not([hidden]) { max-height: 45vh; max-height: 45dvh; overflow-y: auto; }
+/* The pinned parts stay compact, with or without the CDN, so the messages keep most of a phone screen. */
+#chat-thread #thread-title { margin: 0; font-size: 1.0625rem; line-height: 1.3; }
+#chat-thread #thread-city { margin: 0.125rem 0 0; font-size: 0.75rem; line-height: 1.3; }
+#chat-thread #thread > div:first-child { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 0.75rem; padding: 0.5rem 0.875rem; }
+#chat-thread #thread > div:first-child > div:first-child { display: flex; align-items: center; gap: 0.75rem; }
+#chat-thread #thread-form { gap: 0.375rem; padding: 0.5rem 0.75rem; }
+#chat-thread #thread-rule { margin: 0; }
+/* A short screen (a phone with its keyboard open): only who I talk to, the messages and the composer. */
+@media (max-height: 560px) {
+  #chat-thread #thread-city, #chat-thread #thread-stage, #chat-thread #thread-rule, #chat-thread label[for="thread-input"] + #thread-counter[hidden] { display: none !important; }
+  #chat-thread label[for="thread-input"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+  html.chat-fixed #chat-app[data-view="thread"] #chat-thread { padding-top: 0.25rem; padding-bottom: 0.25rem; gap: 0.25rem; }
+  #chat-thread #thread-compose { flex-direction: row !important; align-items: flex-end !important; padding: 0.25rem !important; }
+  #chat-thread #thread-compose > div:first-child { align-self: flex-end !important; }
+  #chat-thread #thread-input { min-height: 44px; height: 44px; }
+  #chat-thread #thread-send { width: auto !important; padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+  #chat-thread #thread > div:first-child { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+}
+/* « Nouveaux messages » sits at the bottom of the messages pane, above the composer. */
+#thread-jump { position: sticky; bottom: 0.5rem; align-self: center; z-index: 5; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.375rem; min-height: 44px; padding: 0 1rem; border-radius: 9999px; border: 1px solid #C9A86C; background: #0B1D36; color: #F7F1E3; font-size: 0.8125rem; font-weight: 600; box-shadow: 0 4px 14px rgba(11, 29, 54, 0.18); cursor: pointer; }
 #thread-form { scroll-margin-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); }
 /* Discussions rows: own styles, so the list reads the same with or without the Tailwind CDN. */
 #discussions-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
@@ -215,7 +248,7 @@ const STYLE = `<style id="chat-style">
 #photo-viewer-close svg { width: 22px; height: 22px; }
 html.chat-viewer-open, html.chat-viewer-open body { overflow: hidden !important; }
 @media (min-width: ${SPLIT_MIN_PX}px) {
-  #chat-app { display: grid; grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr); gap: 1rem; max-width: 80rem; padding: 1rem 2rem; height: calc(100vh - 13rem); height: calc(100dvh - 13rem); min-height: 28rem; box-sizing: border-box; }
+  html.chat-fixed #chat-app { display: grid; grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 1rem; max-width: 80rem; width: 100%; margin: 0 auto; padding: 1rem 2rem 0.5rem; box-sizing: border-box; }
   #chat-app[data-view] #discussions, #chat-app[data-view] #chat-thread { display: flex; }
   #discussions { flex-direction: column; min-height: 0; max-width: none; margin: 0; padding: 0; background: rgba(255, 255, 255, 0.9); border: 1px solid #E2D4B8; border-radius: 1rem; overflow: hidden; }
   #discussions-top { padding: 1rem 1.25rem 0.75rem; margin: 0; text-align: left; border-bottom: 1px solid rgba(226, 212, 184, 0.7); }
@@ -242,15 +275,11 @@ html.chat-viewer-open, html.chat-viewer-open body { overflow: hidden !important;
   #chat-thread { max-width: none; margin: 0; padding: 0; min-height: 0; gap: 0.75rem; }
   #chat-app #thread-back { display: none !important; }
   #chat-app[data-view="list"] #thread-placeholder { display: flex; }
-  #chat-app #thread:not([hidden]) { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-  #thread-scroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; }
-  #thread-form { flex: none; }
-  #thread-jump { position: sticky; left: auto; transform: none; bottom: 0.5rem; align-self: center; z-index: 5; }
   #chat-thread .chat-photo { width: min(260px, calc((100vw - 22rem) * 0.5)); }
   #chat-thread .chat-voice { width: min(300px, calc((100vw - 22rem) * 0.48)); }
 }
 @media (min-width: 1024px) {
-  #chat-app { grid-template-columns: 22.5rem minmax(0, 1fr); }
+  html.chat-fixed #chat-app { grid-template-columns: 22.5rem minmax(0, 1fr); }
   #chat-thread .chat-photo { width: min(260px, calc((100vw - 26rem) * 0.5)); }
   #chat-thread .chat-voice { width: min(300px, calc((100vw - 26rem) * 0.48)); }
 }
@@ -593,6 +622,8 @@ var catching = false
 /** Read pointers (story chat-polish): mine, and the other member's (null while a Block holds or nothing is read). */
 var readMine = null
 var readOther = null
+/** How my messages show ticks (from the thread head): 'on' « Envoyé » / « Lu », 'off' « Envoyé » only, 'blocked' none. */
+var receiptsMode = 'on'
 var marking = false
 /** QA F3: the message whose read POST was already retried, the one given up on, and the pending retry. */
 var readRetried = null
@@ -630,22 +661,14 @@ function mediaBlob(item) {
   })
 }
 /** The element that scrolls the thread: its own pane in the split view, the page on a phone. */
-function splitScroll() { return isSplit() && scrollBox && scrollBox.scrollHeight > scrollBox.clientHeight + 1 }
+
+/** The messages pane is the only scroller of a thread, at every width (the header and the composer stay put). */
 function nearBottom() {
-  if (isSplit()) return scrollBox.scrollHeight - scrollBox.scrollTop - scrollBox.clientHeight <= ${BOTTOM_SLACK_PX}
-  var form = el('thread-form')
-  var log = el('thread-messages')
-  var end = log.lastChild ? log.lastChild.getBoundingClientRect().bottom : form.getBoundingClientRect().top
-  return end <= window.innerHeight + ${BOTTOM_SLACK_PX}
+  return scrollBox.scrollHeight - scrollBox.scrollTop - scrollBox.clientHeight <= ${BOTTOM_SLACK_PX}
 }
 /** Brings the latest message and the composer into view (no smooth scroll: it must land at once on 2G phones too). */
 function scrollToEnd() {
-  if (isSplit()) {
-    scrollBox.scrollTop = scrollBox.scrollHeight
-  } else {
-    var form = el('thread-form')
-    if (form && form.scrollIntoView) form.scrollIntoView({ block: 'end' })
-  }
+  scrollBox.scrollTop = scrollBox.scrollHeight
   pinned = true
   show('thread-jump', false)
 }
@@ -658,10 +681,37 @@ function settleAtEnd() {
   setTimeout(again, 250)
   setTimeout(again, 1000)
 }
+/**
+ * Mac live QA D1: the Tailwind CDN, fonts or the browser's scroll anchoring move the scroll position on their own.
+ * Only a scroll the member started (wheel, touch, a scrolling key, a pointer held on the scrollbar) unpins the view;
+ * any other scroll away from the end is layout settling, and the view goes back to the end while pinned.
+ */
+var userScrollAt = 0
+var pointerHeld = false
+function noteUserScroll() { userScrollAt = Date.now() }
+var SCROLL_KEYS = { PageUp: 1, PageDown: 1, ArrowUp: 1, ArrowDown: 1, Home: 1, End: 1, ' ': 1 }
+window.addEventListener('wheel', noteUserScroll, { passive: true, capture: true })
+window.addEventListener('touchstart', noteUserScroll, { passive: true, capture: true })
+window.addEventListener('touchmove', noteUserScroll, { passive: true, capture: true })
+window.addEventListener('keydown', function (event) {
+  var target = event.target
+  var typing = target && (target.tagName === 'TEXTAREA' || target.tagName === 'INPUT' || target.isContentEditable)
+  if (SCROLL_KEYS[event.key] && !typing) noteUserScroll()
+}, { capture: true })
+window.addEventListener('pointerdown', function () { pointerHeld = true; noteUserScroll() }, { capture: true })
+window.addEventListener('pointerup', function () { pointerHeld = false; noteUserScroll() }, { capture: true })
+window.addEventListener('pointercancel', function () { pointerHeld = false }, { capture: true })
+function userScrolling() { return pointerHeld || Date.now() - userScrollAt < 1000 }
 function onScroll() {
   if (!conversation) return
-  pinned = nearBottom()
-  if (pinned) { show('thread-jump', false); markSeen() }
+  if (nearBottom()) {
+    pinned = true
+    show('thread-jump', false)
+    markSeen()
+    return
+  }
+  if (userScrolling()) pinned = false
+  else if (pinned && !el('thread').hidden) scrollToEnd()
 }
 // ---- Full-screen Photo viewer (story chat-polish) ----
 var viewerOpener = null
@@ -834,7 +884,7 @@ function voiceNode(item) {
   })
   return card
 }
-function isRead(item) { return !!(item.mine && readOther && item.id <= readOther) }
+function isRead(item) { return !!(item.mine && receiptsMode === 'on' && readOther && item.id <= readOther) }
 function messageNode(item) {
   var mine = item.mine
   var wrap = make('div', 'flex flex-col max-w-[88%] sm:max-w-[78%] md:max-w-[70%] ' + (mine ? 'items-end self-end' : 'items-start self-start'))
@@ -859,7 +909,8 @@ function messageNode(item) {
   var time = make('time', '', timeText(item.created_at))
   time.setAttribute('datetime', item.created_at)
   meta.appendChild(time)
-  if (mine) meta.appendChild(receipt(isRead(item), 'chat-receipt'))
+  meta.setAttribute('data-role', 'chat-meta')
+  if (mine && receiptsMode !== 'blocked') meta.appendChild(receipt(isRead(item), 'chat-receipt'))
   if (!mine && conversation && conversation.other_id) {
     meta.className = 'mt-0.5 px-1 flex items-center gap-1 text-[11px] text-deep-navy/80'
     var flag = make('a', 'chat-hit inline-flex shrink-0 items-center justify-center w-[44px] h-[44px] rounded-md text-deep-navy/80 hover:text-deep-navy hover:bg-cream')
@@ -878,9 +929,30 @@ function refreshReceipts() {
   for (var index = 0; index < nodes.length; index += 1) {
     var id = nodes[index].getAttribute('data-message-id')
     var tick = nodes[index].querySelector('[data-testid="chat-receipt"]')
-    var read = !!(readOther && id <= readOther)
-    if (tick && tick.getAttribute('data-state') !== (read ? 'read' : 'sent')) tick.parentNode.replaceChild(receipt(read, 'chat-receipt'), tick)
+    if (receiptsMode === 'blocked') { if (tick) tick.parentNode.removeChild(tick); continue }
+    var read = !!(receiptsMode === 'on' && readOther && id <= readOther)
+    if (!tick) {
+      var meta = nodes[index].querySelector('[data-role="chat-meta"]')
+      if (meta) meta.insertBefore(receipt(read, 'chat-receipt'), meta.children[1] || null)
+    } else if (tick.getAttribute('data-state') !== (read ? 'read' : 'sent')) tick.parentNode.replaceChild(receipt(read, 'chat-receipt'), tick)
   }
+}
+function readReceiptsMode(read) {
+  return read && (read.receipts === 'off' || read.receipts === 'blocked') ? read.receipts : 'on'
+}
+/** Story chat-polish: a member turned « Confirmations de lecture » on or off: reload the head's read state and the list. */
+function onReceipts(payload) {
+  if (!payload || typeof payload.account_id !== 'string') return
+  if (listLoaded) reloadSoon()
+  if (!conversation || !ID) return
+  var started = gen
+  fetch('/v1/conversations/' + encodeURIComponent(ID), { credentials: 'same-origin' }).then(readJson).then(function (result) {
+    if (started !== gen || result.status !== 200 || !result.payload) return
+    var read = result.payload.read || {}
+    readOther = typeof read.other === 'string' ? read.other : null
+    receiptsMode = readReceiptsMode(read)
+    refreshReceipts()
+  }).catch(function () {})
 }
 function separator(label) {
   var row = make('div', 'flex items-center justify-center my-1')
@@ -1007,6 +1079,7 @@ function markSeen() {
     marking = false
     if (result.status !== 200 || !result.payload || !result.payload.read) { readFailed(started, latest.id, result.status >= 500); return }
     clearUnread(conversationId)
+    refreshBadges()
     if (started !== gen) return
     var pointer = result.payload.read.message_id
     if (!readMine || pointer > readMine) readMine = pointer
@@ -1026,11 +1099,12 @@ function readFailed(started, messageId, transient) {
 }
 function onRead(payload) {
   if (!payload || typeof payload.message_id !== 'string') return
+  if (payload.account_id === me) refreshBadges()
   if (payload.account_id === me) {
     // My own pointer, from this tab or another one: the badge goes, the list confirms on its next refresh.
     clearUnread(payload.conversation_id)
     if (payload.conversation_id === ID && (!readMine || payload.message_id > readMine)) readMine = payload.message_id
-  } else if (payload.conversation_id === ID && (!readOther || payload.message_id > readOther)) {
+  } else if (payload.conversation_id === ID && receiptsMode === 'on' && (!readOther || payload.message_id > readOther)) {
     readOther = payload.message_id
     refreshReceipts()
   }
@@ -1067,6 +1141,7 @@ function load() {
     var read = head.payload.read || {}
     readMine = typeof read.me === 'string' ? read.me : null
     readOther = typeof read.other === 'string' ? read.other : null
+    receiptsMode = readReceiptsMode(read)
     var draft = takeDraft()
     if (draft && !input.value) input.value = draft
     messages = []
@@ -1113,8 +1188,7 @@ function loadOlder() {
       var first = anchor ? el('thread-messages').querySelector('[data-message-id="' + (messages[older.length] && messages[older.length].id) + '"]') : null
       if (first) {
         var shift = first.getBoundingClientRect().top - anchorTop
-        if (splitScroll()) scrollBox.scrollTop += shift
-        else window.scrollBy(0, shift)
+        scrollBox.scrollTop += shift
       }
       pinned = false
     })
@@ -1146,10 +1220,13 @@ function onTyping(payload) {
   if (typingTimer) clearTimeout(typingTimer)
   typingTimer = setTimeout(hideTyping, ${TYPING_SHOW_MS})
 }
+/** The bottom nav's badges (app shell): this page owns the socket, so it tells them when something changed. */
+function refreshBadges() { if (window.__ankBadges) window.__ankBadges.refresh() }
 function onDelivered(payload) {
   if (!payload) return
   // Any conversation: the list shows the new preview, order and unread badge.
   reloadSoon()
+  refreshBadges()
   if (payload.conversation_id !== ID || known[payload.message_id]) return
   if (payload.sender_id !== me) hideTyping()
   catchUp()
@@ -1513,7 +1590,35 @@ el('thread-older').addEventListener('click', function (event) { event.preventDef
 el('thread-retry').addEventListener('click', function (event) { event.preventDefault(); load() })
 el('thread-jump').addEventListener('click', function (event) { event.preventDefault(); scrollToEnd(); markSeen() })
 scrollBox.addEventListener('scroll', onScroll, { passive: true })
-window.addEventListener('scroll', function () { if (!isSplit()) onScroll() }, { passive: true })
+// The Tailwind CDN, fonts or a Photo can reshape the thread seconds after it opens (a CI run caught the CDN landing
+// after the first second). While the member has not scrolled up, every size change keeps the latest message in view.
+if (window.ResizeObserver) {
+  var follower = new ResizeObserver(function () { if (conversation && pinned && !el('thread').hidden) scrollToEnd() })
+  follower.observe(el('thread-messages'))
+  follower.observe(scrollBox)
+  follower.observe(document.documentElement)
+}
+// The on-screen keyboard shrinks the visible viewport: the frame follows it, and the view stays on the latest message.
+var viewport = window.visualViewport
+function fitViewport() {
+  if (!viewport || Math.abs((viewport.scale || 1) - 1) > 0.01) { document.documentElement.style.removeProperty('--chat-vh'); return }
+  document.documentElement.style.setProperty('--chat-vh', Math.round(viewport.height) + 'px')
+  if (conversation && pinned) scrollToEnd()
+}
+if (viewport) { viewport.addEventListener('resize', fitViewport); fitViewport() }
+// While the member types on a phone, the bottom nav steps aside so the composer sits on the keyboard. It comes back
+// only when focus leaves the composer: a tap on « Envoyer » must not move the button between press and release.
+var composer = el('thread-form')
+composer.addEventListener('focusin', function (event) {
+  if (event.target !== input || isSplit()) return
+  document.documentElement.classList.add('chat-typing')
+  fitViewport()
+})
+composer.addEventListener('focusout', function (event) {
+  if (event.relatedTarget && composer.contains(event.relatedTarget)) return
+  document.documentElement.classList.remove('chat-typing')
+  fitViewport()
+})
 document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { markSeen(); if (conversation) catchUp() } })
 window.addEventListener('focus', function () { markSeen() })
 // ---- One page for both routes: list and thread, side by side from ${SPLIT_MIN_PX} px (story chat-polish) ----
@@ -1539,6 +1644,7 @@ function leaveThread() {
   readStopped = null
   readMine = null
   readOther = null
+  receiptsMode = 'on'
   pinned = true
   var log = el('thread-messages')
   while (log.firstChild) log.removeChild(log.firstChild)
@@ -1553,6 +1659,8 @@ function leaveThread() {
 }
 /** In split view the thread's name is the page's h1 and the list title steps down to h2; alone, the list title is h1. */
 function retitle() {
+  // A thread on a phone, and the split view, use the fixed messaging layout; the phone list scrolls like a page.
+  document.documentElement.classList.toggle('chat-fixed', isSplit() || !!ID)
   var title = el('discussions-title')
   var want = isSplit() && ID ? 'H2' : 'H1'
   if (title && title.tagName !== want) {
@@ -1626,10 +1734,12 @@ if (ID) firstLoads.push(load())
 Promise.all(firstLoads).then(function () {
   realtime({
     ready: function (connected) { socket = connected },
-    connect: function () { catchUp(); if (listLoaded) reloadSoon() },
+    connect: function () { catchUp(); if (listLoaded) reloadSoon(); refreshBadges() },
     'message.delivered': onDelivered,
     'conversation.typing': onTyping,
-    'conversation.read': onRead
+    'conversation.read': onRead,
+    'chat.receipts': onReceipts,
+    'invite.changed': refreshBadges
   })
 })`
 
@@ -1717,7 +1827,7 @@ function threadPane(id: string): string {
 <span id="thread-counter" hidden class="text-deep-navy/80">0/${TEXT_MAX}</span>
 </div>
 <div id="thread-media" hidden role="group" data-testid="thread-media" class="flex flex-col gap-2 rounded-xl border border-hairline bg-[#FAF7F0] p-3"></div>
-<div class="flex flex-col sm:flex-row items-stretch sm:items-end gap-2 sm:gap-2.5 rounded-xl border border-hairline bg-white p-2 focus-within:border-soft-gold">
+<div id="thread-compose" class="flex flex-col sm:flex-row items-stretch sm:items-end gap-2 sm:gap-2.5 rounded-xl border border-hairline bg-white p-2 focus-within:border-soft-gold">
 <div class="flex items-center gap-1 self-start sm:self-end shrink-0">
 <button id="thread-photo" type="button" title="${CHAT_COPY.photoButton}" class="chat-target inline-flex items-center justify-center w-11 h-11 rounded-md text-deep-navy/80 hover:text-deep-navy hover:bg-cream"><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">photo_camera</span><span class="chat-sr">${CHAT_COPY.photoButton}</span></button>
 <button id="thread-voice" type="button" title="${CHAT_COPY.voiceButton}" class="chat-target inline-flex items-center justify-center w-11 h-11 rounded-md text-deep-navy/80 hover:text-deep-navy hover:bg-cream"><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">mic</span><span class="chat-sr">${CHAT_COPY.voiceButton}</span></button>
@@ -1728,7 +1838,7 @@ function threadPane(id: string): string {
 </div>
 <p id="thread-error" role="alert" hidden class="text-sm text-[#9B2C2C] break-words px-1"></p>
 <p id="thread-status" role="status" aria-live="polite" class="chat-sr"></p>
-<p class="text-[11px] text-deep-navy/80 leading-normal px-1"><strong class="font-semibold text-deep-navy">${CHAT_COPY.ruleLead}</strong> ${CHAT_COPY.rule}</p>
+<p id="thread-rule" class="text-[11px] text-deep-navy/80 leading-normal px-1"><strong class="font-semibold text-deep-navy">${CHAT_COPY.ruleLead}</strong> ${CHAT_COPY.rule}</p>
 </form>
 </section>
 </div>`
