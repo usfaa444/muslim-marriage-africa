@@ -1,0 +1,9 @@
+open ms 9918
+GET /v1/conversations
+GET /v1/conversations/01990000-0000-7000-8000-0000000000c1
+GET /v1/conversations/01990000-0000-7000-8000-0000000000c1/messages
+POST /v1/conversations/01990000-0000-7000-8000-0000000000c1/read
+GET /v1/realtime/socket.io.min.js
+GET /v1/conversations/01990000-0000-7000-8000-0000000000c1/messages
+GET /v1/conversations
+GET /v1/pin

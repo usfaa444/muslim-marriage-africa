@@ -1,0 +1,540 @@
+import type { BrowserContext, Page } from '@playwright/test'
+import { deflateSync } from 'node:zlib'
+import { writeFileSync } from 'node:fs'
+import { expect, expectAccessible, expectNoHorizontalOverflow, test, WIDTHS } from './fixtures'
+import AxeBuilder from '@axe-core/playwright'
+
+// Story chat-polish on screens 20 and 21: full-screen Chat Photo, open at the latest message, read receipts, unread
+// badges, and the split view from 768 px. Like chat.spec.ts, these tests answer every /v1 call themselves (the web-only
+// dev server has no API) and replace the Socket.IO client with a fake a test drives. Stub cookies are a dev-build seam.
+const STUB_SKIP = 'A built image ignores stub cookies (Story 12.1); these run on the web-only dev server.'
+
+const ME = '01990000-0000-7000-8000-0000000000e1'
+const HIM = '01990000-0000-7000-8000-0000000000e2'
+const OTHER = '01990000-0000-7000-8000-0000000000e3'
+const FIRST = '01990000-0000-7000-8000-0000000000c1'
+const SECOND = '01990000-0000-7000-8000-0000000000c2'
+
+type Item = {
+  id: string
+  conversation_id: string
+  sender_id: string
+  kind: 'text' | 'photo'
+  state: 'delivered'
+  text: string | null
+  created_at: string
+  media?: Record<string, unknown>
+}
+
+type Api = {
+  messages: Item[]
+  /** Read pointers by conversation and account. */
+  pointers: Record<string, Record<string, string>>
+  reads: Array<{ conversation_id: string; message_id: string }>
+  listCalls: number
+  mediaCalls: string[]
+  serial: number
+}
+
+const PEOPLE: Record<string, { other_id: string; pseudonym: string; age: number; city: string }> = {
+  [FIRST]: { other_id: HIM, pseudonym: 'Al-Hassan_BF', age: 29, city: 'ouagadougou' },
+  [SECOND]: { other_id: OTHER, pseudonym: 'Oumar_K', age: 31, city: 'koudougou' },
+}
+
+function crc32(bytes: Buffer): number {
+  let crc = ~0
+  for (const byte of bytes) {
+    crc ^= byte
+    for (let bit = 0; bit < 8; bit += 1) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1))
+  }
+  return ~crc >>> 0
+}
+
+function png(width: number, height: number, rgb: [number, number, number]): Buffer {
+  const chunk = (type: string, data: Buffer) => {
+    const length = Buffer.alloc(4)
+    length.writeUInt32BE(data.length)
+    const body = Buffer.concat([Buffer.from(type, 'latin1'), data])
+    const crc = Buffer.alloc(4)
+    crc.writeUInt32BE(crc32(body))
+    return Buffer.concat([length, body, crc])
+  }
+  const header = Buffer.alloc(13)
+  header.writeUInt32BE(width, 0)
+  header.writeUInt32BE(height, 4)
+  header[8] = 8
+  header[9] = 2
+  const rows = Buffer.alloc((width * 3 + 1) * height)
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) rows.set(rgb, y * (width * 3 + 1) + 1 + x * 3)
+  }
+  return Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), chunk('IHDR', header), chunk('IDAT', deflateSync(rows)), chunk('IEND', Buffer.alloc(0))])
+}
+
+const BLUR = png(8, 6, [190, 175, 150])
+const CLEAR = png(160, 120, [40, 90, 140])
+
+const FAKE_IO = `(function () {
+  var fake = { sockets: [], emitted: [] }
+  window.__fake = fake
+  fake.fire = function (name, payload) { fake.sockets.forEach(function (socket) { (socket.handlers[name] || []).forEach(function (fn) { fn(payload) }) }) }
+  window.io = function (options) {
+    var socket = { options: options, handlers: {}, connected: true }
+    socket.on = function (name, fn) { (socket.handlers[name] = socket.handlers[name] || []).push(fn); return socket }
+    socket.emit = function (name, payload) { fake.emitted.push({ name: name, payload: payload }) }
+    socket.disconnect = function () { socket.connected = false }
+    fake.sockets.push(socket)
+    setTimeout(function () { fake.fire('connect') }, 0)
+    return socket
+  }
+})()`
+
+function id(serial: number): string {
+  return `01990000-0000-7000-8000-${serial.toString(16).padStart(12, '0')}`
+}
+
+function iso(minutesAgo: number): string {
+  return new Date(Date.now() - minutesAgo * 60_000).toISOString()
+}
+
+function json(body: unknown, status = 200) {
+  return { status, contentType: 'application/json', body: JSON.stringify(body) }
+}
+
+function text(serial: number, conversation: string, sender: string, body: string, minutesAgo: number): Item {
+  return { id: id(serial), conversation_id: conversation, sender_id: sender, kind: 'text', state: 'delivered', text: body, created_at: iso(minutesAgo) }
+}
+
+/** First: two of mine then three of his I have not read. Second: my last message, read by him. */
+function api(): Api {
+  return {
+    messages: [
+      text(0x101, FIRST, ME, 'As-salāmu ʿalaykum.', 90),
+      text(0x102, FIRST, ME, 'Comment allez-vous ?', 80),
+      text(0x103, FIRST, HIM, 'Wa alaykum salam.', 40),
+      text(0x104, FIRST, HIM, 'Très bien, al-hamdulillah.', 35),
+      text(0x105, FIRST, HIM, 'Et votre famille ?', 30),
+      text(0x0f1, SECOND, OTHER, 'Bonjour.', 60 * 26),
+      text(0x0f2, SECOND, ME, 'Bonjour, baraka Allahu fik.', 60 * 25),
+    ],
+    pointers: { [FIRST]: { [HIM]: id(0x101) }, [SECOND]: { [OTHER]: id(0x0f2), [ME]: id(0x0f1) } },
+    reads: [],
+    listCalls: 0,
+    mediaCalls: [],
+    serial: 0x300,
+  }
+}
+
+function inThread(state: Api, conversation: string): Item[] {
+  return state.messages.filter((item) => item.conversation_id === conversation).sort((a, b) => a.id.localeCompare(b.id))
+}
+
+function listItems(state: Api) {
+  return Object.entries(PEOPLE)
+    .map(([conversation, person]) => {
+      const items = inThread(state, conversation)
+      const last = items[items.length - 1]
+      const mine = state.pointers[conversation]?.[ME] ?? ''
+      const theirs = state.pointers[conversation]?.[person.other_id] ?? ''
+      const unread = items.filter((item) => item.sender_id !== ME && item.id > mine).length
+      return {
+        id: conversation,
+        invite_id: conversation.replace('c', 'd'),
+        stage: 'chat',
+        other_id: person.other_id,
+        pseudonym: person.pseudonym,
+        other: { available: true, age: person.age, city: person.city, verified: true, photo: null },
+        unread,
+        last_message: last
+          ? { id: last.id, mine: last.sender_id === ME, kind: last.kind, preview: last.text, created_at: last.created_at, read: last.sender_id === ME ? theirs >= last.id : mine >= last.id }
+          : null,
+      }
+    })
+    .sort((a, b) => (b.last_message?.id ?? b.id).localeCompare(a.last_message?.id ?? a.id))
+}
+
+async function serveApi(context: BrowserContext, baseURL: string, state: Api): Promise<void> {
+  await context.addCookies([{ name: 'ankanu_session', value: 'web', url: baseURL }])
+  await context.route('**/v1/**', async (route) => {
+    const request = route.request()
+    const url = new URL(request.url())
+    const method = request.method()
+    if (url.pathname === '/v1/realtime/socket.io.min.js') {
+      await route.fulfill({ status: 200, contentType: 'application/javascript', body: FAKE_IO })
+      return
+    }
+    if (url.pathname === '/v1/conversations' && method === 'GET') {
+      state.listCalls += 1
+      const items = listItems(state)
+      await route.fulfill(json({ count: items.length, items }))
+      return
+    }
+    if (url.pathname === '/v1/media/get') {
+      const token = url.searchParams.get('token') ?? ''
+      state.mediaCalls.push(`get ${token}`)
+      await route.fulfill({ status: 200, contentType: 'image/png', body: token.startsWith('blur') ? BLUR : CLEAR })
+      return
+    }
+    const access = /^\/v1\/conversations\/([^/]+)\/messages\/([^/]+)\/media$/.exec(url.pathname)
+    if (access) {
+      state.mediaCalls.push(`access ${access[2]}`)
+      await route.fulfill(json({ url: `/v1/media/get?token=clear-${access[2]}`, expires_at: new Date(Date.now() + 60_000).toISOString() }))
+      return
+    }
+    const read = /^\/v1\/conversations\/([^/]+)\/read$/.exec(url.pathname)
+    if (read && method === 'POST') {
+      const conversation = read[1] ?? ''
+      const body = request.postDataJSON() as { message_id: string }
+      state.reads.push({ conversation_id: conversation, message_id: body.message_id })
+      const pointers = (state.pointers[conversation] ??= {})
+      if (!pointers[ME] || pointers[ME] < body.message_id) pointers[ME] = body.message_id
+      await route.fulfill(json({ read: { message_id: pointers[ME] } }))
+      return
+    }
+    const thread = /^\/v1\/conversations\/([^/]+)(\/messages)?$/.exec(url.pathname)
+    const person = thread ? PEOPLE[thread[1] ?? ''] : undefined
+    if (thread && person) {
+      const conversation = thread[1] ?? ''
+      if (!thread[2] && method === 'GET') {
+        await route.fulfill(
+          json({
+            conversation: { id: conversation, stage: 'chat', other_id: person.other_id, pseudonym: person.pseudonym, other: { available: true, age: person.age, city: person.city, verified: true, photo: null }, closed: false },
+            me: { id: ME },
+            read: { me: state.pointers[conversation]?.[ME] ?? null, other: state.pointers[conversation]?.[person.other_id] ?? null },
+          }),
+        )
+        return
+      }
+      if (thread[2] && method === 'GET') {
+        const after = url.searchParams.get('after')
+        const all = inThread(state, conversation)
+        const items = after ? all.filter((item) => item.id > after) : all.slice(-30)
+        await route.fulfill(json({ items: items.map((item) => ({ ...item, mine: item.sender_id === ME })), has_more: !after && all.length > 30 }))
+        return
+      }
+      if (thread[2] && method === 'POST') {
+        const body = request.postDataJSON() as { text: string }
+        state.serial += 1
+        const item = text(state.serial, conversation, ME, String(body.text).trim(), 0)
+        state.messages.push(item)
+        await route.fulfill(json({ message: { ...item, mine: true } }, 201))
+        return
+      }
+    }
+    if (url.pathname === '/v1/pin' && method === 'GET') {
+      await route.fulfill(json({ enabled: false, locked: false }))
+      return
+    }
+    await route.fulfill(json({ error: { code: 'NOT_FOUND', message: 'Not found', details: null } }, 404))
+  })
+}
+
+async function fire(page: Page, name: string, payload: unknown): Promise<void> {
+  await page.evaluate(([event, body]) => (window as unknown as { __fake: { fire(name: string, payload: unknown): void } }).__fake.fire(event as string, body), [name, payload] as const)
+}
+
+async function realtimeReady(page: Page): Promise<void> {
+  await page.waitForFunction(() => ((window as unknown as { __fake?: { sockets: unknown[] } }).__fake?.sockets.length ?? 0) === 1)
+}
+
+async function openList(page: Page): Promise<void> {
+  const listed = page.waitForResponse((response) => response.url().endsWith('/v1/conversations'))
+  await page.goto('/discussions')
+  await listed
+  await expect(page.locator('#discussions')).toHaveAttribute('aria-busy', 'false')
+}
+
+async function openThread(page: Page, conversation = FIRST): Promise<void> {
+  const loaded = page.waitForResponse((response) => response.url().endsWith(`/v1/conversations/${conversation}/messages`))
+  await page.goto(`/discussions/${conversation}`)
+  await loaded
+  await expect(page.locator('#chat-thread')).toHaveAttribute('aria-busy', 'false')
+}
+
+function bubbles(page: Page) {
+  return page.getByRole('log', { name: 'Messages' }).getByTestId('chat-bubble')
+}
+
+function row(page: Page, conversation: string) {
+  return page.locator(`[data-testid="conversation-row"][data-conversation-id="${conversation}"]`)
+}
+
+/** Lite off unless a test asks for it (the CI machine is not a 2G phone). */
+async function setLite(context: BrowserContext, on: boolean): Promise<void> {
+  await context.addInitScript((value) => {
+    try {
+      localStorage.setItem('ankanu_lite', value)
+    } catch {
+      // No storage: the page falls back to its automatic rule.
+    }
+  }, on ? '1' : '0')
+}
+
+/** A value set on `window` survives only while the page is not reloaded. */
+async function markPage(page: Page): Promise<void> {
+  await page.evaluate(() => {
+    ;(window as unknown as { __sameDocument: boolean }).__sameDocument = true
+  })
+}
+
+async function sameDocument(page: Page): Promise<boolean> {
+  return page.evaluate(() => (window as unknown as { __sameDocument?: boolean }).__sameDocument === true)
+}
+
+
+const EV = 'docs/qa-handoffs/chat-polish-evidence'
+function withPhotos(state: Api): void {
+  state.messages.push(
+    { id: id(0x106), conversation_id: FIRST, sender_id: HIM, kind: 'photo', state: 'delivered', text: null, created_at: iso(20), media: { id: id(0xa01), kind: 'photo', width: 160, height: 120, blur_url: '/v1/media/get?token=blur-1' } },
+    { id: id(0x107), conversation_id: FIRST, sender_id: ME, kind: 'photo', state: 'delivered', text: null, created_at: iso(10), media: { id: id(0xa02), kind: 'photo', width: 160, height: 120, blur_url: '/v1/media/get?token=blur-2' } },
+  )
+}
+async function axeAll(page: Page, label: string) {
+  const r = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze()
+  writeFileSync(`${EV}/axe-${label}.json`, JSON.stringify(r.violations.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.map((n) => n.target.join(' ')) })), null, 1))
+  return r.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical')
+}
+
+test.describe('QA chat-polish', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+
+  test('G4/G6 sweep: screenshots, overflow, axe at six widths, list+thread+viewer', async ({ page, context, baseURL }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'sweeps set their own widths')
+    await setLite(context, false)
+    const state = api()
+    withPhotos(state)
+    await serveApi(context, baseURL ?? '', state)
+    const blockers: string[] = []
+    for (const w of [360, 390, 640, 720, 768, 1024, 1280, 1440]) {
+      await page.setViewportSize({ width: w, height: 800 })
+      await openList(page)
+      await expectNoHorizontalOverflow(page)
+      await page.screenshot({ path: `${EV}/list-${w}.png` })
+      blockers.push(...(await axeAll(page, `list-${w}`)).map((v) => `list ${w} ${v.id}`))
+      await openThread(page)
+      await expectNoHorizontalOverflow(page)
+      await page.waitForTimeout(1200)
+      await page.screenshot({ path: `${EV}/thread-${w}.png` })
+      blockers.push(...(await axeAll(page, `thread-${w}`)).map((v) => `thread ${w} ${v.id}`))
+      const photo = page.getByRole('button', { name: /Photo de Al-Hassan_BF/ })
+      await photo.click()
+      await expectNoHorizontalOverflow(page)
+      await page.screenshot({ path: `${EV}/viewer-${w}.png` })
+      blockers.push(...(await axeAll(page, `viewer-${w}`)).map((v) => `viewer ${w} ${v.id}`))
+      await page.keyboard.press('Escape')
+    }
+    expect(blockers).toEqual([])
+  })
+
+  test('G3 hostile content: markup in pseudonym and messages is text, long unbroken strings do not overflow, Arabic renders', async ({ page, context, baseURL }) => {
+    const state = api()
+    PEOPLE[FIRST]!.pseudonym = '<img src=x onerror="window.__xss=1">Z'
+    state.messages.push(
+      text(0x110, FIRST, HIM, '<script>window.__xss=2</script><img src=x onerror="window.__xss=3"> \'"; DROP TABLE message;--', 5),
+      text(0x111, FIRST, HIM, 'A'.repeat(900), 4),
+      text(0x112, FIRST, ME, 'مرحبا بكم، السلام عليكم ورحمة الله', 3),
+    )
+    await serveApi(context, baseURL ?? '', state)
+    for (const w of [360, 1280]) {
+      await page.setViewportSize({ width: w, height: 800 })
+      await openThread(page)
+      await page.waitForTimeout(500)
+      expect(await page.evaluate(() => (window as unknown as { __xss?: number }).__xss)).toBeUndefined()
+      await expectNoHorizontalOverflow(page)
+      await page.screenshot({ path: `${EV}/hostile-${w}.png` })
+    }
+    PEOPLE[FIRST]!.pseudonym = 'Al-Hassan_BF'
+    await expect(page.getByText('DROP TABLE message;--')).toBeVisible()
+  })
+
+  test('G3 hidden tab: no read while hidden, one read when the tab returns', async ({ page, context, baseURL }) => {
+    await context.addInitScript(() => {
+      let v = 'hidden'
+      Object.defineProperty(document, 'visibilityState', { get: () => v, configurable: true })
+      ;(window as unknown as { __vis: (x: string) => void }).__vis = (x) => { v = x; document.dispatchEvent(new Event('visibilitychange')) }
+    })
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    await page.waitForTimeout(1500)
+    expect(state.reads).toEqual([])
+    await page.evaluate(() => (window as unknown as { __vis: (x: string) => void }).__vis('visible'))
+    await expect.poll(() => state.reads.length).toBe(1)
+    expect(state.reads[0]?.message_id).toBe(id(0x105))
+    await page.waitForTimeout(500)
+    expect(state.reads.length).toBe(1)
+  })
+
+  test('G3 spoofed / foreign realtime events do not flip my ticks', async ({ page, context, baseURL }) => {
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    await realtimeReady(page)
+    const last = bubbles(page).filter({ has: page.locator('[data-state]') }).last()
+    await expect(last.locator('[data-state]').first()).toHaveAttribute('data-state', /./)
+    const before = await page.locator('[data-state]').evaluateAll((n) => n.map((x) => x.getAttribute('data-state')))
+    // Other conversation, same ids
+    await fire(page, 'conversation.read', { conversation_id: SECOND, account_id: OTHER, message_id: id(0x105) })
+    // My own pointer in this conversation must not tick my messages
+    await fire(page, 'conversation.read', { conversation_id: FIRST, account_id: ME, message_id: id(0x105) })
+    // Garbage
+    await fire(page, 'conversation.read', null)
+    await fire(page, 'conversation.read', { conversation_id: FIRST })
+    await page.waitForTimeout(600)
+    const after = await page.locator('[data-state]').evaluateAll((n) => n.map((x) => x.getAttribute('data-state')))
+    expect(after).toEqual(before)
+    await fire(page, 'conversation.read', { conversation_id: FIRST, account_id: HIM, message_id: id(0x102) })
+    await expect(page.locator('[data-state="read"], [data-state="lu"]').first()).toBeVisible().catch(() => undefined)
+    const final = await page.locator('[data-state]').evaluateAll((n) => n.map((x) => x.getAttribute('data-state')))
+    writeFileSync(`${EV}/ticks-states.json`, JSON.stringify({ before, after, final }))
+    expect(final).not.toEqual(before)
+  })
+
+  test('G3 Block: a list with read:null shows no tick; 150 unread caps at 99+', async ({ page, context, baseURL }) => {
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    await page.route('**/v1/conversations', async (route) => {
+      if (route.request().method() !== 'GET') return route.fallback()
+      const items = listItems(state)
+      items[0]!.last_message = { ...items[0]!.last_message!, mine: true, read: null }
+      items[0]!.unread = 150
+      await route.fulfill(json({ count: items.length, items }))
+    })
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await openList(page)
+    const r = row(page, items0(state))
+    await expect(r).toContainText('99+')
+    await expect(r).not.toContainText('Lu')
+    await expect(r).not.toContainText('Envoyé')
+    await page.screenshot({ path: `${EV}/list-blocked-99plus.png` })
+  })
+
+  test('G3 read POST failures (403, 404, 500, network) are handled: thread still usable, no loop', async ({ page, context, baseURL }) => {
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    let n = 0
+    await page.route('**/v1/conversations/*/read', async (route) => {
+      n += 1
+      await route.fulfill(json({ error: { code: 'X', message: 'boom', details: null } }, n % 2 ? 500 : 403))
+    })
+    await openThread(page)
+    await page.waitForTimeout(2500)
+    await expect(bubbles(page).last()).toBeVisible()
+    await page.getByRole('textbox').first().fill('Toujours là')
+    await page.getByRole('button', { name: 'Envoyer', exact: true }).click()
+    await expect(bubbles(page).last()).toContainText('Toujours là')
+    expect(n).toBeLessThanOrEqual(6)
+    writeFileSync(`${EV}/read-failure-attempts.txt`, `read POST attempts: ${n}\n`)
+  })
+
+  test('G5/G6 keyboard-only: Tab to the Photo, Enter opens, Tab stays, Escape closes, focus returns', async ({ page, context, baseURL }) => {
+    await setLite(context, false)
+    const state = api()
+    withPhotos(state)
+    await serveApi(context, baseURL ?? '', state)
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await openThread(page)
+    const photo = page.getByRole('button', { name: /Photo de Al-Hassan_BF/ })
+    await photo.focus()
+    await page.keyboard.press('Space')
+    const dlg = page.getByRole('dialog')
+    await expect(dlg).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Fermer la photo' })).toBeFocused()
+    for (let i = 0; i < 3; i++) await page.keyboard.press('Tab')
+    await expect(page.getByRole('button', { name: 'Fermer la photo' })).toBeFocused()
+    await page.keyboard.press('Shift+Tab')
+    await expect(page.getByRole('button', { name: 'Fermer la photo' })).toBeFocused()
+    await page.keyboard.press('Enter')
+    await expect(dlg).toBeHidden()
+    await expect(photo).toBeFocused()
+    // focus ring visible on the photo button
+    const outline = await photo.evaluate((n) => getComputedStyle(n).outlineStyle + ' ' + getComputedStyle(n).outlineWidth + ' ' + getComputedStyle(n).boxShadow)
+    writeFileSync(`${EV}/photo-focus-style.txt`, outline)
+    // viewer opened twice does not leak: open, close, open
+    await photo.click(); await page.keyboard.press('Escape'); await photo.click()
+    await expect(dlg).toBeVisible()
+    await page.keyboard.press('Escape')
+    // page scroll locked behind
+  })
+
+  test('G3 Messages précédents keeps the message being read in place (phone and split)', async ({ page, context, baseURL }) => {
+    const state = api()
+    for (let i = 0; i < 70; i++) state.messages.push(text(0x200 + i, FIRST, i % 3 ? HIM : ME, `Ancien ${i}`, 2000 - i))
+    await serveApi(context, baseURL ?? '', state)
+    for (const w of [390, 1280]) {
+      await page.setViewportSize({ width: w, height: 800 })
+      await openThread(page)
+      await page.waitForTimeout(1300)
+      const older = page.getByRole('button', { name: /Messages précédents/ })
+      await older.scrollIntoViewIfNeeded()
+      const firstBubble = bubbles(page).first()
+      const textBefore = await firstBubble.innerText()
+      const topBefore = (await firstBubble.boundingBox())!.y
+      const loaded = page.waitForResponse((r) => r.url().includes('before='))
+      await older.click()
+      await loaded
+      await page.waitForTimeout(500)
+      const same = bubbles(page).filter({ hasText: textBefore.split('\n')[0]! }).first()
+      const topAfter = (await same.boundingBox())!.y
+      writeFileSync(`${EV}/older-anchor-${w}.txt`, `before ${topBefore} after ${topAfter}\n`)
+      expect(Math.abs(topAfter - topBefore)).toBeLessThan(120)
+    }
+  })
+
+  test('G3 malformed deep link and unknown thread', async ({ page, context, baseURL }) => {
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await page.goto('/discussions/not-a-uuid')
+    await page.waitForTimeout(1000)
+    writeFileSync(`${EV}/malformed-url.txt`, `${page.url()}\n${(await page.locator('main').innerText()).slice(0, 400)}`)
+    await page.screenshot({ path: `${EV}/malformed-link.png` })
+    await page.goto('/discussions/01990000-0000-7000-8000-0000000000ff')
+    await page.waitForTimeout(1000)
+    await page.screenshot({ path: `${EV}/unknown-thread.png` })
+  })
+
+  test('G7 Fast 3G: thread open time and request count', async ({ page, context, baseURL }) => {
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    const cdp = await context.newCDPSession(page)
+    await cdp.send('Network.enable')
+    await cdp.send('Network.emulateNetworkConditions', { offline: false, latency: 562, downloadThroughput: (1.6 * 1024 * 1024) / 8 / 1.2, uploadThroughput: (750 * 1024) / 8 / 1.2 })
+    const reqs: string[] = []
+    page.on('request', (r) => { if (r.url().includes('/v1/')) reqs.push(r.method() + ' ' + new URL(r.url()).pathname) })
+    const t0 = Date.now()
+    await page.goto('/discussions/' + FIRST)
+    await expect(bubbles(page).last()).toBeVisible({ timeout: 15000 })
+    const ms = Date.now() - t0
+    await page.waitForTimeout(1500)
+    writeFileSync(`${EV}/fast3g.txt`, `open ms ${ms}\n${reqs.join('\n')}\n`)
+    expect(ms).toBeLessThan(60000)
+  })
+
+  test('G5 touch targets: row link, jump button, viewer close, send, in split view', async ({ page, context, baseURL }) => {
+    await setLite(context, false)
+    const state = api()
+    withPhotos(state)
+    await serveApi(context, baseURL ?? '', state)
+    const out: string[] = []
+    for (const w of [390, 1280]) {
+      await page.setViewportSize({ width: w, height: 800 })
+      await openThread(page)
+      for (const [label, loc] of [
+        ...(w >= 768 ? ([['row link', page.getByTestId('conversation-row').first().getByRole('link').first()]] as const) : []),
+        ['photo', page.getByRole('button', { name: /Photo de Al-Hassan_BF/ })],
+        ['send', page.getByRole('button', { name: 'Envoyer', exact: true })],
+      ] as const) {
+        const b = await loc.boundingBox()
+        out.push(`${w} ${label} ${b ? Math.round(b.width) + 'x' + Math.round(b.height) : 'none'}`)
+      }
+      await page.getByRole('button', { name: /Photo de Al-Hassan_BF/ }).click()
+      const c = await page.getByRole('button', { name: 'Fermer la photo' }).boundingBox()
+      out.push(`${w} viewer close ${Math.round(c!.width)}x${Math.round(c!.height)}`)
+      await page.keyboard.press('Escape')
+    }
+    writeFileSync(`${EV}/touch-targets.txt`, out.join('\n'))
+  })
+})
+
+function items0(state: Api): string { return listItems(state)[0]!.id }

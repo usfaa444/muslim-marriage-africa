@@ -1,0 +1,22 @@
+
+> lint
+> oxlint packages apps e2e
+
+apps/api/src/life-pause.ts:18:19: warning eslint(no-control-regex): Unexpected control characters help: Avoid matching control characters in regular expressions. If intentional, disable this rule for the expression.
+apps/api/src/report-block-gates.test.ts:3:10: warning eslint(no-unused-vars): Identifier 'readdirSync' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:3:23: warning eslint(no-unused-vars): Identifier 'readFileSync' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:4:10: warning eslint(no-unused-vars): Identifier 'join' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:8:17: warning eslint(no-unused-vars): Identifier 'REPORT_REASON_CODES' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:8:38: warning eslint(no-unused-vars): Identifier 'REPORT_REASONS' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:40:43: warning eslint(no-unused-vars): Identifier 'signInTestStaff' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:41:10: warning eslint(no-unused-vars): Identifier 'BLOCK_LIST_MAX' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:42:10: warning eslint(no-unused-vars): Identifier 'caseSlaState' is imported but never used. help: Consider removing this import.
+apps/api/src/report-block-gates.test.ts:53:7: warning eslint(no-unused-vars): Variable 'srcDir' is declared but never used. Unused variables should start with a '_'. help: Consider removing this declaration.
+apps/api/src/report-block-gates.test.ts:300:12: warning eslint(no-unused-vars): Function 'report' is declared but never used. help: Consider removing this declaration.
+apps/api/src/report-block-gates.test.ts:304:18: warning eslint(no-unused-vars): Function 'browseIds' is declared but never used. help: Consider removing this declaration.
+apps/api/src/report-block-gates.test.ts:310:18: warning eslint(no-unused-vars): Function 'staffMetrics' is declared but never used. help: Consider removing this declaration.
+apps/api/src/report-block-gates.test.ts:316:12: warning eslint(no-unused-vars): Function 'connectedSocket' is declared but never used. help: Consider removing this declaration.
+apps/api/src/report-block-gates.test.ts:332:12: warning eslint(no-unused-vars): Function 'noEvent' is declared but never used. help: Consider removing this declaration.
+apps/web/src/v2-flow.test.ts:497:9: warning eslint(no-unused-vars): Variable 'editBtn' is declared but never used. Unused variables should start with a '_'. help: Consider removing this declaration.
+apps/web/src/photo-rules.test.ts:60:9: warning typescript(no-this-alias): Unexpected aliasing of 'this' to local variable. help: Assigning a variable to this instead of properly using arrow lambdas may be a symptom of pre-ES2015 practices or not managing scope well.
+lint=0

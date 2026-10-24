@@ -1,0 +1,7 @@
+390 photo 260x195
+390 send 89x44
+390 viewer close 44x44
+1280 row link 358x72
+1280 photo 260x195
+1280 send 89x44
+1280 viewer close 44x44
