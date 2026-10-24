@@ -73,3 +73,76 @@ No blocker, critical or major finding.
 - **Lighthouse** (binary not available): Web Vitals were measured directly in Playwright under mobile CPU and network throttling instead; the numbers are from the unstyled page, so re-check once styled.
 - **Real-device screen reader (TalkBack) and 200 % zoom on a real device**: not possible here; axe, the keyboard path and `role=status` announcements were verified programmatically.
 - **Staging**: no deploy from this container, by instruction.
+
+
+---
+
+# Round 2: blocked list and unblock
+
+**Verdict: FAIL** (2026-10-24, one Major finding in product behaviour, one Major test-protection gap; no blocker or critical; styled checks pending on Fay's Mac)
+
+- Model: this QA round ran on **Claude Sonnet 5.5** (`claude-sonnet-5-5`), the model pinned by `.claude/agents/factory-qa.md`.
+- Branch `factory/report-block`, commit `99fb942` (merge of `factory/report-block-unblock`; round 2 delta is `ba61db0..99fb942`, 14 files).
+- Environment: cloud container, local only. Web on port 3100 (web-only e2e, `/v1` mocked per test), API through a real Nest server on 127.0.0.1 in vitest (in-memory stores), Postgres 17 (`postgres:17` tagged from `mirror.gcr.io/library/postgres:17`) for the migrate test. Tailwind CDN, Google Fonts and Material Symbols are unreachable, so every page is unstyled; e2e ran with `E2E_ALLOW_ERRORS` for those hosts only.
+- Scope: spec rows U-1 to U-4, handoff test cases 19 to 23, `GET /v1/blocks`, `DELETE /v1/blocks/:blocked_id`, web `/settings/bloques`, effects of unblock, mutual blocks, plus a regression pass on 8.5/8.6.
+- Evidence: `code/docs/qa-handoffs/8-5-8-6-report-and-block-evidence/round-2/`.
+- Independence: the matrix was built from the owner's request, the spec rows and epics before reading the handoff. QA added `apps/api/src/qa-round2-unblock.test.ts` (4 API tests) and `e2e/qa-round2-blocked.spec.ts` (5 browser tests). No product code was left modified (two temporary mutations, restored; `git status` shows only the new QA files and evidence).
+
+## Gate summary (round 2)
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS | Lint exit 0 (3 pre-existing warnings), typecheck and build exit 0, `npm audit` high advisories in `body-parser` / `multer` / `next` are pre-existing (`package-lock.json` unchanged between `ba61db0` and `99fb942`, round-1 F3). No secrets or debug leftovers in the delta. `npm-audit.txt` |
+| G2 Automated tests, mutation, flake | PASS with finding F-2 | Unit 639 passed, 1 failed (`photo-rules` Chrome check, times out in this container, same as round 1, unrelated). `reports-blocks.test.ts` 22/22 and `blocked-list-page.test.ts` 5/5 green. Integration: 33 passed; `compose.test.ts` fails because `npm ci` inside the docker build has no network (same as round 1). `operator-config.migrate.test.ts` (real Postgres, includes `blocksBy`/`removeBlock`) green. New e2e (`blocked-list`, `report-block`, `app-shell`) 138 passed over `--repeat-each=3`, 0 flaky. Mutation results below. `unit-suite.txt`, `integration.txt`, `qa-api-tests.txt` |
+| G3 Functional, browser and API | FAIL (F-1) | 4 QA API tests, 5 QA browser tests (3 consecutive runs, 5/5 each), observations in `observations.txt` |
+| G4 UI fidelity 360 to 1440 | PASS for layout and copy, styled pass pending | `list-360/390/768/1024/1280/1440.png`, `confirm-long-name-1440.png`; no horizontal scroll at any width, with a 56-character accented name, an Arabic name and an HTML-looking pseudonym |
+| G5 UX | FAIL (F-1) for the non-listable blocker; otherwise PASS | `state-403.png`, `state-delete-403.png`, `state-loading.png`, `state-empty-after-last.png` |
+| G6 Accessibility | PASS (automated and keyboard) | axe WCAG 2.0/2.1/2.2 A+AA, zero serious or critical on the list, the open confirmation, after unblock and the empty state; keyboard path (Enter, Tab, Enter) green, focus returns to « Débloquer » on Annuler and to the h1 after success. Contrast and 44 px targets are pending (unstyled) |
+| G7 Non-functional | PASS with minor findings | IDOR, auth, payload and method checks green (API table below). Lighthouse not available; the list is one request and measures nothing meaningful unstyled, re-check styled |
+| G8 Regression | PASS | Full e2e on `99fb942`: 151 passed, 35 skipped, 32 failed. The same 32 fail on round-1 commit `ba61db0` in the same container (5 spec files re-run there: 32 failed, 63 passed). Causes: Tailwind CDN missing (`The Tailwind CDN did not load…`, 16), axe contrast on unstyled pages (11), 2 touch-target checks measured unstyled, 1 staff two-pane layout unstyled, and the 2 chat « Aujourd'hui » tests, which fail because the run was at 00:2x Africa/Ouagadougou (UTC+0), just after midnight. None touches Report/Block. `report-block.spec.ts`, `blocked-list.spec.ts`, `app-shell.spec.ts` all pass. `e2e-full-branch.txt` |
+
+## Verification matrix (round 2)
+
+| ID | Criterion or check | Expected | Actual | Result | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| U-1 | List shows blocked members, pseudonym and blurred photo only, never who blocked me | Only my rows, newest first, exact keys, `blur` grant | Dev suite green; QA IDOR check: a third member sees an empty list and cannot delete my Block (404); a Block on me never appears | PASS | `qa-api-tests.txt` |
+| U-1b | Hostile, long, non-Latin names | Rendered as text, no overflow | `<img src=x onerror=…>` stays text (`__xss` undefined, no stray `<img>`), 56-char accented name and Arabic name fit at 6 widths, date « Bloqué le 21 octobre 2026 » for 23:30 UTC | PASS | `list-*.png`, `confirm-long-name-1440.png` |
+| U-1c | Blocker whose own profile is not listable (private, paused, in review) | Can still see and lift the Blocks she placed | `GET /v1/blocks` and `DELETE` both 403 `viewer_not_listable`; the page shows « Votre profil doit être validé avant de consulter d'autres profils. » with « Réessayer » | **FAIL (F-1)** | `qa-api-tests.txt`, `state-403.png`, `state-delete-403.png`, `observations.txt` |
+| U-2 | Cancel changes nothing; confirm removes my own Block only | No DELETE on cancel; one DELETE for that id on confirm | Dev e2e green; QA: a double click sends one DELETE; a failed DELETE (network abort, 500, 403) keeps the row and says why; retry works; removing the last member shows « Vous n'avez bloqué aucun membre. » | PASS | `observations.txt`, `state-empty-after-last.png` |
+| U-2b | I cannot remove the other member's Block, including by sending my own id | 404 « Ce blocage n'existe pas. », nothing deleted | Real code: 404 and the Block stands (QA test). Mutation M1 shows the dev API tests do not guard this (F-2) | PASS (product), test gap F-2 | `qa-api-tests.txt` |
+| U-3 | After unblock: browse, profile, favourites, Invites, Chat | All back both ways; thread reopens with history | Dev suite green. QA adds: an Invite sent before the Block can be accepted again after unblock (accept 404 while blocked, 200 after); favourite add refused while blocked and allowed after; a Report can still be filed on a blocked member and on a message of the closed thread; re-block after unblock returns 201 then 200, one list row | PASS | `qa-api-tests.txt` |
+| U-4 | Mutual Block, one unblock | Hidden and closed until both lift | Dev test green; QA reproduced via mutation M2 that it fails when the list leaks | PASS | `qa-api-tests.txt` |
+| 23 | Keyboard only | Enter, Tab, Enter unblocks, focus on h1 | Green on desktop profile, 3 runs | PASS | `blocked-list.spec.ts` |
+| Auth | No session, staff, mahram, malformed ids, payloads | 401 / 403 / 404, nothing changed | No session redirects the page to `/auth`; API 401 and staff 403 (dev suite); ids `' OR 1=1 --`, `<script>`, `%00`, `..%2f`, 5000 characters all 404 with the Block intact; `PUT` and `PATCH` on `/v1/blocks/:id` 404 or 405; an upper-case UUID is accepted (200) | PASS | `qa-api-tests.txt`, `observations.txt` |
+| UX | Load, slow, error, back button | Loading state, error with retry, fresh data after back | `aria-busy` with the page head while a 3 s list loads; 500 on list shows the load error with « Réessayer »; back after an unblock re-reads the API (2 rows) | PASS | `state-loading.png` |
+| Reg | 8.5 / 8.6 flows | Unchanged | 22 API tests, `report-block.spec.ts` 6 x 3 runs green, boundaries tests green, Report and Block never reach BillingPort | PASS | `unit-suite.txt`, `e2e-full-branch.txt` |
+
+### Mutation spot-check (round 2)
+
+| # | Mutation (restored afterwards) | Result |
+| --- | --- | --- |
+| M1 | `memoryTrustStore.removeBlock` ignores `blocker_id` (deletes any row for that `blocked_id`) | `reports-blocks.test.ts` **still passes 22/22**: no dev test sends my own id to `DELETE`. QA's test `QA: DELETE with my OWN id cannot lift the Block…` fails on the mutant and passes on the real code (F-2). |
+| M2 | `memoryTrustStore.blocksBy` stops filtering by blocker | Caught: 2 dev tests fail (list and mutual unblock) |
+| M3 | Web page sends `POST` instead of `DELETE` | Caught: 1 web unit test and 3 e2e tests fail |
+
+## Findings (round 2)
+
+| # | Severity | Gate | Steps to reproduce | Expected | Actual | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| F-1 | **Major** (product decision may downgrade) | G3, G5 | Member B blocks A. B's own profile later becomes not listable (private, paused, profile in review, ID or liveness pending). B opens « Membres bloqués », or calls `DELETE /v1/blocks/<A>` | The owner's request is that the person who blocked can see and unblock. B should still reach the list and lift the Block. | 403 `viewer_not_listable` on both calls (same gate as browse, `assertBrowseViewer`). The page shows « Votre profil doit être validé avant de consulter d'autres profils. » and « Réessayer », which cannot succeed. B has no way to lift the Block, and the message talks about browsing, not blocking. The same gate is used by the round-1 `POST /v1/blocks`, so a Block can be placed and then cannot be lifted once the profile stops being listable. | `state-403.png`, `state-delete-403.png`, `observations.txt`, `qa-api-tests.txt` |
+| F-2 | **Major** (test does not protect U-2) | G2 | Apply mutation M1 | A test fails | No dev test fails; the product code is correct (Postgres uses `blocker_id AND blocked_id`, QA test passes) but nothing at API level guards « I cannot remove the other member's Block » against the case where the caller sends their own id. | `qa-api-tests.txt`; QA test left in `apps/api/src/qa-round2-unblock.test.ts` for the developer to fold in |
+| F-3 | Minor | G7 | `GET /v1/blocks` with many Blocks | One query per list | `listMyBlocks` calls `loadAccount` and `signMedia` once per row (N+1) and the list has no pagination; fine at a handful of Blocks, worth a cap or a batch read before large lists | code read of `apps/api/src/reports.ts` |
+| F-4 | Minor | G1 | Upper-case UUID in `DELETE /v1/blocks/:id` | n/a | Accepted and lower-cased (200). Harmless, noted for consistency with `POST` | `qa-api-tests.txt` |
+| F-5 | Minor (pre-existing) | G1, G2 | `npm audit`; `photo-rules` Chrome test; `compose.test.ts` | green | Unchanged from round 1 (F3 there) and environmental here | `npm-audit.txt`, `unit-suite.txt`, `integration.txt` |
+
+## Not tested and why (round 2)
+
+- Styled visual fidelity of « Membres bloqués » and of the new Paramètres card, colours, spacing, icon glyphs, contrast, and measured 44 x 44 px targets for « Débloquer », « Confirmer le déblocage » and « Annuler ». Tailwind CDN and fonts are unreachable here. Pending live QA on the owner's Mac. There is no Stitch screen for this page (built on screen 27), so the check is against the spec copy and the Paramètres style.
+- Full compose stack: the Postgres-backed API path (`GET`/`DELETE /v1/blocks` over HTTP against real rows, `select * from block`), handoff section 3 step 7 end to end in the built image. Only the Postgres store was run (migrate test). Pending on the Mac.
+- Lighthouse and 3G throttling of the styled page, TalkBack, 200 % zoom on a device.
+- OWASP ZAP and security headers: not configured here.
+- Real Socket.IO typing relay after unblock was covered by the dev API test (re-run green); QA did not duplicate it.
+
+## Retest guidance
+
+After F-1 is decided (allow list and unblock for any signed-in member regardless of listability, or accept and show a block-specific message with no « Réessayer ») and F-2 is covered (keep or merge `QA: DELETE with my OWN id…`), re-run G2, G6, G7, G8 in full.

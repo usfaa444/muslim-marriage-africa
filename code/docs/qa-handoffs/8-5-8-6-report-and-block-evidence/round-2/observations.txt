@@ -1,0 +1,12 @@
+403 list -> message: Votre profil doit être validé avant de consulter d'autres profils. | retry visible: true
+loading state main text: "arrow_backRetour aux paramètres\n\nPréférences & confidentialité\n\nMembres bloqués\n\nLes membres que vous avez bloqués ne voient pas votre fiche et ne peuvent pas vous contacter. Vous pouvez lever un bloc"
+delete abort -> ["Envoi impossible. Vérifiez votre connexion et réessayez."]; 500 -> ["Envoi impossible. Vérifiez votre connexion et réessayez."]; 403 -> ["Votre profil doit être validé avant de consulter d'autres profils."]
+signed-out url: http://localhost:3100/auth
+403 list -> message: Votre profil doit être validé avant de consulter d'autres profils. | retry visible: true
+loading state main text: "arrow_backRetour aux paramètres\n\nPréférences & confidentialité\n\nMembres bloqués\n\nLes membres que vous avez bloqués ne voient pas votre fiche et ne peuvent pas vous contacter. Vous pouvez lever un bloc"
+delete abort -> ["Envoi impossible. Vérifiez votre connexion et réessayez."]; 500 -> ["Envoi impossible. Vérifiez votre connexion et réessayez."]; 403 -> ["Votre profil doit être validé avant de consulter d'autres profils."]
+signed-out url: http://localhost:3100/auth
+403 list -> message: Votre profil doit être validé avant de consulter d'autres profils. | retry visible: true
+loading state main text: "arrow_backRetour aux paramètres\n\nPréférences & confidentialité\n\nMembres bloqués\n\nLes membres que vous avez bloqués ne voient pas votre fiche et ne peuvent pas vous contacter. Vous pouvez lever un bloc"
+delete abort -> ["Envoi impossible. Vérifiez votre connexion et réessayez."]; 500 -> ["Envoi impossible. Vérifiez votre connexion et réessayez."]; 403 -> ["Votre profil doit être validé avant de consulter d'autres profils."]
+signed-out url: http://localhost:3100/auth
