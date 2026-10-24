@@ -1,6 +1,6 @@
 # Live QA on Faycal's Mac: story chat-polish (full-screen Photo, open at the latest message, read ticks, split view)
 
-**Round 3 (0a6beb7): FAIL on one item only.** Paramètres still fails axe colour contrast with the real theme, so 4 new e2e tests are red. Everything Faycal asked for passes. See Round 3 at the end. **Round 2 (c4274f8): PASS.** Round 1 below is kept as it was.
+**Round 4 (de48b62): PASS, see Round 4 at the end.** **Round 3 (0a6beb7): FAIL on one item only.** Paramètres still fails axe colour contrast with the real theme, so 4 new e2e tests are red. Everything Faycal asked for passes. See Round 3 at the end. **Round 2 (c4274f8): PASS.** Round 1 below is kept as it was.
 
 Date 2026-10-24 (UTC 12:27–13:00). Branch `factory/chat-polish` at `b2ccb5b`. Stack `ankanu-local` on http://localhost:4012, left running.
 
@@ -241,3 +241,26 @@ Console: 0 errors on member screens. The 6 errors logged are reCAPTCHA's `reques
 Fixed from round 2: R2-1 (stale second window), R2-2 (flaky switch test, 10/10), R2-3 (phone message area: 72–79 % instead of about 50 %), and the R2-4 unnamed switches (the R2-4 contrast part is still open as R3-A).
 
 Committed for round 3: this section, `r3-e2e-fullstack.txt`, `r3-e2e-webonly.txt`, `r3-switch-test-repeat.txt`, `r3-live.json`, `r3-regr-live-d1-pin-chrome-receipts-badges.json`. On the Mac only: `shots/r3-*`, `scripts/`.
+
+
+---
+
+# Round 4 (de48b62, 2026-10-24, UTC 15:32–15:50)
+
+A short check of the round 3 fixes: contrast on Paramètres, and the phone composer's placeholder and focus ring.
+
+**Verdict: PASS.** No open findings for this story.
+
+| Check | Result |
+|---|---|
+| Deploy: `pull`, `npm ci`, `up -d --build --wait`, `migrate` | `de48b62`; healthy; no new migration; `/` 200, `/v1/health` ok |
+| Web-only e2e (real CDN and fonts), full run | **285 passed, 0 failed**, 45 skipped. `r4-e2e-webonly.txt`. No fake-microphone failures either |
+| axe whole page `/settings` at 360 / 390 / 768 / 1024 / 1280 / 1440 | **0 violations of any impact** at every width; no horizontal scroll. The eyebrow and « Voir les formules » are now `#7D5F27` (the dark gold of the « Lu » ticks, about 5.6:1 on cream); the descriptions are navy at 70 % |
+| Look compared with Stitch | it still reads as the Stitch palette. The darker gold is the deep-gold token already used for accents and ticks, and the descriptions are slightly darker grey. Nothing looks out of place (`shots/r4-settings-*.png`) |
+| Phone composer 360 × 640 / 390 × 800 | placeholder « Votre message… » is 110 px wide in a 199 px / 229 px box, so it fits. On focus the textarea has no outline of its own; a 2 px ring is drawn on the composer pill (22 px radius) and follows its rounded shape (`shots/r4-composer-focus-*.png`) |
+| Regression: open at the latest message, 6 widths × 5 | **30/30** |
+| Regression: receipts in two windows | B off: A all « Envoyé » after 10 ms, B's other tab synced after 1 ms; on again: « Lu » after 65 ms; A off / on reciprocal; Block 0 ticks, unblock 16 |
+| Regression: Discussions badge on Découvrir / Profil | 1 → 2 live in 0.39 s, clears on read, blocked excluded, hidden at 0 |
+| Regression: Invitations badge | not re-run live. The disposable Brother has already invited both test Sisters, so a new invite is refused (403, by design); it passed live in rounds 2 and 3 and in e2e this round |
+
+Data: `r4-live.json`, `r4-regr-live-d1-receipts-badges.json`. Scripts on the Mac: `scripts/r4.mjs`, `scripts/r2.mjs`.

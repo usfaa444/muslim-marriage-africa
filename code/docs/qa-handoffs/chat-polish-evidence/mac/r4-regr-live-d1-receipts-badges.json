@@ -1,0 +1,246 @@
+{
+  "walk": {
+    "R1-D1-360": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-390": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-768": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-1024": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-1280": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-1440": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R4a-B-off-neither-sees-Lu": {
+      "ok": true,
+      "before": {
+        "switchB": "true",
+        "lastA": "read"
+      },
+      "put": 200,
+      "aTicksAllSentMs": 10,
+      "aReloads": 0,
+      "otherTabSwitchSyncedMs": 1,
+      "m1OnA": "sent",
+      "bTicks": [
+        "sent"
+      ],
+      "bUnread": 0,
+      "mBOnB": "sent"
+    },
+    "R4b-B-on-restores-live": {
+      "ok": true,
+      "m1OnAms": 65,
+      "mBOnBms": 1,
+      "aReloads": 0,
+      "switchTab1": "true"
+    },
+    "R4c-A-off-reciprocal": {
+      "ok": true,
+      "bAllSentMs": 6,
+      "aAllSentMs": 3
+    },
+    "R4d-A-on-restores": {
+      "ok": true,
+      "ms": 69,
+      "switchA": "true"
+    },
+    "R5-D2-block-no-ticks": {
+      "ok": true,
+      "block": 201,
+      "ticksA": 0,
+      "ticksB": 0,
+      "ticksAafterBToggles": 0,
+      "rowTickA": 0
+    },
+    "R5b-unblock-ticks-back": {
+      "ok": true,
+      "unblock": 200,
+      "ticksA": 16
+    },
+    "R6a-discussions-badge-live": {
+      "ok": true,
+      "start": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Discussions"
+      },
+      "after1": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue",
+        "ms": 390
+      },
+      "after2": {
+        "hidden": false,
+        "text": "2",
+        "sr": "2 discussions non lues",
+        "link": "2Discussions2 discussions non lues",
+        "ms": 322
+      },
+      "reloads": 0,
+      "badgeRequests": 4
+    },
+    "R6b-clears-on-read": {
+      "ok": true,
+      "onThreadAfterReadingAB": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue"
+      },
+      "onProfil": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue"
+      }
+    },
+    "R6c-block-excluded": {
+      "ok": true,
+      "whileABlocksC": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Discussions"
+      },
+      "afterUnblock": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue"
+      }
+    },
+    "R6d-hidden-at-0": {
+      "ok": true,
+      "hidden": true,
+      "text": "",
+      "sr": "",
+      "link": "Discussions"
+    },
+    "R6e-invitations-badge-live": {
+      "ok": false,
+      "invite": 403,
+      "start": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations"
+      },
+      "after": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations",
+        "ms": -1
+      },
+      "reloads": 0
+    },
+    "R6f-invite-block-excluded": {
+      "ok": false,
+      "whileBlocked": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations"
+      },
+      "afterUnblock": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations"
+      }
+    },
+    "R6g-clears-on-answer": {
+      "ok": false,
+      "decline": 404,
+      "ms": 3,
+      "after": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations"
+      }
+    }
+  },
+  "sweep": [],
+  "console": [],
+  "summary": {
+    "pass": 16,
+    "fail": [
+      "R6e-invitations-badge-live",
+      "R6f-invite-block-excluded",
+      "R6g-clears-on-answer"
+    ],
+    "consoleErrors": 0
+  }
+}
