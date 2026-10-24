@@ -1,4 +1,5 @@
 import type { AddressInfo } from 'node:net'
+import { createRequire } from 'node:module'
 import { execFile } from 'node:child_process'
 import { createHash, randomBytes } from 'node:crypto'
 import { readdirSync, readFileSync } from 'node:fs'
@@ -27,6 +28,10 @@ import { getChatPort, setChatPort } from './chat.js'
 import { openChatText, sealChatText } from './chat-key.js'
 import { getMessageStore, setMessageStore, type StoredMessage } from './chat-messages.js'
 import { getModerationPort, setModerationPort } from './moderation.js'
+import { setEvidenceWriter } from './evidence-writer.js'
+import { readGrantedMedia, setMediaClock, setSignedTtlReader } from './media.js'
+import { fetchChatMediaForScan, readChatPhoto, readVoiceNote, signChatMedia, storeChatPhoto, storeVoiceNote } from './media-chat.js'
+import { getMediaStore, setMediaStore } from './media-store.js'
 import { getTrustStore, readReportRatePerHour, readReportSlaHours, setReportRateReader, setReportSlaReader, setTrustStore } from './trust.js'
 import { getInviteStore, readInviteConfig, setInviteConfigReader, setInviteStore, type InviteRow } from './invites.js'
 import { PASSWORD_RESET_SESSION_MS, PASSWORD_RESET_TTL_MS } from './password-reset.js'
@@ -198,6 +203,7 @@ function migrationSql(): string {
     '0022_conversation.sql',
     '0023_message.sql',
     '0024_report_block.sql',
+    '0025_message_media.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -357,7 +363,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('25')
+    expect(applied.rows[0]?.count).toBe('26')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -1436,6 +1442,148 @@ describe('operator_config migration', () => {
       await db().query(`delete from "conversation" where "invite_id" = $1`, [inviteId])
       await db().query(`delete from "invite" where "id" = $1`, [inviteId])
       await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, sister]])
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('stores a Chat Photo and a Voice note as delivered media messages, signs them per caller, and refuses a message without its media on migrated Postgres (Stories 5.3, 5.4)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setInviteStore(undefined)
+    setChatPort(undefined)
+    setMessageStore(undefined)
+    setModerationPort(undefined)
+    setMediaStore(undefined)
+    // The signed-URL lifetime comes from the seeded operator_config row (60 s).
+    setSignedTtlReader(undefined)
+    const objects = new Map<string, Uint8Array>()
+    setEvidenceWriter({
+      bucket: 'chat-media-test',
+      async writeObject(key, body) {
+        objects.set(key, body)
+      },
+      async readObject(key) {
+        const found = objects.get(key)
+        if (!found) {
+          throw new Error(`missing ${key}`)
+        }
+        return found
+      },
+    })
+    const at = new Date('2026-10-24T09:00:00.000Z')
+    setMediaClock(() => at)
+    const brother = newId(at)
+    const sister = newId(at)
+    const inviteId = newId(at)
+    const key = { key: randomBytes(32), kid: 'pg-chat-media-1' }
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, $4, $5, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    await db().query(insertAccount, [brother, 'media-b@example.bf', 'Media_B', 'brother', ['member']])
+    await db().query(insertAccount, [sister, 'media-s@example.bf', 'Media_S', 'sister', ['member']])
+    await db().query(`insert into "invite" ("id", "from_id", "to_id", "state", "created_at") values ($1, $2, $3, 'pending', $4)`, [inviteId, brother, sister, at.toISOString()])
+    let conversationId = ''
+    const assetIds: string[] = []
+    try {
+      const accepted = await getInviteStore().accept(inviteId, sister, at.toISOString(), at)
+      conversationId = accepted.ok && accepted.conversation ? accepted.conversation.id : ''
+      expect(conversationId).not.toBe('')
+      const store = getMediaStore()
+      // A 4×3 PNG; a header alone does not decode and is refused before anything is stored.
+      const { PNG } = createRequire(import.meta.url)('pngjs') as { PNG: { new (o: { width: number; height: number }): { data: Buffer }; sync: { write(p: unknown): Buffer } } }
+      const image = new PNG({ width: 4, height: 3 })
+      image.data.fill(200)
+      expect(readChatPhoto(PNG.sync.write(image).subarray(0, 33).toString('base64')).ok).toBe(false)
+      const photo = readChatPhoto(PNG.sync.write(image).toString('base64'))
+      expect(photo.ok).toBe(true)
+      const voice = readVoiceNote(Buffer.concat([Buffer.from('1a45dfa3', 'hex'), randomBytes(512)]).toString('base64'), 5000, 'mos')
+      expect(voice.ok).toBe(true)
+      const photoId = await storeChatPhoto(store, sister, photo.ok ? photo.photo : (undefined as never))
+      const voiceId = await storeVoiceNote(store, brother, voice.ok ? voice.voice : (undefined as never))
+      assetIds.push(photoId, voiceId)
+
+      const rows: StoredMessage[] = [
+        { kind: 'photo' as const, sender: sister, media: photoId, meta: '{"w":4,"h":3}' },
+        { kind: 'voice' as const, sender: brother, media: voiceId, meta: '{"d":5000,"l":"mos"}' },
+      ].map((item, index) => {
+        const id = newId(new Date(at.getTime() + index + 1))
+        return {
+          id,
+          conversation_id: conversationId,
+          sender_id: item.sender,
+          kind: item.kind,
+          state: 'delivered',
+          body: sealChatText(item.meta, key, conversationId, id),
+          media_id: item.media,
+          created_at: new Date(at.getTime() + index + 1).toISOString(),
+        }
+      })
+      for (const row of rows) {
+        await getMessageStore().insert(row)
+        await getModerationPort().enqueueScan({ itemId: row.id, itemKind: 'message', accountId: row.sender_id, payload: { kind: 'photo', mediaId: row.media_id ?? '', contentType: 'image/png' } })
+      }
+      const page = await getMessageStore().page(conversationId, {}, 10)
+      expect(page.rows.map((row) => [row.kind, row.media_id])).toEqual([['photo', photoId], ['voice', voiceId]])
+      expect(openChatText(page.rows[1]?.body, key, conversationId, rows[1]!.id)).toBe('{"d":5000,"l":"mos"}')
+
+      const assets = await db().query<{ id: string; kind: string; moderation_state: string | null; blur_key: string | null }>(
+        `select "id", "kind", "moderation_state", "blur_key" from "photo_asset" where "id" = any($1::uuid[]) order by "kind"`,
+        [assetIds],
+      )
+      expect(assets.rows.map((row) => [row.kind, row.moderation_state, row.blur_key !== null])).toEqual([['chat_photo', null, true], ['voice_note', null, false]])
+      const sizes = await db().query<{ size: string }>(`select "size" from "derivative" where "photo_asset_id" = $1 order by "size"`, [photoId])
+      expect(sizes.rows.map((row) => row.size)).toEqual(['blur', 'md'])
+      const jobs = await db().query<{ message_id: string; asset_id: string | null }>(`select "message_id", "asset_id" from "moderation_job" where "message_id" = any($1::uuid[])`, [rows.map((row) => row.id)])
+      expect(jobs.rows).toHaveLength(2)
+      expect(jobs.rows.every((row) => row.asset_id === null)).toBe(true)
+
+      // Signed for one caller, served to that caller only, never the original; TTL from operator_config.
+      const clear = await signChatMedia(store, photoId, 'clear', brother)
+      expect(clear.ok).toBe(true)
+      const token = clear.ok ? clear.url.split('token=')[1] ?? '' : ''
+      expect(clear.ok ? Date.parse(clear.expires_at) - at.getTime() : 0).toBe(60_000)
+      const grants = await db().query<{ derivative: string; viewer_id: string }>(`select "derivative", "viewer_id" from "signed_grant" where "id" = $1`, [token])
+      expect(grants.rows).toEqual([{ derivative: 'md', viewer_id: brother }])
+      expect(await readGrantedMedia(store, token, brother)).toMatchObject({ ok: true, contentType: 'image/png' })
+      expect(await readGrantedMedia(store, token, sister)).toMatchObject({ ok: false, status: 403 })
+      const audio = await signChatMedia(store, voiceId, 'clear', sister)
+      expect(await readGrantedMedia(store, audio.ok ? audio.url.split('token=')[1] ?? '' : '', sister)).toMatchObject({ ok: true, contentType: 'audio/webm' })
+      expect((await fetchChatMediaForScan(store, voiceId))?.kind).toBe('voice_note')
+      expect([...objects.keys()].some((name) => name.endsWith('/original'))).toBe(true)
+
+      // The schema keeps media and kind together: a photo or voice needs its media, a text has none, the media exists.
+      for (const [sqlText, values, code] of [
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body") values ($1, $2, $3, 'photo', 'delivered', '{}')`, [newId(at), conversationId, sister], '23514'],
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body") values ($1, $2, $3, 'voice', 'delivered', '{}')`, [newId(at), conversationId, sister], '23514'],
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body", "media_id") values ($1, $2, $3, 'text', 'delivered', '{}', $4)`, [newId(at), conversationId, sister, photoId], '23514'],
+        [`insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body", "media_id") values ($1, $2, $3, 'photo', 'delivered', '{}', $4)`, [newId(at), conversationId, sister, newId(at)], '23503'],
+      ] as const) {
+        let refused = false
+        try {
+          await db().query(sqlText, [...values])
+        } catch (error) {
+          refused = true
+          expect(postgresCode(error), sqlText).toBe(code)
+        }
+        expect(refused, sqlText).toBe(true)
+      }
+    } finally {
+      await db().query(`delete from "moderation_job" where "message_id" in (select "id" from "message" where "conversation_id" = $1)`, [conversationId || newId(at)])
+      await db().query(`delete from "message" where "conversation_id" = $1`, [conversationId || newId(at)])
+      await db().query(`delete from "signed_grant" where "photo_asset_id" = any($1::uuid[])`, [assetIds])
+      await db().query(`delete from "derivative" where "photo_asset_id" = any($1::uuid[])`, [assetIds])
+      await db().query(`delete from "photo_asset" where "id" = any($1::uuid[])`, [assetIds])
+      await db().query(`delete from "conversation" where "invite_id" = $1`, [inviteId])
+      await db().query(`delete from "invite" where "id" = $1`, [inviteId])
+      await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, sister]])
+      setEvidenceWriter(undefined)
+      setMediaClock(undefined)
       await closeAccountStore()
       if (previousDatabaseUrl === undefined) {
         delete process.env['DATABASE_URL']

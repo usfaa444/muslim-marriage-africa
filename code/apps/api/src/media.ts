@@ -318,7 +318,8 @@ export async function signMedia(
     return revealDenied()
   }
   const asset = await store.asset(assetId)
-  if (!asset || !asset.blur_key) {
+  // Chat Photos and Voice notes are signed by `signChatMedia` only, after Chat's participant check (Stories 5.3, 5.4).
+  if (!asset || !asset.blur_key || asset.kind !== 'profile_photo') {
     return grantDenied()
   }
   if (asset.kind === 'profile_photo' && (asset.moderation_state === 'replaced' || asset.moderation_state === 'blocked')) {
@@ -377,11 +378,15 @@ export async function readGrantedMedia(
   if (Date.parse(grant.expires_at) <= clock().getTime()) {
     return grantDenied()
   }
+  const chatAsset = await store.asset(grant.photo_asset_id)
+  if (chatAsset && (chatAsset.kind === 'chat_photo' || chatAsset.kind === 'voice_note')) {
+    return readChatGrant(store, chatAsset, grant.derivative)
+  }
   const clear = grant.derivative === 'sm' || grant.derivative === 'md'
   if (!clear && grant.derivative !== 'blur') {
     return revealDenied()
   }
-  const asset = await store.asset(grant.photo_asset_id)
+  const asset = chatAsset
   if (!asset || !asset.blur_key) {
     return grantDenied()
   }
@@ -426,6 +431,75 @@ export async function readGrantedMedia(
     return storageFailure()
   }
   return { ok: true, bytes, contentType: imageContentType(bytes) }
+}
+
+/**
+ * Chat Photo and Voice note bytes (Stories 5.3, 5.4). The grant was minted by `signChatMedia` for one conversation
+ * member. A Chat Photo serves its `blur` or its clear `md` derivative, a Voice note its audio; the stored `original`
+ * of a Chat Photo is never served. No moderation state is read: delivery never waits on a review (AD-10).
+ */
+async function readChatGrant(
+  store: MediaStore,
+  asset: StoredAsset,
+  derivative: string,
+): Promise<{ ok: true; bytes: Uint8Array; contentType: string } | MediaFailure> {
+  let key: string | null = null
+  if (asset.kind === 'chat_photo' && derivative === 'blur') {
+    key = asset.blur_key
+  } else if (asset.kind === 'chat_photo' && derivative === 'md') {
+    key = (await store.derivative(asset.id, 'md'))?.object_key ?? null
+  } else if (asset.kind === 'voice_note' && derivative === 'voice') {
+    key = asset.original_key
+  } else {
+    return revealDenied()
+  }
+  if (!key) {
+    return grantDenied()
+  }
+  let bytes: Uint8Array | null
+  try {
+    bytes = await store.bytes(key)
+  } catch (error) {
+    if (error instanceof MediaStorageError) {
+      return storageFailure()
+    }
+    throw error
+  }
+  if (!bytes) {
+    return storageFailure()
+  }
+  return { ok: true, bytes, contentType: asset.kind === 'voice_note' ? (audioContentType(bytes) ?? 'application/octet-stream') : imageContentType(bytes) }
+}
+
+/** Container sniffed from the first bytes: WebM (Opus), Ogg (Opus) or MP4 (AAC). Null for anything else. */
+export function audioContentType(bytes: Uint8Array): 'audio/webm' | 'audio/ogg' | 'audio/mp4' | null {
+  if (bytes.length >= 4 && bytes[0] === 0x1a && bytes[1] === 0x45 && bytes[2] === 0xdf && bytes[3] === 0xa3) {
+    return 'audio/webm'
+  }
+  if (bytes.length >= 4 && Buffer.from(bytes.subarray(0, 4)).toString('latin1') === 'OggS') {
+    return 'audio/ogg'
+  }
+  if (bytes.length >= 12 && Buffer.from(bytes.subarray(4, 8)).toString('latin1') === 'ftyp') {
+    return 'audio/mp4'
+  }
+  return null
+}
+
+/** The media clock and the capped signed-URL lifetime, for the Chat media signer in `media-chat.ts`. */
+export function mediaNow(): Date {
+  return clock()
+}
+
+export async function signedUrlTtlSeconds(): Promise<number> {
+  return ttlSeconds()
+}
+
+export function chatGrantDenied(): MediaFailure {
+  return grantDenied()
+}
+
+export function chatTtlFailure(): MediaFailure {
+  return ttlFailure()
 }
 
 /** Clear `md` for this owner only. `photo_blur` does not apply. Never `original`. */

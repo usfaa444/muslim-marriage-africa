@@ -3,7 +3,18 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { GET as getList } from '../app/discussions/route.js'
 import { GET as getThread } from '../app/discussions/[id]/route.js'
-import { CHAT_COPY, chatThreadHtml, discussionsHtml, REALTIME_SCRIPT, STAGE_LABEL, TEXT_MAX } from './discussions-page.js'
+import {
+  CHAT_COPY,
+  chatThreadHtml,
+  discussionsHtml,
+  PHOTO_MAX_BYTES,
+  REALTIME_SCRIPT,
+  STAGE_LABEL,
+  TEXT_MAX,
+  VOICE_LANGUAGES,
+  VOICE_MAX_BYTES,
+  VOICE_MAX_MS,
+} from './discussions-page.js'
 
 function stitch(folder: string): string {
   return readFileSync(fileURLToPath(new URL(`../../../design-stitch/ankanu-v2/${folder}/screen.html`, import.meta.url)), 'utf8')
@@ -14,7 +25,11 @@ const ID = '01990000-0000-7000-8000-0000000000c1'
 /** Copy the product must never show a member on Chat: hold, scan, verification wait (AD-10, DESIGN.md chat-bubble). */
 const HOLD_COPY = /En cours de vérification|en vérification|vérification en cours|modération|scan|retenu|en attente de|pending|held/i
 
-/** Stitch lines the product does not do, read receipts, the quota of Story 5.11, and Stitch sample data. */
+/**
+ * Stitch lines the product does not do, read receipts, the quota of Story 5.11, and Stitch sample data. The camera and
+ * microphone buttons and the Voice note bubble left this list with Stories 5.3 and 5.4; the Stitch sample title
+ * « Note vocale de présentation sobre » stays out.
+ */
 const DROPPED = [
   'Wali notifié',
   'Accord mutuel validé',
@@ -25,9 +40,7 @@ const DROPPED = [
   'Sans réponse',
   'non lu',
   'done_all',
-  'photo_camera',
-  'Joindre une photo',
-  'note vocale',
+  'Note vocale de présentation sobre',
   'sécurisés sur AnKanu',
   'Al-Hassan_BF',
   'Ibrahim_S',
@@ -64,6 +77,8 @@ describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
   })
 
   it('AC 5.1-1: no hold badge, no scan wording, no read receipt, no dropped Stitch line', () => {
+    // Stories 5.3, 5.4: a Photo or Voice note last message reads « Photo » / « Note vocale », never a URL.
+    expect(html).toContain("quote.textContent = (last.mine ? COPY.you + ' : ' : '') + (last.kind === 'photo' ? COPY.photo : COPY.voice)")
     expect(visibleText(html)).not.toMatch(HOLD_COPY)
     expect(Object.values(CHAT_COPY).join(' ')).not.toMatch(HOLD_COPY)
     for (const banned of DROPPED) {
@@ -143,6 +158,51 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     expect(html).toContain("var DRAFT_KEY = 'ankanu_chat_draft:' + ID")
     expect(html).toContain(`<a id="thread-signin" hidden href="/auth"`)
     expect(html).not.toMatch(/\.innerHTML\s*=/)
+  })
+
+  it('Stories 5.3, 5.4: the Stitch camera and microphone buttons open the Photo picker and the recorder; no GIF picker', () => {
+    expect(html).toContain(`id="thread-photo" type="button" title="${CHAT_COPY.photoButton}"`)
+    expect(html).toContain(`aria-hidden="true">photo_camera</span><span class="chat-sr">${CHAT_COPY.photoButton}</span></button>`)
+    expect(html).toContain(`id="thread-voice" type="button" title="${CHAT_COPY.voiceButton}"`)
+    expect(html).toContain(`aria-hidden="true">mic</span><span class="chat-sr">${CHAT_COPY.voiceButton}</span></button>`)
+    expect(html).toContain('w-11 h-11')
+    expect(html).toContain('<input id="thread-photo-input" type="file" accept="image/*" hidden/>')
+    expect(CHAT_COPY.photoButton).toBe('Joindre une photo sobre')
+    expect(CHAT_COPY.voiceButton).toBe('Enregistrer une note vocale sobre')
+    // A closed or unavailable thread disables both buttons with the composer.
+    expect(html).toContain('photoButton.disabled = input.disabled')
+    expect(html).toContain('voiceButton.disabled = input.disabled')
+    expect(html).not.toMatch(/\bgif\b|giphy|tenor/i)
+  })
+
+  it('Story 5.3: the Photo is re-encoded in the browser (1600 px, JPEG, 2 Mo at most) and posted as kind photo', () => {
+    expect(html).toContain('var attempts = [[1600, 0.82], [1280, 0.7], [960, 0.6]]')
+    expect(html).toContain("}, 'image/jpeg', attempts[index][1])")
+    expect(html).toContain(`if (blob.size > ${PHOTO_MAX_BYTES}) { reject(new Error('heavy')); return }`)
+    expect(html).toContain("postMedia({ kind: 'photo', image: image }, COPY.photoSent, sendPhoto)")
+    expect(PHOTO_MAX_BYTES).toBe(2_097_152)
+  })
+
+  it('Story 5.3: a Photo bubble shows the server blur at once and loads the clear image from a fresh signed URL (on tap in Lite)', () => {
+    expect(html).toContain('preview.src = media.blur_url')
+    expect(html).toContain("'/messages/' + encodeURIComponent(item.id) + '/media'")
+    expect(html).toContain('if (mediaCache[item.id] || !liteEnabled()) setTimeout(reveal, 0)')
+    expect(html).toContain('show.appendChild(make(\'span\', \'\', COPY.photoShow))')
+    // No signed URL is ever taken from a realtime event: the event handler only catches up over HTTP.
+    expect(html).toContain('function onDelivered(payload) {')
+  })
+
+  it('Story 5.4: the recorder caps the note at 2 minutes and 1 Mo, asks for a language, and posts kind voice; playback is on tap only', () => {
+    expect(html).toContain("navigator.mediaDevices.getUserMedia({ audio: true })")
+    expect(html).toContain(`if (elapsed >= ${VOICE_MAX_MS} && recorder && recorder.state === 'recording') {`)
+    expect(html).toContain(`if (blob.size > ${VOICE_MAX_BYTES}) { closePanel(); mediaError(COPY.voiceTooHeavy)`)
+    expect(html).toContain("postMedia({ kind: 'voice', audio: audio, duration_ms:")
+    expect(VOICE_LANGUAGES.map((item) => item.label)).toEqual(['Français', 'Mooré', 'Dioula'])
+    // No autoplay: the audio element is created on the first tap with preload none; no transcript anywhere.
+    expect(html).toContain("audio.preload = 'none'")
+    expect(html).not.toMatch(/autoplay/i)
+    expect(Object.values(CHAT_COPY).join(' ')).not.toMatch(/transcri/i)
+    expect(VOICE_MAX_MS).toBe(120_000)
   })
 
   it('refuses to build a page for an id that is not a UUID', () => {

@@ -5,10 +5,12 @@ import { accountStoreIsMemory, getIdentityDatabase } from './account-store.js'
 import { authNow } from './auth-clock.js'
 
 /**
- * Minimal moderation module (Story 5.2). `enqueueScan` is the only INSERT of `moderation_job` (AD-10): one queued row
- * per delivered item, `outcome` null until the Epic 8 worker scans it. The plaintext payload is accepted here and not
- * stored: no scanner exists yet, and keeping it in Postgres or Redis would undo the Chat encryption. Moderation never
- * reads `message` and never writes `message.state`.
+ * Minimal moderation module (Stories 5.2 to 5.4). `enqueueScan` is the only INSERT of `moderation_job` (AD-10): one
+ * queued row per delivered item (a Chat Photo or a Voice note is one job keyed by its message id, not a second job by
+ * asset), `outcome` null until the Epic 8 worker scans it. The plaintext payload is accepted here and not stored: no
+ * scanner exists yet, and keeping it in Postgres or Redis would undo the Chat encryption. A photo or voice payload
+ * carries the media id only; the worker reads the bytes through `fetchChatMediaForScan`. Moderation never reads
+ * `message` and never writes `message.state`.
  */
 
 export type QueuedJob = {

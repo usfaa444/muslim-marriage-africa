@@ -9,7 +9,16 @@ import { openChatText, readChatKey, sealChatText, type ChatEnvelope } from './ch
 import { ageOn } from './create-account.js'
 import { getInvitesPort } from './invites-port.js'
 import { discoveryPhoto, signMedia } from './media.js'
-import { getMediaStore } from './media-store.js'
+import {
+  readChatPhoto,
+  readVoiceNote,
+  signChatMedia,
+  storeChatPhoto,
+  storeVoiceNote,
+  type ChatPhotoInput,
+  type VoiceNoteInput,
+} from './media-chat.js'
+import { getMediaStore, MediaStorageError } from './media-store.js'
 import { getModerationPort } from './moderation.js'
 import { isListableProfile } from './profile-review.js'
 import { getProfileStore } from './profile-store.js'
@@ -24,9 +33,10 @@ import {
 import type { ResolvedSession } from './session-store.js'
 
 /**
- * Chat messages (Stories 5.1, 5.2). A text is persisted `delivered` (the only state), pushed to both members as
- * `message.delivered` with ids only, and only then handed to `ModerationPort.enqueueScan`. Nothing here waits on AI,
- * and nothing here reads an entitlement: the Free-tier cap (Story 5.11) plugs in at `checkMessageCap`.
+ * Chat messages (Stories 5.1 to 5.4). A text, a Chat Photo or a Voice note is persisted `delivered` (the only state),
+ * pushed to both members as `message.delivered` with ids only, and only then handed to `ModerationPort.enqueueScan`.
+ * Nothing here waits on AI, and nothing here reads an entitlement: the Free-tier cap (Story 5.11) plugs in at
+ * `checkMessageCap`, which every kind goes through before anything is stored.
  */
 
 export const TEXT_MAX = 2000
@@ -44,6 +54,7 @@ export const CLOSED_MESSAGE = 'Cette discussion est fermée.'
 export const OTHER_UNAVAILABLE_MESSAGE = "Ce profil n'est plus disponible."
 export const KEY_MISSING_MESSAGE = 'Envoi indisponible pour le moment. Réessayez plus tard.'
 export const MESSAGE_CAP_MESSAGE = 'Limite de messages du jour atteinte.'
+export const MEDIA_MISSING_MESSAGE = 'Ce média est introuvable.'
 
 export type MessageKind = 'text' | 'photo' | 'voice'
 
@@ -229,7 +240,7 @@ export function setChatEvents(next: ChatEvents | undefined): void {
 /**
  * Story 5.11 seam (FR-146, AD-29). Today every send is allowed and nothing is read: no entitlement read, no
  * `message_quota`. Story 5.11 replaces the body with the live `daily_message_cap` + entitlement check and
- * the atomic `message_quota` increment; a refusal must make `sendText` answer `MESSAGE_CAP_EXCEEDED` before anything is
+ * the atomic `message_quota` increment; a refusal must make `sendMessage` answer (text, photo and voice alike) `MESSAGE_CAP_EXCEEDED` before anything is
  * stored or enqueued.
  */
 export type CapDecision = { allowed: true } | { allowed: false; cap: number; resets_at: string }
@@ -314,6 +325,15 @@ export async function participantConversation(
   return match ? { row, otherId: match.otherId } : null
 }
 
+/**
+ * A Chat Photo or a Voice note as a reader sees it (Stories 5.3, 5.4). Ids and display facts only: the Photo's blur is
+ * signed for this reader at read time; its clear image and the Voice note's audio come from
+ * `GET …/messages/:messageId/media`, signed for the caller on demand (no autoplay, no URL in an event).
+ */
+export type MessageMedia =
+  | { id: string; kind: 'photo'; width: number | null; height: number | null; blur_url: string | null }
+  | { id: string; kind: 'voice'; duration_ms: number | null }
+
 export type MessageItem = {
   id: string
   conversation_id: string
@@ -323,6 +343,28 @@ export type MessageItem = {
   state: 'delivered'
   text: string | null
   created_at: string
+  /** Present on `photo` and `voice` only. */
+  media?: MessageMedia
+}
+
+/** Sealed with the message like a text, so a Photo's size or a note's language is not readable at rest either. */
+type MediaMeta = { w?: number; h?: number; d?: number; l?: string | null }
+
+function readMeta(row: StoredMessage): MediaMeta {
+  const raw = openChatText(row.body, readChatKey(), row.conversation_id, row.id)
+  if (raw === null) {
+    return {}
+  }
+  try {
+    const parsed: unknown = JSON.parse(raw)
+    return typeof parsed === 'object' && parsed !== null ? (parsed as MediaMeta) : {}
+  } catch {
+    return {}
+  }
+}
+
+function positive(value: unknown): number | null {
+  return typeof value === 'number' && Number.isInteger(value) && value > 0 ? value : null
 }
 
 function present(row: StoredMessage, viewerId: string): MessageItem {
@@ -333,8 +375,25 @@ function present(row: StoredMessage, viewerId: string): MessageItem {
     mine: row.sender_id === viewerId,
     kind: row.kind,
     state: 'delivered',
-    text: openChatText(row.body, readChatKey(), row.conversation_id, row.id),
+    text: row.kind === 'text' ? openChatText(row.body, readChatKey(), row.conversation_id, row.id) : null,
     created_at: row.created_at,
+  }
+}
+
+/** `present` plus the media facts; the Photo blur is signed for this viewer now (a failed sign is `blur_url: null`). */
+async function presentFull(row: StoredMessage, viewerId: string): Promise<MessageItem> {
+  const item = present(row, viewerId)
+  if (row.kind === 'text' || !row.media_id) {
+    return item
+  }
+  const meta = readMeta(row)
+  if (row.kind === 'voice') {
+    return { ...item, media: { id: row.media_id, kind: 'voice', duration_ms: positive(meta.d) } }
+  }
+  const signed = await signChatMedia(getMediaStore(), row.media_id, 'blur', viewerId)
+  return {
+    ...item,
+    media: { id: row.media_id, kind: 'photo', width: positive(meta.w), height: positive(meta.h), blur_url: signed.ok ? signed.url : null },
   }
 }
 
@@ -500,11 +559,38 @@ export async function listMessages(
     cursor.after = after.value
   }
   const page = await getMessageStore().page(found.row.id, cursor, limit)
-  return { ok: true, body: { items: page.rows.map((row) => present(row, gate.account.id)), has_more: page.hasMore } }
+  const items = await Promise.all(page.rows.map((row) => presentFull(row, gate.account.id)))
+  return { ok: true, body: { items, has_more: page.hasMore } }
 }
 
-function readText(body: unknown): { ok: true; text: string } | ChatFailure {
+type SendInput =
+  | { kind: 'text'; text: string }
+  | { kind: 'photo'; photo: ChatPhotoInput }
+  | { kind: 'voice'; voice: VoiceNoteInput }
+
+/** `kind` decides the shape: `text` (5.2), `photo` with `image` (5.3), `voice` with `audio` and `duration_ms` (5.4). */
+function readSend(body: unknown): { ok: true; input: SendInput } | ChatFailure {
   const record = typeof body === 'object' && body !== null && !Array.isArray(body) ? (body as Record<string, unknown>) : {}
+  const kind = record['kind']
+  if (kind === 'photo') {
+    const photo = readChatPhoto(record['image'])
+    if (!photo.ok) {
+      return fail(400, 'UNHANDLED', photo.message, photo.max === undefined ? { field: photo.field } : { field: photo.field, max: photo.max })
+    }
+    return { ok: true, input: { kind: 'photo', photo: photo.photo } }
+  }
+  if (kind === 'voice') {
+    const voice = readVoiceNote(record['audio'], record['duration_ms'], record['language'])
+    if (!voice.ok) {
+      return fail(400, 'UNHANDLED', voice.message, voice.max === undefined ? { field: voice.field } : { field: voice.field, max: voice.max })
+    }
+    return { ok: true, input: { kind: 'voice', voice: voice.voice } }
+  }
+  const text = readText(record)
+  return text.ok ? { ok: true, input: { kind: 'text', text: text.text } } : text
+}
+
+function readText(record: Record<string, unknown>): { ok: true; text: string } | ChatFailure {
   if (record['kind'] !== 'text') {
     return fail(400, 'UNHANDLED', KIND_MESSAGE, { field: 'kind' })
   }
@@ -549,8 +635,12 @@ async function enqueueAfterPersist(input: { itemId: string; accountId: string; p
   }
 }
 
-/** `POST /v1/conversations/:id/messages` with `kind: 'text'`. See the story spec for the order of the checks. */
-export async function sendText(
+/**
+ * `POST /v1/conversations/:id/messages` with `kind: 'text' | 'photo' | 'voice'`. See the story specs (5.2, 5.3, 5.4)
+ * for the order of the checks. Every kind goes through the same closed check, Block check and cap seam, and nothing
+ * (no object, no `photo_asset`, no `message`, no scan job) is written when one refuses.
+ */
+export async function sendMessage(
   session: ResolvedSession,
   id: unknown,
   body: unknown,
@@ -564,10 +654,11 @@ export async function sendText(
   if (!found) {
     return notFound()
   }
-  const input = readText(body)
-  if (!input.ok) {
-    return input
+  const parsed = readSend(body)
+  if (!parsed.ok) {
+    return parsed
   }
+  const input = parsed.input
   if (found.row.ended_at !== null || found.row.paused_by !== null || (await getTrustPort().blockedBetween(me, found.otherId))) {
     return fail(409, 'UNHANDLED', CLOSED_MESSAGE, { reason: 'conversation_closed' })
   }
@@ -577,7 +668,7 @@ export async function sendText(
     return fail(409, 'UNHANDLED', OTHER_UNAVAILABLE_MESSAGE, { reason: 'other_unavailable' })
   }
   const now = authNow()
-  const cap = await checkMessageCap({ senderId: me, kind: 'text', now })
+  const cap = await checkMessageCap({ senderId: me, kind: input.kind, now })
   if (!cap.allowed) {
     return fail(429, 'MESSAGE_CAP_EXCEEDED', MESSAGE_CAP_MESSAGE, { cap: cap.cap, resets_at: cap.resets_at })
   }
@@ -585,15 +676,38 @@ export async function sendText(
   if (!key) {
     return fail(503, 'UNHANDLED', KEY_MISSING_MESSAGE, null, true)
   }
+  // Media first (owned by the media module), then the message row that points at it. A storage failure stores no
+  // message and enqueues nothing; at worst an unreferenced object is left behind.
+  let mediaId: string | null = null
+  try {
+    if (input.kind === 'photo') {
+      mediaId = await storeChatPhoto(getMediaStore(), me, input.photo)
+    } else if (input.kind === 'voice') {
+      mediaId = await storeVoiceNote(getMediaStore(), me, input.voice)
+    }
+  } catch (error) {
+    if (error instanceof MediaStorageError) {
+      return fail(503, 'UNHANDLED', KEY_MISSING_MESSAGE, null, true)
+    }
+    throw error
+  }
   const messageId = newId(now)
+  const sealed =
+    input.kind === 'text'
+      ? input.text
+      : JSON.stringify(
+          input.kind === 'photo'
+            ? { w: input.photo.width, h: input.photo.height }
+            : { d: input.voice.durationMs, l: input.voice.language },
+        )
   const row: StoredMessage = {
     id: messageId,
     conversation_id: found.row.id,
     sender_id: me,
-    kind: 'text',
+    kind: input.kind,
     state: 'delivered',
-    body: sealChatText(input.text, key, found.row.id, messageId),
-    media_id: null,
+    body: sealChatText(sealed, key, found.row.id, messageId),
+    media_id: mediaId,
     created_at: now.toISOString(),
   }
   await getMessageStore().insert(row)
@@ -602,8 +716,54 @@ export async function sendText(
   } catch {
     // Realtime is best effort; the reader catches up over HTTP.
   }
-  await enqueueAfterPersist({ itemId: messageId, accountId: me, payload: { kind: 'text', text: input.text } })
-  return { ok: true, body: { message: { ...present(row, me), text: input.text } } }
+  const payload: ScanPayload =
+    input.kind === 'text'
+      ? { kind: 'text', text: input.text }
+      : input.kind === 'photo'
+        ? { kind: 'photo', mediaId: mediaId ?? '', contentType: input.photo.contentType }
+        : {
+            kind: 'voice',
+            mediaId: mediaId ?? '',
+            contentType: input.voice.contentType,
+            durationMs: input.voice.durationMs,
+            language: input.voice.language,
+          }
+  await enqueueAfterPersist({ itemId: messageId, accountId: me, payload })
+  const item = input.kind === 'text' ? { ...present(row, me), text: input.text } : await presentFull(row, me)
+  return { ok: true, body: { message: item } }
+}
+
+/**
+ * `GET /v1/conversations/:id/messages/:messageId/media`: a fresh signed URL, for the caller only, to the clear Chat
+ * Photo (`md`) or the Voice note audio. Participants only; a conversation that is closed or blocked stays readable,
+ * like its texts. Any other id is a 404. Never the stored original.
+ */
+export async function mediaAccess(
+  session: ResolvedSession,
+  id: unknown,
+  messageId: unknown,
+): Promise<{ ok: true; body: { url: string; expires_at: string } } | ChatFailure> {
+  const gate = await assertBrowseViewer(session)
+  if (!gate.ok) {
+    return fromViewer(gate)
+  }
+  const found = await participantConversation(gate.account.id, id)
+  if (!found) {
+    return notFound()
+  }
+  const missing = () => fail(404, 'NOT_FOUND', MEDIA_MISSING_MESSAGE, null)
+  if (typeof messageId !== 'string' || !isUuidV7(messageId)) {
+    return missing()
+  }
+  const row = await getMessageStore().find(messageId)
+  if (!row || row.conversation_id !== found.row.id || row.kind === 'text' || !row.media_id) {
+    return missing()
+  }
+  const signed = await signChatMedia(getMediaStore(), row.media_id, 'clear', gate.account.id)
+  if (!signed.ok) {
+    return signed.status === 503 ? fail(503, 'UNHANDLED', signed.message, null, true) : missing()
+  }
+  return { ok: true, body: { url: signed.url, expires_at: signed.expires_at } }
 }
 
 /** Typing relay check: the viewer may type in this conversation. Returns the other member, or null. */

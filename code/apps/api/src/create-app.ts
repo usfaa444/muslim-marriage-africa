@@ -17,6 +17,8 @@ const express = createRequire(import.meta.url)('express') as {
 
 /** JSON limit for the ID and liveness posts. Other routes keep the 100kb default. */
 export const VERIFICATION_JSON_LIMIT = 8 * 1024 * 1024
+/** Chat sends carry a Photo (2 MiB) or a Voice note (1 MiB) as base64 (Stories 5.3, 5.4): 4/3 of 2 MiB plus the JSON. */
+export const CHAT_JSON_LIMIT = 3 * 1024 * 1024
 
 type ExpressLike = {
   use: (
@@ -33,6 +35,7 @@ export async function createApp(): Promise<INestApplication> {
   app.use('/v1/verifications/id', express.json({ limit: VERIFICATION_JSON_LIMIT }))
   app.use('/v1/verifications/liveness', express.json({ limit: VERIFICATION_JSON_LIMIT }))
   app.use('/v1/media', express.json({ limit: VERIFICATION_JSON_LIMIT }))
+  app.use('/v1/conversations', express.json({ limit: CHAT_JSON_LIMIT }))
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
   app.use(sessionTouch)

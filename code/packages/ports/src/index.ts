@@ -84,8 +84,18 @@ export type ChatPort = {
 /** What a background scan covers: a Chat message, a pre-conversation Message Flash, or a media asset (AD-10). */
 export type ScanItemKind = 'message' | 'flash' | 'asset'
 
-/** Plaintext from the owner (Chat decrypts). Text only until Chat Photo and Voice note (Stories 5.3, 5.4). */
-export type ScanPayload = { kind: 'text'; text: string }
+/** Language a member chose for a Voice note: French, Mooré or Dioula (FR-051). A hint for the scan, never a hold (AD-11). */
+export type VoiceLanguage = 'fr' | 'mos' | 'dyu'
+
+/**
+ * What Chat hands to moderation after persist. Text is plaintext from the owner (Chat decrypts). A Chat Photo or a
+ * Voice note carries its media id only (Stories 5.3, 5.4): the Epic 8 worker reads the bytes with
+ * `fetchChatMediaForScan(mediaId)` (AD-10 `MediaPort.fetchForScan`), so moderation never reads `message`.
+ */
+export type ScanPayload =
+  | { kind: 'text'; text: string }
+  | { kind: 'photo'; mediaId: string; contentType: string }
+  | { kind: 'voice'; mediaId: string; contentType: string; durationMs: number; language: VoiceLanguage | null }
 
 /**
  * Moderation is the only writer of `moderation_job` (AD-3, AD-10). Chat calls `enqueueScan` **after** a message is
