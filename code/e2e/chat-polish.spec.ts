@@ -103,7 +103,7 @@ test.describe('story chat-polish: read receipts and open at the latest message',
     const marked = page.waitForRequest((request) => request.url().endsWith(`/v1/conversations/${FIRST}/read`) && request.method() === 'POST')
     await openThread(page)
     await expect(bubbles(page).last()).toBeInViewport()
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeInViewport()
+    await expect(page.getByLabel('Votre message')).toBeInViewport()
     await marked
     expect(state.reads).toEqual([{ conversation_id: FIRST, message_id: id(0x110 + 23) }])
     // The page does not post again for the same message.
@@ -145,7 +145,7 @@ test.describe('story chat-polish: read receipts and open at the latest message',
     await expect(bubbles(page).last()).toBeInViewport()
     await expect(jump).toBeHidden()
     await expect.poll(() => state.reads.at(-1)?.message_id).toBe(id(state.serial))
-    await page.getByLabel('Réponse réfléchie et posée').fill('Oui, je suis là.')
+    await page.getByLabel('Votre message').fill('Oui, je suis là.')
     await page.getByRole('button', { name: 'Envoyer' }).click()
     await expect(bubbles(page).last()).toContainText('Oui, je suis là.')
     await expect(bubbles(page).last()).toBeInViewport()
@@ -265,7 +265,7 @@ test.describe('story chat-polish: split view from 768 px and in-page navigation'
     await expect(bubbles(page)).toHaveCount(5)
     // Reading clears my badge in the list.
     await expect(row(page, FIRST).getByTestId('conversation-unread')).toHaveCount(0)
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeInViewport()
+    await expect(page.getByLabel('Votre message')).toBeInViewport()
     // The back link is for phones; the list is right there.
     await expect(page.getByRole('link', { name: 'Retour aux discussions' })).toBeHidden()
     expect(await sameDocument(page)).toBe(true)
@@ -273,19 +273,19 @@ test.describe('story chat-polish: split view from 768 px and in-page navigation'
     await expectNoHorizontalOverflow(page)
 
     // A draft stays with its thread.
-    await page.getByLabel('Réponse réfléchie et posée').fill('Brouillon pour Al-Hassan')
+    await page.getByLabel('Votre message').fill('Brouillon pour Al-Hassan')
     await row(page, SECOND).getByRole('link').click()
     await expect(page).toHaveURL(new RegExp(`/discussions/${SECOND}$`))
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Oumar_K, 31 ans')
     await expect(bubbles(page)).toHaveCount(2)
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toHaveValue('')
+    await expect(page.getByLabel('Votre message')).toHaveValue('')
     await expect(row(page, SECOND).getByRole('link')).toHaveAttribute('aria-current', 'page')
     await expect(row(page, FIRST).getByRole('link')).not.toHaveAttribute('aria-current', 'page')
 
     await page.goBack()
     await expect(page).toHaveURL(new RegExp(`/discussions/${FIRST}$`))
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Al-Hassan_BF, 29 ans')
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toHaveValue('Brouillon pour Al-Hassan')
+    await expect(page.getByLabel('Votre message')).toHaveValue('Brouillon pour Al-Hassan')
     await page.goBack()
     await expect(page).toHaveURL(/\/discussions$/)
     await expect(page.getByText("Sélectionnez une discussion pour l'afficher ici.")).toBeVisible()
@@ -310,7 +310,7 @@ test.describe('story chat-polish: split view from 768 px and in-page navigation'
     await expect(page).toHaveURL(new RegExp(`/discussions/${FIRST}$`))
     await expect(bubbles(page)).toHaveCount(5)
     await expect(page.getByTestId('conversation-row').first()).toBeHidden()
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeInViewport()
+    await expect(page.getByLabel('Votre message')).toBeInViewport()
     await page.getByRole('link', { name: 'Retour aux discussions' }).click()
     await expect(page).toHaveURL(/\/discussions$/)
     await expect(page.getByTestId('conversation-row')).toHaveCount(2)
@@ -334,7 +334,7 @@ test.describe('story chat-polish: split view from 768 px and in-page navigation'
       await expectNoHorizontalOverflow(page)
       await openThread(page)
       await expectNoHorizontalOverflow(page)
-      await expect(page.getByLabel('Réponse réfléchie et posée')).toBeInViewport()
+      await expect(page.getByLabel('Votre message')).toBeInViewport()
       await page.getByRole('button', { name: /Photo de Al-Hassan_BF/ }).click()
       await expect(page.getByRole('dialog', { name: 'Photo de Al-Hassan_BF' })).toBeVisible()
       await expectNoHorizontalOverflow(page)

@@ -10,6 +10,9 @@ export const RECEIPTS_COPY = {
   explain:
     'Désactivées, vos interlocuteurs ne voient pas quand vous avez lu leurs messages, et vous ne voyez pas non plus quand ils lisent les vôtres.',
   failed: 'Réglage non enregistré. Réessayez.',
+  presenceTitle: 'Statut en ligne et dernière connexion',
+  presenceExplain:
+    'Désactivé, vos interlocuteurs ne voient pas quand vous êtes en ligne ni quand vous l’étiez pour la dernière fois, et vous ne voyez pas non plus les leurs.',
   privacyTitle: 'Confidentialité',
   privacyExplain: 'Politique de confidentialité et mentions légales d’AnKanu.',
   privacyAction: 'Lire',
@@ -29,8 +32,20 @@ const SWITCH_STYLE = `<style id="receipts-switch-style">
 .ank-setting-link { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 </style>`
 
+type SwitchSection = { key: string; icon: string; title: string; explain: string; toggleId: string; prefix: string }
+
+function switchSection(spec: SwitchSection): string {
+  const { key, icon, title, explain, toggleId, prefix } = spec
+  return `<section data-${key}-settings class="bg-cream border border-hairline rounded-2xl p-6 md:p-7 shadow-none" style="background-color: rgb(251, 248, 241);"> <div class="flex items-start justify-between gap-6"> <div class="space-y-1.5 flex-1 min-w-0"> <div class="flex items-center gap-2"> <span class="material-symbols-outlined text-[#7D5F27] text-lg" data-icon="${icon}" aria-hidden="true">${icon}</span> <h2 id="${prefix}-title" class="text-base font-semibold text-deep-navy">${title}</h2> </div> <p id="${prefix}-explain" class="text-xs md:text-sm text-deep-navy/80 leading-relaxed">${explain}</p> <p id="${prefix}-error" role="alert" hidden class="text-xs md:text-sm text-[#9B2C2C]">${RECEIPTS_COPY.failed}</p> </div> <div class="pt-0.5"> <button id="${toggleId}" type="button" role="switch" aria-checked="true" aria-labelledby="${prefix}-title" aria-describedby="${prefix}-explain" disabled class="ank-switch"><span class="ank-switch-thumb"></span></button> </div> </div> </section> `
+}
+
 export function receiptsSettingsSection(): string {
-  return `<!-- CONFIRMATIONS DE LECTURE (story chat-polish) --> <section data-receipts-settings class="bg-cream border border-hairline rounded-2xl p-6 md:p-7 shadow-none" style="background-color: rgb(251, 248, 241);"> <div class="flex items-start justify-between gap-6"> <div class="space-y-1.5 flex-1 min-w-0"> <div class="flex items-center gap-2"> <span class="material-symbols-outlined text-[#7D5F27] text-lg" data-icon="mark_chat_read" aria-hidden="true">mark_chat_read</span> <h2 id="receipts-title" class="text-base font-semibold text-deep-navy">${RECEIPTS_COPY.title}</h2> </div> <p id="receipts-explain" class="text-xs md:text-sm text-deep-navy/80 leading-relaxed">${RECEIPTS_COPY.explain}</p> <p id="receipts-error" role="alert" hidden class="text-xs md:text-sm text-[#9B2C2C]">${RECEIPTS_COPY.failed}</p> </div> <div class="pt-0.5"> <button id="read-receipts-toggle" type="button" role="switch" aria-checked="true" aria-labelledby="receipts-title" aria-describedby="receipts-explain" disabled class="ank-switch"><span class="ank-switch-thumb"></span></button> </div> </div> </section> `
+  return `<!-- CONFIRMATIONS DE LECTURE (story chat-polish) --> ${switchSection({ key: 'receipts', icon: 'mark_chat_read', title: RECEIPTS_COPY.title, explain: RECEIPTS_COPY.explain, toggleId: 'read-receipts-toggle', prefix: 'receipts' })}`
+}
+
+/** Story chat-polish-2 (Faycal): « Statut en ligne et dernière connexion », reciprocal like WhatsApp, on by default. */
+export function presenceSettingsSection(): string {
+  return `<!-- STATUT EN LIGNE (story chat-polish-2) --> ${switchSection({ key: 'presence', icon: 'radio_button_checked', title: RECEIPTS_COPY.presenceTitle, explain: RECEIPTS_COPY.presenceExplain, toggleId: 'presence-toggle', prefix: 'presence' })}`
 }
 
 export function privacySettingsSection(): string {
@@ -43,55 +58,68 @@ export function receiptsSettingsStyle(): string {
 
 /** Reads the switch from the server, saves a change, and goes back to the stored value when a save fails. */
 export function receiptsSettingsScript(): string {
-  // The leading semicolon: this script is appended to the page's own, which may end without one.
+  // The leading semicolon: this script is appended to the page's own, which may end without one. One read paints both
+  // switches; each switch saves only its own field of `/v1/chat/settings`, so one never overwrites the other.
   return `
     ;(function () {
-      var toggle = document.getElementById('read-receipts-toggle')
-      var error = document.getElementById('receipts-error')
-      if (!toggle) return
-      var saving = false
-      var version = 0
-      function paint(on) { toggle.setAttribute('aria-checked', on ? 'true' : 'false') }
+      var switches = []
+      function wire(toggleId, errorId, field) {
+        var toggle = document.getElementById(toggleId)
+        var error = document.getElementById(errorId)
+        if (!toggle) return
+        var entry = { toggle: toggle, field: field, saving: false, version: 0 }
+        switches.push(entry)
+        function paint(on) { toggle.setAttribute('aria-checked', on ? 'true' : 'false') }
+        entry.paint = paint
+        // A click saves what the member asks for, the opposite of what the switch shows, never a flip of the server's
+        // value: a window left open on an old value cannot save the reverse of what it shows (Mac QA round 2).
+        toggle.addEventListener('click', function () {
+          if (entry.saving || toggle.disabled) return
+          var before = toggle.getAttribute('aria-checked') === 'true'
+          var want = !before
+          var change = {}
+          change[field] = want
+          entry.version += 1
+          entry.saving = true
+          toggle.setAttribute('aria-busy', 'true')
+          error.hidden = true
+          paint(want)
+          fetch('${RECEIPTS_SETTINGS_PATH}', {
+            method: 'PUT',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(change)
+          })
+            .then(function (response) { return response.ok ? response.json() : null })
+            .then(function (body) {
+              settled()
+              if (body && typeof body[field] === 'boolean') { paint(body[field]); return }
+              paint(before)
+              error.hidden = false
+            })
+            .catch(function () { settled(); paint(before); error.hidden = false })
+        })
+        function settled() { entry.saving = false; toggle.removeAttribute('aria-busy') }
+      }
       function load() {
-        if (saving) return
-        var asked = ++version
+        var asked = switches.map(function (entry) { entry.version += 1; return entry.version })
+        if (switches.every(function (entry) { return entry.saving })) return
         fetch('${RECEIPTS_SETTINGS_PATH}', { credentials: 'same-origin' })
           .then(function (response) { return response.ok ? response.json() : null })
           .then(function (body) {
-            // A read that a click overtook says nothing about the value now.
-            if (saving || asked !== version || !body || typeof body.read_receipts !== 'boolean') return
-            paint(body.read_receipts)
-            toggle.disabled = false
+            if (!body) return
+            switches.forEach(function (entry, index) {
+              // A read that a click overtook says nothing about the value now.
+              if (entry.saving || asked[index] !== entry.version || typeof body[entry.field] !== 'boolean') return
+              entry.paint(body[entry.field])
+              entry.toggle.disabled = false
+            })
           })
           .catch(function () {})
       }
-      // A click saves what the member asks for, the opposite of what the switch shows, never a flip of the server's
-      // value: a window left open on an old value cannot save the reverse of what it shows (Mac QA round 2).
-      toggle.addEventListener('click', function () {
-        if (saving || toggle.disabled) return
-        var before = toggle.getAttribute('aria-checked') === 'true'
-        var want = !before
-        version += 1
-        saving = true
-        toggle.setAttribute('aria-busy', 'true')
-        error.hidden = true
-        paint(want)
-        fetch('${RECEIPTS_SETTINGS_PATH}', {
-          method: 'PUT',
-          credentials: 'same-origin',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ read_receipts: want })
-        })
-          .then(function (response) { return response.ok ? response.json() : null })
-          .then(function (body) {
-            settled()
-            if (body && typeof body.read_receipts === 'boolean') { paint(body.read_receipts); return }
-            paint(before)
-            error.hidden = false
-          })
-          .catch(function () { settled(); paint(before); error.hidden = false })
-      })
-      function settled() { saving = false; toggle.removeAttribute('aria-busy') }
+      wire('read-receipts-toggle', 'receipts-error', 'read_receipts')
+      wire('presence-toggle', 'presence-error', 'presence')
+      if (!switches.length) return
       // Another window, or another device, changed it: follow live, and again whenever this window comes back.
       document.addEventListener('${RECEIPTS_DOM_EVENT}', load)
       document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') load() })

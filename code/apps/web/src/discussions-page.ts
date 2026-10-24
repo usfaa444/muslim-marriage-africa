@@ -27,7 +27,6 @@ import { prepareV2 } from './v2-document'
  */
 
 export const CHAT_COPY = {
-  listEyebrow: 'Échanges concertés & bienséance',
   listTitle: "Discussions Ta'aruf",
   loading: 'Chargement…',
   loadError: 'Chargement impossible. Vérifiez votre connexion et réessayez.',
@@ -41,9 +40,6 @@ export const CHAT_COPY = {
   noMessage: "Aucun message pour l'instant.",
   you: 'Vous',
   unavailableName: 'Profil indisponible',
-  pendingNote: "Pour les invitations envoyées en attente, le fil de discussion ne s'ouvre qu'après acceptation formelle de la sœur.",
-  registryOne: 'Registre des échanges : 1 fil actif',
-  registryMany: 'Registre des échanges : {n} fils actifs',
   back: 'Retour aux discussions',
   missing: "Cette discussion n'existe pas.",
   unavailable: "Ce profil n'est plus disponible.",
@@ -54,7 +50,8 @@ export const CHAT_COPY = {
   older: 'Messages précédents',
   threadEmpty: "Aucun message pour l'instant. Commencez la discussion avec bienséance.",
   typing: '{name} écrit…',
-  composeLabel: 'Réponse réfléchie et posée',
+  /** Story chat-polish-2: the composer's label is for screen readers only (Faycal removed the visible line). */
+  composeLabel: 'Votre message',
   placeholder: 'Rédigez votre message dans le respect des convenances...',
   /** Mac QA round 3: the long placeholder is cut mid-word at 360 px; a phone thread shows this one (the label stays). */
   placeholderShort: 'Votre message…',
@@ -68,7 +65,29 @@ export const CHAT_COPY = {
   at: 'à',
   textUnavailable: 'Message indisponible.',
   reportBlock: 'Signaler / Bloquer',
+  /** Story chat-polish-2: the split view's list can step aside (Faycal). The button's state is aria-expanded. */
+  listToggle: 'Liste des discussions',
+  /** Story chat-polish-2: presence in the thread header, next to the city (real presence, owner-approved). */
+  online: 'En ligne',
+  lastSeen: 'Vu pour la dernière fois {when}',
+  lastSeenToday: "aujourd'hui à {time}",
+  lastSeenYesterday: 'hier à {time}',
+  lastSeenDate: 'le {date} à {time}',
+  /** Story chat-polish-2: the photo and the name open the member's profile. */
+  profileOf: 'Voir le profil de {name}',
+  /** Story chat-polish-2: the voice note waveform is a slider (seek by tap or arrow keys). */
+  voicePosition: 'Position dans la note vocale',
+  voiceOf: '{at} sur {total}',
+  voiceDelete: 'Supprimer la note vocale',
   reportMessage: 'Signaler ce message',
+  /** Story chat-polish-2: replies (the arrow, the swipe, the quoted card). */
+  reply: 'Répondre',
+  replyingTo: 'Réponse à {name}',
+  replyCancel: 'Annuler la réponse',
+  replyUnavailable: 'Message indisponible',
+  quoteOf: 'Message cité de {name}',
+  quoteGo: 'Aller au message cité',
+  quoteMissing: 'Le message cité n’est plus disponible dans cette discussion.',
   photoButton: 'Joindre une photo sobre',
   voiceButton: 'Enregistrer une note vocale sobre',
   photo: 'Photo',
@@ -117,13 +136,6 @@ export const VOICE_LANGUAGES = [
   { code: 'dyu', label: 'Dioula' },
 ] as const
 
-export const STAGE_LABEL: Record<string, string> = {
-  invite: 'Étape : invitation',
-  chat: 'Étape : discussion',
-  meeting: 'Étape : rencontre',
-  married: 'Étape : mariage',
-}
-
 export const TEXT_MAX = 2000
 export const COUNTER_FROM = 1800
 /** Client limits, the same as the API's (Stories 5.3, 5.4). The Photo is re-encoded in the browser before upload. */
@@ -150,6 +162,13 @@ export const LIST_REFRESH_MS = 300
 /** Within this distance of the end, the thread counts as « at the latest message ». */
 export const BOTTOM_SLACK_PX = 80
 export const UNREAD_CAP = 99
+/** Story chat-polish-2: a swipe to the right this far (px) on a bubble starts a reply; the bubble follows up to the max. */
+export const REPLY_SWIPE_PX = 60
+export const REPLY_SWIPE_MAX_PX = 88
+/** How long the original of a quoted card stays highlighted after a tap on the card. */
+export const QUOTE_FLASH_MS = 1600
+/** At most this many older pages are loaded to find the original of a quoted card. */
+export const QUOTE_MAX_PAGES = 20
 /**
  * QA F3: a read POST lost to the network or a 5xx is tried again once, after this delay, for the same message. A 4xx
  * answer is final (the answer would not change). After that the page stops posting for that message: scrolls and focus
@@ -208,7 +227,8 @@ html.chat-fixed #chat-app[data-view="thread"] #chat-thread { flex: 1 1 auto; min
 #chat-app #thread-media:not([hidden]) { max-height: 45vh; max-height: 45dvh; overflow-y: auto; }
 /* The pinned parts stay compact, with or without the CDN, so the messages keep most of a phone screen. */
 #chat-thread #thread-title { margin: 0; font-size: 1.0625rem; line-height: 1.3; }
-#chat-thread #thread-city { margin: 0.125rem 0 0; font-size: 0.75rem; line-height: 1.3; }
+#chat-thread #thread-sub { margin: 0.125rem 0 0; font-size: 0.75rem; line-height: 1.3; }
+#chat-thread #thread-sub[hidden], #chat-thread #thread-sub:not(:has(> :not([hidden]))) { display: none; }
 #chat-thread #thread > div:first-child { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.25rem 0.75rem; padding: 0.5rem 0.875rem; }
 #chat-thread #thread > div:first-child > div:first-child { display: flex; align-items: center; gap: 0.75rem; }
 #chat-thread #thread-form { gap: 0.375rem; padding: 0.5rem 0.75rem; }
@@ -217,7 +237,7 @@ html.chat-fixed #chat-app[data-view="thread"] #chat-thread { flex: 1 1 auto; min
 #chat-thread #thread-input { box-sizing: border-box; min-height: 44px; max-height: ${COMPOSER_MAX_PX}px; line-height: 1.375rem; overflow-y: hidden; }
 /* A short split view (a tablet on its side with the keyboard open): the details step aside. */
 @media (max-height: 560px) {
-  #chat-thread #thread-city, #chat-thread #thread-stage, #chat-thread #thread-rule { display: none !important; }
+  #chat-thread #thread-city, #chat-thread #thread-presence-sep, #chat-thread #thread-rule { display: none !important; }
 }
 /*
  * The thread on a phone (QA R2-1, Faycal): a sub-screen like WhatsApp. No bottom nav (« Retour » goes back to the
@@ -226,8 +246,7 @@ html.chat-fixed #chat-app[data-view="thread"] #chat-thread { flex: 1 1 auto; min
  */
 html.chat-sub body.ank-has-nav { padding-bottom: 0 !important; }
 html.chat-sub #app-bottom-nav { display: none !important; }
-html.chat-sub #thread-stage, html.chat-sub .chat-back-text, html.chat-sub .chat-report-text, html.chat-sub .chat-send-text, html.chat-sub #thread-label-row { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-html.chat-sub #thread-label-row:has(#thread-counter:not([hidden])) { position: static !important; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; }
+html.chat-sub .chat-back-text, html.chat-sub .chat-report-text { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 html.chat-sub #chat-app[data-view="thread"] #chat-thread { position: relative; padding: 0 !important; gap: 0 !important; }
 html.chat-sub #thread-backbar { position: absolute; top: 0; left: 0; z-index: 3; width: auto; height: 3.5rem; padding-left: 0.25rem; }
 html.chat-sub #thread-back { justify-content: center; width: 44px; gap: 0; }
@@ -238,42 +257,132 @@ html.chat-sub #chat-thread #thread-head > div:first-child { flex: 1 1 auto; gap:
 html.chat-sub #thread-avatar > * { width: 2.25rem !important; height: 2.25rem !important; font-size: 0.875rem; }
 html.chat-sub #thread-nameline { flex-wrap: nowrap; }
 html.chat-sub #chat-thread #thread-title { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
-html.chat-sub #chat-thread #thread-city { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.chat-sub #chat-thread #thread-sub { margin: 0; white-space: nowrap; overflow: hidden; }
+html.chat-sub #chat-thread #thread-city, html.chat-sub #chat-thread #thread-presence { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+html.chat-sub #chat-thread #thread-city { flex: 0 1 auto; }
+html.chat-sub #chat-thread #thread-presence { flex: 0 10 auto; }
 html.chat-sub #chat-thread #thread-head > div:last-child { flex: none; gap: 0; }
 html.chat-sub #chat-thread #thread-report { width: 44px; padding: 0; }
 html.chat-sub #chat-thread #thread-scroll { padding: 0.75rem; gap: 0.75rem; }
 html.chat-sub #chat-thread #thread-form { gap: 0.25rem; padding: 0.375rem 0.5rem calc(0.375rem + env(safe-area-inset-bottom, 0px)); }
-html.chat-sub #chat-thread #thread-compose { flex-direction: row; align-items: flex-end; gap: 0; padding: 0 0.1875rem 0 0; border-radius: 1.375rem; }
-html.chat-sub #chat-thread #thread-compose > div:first-child { align-self: flex-end; gap: 0; }
-html.chat-sub #chat-thread #thread-input { padding: 0.6875rem 0.25rem; }
-html.chat-sub #chat-thread #thread-send { flex: none; width: 44px; height: 44px; padding: 0; gap: 0; border-radius: 9999px; }
+html.chat-sub #chat-thread #thread-compose > div:first-child { gap: 0; }
 html.chat-sub #chat-thread #thread-rule { padding: 0 0.25rem; line-height: 1.35; }
 html.chat-sub.chat-typing #chat-thread #thread-rule { display: none; }
+/*
+ * Story chat-polish-2 (Faycal): WhatsApp-like composer at every width, one rounded row whose « Envoyer » is a round
+ * icon; the label line is for screen readers (it shows only for the character counter near the limit).
+ */
+#thread-label-row { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+#thread-label-row:has(#thread-counter:not([hidden])) { position: static !important; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; justify-content: flex-end; }
+#chat-thread #thread-compose { flex-direction: row; align-items: flex-end; gap: 0.25rem; padding: 0 0.1875rem 0 0; border-radius: 1.375rem; }
+#chat-thread #thread-compose > div:first-child { align-self: flex-end; }
+#chat-thread #thread-input { padding: 0.6875rem 0.25rem; }
+#chat-thread #thread-send { flex: none; align-self: flex-end; margin-bottom: 0; }
+.chat-round { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 44px; height: 44px; min-width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 9999px; cursor: pointer; }
+.chat-round svg { width: 22px; height: 22px; display: block; }
+.chat-round-navy { background: #0B1D36; color: #F7F1E3; }
+.chat-round-navy:hover { background: #1A2E4C; }
+/* Recorder (story chat-polish-2): « Annuler » a red square, « Arrêter » a navy check, the send a navy circle. */
+.chat-square { border-radius: 10px; }
+.chat-round-danger { background: #B42318; color: #FFFFFF; }
+.chat-round-danger:hover { background: #8F1B12; }
+.chat-rec { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+.chat-rec-dot { flex: none; width: 10px; height: 10px; border-radius: 9999px; background: #B42318; }
+@media (prefers-reduced-motion: no-preference) { .chat-rec-dot { animation: chat-rec-pulse 1.2s ease-in-out infinite; } }
+@keyframes chat-rec-pulse { 50% { opacity: 0.35; } }
+.chat-rec-time { font-size: 0.875rem; font-variant-numeric: tabular-nums; color: #0B1D36; }
+.chat-rec-spacer { flex: 1 1 auto; }
+/* Voice waveform (story chat-polish-2): the bars span the bubble, fill as it plays, and seek by tap or arrow keys. */
+.chat-wave { position: relative; flex: 1 1 auto; min-width: 0; height: 44px; display: flex; align-items: center; justify-content: space-between; gap: 2px; cursor: pointer; touch-action: none; border-radius: 6px; }
+.chat-wave:focus-visible { outline: 2px solid #7D5F27; outline-offset: 2px; }
+.chat-wave-bar { flex: 0 1 3px; width: 3px; min-width: 2px; border-radius: 9999px; background: currentColor; opacity: 0.4; }
+.chat-wave-bar[data-played] { opacity: 1; }
+.chat-wave-mine { color: #F7F1E3; }
+.chat-wave-mine .chat-wave-bar[data-played] { background: #C9A86C; }
+.chat-wave-theirs { color: #0B1D36; }
+.chat-wave-theirs .chat-wave-bar[data-played] { background: #7D5F27; }
+/* Replies (story chat-polish-2): the arrow beside each bubble (left of mine, right of theirs), the quoted card, the
+   composer preview and the swipe. On a touch screen the arrow takes no room; the swipe is the way, the arrow is for
+   the keyboard. */
+#thread-messages { overflow-x: clip; }
+[data-testid="chat-bubble"] { position: relative; }
+.chat-bubble-row { position: relative; display: flex; align-items: center; gap: 0.25rem; max-width: 100%; min-width: 0; touch-action: pan-y; }
+.chat-bubble-body { min-width: 0; }
+.chat-reply { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 9999px; background: transparent; color: rgba(11, 29, 54, 0.8); cursor: pointer; }
+.chat-reply svg { width: 20px; height: 20px; }
+.chat-reply:hover { background: #F7F1E3; color: #0B1D36; }
+.chat-reply:focus-visible { outline: 2px solid #7D5F27; outline-offset: 2px; }
+@media (hover: hover) { .chat-reply { opacity: 0; } [data-testid="chat-bubble"]:hover .chat-reply, .chat-reply:focus { opacity: 1; } }
+@media (hover: none) {
+  .chat-reply { position: absolute; top: 50%; transform: translateY(-50%); opacity: 0; pointer-events: none; }
+  .chat-reply-mine { right: 100%; }
+  .chat-reply-theirs { left: 100%; }
+  .chat-reply:focus { opacity: 1; pointer-events: auto; }
+}
+#chat-thread[data-noreply="true"] .chat-reply { display: none; }
+.chat-swipe-hint { position: absolute; left: 0; top: 50%; width: 32px; height: 32px; margin-top: -16px; display: flex; align-items: center; justify-content: center; border-radius: 9999px; background: #F7F1E3; color: #0B1D36; opacity: 0; pointer-events: none; }
+.chat-swipe-hint svg { width: 18px; height: 18px; }
+.chat-swipe-hint[data-armed="true"] { background: #0B1D36; color: #F7F1E3; }
+@media (prefers-reduced-motion: no-preference) { .chat-bubble-row.chat-swiping-back { transition: transform 0.18s ease-out; } .chat-bubble-body { transition: box-shadow 0.3s; } }
+.chat-quote { display: flex; flex-direction: column; align-items: stretch; gap: 0.125rem; width: 100%; min-width: 0; margin: 0 0 0.375rem; padding: 0.375rem 0.625rem; border: 0; border-left: 3px solid #C9A86C; border-radius: 8px; text-align: left; font: inherit; cursor: pointer; }
+.chat-quote-mine { background: rgba(247, 241, 227, 0.14); color: #F7F1E3; }
+.chat-quote-theirs { background: rgba(11, 29, 54, 0.06); color: #0B1D36; border-left-color: #7D5F27; }
+div.chat-quote { cursor: default; font-style: italic; }
+.chat-quote:focus-visible { outline: 2px solid #C9A86C; outline-offset: 2px; }
+.chat-quote-name { font-size: 0.75rem; font-weight: 700; line-height: 1.3; }
+.chat-quote-mine .chat-quote-name { color: #E9CF97; }
+.chat-quote-theirs .chat-quote-name { color: #7D5F27; }
+.chat-quote-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; font-size: 0.8125rem; line-height: 1.35; overflow-wrap: anywhere; }
+.chat-quote-media { display: flex; align-items: center; gap: 0.25rem; }
+.chat-quote-media svg { flex: none; width: 14px; height: 14px; }
+[data-testid="chat-bubble"].chat-flash .chat-bubble-body { box-shadow: 0 0 0 3px #C9A86C; }
+[data-testid="chat-bubble"]:focus { outline: none; }
+#thread-reply { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.25rem 0.25rem 0.625rem; border-left: 3px solid #7D5F27; border-radius: 10px; background: #FAF7F0; color: #0B1D36; }
+#thread-reply[hidden] { display: none; }
+#thread-reply-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 0.125rem; }
+#thread-reply-name { font-size: 0.75rem; font-weight: 700; color: #7D5F27; }
+#thread-reply-cancel { display: inline-flex; }
+/* Header extras (story chat-polish-2): the list toggle (split view only), the profile links, presence. */
+.chat-icon-button { display: none; align-items: center; justify-content: center; flex: none; width: 44px; height: 44px; border: 0; border-radius: 10px; background: transparent; color: rgba(11, 29, 54, 0.8); cursor: pointer; }
+.chat-icon-button:hover { background: #F7F1E3; color: #0B1D36; }
+.chat-icon-button svg { width: 22px; height: 22px; }
+.chat-profile-link { color: inherit; text-decoration: none; }
+.chat-profile-link[href]:hover { text-decoration: underline; text-underline-offset: 3px; }
+.chat-profile-photo { display: block; flex: none; border-radius: 9999px; }
+.chat-profile-photo[href] { cursor: pointer; }
+#thread-presence[data-state="online"] { color: #17643F; font-weight: 600; }
+#thread-presence[data-state="online"]::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 0.25rem; border-radius: 9999px; background: #1E8E5A; vertical-align: 0.05em; }
 /* « Nouveaux messages » sits at the bottom of the messages pane, above the composer. */
 #thread-jump { position: sticky; bottom: 0.5rem; align-self: center; z-index: 5; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.375rem; min-height: 44px; padding: 0 1rem; border-radius: 9999px; border: 1px solid #C9A86C; background: #0B1D36; color: #F7F1E3; font-size: 0.8125rem; font-weight: 600; box-shadow: 0 4px 14px rgba(11, 29, 54, 0.18); cursor: pointer; }
 #thread-form { scroll-margin-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); }
-/* Discussions rows: own styles, so the list reads the same with or without the Tailwind CDN. */
-#discussions-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1rem; }
-.conv-row { position: relative; padding: 1.25rem; border-radius: 8px; background: #FAF6EC; border: 1px solid #E2D4B8; }
-.conv-grid { display: grid; grid-template-columns: 3rem minmax(0, 1fr); grid-template-areas: "a w" "p p" "m m" "l l"; column-gap: 0.875rem; row-gap: 0.75rem; align-items: center; }
-.conv-avatar { grid-area: a; width: 3rem; height: 3rem; border-radius: 0.5rem; overflow: hidden; border: 1px solid #E2D4B8; background: #F7F1E3; display: flex; align-items: center; justify-content: center; color: rgba(11, 29, 54, 0.8); font-family: Newsreader, Georgia, serif; font-size: 1rem; }
+/*
+ * Discussions rows: own styles, so the list reads the same with or without the Tailwind CDN. Story chat-polish-2
+ * (Faycal): the same simple row at every width, like the split view: a round photo, the name, the time, the last
+ * message with its ticks and the unread badge. The whole row is the link; the city, « Identité vérifiée » and the
+ * « Accéder à la conversation » button are gone (they live on the profile).
+ */
+#discussions-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; background: rgba(255, 255, 255, 0.9); border: 1px solid #E2D4B8; border-radius: 1rem; overflow: hidden; }
+.conv-row { position: relative; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(226, 212, 184, 0.7); background: transparent; }
+.conv-row:last-child { border-bottom: 0; }
+.conv-row:hover { background: #FBF7EE; }
+.conv-row[data-current] { background: #F3EAD6; box-shadow: inset 3px 0 0 #C9A86C; }
+.conv-grid { display: grid; grid-template-columns: 3rem minmax(0, 1fr) auto; grid-template-areas: "a w t" "a p p"; column-gap: 0.75rem; row-gap: 0.125rem; align-items: center; }
+.conv-avatar { grid-area: a; width: 3rem; height: 3rem; border-radius: 9999px; overflow: hidden; border: 1px solid #E2D4B8; background: #F7F1E3; display: flex; align-items: center; justify-content: center; color: rgba(11, 29, 54, 0.8); font-family: Newsreader, Georgia, serif; font-size: 1rem; }
 .conv-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.conv-who { grid-area: w; }
-.conv-line { display: flex; flex-wrap: wrap; align-items: center; column-gap: 0.5rem; row-gap: 0.25rem; }
-.conv-name { margin: 0; font-family: Newsreader, Georgia, serif; font-size: 1.125rem; line-height: 1.35; font-weight: 500; color: #0B1D36; }
+.conv-who { grid-area: w; min-width: 0; }
+.conv-line { display: flex; flex-wrap: nowrap; align-items: center; column-gap: 0.5rem; }
+.conv-name { margin: 0; font-family: Newsreader, Georgia, serif; font-size: 1rem; line-height: 1.35; font-weight: 500; color: #0B1D36; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
 .conv-row[data-unread] .conv-name { font-weight: 700; }
-.conv-city { width: 100%; display: inline-flex; align-items: center; gap: 0.5rem; white-space: nowrap; font-size: 0.75rem; font-weight: 500; color: rgba(11, 29, 54, 0.8); }
-.conv-pills { display: flex; flex-wrap: wrap; gap: 0.375rem; padding-top: 0.25rem; }
-.conv-pill { display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.125rem 0.5rem; border-radius: 0.25rem; font-size: 11px; color: #0B1D36; background: rgba(11, 29, 54, 0.05); border: 1px solid rgba(226, 212, 184, 0.6); }
-.conv-short { grid-area: t; display: none; font-size: 0.75rem; color: rgba(11, 29, 54, 0.8); white-space: nowrap; }
+.conv-short { grid-area: t; display: block; font-size: 0.75rem; color: rgba(11, 29, 54, 0.8); white-space: nowrap; }
 .conv-row[data-unread] .conv-short { color: #7D5F27; font-weight: 700; }
-.conv-preview-line { grid-area: p; display: flex; align-items: center; gap: 0.5rem; }
-.conv-preview { flex: 1; margin: 0; padding-left: 0.75rem; border-left: 2px solid #C9A86C; font-size: 0.75rem; line-height: 1.6; font-style: italic; color: #0B1D36; }
-.conv-preview-empty { border-left-color: #E2D4B8; }
-.conv-unread { flex: none; min-width: 1.375rem; height: 1.375rem; padding: 0 0.375rem; border-radius: 9999px; background: #7D5F27; color: #FFFFFF; font-size: 0.6875rem; font-weight: 700; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
-.conv-when { grid-area: m; margin: 0; display: flex; align-items: center; gap: 0.25rem; font-size: 0.75rem; color: rgba(11, 29, 54, 0.8); }
-.conv-link { grid-area: l; justify-self: start; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 44px; padding: 0.625rem 1rem; border-radius: 8px; background: #0B1D36; color: #F7F1E3; font-size: 0.8125rem; font-weight: 500; text-decoration: none; }
-.conv-link:hover { background: rgba(11, 29, 54, 0.9); }
+.conv-preview-line { grid-area: p; display: flex; align-items: center; gap: 0.375rem; min-width: 0; }
+.conv-preview { flex: 1; min-width: 0; margin: 0; font-size: 0.8125rem; line-height: 1.5; color: rgba(11, 29, 54, 0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.conv-row[data-unread] .conv-preview { color: #0B1D36; font-weight: 600; }
+/* Unread: amber, to catch the eye (Faycal); navy figures on amber are 7.9:1, and the count is also spoken. */
+.conv-unread { flex: none; min-width: 1.375rem; height: 1.375rem; padding: 0 0.375rem; border-radius: 9999px; background: #F59E0B; color: #0B1D36; font-size: 0.6875rem; font-weight: 800; line-height: 1; display: inline-flex; align-items: center; justify-content: center; }
+.conv-link { position: absolute; inset: 0; z-index: 1; display: block; border-radius: 0; background: transparent; text-decoration: none; }
+#chat-app .conv-link:focus-visible { outline-offset: -3px; }
+.conv-link > * { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 /* Full-screen Chat Photo viewer (story chat-polish). Works without the CDN; above the header and the bottom nav. */
 #photo-viewer { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 3.5rem 0.75rem 1rem; }
 #photo-viewer .chat-viewer-backdrop { position: absolute; inset: 0; background: rgba(11, 29, 54, 0.92); }
@@ -289,31 +398,25 @@ html.chat-viewer-open, html.chat-viewer-open body { overflow: hidden !important;
   #discussions-top h1, #discussions-top h2 { font-size: 1.5rem; }
   #discussions-scroll { flex: 1; min-height: 0; overflow-y: auto; }
   #discussions-loading, #discussions-load-error, #discussions-empty { margin: 1rem; }
-  #discussions-foot { margin: 0; padding: 1rem 1.25rem; flex-direction: column; align-items: flex-start; }
-  #discussions-list { gap: 0; }
-  .conv-row { padding: 0.75rem 1rem; border-radius: 0; border: 0; border-bottom: 1px solid rgba(226, 212, 184, 0.7); background: transparent; }
-  .conv-row:hover { background: #FBF7EE; }
-  .conv-row[data-current] { background: #F3EAD6; box-shadow: inset 3px 0 0 #C9A86C; }
-  .conv-grid { grid-template-columns: 3rem minmax(0, 1fr) auto; grid-template-areas: "a w t" "a p p"; row-gap: 0.125rem; column-gap: 0.75rem; }
-  .conv-avatar { border-radius: 9999px; }
-  .conv-name { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
-  .conv-line { flex-wrap: nowrap; }
-  .conv-city, .conv-pills, .conv-when { display: none; }
-  .conv-short { display: block; }
-  .conv-preview { padding-left: 0; border-left: 0; font-style: normal; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: rgba(11, 29, 54, 0.8); }
-  .conv-row[data-unread] .conv-preview { color: #0B1D36; font-weight: 600; }
-  .conv-link { position: absolute; inset: 0; z-index: 1; justify-self: stretch; align-self: stretch; width: auto; height: auto; min-height: 0; padding: 0; border-radius: 0; background: transparent; }
-  .conv-link:hover { background: transparent; }
-  #chat-app .conv-link:focus-visible { outline-offset: -3px; }
-  .conv-link > * { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  #discussions-list { border: 0; border-radius: 0; background: transparent; }
+  /* Story chat-polish-2: the list toggle; collapsed, the thread takes the whole width (remembered on this device). */
+  #chat-app .chat-icon-button { display: inline-flex; }
+  html.chat-fixed.chat-list-collapsed #chat-app { grid-template-columns: 0 minmax(0, 1fr); column-gap: 0; }
+  html.chat-list-collapsed #chat-app #discussions { visibility: hidden; border-width: 0; }
   #chat-thread { max-width: none; margin: 0; padding: 0; min-height: 0; gap: 0.75rem; }
   #chat-app #thread-back { display: none !important; }
   #chat-app[data-view="list"] #thread-placeholder { display: flex; }
   #chat-thread .chat-photo { width: min(260px, calc((100vw - 22rem) * 0.5)); }
   #chat-thread .chat-voice { width: min(300px, calc((100vw - 22rem) * 0.48)); }
 }
+@media (min-width: ${SPLIT_MIN_PX}px) and (prefers-reduced-motion: no-preference) {
+  html.chat-fixed #chat-app { transition: grid-template-columns 0.22s ease, column-gap 0.22s ease; }
+  #chat-app #discussions { transition: visibility 0s linear 0s; }
+  html.chat-list-collapsed #chat-app #discussions { transition: visibility 0s linear 0.22s; }
+}
 @media (min-width: 1024px) {
   html.chat-fixed #chat-app { grid-template-columns: 22.5rem minmax(0, 1fr); }
+  html.chat-fixed.chat-list-collapsed #chat-app { grid-template-columns: 0 minmax(0, 1fr); }
   #chat-thread .chat-photo { width: min(260px, calc((100vw - 26rem) * 0.5)); }
   #chat-thread .chat-voice { width: min(300px, calc((100vw - 26rem) * 0.48)); }
 }
@@ -321,7 +424,6 @@ html.chat-viewer-open, html.chat-viewer-open body { overflow: hidden !important;
 
 /** Browser helpers. ES5 only, like the other v2 page scripts. */
 const COMMON = `var COPY = ${JSON.stringify(CHAT_COPY)}
-var STAGE = ${JSON.stringify(STAGE_LABEL)}
 var CITY = {
   ouagadougou: 'Ouagadougou',
   bobo: 'Bobo-Dioulasso',
@@ -372,7 +474,6 @@ function dayLabel(iso) {
   if (YEAR && DATE && DATE_YEAR) return YEAR.format(date) === YEAR.format(now) ? DATE.format(date) : DATE_YEAR.format(date)
   return dayKey(date)
 }
-function whenText(iso) { return dayLabel(iso) + ' ' + COPY.at + ' ' + timeText(iso) }
 /** The split-view list's short time, like WhatsApp: « 10:15 », « Hier », « 12 oct. ». */
 function shortWhen(iso) {
   var label = dayLabel(iso)
@@ -416,6 +517,113 @@ function svgIcon(paths, width, height) {
     svg.appendChild(path)
   }
   return svg
+}
+/** A filled 24 x 24 icon (play, pause, send), drawn inline so it shows without the icon font (2G, no CDN). */
+function fillIcon(d) {
+  var svg = svgIcon([], 24, 24)
+  var path = document.createElementNS(SVG_NS, 'path')
+  path.setAttribute('d', d)
+  path.setAttribute('fill', 'currentColor')
+  svg.appendChild(path)
+  return svg
+}
+var ICON_PLAY = 'M8 5.5v13l10.5-6.5z'
+var ICON_PAUSE = 'M7 5h3.5v14H7zM13.5 5H17v14h-3.5z'
+var ICON_SEND = 'M3.4 20.4 21 12 3.4 3.6 3.4 10.2 15 12 3.4 13.8z'
+var ICON_TRASH = ['M4.5 7h15', 'M9.5 7V4.8h5V7', 'M6.5 7l.9 12.2h9.2L17.5 7', 'M10.2 10.5v5.5', 'M13.8 10.5v5.5']
+var ICON_CHECK = ['M5 12.5l4.5 4.5L19 7.5']
+var ICON_REPLY = ['M9.5 14.5 4.5 9.5l5-5', 'M4.5 9.5H14a5.5 5.5 0 0 1 0 11h-2.5']
+var ICON_PHOTO = ['M4 8h3l1.5-2.5h7L17 8h3v11H4z', 'M12 16.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6z']
+var ICON_MIC = ['M12 3.5a2.5 2.5 0 0 0-2.5 2.5v5.5a2.5 2.5 0 0 0 5 0V6A2.5 2.5 0 0 0 12 3.5z', 'M6.5 11.5a5.5 5.5 0 0 0 11 0', 'M12 17v3.5']
+/** Story chat-polish-2: a 44 px icon button whose name is visually hidden text (recorder, preview, send). */
+function iconButton(label, svg, variant) {
+  var button = make('button', 'chat-round ' + variant)
+  button.type = 'button'
+  button.appendChild(svg)
+  var name = make('span', 'chat-sr', label)
+  button.appendChild(name)
+  button.setLabel = function (text) { name.textContent = text }
+  return button
+}
+var REDUCED_MOTION = (function () { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches } catch (error) { return false } })()
+var WAVE_HEIGHTS = [3, 5, 7, 4, 8, 6, 9, 5, 7, 4, 6, 8, 5, 3, 6, 9, 7, 5, 8, 4, 6, 7, 3, 5, 8, 6, 4, 7, 9, 5, 6, 4, 7, 5, 3, 6]
+/**
+ * Story chat-polish-2 (Faycal): the voice note waveform spans the bubble and fills as it plays. It is a slider: a tap
+ * or a click seeks there, the arrow keys move 5 s, Home and End go to the ends; aria-valuetext says « 0:12 sur 0:48 ».
+ */
+function waveform(mine, durationMs, onSeek) {
+  var root = make('div', 'chat-wave ' + (mine ? 'chat-wave-mine' : 'chat-wave-theirs'))
+  root.setAttribute('role', 'slider')
+  root.tabIndex = 0
+  root.setAttribute('aria-label', COPY.voicePosition)
+  root.setAttribute('aria-valuemin', '0')
+  root.setAttribute('aria-valuemax', String(Math.round(durationMs / 1000)))
+  root.setAttribute('data-testid', 'voice-wave')
+  var bars = []
+  for (var index = 0; index < WAVE_HEIGHTS.length; index += 1) {
+    var bar = make('span', 'chat-wave-bar')
+    bar.setAttribute('aria-hidden', 'true')
+    bar.style.height = (WAVE_HEIGHTS[index] * 3.5) + 'px'
+    root.appendChild(bar)
+    bars.push(bar)
+  }
+  var at = 0
+  function paint(ms) {
+    at = Math.max(0, Math.min(durationMs, ms || 0))
+    var played = durationMs > 0 ? Math.round((at / durationMs) * bars.length) : 0
+    for (var bar = 0; bar < bars.length; bar += 1) {
+      if (bar < played) bars[bar].setAttribute('data-played', '')
+      else bars[bar].removeAttribute('data-played')
+    }
+    root.setAttribute('aria-valuenow', String(Math.round(at / 1000)))
+    root.setAttribute('aria-valuetext', COPY.voiceOf.replace('{at}', clock(at)).replace('{total}', clock(durationMs)))
+    root.setAttribute('data-played-bars', String(played))
+  }
+  function seek(ms) { paint(ms); if (onSeek) onSeek(at) }
+  root.addEventListener('click', function (event) {
+    var box = root.getBoundingClientRect()
+    if (!box.width) return
+    seek(((event.clientX - box.left) / box.width) * durationMs)
+  })
+  root.addEventListener('keydown', function (event) {
+    var next = null
+    if (event.key === 'ArrowRight' || event.key === 'ArrowUp') next = at + 5000
+    else if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') next = at - 5000
+    else if (event.key === 'Home') next = 0
+    else if (event.key === 'End') next = durationMs
+    if (next === null) return
+    event.preventDefault()
+    seek(next)
+  })
+  paint(0)
+  // The audio's own length, once the browser knows it, wins over the length stored with the note.
+  function setDuration(ms) {
+    if (!(ms > 0) || !isFinite(ms) || Math.abs(ms - durationMs) < 1) return
+    durationMs = ms
+    root.setAttribute('aria-valuemax', String(Math.round(durationMs / 1000)))
+    paint(at)
+  }
+  return { root: root, paint: paint, setDuration: setDuration, at: function () { return at } }
+}
+/**
+ * Keeps a waveform on its audio: it fills while playing (each frame, or at each timeupdate when the member asked for
+ * reduced motion), holds when paused, and goes back to the start when the note ends, like WhatsApp.
+ */
+function followAudio(audio, wave, onTime) {
+  var frame = null
+  function tick() {
+    wave.paint(audio.currentTime * 1000)
+    if (onTime) onTime(audio.currentTime * 1000)
+    frame = !REDUCED_MOTION && !audio.paused ? requestAnimationFrame(tick) : null
+  }
+  function halt() { if (frame) { cancelAnimationFrame(frame); frame = null } }
+  function measured() { if (audio.duration && isFinite(audio.duration)) wave.setDuration(audio.duration * 1000) }
+  audio.addEventListener('loadedmetadata', measured)
+  audio.addEventListener('durationchange', measured)
+  audio.addEventListener('play', function () { halt(); measured(); tick() })
+  audio.addEventListener('timeupdate', function () { if (!frame) { wave.paint(audio.currentTime * 1000); if (onTime) onTime(audio.currentTime * 1000) } })
+  audio.addEventListener('pause', function () { halt(); wave.paint(audio.currentTime * 1000) })
+  audio.addEventListener('ended', function () { halt(); wave.paint(0) })
 }
 /** Story chat-polish: one tick « Envoyé », two ticks « Lu ». The shape and the text differ, not only the colour. */
 function receipt(read, testId) {
@@ -495,20 +703,7 @@ function row(item) {
   var who = make('div', 'conv-who')
   var line = make('div', 'conv-line')
   line.appendChild(make('h2', 'chat-name conv-name', nameLine(pseudonym, other)))
-  var city = cityText(other)
-  if (city) {
-    // On phones the city takes its own line with no « · » (QA D2: a wrapped line started with a lone dot).
-    line.appendChild(make('span', 'chat-city conv-city', city))
-  }
   who.appendChild(line)
-  if (other.available && other.verified) {
-    var pills = make('div', 'conv-pills')
-    var pill = make('span', 'conv-pill')
-    pill.appendChild(icon('verified_user', 'text-[13px] text-[#7D5F27]'))
-    pill.appendChild(document.createTextNode(COPY.verified))
-    pills.appendChild(pill)
-    who.appendChild(pills)
-  }
   grid.appendChild(who)
   var last = item.last_message
   if (last) {
@@ -540,12 +735,6 @@ function row(item) {
     previewLine.appendChild(badge)
   }
   grid.appendChild(previewLine)
-  if (last) {
-    var meta = make('p', 'conv-when')
-    meta.appendChild(icon('schedule', 'text-[15px]'))
-    meta.appendChild(make('span', '', whenText(last.created_at)))
-    grid.appendChild(meta)
-  }
   li.appendChild(grid)
   if (!other.available) {
     li.setAttribute('data-unavailable', 'true')
@@ -555,12 +744,8 @@ function row(item) {
   link.href = ${JSON.stringify(DISCUSSIONS_PATH)} + '/' + encodeURIComponent(item.id)
   link.setAttribute('data-conversation-id', item.id)
   if (item.id === ID) link.setAttribute('aria-current', 'page')
-  // The name comes from the content (visible label + screen-reader suffix), so it always starts with the visible
-  // words and the icon ligature (aria-hidden) never takes part in it (QA F1, WCAG 2.5.3).
-  var label = make('span', '', COPY.open)
-  label.appendChild(make('span', 'chat-sr', ' ' + COPY.openWithSuffix + ' ' + (pseudonym || '') + (unread ? ', ' + unreadText(unread) : '')))
-  link.appendChild(label)
-  link.appendChild(icon('arrow_forward', 'text-sm text-gold-soft'))
+  // Story chat-polish-2: the whole row is the link (no visible button); its name says where it goes and what is new.
+  link.appendChild(make('span', '', COPY.open + ' ' + COPY.openWithSuffix + ' ' + (pseudonym || '') + (unread ? ', ' + unreadText(unread) : '')))
   grid.appendChild(link)
   return li
 }
@@ -572,7 +757,6 @@ function paint() {
   for (var index = 0; index < data.length; index += 1) list.appendChild(row(data[index]))
   show('discussions-list', data.length > 0)
   show('discussions-empty', data.length === 0)
-  el('discussions-count').textContent = data.length === 1 ? COPY.registryOne : COPY.registryMany.replace('{n}', String(data.length))
   if (focused) {
     var again = list.querySelector('a[data-conversation-id="' + focused + '"]')
     if (again) again.focus()
@@ -658,6 +842,12 @@ var readMine = null
 var readOther = null
 /** How my messages show ticks (from the thread head): 'on' « Envoyé » / « Lu », 'off' « Envoyé » only, 'blocked' none. */
 var receiptsMode = 'on'
+/** Story chat-polish-2: the other member's presence from the thread head, or null (hidden, Block, unavailable). */
+var presence = null
+/** Story chat-polish-2: every rendered message by id (the swipe and the arrow start a reply from it). */
+var itemsById = {}
+/** The message the composer answers, or null. */
+var replyTarget = null
 var marking = false
 /** QA F3: the message whose read POST was already retried, the one given up on, and the pending retry. */
 var readRetried = null
@@ -868,20 +1058,18 @@ function voiceNode(item) {
   var playName = make('span', 'chat-sr', COPY.voicePlay)
   play.appendChild(playName)
   row.appendChild(play)
-  var bars = make('div', 'flex-1 flex items-center gap-[3px] h-7 overflow-hidden')
-  bars.setAttribute('aria-hidden', 'true')
-  var heights = [2, 4, 5, 3, 6, 5, 7, 4, 6, 5, 3, 5, 2, 4, 5, 3, 4, 2]
-  for (var index = 0; index < heights.length; index += 1) {
-    var bar = make('span', 'w-[3px] rounded-full shrink-0 ' + (item.mine ? 'bg-cream/60' : 'bg-deep-navy/50'))
-    bar.style.height = (heights[index] * 4) + 'px'
-    bars.appendChild(bar)
-  }
-  row.appendChild(bars)
+  var audio = null
+  var startAt = 0
+  // Seeking before the first play remembers the place; the note starts there.
+  var wave = waveform(item.mine, duration, function (ms) {
+    if (audio) { try { audio.currentTime = ms / 1000 } catch (error) {} } else startAt = ms
+    time.textContent = clock(ms) + ' / ' + clock(duration)
+  })
+  row.appendChild(wave.root)
   card.appendChild(row)
   var note = make('p', 'text-[11px]')
   note.hidden = true
   card.appendChild(note)
-  var audio = null
   function setPlaying(on) {
     glyph.textContent = on ? 'pause' : 'play_arrow'
     playName.textContent = on ? COPY.voicePause : COPY.voicePlay
@@ -899,10 +1087,11 @@ function voiceNode(item) {
         audio = new Audio()
         audio.preload = 'none'
         audio.src = url
-        audio.addEventListener('timeupdate', function () { time.textContent = clock(audio.currentTime * 1000) + ' / ' + clock(duration) })
+        followAudio(audio, wave, function (ms) { time.textContent = clock(ms) + ' / ' + clock(duration) })
         audio.addEventListener('pause', function () { setPlaying(false) })
         audio.addEventListener('ended', function () { setPlaying(false); time.textContent = clock(duration) })
         audio.addEventListener('play', function () { setPlaying(true) })
+        if (startAt) { try { audio.currentTime = startAt / 1000 } catch (error) {} }
       }
       playing = stop
       play.disabled = false
@@ -919,6 +1108,87 @@ function voiceNode(item) {
   return card
 }
 function isRead(item) { return !!(item.mine && receiptsMode === 'on' && readOther && item.id <= readOther) }
+function senderName(mine) { return mine ? COPY.you : ((conversation && conversation.pseudonym) || '') }
+/** The start of a quoted message: its text (two lines at most, then « … »), or « Photo » / « Note vocale » with an icon. */
+function quoteBody(box, quote) {
+  if (quote.available === false) { box.appendChild(make('span', 'chat-quote-text', COPY.replyUnavailable)); return }
+  if (quote.kind === 'photo' || quote.kind === 'voice') {
+    var line = make('span', 'chat-quote-text chat-quote-media')
+    line.appendChild(svgIcon(quote.kind === 'photo' ? ICON_PHOTO : ICON_MIC, 24, 24))
+    line.appendChild(make('span', '', quote.kind === 'photo' ? COPY.photo : COPY.voice))
+    box.appendChild(line)
+    return
+  }
+  box.appendChild(make('span', 'chat-quote-text', quote.text === null || quote.text === undefined ? COPY.replyUnavailable : quote.text))
+}
+function quoteNode(item) {
+  var quote = item.reply_to
+  var className = 'chat-quote ' + (item.mine ? 'chat-quote-mine' : 'chat-quote-theirs')
+  if (quote.available === false) {
+    var gone = make('div', className)
+    gone.setAttribute('data-testid', 'chat-quote')
+    gone.setAttribute('data-available', 'false')
+    quoteBody(gone, quote)
+    return gone
+  }
+  var card = make('button', className)
+  card.type = 'button'
+  card.title = COPY.quoteGo
+  card.setAttribute('data-testid', 'chat-quote')
+  card.setAttribute('data-target-id', quote.id)
+  card.appendChild(make('span', 'chat-sr', COPY.quoteOf.replace('{name}', senderName(quote.mine)) + ' : '))
+  var name = make('span', 'chat-quote-name', senderName(quote.mine))
+  name.setAttribute('aria-hidden', 'true')
+  card.appendChild(name)
+  quoteBody(card, quote)
+  card.addEventListener('click', function (event) { event.preventDefault(); goToMessage(quote.id, 0) })
+  return card
+}
+function startReply(item) {
+  if (!item || input.disabled) return
+  replyTarget = { id: item.id, mine: item.mine, kind: item.kind, text: item.text }
+  el('thread-reply-name').textContent = COPY.replyingTo.replace('{name}', senderName(item.mine))
+  var text = el('thread-reply-text')
+  while (text.firstChild) text.removeChild(text.firstChild)
+  quoteBody(text, replyTarget)
+  show('thread-reply', true)
+  input.setAttribute('aria-describedby', 'thread-reply-name thread-reply-text')
+  input.focus()
+}
+function clearReply() {
+  replyTarget = null
+  show('thread-reply', false)
+  input.removeAttribute('aria-describedby')
+}
+var flashTimer = null
+var quoteNoteTimer = null
+/** A tap on a quoted card: scroll to the quoted message and highlight it, loading older pages first if needed. */
+function goToMessage(id, pages) {
+  var node = el('thread-messages').querySelector('[data-testid="chat-bubble"][data-message-id="' + id + '"]')
+  if (node) {
+    pinned = false
+    show('thread-quote-note', false)
+    var lit = el('thread-messages').querySelectorAll('.chat-flash')
+    for (var index = 0; index < lit.length; index += 1) lit[index].classList.remove('chat-flash')
+    node.setAttribute('tabindex', '-1')
+    // A jump the member asked for (never undone by the pinning to the end), and at once, like the end of the thread.
+    noteUserScroll()
+    try { node.scrollIntoView({ block: 'center' }) } catch (error) { node.scrollIntoView() }
+    try { node.focus({ preventScroll: true }) } catch (error) { /* focus is a nicety for keyboard members */ }
+    node.classList.add('chat-flash')
+    node.setAttribute('data-flash', 'true')
+    if (flashTimer) clearTimeout(flashTimer)
+    flashTimer = setTimeout(function () { node.classList.remove('chat-flash'); node.removeAttribute('data-flash') }, ${QUOTE_FLASH_MS})
+    return
+  }
+  if (hasMore && pages < ${QUOTE_MAX_PAGES}) { loadOlder(function (ok) { if (ok) goToMessage(id, pages + 1); else quoteMissing() }); return }
+  quoteMissing()
+}
+function quoteMissing() {
+  show('thread-quote-note', true)
+  if (quoteNoteTimer) clearTimeout(quoteNoteTimer)
+  quoteNoteTimer = setTimeout(function () { show('thread-quote-note', false) }, 5000)
+}
 function messageNode(item) {
   var mine = item.mine
   var wrap = make('div', 'flex flex-col max-w-[88%] sm:max-w-[78%] md:max-w-[70%] ' + (mine ? 'items-end self-end' : 'items-start self-start'))
@@ -929,6 +1199,7 @@ function messageNode(item) {
     ? 'bg-deep-navy text-cream rounded-2xl rounded-tr-sm px-3.5 sm:px-4 py-2.5 sm:py-3 shadow-sm'
     : 'bg-cream text-deep-navy border border-hairline rounded-2xl rounded-tl-sm px-3.5 sm:px-4 py-2.5 sm:py-3 shadow-sm')
   bubble.appendChild(make('span', 'chat-sr', (mine ? COPY.you : (conversation && conversation.pseudonym) || '') + ' : '))
+  itemsById[item.id] = item
   if (item.kind === 'photo' && item.media) {
     bubble.className = (mine ? 'bg-deep-navy rounded-2xl rounded-tr-sm' : 'bg-cream border border-hairline rounded-2xl rounded-tl-sm') + ' p-1.5 shadow-sm'
     bubble.appendChild(photoNode(item))
@@ -938,7 +1209,23 @@ function messageNode(item) {
   } else {
     bubble.appendChild(make('p', 'chat-text text-sm leading-relaxed', item.text === null || item.text === undefined ? COPY.textUnavailable : item.text))
   }
-  wrap.appendChild(bubble)
+  bubble.classList.add('chat-bubble-body')
+  // Story chat-polish-2: the quoted card sits at the top of the bubble, whatever the kind.
+  if (item.reply_to && item.reply_to.id) bubble.insertBefore(quoteNode(item), bubble.children[1] || null)
+  var row = make('div', 'chat-bubble-row')
+  var replyButton = make('button', 'chat-reply ' + (mine ? 'chat-reply-mine' : 'chat-reply-theirs'))
+  replyButton.type = 'button'
+  replyButton.setAttribute('data-testid', 'chat-reply')
+  replyButton.appendChild(svgIcon(ICON_REPLY, 24, 24))
+  replyButton.appendChild(make('span', 'chat-sr', COPY.reply))
+  replyButton.addEventListener('click', function (event) { event.preventDefault(); startReply(item) })
+  // WhatsApp: the arrow is on the open side, left of my bubbles and right of theirs.
+  if (mine) { row.appendChild(replyButton); row.appendChild(bubble) } else { row.appendChild(bubble); row.appendChild(replyButton) }
+  wrap.appendChild(row)
+  var hint = make('span', 'chat-swipe-hint')
+  hint.setAttribute('aria-hidden', 'true')
+  hint.appendChild(svgIcon(ICON_REPLY, 24, 24))
+  wrap.appendChild(hint)
   var meta = make('p', 'mt-1 px-1 flex items-center gap-1 text-[11px] text-deep-navy/80')
   var time = make('time', '', timeText(item.created_at))
   time.setAttribute('datetime', item.created_at)
@@ -978,6 +1265,10 @@ function readReceiptsMode(read) {
 function onReceipts(payload) {
   if (!payload || typeof payload.account_id !== 'string') return
   if (listLoaded) reloadSoon()
+  refreshHead()
+}
+/** Reloads the thread head (read state and presence) and redraws the ticks and the presence line in place. */
+function refreshHead() {
   if (!conversation || !ID) return
   var started = gen
   fetch('/v1/conversations/' + encodeURIComponent(ID), { credentials: 'same-origin' }).then(readJson).then(function (result) {
@@ -986,7 +1277,35 @@ function onReceipts(payload) {
     readOther = typeof read.other === 'string' ? read.other : null
     receiptsMode = readReceiptsMode(read)
     refreshReceipts()
+    presence = result.payload.presence || null
+    paintPresence()
   }).catch(function () {})
+}
+/** Story chat-polish-2: the other member came online or left (ids only); only the open thread's member matters. */
+function onPresence(payload) {
+  if (!payload || !conversation || payload.account_id !== conversation.other_id) return
+  refreshHead()
+}
+/** « En ligne », or « Vu pour la dernière fois aujourd'hui à 14:05 / hier à … / le 12 octobre à … » (Ouagadougou time). */
+function presenceText(value) {
+  if (!value) return ''
+  if (value.online) return COPY.online
+  if (typeof value.last_seen_at !== 'string') return ''
+  var label = dayLabel(value.last_seen_at)
+  var time = timeText(value.last_seen_at)
+  var when = label === COPY.today ? COPY.lastSeenToday.replace('{time}', time)
+    : label === COPY.yesterday ? COPY.lastSeenYesterday.replace('{time}', time)
+    : COPY.lastSeenDate.replace('{date}', label).replace('{time}', time)
+  return COPY.lastSeen.replace('{when}', when)
+}
+function paintPresence() {
+  var shown = conversation && conversation.other && conversation.other.available ? presence : null
+  var text = presenceText(shown)
+  var node = el('thread-presence')
+  node.textContent = text
+  node.hidden = !text
+  node.setAttribute('data-state', shown && shown.online ? 'online' : 'seen')
+  show('thread-presence-sep', !!text && !el('thread-city').hidden)
 }
 function separator(label) {
   var row = make('div', 'flex items-center justify-center my-1')
@@ -1042,12 +1361,25 @@ function header() {
   var slot = el('thread-avatar')
   while (slot.firstChild) slot.removeChild(slot.firstChild)
   slot.appendChild(avatar(conversation.pseudonym, other, 'w-12 h-12 sm:w-14 sm:h-14 rounded-full'))
-  el('thread-title').textContent = nameLine(conversation.pseudonym, other)
+  // Story chat-polish-2: the name (and the photo, for the pointer) opens the member's profile; one tab stop.
+  var link = el('thread-profile')
+  link.textContent = nameLine(conversation.pseudonym, other)
+  var photoLink = el('thread-avatar-link')
+  if (other.available && conversation.other_id) {
+    var href = '/profil/' + encodeURIComponent(conversation.other_id)
+    link.href = href
+    link.title = COPY.profileOf.replace('{name}', conversation.pseudonym || '')
+    photoLink.href = href
+  } else {
+    link.removeAttribute('href')
+    link.removeAttribute('title')
+    photoLink.removeAttribute('href')
+  }
   show('thread-verified', !!(other.available && other.verified))
   var city = cityText(other)
   el('thread-city-text').textContent = city
   show('thread-city', !!city)
-  el('thread-stage').textContent = STAGE[conversation.stage] || STAGE.chat
+  paintPresence()
   var report = el('thread-report')
   report.href = ${JSON.stringify(REPORT_PATH)} + '/' + encodeURIComponent(conversation.other_id) + '?discussion=' + encodeURIComponent(ID)
   report.hidden = !conversation.other_id
@@ -1056,6 +1388,9 @@ function header() {
   show('thread-unavailable', unavailable)
   show('thread-closed', closed && !unavailable)
   input.disabled = unavailable || closed
+  // Story chat-polish-2: no reply in a closed, blocked or unavailable conversation.
+  el('chat-thread').setAttribute('data-noreply', input.disabled ? 'true' : 'false')
+  if (input.disabled) clearReply()
   photoButton.disabled = input.disabled
   voiceButton.disabled = input.disabled
   if (input.disabled) closePanel()
@@ -1193,6 +1528,7 @@ function load() {
     readMine = typeof read.me === 'string' ? read.me : null
     readOther = typeof read.other === 'string' ? read.other : null
     receiptsMode = readReceiptsMode(read)
+    presence = head.payload.presence || null
     var draft = takeDraft()
     if (draft && !input.value) input.value = draft
     messages = []
@@ -1217,8 +1553,8 @@ function load() {
     return false
   })
 }
-function loadOlder() {
-  if (!messages.length) return
+function loadOlder(done) {
+  if (!messages.length) { if (done) done(false); return }
   var button = el('thread-older')
   var started = gen
   button.disabled = true
@@ -1227,7 +1563,7 @@ function loadOlder() {
     .then(function (result) {
       button.disabled = false
       if (started !== gen) return
-      if (result.status !== 200 || !result.payload || !Array.isArray(result.payload.items)) return
+      if (result.status !== 200 || !result.payload || !Array.isArray(result.payload.items)) { if (done) done(false); return }
       var older = result.payload.items.filter(function (item) { return !known[item.id] })
       for (var index = 0; index < older.length; index += 1) known[older[index].id] = true
       // Keep the message I was reading where it is: older messages grow the content above it.
@@ -1242,8 +1578,9 @@ function loadOlder() {
         scrollBox.scrollTop += shift
       }
       pinned = false
+      if (done) done(true)
     })
-    .catch(function () { button.disabled = false })
+    .catch(function () { button.disabled = false; if (done && started === gen) done(false) })
 }
 function catchUp() {
   if (catching || !conversation || !ID) return
@@ -1301,11 +1638,12 @@ function send() {
     method: 'POST',
     credentials: 'same-origin',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ kind: 'text', text: text })
+    body: JSON.stringify(replyTarget ? { kind: 'text', text: text, reply_to_message_id: replyTarget.id } : { kind: 'text', text: text })
   }).then(readJson).then(function (result) {
     busy = false
     if (started !== gen) { updateSend(); return }
     if (result.status === 201 && result.payload && result.payload.message) {
+      clearReply()
       appendItems([result.payload.message])
       input.value = ''
       el('thread-status').textContent = COPY.sent
@@ -1327,7 +1665,10 @@ function send() {
   })
 }
 function refused(result) {
-  var reason = result.payload && result.payload.error && result.payload.error.details && result.payload.error.details.reason
+  var details = result.payload && result.payload.error && result.payload.error.details
+  var reason = details && details.reason
+  // The answered message is gone from this conversation: drop the reply, keep the text.
+  if (result.status === 404 && details && details.field === 'reply_to_message_id') clearReply()
   if (result.status === 409 && reason === 'conversation_closed') { conversation.closed = true; header() }
   if (result.status === 409 && reason === 'other_unavailable') { conversation.other = { available: false }; header() }
   el('thread-error').textContent = errorMessage(result, COPY.sendError)
@@ -1350,6 +1691,7 @@ function closePanel() {
   if (recorder && recorder.state !== 'inactive') { recordCancelled = true; try { recorder.stop() } catch (error) {} }
   stopStream()
   if (recordTimer) { clearInterval(recordTimer); recordTimer = null }
+  if (pending && pending.audio) { try { pending.audio.pause() } catch (error) {} }
   if (pending && pending.preview) URL.revokeObjectURL(pending.preview)
   pending = null
   var box = panel()
@@ -1434,6 +1776,7 @@ function decodePhoto(file) {
 }
 function postMedia(body, sentText, button) {
   if (busy) return
+  if (replyTarget) body.reply_to_message_id = replyTarget.id
   var started = gen
   busy = true
   button.disabled = true
@@ -1451,6 +1794,7 @@ function postMedia(body, sentText, button) {
     if (started !== gen) { updateSend(); return }
     if (result.status === 201 && result.payload && result.payload.message) {
       closePanel()
+      clearReply()
       appendItems([result.payload.message])
       el('thread-status').textContent = sentText
       input.focus()
@@ -1534,19 +1878,23 @@ function startRecording() {
     try { recorder = new window.MediaRecorder(stream, options) } catch (error) { closePanel(); mediaError(COPY.voiceUnsupported); return }
     recordChunks = []
     recordCancelled = false
-    var line = make('div', 'flex flex-wrap items-center gap-3')
-    var dot = make('span', 'inline-block w-2.5 h-2.5 rounded-full bg-[#9B2C2C]')
+    // Story chat-polish-2 (Faycal): icons, not words. A pulsing red dot and the timer; « Annuler » is a red square
+    // with a bin, « Arrêter l'enregistrement » a navy check that stops and opens the preview to listen before sending.
+    var line = make('div', 'chat-rec')
+    var dot = make('span', 'chat-rec-dot')
     dot.setAttribute('aria-hidden', 'true')
     line.appendChild(dot)
-    line.appendChild(make('span', 'text-sm font-medium text-deep-navy', COPY.voiceRecording))
-    var timer = make('span', 'text-sm tabular-nums text-deep-navy', '0:00 / ' + clock(${VOICE_MAX_MS}))
+    line.appendChild(make('span', 'chat-sr', COPY.voiceRecording))
+    var timer = make('span', 'chat-rec-time', '0:00 / ' + clock(${VOICE_MAX_MS}))
     timer.setAttribute('data-testid', 'voice-timer')
     line.appendChild(timer)
-    var stopButton = panelButton(COPY.voiceStop, true)
+    line.appendChild(make('span', 'chat-rec-spacer'))
+    var cancel = iconButton(COPY.cancel, svgIcon(ICON_TRASH, 24, 24), 'chat-square chat-round-danger')
+    cancel.setAttribute('data-testid', 'voice-cancel')
+    var stopButton = iconButton(COPY.voiceStop, svgIcon(ICON_CHECK, 24, 24), 'chat-round-navy')
     stopButton.setAttribute('data-testid', 'voice-stop')
-    var cancel = panelButton(COPY.cancel, false)
-    line.appendChild(stopButton)
     line.appendChild(cancel)
+    line.appendChild(stopButton)
     box.appendChild(line)
     var limit = make('p', 'text-[11px] text-deep-navy/80')
     limit.setAttribute('role', 'status')
@@ -1583,16 +1931,44 @@ function recorded(blob, ms, note) {
   var box = openPanel(COPY.voice)
   if (ms < ${VOICE_MIN_MS}) { closePanel(); mediaError(COPY.voiceShort); voiceButton.focus(); return }
   if (blob.size > ${VOICE_MAX_BYTES}) { closePanel(); mediaError(COPY.voiceTooHeavy); voiceButton.focus(); return }
-  pending = { blob: blob, ms: ms }
-  var line = make('div', 'flex flex-wrap items-center gap-3')
-  line.appendChild(icon('graphic_eq', 'text-base text-[#7D5F27]'))
-  var ready = make('p', 'text-sm font-medium text-deep-navy', COPY.voiceReady + ' : ' + clock(ms))
+  // Story chat-polish-2: listen before sending. The preview plays the recorded blob (no request) on the same waveform.
+  var url = URL.createObjectURL(blob)
+  var audio = new Audio()
+  audio.preload = 'auto'
+  audio.src = url
+  pending = { blob: blob, ms: ms, preview: url, audio: audio }
+  var line = make('div', 'chat-rec')
+  var play = iconButton(COPY.voicePlay, fillIcon(ICON_PLAY), 'chat-round-navy')
+  play.setAttribute('data-testid', 'voice-preview-play')
+  line.appendChild(play)
+  var wave = waveform(false, ms, function (at) { try { audio.currentTime = at / 1000 } catch (error) {} ; elapsed.textContent = clock(at) })
+  line.appendChild(wave.root)
+  var elapsed = make('span', 'chat-rec-time', clock(ms))
+  elapsed.setAttribute('aria-hidden', 'true')
+  line.appendChild(elapsed)
+  box.appendChild(line)
+  var ready = make('p', 'chat-sr', COPY.voiceReady + ' : ' + clock(ms))
   ready.setAttribute('role', 'status')
   ready.setAttribute('data-testid', 'voice-ready')
-  line.appendChild(ready)
-  box.appendChild(line)
+  box.appendChild(ready)
+  function setPlaying(on) {
+    var glyph = fillIcon(on ? ICON_PAUSE : ICON_PLAY)
+    play.replaceChild(glyph, play.firstChild)
+    play.setLabel(on ? COPY.voicePause : COPY.voicePlay)
+  }
+  followAudio(audio, wave, function (at) { elapsed.textContent = clock(at) })
+  audio.addEventListener('play', function () { setPlaying(true) })
+  audio.addEventListener('pause', function () { setPlaying(false) })
+  audio.addEventListener('ended', function () { setPlaying(false); elapsed.textContent = clock(ms) })
+  play.addEventListener('click', function (event) {
+    event.preventDefault()
+    if (!audio.paused) { audio.pause(); return }
+    if (playing) { try { playing() } catch (error) {} playing = null }
+    var started = audio.play()
+    if (started && started.catch) started.catch(function () { setPlaying(false) })
+  })
   if (note) box.appendChild(make('p', 'text-[11px] text-deep-navy/80', note))
-  var controls = make('div', 'flex flex-wrap items-end gap-2')
+  var controls = make('div', 'chat-rec')
   var field = make('div', 'flex flex-col gap-1')
   var label = make('label', 'text-[11px] font-medium text-deep-navy', COPY.voiceLanguage)
   label.setAttribute('for', 'thread-voice-language')
@@ -1607,11 +1983,14 @@ function recorded(blob, ms, note) {
   field.appendChild(label)
   field.appendChild(select)
   controls.appendChild(field)
-  var sendVoice = panelButton(COPY.voiceSend, true)
+  controls.appendChild(make('span', 'chat-rec-spacer'))
+  var cancel = iconButton(COPY.cancel, svgIcon(ICON_TRASH, 24, 24), 'chat-square chat-round-danger')
+  cancel.setAttribute('data-testid', 'voice-cancel')
+  var sendVoice = iconButton(COPY.voiceSend, fillIcon(ICON_SEND), 'chat-round-navy')
   sendVoice.setAttribute('data-testid', 'voice-send')
-  var cancel = panelButton(COPY.cancel, false)
-  controls.appendChild(sendVoice)
   controls.appendChild(cancel)
+  controls.appendChild(sendVoice)
+  controls.style.alignItems = 'flex-end'
   box.appendChild(controls)
   sendVoice.focus()
   cancel.addEventListener('click', function (event) { event.preventDefault(); closePanel(); voiceButton.focus() })
@@ -1619,9 +1998,10 @@ function recorded(blob, ms, note) {
     event.preventDefault()
     if (!pending) return
     var current = pending
-    readBase64(current.blob).then(function (audio) {
+    try { audio.pause() } catch (error) {}
+    readBase64(current.blob).then(function (audioData) {
       if (pending !== current) return
-      postMedia({ kind: 'voice', audio: audio, duration_ms: Math.max(${VOICE_MIN_MS}, Math.round(current.ms)), language: select.value }, COPY.voiceSent, sendVoice)
+      postMedia({ kind: 'voice', audio: audioData, duration_ms: Math.max(${VOICE_MIN_MS}, Math.round(current.ms)), language: select.value }, COPY.voiceSent, sendVoice)
     }).catch(function () { mediaError(COPY.sendError) })
   })
 }
@@ -1636,7 +2016,63 @@ el('thread-form').addEventListener('submit', function (event) { event.preventDef
 input.addEventListener('input', function () { updateSend(); emitTyping() })
 input.addEventListener('keydown', function (event) {
   if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) { event.preventDefault(); send() }
+  if (event.key === 'Escape' && replyTarget) { event.preventDefault(); clearReply() }
 })
+el('thread-reply-cancel').addEventListener('click', function (event) { event.preventDefault(); clearReply(); input.focus() })
+// Story chat-polish-2: swipe a bubble to the right to answer it (touch and pen; a mouse uses the arrow). A vertical
+// move is left to the scroll, a tap to the Photo viewer; the bubble follows the finger and the arrow fills past
+// ${REPLY_SWIPE_PX} px.
+var swipe = null
+var swallowClick = false
+el('thread-messages').addEventListener('pointerdown', function (event) {
+  if (event.pointerType === 'mouse' || input.disabled || swipe || !event.target.closest) return
+  if (event.target.closest('.chat-wave, .chat-reply, .chat-quote')) return
+  var row = event.target.closest('.chat-bubble-row')
+  if (!row || !el('thread-messages').contains(row)) return
+  swipe = { id: event.pointerId, row: row, wrap: row.parentNode, x: event.clientX, y: event.clientY, dx: 0, active: false }
+  swipe.hint = swipe.wrap.querySelector('.chat-swipe-hint')
+})
+function swipeMove(event) {
+  if (!swipe || event.pointerId !== swipe.id) return
+  var dx = event.clientX - swipe.x
+  var dy = event.clientY - swipe.y
+  if (!swipe.active) {
+    if (Math.abs(dy) > 10 && Math.abs(dy) >= Math.abs(dx)) { swipe = null; return }
+    if (!(dx > 10 && dx > Math.abs(dy) * 1.5)) return
+    swipe.active = true
+    swipe.row.classList.remove('chat-swiping-back')
+  }
+  var shift = Math.max(0, Math.min(dx, ${REPLY_SWIPE_MAX_PX}))
+  swipe.dx = dx
+  swipe.row.style.transform = 'translateX(' + shift + 'px)'
+  if (swipe.hint) {
+    swipe.hint.style.opacity = String(Math.min(1, shift / ${REPLY_SWIPE_PX}))
+    swipe.hint.setAttribute('data-armed', dx >= ${REPLY_SWIPE_PX} ? 'true' : 'false')
+  }
+  if (event.cancelable) event.preventDefault()
+}
+function swipeEnd(event) {
+  if (!swipe || event.pointerId !== swipe.id) return
+  var done = swipe
+  swipe = null
+  if (!done.active) return
+  swallowClick = true
+  setTimeout(function () { swallowClick = false }, 400)
+  done.row.classList.add('chat-swiping-back')
+  done.row.style.transform = ''
+  if (done.hint) { done.hint.style.opacity = '0'; done.hint.removeAttribute('data-armed') }
+  if (event.type === 'pointerup' && done.dx >= ${REPLY_SWIPE_PX}) startReply(itemsById[done.wrap.getAttribute('data-message-id')])
+}
+window.addEventListener('pointermove', swipeMove, { passive: false })
+window.addEventListener('pointerup', swipeEnd)
+window.addEventListener('pointercancel', swipeEnd)
+// The tap that ends a swipe never opens the Photo viewer or a link.
+el('thread-messages').addEventListener('click', function (event) {
+  if (!swallowClick) return
+  swallowClick = false
+  event.preventDefault()
+  event.stopPropagation()
+}, true)
 el('thread-older').addEventListener('click', function (event) { event.preventDefault(); loadOlder() })
 el('thread-retry').addEventListener('click', function (event) { event.preventDefault(); load() })
 el('thread-jump').addEventListener('click', function (event) { event.preventDefault(); scrollToEnd(); markSeen() })
@@ -1670,7 +2106,7 @@ composer.addEventListener('focusout', function (event) {
   document.documentElement.classList.remove('chat-typing')
   fitViewport()
 })
-document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { markSeen(); if (conversation) catchUp() } })
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') { markSeen(); if (conversation) { catchUp(); refreshHead() } } })
 window.addEventListener('focus', function () { markSeen() })
 // ---- One page for both routes: list and thread, side by side from ${SPLIT_MIN_PX} px (story chat-polish) ----
 /** Leaves the open thread: stops what it was doing and forgets its messages (a new one loads clean). */
@@ -1696,6 +2132,10 @@ function leaveThread() {
   readMine = null
   readOther = null
   receiptsMode = 'on'
+  presence = null
+  itemsById = {}
+  clearReply()
+  show('thread-quote-note', false)
   pinned = true
   var log = el('thread-messages')
   while (log.firstChild) log.removeChild(log.firstChild)
@@ -1715,6 +2155,7 @@ function retitle() {
   // On a phone the thread is a sub-screen (QA R2-1): no bottom nav, « Retour » leads back to the list where it is.
   document.documentElement.classList.toggle('chat-sub', !isSplit() && !!ID)
   input.placeholder = isSplit() ? COPY.placeholder : COPY.placeholderShort
+  paintListToggle()
   var title = el('discussions-title')
   var want = isSplit() && ID ? 'H2' : 'H1'
   if (title && title.tagName !== want) {
@@ -1765,6 +2206,26 @@ function routeFromLocation() {
   else openList(false)
 }
 window.addEventListener('popstate', function () { routeFromLocation() })
+// ---- Story chat-polish-2: the split view's list steps aside for the open thread, remembered on this device ----
+var LIST_KEY = 'ankanu_chat_list_collapsed'
+var listCollapsed = (function () { try { return localStorage.getItem(LIST_KEY) === '1' } catch (error) { return false } })()
+function paintListToggle() {
+  // Only with a thread open in the split view: the list route and phones always show the list.
+  var collapsed = listCollapsed && isSplit() && !!ID
+  document.documentElement.classList.toggle('chat-list-collapsed', collapsed)
+  el('list-toggle').setAttribute('aria-expanded', collapsed ? 'false' : 'true')
+  var list = el('discussions')
+  if (collapsed) list.setAttribute('inert', '')
+  else list.removeAttribute('inert')
+}
+el('list-toggle').addEventListener('click', function (event) {
+  event.preventDefault()
+  listCollapsed = el('list-toggle').getAttribute('aria-expanded') === 'true'
+  try { localStorage.setItem(LIST_KEY, listCollapsed ? '1' : '0') } catch (error) { /* no storage: this page only */ }
+  paintListToggle()
+  if (!listCollapsed && listVisible() && (!listLoaded || listStale)) loadList()
+  if (conversation && pinned) scrollToEnd()
+})
 el('thread-back').addEventListener('click', function (event) {
   if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
   event.preventDefault()
@@ -1793,6 +2254,7 @@ Promise.all(firstLoads).then(function () {
     'conversation.typing': onTyping,
     'conversation.read': onRead,
     'chat.receipts': onReceipts,
+    'presence.changed': onPresence,
     'invite.changed': refreshBadges
   })
 })`
@@ -1804,8 +2266,7 @@ const quiet =
 /** Screen 20, the list: the whole page under 768 px, the left pane from there. */
 function listPane(heading: 'h1' | 'h2'): string {
   return `<section id="discussions" aria-labelledby="discussions-title" aria-busy="true">
-<div id="discussions-top" class="mb-8 text-center md:text-left">
-<p class="inline-flex items-center gap-2 mb-3"><span class="h-1.5 w-1.5 rounded-full bg-soft-gold" aria-hidden="true"></span><span class="text-[11px] font-semibold tracking-[0.2em] text-[#7D5F27] uppercase">${CHAT_COPY.listEyebrow.replace('&', '&amp;')}</span></p>
+<div id="discussions-top" class="mb-6 text-left">
 <${heading} id="discussions-title" class="font-display text-3xl md:text-4xl text-deep-navy font-normal tracking-tight">${CHAT_COPY.listTitle}</${heading}>
 </div>
 <div id="discussions-scroll">
@@ -1821,10 +2282,6 @@ function listPane(heading: 'h1' | 'h2'): string {
 <a href="/invitations" class="mt-4 ${quiet}">${CHAT_COPY.emptyLink}</a>
 </div>
 <ul id="discussions-list" hidden></ul>
-<div id="discussions-foot" class="mt-10 pt-6 border-t border-hairline/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-deep-navy/80">
-<p>${CHAT_COPY.pendingNote}</p>
-<p id="discussions-count" class="italic text-[11px] shrink-0">${CHAT_COPY.registryMany.replace('{n}', '0')}</p>
-</div>
 </div>
 </section>`
 }
@@ -1852,17 +2309,17 @@ function threadPane(id: string): string {
 <section id="thread" hidden aria-labelledby="thread-title" class="bg-white/90 rounded-xl sm:rounded-2xl border border-hairline shadow-sm flex flex-col overflow-hidden">
 <div id="thread-head" class="px-3.5 sm:px-6 py-3.5 sm:py-4 border-b border-hairline/70 flex flex-wrap items-center justify-between gap-3 bg-white">
 <div class="flex items-center gap-3 sm:gap-4 min-w-0">
-<div id="thread-avatar"></div>
+<button id="list-toggle" type="button" aria-expanded="true" aria-controls="discussions" title="${CHAT_COPY.listToggle}" class="chat-icon-button"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 4.5v15" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span class="chat-sr">${CHAT_COPY.listToggle}</span></button>
+<a id="thread-avatar-link" tabindex="-1" aria-hidden="true" class="chat-profile-photo"><div id="thread-avatar"></div></a>
 <div class="min-w-0 flex-1">
 <div id="thread-nameline" class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-<h1 id="thread-title" class="chat-name font-display text-base sm:text-lg md:text-xl font-bold text-deep-navy"></h1>
+<h1 id="thread-title" class="chat-name font-display text-base sm:text-lg md:text-xl font-bold text-deep-navy"><a id="thread-profile" class="chat-profile-link"></a></h1>
 <span id="thread-verified" hidden role="img" aria-label="${CHAT_COPY.verified}" title="${CHAT_COPY.verified}" class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-soft-gold/20 border border-soft-gold/40"><span class="material-symbols-outlined text-[13px] text-[#7D5F27]" aria-hidden="true">verified</span></span>
 </div>
-<p id="thread-city" hidden class="flex items-center gap-0.5 mt-1 text-xs text-deep-navy/80"><span class="material-symbols-outlined text-xs text-[#7D5F27]" aria-hidden="true">location_on</span><span id="thread-city-text"></span></p>
+<p id="thread-sub" class="flex items-center gap-1 mt-1 text-xs text-deep-navy/80 min-w-0"><span id="thread-city" hidden class="inline-flex items-center gap-0.5 min-w-0"><span class="material-symbols-outlined text-xs text-[#7D5F27]" aria-hidden="true">location_on</span><span id="thread-city-text"></span></span><span id="thread-presence-sep" hidden aria-hidden="true">·</span><span id="thread-presence" hidden data-testid="thread-presence"></span></p>
 </div>
 </div>
 <div class="flex items-center gap-2 flex-wrap">
-<span id="thread-stage" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold-soft/40 text-deep-navy border border-soft-gold/40"></span>
 <a id="thread-report" hidden href="${REPORT_PATH}" class="chat-hit inline-flex items-center justify-center gap-1 min-h-[44px] px-3 rounded-md border border-transparent hover:border-hairline hover:bg-cream text-xs text-deep-navy/80 hover:text-deep-navy"><span class="material-symbols-outlined text-base leading-none text-red-700/80" aria-hidden="true">shield</span><span class="chat-report-text">${CHAT_COPY.reportBlock}</span></a>
 </div>
 </div>
@@ -1877,9 +2334,10 @@ function threadPane(id: string): string {
 </div>
 <form id="thread-form" class="p-3 sm:p-4 md:p-5 bg-white border-t border-hairline flex flex-col gap-2.5" novalidate>
 <div id="thread-label-row" class="flex items-center justify-between gap-2 text-[11px] px-1">
-<label for="thread-input" class="font-medium text-deep-navy">${CHAT_COPY.composeLabel}</label>
+<label for="thread-input" class="chat-sr">${CHAT_COPY.composeLabel}</label>
 <span id="thread-counter" hidden class="text-deep-navy/80">0/${TEXT_MAX}</span>
 </div>
+<div id="thread-reply" hidden role="group" aria-labelledby="thread-reply-name" data-testid="thread-reply"><div id="thread-reply-body"><p id="thread-reply-name"></p><div id="thread-reply-text"></div></div><button id="thread-reply-cancel" type="button" class="chat-icon-button" data-testid="thread-reply-cancel"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="chat-sr">${CHAT_COPY.replyCancel}</span></button></div>
 <div id="thread-media" hidden role="group" data-testid="thread-media" class="flex flex-col gap-2 rounded-xl border border-hairline bg-[#FAF7F0] p-3"></div>
 <div id="thread-compose" class="flex flex-col sm:flex-row items-stretch sm:items-end gap-2 sm:gap-2.5 rounded-xl border border-hairline bg-white p-2 focus-within:border-soft-gold">
 <div class="flex items-center gap-1 self-start sm:self-end shrink-0">
@@ -1888,8 +2346,9 @@ function threadPane(id: string): string {
 <input id="thread-photo-input" type="file" accept="image/*" hidden/>
 </div>
 <textarea id="thread-input" rows="1" placeholder="${CHAT_COPY.placeholder}" class="flex-1 w-full border-0 focus:ring-0 p-1.5 text-sm text-deep-navy placeholder-[#0B1D36]/60 resize-none bg-transparent"></textarea>
-<button id="thread-send" type="submit" class="chat-hit w-full sm:w-auto inline-flex items-center justify-center gap-1.5 min-h-[44px] px-5 rounded-lg bg-deep-navy hover:bg-deep-navy/90 text-cream text-sm font-semibold"><span class="chat-send-text">${CHAT_COPY.send}</span><span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span></button>
+<button id="thread-send" type="submit" class="chat-hit chat-round chat-round-navy"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3.4 20.4 21 12 3.4 3.6 3.4 10.2 15 12 3.4 13.8z" fill="currentColor"/></svg><span class="chat-sr chat-send-text">${CHAT_COPY.send}</span></button>
 </div>
+<p id="thread-quote-note" role="status" hidden data-testid="thread-quote-note" class="text-xs text-deep-navy/80 px-1">${CHAT_COPY.quoteMissing}</p>
 <p id="thread-error" role="alert" hidden class="text-sm text-[#9B2C2C] break-words px-1"></p>
 <p id="thread-status" role="status" aria-live="polite" class="chat-sr"></p>
 <p id="thread-rule" class="text-[11px] text-deep-navy/80 leading-normal px-1"><strong class="font-semibold text-deep-navy">${CHAT_COPY.ruleLead}</strong> ${CHAT_COPY.rule}</p>

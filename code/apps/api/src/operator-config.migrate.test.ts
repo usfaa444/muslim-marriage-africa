@@ -27,6 +27,7 @@ import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
 import { getChatPort, setChatPort } from './chat.js'
 import { openChatText, sealChatText } from './chat-key.js'
 import { getMessageStore, setMessageStore, type StoredMessage } from './chat-messages.js'
+import { getPresenceStore } from './chat-presence.js'
 import { getReadStore, setReadStore } from './chat-read.js'
 import { getModerationPort, setModerationPort } from './moderation.js'
 import { setEvidenceWriter } from './evidence-writer.js'
@@ -207,6 +208,8 @@ function migrationSql(): string {
     '0025_message_media.sql',
     '0026_conversation_read.sql',
     '0027_read_receipt_setting.sql',
+    '0028_chat_presence.sql',
+    '0029_message_reply.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -303,6 +306,7 @@ describe('operator_config migration', () => {
       'account',
       'audit_event',
       'block',
+      'chat_presence',
       'cil_ticket',
       'conversation',
       'conversation_read',
@@ -337,6 +341,7 @@ describe('operator_config migration', () => {
       'public.account',
       'public.audit_event',
       'public.block',
+      'public.chat_presence',
       'public.cil_ticket',
       'public.conversation',
       'public.conversation_read',
@@ -370,7 +375,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('28')
+    expect(applied.rows[0]?.count).toBe('30')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -899,6 +904,7 @@ describe('operator_config migration', () => {
       'account',
       'audit_event',
       'block',
+      'chat_presence',
       'cil_ticket',
       'conversation',
       'conversation_read',
@@ -933,6 +939,7 @@ describe('operator_config migration', () => {
       'public.account',
       'public.audit_event',
       'public.block',
+      'public.chat_presence',
       'public.cil_ticket',
       'public.conversation',
       'public.conversation_read',
@@ -1423,6 +1430,35 @@ describe('operator_config migration', () => {
       expect(after).toMatchObject({ rows: [{ id: rows[2]!.id }], hasMore: true })
       expect((await store.lastFor([conversationId])).get(conversationId)?.id).toBe(rows[3]!.id)
 
+      // Story chat-polish-2: a reply keeps its target id; a target that does not exist is refused by the schema.
+      const replyAt = new Date(at.getTime() + 10_000)
+      const replyId = newId(replyAt)
+      await store.insert({
+        id: replyId,
+        conversation_id: conversationId,
+        sender_id: sister,
+        kind: 'text',
+        state: 'delivered',
+        body: sealChatText('Réponse', key, conversationId, replyId),
+        media_id: null,
+        created_at: replyAt.toISOString(),
+        reply_to_message_id: rows[0]!.id,
+      })
+      expect((await store.find(replyId))?.reply_to_message_id).toBe(rows[0]!.id)
+      expect((await store.find(rows[0]!.id))?.reply_to_message_id).toBeNull()
+      expect((await store.page(conversationId, { after: rows[3]!.id }, 5)).rows.map((row) => row.reply_to_message_id)).toEqual([rows[0]!.id])
+      let danglingReply = false
+      try {
+        await db().query(
+          `insert into "message" ("id", "conversation_id", "sender_id", "kind", "state", "body", "reply_to_message_id") values ($1, $2, $3, 'text', 'delivered', '{}', $4)`,
+          [newId(replyAt), conversationId, sister, newId(replyAt)],
+        )
+      } catch (error) {
+        danglingReply = true
+        expect(postgresCode(error)).toBe('23503')
+      }
+      expect(danglingReply).toBe(true)
+
       const jobs = await db().query<{ message_id: string; outcome: string | null }>(
         `select "message_id", "outcome" from "moderation_job" where "message_id" = any($1::uuid[]) order by "message_id"`,
         [rows.map((row) => row.id)],
@@ -1556,7 +1592,33 @@ describe('operator_config migration', () => {
         expect(postgresCode(error)).toBe('23503')
       }
       expect(orphan).toBe(true)
+
+      // Story chat-polish-2: presence. No row is visible and never seen; « Vu » and the switch are stored per member.
+      const seen = getPresenceStore()
+      expect(await seen.hidden([brother, sister])).toEqual(new Set())
+      expect(await seen.lastSeen([sister])).toEqual(new Map())
+      await seen.markSeen(sister, at)
+      expect(await seen.lastSeen([brother, sister])).toEqual(new Map([[sister, at.toISOString()]]))
+      await seen.setVisible(sister, false, at)
+      expect(await seen.hidden([brother, sister])).toEqual(new Set([sister]))
+      // Hiding keeps « Vu »; a new « Vu » keeps the switch.
+      expect(await seen.lastSeen([sister])).toEqual(new Map([[sister, at.toISOString()]]))
+      const later = new Date(at.getTime() + 60_000)
+      await seen.markSeen(sister, later)
+      expect(await seen.hidden([sister])).toEqual(new Set([sister]))
+      expect(await seen.lastSeen([sister])).toEqual(new Map([[sister, later.toISOString()]]))
+      await seen.setVisible(sister, true, later)
+      expect(await seen.hidden([sister])).toEqual(new Set())
+      let orphanPresence = false
+      try {
+        await db().query(`insert into "chat_presence" ("account_id") values ($1)`, [newId(at)])
+      } catch (error) {
+        orphanPresence = true
+        expect(postgresCode(error)).toBe('23503')
+      }
+      expect(orphanPresence).toBe(true)
     } finally {
+      await db().query(`delete from "chat_presence" where "account_id" = any($1::uuid[])`, [[brother, sister]])
       await db().query(`delete from "read_receipt_setting" where "account_id" = any($1::uuid[])`, [[brother, sister]])
       await db().query(`delete from "conversation_read" where "conversation_id" = $1`, [conversationId || newId(at)])
       await db().query(`delete from "message" where "conversation_id" = $1`, [conversationId || newId(at)])

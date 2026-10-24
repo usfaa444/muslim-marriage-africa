@@ -216,15 +216,16 @@ test.describe('Discussions list (screen 20)', () => {
     await expect(rows).toHaveCount(2)
     const first = rows.first()
     await expect(first.getByRole('heading', { level: 2 })).toHaveText('Al-Hassan_BF, 29 ans')
-    await expect(first).toContainText('Ouagadougou')
-    await expect(first).toContainText('Identité vérifiée')
+    // chat-polish-2 (Faycal): the card shows what matters for the chat only; city and « Identité vérifiée » live on the profile.
+    await expect(first).not.toContainText('Ouagadougou')
+    await expect(first).not.toContainText('Identité vérifiée')
     await expect(first.getByTestId('conversation-preview')).toHaveText("« J'ai bien pris note de votre projet de foyer. »")
-    await expect(first).toContainText(/Aujourd'hui à \d{2}:\d{2}/)
+    await expect(first.locator('time')).toHaveText(/^\d{2}:\d{2}$/)
     await expect(first.getByRole('link', { name: 'Accéder à la conversation avec Al-Hassan_BF' })).toHaveAttribute('href', `/discussions/${CONVERSATION}`)
     const second = rows.nth(1)
     await expect(second.getByTestId('conversation-preview')).toHaveText("Aucun message pour l'instant.")
     await expect(second).not.toContainText('Identité vérifiée')
-    await expect(page.getByText('Registre des échanges : 2 fils actifs')).toBeVisible()
+    await expect(page.getByText(/Registre des échanges/)).toHaveCount(0)
     await expect(page.locator('main')).not.toContainText(HOLD_COPY)
     await expectAccessible(page)
     await expectNoHorizontalOverflow(page)
@@ -249,7 +250,6 @@ test.describe('Discussions list (screen 20)', () => {
     const link = page.getByTestId('conversation-row').first().getByRole('link')
     await expect(link).toHaveAccessibleName('Accéder à la conversation avec Al-Hassan_BF')
     await expect(link).not.toHaveAttribute('aria-label', /.*/)
-    await expect(link.locator('.material-symbols-outlined')).toHaveAttribute('aria-hidden', 'true')
     // Without the icon font the ligature is visible text; the rule must still hold (axe label-content-name-mismatch).
     await page.addStyleTag({ content: '.material-symbols-outlined { font-family: serif !important; }' })
     await expectAccessible(page)
@@ -314,7 +314,7 @@ test.describe('Chat thread (screen 21)', () => {
     expect(Date.now() - started).toBeLessThan(4000)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Al-Hassan_BF, 29 ans')
     await expect(page.getByRole('img', { name: 'Identité vérifiée' })).toBeVisible()
-    await expect(page.getByText('Étape : discussion')).toBeVisible()
+    await expect(page.getByText(/Étape/)).toHaveCount(0)
     // Story chat-polish: from 768 px the list sits beside the thread, so the back link is for phones only.
     if (testInfo.project.name === 'mobile') await expect(page.getByRole('link', { name: 'Retour aux discussions' })).toHaveAttribute('href', '/discussions')
     else await expect(page.getByTestId('conversation-row')).toHaveCount(2)
@@ -326,7 +326,7 @@ test.describe('Chat thread (screen 21)', () => {
     await expect(bubbles(page).nth(1).locator('time')).toHaveText(/^\d{2}:\d{2}$/)
     await expect(page.locator('main')).not.toContainText(HOLD_COPY)
     // Story chat-polish (Mac QA round 3): a phone thread shows a short placeholder, the split view the full one.
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toHaveAttribute('placeholder', testInfo.project.name === 'mobile' ? 'Votre message…' : 'Rédigez votre message dans le respect des convenances...')
+    await expect(page.getByLabel('Votre message')).toHaveAttribute('placeholder', testInfo.project.name === 'mobile' ? 'Votre message…' : 'Rédigez votre message dans le respect des convenances...')
     await expect(page.getByText("Règle d'or AnKanu :")).toBeVisible()
     await expectAccessible(page)
     await expectNoHorizontalOverflow(page)
@@ -337,7 +337,7 @@ test.describe('Chat thread (screen 21)', () => {
     state.postDelayMs = 300
     await serveApi(context, baseURL ?? '', state)
     await openThread(page)
-    const input = page.getByLabel('Réponse réfléchie et posée')
+    const input = page.getByLabel('Votre message')
     const send = page.getByRole('button', { name: 'Envoyer' })
     await expect(send).toBeDisabled()
     await input.fill('  Wa alaykum salam. Qu’Allah bénisse cette démarche.  ')
@@ -364,7 +364,7 @@ test.describe('Chat thread (screen 21)', () => {
     const state = api()
     await serveApi(context, baseURL ?? '', state)
     await openThread(page)
-    const input = page.getByLabel('Réponse réfléchie et posée')
+    const input = page.getByLabel('Votre message')
     state.failNextPost = { status: 409, body: { error: { code: 'UNHANDLED', message: 'Cette discussion est fermée.', details: { reason: 'conversation_closed' }, request_id: 'r', retryable: false } } }
     await input.fill('Encore là ?')
     await page.getByRole('button', { name: 'Envoyer' }).click()
@@ -385,7 +385,7 @@ test.describe('Chat thread (screen 21)', () => {
     await expect(page.locator('#thread-closed')).toHaveText('Cette discussion est fermée.')
     await expect(page.locator('#thread-closed')).toBeVisible()
     await expect(bubbles(page)).toHaveCount(2)
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeDisabled()
+    await expect(page.getByLabel('Votre message')).toBeDisabled()
     await expect(page.getByRole('button', { name: 'Envoyer' })).toBeDisabled()
     expect(state.posts).toHaveLength(0)
     await expectAccessible(page)
@@ -395,7 +395,7 @@ test.describe('Chat thread (screen 21)', () => {
     const state = api()
     await serveApi(context, baseURL ?? '', state)
     await openThread(page)
-    const input = page.getByLabel('Réponse réfléchie et posée')
+    const input = page.getByLabel('Votre message')
     state.failNextPost = { status: 401, body: { error: { code: 'UNAUTHENTICATED', message: 'Authentification requise.', details: null, request_id: 'r', retryable: false } } }
     await input.fill('Mon message gardé')
     await page.getByRole('button', { name: 'Envoyer' }).click()
@@ -465,7 +465,7 @@ test.describe('Chat thread (screen 21)', () => {
     )
     await expect(typing).toHaveText('')
 
-    const input = page.getByLabel('Réponse réfléchie et posée')
+    const input = page.getByLabel('Votre message')
     await input.pressSequentially('Bonjour', { delay: 50 })
     const emitted = await page.evaluate(() => (window as unknown as { __fake: { emitted: Array<{ name: string; payload: unknown }> } }).__fake.emitted)
     expect(emitted.length).toBeGreaterThanOrEqual(1)
@@ -485,7 +485,7 @@ test.describe('Chat thread (screen 21)', () => {
     state.available = false
     await openThread(page)
     await expect(page.getByText("Ce profil n'est plus disponible.")).toBeVisible()
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeDisabled()
+    await expect(page.getByLabel('Votre message')).toBeDisabled()
     await expect(page.getByRole('button', { name: 'Envoyer' })).toBeDisabled()
   })
 
@@ -521,7 +521,7 @@ test.describe('Chat thread (screen 21)', () => {
     const openMs = Date.now() - started
     testInfo.annotations.push({ type: 'timing', description: `thread open on Fast 3G: ${openMs} ms` })
     expect(openMs).toBeLessThan(4000)
-    await page.getByLabel('Réponse réfléchie et posée').fill('Sur réseau lent.')
+    await page.getByLabel('Votre message').fill('Sur réseau lent.')
     const sendStarted = Date.now()
     await page.getByRole('button', { name: 'Envoyer' }).click()
     await expect(bubbles(page)).toHaveCount(3)

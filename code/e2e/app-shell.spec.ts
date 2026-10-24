@@ -162,15 +162,18 @@ test.describe('links that moved with the footer', () => {
 })
 
 for (const path of PUBLIC_PAGES) {
-  test(`signed-out page ${path} has the header and footer but no bottom nav`, async ({ page }) => {
+  test(`signed-out page ${path} has no site header, footer or bottom nav, but keeps the legal link`, async ({ page }) => {
+    // chat-polish-2 (Faycal): « no header/footer on sign-in and sign-up ». Only the landing page keeps them.
     const response = await page.goto(path)
     expect(response?.status()).toBe(200)
-    await expect(page.getByRole('banner')).toHaveCount(1)
-    await expect(page.getByRole('banner').getByText('AnKanu', { exact: true })).toBeVisible()
-    await expect(page.getByRole('banner').getByRole('link')).toHaveCount(0)
-    await expect(page.getByRole('contentinfo')).toHaveCount(1)
+    await expect(page.locator('#app-header')).toHaveCount(0)
+    await expect(page.locator('#app-footer')).toHaveCount(0)
+    await expect(page.getByRole('contentinfo')).toHaveCount(0)
     await expect(bottomNav(page)).toHaveCount(0)
     await expect(page.locator('[data-app-shell="bottom-nav"]')).toHaveCount(0)
+    const legal = page.locator('#app-legal').getByRole('link', { name: 'Confidentialité' })
+    await expect(legal).toBeVisible()
+    await expect(legal).toHaveAttribute('href', '/#legal')
     await expectNoHorizontalOverflow(page)
     await expectAccessible(page)
   })

@@ -135,7 +135,7 @@ test.describe('story chat-polish QA gates: open at the latest message when the l
     await expect(bubbles(page).last()).toBeInViewport()
     await expect(page.locator('#late-style')).toBeAttached({ timeout: 5000 })
     await expect(bubbles(page).last()).toBeInViewport()
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeInViewport()
+    await expect(page.getByLabel('Votre message')).toBeInViewport()
   })
 })
 
@@ -228,7 +228,7 @@ test.describe('story chat-polish QA gates: a read request that fails (QA F3)', (
       expect(state.reads).toHaveLength(scenario.stored)
       await expect(page.locator('#thread-error')).toBeHidden()
       await expect(page.getByRole('alert').filter({ hasText: /\S/ })).toHaveCount(0)
-      await page.getByLabel('Réponse réfléchie et posée').fill('Toujours là')
+      await page.getByLabel('Votre message').fill('Toujours là')
       await page.getByRole('button', { name: 'Envoyer', exact: true }).click()
       await expect(bubbles(page).last()).toContainText('Toujours là')
     })

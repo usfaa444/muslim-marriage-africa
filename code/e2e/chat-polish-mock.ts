@@ -22,6 +22,8 @@ export type Item = {
   text: string | null
   created_at: string
   media?: Record<string, unknown>
+  /** Story chat-polish-2: the message this one answers. */
+  reply_to_message_id?: string | null
 }
 
 export type Api = {
@@ -43,9 +45,16 @@ export type Api = {
   badges: { invitations: number; discussions: number | null }
   badgeCalls: number
   headCalls: number
+  /** Story chat-polish-2: the presence the thread head answers, and « Statut en ligne » as the settings see it. */
+  presence: { online: boolean; last_seen_at: string | null } | null
+  presenceSetting: boolean
+  /** The POST bodies of sent messages. */
+  sent: Array<Record<string, unknown>>
+  /** A closed conversation (no send, no reply). */
+  closed: boolean
 }
 
-export type Person = { other_id: string; pseudonym: string; age: number; city: string }
+export type Person = { other_id: string; pseudonym: string; age: number; city: string; available?: false }
 
 export const PEOPLE: Record<string, Person> = {
   [FIRST]: { other_id: HIM, pseudonym: 'Al-Hassan_BF', age: 29, city: 'ouagadougou' },
@@ -140,7 +149,24 @@ export function api(): Api {
     badges: { invitations: 0, discussions: 0 },
     badgeCalls: 0,
     headCalls: 0,
+    presence: { online: true, last_seen_at: null },
+    presenceSetting: true,
+    sent: [],
+    closed: false,
   }
+}
+
+/** A message as the API answers it: `mine`, and the quoted card of a reply (like the API, the text start only). */
+export function present(state: Api, item: Item): Record<string, unknown> {
+  const { reply_to_message_id: replyTo, ...rest } = item
+  const body: Record<string, unknown> = { ...rest, mine: item.sender_id === ME }
+  if (replyTo) {
+    const target = state.messages.find((other) => other.id === replyTo && other.conversation_id === item.conversation_id)
+    body['reply_to'] = target
+      ? { id: target.id, available: true, sender_id: target.sender_id, mine: target.sender_id === ME, kind: target.kind, text: target.kind === 'text' ? target.text : null }
+      : { id: replyTo, available: false }
+  }
+  return body
 }
 
 export function inThread(state: Api, conversation: string): Item[] {
@@ -161,7 +187,7 @@ export function listItems(state: Api) {
         stage: 'chat',
         other_id: person.other_id,
         pseudonym: person.pseudonym,
-        other: { available: true, age: person.age, city: person.city, verified: true, photo: null },
+        other: person.available === false ? { available: false } : { available: true, age: person.age, city: person.city, verified: true, photo: null },
         unread,
         last_message: last
           ? { id: last.id, mine: last.sender_id === ME, kind: last.kind, preview: last.text, created_at: last.created_at, read: last.sender_id === ME ? theirs >= last.id : mine >= last.id }
@@ -217,8 +243,9 @@ export async function serveApi(context: BrowserContext, baseURL: string, state: 
         state.headCalls += 1
         await route.fulfill(
           json({
-            conversation: { id: conversation, stage: 'chat', other_id: person.other_id, pseudonym: person.pseudonym, other: { available: true, age: person.age, city: person.city, verified: true, photo: null }, closed: false },
+            conversation: { id: conversation, stage: 'chat', other_id: person.other_id, pseudonym: person.pseudonym, other: person.available === false ? { available: false } : { available: true, age: person.age, city: person.city, verified: true, photo: null }, closed: state.closed },
             me: { id: ME },
+            presence: state.presence,
             read: {
               me: state.pointers[conversation]?.[ME] ?? null,
               other: state.receipts === 'on' ? (state.pointers[conversation]?.[person.other_id] ?? null) : null,
@@ -235,15 +262,21 @@ export async function serveApi(context: BrowserContext, baseURL: string, state: 
         // A page of 30, newest last: the latest page, the page before a message, or everything after one.
         const older = before ? all.filter((item) => item.id < before) : all
         const items = after ? all.filter((item) => item.id > after) : older.slice(-30)
-        await route.fulfill(json({ items: items.map((item) => ({ ...item, mine: item.sender_id === ME })), has_more: !after && older.length > 30 }))
+        await route.fulfill(json({ items: items.map((item) => present(state, item)), has_more: !after && older.length > 30 }))
         return
       }
       if (thread[2] && method === 'POST') {
-        const body = request.postDataJSON() as { text: string }
+        const body = request.postDataJSON() as { text: string; reply_to_message_id?: string }
+        state.sent.push(body)
+        const target = body.reply_to_message_id ? state.messages.find((item) => item.id === body.reply_to_message_id) : undefined
+        if (body.reply_to_message_id && (!target || target.conversation_id !== conversation)) {
+          await route.fulfill(json({ error: { code: 'NOT_FOUND', message: 'Ce message est introuvable.', details: { field: 'reply_to_message_id' } } }, 404))
+          return
+        }
         state.serial += 1
-        const item = text(state.serial, conversation, ME, String(body.text).trim(), 0)
+        const item = { ...text(state.serial, conversation, ME, String(body.text).trim(), 0), reply_to_message_id: body.reply_to_message_id ?? null }
         state.messages.push(item)
-        await route.fulfill(json({ message: { ...item, mine: true } }, 201))
+        await route.fulfill(json({ message: present(state, item) }, 201))
         return
       }
     }
@@ -256,11 +289,12 @@ export async function serveApi(context: BrowserContext, baseURL: string, state: 
     }
     if (url.pathname === '/v1/chat/settings') {
       if (method === 'PUT') {
-        const body = request.postDataJSON() as { read_receipts: unknown }
+        const body = request.postDataJSON() as { read_receipts?: unknown; presence?: unknown }
         state.settingPuts.push(body)
         if (typeof body.read_receipts === 'boolean') state.setting = body.read_receipts
+        if (typeof body.presence === 'boolean') state.presenceSetting = body.presence
       }
-      await route.fulfill(json({ read_receipts: state.setting }))
+      await route.fulfill(json({ read_receipts: state.setting, presence: state.presenceSetting }))
       return
     }
     if (url.pathname === '/v1/pin' && method === 'GET') {

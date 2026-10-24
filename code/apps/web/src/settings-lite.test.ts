@@ -159,6 +159,15 @@ describe('QA R2-4 and Mac QA round 2: the Paramètres switches', () => {
     const script = receiptsSettingsScript()
     expect(script).toContain(`document.addEventListener('${RECEIPTS_DOM_EVENT}', load)`)
     expect(script).toContain("window.addEventListener('focus', load)")
-    expect(script).toContain('body: JSON.stringify({ read_receipts: want })')
+    expect(script).toContain('change[field] = want')
+    expect(script).toContain('body: JSON.stringify(change)')
+    expect(script).toContain("wire('read-receipts-toggle', 'receipts-error', 'read_receipts')")
+  })
+
+  it('chat-polish-2: « Statut en ligne et dernière connexion » is a second switch that saves only its own field', () => {
+    expect(html).toContain('id="presence-toggle" type="button" role="switch"')
+    expect(html).toContain('Statut en ligne et dernière connexion')
+    expect(html.indexOf('id="read-receipts-toggle"')).toBeLessThan(html.indexOf('id="presence-toggle"'))
+    expect(receiptsSettingsScript()).toContain("wire('presence-toggle', 'presence-error', 'presence')")
   })
 })

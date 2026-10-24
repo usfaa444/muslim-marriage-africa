@@ -283,8 +283,9 @@ body.ank-has-nav { padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px))
 #app-bottom-nav .ank-nav-item:not([aria-current]) svg { color: var(--ank-gold); }
 #app-bottom-nav .ank-nav-item > span:not(.ank-nav-icon):not(.ank-sr) { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #app-bottom-nav .ank-nav-icon { position: relative; display: inline-flex; flex: none; overflow: visible; }
-#app-bottom-nav .ank-nav-badge { position: absolute; top: -0.5rem; left: 0.625rem; min-width: 1.125rem; height: 1.125rem; padding: 0 0.3rem; box-sizing: border-box; border-radius: 9999px; background: #FFFFFF; color: var(--ank-navy); border: 1.5px solid var(--ank-navy); font-size: 0.625rem; font-weight: 700; line-height: 1; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
+#app-bottom-nav .ank-nav-badge { position: absolute; top: -0.5rem; left: 0.625rem; min-width: 1.125rem; height: 1.125rem; padding: 0 0.3rem; box-sizing: border-box; border-radius: 9999px; background: #F59E0B; color: #0B1D36; border: 1.5px solid var(--ank-navy); font-size: 0.625rem; font-weight: 800; line-height: 1; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
 #app-bottom-nav .ank-nav-badge[hidden] { display: none; }
+/* Story chat-polish-2 (Faycal): amber to catch the eye; navy figures on amber are 7.9:1, and the count is spoken. */
 .ank-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 @media (min-width: 640px) {
   .ank-header-inner { padding: 0 1.5rem; height: 5rem; }

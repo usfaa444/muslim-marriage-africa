@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm'
 import {
+  type AnyPgColumn,
   bigint,
   boolean,
   check,
@@ -492,6 +493,11 @@ export const message = pgTable(
     /** The Chat Photo or Voice note (`photo_asset.kind` `chat_photo` / `voice_note`, Stories 5.3, 5.4); null for text. */
     media_id: uuid('media_id').references(() => photoAsset.id),
     created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+    /**
+     * Story chat-polish-2 (Faycal): the message this one answers, always a message of the same conversation (checked
+     * on send). Null for a plain message.
+     */
+    reply_to_message_id: uuid('reply_to_message_id').references((): AnyPgColumn => message.id),
   },
   (table) => [
     check('message_kind_check', sql`${table.kind} in ('text', 'photo', 'voice')`),
@@ -533,6 +539,21 @@ export const readReceiptSetting = pgTable('read_receipt_setting', {
     .primaryKey()
     .references(() => account.id),
   enabled: boolean('enabled').notNull(),
+  updated_at: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+})
+
+/**
+ * Story chat-polish-2: presence for Chat (« En ligne », « Vu pour la dernière fois … »). `visible` is the member's
+ * « Statut en ligne et dernière connexion » switch (no row: on). `last_seen_at` is when the member's last socket closed
+ * (after the grace period). Live « online » state is held by the api process, not here. Only chat partners ever see
+ * either, never across a Block, and only while both keep the switch on (WhatsApp rule).
+ */
+export const chatPresence = pgTable('chat_presence', {
+  account_id: uuid('account_id')
+    .primaryKey()
+    .references(() => account.id),
+  visible: boolean('visible').notNull().default(true),
+  last_seen_at: timestamp('last_seen_at', { withTimezone: true, mode: 'string' }),
   updated_at: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
 })
 
