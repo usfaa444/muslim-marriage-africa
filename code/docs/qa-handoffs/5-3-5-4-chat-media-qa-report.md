@@ -69,3 +69,52 @@ Open known issues (`e2e/known-issues.ts`) were not changed by this story. The ex
 - Story 5.11 behaviour (real cap, `message_quota` for Premium): deferred by the spec.
 
 Evidence: `code/docs/qa-handoffs/5-3-5-4-chat-media-evidence/` (screenshots, `axe-and-targets.json`, `g3-notes.json`, `g7-notes.json`, and my gate spec as `qa-chat-media.spec.ts.txt`).
+
+---
+
+# Round 2 (retest)
+
+Verdict: **PASS** for what this container can verify (2026-10-24, local app only: web dev server on port 3100 with `/v1` mocked, API tests in-memory; branch `factory/chat-media`, commit 9b07833; QA agent Claude Sonnet 5.5). Gates that need Docker, a real stack or the Tailwind CDN are listed as **pending on the owner's Mac / CI**, not as failures. No blocker, critical or major finding remains.
+
+Cloud settings: `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium`; `E2E_ALLOW_ERRORS` for tailwind / Google Fonts / network-changed. All commands re-run by me.
+
+## Round 1 findings, retested
+
+| # | Round 1 | Round 2 result | Evidence |
+| --- | --- | --- | --- |
+| F1 Major (unguarded cross-conversation check) | FIXED | New test "QA F1: a real Photo or Voice note of another conversation is never signed through my conversation" passes (17/17). My mutation: deleting `row.conversation_id !== found.row.id ||` in `mediaAccess` now gives `1 failed | 16 passed` (the F1 test). File restored, `git status` clean. | mutation run |
+| F2 Minor (small thread targets) | FIXED | Retest e2e "QA F2" passes on both projects (bounding boxes of Retour, Signaler / Bloquer, Signaler ce message, Envoyer all at least 44x44, even unstyled). Mutation: removing the `.chat-hit` CSS rule fails the test on both projects. My round 1 gate spec re-run: the only remaining small target is the textarea (182x36, an earlier story's control inside a larger composer box; see R2-1). | `axe-and-targets.json` (refreshed) |
+| F3 Minor (corrupt GIF reached preview) | FIXED | Round 1 `gif-pick` flow now answers « Ce format de photo n'est pas pris en charge. Choisissez une photo JPEG ou PNG. » for the GIF pick (`g3-notes.json`). "QA F3" e2e passes. Mutation: disabling the `sniffPhoto` check (`if (false) throw`) fails the test on both projects. The server-side extra cases (corrupt GIF, WebP, random bytes, data-URL GIF) are in the validation table and pass. | `g3-notes.json`, mutation run |
+| F4 Minor (npm audit) | UNCHANGED, not caused by this story | `npm audit --omit=dev --audit-level=high` still reports vulnerabilities; package files unchanged vs da82726. | audit run |
+| F5 Info (`photo-rules` needs Chromium) | UNCHANGED, environmental | same single unit failure | unit run |
+
+## Gates re-run
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS | lint exit 0 (warnings only, none in story files); typecheck clean; build clean; `migration-check` "Everything's fine"; diff since round 1 touches only `discussions-page.ts` (one CSS rule, one class, `sniffPhoto`), tests, spec and handoff: no secrets or debug leftovers, no dependency change |
+| G2 Automated | PASS | unit: 1 failed | 82 files passed; 665 tests passed, 12 skipped; the one failure is the known `photo-rules` Chromium-path baseline. `chat-media.e2e --repeat-each=3`: 63 passed, 3 skipped (by design), 0 flakes. Three mutations (F1, F2, F3) each caught by a test |
+| G3 Functional | PASS (mocked API) | my round 1 gate spec re-run green: photo flow, double Enter gives one POST, text and GIF refused, 500 on media access handled, reload mid-recording, offline send |
+| G4 UI fidelity | PASS (layout) / pending Mac (styled) | no horizontal scroll at 360, 390, 768, 1024, 1280, 1440 in thread, recorder and voice-ready states (asserted by the spec) |
+| G5 UX | PASS | refusal copy in French, panel kept on cap refusal, back path and cancel present |
+| G6 Accessibility | PASS (axe) / partial manual | axe WCAG 2.0 to 2.2 A/AA zero violations at all 6 widths in thread, recording, ready states; keyboard walk of the recorder and 200% zoom still pending |
+| G7 Non-functional | partial | zero console errors; media 500 handled. Lighthouse, 3G throttling, real-API security, ZAP: pending (see below) |
+| G8 Regression | PASS | full e2e: 177 passed, 37 skipped, 30 failed. The 30 are the same files as the baseline on da82726 (re-run of those four files alone: 30 failed, 34 passed): invite-inbox, profile-edit-flow, staff-review, staff-shell. None in chat, chat-media, report-block, blocked-list, app-shell |
+
+## New findings
+
+| # | Severity | Gate | Detail |
+| --- | --- | --- | --- |
+| R2-1 | Minor | G5 | The message textarea is 182x36 px (earlier story's control, inside the composer box; the box and the 44 px buttons beside it are the practical target). Accepted as minor; carried from round 1 M17. |
+
+## Not tested and why (pending on the owner's Mac or CI, not failures)
+
+- `npm run test:integration` and the Testcontainers start of the migration suite (migration 0025: FK and check constraint): no Docker here. The developer reports 19/19 against a local PostgreSQL 16; I did not re-run that. Must run on a machine with Docker.
+- Real stack: real EXIF/GPS removal and server blur, signed-URL TTL (60 s), object storage, direct API calls with no session / another user / lower role against the real server, script and SQL payloads server-side (in-memory API tests only, which I ran).
+- Styled fidelity against Stitch screen 21 (colours, spacing, icons, contrast), 200% zoom, styled axe contrast: needs the Tailwind CDN. Screenshots here are unstyled.
+- Lighthouse / Web Vitals, 3G throttle, WebKit, real phone camera and Safari MediaRecorder, real microphone: not available here.
+- Full keyboard-only walk through the recorder.
+- OWASP ZAP: not configured.
+- Story 5.11 (real cap, `message_quota`): deferred by the spec.
+
+Evidence: `code/docs/qa-handoffs/5-3-5-4-chat-media-evidence/` (gitignored, refreshed `axe-and-targets.json`, `g3-notes.json`, `g7-notes.json`, screenshots, `qa-chat-media.spec.ts.txt`).
