@@ -6,6 +6,7 @@ import { accountStoreIsMemory, getIdentityDatabase } from './account-store.js'
 import { authNow } from './auth-clock.js'
 import { getChatStore, type ConversationRow } from './chat.js'
 import { openChatText, readChatKey, sealChatText, type ChatEnvelope } from './chat-key.js'
+import { getPresenceStore, presenceBetween, type PresenceView } from './chat-presence.js'
 import { getReadStore, pointerIndex } from './chat-read.js'
 import { ageOn } from './create-account.js'
 import { getInvitesPort } from './invites-port.js'
@@ -58,6 +59,10 @@ export const MESSAGE_CAP_MESSAGE = 'Limite de messages du jour atteinte.'
 export const MEDIA_MISSING_MESSAGE = 'Ce média est introuvable.'
 export const MESSAGE_MISSING_MESSAGE = 'Ce message est introuvable.'
 export const RECEIPTS_FIELD_MESSAGE = 'read_receipts : valeur non reconnue.'
+export const PRESENCE_FIELD_MESSAGE = 'presence : valeur non reconnue.'
+export const REPLY_FIELD_MESSAGE = 'reply_to_message_id : valeur non reconnue.'
+/** Story chat-polish-2: the start of the quoted text the reply card shows (the page clamps it to two lines). */
+export const QUOTE_MAX = 160
 
 export type MessageKind = 'text' | 'photo' | 'voice'
 
@@ -70,6 +75,8 @@ export type StoredMessage = {
   body: ChatEnvelope
   media_id: string | null
   created_at: string
+  /** Story chat-polish-2: the message this one answers (same conversation), or null. */
+  reply_to_message_id?: string | null
 }
 
 export type MessagePage = { rows: StoredMessage[]; hasMore: boolean }
@@ -158,6 +165,7 @@ const columns = {
   body: message.body,
   media_id: message.media_id,
   created_at: message.created_at,
+  reply_to_message_id: message.reply_to_message_id,
 }
 
 type SelectedMessage = {
@@ -169,6 +177,7 @@ type SelectedMessage = {
   body: unknown
   media_id: string | null
   created_at: string
+  reply_to_message_id: string | null
 }
 
 function toStored(row: SelectedMessage): StoredMessage {
@@ -181,6 +190,7 @@ function toStored(row: SelectedMessage): StoredMessage {
     body: row.body as ChatEnvelope,
     media_id: row.media_id,
     created_at: new Date(row.created_at).toISOString(),
+    reply_to_message_id: row.reply_to_message_id,
   }
 }
 
@@ -274,7 +284,10 @@ export type ChatEvents = {
   messageDelivered(input: { conversationId: string; messageId: string; senderId: string; recipients: readonly string[] }): void
   /** Story chat-polish: a member's read pointer moved. Sent to the reader's own sockets and, unless blocked, the other member's. */
   conversationRead(input: { conversationId: string; readerId: string; messageId: string; recipients: readonly string[] }): void
-  /** Story chat-polish: a member turned « Confirmations de lecture » on or off. Their own sockets and their unblocked chat partners. */
+  /**
+   * Story chat-polish: a member changed a chat privacy switch (« Confirmations de lecture », and from chat-polish-2 « Statut
+   * en ligne et dernière connexion »). Their own sockets and their unblocked chat partners; they reload what they show.
+   */
   receiptsChanged(input: { accountId: string; recipients: readonly string[] }): void
 }
 
@@ -392,7 +405,17 @@ export type MessageItem = {
   created_at: string
   /** Present on `photo` and `voice` only. */
   media?: MessageMedia
+  /**
+   * Story chat-polish-2: the message this one answers, as the reply card shows it. `text` is the start of a text
+   * target (at most `QUOTE_MAX` characters), null for a Photo or a Voice note. `available: false` when the target
+   * cannot be shown (« Message indisponible »). Absent on a plain message.
+   */
+  reply_to?: ReplyQuote
 }
+
+export type ReplyQuote =
+  | { id: string; available: true; sender_id: string; mine: boolean; kind: MessageKind; text: string | null }
+  | { id: string; available: false }
 
 /** Sealed with the message like a text, so a Photo's size or a note's language is not readable at rest either. */
 type MediaMeta = { w?: number; h?: number; d?: number; l?: string | null }
@@ -427,9 +450,35 @@ function present(row: StoredMessage, viewerId: string): MessageItem {
   }
 }
 
-/** `present` plus the media facts; the Photo blur is signed for this viewer now (a failed sign is `blur_url: null`). */
-async function presentFull(row: StoredMessage, viewerId: string): Promise<MessageItem> {
-  const item = present(row, viewerId)
+/**
+ * Story chat-polish-2: the reply card for `row`, built only from a target in the same conversation (a stored id from
+ * another conversation, which send never writes, still shows nothing of it). `known` holds rows already loaded.
+ */
+async function quoteFor(row: StoredMessage, viewerId: string, known: ReadonlyMap<string, StoredMessage>): Promise<ReplyQuote | undefined> {
+  const targetId = row.reply_to_message_id
+  if (!targetId) {
+    return undefined
+  }
+  const target = known.get(targetId) ?? (await getMessageStore().find(targetId))
+  if (!target || target.conversation_id !== row.conversation_id) {
+    return { id: targetId, available: false }
+  }
+  let text: string | null = null
+  if (target.kind === 'text') {
+    const opened = openChatText(target.body, readChatKey(), target.conversation_id, target.id)
+    if (opened === null) {
+      return { id: targetId, available: false }
+    }
+    const chars = [...opened]
+    text = chars.length > QUOTE_MAX ? `${chars.slice(0, QUOTE_MAX).join('').trimEnd()}…` : opened
+  }
+  return { id: target.id, available: true, sender_id: target.sender_id, mine: target.sender_id === viewerId, kind: target.kind, text }
+}
+
+/** `present` plus the media facts and the reply card; the Photo blur is signed for this viewer now. */
+async function presentFull(row: StoredMessage, viewerId: string, known: ReadonlyMap<string, StoredMessage> = new Map()): Promise<MessageItem> {
+  const quote = await quoteFor(row, viewerId, known)
+  const item = quote ? { ...present(row, viewerId), reply_to: quote } : present(row, viewerId)
   if (row.kind === 'text' || !row.media_id) {
     return item
   }
@@ -581,6 +630,8 @@ export async function readConversation(
         me: { id: string }
         /** Read pointers (story chat-polish): mine, and the other member's (null while a Block holds or receipts are off). */
         read: { me: string | null; other: string | null; receipts: ReceiptsMode }
+        /** Story chat-polish-2: the other member's presence, or null (Block, either switch off, member unavailable). */
+        presence: PresenceView | null
       }
     }
   | ChatFailure
@@ -598,6 +649,8 @@ export async function readConversation(
   const pointers = pointerIndex(await getReadStore().pointers([found.row.id])).get(found.row.id)
   const off = await getReadStore().receiptsOff([gate.account.id, found.otherId])
   const shared = !off.has(gate.account.id) && !off.has(found.otherId)
+  const shown = await presentOther(gate.account.id, other, blocked)
+  const presence = shown.available ? await presenceBetween(gate.account.id, found.otherId, blocked) : null
   return {
     ok: true,
     body: {
@@ -606,7 +659,7 @@ export async function readConversation(
         stage: found.row.stage,
         other_id: found.otherId,
         pseudonym: other?.pseudonym ?? null,
-        other: await presentOther(gate.account.id, other, blocked),
+        other: shown,
         // Paused, ended, or a Block either way (Story 8.6): the thread stays readable, and a send is refused with
         // `conversation_closed`. The blocked member sees the same answer as for any closed thread.
         closed: blocked || found.row.ended_at !== null || found.row.paused_by !== null,
@@ -618,6 +671,7 @@ export async function readConversation(
         // How my messages show: `blocked` no tick at all (Mac QA D2), `off` « Envoyé » only, `on` « Envoyé » or « Lu ».
         receipts: blocked ? 'blocked' : shared ? 'on' : 'off',
       },
+      presence,
     },
   }
 }
@@ -669,38 +723,55 @@ export async function markRead(
   return { ok: true, body: { read: { message_id: pointer } } }
 }
 
-/** `GET /v1/chat/settings` (story chat-polish): the viewer's « Confirmations de lecture » switch. Members only. */
-export async function readChatSettings(
-  session: ResolvedSession,
-): Promise<{ ok: true; body: { read_receipts: boolean } } | ChatFailure> {
+export type ChatSettings = { read_receipts: boolean; presence: boolean }
+
+async function settingsOf(me: string): Promise<ChatSettings> {
+  const [off, hidden] = await Promise.all([getReadStore().receiptsOff([me]), getPresenceStore().hidden([me])])
+  return { read_receipts: !off.has(me), presence: !hidden.has(me) }
+}
+
+/**
+ * `GET /v1/chat/settings` (stories chat-polish, chat-polish-2): the viewer's « Confirmations de lecture » and « Statut
+ * en ligne et dernière connexion » switches. Members only.
+ */
+export async function readChatSettings(session: ResolvedSession): Promise<{ ok: true; body: ChatSettings } | ChatFailure> {
   const gate = await assertBrowseViewer(session)
   if (!gate.ok) {
     return fromViewer(gate)
   }
-  const off = await getReadStore().receiptsOff([gate.account.id])
-  return { ok: true, body: { read_receipts: !off.has(gate.account.id) } }
+  return { ok: true, body: await settingsOf(gate.account.id) }
 }
 
+const SETTING_FIELDS = [
+  { field: 'read_receipts', message: RECEIPTS_FIELD_MESSAGE },
+  { field: 'presence', message: PRESENCE_FIELD_MESSAGE },
+] as const
+
 /**
- * `PUT /v1/chat/settings` `{ read_receipts: boolean }` (story chat-polish). Off: nobody sees « Lu » for my reads and I
- * see none on my messages; my reads are still stored, so my own unread badges keep working, and turning it back on
- * shows the reads again. My other tabs and my unblocked chat partners hear `chat.receipts` (ids only) and reload.
+ * `PUT /v1/chat/settings` `{ read_receipts?: boolean, presence?: boolean }`: one or both switches; anything else is a
+ * 400 naming the field, and nothing is stored. Receipts off: nobody sees « Lu » for my reads and I see none on my
+ * messages; my reads are still stored. Presence off (WhatsApp rule): nobody sees whether I am online or when I was last
+ * seen, and I see nobody's. My other tabs and my unblocked chat partners hear `chat.receipts` (ids only) and reload.
  */
-export async function updateChatSettings(
-  session: ResolvedSession,
-  body: unknown,
-): Promise<{ ok: true; body: { read_receipts: boolean } } | ChatFailure> {
+export async function updateChatSettings(session: ResolvedSession, body: unknown): Promise<{ ok: true; body: ChatSettings } | ChatFailure> {
   const gate = await assertBrowseViewer(session)
   if (!gate.ok) {
     return fromViewer(gate)
   }
   const me = gate.account.id
   const record = typeof body === 'object' && body !== null && !Array.isArray(body) ? (body as Record<string, unknown>) : {}
-  const enabled = record['read_receipts']
-  if (typeof enabled !== 'boolean') {
+  const given = SETTING_FIELDS.filter(({ field }) => field in record)
+  if (given.length === 0) {
     return fail(400, 'UNHANDLED', RECEIPTS_FIELD_MESSAGE, { field: 'read_receipts' })
   }
-  await getReadStore().setReceipts(me, enabled, authNow())
+  for (const { field, message } of given) {
+    if (typeof record[field] !== 'boolean') {
+      return fail(400, 'UNHANDLED', message, { field })
+    }
+  }
+  const now = authNow()
+  if (typeof record['read_receipts'] === 'boolean') await getReadStore().setReceipts(me, record['read_receipts'], now)
+  if (typeof record['presence'] === 'boolean') await getPresenceStore().setVisible(me, record['presence'], now)
   try {
     const accepted = await getInvitesPort().acceptedFor(me)
     const otherByInvite = new Map(accepted.map((row) => [row.inviteId, row.otherId]))
@@ -711,7 +782,7 @@ export async function updateChatSettings(
   } catch {
     // Realtime is best effort; the next list or thread load carries the change.
   }
-  return { ok: true, body: { read_receipts: enabled } }
+  return { ok: true, body: await settingsOf(me) }
 }
 
 function readCursor(value: unknown, field: string): { ok: true; value: string | undefined } | ChatFailure {
@@ -765,18 +836,44 @@ export async function listMessages(
     cursor.after = after.value
   }
   const page = await getMessageStore().page(found.row.id, cursor, limit)
-  const items = await Promise.all(page.rows.map((row) => presentFull(row, gate.account.id)))
+  const known = new Map(page.rows.map((row) => [row.id, row]))
+  const items = await Promise.all(page.rows.map((row) => presentFull(row, gate.account.id, known)))
   return { ok: true, body: { items, has_more: page.hasMore } }
 }
 
-type SendInput =
+type SendInput = (
   | { kind: 'text'; text: string }
   | { kind: 'photo'; photo: ChatPhotoInput }
   | { kind: 'voice'; voice: VoiceNoteInput }
+) & { replyTo?: string }
+
+/** Story chat-polish-2: `reply_to_message_id` is optional; absent or null is a plain message. */
+function readReply(record: Record<string, unknown>): { ok: true; value: string | undefined } | ChatFailure {
+  const raw = record['reply_to_message_id']
+  if (raw === undefined || raw === null) {
+    return { ok: true, value: undefined }
+  }
+  if (typeof raw !== 'string' || !isUuidV7(raw)) {
+    return fail(400, 'UNHANDLED', REPLY_FIELD_MESSAGE, { field: 'reply_to_message_id' })
+  }
+  return { ok: true, value: raw }
+}
 
 /** `kind` decides the shape: `text` (5.2), `photo` with `image` (5.3), `voice` with `audio` and `duration_ms` (5.4). */
 function readSend(body: unknown): { ok: true; input: SendInput } | ChatFailure {
   const record = typeof body === 'object' && body !== null && !Array.isArray(body) ? (body as Record<string, unknown>) : {}
+  const parsed = readKind(record)
+  if (!parsed.ok) {
+    return parsed
+  }
+  const reply = readReply(record)
+  if (!reply.ok) {
+    return reply
+  }
+  return reply.value ? { ok: true, input: { ...parsed.input, replyTo: reply.value } } : parsed
+}
+
+function readKind(record: Record<string, unknown>): { ok: true; input: SendInput } | ChatFailure {
   const kind = record['kind']
   if (kind === 'photo') {
     const photo = readChatPhoto(record['image'])
@@ -873,6 +970,14 @@ export async function sendMessage(
   if (!other || !other.roles.includes('member') || !otherProfile || !isListableProfile(otherProfile.visibility, other.status)) {
     return fail(409, 'UNHANDLED', OTHER_UNAVAILABLE_MESSAGE, { reason: 'other_unavailable' })
   }
+  // Story chat-polish-2: a reply targets a message of this conversation only; any other id is « introuvable », and
+  // nothing is stored.
+  if (input.replyTo) {
+    const target = await getMessageStore().find(input.replyTo)
+    if (!target || target.conversation_id !== found.row.id) {
+      return fail(404, 'NOT_FOUND', MESSAGE_MISSING_MESSAGE, { field: 'reply_to_message_id' })
+    }
+  }
   const now = authNow()
   const cap = await checkMessageCap({ senderId: me, kind: input.kind, now })
   if (!cap.allowed) {
@@ -915,6 +1020,7 @@ export async function sendMessage(
     body: sealChatText(sealed, key, found.row.id, messageId),
     media_id: mediaId,
     created_at: now.toISOString(),
+    reply_to_message_id: input.replyTo ?? null,
   }
   await getMessageStore().insert(row)
   try {
@@ -935,7 +1041,8 @@ export async function sendMessage(
             language: input.voice.language,
           }
   await enqueueAfterPersist({ itemId: messageId, accountId: me, payload })
-  const item = input.kind === 'text' ? { ...present(row, me), text: input.text } : await presentFull(row, me)
+  const full = await presentFull(row, me)
+  const item = input.kind === 'text' ? { ...full, text: input.text } : full
   return { ok: true, body: { message: item } }
 }
 

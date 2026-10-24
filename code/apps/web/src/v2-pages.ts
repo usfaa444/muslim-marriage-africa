@@ -20,7 +20,7 @@ import {
   statusScript,
 } from './v2-client'
 import { blockedSettingsSection } from './blocked-list-page'
-import { privacySettingsSection, receiptsSettingsScript, receiptsSettingsSection, receiptsSettingsStyle } from './read-receipts-setting'
+import { presenceSettingsSection, privacySettingsSection, receiptsSettingsScript, receiptsSettingsSection, receiptsSettingsStyle } from './read-receipts-setting'
 import {
   dropSignupPseudonym,
   guardAuthPost,
@@ -35,7 +35,11 @@ import {
 
 const GATED: ShellOptions = { kind: 'gated' }
 /** Signed-out pages keep the header and the footer (story chat-polish: only app screens lose them). */
-const PUBLIC: ShellOptions = { kind: 'public' }
+/**
+ * Story chat-polish-2 (Faycal): sign-in, sign-up (identity, pseudonym, account) and password reset have no site
+ * header or footer either; only the landing page keeps them. The « Confidentialité » line keeps the legal link.
+ */
+const AUTH: ShellOptions = { kind: 'gated' }
 
 function mount(html: string, script: string, extra = '', shell: ShellOptions = GATED): string {
   const page = prepareV2(withAppShell(html, shell), script)
@@ -97,11 +101,11 @@ export function splashHtml(): string {
 }
 
 export function identityHtml(stitch: string): string {
-  return mount(stitch, identityScript(), '', PUBLIC)
+  return mount(stitch, identityScript(), '', AUTH)
 }
 
 export function pseudonymHtml(stitch: string): string {
-  return mount(stitch, pseudonymScript(), '', PUBLIC)
+  return mount(stitch, pseudonymScript(), '', AUTH)
 }
 
 export function authHtml(stitch: string, panel: 'signup' | 'login', siteKey: string): string {
@@ -109,7 +113,7 @@ export function authHtml(stitch: string, panel: 'signup' | 'login', siteKey: str
     guardAuthPost(insertLoginError(replaceLoginCaptcha(insertSignupRecaptcha(dropSignupPseudonym(hideGoogleAuth(stitch)))))),
   )
   html = showAuthPanel(html, panel)
-  return mount(html, accountScript(siteKey, panel), recaptchaTag(siteKey), PUBLIC)
+  return mount(html, accountScript(siteKey, panel), recaptchaTag(siteKey), AUTH)
 }
 
 const EMAIL_LINK_ERROR = `<p class="hidden text-xs text-[#9B2C2C] flex items-center gap-1 font-medium mt-1" id="email-link-error"><span class="material-symbols-outlined text-[14px]" data-icon="error">error</span><span id="email-link-error-text"></span></p>`
@@ -339,7 +343,7 @@ export function resetHtml(stitch: string, view: ResetView = 'request'): string {
       mismatch: 'password : la confirmation ne correspond pas.',
     }),
     '',
-    PUBLIC,
+    AUTH,
   )
 }
 
@@ -631,12 +635,13 @@ export function settingsHtml(stitch: string): string {
 
 /**
  * Story 8.6 follow-up: « Membres bloqués » sits after the PIN card, before « Formules & Packs ». Story chat-polish puts
- * « Confirmations de lecture » just before it and « Confidentialité » (from the old footer) just after it.
+ * « Confirmations de lecture » just before it and « Confidentialité » (from the old footer) just after it; chat-polish-2
+ * adds « Statut en ligne et dernière connexion » after the receipts card.
  */
 function withBlockedSection(html: string): string {
   const anchor = '<!-- 4. ABONNEMENT & PACKS DE DÉMARCHE -->'
   return html.includes(anchor)
-    ? html.replace(anchor, `${receiptsSettingsSection()}${blockedSettingsSection()}${privacySettingsSection()}${anchor}`)
+    ? html.replace(anchor, `${receiptsSettingsSection()}${presenceSettingsSection()}${blockedSettingsSection()}${privacySettingsSection()}${anchor}`)
     : html
 }
 

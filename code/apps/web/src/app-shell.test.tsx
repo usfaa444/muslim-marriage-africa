@@ -70,11 +70,11 @@ const VIEW: ProfileDetailView = {
   photos: [],
 } as ProfileDetailView
 
-type Page = { name: string; html: string; nav: NavSection | null; public?: true }
+type Page = { name: string; html: string; nav: NavSection | null; signedOut?: true }
 
 /**
  * Every in-app page the web serves from Stitch HTML. `nav: null` is a linear flow: signed in (no chrome but the legal
- * line) or, with `public`, signed out (header and footer, story chat-polish).
+ * line) or, with `signedOut`, a sign-in or sign-up step (also no header or footer since chat-polish-2, only the legal line).
  */
 function pages(): Page[] {
   const discover = [stitch('57-discover'), stitch('57-discover', 'grid.html')] as const
@@ -91,15 +91,15 @@ function pages(): Page[] {
     { name: '/profile-edit', html: profileHtml(stitch('11-profile-edit')), nav: 'profil' },
     { name: '/profile-review', html: reviewHtml(stitch('12-profile-not-yet-public'), { slaHours: 24, bioPending: true }), nav: 'profil' },
     { name: '/settings', html: settingsHtml(stitch('27-settings')), nav: 'profil' },
-    { name: '/auth', html: authHtml(stitch('02-auth'), 'login', ''), nav: null, public: true },
-    { name: '/signup/account', html: authHtml(stitch('02-auth'), 'signup', ''), nav: null, public: true },
-    { name: '/signup/identity', html: identityHtml(stitch('03-age-gate')), nav: null, public: true },
-    { name: '/signup/pseudonym', html: pseudonymHtml(stitch('54-pseudonym-dob')), nav: null, public: true },
+    { name: '/auth', html: authHtml(stitch('02-auth'), 'login', ''), nav: null, signedOut: true },
+    { name: '/signup/account', html: authHtml(stitch('02-auth'), 'signup', ''), nav: null, signedOut: true },
+    { name: '/signup/identity', html: identityHtml(stitch('03-age-gate')), nav: null, signedOut: true },
+    { name: '/signup/pseudonym', html: pseudonymHtml(stitch('54-pseudonym-dob')), nav: null, signedOut: true },
     { name: '/email-verification', html: emailHtml(stitch('04-email-verification')), nav: null },
     { name: '/phone', html: phoneHtml(stitch('06-otp')), nav: null },
     { name: '/otp', html: otpHtml(stitch('56-otp-alt')), nav: null },
     { name: '/id-liveness', html: idHtml(stitch('07-id-liveness')), nav: null },
-    { name: '/password-reset', html: resetHtml(stitch('05-password-reset')), nav: null, public: true },
+    { name: '/password-reset', html: resetHtml(stitch('05-password-reset')), nav: null, signedOut: true },
     { name: '/pin', html: pinHtml(stitch('10-pin-lock')), nav: null },
     { name: '/onboarding', html: onboardingHtml(stitch('08-onboarding')), nav: null },
     { name: '/photo-rules', html: photoHtml(stitch('09-photo-rules')), nav: null },
@@ -200,15 +200,16 @@ describe('one shell on every in-app page', () => {
   const all = pages()
 
   for (const page of all) {
-    const chrome = page.nav ? `the bottom nav on ${page.nav}, no header, no footer` : page.public ? 'one header, one footer, no bottom nav' : 'no header, no footer, no bottom nav, the privacy link'
+    const chrome = page.nav ? `the bottom nav on ${page.nav}, no header, no footer` : 'no header, no footer, no bottom nav, the privacy link'
     it(`${page.name}: ${chrome}`, () => {
       const html = page.html
-      // Story chat-polish (Faycal): header and footer only on the landing page and the signed-out pages.
-      expect(count(html, /data-app-shell="header"/g)).toBe(page.public ? 1 : 0)
-      expect(count(html, /data-app-shell="footer"/g)).toBe(page.public ? 1 : 0)
-      expect(count(html, /<footer\b/g)).toBe(page.public ? 1 : 0)
-      expect(count(html, /data-app-shell="legal"/g)).toBe(!page.nav && !page.public ? 1 : 0)
-      if (!page.nav && !page.public) expect(html).toContain('<a class="ank-footer-link" href="/#legal">Confidentialité</a>')
+      // Story chat-polish (Faycal): header and footer only on the landing page; chat-polish-2: not on sign-in and
+      // sign-up either.
+      expect(count(html, /data-app-shell="header"/g)).toBe(0)
+      expect(count(html, /data-app-shell="footer"/g)).toBe(0)
+      expect(count(html, /<footer\b/g)).toBe(0)
+      expect(count(html, /data-app-shell="legal"/g)).toBe(!page.nav ? 1 : 0)
+      if (!page.nav) expect(html).toContain('<a class="ank-footer-link" href="/#legal">Confidentialité</a>')
       expect(count(html, /<header class="w-full/g)).toBe(0)
       expect(count(html, /aria-label="Navigation (?:mobile|membre)"/g)).toBe(0)
       expect(html).not.toContain('id="discover-desktop-nav"')
@@ -228,24 +229,23 @@ describe('one shell on every in-app page', () => {
       } else {
         expect(count(html, /data-app-shell="bottom-nav"/g)).toBe(0)
         expect(count(html, /data-nav-item=/g)).toBe(0)
-        expect(html.includes('<span class="ank-brand">AnKanu</span>')).toBe(!!page.public)
+        expect(html).not.toContain('<span class="ank-brand">AnKanu</span>')
         expect(html).not.toMatch(/<body\b[^>]*class="[^"]*ank-has-nav/)
       }
     })
   }
 
-  it('renders the same nav on every member page, and the same header and footer on every signed-out page', () => {
+  it('renders the same nav on every member page, and the same legal line on every signed-out page', () => {
     const members = all.filter((page) => page.nav === 'decouvrir')
-    const signedOut = all.filter((page) => page.public)
+    const signedOut = all.filter((page) => page.signedOut)
+    expect(signedOut.map((page) => page.name)).toEqual(['/auth', '/signup/account', '/signup/identity', '/signup/pseudonym', '/password-reset'])
     const piece = (html: string, marker: string, close: string) => {
       const start = html.lastIndexOf('<', html.indexOf(marker))
       return html.slice(start, html.indexOf(close, start) + close.length)
     }
-    const headers = new Set(signedOut.map((page) => piece(page.html, 'data-app-shell="header"', '</header>')))
-    const footers = new Set(signedOut.map((page) => piece(page.html, 'data-app-shell="footer"', '</footer>')))
+    const legal = new Set(signedOut.map((page) => piece(page.html, 'data-app-shell="legal"', '</p>')))
     const navs = new Set(members.map((page) => piece(page.html, 'data-app-shell="bottom-nav"', '</nav></div>')))
-    expect(headers.size).toBe(1)
-    expect(footers.size).toBe(1)
+    expect(legal.size).toBe(1)
     expect(navs.size).toBe(1)
   })
 })

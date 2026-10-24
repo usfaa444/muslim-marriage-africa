@@ -703,6 +703,31 @@ describe('Chat Photo and Voice note: delivered, then enqueue scan (Stories 5.3, 
     expect(billingCalls).toBe(0)
   })
 
+  it('chat-polish-2 AC 20: a Photo or a Voice note can reply and be replied to; a media target is quoted by kind, never a URL', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const photo = await sendPhoto(brother, conversationId)
+    expect(photo.status).toBe(201)
+    const photoId = ((await photo.json()) as { message: { id: string } }).message.id
+    const voice = await sendVoice(sister, conversationId, { reply_to_message_id: photoId })
+    expect(voice.status).toBe(201)
+    const voiceItem = ((await voice.json()) as { message: { id: string; reply_to: Record<string, unknown> } }).message
+    expect(voiceItem.reply_to).toEqual({ id: photoId, available: true, sender_id: brother.id, mine: false, kind: 'photo', text: null })
+    const text = await send(brother, conversationId, { kind: 'text', text: 'Bien reçu.', reply_to_message_id: voiceItem.id })
+    expect(text.status).toBe(201)
+    const listed = await items(brother, conversationId)
+    const quoted = listed.find((item) => item.kind === 'text') as unknown as { reply_to: Record<string, unknown> }
+    expect(quoted.reply_to).toEqual({ id: voiceItem.id, available: true, sender_id: sister.id, mine: false, kind: 'voice', text: null })
+    expect(JSON.stringify(quoted.reply_to)).not.toMatch(/url|token|media/i)
+    // A media send with a foreign target stores no object either.
+    const elsewhere = await connected()
+    const foreign = await sendPhoto(elsewhere.brother, elsewhere.conversationId)
+    const foreignId = ((await foreign.json()) as { message: { id: string } }).message.id
+    const assets = media.assets.length
+    const refused = await sendVoice(sister, conversationId, { reply_to_message_id: foreignId })
+    expect(refused.status).toBe(404)
+    expect(media.assets.length).toBe(assets)
+  })
+
   it('validates the Photo and the Voice note and writes nothing on a refusal', async () => {
     const { sister, conversationId } = await connected()
     const gif = Buffer.from('GIF89a\x01\x00\x01\x00', 'latin1')

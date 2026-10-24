@@ -8,10 +8,12 @@ import {
   chatThreadHtml,
   discussionsHtml,
   PHOTO_MAX_BYTES,
+  QUOTE_MAX_PAGES,
   READ_RETRY_MS,
+  REPLY_SWIPE_MAX_PX,
+  REPLY_SWIPE_PX,
   REALTIME_SCRIPT,
   SPLIT_MIN_PX,
-  STAGE_LABEL,
   TEXT_MAX,
   VOICE_LANGUAGES,
   VOICE_MAX_BYTES,
@@ -63,13 +65,13 @@ function visibleText(html: string): string {
 describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
   const html = discussionsHtml(stitch('20-discussions-list'))
 
-  it('renders the list inside the shared shell with the Stitch eyebrow, title and footer note', () => {
+  it('renders the list inside the shared shell with the title, and none of the texts Faycal removed (chat-polish-2)', () => {
     expect(html).toContain("<title>AnKanu • Discussions Ta'aruf</title>")
     expect(html).toContain(`id="discussions-title" class="font-display text-3xl md:text-4xl text-deep-navy font-normal tracking-tight">${CHAT_COPY.listTitle}</h1>`)
-    expect(html).toContain('Échanges concertés &amp; bienséance')
-    expect(html).toContain('text-[#7D5F27] uppercase')
-    expect(html).toContain(CHAT_COPY.pendingNote)
-    expect(html).toContain('Registre des échanges : 0 fils actifs')
+    for (const removed of [/Échanges concertés/i, /Pour les invitations envoyées en attente/, /Registre des échanges/, /Réponse réfléchie et posée/, /Étape : discussion/]) {
+      expect(visibleText(html), String(removed)).not.toMatch(removed)
+      expect(Object.values(CHAT_COPY).join(' '), String(removed)).not.toMatch(removed)
+    }
     expect(html).toContain('data-nav-item="discussions" aria-current="page"')
     // Story chat-polish: app screens have no site header or footer, only the bottom nav.
     expect(html).not.toContain('id="app-header"')
@@ -100,9 +102,9 @@ describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
     // QA F1, F5: the row link is named by its content (no aria-label); an unavailable member gets no link.
     expect(html).not.toContain("link.setAttribute('aria-label'")
     expect(html).toContain("if (!other.available) {")
-    // QA D2: on phones the city has its own line and no « · » (from 768 px the split-view row hides the city).
-    expect(html).toContain('.conv-city { width: 100%; display: inline-flex;')
-    expect(html).toContain("line.appendChild(make('span', 'chat-city conv-city', city))")
+    // chat-polish-2: the row is the same simple card at every width: no city, no verified pill, no « ouvrir » button.
+    expect(html).not.toContain('conv-city')
+    expect(html).not.toContain('conv-when')
     expect(html).not.toContain("'·'")
     // API text goes through textContent, never innerHTML.
     expect(html).not.toMatch(/\.innerHTML\s*=/)
@@ -120,12 +122,13 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     expect(html).toContain('href="/discussions"')
     expect(html).toContain('id="thread-messages" role="log" aria-live="polite" aria-label="Messages"')
     expect(html).toContain('id="thread-typing" role="status" aria-live="polite"')
-    expect(html).toContain(`<label for="thread-input" class="font-medium text-deep-navy">${CHAT_COPY.composeLabel}</label>`)
+    // chat-polish-2: the visible label left with « Réponse réfléchie et posée »; « Votre message » names the field.
+    expect(CHAT_COPY.composeLabel).toBe('Votre message')
+    expect(html).toContain(`<label for="thread-input" class="chat-sr">${CHAT_COPY.composeLabel}</label>`)
     expect(html).toContain(`placeholder="${CHAT_COPY.placeholder}"`)
-    expect(html).toContain(`<span class="chat-send-text">${CHAT_COPY.send}</span>`)
+    expect(html).toContain(`<span class="chat-sr chat-send-text">${CHAT_COPY.send}</span>`)
     expect(html).toContain(CHAT_COPY.rule)
     expect(html).toContain('data-nav-item="discussions" aria-current="page"')
-    expect(STAGE_LABEL['chat']).toBe('Étape : discussion')
     expect(TEXT_MAX).toBe(2000)
   })
 
@@ -151,7 +154,7 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
   })
 
   it('AC 5.2-1 / 5.1-2: posts kind text once, fetches the text after a delivered event, and shows and emits typing', () => {
-    expect(html).toContain("body: JSON.stringify({ kind: 'text', text: text })")
+    expect(html).toContain("body: JSON.stringify(replyTarget ? { kind: 'text', text: text, reply_to_message_id: replyTarget.id } : { kind: 'text', text: text })")
     expect(html).toContain('if (busy || !text || input.disabled) return')
     expect(html).toContain("'?after=' + encodeURIComponent(after)")
     expect(html).toContain("'message.delivered': onDelivered")
@@ -212,13 +215,27 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     expect(html).toContain("navigator.mediaDevices.getUserMedia({ audio: true })")
     expect(html).toContain(`if (elapsed >= ${VOICE_MAX_MS} && recorder && recorder.state === 'recording') {`)
     expect(html).toContain(`if (blob.size > ${VOICE_MAX_BYTES}) { closePanel(); mediaError(COPY.voiceTooHeavy)`)
-    expect(html).toContain("postMedia({ kind: 'voice', audio: audio, duration_ms:")
+    expect(html).toContain("postMedia({ kind: 'voice', audio: audioData, duration_ms:")
     expect(VOICE_LANGUAGES.map((item) => item.label)).toEqual(['Français', 'Mooré', 'Dioula'])
     // No autoplay: the audio element is created on the first tap with preload none; no transcript anywhere.
     expect(html).toContain("audio.preload = 'none'")
     expect(html).not.toMatch(/autoplay/i)
     expect(Object.values(CHAT_COPY).join(' ')).not.toMatch(/transcri/i)
     expect(VOICE_MAX_MS).toBe(120_000)
+  })
+
+  it('chat-polish-2 replies: « Répondre » on every bubble, a 60 px swipe, the target id on the send, a two-line quote', () => {
+    expect(REPLY_SWIPE_PX).toBe(60)
+    expect(REPLY_SWIPE_MAX_PX).toBeGreaterThan(REPLY_SWIPE_PX)
+    expect(QUOTE_MAX_PAGES).toBeGreaterThan(0)
+    expect(CHAT_COPY.reply).toBe('Répondre')
+    expect(CHAT_COPY.replyUnavailable).toBe('Message indisponible')
+    expect(html).toContain("if (mine) { row.appendChild(replyButton); row.appendChild(bubble) } else { row.appendChild(bubble); row.appendChild(replyButton) }")
+    expect(html).toContain('if (event.type === \'pointerup\' && done.dx >= 60) startReply(itemsById[done.wrap.getAttribute(\'data-message-id\')])')
+    expect(html).toContain('-webkit-line-clamp: 2;')
+    expect(html).toContain('#chat-thread[data-noreply="true"] .chat-reply { display: none; }')
+    expect(html).toContain('if (replyTarget) body.reply_to_message_id = replyTarget.id')
+    expect(html).not.toMatch(/\.innerHTML\s*=/)
   })
 
   it('refuses to build a page for an id that is not a UUID', () => {

@@ -290,7 +290,7 @@ test.describe('Report / Block from the Chat thread (screen 21)', () => {
     await page.goto(`/discussions/${CONVERSATION}`)
     await reloaded
     await expect(page.getByText("Ce profil n'est plus disponible.")).toBeVisible()
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toBeDisabled()
+    await expect(page.getByLabel('Votre message')).toBeDisabled()
     await expect(page.getByRole('button', { name: 'Envoyer' })).toBeDisabled()
   })
 })

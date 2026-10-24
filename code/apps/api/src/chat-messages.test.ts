@@ -17,10 +17,12 @@ import { setBillingPort } from './billing-port.js'
 import { setBrowseLimitReader } from './browse-rate.js'
 import { memoryChatPort, setChatPort } from './chat.js'
 import { openChatText, sealChatText, setChatKey } from './chat-key.js'
+import { memoryPresenceStore, presenceBetween, resetPresence, setPresenceGraceMs, setPresenceStore } from './chat-presence.js'
 import { memoryReadStore, setReadStore } from './chat-read.js'
 import {
   memoryMessageStore,
   PREVIEW_MAX,
+  QUOTE_MAX,
   SCAN_ENQUEUE_WAIT_MS,
   setMessageCapCheck,
   setMessageStore,
@@ -64,6 +66,9 @@ const invites = memoryInviteStore()
 const chat = memoryChatPort()
 const messages = memoryMessageStore()
 const reads = memoryReadStore()
+const presence = memoryPresenceStore()
+/** Story chat-polish-2: a short grace period, so « Vu … » can be waited for. */
+const GRACE_MS = 250
 const moderation = memoryModerationPort()
 const captures = memoryCaptureStore({ accounts: memory.accounts, profiles: memory.profiles, phoneRows: [] })
 const chatKey = { key: randomBytes(32), kid: 'test-chat-1' }
@@ -132,6 +137,8 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     setChatPort(chat)
     setMessageStore(messages)
     setReadStore(reads)
+    setPresenceStore(presence)
+    setPresenceGraceMs(GRACE_MS)
     setModerationPort(switchingModeration)
     setChatKey(chatKey)
     setInvitesPort(undefined)
@@ -170,6 +177,8 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     messages.rows.length = 0
     reads.rows.length = 0
     reads.settings.clear()
+    resetPresence()
+    presence.rows.clear()
     moderation.jobs.length = 0
     moderation.calls.length = 0
     moderationMode = 'ok'
@@ -198,6 +207,9 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     setChatPort(undefined)
     setMessageStore(undefined)
     setReadStore(undefined)
+    setPresenceStore(undefined)
+    setPresenceGraceMs(undefined)
+    resetPresence()
     setModerationPort(undefined)
     setMessageCapCheck(undefined)
     setChatKey(undefined)
@@ -650,6 +662,8 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
       conversation: { id: conversationId, stage: 'chat', other_id: brother.id, pseudonym: expect.any(String), other: expect.objectContaining({ available: true }), closed: false },
       me: { id: sister.id },
       read: { me: null, other: null, receipts: 'on' },
+      // Story chat-polish-2: he has no socket open and was never seen.
+      presence: { online: false, last_seen_at: null },
     })
     expect(billingCalls).toBe(0)
   })
@@ -846,7 +860,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     const fresh = await receipts(sister)
     expect(fresh.status).toBe(200)
     expect(fresh.headers.get('cache-control')).toContain('no-store')
-    expect(await fresh.json()).toEqual({ read_receipts: true })
+    expect(await fresh.json()).toEqual({ read_receipts: true, presence: true })
     for (const value of ['false', 0, 1, null, undefined, {}]) {
       const refused = await receipts(sister, { read_receipts: value })
       expect(refused.status).toBe(400)
@@ -855,10 +869,10 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect(reads.settings.size).toBe(0)
     const off = await receipts(sister, { read_receipts: false })
     expect(off.status).toBe(200)
-    expect(await off.json()).toEqual({ read_receipts: false })
-    expect(await (await receipts(sister)).json()).toEqual({ read_receipts: false })
+    expect(await off.json()).toEqual({ read_receipts: false, presence: true })
+    expect(await (await receipts(sister)).json()).toEqual({ read_receipts: false, presence: true })
     // Only her own switch: his stays on.
-    expect(await (await receipts(brother)).json()).toEqual({ read_receipts: true })
+    expect(await (await receipts(brother)).json()).toEqual({ read_receipts: true, presence: true })
     expect([...reads.settings.keys()]).toEqual([sister.id])
 
     const account = memory.accounts.find((item) => item.id === brother.id) as { roles: string[] }
@@ -868,7 +882,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
       expect((await receipts(brother, { read_receipts: false })).status).toBe(403)
     }
     account.roles = ['member']
-    expect(await (await receipts(brother)).json()).toEqual({ read_receipts: true })
+    expect(await (await receipts(brother)).json()).toEqual({ read_receipts: true, presence: true })
     expect(billingCalls).toBe(0)
   })
 
@@ -1082,6 +1096,235 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
     expect(polling.status).toBe(200)
     expect(await polling.text()).toMatch(/^0\{"sid":/)
   })
+
+  // ---- Story chat-polish-2: replies (« Répondre », the quoted card) ----
+
+  type Quote = { id: string; available: boolean; sender_id?: string; mine?: boolean; kind?: string; text?: string | null }
+
+  function reply(who: Member, conversationId: string, text: string, target: unknown): Promise<Response> {
+    now = new Date(now.getTime() + 1000)
+    return call(`/v1/conversations/${conversationId}/messages`, who.cookie, 'POST', { kind: 'text', text, reply_to_message_id: target })
+  }
+
+  it('chat-polish-2 AC 20: a reply stores its target and both members see the quoted card, mine or theirs, with the text start', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const long = 'Bismillah. ' + 'Notre famille souhaite vous rencontrer après la prière. '.repeat(6)
+    const asked = await sentId(await sendText(brother, conversationId, long))
+    const answered = await reply(sister, conversationId, 'Avec plaisir.', asked)
+    expect(answered.status).toBe(201)
+    const sent = ((await answered.json()) as { message: { id: string; reply_to: Quote } }).message
+    const quote = { id: asked, available: true, sender_id: brother.id, kind: 'text' }
+    expect(sent.reply_to).toMatchObject({ ...quote, mine: false })
+    expect([...(sent.reply_to.text ?? '')].length).toBe(QUOTE_MAX + 1)
+    expect(sent.reply_to.text?.endsWith('…')).toBe(true)
+    expect(long.startsWith((sent.reply_to.text ?? '').slice(0, -1))).toBe(true)
+    expect(messages.rows.find((row) => row.id === sent.id)?.reply_to_message_id).toBe(asked)
+    // The quote is never stored in clear: the reply row keeps the target id only.
+    expect(JSON.stringify(messages.rows.find((row) => row.id === sent.id))).not.toContain('Notre famille')
+    const his = (await page(brother, conversationId)).items as Array<Item & { reply_to?: Quote }>
+    expect(his.find((item) => item.id === sent.id)?.reply_to).toMatchObject({ ...quote, mine: true })
+    expect(his.find((item) => item.id === asked)?.reply_to).toBeUndefined()
+    // A short target is quoted whole; a reply to a reply quotes the reply.
+    const short = await reply(brother, conversationId, 'Parfait.', sent.id)
+    expect(((await short.json()) as { message: { reply_to: Quote } }).message.reply_to).toMatchObject({ id: sent.id, mine: false, text: 'Avec plaisir.' })
+    // Paging: a target outside the page is still quoted.
+    const older = (await page(sister, conversationId, '?limit=1')).items as Array<Item & { reply_to?: Quote }>
+    expect(older[0]?.reply_to).toMatchObject({ id: sent.id, available: true, mine: true, text: 'Avec plaisir.' })
+    expect(billingCalls).toBe(0)
+  })
+
+  it('chat-polish-2 AC 21: a reply target from another conversation, unknown or malformed is refused and nothing is stored', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const elsewhere = await connected()
+    const foreign = await sentId(await sendText(elsewhere.brother, elsewhere.conversationId, 'Message privé ailleurs'))
+    const before = messages.rows.length
+    const jobs = moderation.calls.length
+    const leaked = await reply(sister, conversationId, 'Intrusion', foreign)
+    expect(leaked.status).toBe(404)
+    const body = await leaked.text()
+    expect(body).not.toContain('Message privé')
+    expect(JSON.parse(body)).toMatchObject({ error: { code: 'NOT_FOUND', message: 'Ce message est introuvable.', details: { field: 'reply_to_message_id' } } })
+    expect((await reply(sister, conversationId, 'Inconnu', '01990000-0000-7000-8000-00000000dead')).status).toBe(404)
+    for (const bad of ['abc', 42, {}, ['x'], true]) {
+      const refused = await reply(brother, conversationId, 'Mauvais', bad)
+      expect(refused.status).toBe(400)
+      expect(await refused.json()).toMatchObject({ error: { message: 'reply_to_message_id : valeur non reconnue.', details: { field: 'reply_to_message_id' } } })
+    }
+    expect(messages.rows.length).toBe(before)
+    expect(moderation.calls.length).toBe(jobs)
+    // null or absent is a plain message.
+    const plain = await reply(brother, conversationId, 'Normal', null)
+    expect(plain.status).toBe(201)
+    expect(((await plain.json()) as { message: Record<string, unknown> }).message).not.toHaveProperty('reply_to')
+  })
+
+  it('chat-polish-2 AC 22: a target that cannot be read shows « indisponible » only, and a stored foreign id never leaks its text', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const elsewhere = await connected()
+    const foreign = await sentId(await sendText(elsewhere.sister, elsewhere.conversationId, 'Secret ailleurs'))
+    const target = await sentId(await sendText(brother, conversationId, 'Cible'))
+    const answer = await sentId(await reply(sister, conversationId, 'Réponse', target))
+    // A target that no longer opens (moved envelope) is unavailable, with no text, sender or kind.
+    const row = messages.rows.find((item) => item.id === target)
+    if (row) row.body = sealChatText('Cible', chatKey, conversationId, 'another-id')
+    const listed = (await page(brother, conversationId)).items as Array<Item & { reply_to?: Quote }>
+    expect(listed.find((item) => item.id === answer)?.reply_to).toEqual({ id: target, available: false })
+    // A row that somehow points into another conversation (never written by send) shows nothing of it.
+    const stored = messages.rows.find((item) => item.id === answer)
+    if (stored) stored.reply_to_message_id = foreign
+    const again = (await page(sister, conversationId)).items as Array<Item & { reply_to?: Quote }>
+    expect(again.find((item) => item.id === answer)?.reply_to).toEqual({ id: foreign, available: false })
+    expect(JSON.stringify(again)).not.toContain('Secret ailleurs')
+  })
+
+  it('chat-polish-2 AC 23: no reply into a closed or blocked conversation, and only members of it may reply', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const stranger = await member('brother')
+    const target = await sentId(await sendText(brother, conversationId, 'Bonjour'))
+    expect((await reply(stranger, conversationId, 'Moi aussi', target)).status).toBe(404)
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    const refused = await reply(sister, conversationId, 'Après blocage', target)
+    expect(refused.status).toBe(409)
+    expect(messages.rows.filter((row) => row.reply_to_message_id === target)).toHaveLength(0)
+  })
+
+  // ---- Story chat-polish-2: presence (« En ligne », « Vu pour la dernière fois … ») ----
+
+  type Presence = { online: boolean; last_seen_at: string | null } | null
+
+  async function presenceSeenBy(viewer: Member, conversationId: string): Promise<Presence> {
+    const head = await call(`/v1/conversations/${conversationId}`, viewer.cookie)
+    expect(head.status).toBe(200)
+    return ((await head.json()) as { presence: Presence }).presence
+  }
+
+  function closed(socket: Socket): Promise<void> {
+    return new Promise((resolve) => {
+      if (!socket.connected) return resolve()
+      socket.once('disconnect', () => resolve())
+      socket.disconnect()
+    })
+  }
+
+  it('chat-polish-2 AC 8: presence follows her sockets (several tabs count once), survives a short reconnect, then stores « Vu … »', async () => {
+    const { brother, sister, conversationId } = await connected()
+    expect(await presenceSeenBy(brother, conversationId)).toEqual({ online: false, last_seen_at: null })
+    const first = await connectedSocket(sister)
+    const second = await connectedSocket(sister)
+    await expect.poll(() => presenceSeenBy(brother, conversationId)).toEqual({ online: true, last_seen_at: null })
+    // One tab closes: still online, well past the grace period, and no « Vu » is stored.
+    await closed(first)
+    await new Promise((resolve) => setTimeout(resolve, GRACE_MS * 2))
+    expect(await presenceSeenBy(brother, conversationId)).toEqual({ online: true, last_seen_at: null })
+    expect(presence.rows.get(sister.id)?.last_seen_at ?? null).toBeNull()
+    // The last tab closes: still online during the grace period; a reconnect inside it never shows « hors ligne ».
+    const leftAt = now.toISOString()
+    await closed(second)
+    expect(await presenceSeenBy(brother, conversationId)).toEqual({ online: true, last_seen_at: null })
+    const back = await connectedSocket(sister)
+    await new Promise((resolve) => setTimeout(resolve, GRACE_MS * 2))
+    expect(await presenceSeenBy(brother, conversationId)).toEqual({ online: true, last_seen_at: null })
+    expect(presence.rows.get(sister.id)?.last_seen_at ?? null).toBeNull()
+    // Gone for good: after the grace period she is offline, seen when her last socket closed.
+    now = new Date(now.getTime() + 5000)
+    const goneAt = now.toISOString()
+    await closed(back)
+    await expect.poll(() => presenceSeenBy(brother, conversationId), { timeout: 3000 }).toEqual({ online: false, last_seen_at: goneAt })
+    expect(goneAt).not.toBe(leftAt)
+    expect(presence.rows.get(sister.id)?.last_seen_at).toBe(goneAt)
+    expect(billingCalls).toBe(0)
+  })
+
+  it('chat-polish-2 AC 8: presence.changed reaches her chat partner (ids only), never a stranger, across a Block, or when either hides it', async () => {
+    const { brother, sister, conversationId } = await connected()
+    const stranger = await member('brother')
+    const hisSocket = await connectedSocket(brother)
+    const strangerSocket = await connectedSocket(stranger)
+    const toHim = nextEvent<Record<string, unknown>>(hisSocket, 'presence.changed')
+    const leak = noEvent(strangerSocket, 'presence.changed')
+    const herSocket = await connectedSocket(sister)
+    expect(await toHim).toEqual({ account_id: sister.id })
+    await leak
+    // She goes offline: told once the grace period is over.
+    const offline = nextEvent<Record<string, unknown>>(hisSocket, 'presence.changed', GRACE_MS + 2000)
+    await closed(herSocket)
+    expect(await offline).toEqual({ account_id: sister.id })
+
+    // She hides hers: her coming and going is never announced (nobody can time it from the events).
+    expect((await receipts(sister, { presence: false })).status).toBe(200)
+    const hiddenHers = noEvent(hisSocket, 'presence.changed', GRACE_MS + 600)
+    const again = await connectedSocket(sister)
+    await closed(again)
+    await hiddenHers
+    expect(await presenceSeenBy(brother, conversationId)).toBeNull()
+    expect(await presenceSeenBy(sister, conversationId)).toBeNull()
+    expect((await receipts(sister, { presence: true })).status).toBe(200)
+
+    // He hides his: she is not announced to him either (reciprocal), and he sees nothing.
+    expect((await receipts(brother, { presence: false })).status).toBe(200)
+    const hiddenHis = noEvent(hisSocket, 'presence.changed', GRACE_MS + 600)
+    const third = await connectedSocket(sister)
+    expect(await presenceSeenBy(brother, conversationId)).toBeNull()
+    await closed(third)
+    await hiddenHis
+    expect((await receipts(brother, { presence: true })).status).toBe(200)
+
+    // A Block either way: nothing crosses, and the head says nothing.
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    const blocked = noEvent(hisSocket, 'presence.changed', GRACE_MS + 600)
+    const fourth = await connectedSocket(sister)
+    expect(await presenceSeenBy(brother, conversationId)).toBeNull()
+    // The presence rule itself refuses a Block, whatever the caller already hid.
+    expect(await presenceBetween(brother.id, sister.id, true)).toBeNull()
+    expect(await presenceBetween(brother.id, sister.id, false)).toEqual({ online: true, last_seen_at: null })
+    await closed(fourth)
+    await blocked
+  })
+
+  it('chat-polish-2 AC 9: « Statut en ligne et dernière connexion » is on by default, per member, booleans only, members only', async () => {
+    const { brother, sister } = await connected()
+    expect(await (await receipts(sister)).json()).toEqual({ read_receipts: true, presence: true })
+    for (const value of ['false', 0, 1, null, {}]) {
+      const refused = await receipts(sister, { presence: value })
+      expect(refused.status).toBe(400)
+      expect(await refused.json()).toMatchObject({ error: { message: 'presence : valeur non reconnue.', details: { field: 'presence' } } })
+    }
+    // A bad value next to a good one stores neither.
+    const mixed = await receipts(sister, { read_receipts: false, presence: 'non' })
+    expect(mixed.status).toBe(400)
+    expect(reads.settings.has(sister.id)).toBe(false)
+    expect(presence.rows.has(sister.id)).toBe(false)
+    const off = await receipts(sister, { presence: false })
+    expect(off.status).toBe(200)
+    expect(await off.json()).toEqual({ read_receipts: true, presence: false })
+    expect(await (await receipts(brother)).json()).toEqual({ read_receipts: true, presence: true })
+    const both = await receipts(brother, { read_receipts: false, presence: false })
+    expect(await both.json()).toEqual({ read_receipts: false, presence: false })
+    expect((await receipts(undefined, { presence: false })).status).toBe(401)
+    const account = memory.accounts.find((item) => item.id === brother.id) as { roles: string[] }
+    for (const roles of [['mahram'], ['moderator']]) {
+      account.roles = roles
+      expect((await receipts(brother, { presence: true })).status).toBe(403)
+    }
+    account.roles = ['member']
+    expect(billingCalls).toBe(0)
+  })
+
+  it('chat-polish-2 AC 9: a presence change tells my tabs and my unblocked partners to reload (chat.receipts), never a stranger', async () => {
+    const { brother, sister } = await connected()
+    const stranger = await member('brother')
+    const hisSocket = await connectedSocket(brother)
+    const herSocket = await connectedSocket(sister)
+    const strangerSocket = await connectedSocket(stranger)
+    const toHim = nextEvent<Record<string, unknown>>(hisSocket, 'chat.receipts')
+    const toHer = nextEvent<Record<string, unknown>>(herSocket, 'chat.receipts')
+    const leak = noEvent(strangerSocket, 'chat.receipts')
+    expect((await receipts(sister, { presence: false })).status).toBe(200)
+    expect(await toHim).toEqual({ account_id: sister.id })
+    expect(await toHer).toEqual({ account_id: sister.id })
+    await leak
+  })
+
 })
 
 describe('chat and moderation boundaries (AD-10, AD-21, AD-15)', () => {

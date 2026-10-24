@@ -2,6 +2,7 @@ import type { Server as HttpServer } from 'node:http'
 import { Server, type Socket } from 'socket.io'
 import { clientIp } from './auth-guard.js'
 import { setChatEvents, typingTarget } from './chat-messages.js'
+import { presenceConnected, presenceDisconnected, resetPresence, setPresenceEvents } from './chat-presence.js'
 import { setInviteEvents } from './invites.js'
 import { originForbidden } from './edge-request.js'
 import { applySessionGate, loadLiveSession } from './pin-session.js'
@@ -12,8 +13,9 @@ import { assertBrowseViewer } from './public-profile.js'
  * gates as HTTP: Origin (AD-17 CSRF), session and PIN lock, then the member viewer gate. A socket joins only its own
  * room `account:<id>`. Events carry ids only: `message.delivered { conversation_id, message_id, sender_id }` and
  * `conversation.typing { conversation_id, account_id }`, and (story chat-polish) `conversation.read { conversation_id,
- * account_id, message_id }` to the reader and, unless a Block holds, the other member. There is no pending, held or
- * blocked event. No BillingPort.
+ * account_id, message_id }` to the reader and, unless a Block holds, the other member. Story chat-polish-2: each socket
+ * counts for its member's presence, and `presence.changed { account_id }` goes to the chat partners who may see it.
+ * There is no pending, held or blocked event. No BillingPort.
  */
 
 export const REALTIME_PATH = '/v1/realtime'
@@ -81,6 +83,8 @@ export function attachRealtime(httpServer: HttpServer): Server {
   io.on('connection', (socket: Socket) => {
     const data = socket.data as SocketData
     void socket.join(`account:${data.accountId}`)
+    void presenceConnected(data.accountId).catch(() => undefined)
+    socket.on('disconnect', () => presenceDisconnected(data.accountId))
     socket.on('conversation.typing', (payload: unknown) => {
       const conversationId =
         typeof payload === 'object' && payload !== null ? (payload as { conversation_id?: unknown }).conversation_id : undefined
@@ -122,6 +126,12 @@ export function attachRealtime(httpServer: HttpServer): Server {
       io.to(rooms).emit('chat.receipts', { account_id: accountId })
     },
   })
+  setPresenceEvents({
+    presenceChanged({ accountId, recipients }) {
+      const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
+      io.to(rooms).emit('presence.changed', { account_id: accountId })
+    },
+  })
   setInviteEvents({
     inviteChanged({ inviteId, recipients }) {
       const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
@@ -138,6 +148,8 @@ export async function closeRealtime(): Promise<void> {
   current = undefined
   setChatEvents(undefined)
   setInviteEvents(undefined)
+  setPresenceEvents(undefined)
+  resetPresence()
   if (io) {
     io.disconnectSockets(true)
     // The HTTP server belongs to Nest; only detach Socket.IO's own engine.

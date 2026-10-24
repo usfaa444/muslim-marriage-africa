@@ -79,9 +79,9 @@ function png(width: number, height: number, rgb: [number, number, number]): Buff
 }
 
 /** One second of silence as WAV: decodable by headless Chromium, so playback really starts. */
-function wav(): Buffer {
+function wav(seconds = 1): Buffer {
   const rate = 8000
-  const data = Buffer.alloc(rate)
+  const data = Buffer.alloc(rate * seconds)
   data.fill(128)
   const head = Buffer.alloc(44)
   head.write('RIFF', 0, 'latin1')
@@ -102,6 +102,8 @@ function wav(): Buffer {
 const BLUR = png(8, 6, [190, 175, 150])
 const CLEAR = png(160, 120, [40, 90, 140])
 const AUDIO = wav()
+/** Story chat-polish-2: a test may serve a longer note, to watch the waveform fill while it plays. */
+let voiceAudio = AUDIO
 
 const FAKE_IO = `(function () {
   var fake = { sockets: [], emitted: [] }
@@ -196,7 +198,7 @@ async function serveApi(context: BrowserContext, baseURL: string, state: Api): P
       state.mediaCalls.push(`get ${token}`)
       if (token.startsWith('blur')) await route.fulfill({ status: 200, contentType: 'image/png', body: BLUR })
       else if (token.startsWith('clear')) await route.fulfill({ status: 200, contentType: 'image/png', body: CLEAR })
-      else if (token.startsWith('voice')) await route.fulfill({ status: 200, contentType: 'audio/wav', body: AUDIO })
+      else if (token.startsWith('voice')) await route.fulfill({ status: 200, contentType: 'audio/wav', body: voiceAudio })
       else await route.fulfill(json({ error: { code: 'FORBIDDEN', message: 'Accès au média refusé.', details: null } }, 403))
       return
     }
@@ -598,5 +600,140 @@ test.describe('Chat Photo and Voice note (Stories 5.3, 5.4, screen 21)', () => {
       await expectNoHorizontalOverflow(page)
       await page.getByTestId('thread-media').getByRole('button', { name: 'Annuler' }).click()
     }
+  })
+})
+
+test.describe('story chat-polish-2: voice notes like WhatsApp (waveform, icon recorder, listen before sending)', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+
+  function wave(page: Page) {
+    return bubbles(page).nth(1).getByRole('slider', { name: 'Position dans la note vocale' })
+  }
+
+  /** The bars painted as played (what the member sees), checked against the count the slider reports. */
+  async function playedBars(page: Page): Promise<number> {
+    const [painted, said] = await wave(page).evaluate((node) => [node.querySelectorAll('[data-played]').length, Number(node.getAttribute('data-played-bars'))])
+    expect(painted).toBe(said)
+    return painted
+  }
+
+  test('AC 16: the waveform fills while the note plays, holds on pause, and goes back to the start at the end', async ({ page, context, baseURL }) => {
+    voiceAudio = wav(4)
+    try {
+      await setLite(context, false)
+      await serveApi(context, baseURL ?? '', api())
+      await openThread(page)
+      const voice = bubbles(page).nth(1)
+      await expect(wave(page)).toHaveAttribute('data-played-bars', '0')
+      await expect(wave(page)).toHaveAttribute('aria-valuetext', '0:00 sur 0:48')
+      await voice.getByRole('button', { name: 'Écouter la note vocale' }).click()
+      // The browser knows the real length (4 s) once the audio loads: the bars follow it.
+      await expect(wave(page)).toHaveAttribute('aria-valuemax', '4')
+      await expect.poll(() => playedBars(page), { timeout: 4000 }).toBeGreaterThan(4)
+      await voice.getByRole('button', { name: 'Mettre en pause la note vocale' }).click()
+      const held = await playedBars(page)
+      await page.waitForTimeout(600)
+      expect(await playedBars(page)).toBe(held)
+      expect(held).toBeGreaterThan(4)
+      expect(held).toBeLessThan(36)
+      await voice.getByRole('button', { name: 'Écouter la note vocale' }).click()
+      await expect.poll(() => playedBars(page), { timeout: 4000 }).toBeGreaterThan(held)
+      // Ended: back to the start, like WhatsApp.
+      await expect(voice.getByRole('button', { name: 'Écouter la note vocale' })).toBeVisible({ timeout: 6000 })
+      await expect(wave(page)).toHaveAttribute('data-played-bars', '0')
+    } finally {
+      voiceAudio = AUDIO
+    }
+  })
+
+  test('AC 17: the waveform is a slider: arrow keys move 5 s, Home and End, a tap seeks; it spans the bubble', async ({ page, context, baseURL }) => {
+    await setLite(context, false)
+    await serveApi(context, baseURL ?? '', api())
+    await openThread(page)
+    const slider = wave(page)
+    await slider.focus()
+    await page.keyboard.press('ArrowRight')
+    await expect(slider).toHaveAttribute('aria-valuetext', '0:05 sur 0:48')
+    await expect(slider).toHaveAttribute('aria-valuenow', '5')
+    await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('ArrowLeft')
+    await expect(slider).toHaveAttribute('aria-valuetext', '0:05 sur 0:48')
+    await page.keyboard.press('End')
+    await expect(slider).toHaveAttribute('aria-valuetext', '0:48 sur 0:48')
+    await expect(slider).toHaveAttribute('data-played-bars', '36')
+    await page.keyboard.press('Home')
+    await expect(slider).toHaveAttribute('data-played-bars', '0')
+    const box = await slider.boundingBox()
+    if (!box) throw new Error('no waveform box')
+    await page.mouse.click(box.x + box.width * 0.5, box.y + box.height / 2)
+    await expect(slider).toHaveAttribute('aria-valuetext', /^0:2[3-5] sur 0:48$/)
+    // Faycal: the bars reach close to the end of the bubble, at every width, without overflowing it.
+    for (const width of [320, 390, 1280]) {
+      await page.setViewportSize({ width, height: 800 })
+      const bubble = await bubbles(page).nth(1).locator('.chat-bubble-body').boundingBox()
+      const bars = await slider.boundingBox()
+      if (!bubble || !bars) throw new Error('no boxes')
+      expect(bars.x + bars.width).toBeLessThanOrEqual(bubble.x + bubble.width)
+      expect(bubble.x + bubble.width - (bars.x + bars.width)).toBeLessThanOrEqual(24)
+    }
+    await expectAccessible(page)
+  })
+
+  test('AC 13 / 14 / 15: the recorder is icons: a red « Annuler », a navy check that stops, a preview to listen to, a round send', async ({ page, context, baseURL }) => {
+    const state = api()
+    await setLite(context, false)
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    await page.getByRole('button', { name: 'Enregistrer une note vocale sobre' }).click()
+    const panel = page.getByTestId('thread-media')
+    const cancel = panel.getByTestId('voice-cancel')
+    const stop = panel.getByTestId('voice-stop')
+    await expect(cancel).toHaveAccessibleName('Annuler')
+    await expect(stop).toHaveAccessibleName("Arrêter l'enregistrement")
+    // No visible words on the buttons: icons only, named for screen readers.
+    await expect(cancel.locator('svg')).toHaveCount(1)
+    await expect(stop.locator('svg')).toHaveCount(1)
+    for (const button of [cancel, stop]) {
+      const box = await button.boundingBox()
+      expect(box?.width ?? 0).toBeGreaterThanOrEqual(44)
+      expect(box?.height ?? 0).toBeGreaterThanOrEqual(44)
+    }
+    expect(await cancel.evaluate((node) => getComputedStyle(node).backgroundColor)).toBe('rgb(180, 35, 24)')
+    expect(await stop.evaluate((node) => getComputedStyle(node).backgroundColor)).toBe('rgb(11, 29, 54)')
+    expect(await stop.evaluate((node) => getComputedStyle(node).borderRadius)).not.toBe(await cancel.evaluate((node) => getComputedStyle(node).borderRadius))
+    await expect(panel.getByTestId('voice-timer')).toHaveText(/^0:0[2-9] \/ 2:00$/, { timeout: 6000 })
+    await stop.click()
+    // Listen before sending: a play button and the same waveform; nothing is posted yet.
+    const listen = panel.getByTestId('voice-preview-play')
+    await expect(listen).toHaveAccessibleName('Écouter la note vocale')
+    await expect(panel.getByRole('slider', { name: 'Position dans la note vocale' })).toBeVisible()
+    await listen.click()
+    await expect(listen).toHaveAccessibleName('Mettre en pause la note vocale')
+    await expect(listen).toHaveAccessibleName('Écouter la note vocale', { timeout: 6000 })
+    expect(state.posts).toEqual([])
+    const send = panel.getByTestId('voice-send')
+    await expect(send).toHaveAccessibleName('Envoyer la note vocale')
+    expect(await send.evaluate((node) => getComputedStyle(node).borderRadius)).toBe('9999px')
+    await expectAccessible(page)
+    const posted = page.waitForResponse((response) => response.request().method() === 'POST' && response.url().endsWith('/messages'))
+    await send.click()
+    expect((await posted).status()).toBe(201)
+    expect(state.posts[0]?.kind).toBe('voice')
+    await expect(panel).toBeHidden()
+  })
+
+  test('AC 14: « Annuler » (the red trash) after the preview discards the note and sends nothing', async ({ page, context, baseURL }) => {
+    const state = api()
+    await setLite(context, false)
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    await page.getByRole('button', { name: 'Enregistrer une note vocale sobre' }).click()
+    const panel = page.getByTestId('thread-media')
+    await expect(panel.getByTestId('voice-timer')).toHaveText(/^0:0[2-9] \/ 2:00$/, { timeout: 6000 })
+    await panel.getByTestId('voice-stop').click()
+    await expect(panel.getByTestId('voice-preview-play')).toBeVisible()
+    await panel.getByTestId('voice-cancel').click()
+    await expect(panel).toBeHidden()
+    expect(state.posts).toEqual([])
   })
 })

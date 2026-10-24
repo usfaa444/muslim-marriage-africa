@@ -197,6 +197,20 @@
       "when": 1792845504724,
       "tag": "0027_read_receipt_setting",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1792864092381,
+      "tag": "0028_chat_presence",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "7",
+      "when": 1792865861619,
+      "tag": "0029_message_reply",
+      "breakpoints": true
     }
   ]
 }

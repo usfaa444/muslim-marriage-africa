@@ -28,7 +28,7 @@ function threadTitle(page: Page) {
 }
 
 function composer(page: Page) {
-  return page.getByLabel('Réponse réfléchie et posée')
+  return page.getByLabel('Votre message')
 }
 
 test.describe('story chat-polish: the thread is a messaging app, only the messages scroll (AC 23)', () => {
