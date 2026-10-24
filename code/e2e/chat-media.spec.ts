@@ -430,6 +430,74 @@ test.describe('Chat Photo and Voice note (Stories 5.3, 5.4, screen 21)', () => {
     expect(state.posts).toEqual([])
   })
 
+  test('QA F2: « Retour », « Signaler / Bloquer », « Signaler ce message » and « Envoyer » are 44 x 44 targets, even unstyled', async ({ page, context, baseURL }) => {
+    const state = api()
+    await setLite(context, false)
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    await page.getByRole('textbox').first().fill('Bien reçu.')
+    const targets = [
+      page.getByRole('link', { name: 'Retour aux discussions' }),
+      page.getByRole('link', { name: 'Signaler / Bloquer' }),
+      page.getByRole('button', { name: 'Envoyer', exact: true }),
+      ...(await bubbles(page).getByRole('link', { name: 'Signaler ce message' }).all()),
+    ]
+    expect(targets.length).toBeGreaterThanOrEqual(5)
+    for (const target of targets) {
+      await expect(target).toBeVisible()
+      const box = await target.boundingBox()
+      expect(box?.width ?? 0).toBeGreaterThanOrEqual(44)
+      expect(box?.height ?? 0).toBeGreaterThanOrEqual(44)
+    }
+    await expectAccessible(page)
+    await expectNoHorizontalOverflow(page)
+  })
+
+  test('QA F3: a GIF or a corrupt file is refused before any preview, whatever its name or type; a JPEG still previews', async ({ page, context, baseURL }) => {
+    const state = api()
+    await setLite(context, false)
+    await serveApi(context, baseURL ?? '', state)
+    await openThread(page)
+    const panel = page.getByTestId('thread-media')
+    const unsupported = "Ce format de photo n'est pas pris en charge. Choisissez une photo JPEG ou PNG."
+    // A real, decodable GIF the browser could re-encode, named and typed as a JPEG; then a corrupt GIF.
+    const realGif = Buffer.from('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7', 'base64')
+    const corruptGif = Buffer.concat([Buffer.from('GIF89a', 'latin1'), Buffer.alloc(32, 0x5a)])
+    for (const file of [
+      { name: 'photo.jpg', mimeType: 'image/jpeg', buffer: realGif },
+      { name: 'anim.gif', mimeType: 'image/gif', buffer: corruptGif },
+    ]) {
+      const chooser = page.waitForEvent('filechooser')
+      await page.getByRole('button', { name: 'Joindre une photo sobre' }).click()
+      await (await chooser).setFiles(file)
+      await expect(page.getByRole('alert').filter({ hasText: unsupported })).toBeVisible()
+      await expect(panel.getByRole('img', { name: 'Aperçu de la photo à envoyer' })).toHaveCount(0)
+      await expect(panel.getByRole('button', { name: 'Envoyer la photo' })).toHaveCount(0)
+    }
+    expect(state.posts).toEqual([])
+
+    // A JPEG (made by this browser) passes the same check and previews.
+    const jpeg = Buffer.from(
+      (await page.evaluate(() => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 40
+        canvas.height = 30
+        const context2d = canvas.getContext('2d')
+        if (context2d) {
+          context2d.fillStyle = '#336699'
+          context2d.fillRect(0, 0, 40, 30)
+        }
+        return canvas.toDataURL('image/jpeg', 0.8)
+      })).split(',')[1] ?? '',
+      'base64',
+    )
+    const chooser = page.waitForEvent('filechooser')
+    await page.getByRole('button', { name: 'Joindre une photo sobre' }).click()
+    await (await chooser).setFiles({ name: 'photo.jpg', mimeType: 'image/jpeg', buffer: jpeg })
+    await expect(panel.getByRole('img', { name: 'Aperçu de la photo à envoyer' })).toBeVisible()
+    await expect(page.getByRole('alert').filter({ hasText: unsupported })).toBeHidden()
+  })
+
   test('AC 5.3-2 / 5.4-2 (UI side of the 5.11 seam): a refused send shows the API message and keeps the Photo ready', async ({ page, context, baseURL }) => {
     const state = api()
     await setLite(context, false)

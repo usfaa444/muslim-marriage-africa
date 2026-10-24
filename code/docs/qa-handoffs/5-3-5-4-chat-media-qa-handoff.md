@@ -115,9 +115,9 @@ Full stack (Fay's Mac, `.factory/config.md`): rebuild, **run the migrate command
 
 ## 7. Assumptions and known issues
 
-Decisions taken on the spec's behalf (product owner should confirm):
+Decisions taken on the spec's behalf (item 1 confirmed; the others still for the product owner to confirm):
 
-1. **The recipient sees a Chat Photo clear.** Sending a Photo in a conversation is the sender's per-viewer choice; the Profile « flou protecteur » (FR-056–FR-059) governs Profile Photos. The server blur is shown first as placeholder (and in Lite until a tap). If Chat Photos must follow the sender's blur setting, it is one rule in `signChatMedia`.
+1. **The recipient sees a Chat Photo clear. Confirmed by the product owner (Faycal) after QA round 1.** Sending a Photo in a conversation is the sender's per-viewer choice; the Profile « flou protecteur » (FR-056–FR-059) governs Profile Photos only. The server blur is shown first as placeholder (and in Lite until a tap).
 2. **Limits** not fixed by the PRD: Photo ≤ 2 Mo after browser compression (1600 px JPEG), ≤ 6000 px edge on the server; Voice note 1 s – 2 min, ≤ 1 Mo, Opus 32 kbit/s. Stated in the copy.
 3. **Language select** on the Voice note (Français default, Mooré, Dioula): the AC is about `mos` / `dyu`, so the member says which; it only goes to the scan payload.
 4. **One scan job per media message**, keyed by `message_id` (not a second job by `asset_id`, per the adversarial review « one send → two jobs »).
@@ -158,3 +158,25 @@ Known issues of this environment:
   2. At 360 px the 320 px Voice note card pushed its bubble past both screen edges (clipped by the thread, so overflow read 0). Now `min(300px, 100vw - 112px)`; the check now also measures each bubble against the viewport.
   3. The play / pause `aria-label` mismatch and the soft-gold voice icon contrast on light backgrounds (section 7).
 - Screenshots (360 and 1440: thread full and Lite, recording, voice ready, Photo preview) are in `code/docs/qa-handoffs/5-3-5-4-chat-media-evidence/`, **left untracked on purpose** (not committed).
+
+## Retest (QA round 1 FAIL, fixes for round 2)
+
+QA report: `code/docs/qa-handoffs/5-3-5-4-chat-media-qa-report.md` (b49b48e). Product decision recorded: Chat Photos show clear to the recipient, confirmed by Faycal (section 7, item 1, and the spec).
+
+| Finding | Fix | Regression test | Proof the test guards it |
+| --- | --- | --- | --- |
+| F1 (Major): the cross-conversation check in `mediaAccess` was unguarded | No product change needed (the check was correct). | `apps/api/src/chat-media.test.ts` « QA F1: a real Photo or Voice note of another conversation is never signed through my conversation (404, no grant) »: two real conversations; a real Photo and a real Voice note are sent in the second; both members of the first ask for them through the first conversation id → 404 « Ce média est introuvable. »; through the second id (not a participant) → 404; no grant is minted for them on those media; the second conversation's own members still get 200. | Mutation: removing `row.conversation_id !== found.row.id ||` from `mediaAccess` makes this test fail (`1 failed | 16 passed`); with the check, `17 passed`. File restored. |
+| F2 (Minor): thread controls under 44 × 44 | New class `chat-hit` in the page's own style block: `#chat-thread .chat-hit:not([hidden]) { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; }`, added to « Retour aux discussions » (`#thread-back`), « Signaler / Bloquer » (`#thread-report`), « Envoyer » (`#thread-send`) and each « Signaler ce message » flag. With Tailwind these already had 44 px classes, so the styled look does not change; without the CDN (2G, CI) the hit area now holds too. `:not([hidden])` keeps `hidden` working. | e2e `chat-media.spec.ts` « QA F2: « Retour », « Signaler / Bloquer », « Signaler ce message » and « Envoyer » are 44 x 44 targets, even unstyled » (bounding boxes, both projects, plus axe and overflow); web unit `discussions-page.test.ts` « QA F2: … carry a 44 x 44 hit area … ». | Mutation: removing the `chat-hit` rule makes the e2e fail on both projects (`Expected: >= 44, Received: 17`). |
+| F3 (Minor): a corrupt or GIF file reached the preview | Client: `sniffPhoto` reads the first 8 bytes and lets only JPEG (`FF D8 FF`) and PNG (signature) through to decode / preview; anything else gets « Ce format de photo n'est pas pris en charge. Choisissez une photo JPEG ou PNG. » and nothing is previewed or sent, whatever the file name or declared type. Server: already sniffs the bytes (no name or type is ever read); now tested with more inputs. | e2e « QA F3: a GIF or a corrupt file is refused before any preview, whatever its name or type; a JPEG still previews » (a real decodable GIF named `photo.jpg` / `image/jpeg`, a corrupt GIF, then a browser-made JPEG that previews; no POST). API « validates the Photo and the Voice note … » gains: corrupt GIF, WebP, random bytes, and a `data:image/jpeg;base64,` GIF → 400 « Une photo JPEG ou PNG est requise. », nothing stored. | Mutation: disabling the client check lets the real GIF reach the preview and the e2e fails on both projects. |
+
+Note on F3: a real phone gallery WebP is now refused with the French message, as the server always did; iOS Safari converts HEIC to JPEG for `accept="image/*"`, so iPhone photos still pass (not tried on a device).
+
+### Self-check, round 2 (real output, this container, 2026-10-24)
+
+- `npm run lint`: exit 0, 17 warnings, none in files this story touches.
+- `npm run typecheck`: exit 0. `npm run build`: exit 0. `npm run migration-check`: `Everything's fine`.
+- `npm run test:unit`: `Test Files  1 failed | 82 passed | 2 skipped (85)`, `Tests  1 failed | 665 passed | 12 skipped (678)`; the failure is the pre-existing `photo-rules.test.ts` « 32px play circle ». `chat-media.test.ts` 17 passed; `discussions-page.test.ts` 15 passed.
+- `npm run test:integration`: still not run, Docker unavailable (section 7). No migration or Postgres code changed in this round.
+- `npx playwright test e2e/chat-media.spec.ts e2e/chat.spec.ts e2e/report-block.spec.ts` (same env as section 8): `62 passed`, `6 skipped`.
+- Full e2e suite: `177 passed`, `37 skipped`, `30 failed`; the 30 are the same baseline files as before (invite-inbox 3, profile-edit-flow 16, staff-review 6, staff-shell 5).
+- Styled browser check rerun (6 widths, full and Lite, 30 states, the target check covers every link, button and select in `#chat-thread`): overflow 0, no clipped bubble, zero serious or critical axe violations, no visible target under 44 × 44, no console error. Screenshots refreshed in the untracked evidence folder.

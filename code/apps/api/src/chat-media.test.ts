@@ -554,6 +554,32 @@ describe('Chat Photo and Voice note: delivered, then enqueue scan (Stories 5.3, 
     expect(JSON.stringify(sent)).not.toMatch(/chat-photo\/|original/)
   })
 
+  it('QA F1: a real Photo or Voice note of another conversation is never signed through my conversation (404, no grant)', async () => {
+    const mine = await connected()
+    const theirs = await connected()
+    const photo = (await (await sendPhoto(theirs.sister, theirs.conversationId)).json()) as { message: MediaItem }
+    const voice = (await (await sendVoice(theirs.brother, theirs.conversationId)).json()) as { message: MediaItem }
+    expect(photo.message.media?.kind).toBe('photo')
+    expect(voice.message.media?.kind).toBe('voice')
+    const grantsBefore = media.grants.length
+    for (const messageId of [photo.message.id, voice.message.id]) {
+      // A participant of my conversation asks for their message through my conversation id.
+      for (const who of [mine.brother, mine.sister]) {
+        const response = await access(who, mine.conversationId, messageId)
+        expect(response.status).toBe(404)
+        expect(await response.json()).toMatchObject({ error: { code: 'NOT_FOUND', message: 'Ce média est introuvable.' } })
+      }
+      // Through their conversation id: not a participant, the conversation does not exist for me.
+      expect((await access(mine.brother, theirs.conversationId, messageId)).status).toBe(404)
+    }
+    expect(media.grants.length).toBe(grantsBefore)
+    const chatMedia = [photo.message.media?.id, voice.message.media?.id]
+    expect(media.grants.filter((grant) => chatMedia.includes(grant.photo_asset_id) && (grant.viewer_id === mine.brother.id || grant.viewer_id === mine.sister.id))).toEqual([])
+    // Their own members still get it through their conversation.
+    expect((await access(theirs.brother, theirs.conversationId, photo.message.id)).status).toBe(200)
+    expect((await access(theirs.sister, theirs.conversationId, voice.message.id)).status).toBe(200)
+  })
+
   it('AC 5.3-3: signing a chat_photo never waits on applyModeration, even while the scan enqueue hangs', async () => {
     const { brother, sister, conversationId } = await connected()
     moderationMode = 'hang'
@@ -684,6 +710,12 @@ describe('Chat Photo and Voice note: delivered, then enqueue scan (Stories 5.3, 
       [undefined, 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
       ['%%%', 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
       [gif.toString('base64'), 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
+      // QA F3: the bytes decide, never a name or a declared type. A corrupt GIF, a WebP, random bytes, and a GIF whose
+      // body claims a JPEG content type are all refused by sniffing.
+      [Buffer.concat([Buffer.from('GIF89a', 'latin1'), Buffer.alloc(32, 0x5a)]).toString('base64'), 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
+      [Buffer.concat([Buffer.from('RIFF', 'latin1'), Buffer.alloc(4, 0), Buffer.from('WEBPVP8 ', 'latin1'), Buffer.alloc(16, 1)]).toString('base64'), 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
+      [randomBytes(64).fill(0x00, 0, 1).toString('base64'), 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
+      [`data:image/jpeg;base64,${gif.toString('base64')}`, 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
       [Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0x00]).toString('base64'), 'Une photo JPEG ou PNG est requise.', { field: 'image' }],
       [Buffer.alloc(CHAT_PHOTO_MAX_BYTES + 1, 1).toString('base64'), 'Photo trop lourde (2 Mo au plus).', { field: 'image', max: CHAT_PHOTO_MAX_BYTES }],
       [hugePngHeader().toString('base64'), 'Photo trop grande (6000 pixels de côté au plus).', { field: 'image', max: 6000 }],

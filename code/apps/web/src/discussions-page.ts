@@ -136,6 +136,8 @@ const STYLE = `<style id="chat-style">
 #chat-thread .chat-voice { width: min(300px, calc(100vw - 112px)); }
 #chat-thread .chat-target { min-width: 44px; min-height: 44px; }
 #chat-thread .chat-play { width: 44px; height: 44px; }
+/* QA F2: 44 x 44 hit areas that hold even when the Tailwind CDN does not load (2G); the look is unchanged. */
+#chat-thread .chat-hit:not([hidden]) { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; }
 #discussions a:focus-visible, #discussions button:focus-visible, #chat-thread a:focus-visible, #chat-thread button:focus-visible, #chat-thread textarea:focus-visible { outline: 2px solid #7D5F27; outline-offset: 2px; }
 .chat-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 </style>`
@@ -527,7 +529,7 @@ function messageNode(item) {
   meta.appendChild(time)
   if (!mine && conversation && conversation.other_id) {
     meta.className = 'mt-0.5 px-1 flex items-center gap-1 text-[11px] text-deep-navy/80'
-    var flag = make('a', 'inline-flex shrink-0 items-center justify-center w-[44px] h-[44px] rounded-md text-deep-navy/80 hover:text-deep-navy hover:bg-cream')
+    var flag = make('a', 'chat-hit inline-flex shrink-0 items-center justify-center w-[44px] h-[44px] rounded-md text-deep-navy/80 hover:text-deep-navy hover:bg-cream')
     flag.href = ${JSON.stringify(REPORT_PATH)} + '/' + encodeURIComponent(conversation.other_id) + '?discussion=' + encodeURIComponent(ID) + '&message=' + encodeURIComponent(item.id)
     flag.setAttribute('data-testid', 'report-message')
     flag.appendChild(icon('flag', 'text-[16px]'))
@@ -813,7 +815,28 @@ function readBase64(blob) {
   })
 }
 /** Re-encode in the browser: longest edge ${PHOTO_MAX_EDGE} px, JPEG. Drops EXIF (position) and cuts the upload on 2G/3G. */
+// Only JPEG and PNG reach the preview: the first bytes decide, not the name or the declared type (an animated, WebP or corrupt
+// file of any other format is refused before any decode). The server sniffs the bytes again.
+function sniffPhoto(file) {
+  return new Promise(function (resolve) {
+    var reader = new FileReader()
+    reader.onload = function () {
+      var bytes = new Uint8Array(reader.result || new ArrayBuffer(0))
+      var jpeg = bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff
+      var png = bytes.length >= 8 && bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4e && bytes[3] === 0x47 && bytes[4] === 0x0d && bytes[5] === 0x0a && bytes[6] === 0x1a && bytes[7] === 0x0a
+      resolve(jpeg || png)
+    }
+    reader.onerror = function () { resolve(false) }
+    reader.readAsArrayBuffer(file.slice(0, 8))
+  })
+}
 function compressPhoto(file) {
+  return sniffPhoto(file).then(function (ok) {
+    if (!ok) throw new Error('unsupported')
+    return decodePhoto(file)
+  })
+}
+function decodePhoto(file) {
   return new Promise(function (resolve, reject) {
     var url = URL.createObjectURL(file)
     var image = new Image()
@@ -1090,7 +1113,7 @@ function listMain(): string {
 function threadMain(id: string): string {
   return `<main id="chat-thread" data-conversation-id="${id}" aria-busy="true" class="flex-1 w-full max-w-4xl mx-auto px-3 sm:px-6 md:px-8 py-4 sm:py-6 flex flex-col gap-4 min-w-0">
 <div class="w-full flex items-center">
-<a href="${DISCUSSIONS_PATH}" class="inline-flex items-center gap-2 min-h-[44px] text-sm text-deep-navy/80 hover:text-deep-navy font-medium"><span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span><span>${CHAT_COPY.back}</span></a>
+<a id="thread-back" href="${DISCUSSIONS_PATH}" class="chat-hit inline-flex items-center gap-2 min-h-[44px] text-sm text-deep-navy/80 hover:text-deep-navy font-medium"><span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span><span>${CHAT_COPY.back}</span></a>
 </div>
 <p id="thread-loading" class="text-sm text-deep-navy/80">${CHAT_COPY.loading}</p>
 <div id="thread-missing" hidden class="rounded-md border border-hairline/70 bg-hairline/20 px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
@@ -1116,7 +1139,7 @@ function threadMain(id: string): string {
 </div>
 <div class="flex items-center gap-2 flex-wrap">
 <span id="thread-stage" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold-soft/40 text-deep-navy border border-soft-gold/40"></span>
-<a id="thread-report" hidden href="${REPORT_PATH}" class="inline-flex items-center justify-center gap-1 min-h-[44px] px-3 rounded-md border border-transparent hover:border-hairline hover:bg-cream text-xs text-deep-navy/80 hover:text-deep-navy"><span class="material-symbols-outlined text-base leading-none text-red-700/80" aria-hidden="true">shield</span><span>${CHAT_COPY.reportBlock}</span></a>
+<a id="thread-report" hidden href="${REPORT_PATH}" class="chat-hit inline-flex items-center justify-center gap-1 min-h-[44px] px-3 rounded-md border border-transparent hover:border-hairline hover:bg-cream text-xs text-deep-navy/80 hover:text-deep-navy"><span class="material-symbols-outlined text-base leading-none text-red-700/80" aria-hidden="true">shield</span><span>${CHAT_COPY.reportBlock}</span></a>
 </div>
 </div>
 <p id="thread-unavailable" hidden class="px-3.5 sm:px-6 py-2.5 bg-cream border-b border-hairline text-sm text-deep-navy">${CHAT_COPY.unavailable}</p>
@@ -1140,7 +1163,7 @@ function threadMain(id: string): string {
 <input id="thread-photo-input" type="file" accept="image/*" hidden/>
 </div>
 <textarea id="thread-input" rows="2" placeholder="${CHAT_COPY.placeholder}" class="flex-1 w-full border-0 focus:ring-0 p-1.5 text-sm text-deep-navy placeholder-[#0B1D36]/60 resize-none bg-transparent"></textarea>
-<button id="thread-send" type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 min-h-[44px] px-5 rounded-lg bg-deep-navy hover:bg-deep-navy/90 text-cream text-sm font-semibold"><span>${CHAT_COPY.send}</span><span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span></button>
+<button id="thread-send" type="submit" class="chat-hit w-full sm:w-auto inline-flex items-center justify-center gap-1.5 min-h-[44px] px-5 rounded-lg bg-deep-navy hover:bg-deep-navy/90 text-cream text-sm font-semibold"><span>${CHAT_COPY.send}</span><span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span></button>
 </div>
 <p id="thread-error" role="alert" hidden class="text-sm text-[#9B2C2C] break-words px-1"></p>
 <p id="thread-status" role="status" aria-live="polite" class="chat-sr"></p>

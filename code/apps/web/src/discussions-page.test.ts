@@ -160,6 +160,14 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     expect(html).not.toMatch(/\.innerHTML\s*=/)
   })
 
+  it('QA F2: Retour, Signaler / Bloquer, Signaler ce message and Envoyer carry a 44 x 44 hit area that holds without the CDN', () => {
+    expect(html).toContain('#chat-thread .chat-hit:not([hidden]) { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; }')
+    expect(html).toContain('<a id="thread-back" href="/discussions" class="chat-hit ')
+    expect(html).toContain('<a id="thread-report" hidden href="/signaler" class="chat-hit ')
+    expect(html).toContain('<button id="thread-send" type="submit" class="chat-hit ')
+    expect(html).toContain("var flag = make('a', 'chat-hit ")
+  })
+
   it('Stories 5.3, 5.4: the Stitch camera and microphone buttons open the Photo picker and the recorder; no GIF picker', () => {
     expect(html).toContain(`id="thread-photo" type="button" title="${CHAT_COPY.photoButton}"`)
     expect(html).toContain(`aria-hidden="true">photo_camera</span><span class="chat-sr">${CHAT_COPY.photoButton}</span></button>`)
