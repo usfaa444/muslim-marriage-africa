@@ -489,11 +489,13 @@ export const message = pgTable(
     kind: text('kind').notNull(),
     state: text('state').notNull(),
     body: jsonb('body').notNull(),
-    media_id: uuid('media_id'),
+    /** The Chat Photo or Voice note (`photo_asset.kind` `chat_photo` / `voice_note`, Stories 5.3, 5.4); null for text. */
+    media_id: uuid('media_id').references(() => photoAsset.id),
     created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
   },
   (table) => [
     check('message_kind_check', sql`${table.kind} in ('text', 'photo', 'voice')`),
+    check('message_media_check', sql`(${table.kind} = 'text') = (${table.media_id} is null)`),
     check('message_state_check', sql`${table.state} = 'delivered'`),
     index('message_conversation_id_idx').on(table.conversation_id, table.id),
   ],

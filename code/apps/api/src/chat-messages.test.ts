@@ -476,7 +476,7 @@ describe('Text Chat: delivered, then enqueue scan, realtime without a hold state
   it('validates kind and text, and writes nothing on a refusal', async () => {
     const { sister, conversationId } = await connected()
     const cases: Array<[unknown, unknown, string, Record<string, unknown>]> = [
-      ['photo', 'x', 'kind : valeur non reconnue.', { field: 'kind' }],
+      ['gif', 'x', 'kind : valeur non reconnue.', { field: 'kind' }],
       [null, 'x', 'kind : valeur non reconnue.', { field: 'kind' }],
       ['text', '   ', 'Écrivez un message.', { field: 'text' }],
       ['text', 42, 'Écrivez un message.', { field: 'text' }],

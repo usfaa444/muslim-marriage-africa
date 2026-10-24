@@ -1,0 +1,15 @@
+{
+  "posts": [
+    {
+      "kind": "photo",
+      "len": 1512
+    }
+  ],
+  "note": {
+    "annotations": [
+      "gif pick text:  | alert: Ce format de photo n'est pas pris en charge. Choisissez une photo JPEG ou PNG.",
+      "txt pick alert: Ce format de photo n'est pas pris en charge. Choisissez une photo JPEG ou PNG.",
+      "posts after double Enter: 1"
+    ]
+  }
+}

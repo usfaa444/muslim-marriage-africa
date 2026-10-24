@@ -1,0 +1,651 @@
+{
+  "walk": {
+    "W1 live photo, blur then clear": {
+      "ok": true,
+      "post": 201,
+      "photoId": "01a16ce9-fbac-7e97-baf0-cb9c444c87bf",
+      "inputBytes": 7029,
+      "inputHasExif": true,
+      "inputHasGps": true,
+      "inputSegments": [
+        "APP1:Exif",
+        "FFDB",
+        "FFDB",
+        "FFC0",
+        "FFC4",
+        "FFC4",
+        "FFC4",
+        "FFC4",
+        "SOS"
+      ],
+      "msAfterPost": {
+        "chat-photo": 212,
+        "chat-photo-blur": 212,
+        "chat-photo-clear": 212,
+        "clearLoaded": 212
+      },
+      "blurBeforeClear": true,
+      "pageLoads": 1
+    },
+    "W2 no EXIF / GPS served": {
+      "ok": true,
+      "item": {
+        "id": "01a16ce9-fbac-7e97-baf0-cb9c444c87bf",
+        "conversation_id": "01a16ce2-ec56-72a1-855f-72a3590c61ea",
+        "sender_id": "01a16ce1-f129-7e55-92d3-ff93c39e4393",
+        "mine": false,
+        "kind": "photo",
+        "state": "delivered",
+        "text": null,
+        "created_at": "2026-10-24T07:57:16.076Z",
+        "media": {
+          "id": "01a16ce9-fbac-7097-824f-bf28cf15c952",
+          "kind": "photo",
+          "width": 1200,
+          "height": 900,
+          "blur_url": "/v1/media/get?token=…"
+        }
+      },
+      "access": 200,
+      "ttlSeconds": 60,
+      "url": "/v1/media/get?token=…",
+      "clear": {
+        "status": 200,
+        "type": "image/jpeg",
+        "cache": null,
+        "bytes": 6681,
+        "w": 1200,
+        "h": 900,
+        "exif": false,
+        "xmp": false,
+        "icc": false,
+        "segments": [
+          "FFDB",
+          "FFDB",
+          "FFC0",
+          "FFC4",
+          "FFC4",
+          "FFC4",
+          "FFC4",
+          "SOS"
+        ],
+        "gpsBytes": false
+      },
+      "blur": {
+        "status": 200,
+        "type": "image/jpeg",
+        "bytes": 633,
+        "gpsBytes": false
+      }
+    },
+    "W3 token per caller": {
+      "ok": true,
+      "sender": 403,
+      "third": 403,
+      "signedOut": 401,
+      "ownerAgain": 200
+    },
+    "W4 media route access": {
+      "ok": true,
+      "noSession": "401 Authentification requise.",
+      "thirdViaAB": "404 Cette discussion n'existe pas.",
+      "thirdViaOwnCD": "404 Ce média est introuvable.",
+      "fourthViaOwnCD": "404 Ce média est introuvable.",
+      "thirdListAB": "404 Cette discussion n'existe pas."
+    },
+    "W5 voice plays on tap only": {
+      "ok": true,
+      "post": 201,
+      "voiceId": "01a16ce9-fcac-7aa9-a74c-e768aac22424",
+      "voiceAccessBeforeTap": 0,
+      "audioBefore": [],
+      "voiceAccessAfterTap": 1,
+      "mediaGetsAfterTap": 1,
+      "audio": [],
+      "chipWhilePlaying": "0:01 / 0:04",
+      "pauseVisible": true,
+      "servedType": "audio/webm",
+      "bytesIdentical": true,
+      "transcriptKey": false
+    },
+    "W6a page photo send": {
+      "ok": true,
+      "uploadBytes": 7172,
+      "uploadW": 1200,
+      "uploadH": 900,
+      "uploadExif": false,
+      "uploadSegments": [
+        "APP0:JFIF",
+        "APP2:ICC_PR",
+        "FFDB",
+        "FFDB",
+        "FFC0",
+        "FFC4",
+        "FFC4",
+        "FFC4",
+        "FFC4",
+        "SOS"
+      ],
+      "messageId": "01a16cea-107e-7639-914a-b0d702f86538",
+      "aBubblesBefore": 3,
+      "aBubblesAfter": 4
+    },
+    "W6b page voice send (synthetic mic)": {
+      "ok": true,
+      "kind": "voice",
+      "language": "mos",
+      "duration_ms": 2771,
+      "bytes": 11017,
+      "webmMagic": "1a45dfa3",
+      "messageId": "01a16cea-1c58-7d00-a106-a569b079636a"
+    },
+    "W7 one scan job per media message": {
+      "ok": true,
+      "rows": "id|kind|state|jobs_by_message|jobs_by_asset|asset_kind|asset_moderation_state",
+      "jobs": [
+        "01a16ce9-fbac-7e97-baf0-cb9c444c87bf|photo|delivered|1|0|chat_photo|",
+        "01a16ce9-fcac-7aa9-a74c-e768aac22424|voice|delivered|1|0|voice_note|",
+        "01a16cea-107e-7639-914a-b0d702f86538|photo|delivered|1|0|chat_photo|",
+        "01a16cea-1c58-7d00-a106-a569b079636a|voice|delivered|1|0|voice_note|"
+      ]
+    },
+    "W8 GIF / WebP refused": {
+      "ok": true,
+      "refusals": {
+        "gif": "400 Une photo JPEG ou PNG est requise.",
+        "webp": "400 Une photo JPEG ou PNG est requise.",
+        "kind:gif": "400 kind : valeur non reconnue.",
+        "voice wav": "400 Une note vocale est requise."
+      },
+      "messages": [
+        "10",
+        "10"
+      ],
+      "assets": [
+        "43",
+        "43"
+      ]
+    },
+    "lite-360": {
+      "showButtons": 4,
+      "clearAccessBeforeTap": 0,
+      "blurOrAvatarGets": 5
+    },
+    "lite-390": {
+      "showButtons": 4,
+      "clearAccessBeforeTap": 0,
+      "blurOrAvatarGets": 5
+    },
+    "lite-768": {
+      "showButtons": 4,
+      "clearAccessBeforeTap": 0,
+      "blurOrAvatarGets": 5
+    },
+    "lite-1024": {
+      "showButtons": 4,
+      "clearAccessBeforeTap": 0,
+      "blurOrAvatarGets": 5
+    },
+    "lite-1280": {
+      "showButtons": 4,
+      "clearAccessBeforeTap": 0,
+      "blurOrAvatarGets": 5
+    },
+    "lite-1440": {
+      "showButtons": 4,
+      "clearAccessBeforeTap": 0,
+      "blurOrAvatarGets": 5
+    },
+    "W9 report on a media message": {
+      "ok": false,
+      "flagHref": "/signaler/01a16ce1-f129-7e55-92d3-ff93c39e4393?discussion=01a16ce2-ec56-72a1-855f-72a3590c61ea&message=01a16ce8-0abd-71de-94d5-1cb0814216a7",
+      "status": 201,
+      "body": {
+        "report": {
+          "id": "01a16ceb-321e-7a9b-b9e6-3826a561cca3",
+          "target_kind": "message",
+          "reason": "indecency",
+          "sla_started_at": "2026-10-24T07:58:35.550Z"
+        },
+        "case": {
+          "id": "01a16ceb-321e-7454-aa14-281e4944fc32",
+          "sla_started_at": "2026-10-24T07:58:35.550Z",
+          "sla_state": "open"
+        },
+        "blocked": false,
+        "sla_hours": 24
+      },
+      "row": "message|01a16ce8-0abd-71de-94d5-1cb0814216a7|01a16ce2-ec56-72a1-855f-72a3590c61ea|indecency\nmessage|01a16ce8-0abd-71de-94d5-1cb0814216a7|01a16ce2-ec56-72a1-855f-72a3590c61ea|indecency",
+      "flagOnMyOwnMedia": 0
+    },
+    "W10 block closes media": {
+      "ok": true,
+      "block": 201,
+      "sends": {
+        "photoFromA": "409 Cette discussion est fermée.",
+        "voiceFromA": "409 Cette discussion est fermée.",
+        "photoFromB": "409 Cette discussion est fermée.",
+        "voiceFromB": "409 Cette discussion est fermée."
+      },
+      "messagesAndAssets": [
+        "10/43",
+        "10/43"
+      ],
+      "earlierMediaForA": 200,
+      "buttons": [
+        "thread-photo:true",
+        "thread-voice:true",
+        "thread-send:true"
+      ]
+    },
+    "W10 unblock (cleanup)": {
+      "status": 200
+    },
+    "W11 signed URL expires": {
+      "ok": true,
+      "secondsAfterMint": 83,
+      "status": 403
+    }
+  },
+  "widths": [
+    {
+      "screen": "thread-media",
+      "width": 360,
+      "overflow": false,
+      "scrollWidth": 360,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "recording",
+      "width": 360,
+      "overflow": false,
+      "scrollWidth": 360,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "voice-ready",
+      "width": 360,
+      "overflow": false,
+      "scrollWidth": 360,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "photo-preview",
+      "width": 360,
+      "overflow": false,
+      "scrollWidth": 360,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-lite",
+      "width": 360,
+      "overflow": false,
+      "scrollWidth": 360,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-media",
+      "width": 390,
+      "overflow": false,
+      "scrollWidth": 390,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "recording",
+      "width": 390,
+      "overflow": false,
+      "scrollWidth": 390,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "voice-ready",
+      "width": 390,
+      "overflow": false,
+      "scrollWidth": 390,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "photo-preview",
+      "width": 390,
+      "overflow": false,
+      "scrollWidth": 390,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-lite",
+      "width": 390,
+      "overflow": false,
+      "scrollWidth": 390,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-media",
+      "width": 768,
+      "overflow": false,
+      "scrollWidth": 768,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "recording",
+      "width": 768,
+      "overflow": false,
+      "scrollWidth": 768,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "voice-ready",
+      "width": 768,
+      "overflow": false,
+      "scrollWidth": 768,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "photo-preview",
+      "width": 768,
+      "overflow": false,
+      "scrollWidth": 768,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-lite",
+      "width": 768,
+      "overflow": false,
+      "scrollWidth": 768,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-media",
+      "width": 1024,
+      "overflow": false,
+      "scrollWidth": 1024,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "recording",
+      "width": 1024,
+      "overflow": false,
+      "scrollWidth": 1024,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "voice-ready",
+      "width": 1024,
+      "overflow": false,
+      "scrollWidth": 1024,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "photo-preview",
+      "width": 1024,
+      "overflow": false,
+      "scrollWidth": 1024,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-lite",
+      "width": 1024,
+      "overflow": false,
+      "scrollWidth": 1024,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-media",
+      "width": 1280,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "recording",
+      "width": 1280,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "voice-ready",
+      "width": 1280,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "photo-preview",
+      "width": 1280,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-lite",
+      "width": 1280,
+      "overflow": false,
+      "scrollWidth": 1280,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-media",
+      "width": 1440,
+      "overflow": false,
+      "scrollWidth": 1440,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "recording",
+      "width": 1440,
+      "overflow": false,
+      "scrollWidth": 1440,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "voice-ready",
+      "width": 1440,
+      "overflow": false,
+      "scrollWidth": 1440,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "photo-preview",
+      "width": 1440,
+      "overflow": false,
+      "scrollWidth": 1440,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-lite",
+      "width": 1440,
+      "overflow": false,
+      "scrollWidth": 1440,
+      "bubblesOutside": 0,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "small": [],
+      "axeSerious": [],
+      "axeOther": []
+    }
+  ],
+  "db": {
+    "jobs": [
+      "01a16ce9-fbac-7e97-baf0-cb9c444c87bf|photo|delivered|1|0|chat_photo|",
+      "01a16ce9-fcac-7aa9-a74c-e768aac22424|voice|delivered|1|0|voice_note|",
+      "01a16cea-107e-7639-914a-b0d702f86538|photo|delivered|1|0|chat_photo|",
+      "01a16cea-1c58-7d00-a106-a569b079636a|voice|delivered|1|0|voice_note|"
+    ]
+  },
+  "console": []
+}

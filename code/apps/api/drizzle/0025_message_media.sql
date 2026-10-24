@@ -1,0 +1,2 @@
+ALTER TABLE "message" ADD CONSTRAINT "message_media_id_photo_asset_id_fk" FOREIGN KEY ("media_id") REFERENCES "public"."photo_asset"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "message" ADD CONSTRAINT "message_media_check" CHECK (("message"."kind" = 'text') = ("message"."media_id" is null));

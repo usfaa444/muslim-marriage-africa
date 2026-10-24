@@ -81,6 +81,17 @@ function fromJpeg(bytes: Buffer): Raster {
   return { width: decoded.width, height: decoded.height, data: decoded.data }
 }
 
+/** Pixel size from the PNG header or the first JPEG frame header, without decoding. Null when unreadable. */
+export function imageSize(bytes: Buffer): { width: number; height: number } | null {
+  if (isPng(bytes)) {
+    return pngSize(bytes)
+  }
+  if (isJpeg(bytes)) {
+    return jpegSize(bytes)
+  }
+  return null
+}
+
 function fits(width: number, height: number): boolean {
   return width >= 1 && height >= 1 && width <= MAX_PIXELS && height <= MAX_PIXELS && width * height <= MAX_PIXELS
 }

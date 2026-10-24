@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Header, HttpCode, HttpException, Param, Post, Query, Req, Res } from '@nestjs/common'
-import { listConversations, listMessages, readConversation, sendText, type ChatFailure } from './chat-messages.js'
+import { listConversations, listMessages, mediaAccess, readConversation, sendMessage, type ChatFailure } from './chat-messages.js'
 import { requireLiveSession } from './pin-session.js'
 
 type CookieRequest = {
@@ -17,7 +17,7 @@ function refuse(result: ChatFailure): never {
   )
 }
 
-/** Chat (Stories 4.5, 5.1, 5.2). Participants only; no BillingPort on any route. */
+/** Chat (Stories 4.5, 5.1 to 5.4). Participants only; no BillingPort on any route. */
 @Controller('conversations')
 export class ConversationsController {
   @Get()
@@ -63,7 +63,22 @@ export class ConversationsController {
   ) {
     response.setHeader('Cache-Control', 'no-store')
     const session = await requireLiveSession(request.headers?.cookie)
-    const result = await sendText(session, id, body)
+    const result = await sendMessage(session, id, body)
+    return result.ok ? result.body : refuse(result)
+  }
+
+  /** A fresh signed URL for one Chat Photo (clear) or Voice note (Stories 5.3, 5.4), for the caller only. */
+  @Get(':id/messages/:messageId/media')
+  @Header('Cache-Control', 'no-store')
+  async media(
+    @Req() request: CookieRequest,
+    @Param('id') id: string,
+    @Param('messageId') messageId: string,
+    @Res({ passthrough: true }) response: HeaderResponse,
+  ) {
+    response.setHeader('Cache-Control', 'no-store')
+    const session = await requireLiveSession(request.headers?.cookie)
+    const result = await mediaAccess(session, id, messageId)
     return result.ok ? result.body : refuse(result)
   }
 }

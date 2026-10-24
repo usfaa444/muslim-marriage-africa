@@ -23,3 +23,11 @@ code/pg-base/
 api.env
 code/e2e/test-results/
 code/e2e/report/
+# QA screenshots and recordings stay out of git (Faycal, 2026-10-24); written reports stay in.
+code/docs/qa-handoffs/**/*.png
+code/docs/qa-handoffs/**/*.jpg
+code/docs/qa-handoffs/**/*.jpeg
+code/docs/qa-handoffs/**/*.webp
+code/docs/qa-handoffs/**/*.webm
+code/docs/qa-handoffs/**/*.mp4
+code/docs/qa-handoffs/**/*.zip
