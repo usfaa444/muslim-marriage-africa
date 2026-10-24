@@ -2,6 +2,8 @@
 
 Branch `factory/report-block` (from `main` at `38a6a63`). Spec: `_bmad-output/implementation-artifacts/spec-8-5-8-6-report-and-block.md`. Also closes the deferred Story 4.4 AC 3 (Report reason « misrepresented marital status »).
 
+**Revision 3 (on `factory/report-block`, after QA round 2 FAIL at `99fb942`):** F-1 to F-4 addressed, see section 7 « Retest » and the revision 3 self-check.
+
 **Revision 2 (branch `factory/report-block-unblock`, on top of `db16287`):** the product owner confirmed Block both ways and added « Membres bloqués » with Unblock (rows U-1 to U-4 below). Everything from revision 1 is unchanged.
 
 ## 1. What was built
@@ -14,7 +16,7 @@ Branch `factory/report-block` (from `main` at `38a6a63`). Spec: `_bmad-output/im
   - Message target: `target_id` is the message id; it must be in one of my conversations and sent by the other member. Else 404 « Ce message est introuvable. ». The row stores the message id and conversation id, never the text.
   - Errors: 400 « target_kind : valeur non reconnue. », « target_id : valeur non reconnue. », « Choisissez un motif. » (`field: 'reason'`), « details : valeur non reconnue. », « Précisions trop longues (1000 caractères au plus). » (`max: 1000`), « block : valeur non reconnue. ». 429 `RATE_LIMITED` « Trop de signalements en peu de temps. Réessayez plus tard. » after `operator_config.rl_report_per_hour` (seed 10) Reports in the last hour; 503 if that row is unreadable. Nothing is written on any refusal.
 - `POST /v1/blocks` `{ blocked_id }`: 201 first time, 200 for the same pair, body `{ block: { blocked_id, created_at } }`. 400 « blocked_id : valeur non reconnue. » (self, malformed, missing); 404 « Ce profil n'est pas disponible. » (unknown or same gender).
-- Both: no session 401; staff session 403 `staff_session`; mahram 403; viewer whose own profile is not listable 403 (same gate as Chat). No BillingPort.
+- All trust endpoints (Report, Block, list, Unblock): no session 401; staff session 403 `staff_session`; mahram 403. **The viewer's own profile does not need to be listable** (revision 3): a member who is unpublished, in review, waiting for ID, held or paused can still Report, Block, list and Unblock. No BillingPort.
 - **A Block hides both ways** (decision, see 7): browse card and grid exclude both members; `/v1/profiles/:id` is 404 both ways; favourites drop the profile and refuse adding it; `POST /v1/invites` either way is 404 « Ce profil n'est pas disponible. »; a pending invite between them shows `other: { available: false }` and its accept is 404; **the existing conversation is closed for both**: `/v1/conversations` and `/:id` show `other: { available: false }`, `/:id` has `closed: true`, a send from either side is 409 « Cette discussion est fermée. » `{ reason: 'conversation_closed' }` with nothing stored, and the socket `conversation.typing` relay sends nothing. History stays readable. The close is computed from the Block; `conversation.ended_at` / `paused_by` are not written.
 - **Unblock (revision 2).**
   - `GET /v1/blocks`: `{ count, items: [{ blocked_id, pseudonym, created_at, photo }] }`, the Blocks I placed, newest first. `photo` is always the blurred derivative signed for me, or null; no other profile field. A Block placed on me is never listed. `no-store`.
@@ -150,6 +152,12 @@ Decisions the product owner should know:
 15. **« Membres bloqués » has no Stitch screen or EXPERIENCE.md row**; it reuses the screen 27 document and Paramètres card style. Its route is `/settings/bloques` (Paramètres is `/settings`). The confirmation is inline in the row, not a modal (the project forbids native dialogs and has no modal component).
 16. The list shows a member who has since left or been suspended (pseudonym kept) so the Block can still be lifted; a deleted account is left out.
 
+17. **Retest (QA round 2):**
+    - **F-1 (Major), fixed.** New `assertMemberViewer` (`public-profile.ts`): staff and mahram refused, member account required, no listable check. `submitReport`, `blockMember`, `listMyBlocks` and `unblockMember` use it; browse and the rest keep `assertBrowseViewer`. Regression test « QA F-1: a member whose own profile is not listable can still Report, Block, list her Blocks and Unblock » runs the four states unpublished, null, held and deactivated (browse is still 403 for her). The web page needs no change: the 403 message can no longer appear there.
+    - **F-2 (Major), fixed.** QA's API tests folded into `reports-blocks.test.ts`: « QA F-2: DELETE with my own id cannot lift the Block the other member placed on me, and a third member cannot lift mine » (also hostile ids, PUT/PATCH, upper-case UUID) and « QA: a pending Invite and a favourite work again after an unblock; re-blocking is 201 then 200 with one row ». Mutation M1 re-run (`memoryTrustStore.removeBlock` ignoring `blocker_id`): the F-2 test now fails (1 failed, 25 passed), and passes on the real code. QA's browser edges folded into `e2e/blocked-list.spec.ts` (hostile / long / Arabic names at 6 widths with the Ouagadougou date; network and 500 failures keep the row with a message, retry works, signed out goes to `/auth`). `qa-round2-unblock.test.ts` and `qa-round2-blocked.spec.ts` deleted; the evidence folder and QA report untouched.
+    - **F-3 (Minor), fixed.** `GET /v1/blocks` reads at most 100 newest rows (`BLOCK_LIST_MAX`, limit pushed into the store query) and returns `has_more`; photos are one batch read; account and blur reads run in parallel instead of one after another. Remaining per-row reads (account, blur grant) are bounded by the cap; a batch account loader does not exist yet. Test « QA F-3: the list is capped … ». The page shows the first 100; no paging UI (a member with more than 100 Blocks is not expected).
+    - **F-4 (Minor), kept by design.** An upper-case UUID in `DELETE /v1/blocks/:id` names the same row, as `POST /v1/blocks` already lower-cases `blocked_id`. Now asserted in the F-2 test.
+
 Existing tests changed (not weakened):
 
 - `discussions-page.test.ts`: « Signaler / Bloquer » removed from the list of Stitch lines the product does not ship, because this story ships it; a new test asserts the link and the per-bubble flag.
@@ -164,7 +172,16 @@ Known issues of this environment (not of the story):
 - Revision 2 e2e ran on a private port (3201, a local copy of the Playwright config that was not committed) so it could not collide with a QA run on 3100. Two suite files hardcode `localhost:3100` or depend on the clock: `app-shell.spec.ts` « each item opens its section » (a regex on `localhost:3100`) and `chat.spec.ts` two « AC 5.1-1 » tests (they expect « Aujourd'hui » for a message a few minutes old; the run was just after midnight in Ouagadougou, so it showed « Hier »). These 6 fail identically on `db16287` with the same setup (checked).
 - Not run: the full-stack flow in section 3 (no compose stack in this container), real-device TalkBack, Lighthouse.
 
-## 8. Self-check, revision 2 (real output, worktree `/home/claude/rb-unblock`, 2026-10-24)
+## 8. Self-check, revision 3 (real output, `/home/claude/muslim-marriage-africa`, branch `factory/report-block`, 2026-10-24)
+
+- `npm run lint`: exit 0, the 3 pre-existing warnings only. `npm run typecheck`: exit 0. `npm run build`: exit 0. `npm run migration-check`: `Everything's fine 🐶🔥`.
+- `npm run test:unit`: `Test Files  1 failed | 80 passed | 2 skipped (83)`, `Tests  1 failed | 639 passed | 12 skipped (652)`; the failure is the pre-existing `photo-rules` Chrome check. `reports-blocks.test.ts` 26 passed (4 new).
+- `npm run test:integration` (no compose stack up): `Test Files  1 failed | 4 passed (5)`, `Tests  33 passed | 2 skipped (35)`; the failure is `compose.test.ts` (Docker build, proxy TLS), as before.
+- `npx playwright test e2e/blocked-list.spec.ts e2e/report-block.spec.ts` (port 3100, `PLAYWRIGHT_CHROMIUM_EXECUTABLE=/opt/pw-browsers/chromium`, `E2E_ALLOW_ERRORS` for the Tailwind CDN and Google Fonts): `19 passed`, `5 skipped` (desktop-only sweeps and keyboard paths); `blocked-list.spec.ts` 10 passed, 3 skipped.
+- `npm run test:e2e` full suite, same setup: `154 passed`, `36 skipped`, `32 failed`. The 32 are QA round 2's baseline list (30 Tailwind / unstyled-axe failures identical to `main`, plus the 2 chat « Aujourd'hui » tests that fail just after midnight Ouagadougou time).
+- Mutation M1 (removeBlock ignores `blocker_id`): caught by the new F-2 test.
+
+## 8b. Self-check, revision 2 (real output, worktree `/home/claude/rb-unblock`, 2026-10-24)
 
 - `npm run lint`: exit 0; only the 3 pre-existing warnings (`life-pause.ts`, `photo-rules.test.ts`, `v2-flow.test.ts`).
 - `npm run typecheck`: exit 0. `npm run build`: exit 0.

@@ -46,8 +46,8 @@ export type TrustStore = {
   fileReport(input: { report: ReportRow; case: CaseRow; block: BlockRow | null }): Promise<{ blockCreated: boolean }>
   reportsSince(reporterId: string, since: string): Promise<number>
   insertBlock(row: BlockRow): Promise<{ created: boolean; row: BlockRow }>
-  /** The Blocks this member placed (never the ones placed on them), newest first. */
-  blocksBy(blockerId: string): Promise<BlockRow[]>
+  /** The Blocks this member placed (never the ones placed on them), newest first, at most `limit` rows. */
+  blocksBy(blockerId: string, limit?: number): Promise<BlockRow[]>
   /** Deletes the blocker's own row for this pair only. False when there is none. */
   removeBlock(blockerId: string, blockedId: string): Promise<boolean>
   blockedBetween(a: string, b: string): Promise<boolean>
@@ -83,11 +83,12 @@ export function memoryTrustStore(): TrustStore & { reports: ReportRow[]; cases: 
     async insertBlock(row) {
       return insertBlock(row)
     },
-    async blocksBy(blockerId) {
-      return blocks
+    async blocksBy(blockerId, limit) {
+      const sorted = blocks
         .filter((row) => row.blocker_id === blockerId)
         .map((row) => ({ ...row }))
         .sort((left, right) => (left.created_at < right.created_at ? 1 : left.created_at > right.created_at ? -1 : 0))
+      return limit === undefined ? sorted : sorted.slice(0, limit)
     },
     async removeBlock(blockerId, blockedId) {
       const index = blocks.findIndex((row) => row.blocker_id === blockerId && row.blocked_id === blockedId)
@@ -166,12 +167,13 @@ function postgresTrustStore(): TrustStore {
       }
       return { created: false, row: { ...found, created_at: new Date(found.created_at).toISOString() } }
     },
-    async blocksBy(blockerId) {
-      const rows = await getIdentityDatabase()
+    async blocksBy(blockerId, limit) {
+      const query = getIdentityDatabase()
         .select(blockColumns)
         .from(block)
         .where(eq(block.blocker_id, blockerId))
         .orderBy(desc(block.created_at), desc(block.id))
+      const rows = limit === undefined ? await query : await query.limit(limit)
       return rows.map((row) => ({ ...row, created_at: new Date(row.created_at).toISOString() }))
     },
     async removeBlock(blockerId, blockedId) {

@@ -7,6 +7,7 @@ const STUB_SKIP = 'A built image ignores stub cookies (Story 12.1); these run on
 
 const HIM = '01990000-0000-7000-8000-0000000000e2'
 const OTHER = '01990000-0000-7000-8000-0000000000e3'
+const THIRD = '01990000-0000-7000-8000-0000000000e4'
 // 1×1 PNG: stands in for the blurred derivative the API signs.
 const PIXEL = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64')
 
@@ -16,7 +17,7 @@ type Api = {
   items: Item[]
   deletes: string[]
   listStatus: number
-  deleteFailure?: { status: number; body: unknown }
+  deleteFailure?: { status: number; body: unknown } | 'abort'
 }
 
 function json(body: unknown, status = 200) {
@@ -64,7 +65,8 @@ async function serveApi(context: BrowserContext, baseURL: string, api: Api): Pro
       if (api.deleteFailure) {
         const failure = api.deleteFailure
         delete api.deleteFailure
-        await route.fulfill(json(failure.body, failure.status))
+        if (failure === 'abort') await route.abort('failed')
+        else await route.fulfill(json(failure.body, failure.status))
         return
       }
       api.items = api.items.filter((item) => item.blocked_id !== id)
@@ -176,6 +178,58 @@ test.describe('Membres bloqués (Story 8.6 follow-up)', () => {
     await expect(page.getByText("Vous n'avez bloqué aucun membre.")).toBeVisible()
     await expect(page.locator('#blocked-count')).toBeHidden()
     await expectAccessible(page)
+  })
+
+  test('QA round 2: hostile, long and Arabic pseudonyms render as text and fit; the date is in Ouagadougou time', async ({ page, context, baseURL }, testInfo) => {
+    test.skip(testInfo.project.name !== 'desktop', 'width sweep runs once')
+    const api = state()
+    api.items = [
+      { blocked_id: HIM, pseudonym: '<img src=x onerror=window.__xss=1>', created_at: '2026-10-22T09:00:00.000Z', photo: { id: 'p1', url: '/v1/media/get?token=blur-1' } },
+      { blocked_id: OTHER, pseudonym: 'Aïssatou_Ouédraogo_très_très_longue_pseudonyme_0123456789', created_at: '2026-10-21T23:30:00.000Z', photo: null },
+      { blocked_id: THIRD, pseudonym: 'عبد_الله', created_at: '2026-10-20T09:00:00.000Z', photo: null },
+    ]
+    await serveApi(context, baseURL ?? '', api)
+    for (const width of WIDTHS) {
+      await page.setViewportSize({ width, height: 900 })
+      await openList(page)
+      await expect(page.getByRole('listitem')).toHaveCount(3)
+      expect(await page.evaluate(() => (window as unknown as { __xss?: number }).__xss)).toBeUndefined()
+      await expect(page.locator('img[src="x"]')).toHaveCount(0)
+      await expectNoHorizontalOverflow(page)
+    }
+    await expect(page.getByRole('listitem').nth(0)).toContainText('<img src=x onerror=window.__xss=1>')
+    await page.getByRole('listitem').nth(1).getByRole('button', { name: /^Débloquer/ }).click()
+    await expectNoHorizontalOverflow(page)
+    await expect(page.getByRole('listitem').nth(1)).toContainText('Bloqué le 21 octobre 2026')
+    await expect(page.getByRole('listitem').nth(2)).toContainText('عبد_الله')
+    await expectAccessible(page)
+  })
+
+  test('QA round 2: a failed DELETE (network, 500) keeps the row and says why; the retry works; signed out goes to sign-in', async ({ page, context, baseURL, guards }) => {
+    const api = state()
+    await serveApi(context, baseURL ?? '', api)
+    await openList(page)
+    const row = page.getByRole('listitem').nth(1)
+    await row.getByRole('button', { name: 'Débloquer Ousmane_Ouaga' }).click()
+    api.deleteFailure = 'abort'
+    await row.getByRole('button', { name: 'Confirmer le déblocage' }).click()
+    await expect(row.getByRole('alert')).toHaveText('Envoi impossible. Vérifiez votre connexion et réessayez.')
+    await expect(page.getByRole('listitem')).toHaveCount(2)
+    api.deleteFailure = { status: 500, body: { error: { code: 'UNHANDLED', message: 'Request failed', details: null, request_id: 'r', retryable: true } } }
+    await row.getByRole('button', { name: 'Confirmer le déblocage' }).click()
+    await expect(row.getByRole('alert')).toHaveText('Envoi impossible. Vérifiez votre connexion et réessayez.')
+    await expect(page.getByRole('listitem')).toHaveCount(2)
+    await expectAccessible(page)
+    await row.getByRole('button', { name: 'Confirmer le déblocage' }).click()
+    await expect(page.getByRole('listitem')).toHaveCount(1)
+    expect(api.deletes).toEqual([OTHER, OTHER, OTHER])
+    // The aborted request and the 500 are expected here; nothing else may fail.
+    expect(guards.failedRequests.filter((line) => !line.includes(`/v1/blocks/${OTHER}`))).toEqual([])
+    guards.failedRequests.length = 0
+    guards.consoleErrors = guards.consoleErrors.filter((line) => !line.includes(`/v1/blocks/${OTHER}`))
+    await context.clearCookies()
+    await page.goto('/settings/bloques')
+    await expect(page).toHaveURL(/\/auth/)
   })
 
   test('keyboard only: open the confirmation and unblock with the keyboard', async ({ page, context, baseURL }, testInfo) => {

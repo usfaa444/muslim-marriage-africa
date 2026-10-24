@@ -4,7 +4,7 @@ import { messageForReport } from './chat-messages.js'
 import { discoveryPhoto, signMedia } from './media.js'
 import { getMediaStore } from './media-store.js'
 import {
-  assertBrowseViewer,
+  assertMemberViewer,
   loadAccount,
   PROFILE_UNAVAILABLE,
   type BrowseViewer,
@@ -22,7 +22,8 @@ import {
 
 /**
  * Member Report and Block commands (Stories 8.5, 8.6). Safety paths: no BillingPort, no entitlement, no quota
- * (AD-21). Every target the viewer may not act on is one 404, so a refusal never says why a member is out of reach.
+ * (AD-21), and no listable-profile requirement on the viewer (`assertMemberViewer`): a member whose own profile is not
+ * public can still Report, Block, see her Blocks and Unblock. Every target the viewer may not act on is one 404, so a refusal never says why a member is out of reach.
  */
 
 export const TARGET_KIND_MESSAGE = 'target_kind : valeur non reconnue.'
@@ -137,7 +138,7 @@ export async function submitReport(
   session: ResolvedSession,
   body: unknown,
 ): Promise<{ ok: true; body: ReportBody } | TrustFailure> {
-  const gate = await assertBrowseViewer(session)
+  const gate = await assertMemberViewer(session)
   if (!gate.ok) {
     return fromViewer(gate)
   }
@@ -212,7 +213,7 @@ export async function blockMember(
   session: ResolvedSession,
   body: unknown,
 ): Promise<{ ok: true; status: 200 | 201; body: BlockBody } | TrustFailure> {
-  const gate = await assertBrowseViewer(session)
+  const gate = await assertMemberViewer(session)
   if (!gate.ok) {
     return fromViewer(gate)
   }
@@ -246,41 +247,58 @@ export type BlockedItem = {
   photo: { id: string; url: string } | null
 }
 
-export type BlockedListBody = { count: number; items: BlockedItem[] }
+export type BlockedListBody = { count: number; items: BlockedItem[]; has_more: boolean }
+
+/** At most this many Blocks per `GET /v1/blocks` (newest first); `has_more` says when older ones exist. */
+export const BLOCK_LIST_MAX = 100
 
 /**
  * `GET /v1/blocks`: the Blocks I placed, newest first, with the pseudonym and the blurred main photo only. A Block
- * placed on me is never listed (no one learns who blocked them). A member whose account is gone is left out.
+ * placed on me is never listed (no one learns who blocked them). A member whose account is gone is left out. One
+ * read of the Blocks and one batch read of the main photos; the accounts and the blur grants are then read in
+ * parallel, bounded by `BLOCK_LIST_MAX` (QA round 2, F-3).
  */
 export async function listMyBlocks(
   session: ResolvedSession,
 ): Promise<{ ok: true; body: BlockedListBody } | TrustFailure> {
-  const gate = await assertBrowseViewer(session)
+  const gate = await assertMemberViewer(session)
   if (!gate.ok) {
     return fromViewer(gate)
   }
   const viewerId = gate.account.id
-  const rows = await getTrustStore().blocksBy(viewerId)
+  const fetched = await getTrustStore().blocksBy(viewerId, BLOCK_LIST_MAX + 1)
+  const rows = fetched.slice(0, BLOCK_LIST_MAX)
   const ids = rows.map((row) => row.blocked_id)
   const mains = ids.length > 0 ? await getMediaStore().liveMainProfilePhotos(ids) : []
+  const built = await Promise.all(
+    rows.map(async (row): Promise<BlockedItem | null | TrustFailure> => {
+      const target = await loadAccount(row.blocked_id)
+      if (!target) {
+        return null
+      }
+      const asset = mains.find((item) => item.owner_id === row.blocked_id) ?? null
+      let photo: BlockedItem['photo'] = null
+      if (asset && discoveryPhoto(asset)) {
+        const signed = await signMedia(getMediaStore(), asset.id, 'blur', viewerId)
+        if (!signed.ok) {
+          return fail(500, 'UNHANDLED', 'Request failed', null, signed.retryable)
+        }
+        photo = { id: asset.id, url: signed.url }
+      }
+      return { blocked_id: row.blocked_id, pseudonym: target.pseudonym, created_at: row.created_at, photo }
+    }),
+  )
   const items: BlockedItem[] = []
-  for (const row of rows) {
-    const target = await loadAccount(row.blocked_id)
-    if (!target) {
+  for (const entry of built) {
+    if (entry === null) {
       continue
     }
-    const asset = mains.find((item) => item.owner_id === row.blocked_id) ?? null
-    let photo: BlockedItem['photo'] = null
-    if (asset && discoveryPhoto(asset)) {
-      const signed = await signMedia(getMediaStore(), asset.id, 'blur', viewerId)
-      if (!signed.ok) {
-        return fail(500, 'UNHANDLED', 'Request failed', null, signed.retryable)
-      }
-      photo = { id: asset.id, url: signed.url }
+    if ('ok' in entry) {
+      return entry
     }
-    items.push({ blocked_id: row.blocked_id, pseudonym: target.pseudonym, created_at: row.created_at, photo })
+    items.push(entry)
   }
-  return { ok: true, body: { count: items.length, items } }
+  return { ok: true, body: { count: items.length, items, has_more: fetched.length > BLOCK_LIST_MAX } }
 }
 
 /**
@@ -291,7 +309,7 @@ export async function unblockMember(
   session: ResolvedSession,
   blockedId: string,
 ): Promise<{ ok: true; body: Record<string, never> } | TrustFailure> {
-  const gate = await assertBrowseViewer(session)
+  const gate = await assertMemberViewer(session)
   if (!gate.ok) {
     return fromViewer(gate)
   }

@@ -253,6 +253,27 @@ function presentProfile(row: StoredProfile, owner: BrowseViewer): PublicProfileB
 }
 
 /** Session, staff/mahram, then the viewer's own listable profile. Does not take a browse slot. */
+/**
+ * Member-only gate without the listable check: staff 403 `staff_session`, mahram 403 `mahram_session`, and the
+ * member's account must exist. Safety paths (Report, Block, the blocked list, Unblock) use it, so a member whose own
+ * profile is private, paused, in review or waiting for ID can still protect herself (QA round 2, F-1).
+ */
+export async function assertMemberViewer(
+  viewer: ResolvedSession,
+): Promise<{ ok: true; account: BrowseViewer } | PublicProfileFailure> {
+  if (viewer.roles.some((role) => STAFF_ROLES.has(role))) {
+    return failure(403, 'FORBIDDEN', STAFF_MEMBER_MESSAGE, { reason: 'staff_session' }, false)
+  }
+  if (!viewer.roles.includes('member')) {
+    return failure(403, 'FORBIDDEN', MAHRAM_MEMBER_MESSAGE, { reason: 'mahram_session' }, false)
+  }
+  const account = await loadAccount(viewer.account_id)
+  if (!account || !account.roles.includes('member')) {
+    return failure(403, 'FORBIDDEN', MAHRAM_MEMBER_MESSAGE, { reason: 'mahram_session' }, false)
+  }
+  return { ok: true, account }
+}
+
 export async function assertBrowseViewer(
   viewer: ResolvedSession,
 ): Promise<{ ok: true; account: BrowseViewer } | PublicProfileFailure> {

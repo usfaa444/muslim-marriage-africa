@@ -24,7 +24,8 @@ Sources: epics.md Stories 8.5, 8.6 (and 4.4 AC 3); PRD FR-083, FR-084, NFR-003, 
 
 **Always:**
 
-- **Viewer gate** on both commands: live session (`requireLiveSession`, PIN gate), then `assertBrowseViewer` (staff 403 `staff_session`, mahram 403, viewer not listable 403). No session 401.
+- **Viewer gate** on every trust command (Report, Block, the blocked list, Unblock): live session (`requireLiveSession`, PIN gate), then `assertMemberViewer` (staff 403 `staff_session`, mahram 403 `mahram_session`, the member's account must exist). No session 401. **The viewer's own profile does not have to be listable** (revision 3, QA round 2 F-1): a member whose profile is unpublished (private, in review, waiting for ID or liveness), held, or paused can still Report, Block, see her Blocks and Unblock. Browse, profiles, favourites, Invites and Chat keep `assertBrowseViewer`.
+- **`GET /v1/blocks` is capped** at `BLOCK_LIST_MAX` = 100 newest Blocks with `has_more` when older ones exist (revision 3, F-3); the store query carries the limit and the per-row account and blur reads run in parallel.
 - **One shared reason list** `REPORT_REASONS` in `packages/kernel/src/report.ts`, in Stitch order: `indecency` « Indécence ou tenue inappropriée », `sexual_content` « Propos à caractère sexuel », `impersonation` « Usurpation d'identité », `multiple_accounts` « Comptes multiples », `harassment` « Harcèlement ou insistance déplacée », `money_scam` « Demande d'argent ou tentative d'escroquerie », `hateful` « Propos haineux ou irrespectueux », `non_matrimonial` « Usage non matrimonial », `misrepresented_marital_status` « Dissimulation ou fausse déclaration de situation matrimoniale ». The api validates against it, the web renders it, the migration's check constraint lists the same codes (a test compares them).
 - **`POST /v1/reports`** `{ target_kind: 'profile' | 'message', target_id, reason, details?, block? }`. Order, nothing written when a step fails:
   1. Viewer gate.

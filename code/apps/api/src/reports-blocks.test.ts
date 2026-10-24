@@ -38,6 +38,7 @@ import { SESSION_COOKIE } from './session-cookie.js'
 import { memorySessionStore, setSessionStore } from './session-store.js'
 import { memoryStaffStore } from './staff-store.js'
 import { installTestStaff, openTestStaff, signInTestStaff } from './test-staff-session.js'
+import { BLOCK_LIST_MAX } from './reports.js'
 import { caseSlaState, memoryTrustStore, setReportRateReader, setReportSlaReader, setTrustStore } from './trust.js'
 import { setTrustPort } from './trust-port.js'
 
@@ -851,6 +852,109 @@ describe('Report with a 24h SLA (8.5) and Block (8.6)', { timeout: 60_000 }, () 
     expect((await call(`/v1/blocks/${sister.id}`, brother.cookie, 'DELETE')).status).toBe(200)
     expect(await browseIds(sister)).toContain(brother.id)
     expect((await sendText(sister, conversationId, 'Bonjour.')).status).toBe(201)
+  })
+
+  it('QA F-1: a member whose own profile is not listable can still Report, Block, list her Blocks and Unblock', async () => {
+    const sister = await member('sister')
+    const brother = await member('brother')
+    const profile = memory.profiles.find((item) => item.account_id === sister.id)
+    const account = memory.accounts.find((item) => item.id === sister.id)
+    if (!profile || !account) {
+      throw new Error('test member missing')
+    }
+    const states: Array<{ label: string; visibility: string | null; status: string }> = [
+      { label: 'unpublished (private / in review / pending ID)', visibility: 'unpublished', status: 'Active' },
+      { label: 'no visibility yet', visibility: null, status: 'Active' },
+      { label: 'held', visibility: 'held', status: 'Active' },
+      { label: 'paused (deactivated)', visibility: 'public', status: 'deactivated' },
+    ]
+    for (const state of states) {
+      profile.visibility = state.visibility as typeof profile.visibility
+      account.status = state.status as typeof account.status
+      // Browse is still gated on her own listability; the safety paths are not.
+      expect((await call('/v1/browse?view=grid', sister.cookie)).status, state.label).toBe(403)
+      now = new Date(now.getTime() + 1000)
+      const filed = await report(sister, { target_kind: 'profile', target_id: brother.id, reason: 'harassment' })
+      expect(filed.status, state.label).toBe(201)
+      expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status, state.label).toBe(201)
+      const listed = await call('/v1/blocks', sister.cookie)
+      expect(listed.status, state.label).toBe(200)
+      expect(((await listed.json()) as { items: Array<{ blocked_id: string }> }).items.map((item) => item.blocked_id), state.label).toEqual([brother.id])
+      expect((await call(`/v1/blocks/${brother.id}`, sister.cookie, 'DELETE')).status, state.label).toBe(200)
+      expect(trust.blocks, state.label).toEqual([])
+    }
+    expect(billingCalls).toBe(0)
+  })
+
+  it('QA F-2: DELETE with my own id cannot lift the Block the other member placed on me, and a third member cannot lift mine', async () => {
+    const sister = await member('sister')
+    const brother = await member('brother')
+    const other = await member('brother')
+    expect((await call('/v1/blocks', brother.cookie, 'POST', { blocked_id: sister.id })).status).toBe(201)
+    // She sends her own id (the blocked_id of his row): 404, his Block stands.
+    const own = await call(`/v1/blocks/${sister.id}`, sister.cookie, 'DELETE')
+    expect(own.status).toBe(404)
+    expect(await own.json()).toMatchObject({ error: { code: 'NOT_FOUND', message: "Ce blocage n'existe pas." } })
+    expect(trust.blocks).toEqual([expect.objectContaining({ blocker_id: brother.id, blocked_id: sister.id })])
+    expect(await browseIds(sister)).not.toContain(brother.id)
+
+    // Her own Block on the other brother: he and a third member cannot lift it, nor see it.
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: other.id })).status).toBe(201)
+    for (const who of [other, brother]) {
+      expect((await call(`/v1/blocks/${other.id}`, who.cookie, 'DELETE')).status).toBe(404)
+      expect((await call(`/v1/blocks/${sister.id}`, other.cookie, 'DELETE')).status).toBe(404)
+    }
+    expect(((await (await call('/v1/blocks', other.cookie)).json()) as { count: number }).count).toBe(0)
+    expect(trust.blocks).toHaveLength(2)
+    // Hostile ids and other methods change nothing.
+    for (const id of ["' OR 1=1 --", '<script>alert(1)</script>', '%00', '..%2f..%2fetc', 'a'.repeat(5000)]) {
+      expect((await call(`/v1/blocks/${encodeURIComponent(id)}`, sister.cookie, 'DELETE')).status, id.slice(0, 20)).toBe(404)
+    }
+    expect([404, 405]).toContain((await call(`/v1/blocks/${other.id}`, sister.cookie, 'PUT')).status)
+    expect([404, 405]).toContain((await call(`/v1/blocks/${other.id}`, sister.cookie, 'PATCH')).status)
+    expect(trust.blocks).toHaveLength(2)
+    // An upper-case UUID names the same row (ids are compared lower-case, as on POST).
+    expect((await call(`/v1/blocks/${other.id.toUpperCase()}`, sister.cookie, 'DELETE')).status).toBe(200)
+    expect(trust.blocks).toEqual([expect.objectContaining({ blocker_id: brother.id, blocked_id: sister.id })])
+  })
+
+  it('QA: a pending Invite and a favourite work again after an unblock; re-blocking is 201 then 200 with one row', async () => {
+    const sister = await member('sister')
+    const brother = await member('brother')
+    now = new Date(now.getTime() + 1000)
+    const sent = await call('/v1/invites', brother.cookie, 'POST', { to_id: sister.id })
+    const inviteId = ((await sent.json()) as { invite: { id: string } }).invite.id
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect((await call(`/v1/invites/${inviteId}/accept`, sister.cookie, 'POST')).status).toBe(404)
+    expect((await call(`/v1/blocks/${brother.id}`, sister.cookie, 'DELETE')).status).toBe(200)
+    expect((await call(`/v1/invites/${inviteId}/accept`, sister.cookie, 'POST')).status).toBe(200)
+
+    expect((await call('/v1/blocks', brother.cookie, 'POST', { blocked_id: sister.id })).status).toBe(201)
+    expect((await call('/v1/favourites', brother.cookie, 'POST', { target_id: sister.id })).status).toBe(404)
+    expect((await call(`/v1/blocks/${sister.id}`, brother.cookie, 'DELETE')).status).toBe(200)
+    expect((await call('/v1/favourites', brother.cookie, 'POST', { target_id: sister.id })).status).toBe(201)
+
+    expect((await call('/v1/blocks', brother.cookie, 'POST', { blocked_id: sister.id })).status).toBe(201)
+    expect((await call('/v1/blocks', brother.cookie, 'POST', { blocked_id: sister.id })).status).toBe(200)
+    expect(((await (await call('/v1/blocks', brother.cookie)).json()) as { count: number }).count).toBe(1)
+  })
+
+  it('QA F-3: the list is capped at BLOCK_LIST_MAX newest Blocks and says when older ones exist', async () => {
+    const sister = await member('sister')
+    const brother = await member('brother')
+    const at = Date.parse(now.toISOString())
+    // Rows written straight to the store: the cap is about the read, not about creating accounts.
+    for (let index = 0; index < BLOCK_LIST_MAX + 2; index += 1) {
+      trust.blocks.push({ id: newId(now), blocker_id: sister.id, blocked_id: index === BLOCK_LIST_MAX + 1 ? brother.id : newId(now), created_at: new Date(at + index * 1000).toISOString() })
+    }
+    const body = (await (await call('/v1/blocks', sister.cookie)).json()) as { count: number; has_more: boolean; items: Array<{ blocked_id: string }> }
+    expect(body.has_more).toBe(true)
+    // Newest first: the real member is the newest row; the unknown accounts are left out.
+    expect(body.items.map((item) => item.blocked_id)).toEqual([brother.id])
+    trust.blocks.length = 0
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    const small = (await (await call('/v1/blocks', sister.cookie)).json()) as { has_more: boolean }
+    expect(small.has_more).toBe(false)
   })
 })
 
