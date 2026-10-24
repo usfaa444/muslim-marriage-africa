@@ -145,3 +145,71 @@ Carried over unchanged: F2 (product question), F4 (audit, pre-existing).
 - Integration suites (`npm run test:integration`): no Docker here; integration pending CI. The dev's local Postgres 16 run of the migrate test (0027) was not repeated by me.
 - Styled checks on the owner's Mac: the real Tailwind CDN and Stitch colours, fonts, contrast, split view proportions and badge look at 390, 768 and 1280; iOS Safari keyboard and `visualViewport`; real phone 100dvh; Lighthouse and Fast 3G.
 - Live two-browser realtime on a real API and Postgres `unreadCounts` under data.
+
+---
+
+# Round 3 (retest of 0a6beb7)
+
+Verdict: **PASS** (2026-10-24, cloud container, branch `factory/chat-polish`, commit 0a6beb7; QA agent Claude Sonnet 5.5; no staging, no Docker; the styled real-CDN check runs on the owner's Mac in parallel). No blocker, critical or major finding. Two minors (one new test gap, one observation). R2-3 is the pending owner question, not a finding.
+
+## Round 2 findings and Mac minors
+
+| Finding | Result | Evidence |
+| --- | --- | --- |
+| R2-1 (major): small-phone message area | **Fixed.** Real compiled Tailwind (`e2e/real-css.ts`, CSS landing 1.5 s late), 40 long messages, my own probe. Message box over screen height: 360x600 **435 px (72 %)**, 360x640 **475 (74 %)**, 360x667 **502 (75 %)**, 360x720 **555 (77 %)**, 390x800 **635 (79 %)**, plus 320x568 403 (71 %), 412x732 567 (77 %). Round 2 gave 44, 84, 111, 164, 244. With a simulated keyboard (viewport minus 300 px, composer focused): 61 %, 66 %, 68 %, 72 %, 77 %, 57 % (320x568), 73 %; latest message in view at every size. With the keyboard and a 7-line draft (composer capped at 132 px) the box drops to 32 to 59 % (24 % at 320x568): by design, same as a messaging app; see R3-2. Page never scrolls (`scrollHeight == innerHeight`), no horizontal scroll, composer bottom inside the viewport, at every size. | `r3-probe-out.txt`, `qa-round3-probes.spec.ts.txt` |
+| R2-2 (major): single-event badge test gap | **Fixed.** Three one-event tests on Paramètres. My mutations: `socket.on('message.delivered')` removed fails that test on both projects; `socket.on('conversation.read')` removed fails on both. (`invite.changed` was already covered.) | mutation table below |
+| R2-4 (minor): unnamed Lite and PIN switches | **Fixed.** `role="switch"` plus names; `/settings` now whole-page axe in `app-shell.spec.ts`, which passes both projects. | `r3-e2e-full-summary.txt` |
+| Mac 1: stale switch across windows | **Fixed.** Two pages in one context (my probe): `chat.receipts` event updates the stale window live; a bare `focus` reloads it; a stale click sends `{read_receipts: !shown}`; a GET held in flight and overtaken by a click does not repaint the old value; Space keeps focus and `aria-busy` clears; a failed PUT reverts and shows the error. Passes on both projects. Mutations: DOM listener removed (dev test fails), focus listener removed (fails). | probe, mutation table |
+| Mac 2: flaky switch test | **Fixed.** No `disabled` during save; full suite and `--repeat-each=3` on the touched specs: 351 passed, 75 skipped, 0 failed, 0 flaky. | `r3-repeat3.txt` |
+| Mac 3: phone message area | Same as R2-1. | above |
+| R2-3 | Pending owner question, not a finding. | |
+| R2-5 (iOS keyboard untested) | Still Mac and real-device only; my keyboard model resizes the layout viewport, which is what Android Chrome does. `visualViewport` on iOS is not simulated. | |
+
+## New phone sub-screen (AC 25), regression probes
+
+- **No bottom nav on a phone thread; back always reachable.** `#thread-back` is the first tab stop (Tab from the page start lands on it, solid 2 px focus ring), 44x44, topmost at its centre (`elementFromPoint`), inside the viewport at all seven sizes, also with the keyboard up. It does not overlap the avatar, name, city, verified badge or the report icon. With a 47-character pseudonym the name is cut with an ellipsis, the report icon stays inside the viewport (right edge 356 of 360). In the load-error state (messages GET 500) and the unknown-thread state, the back link is 44x44 and topmost, and the page shows the message plus a second « Retour aux discussions » button. Enter on back goes to the list, where the nav shows; browser Back returns to the thread without the nav, and the unsent draft « Brouillon à garder » is kept; sending resets the composer to one line (44 px).
+- **Names for assistive tech.** Back, « Signaler / Bloquer », Photo, Voice note and « Envoyer » keep their accessible names although only icons show; the stage « Étape : discussion » stays in the DOM (visually hidden). Tab order from the field: Photo, then Voice back, then the header. axe (WCAG 2.2 AA) with real CSS on the phone thread, and again with a 900-character draft and counter: zero violations; no horizontal overflow.
+- **Split view unchanged.** Crossing 767 to 768 to 767 live (matchMedia change): `chat-sub` off at 768 with the list beside the thread, nav back (96 px body padding), back link hidden, no page scroll; on again at 767. At 768, 1024 and 1280 the class is off, nav present, list visible, page still. The phone list at 360 shows the nav. The full-suite width sweeps and `chat-polish.spec.ts` split tests pass.
+- **Not covered here.** iOS `visualViewport` keyboard behaviour, safe-area inset on a notched phone, styled Stitch colours of the new slim header and icon buttons, and tap feel: owner's Mac or a real device.
+
+## Gates (round 3)
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS. Lint exit 0 (17 warnings, pre-existing), typecheck exit 0, migration-check « Everything's fine » (no schema change), `npm audit --omit=dev`: 5 (4 high, 1 critical), unchanged, no dependency change in the diff. No secrets or debug leftovers in the diff. | `r3-lint.txt`, `r3-typecheck.txt`, `r3-migcheck.txt`, `r3-audit.txt` |
+| G2 Tests | PASS. Unit: 1 failed (`photo-rules`, baseline) / 684 passed / 12 skipped. Full e2e both projects: **253 passed, 45 skipped, 30 failed** = exactly the baseline (invite-inbox 3, profile-edit-flow 16, staff-review 6, staff-shell 5). Integration (Docker) pending CI. Repeat x3: 0 flakes. | `r3-unit.txt`, `r3-e2e-full-summary.txt`, `r3-repeat3.txt` |
+| G3 Functional | PASS (mocked API, real browser): probes above | `qa-round3-probes.spec.ts.txt` |
+| G4 UI | PASS for layout at 320 to 412 wide phone sizes and 767/768/1024/1280; styled fidelity vs Stitch pending on the Mac | |
+| G5 UX | PASS; no dead end on the phone thread (back reachable in every state). Minor R3-2. | |
+| G6 A11y | PASS: axe zero violations on the phone thread (also with grown composer), `/settings` whole page now clean; keyboard path and names checked | probe |
+| G7 Non-functional | PASS for what runs here; no API or security code changed this round (diff is web and tests only); perf pending the Mac | |
+| G8 Regression | PASS: chat, chat-media, report-block, blocked-list, app-shell, invite-compose, smoke all green; full suite = baseline | |
+
+## Mutation spot-checks (each restored; `git status` clean)
+
+| Mutation | Result |
+| --- | --- |
+| `chat-sub` class never set | 6 fail (AC 25 x2, AC 23 sweep, AC 23/25 keyboard, `app-shell.spec` /discussions/:id x2) |
+| `socket.on('message.delivered')` removed | the R2-2 test fails, both projects |
+| `socket.on('conversation.read')` removed | the R2-2 test fails, both projects |
+| Paramètres `focus` listener removed | the Mac-1 test fails, both projects |
+| `asked !== version` guard (overtaken read) removed | **dev tests all pass**; my probe fails: see R3-1 |
+
+## Review of changed tests
+
+No weakening. `chat-polish-app.spec.ts`: the old « composer ends above the bottom nav » check is kept from 768 px and replaced on phones by « no nav, composer inside the viewport »; the old keyboard test became the AC 23/25 test that still asserts the composer, header and last message stay in view; the AC 22 test now goes back to the list first (same socket, same assertion). `app-shell.spec.ts`: the thread path is a `subScreen` (phone: nav hidden and back visible; nav checks from 1024), `/settings` moved to whole-page axe (stricter). `discussions-page.test.ts`: two class-name string assertions, words unchanged. New unit and e2e tests added for AC 25 and the settings switches.
+
+## Findings
+
+| # | Severity | Gate | Steps | Expected | Actual | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| R3-1 | Minor | G2 | Remove `asked !== version ||` from `read-receipts-setting.ts` `load()`; run `chat-polish-app.spec.ts` | A test fails: a read overtaken by a click must not repaint the old value (stated in the handoff as protected) | All dev tests pass. My two-window probe (GET held in flight, click, release) fails under the mutation and passes on the current code, so the behaviour is right but unprotected. | `qa-round3-probes.spec.ts.txt` (last test), mutation row |
+| R3-2 | Minor (observation) | G5 | 360x600 or 320x568 with the keyboard up and a draft of five or more lines | | The message area shrinks to 32 % (24 % at 320x568) while the composer holds its 132 px cap. The latest message stays in view and everything stays reachable. Same trade-off as other messaging apps; noted only. | `r3-probe-out.txt` |
+
+Carried over unchanged: F2 (product question), F4 and the `npm audit` count (pre-existing), R2-3 (owner question), R2-5 (iOS keyboard, Mac).
+
+## Not tested and why (pending, not failures)
+
+- Integration suites (`npm run test:integration`): no Docker here; pending CI. No schema or API change this round.
+- Styled real-CDN look (Stitch colours, fonts, contrast of the new slim header, icon buttons and ticks), iOS Safari `visualViewport` and safe-area, real phone 100dvh, Lighthouse and Fast 3G: owner's Mac, running in parallel.
+- Live two-browser realtime on a real API: Mac.

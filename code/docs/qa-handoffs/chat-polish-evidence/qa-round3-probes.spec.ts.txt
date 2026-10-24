@@ -1,0 +1,243 @@
+import { api, bubbles, fire, FIRST, HIM, id, ME, openList, openThread, realtimeReady, serveApi, STUB_SKIP, text } from './chat-polish-mock'
+import { expect, expectAccessible, expectNoHorizontalOverflow, test } from './fixtures'
+import { compiledTailwind, serveTailwind } from './real-css'
+import { writeFileSync, appendFileSync } from 'node:fs'
+
+const OUT = '/tmp/claude-0/q3/probe-out.txt'
+function seed(n = 40) {
+  const state = api()
+  for (let i = 0; i < n; i += 1) state.messages.push(text(0x110 + i, FIRST, i % 2 ? ME : HIM, `Message ${i + 1} assez long pour prendre de la place à l'écran, vraiment, encore un peu de texte pour aller à la ligne.`, 39 - i))
+  return state
+}
+test.describe('QA round 3 probes', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+  test.beforeEach(async ({}, ti) => { test.skip(ti.project.name !== 'mobile', 'phone project') })
+
+  for (const [w, h] of [[360, 600], [360, 640], [360, 667], [360, 720], [390, 800], [320, 568], [412, 732]] as const) {
+    test(`ratio ${w}x${h}`, async ({ page, context, baseURL }) => {
+      await serveApi(context, baseURL ?? '', seed())
+      await serveTailwind(context, await compiledTailwind(page, `/discussions/${FIRST}`), 1500)
+      await page.setViewportSize({ width: w, height: h })
+      await openThread(page)
+      await expect(page.locator('#real-tailwind')).toBeAttached({ timeout: 10000 })
+      await page.waitForTimeout(800)
+      const m = (label: string) => page.evaluate((l) => {
+        const box = document.getElementById('thread-scroll')!
+        const r = (s: string) => { const e = document.querySelector(s); return e ? Math.round(e.getBoundingClientRect().bottom) : null }
+        const last = [...document.querySelectorAll('[data-testid="chat-bubble"]')].pop()!.getBoundingClientRect()
+        const nav = document.getElementById('app-bottom-nav')
+        return { l, inner: innerHeight, box: box.clientHeight, gap: box.scrollHeight - box.scrollTop - box.clientHeight, doc: document.documentElement.scrollHeight, lastB: Math.round(last.bottom), boxB: Math.round(box.getBoundingClientRect().bottom), taB: r('#thread-input'), nav: nav ? getComputedStyle(nav).display : 'none-el', hscroll: document.documentElement.scrollWidth - innerWidth }
+      }, label)
+      const a = await m('open')
+      await page.getByLabel('Réponse réfléchie et posée').focus()
+      await page.setViewportSize({ width: w, height: h - 300 })
+      await page.waitForTimeout(300)
+      const b = await m('kbd')
+      await page.getByLabel('Réponse réfléchie et posée').fill('a\nb\nc\nd\ne\nf\ng')
+      await page.waitForTimeout(300)
+      const c = await m('kbd+5lines')
+      appendFileSync(OUT, JSON.stringify({ w, h, open: { ...a, ratio: +(a.box / a.inner).toFixed(2) }, kbd: { ...b, ratio: +(b.box / b.inner).toFixed(2) }, kbd5: { ...c, ratio: +(c.box / c.inner).toFixed(2) } }) + '\n')
+      expect(a.box / a.inner).toBeGreaterThanOrEqual(0.6)
+      expect(a.nav).toBe('none')
+      expect(a.doc).toBeLessThanOrEqual(a.inner)
+      expect(a.hscroll).toBeLessThanOrEqual(0)
+      expect(b.gap).toBeLessThanOrEqual(4)
+      expect(b.box / b.inner).toBeGreaterThanOrEqual(0.45)
+      expect(c.lastB).toBeLessThanOrEqual(c.boxB + 1)
+      // back still reachable, topmost at its centre, 44x44
+      const back = page.getByRole('link', { name: 'Retour aux discussions' })
+      const bb = (await back.boundingBox())!
+      expect(bb.width).toBeGreaterThanOrEqual(44); expect(bb.height).toBeGreaterThanOrEqual(44); expect(bb.y).toBeGreaterThanOrEqual(0)
+      const top = await page.evaluate(([x, y]) => document.elementFromPoint(x, y)?.closest('a')?.id, [bb.x + bb.width / 2, bb.y + bb.height / 2])
+      expect(top).toBe('thread-back')
+    })
+  }
+
+  test('back always reachable: states, keyboard, screen-reader names, no overlap', async ({ page, context, baseURL }) => {
+    const state = seed(3)
+    state.people[FIRST] = { ...state.people[FIRST], pseudonym: 'Abdoulaye_Mamadou_Ouedraogo_Ibrahim_Sawadogo_Kone' }
+    await serveApi(context, baseURL ?? '', state)
+    await serveTailwind(context, await compiledTailwind(page, `/discussions/${FIRST}`))
+    await page.setViewportSize({ width: 360, height: 640 })
+    await openThread(page)
+    await expect(page.locator('#real-tailwind')).toBeAttached()
+    const back = page.getByRole('link', { name: 'Retour aux discussions' })
+    await expect(back).toBeVisible()
+    // overlap check back vs header children
+    const o = await page.evaluate(() => {
+      const b = document.getElementById('thread-back')!.getBoundingClientRect()
+      const hits: string[] = []
+      for (const s of ['#thread-avatar', '#thread-title', '#thread-city', '#thread-report', '#thread-verified']) { const e = document.querySelector(s); if (!e) continue; const r = e.getBoundingClientRect(); if (r.width && r.left < b.right && r.right > b.left && r.top < b.bottom && r.bottom > b.top) hits.push(s) }
+      const t = document.getElementById('thread-title')!
+      const rp = document.getElementById('thread-report')!.getBoundingClientRect()
+      return { hits, titleClipped: t.scrollWidth > t.clientWidth, titleRight: t.getBoundingClientRect().right, reportLeft: rp.left, reportRight: rp.right, inner: innerWidth, stage: getComputedStyle(document.getElementById('thread-stage')!).position }
+    })
+    appendFileSync(OUT, 'overlap ' + JSON.stringify(o) + '\n')
+    expect(o.hits).toEqual([])
+    expect(o.reportRight).toBeLessThanOrEqual(o.inner)
+    // keyboard: first Tab reaches back (it is first in DOM)
+    await page.evaluate(() => (document.activeElement as HTMLElement)?.blur())
+    await page.keyboard.press('Tab')
+    const first = await page.evaluate(() => document.activeElement?.id || document.activeElement?.tagName)
+    appendFileSync(OUT, 'first tab: ' + first + '\n')
+    expect(first).toBe('thread-back')
+    // focus ring visible
+    const outline = await page.evaluate(() => { const s = getComputedStyle(document.activeElement!); return s.outlineStyle + ' ' + s.outlineWidth })
+    appendFileSync(OUT, 'back focus outline: ' + outline + '\n')
+    await page.keyboard.press('Enter')
+    await expect(page).toHaveURL(/\/discussions$/)
+    await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toBeVisible()
+    // accessible names of icon buttons
+    await openThread(page)
+    for (const n of ['Retour aux discussions', 'Signaler / Bloquer', 'Joindre une photo sobre', 'Enregistrer une note vocale sobre']) await expect(page.getByRole(n.startsWith('Ret') || n.startsWith('Sig') ? 'link' : 'button', { name: n })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Envoyer', exact: true })).toBeVisible()
+    await expectAccessible(page)
+    // axe with grown composer + counter
+    await page.getByLabel('Réponse réfléchie et posée').fill('x'.repeat(900))
+    await expectAccessible(page)
+    await expectNoHorizontalOverflow(page)
+    // stage still exposed to AT
+    const stageText = await page.locator('#thread-stage').innerText()
+    appendFileSync(OUT, 'stage text (sr-only): ' + JSON.stringify(stageText) + '\n')
+    expect(stageText.length).toBeGreaterThan(0)
+  })
+
+  test('error and missing states keep a way back', async ({ page, context, baseURL }) => {
+    const state = seed(3)
+    await serveApi(context, baseURL ?? '', state)
+    await serveTailwind(context, await compiledTailwind(page, `/discussions/${FIRST}`))
+    await page.setViewportSize({ width: 360, height: 640 })
+    // thread messages 500
+    await page.route(/\/v1\/conversations\/[^/]+\/messages(\?.*)?$/, (r) => r.request().method() === 'GET' ? r.fulfill({ status: 500, contentType: 'application/json', body: '{"error":{"code":"X","message":"x","details":null}}' }) : r.fallback())
+    await page.goto(`/discussions/${FIRST}`)
+    await page.waitForTimeout(1500)
+    const vis = await page.evaluate(() => ({ back: (() => { const a = document.getElementById('thread-back')!; const r = a.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return { w: r.width, h: r.height, y: r.y, topIsBack: top?.closest('a')?.id === 'thread-back' } })(), nav: getComputedStyle(document.getElementById('app-bottom-nav')!).display, errShown: !document.getElementById('thread-load-error')!.hidden, errTop: document.getElementById('thread-load-error')!.getBoundingClientRect().top }))
+    appendFileSync(OUT, 'load-error ' + JSON.stringify(vis) + '\n')
+    expect(vis.back.topIsBack).toBe(true)
+    // unknown thread
+    await page.unroute(/\/v1\/conversations\/[^/]+\/messages(\?.*)?$/)
+    await page.goto(`/discussions/01990000-0000-7000-8000-0000000000ff`)
+    await page.waitForTimeout(1200)
+    const v2 = await page.evaluate(() => { const a = document.getElementById('thread-back')!; const r = a.getBoundingClientRect(); const top = document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2); return { url: location.pathname, w: r.width, h: r.height, topIsBack: top?.closest('a')?.id === 'thread-back', nav: getComputedStyle(document.getElementById('app-bottom-nav')!).display } })
+    appendFileSync(OUT, 'unknown ' + JSON.stringify(v2) + '\n')
+    await page.screenshot({ path: '/tmp/claude-0/q3/unknown-360.png' })
+  })
+
+  test('layout switches at 768 both ways, nav returns, split unchanged', async ({ page, context, baseURL }) => {
+    await serveApi(context, baseURL ?? '', seed(10))
+    await serveTailwind(context, await compiledTailwind(page, `/discussions/${FIRST}`))
+    await page.setViewportSize({ width: 767, height: 900 })
+    await openThread(page)
+    await expect(page.locator('#real-tailwind')).toBeAttached()
+    const s = () => page.evaluate(() => ({ sub: document.documentElement.classList.contains('chat-sub'), nav: getComputedStyle(document.getElementById('app-bottom-nav')!).display, listVisible: !!document.querySelector('[data-testid="conversation-row"]') && document.querySelector('[data-testid="conversation-row"]')!.getBoundingClientRect().width > 0, backVisible: (() => { const r = document.getElementById('thread-back')!.getBoundingClientRect(); return r.width > 0 && getComputedStyle(document.getElementById('thread-back')!).display !== 'none' })(), doc: document.documentElement.scrollHeight - innerHeight, pbottom: getComputedStyle(document.body).paddingBottom }))
+    const a = await s()
+    await page.setViewportSize({ width: 768, height: 900 })
+    await page.waitForTimeout(500)
+    const b = await s()
+    await page.setViewportSize({ width: 767, height: 900 })
+    await page.waitForTimeout(500)
+    const c = await s()
+    appendFileSync(OUT, 'resize 767/768/767 ' + JSON.stringify({ a, b, c }) + '\n')
+    expect(a.sub).toBe(true); expect(a.nav).toBe('none')
+    expect(b.sub).toBe(false); expect(b.listVisible).toBe(true); expect(b.nav).not.toBe('none'); expect(b.backVisible).toBe(false)
+    expect(c.sub).toBe(true); expect(c.nav).toBe('none')
+    for (const w of [768, 1024, 1280]) {
+      await page.setViewportSize({ width: w, height: 900 }); await page.waitForTimeout(300)
+      const x = await s()
+      expect(x.sub, 'w' + w).toBe(false); expect(x.nav, 'w' + w).not.toBe('none'); expect(x.listVisible).toBe(true); expect(x.doc).toBeLessThanOrEqual(0)
+    }
+    // list page on phone has nav
+    await page.setViewportSize({ width: 360, height: 640 })
+    await openList(page)
+    expect((await s()).nav).not.toBe('none')
+  })
+
+  test('keyboard-typing: typing a message then send, back via keyboard, draft kept', async ({ page, context, baseURL }) => {
+    const state = seed(3)
+    await serveApi(context, baseURL ?? '', state)
+    await serveTailwind(context, await compiledTailwind(page, `/discussions/${FIRST}`))
+    await page.setViewportSize({ width: 360, height: 640 })
+    await openThread(page)
+    const field = page.getByLabel('Réponse réfléchie et posée')
+    await field.fill('Brouillon à garder')
+    await page.keyboard.press('Shift+Tab'); await page.keyboard.press('Shift+Tab')
+    const f = await page.evaluate(() => document.activeElement?.id)
+    appendFileSync(OUT, 'shift-tab x2 from field: ' + f + '\n')
+    await page.getByRole('link', { name: 'Retour aux discussions' }).click()
+    await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toBeVisible()
+    await page.goBack()
+    await expect(page.getByRole('navigation', { name: 'Navigation principale' })).toBeHidden()
+    await expect(field).toHaveValue('Brouillon à garder')
+    // send via button and Enter-less path
+    await page.getByRole('button', { name: 'Envoyer', exact: true }).click()
+    await expect(bubbles(page).last()).toContainText('Brouillon à garder')
+    const h = (await field.boundingBox())!.height
+    appendFileSync(OUT, 'composer height after send ' + h + '\n')
+    expect(h).toBeLessThanOrEqual(48)
+  })
+})
+
+test.describe('QA round 3: stale Paramètres windows', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+  const sw = (p: import('@playwright/test').Page) => p.getByRole('switch', { name: 'Confirmations de lecture' })
+
+  test('two windows: live event, focus, stale click, overtaken read', async ({ context, baseURL }) => {
+    const state = api()
+    await serveApi(context, baseURL ?? '', state)
+    const a = await context.newPage(); const b = await context.newPage()
+    await a.goto('/settings'); await b.goto('/settings')
+    await expect(sw(a)).toHaveAttribute('aria-checked', 'true'); await expect(sw(b)).toHaveAttribute('aria-checked', 'true')
+    // A turns off; B (no event, hidden) stays stale
+    await sw(a).click()
+    await expect(sw(a)).toHaveAttribute('aria-checked', 'false')
+    expect(state.setting).toBe(false)
+    await expect(sw(b)).toHaveAttribute('aria-checked', 'true') // stale, as expected without a signal
+    // live event reaches B
+    await realtimeReady(b).catch(() => {})
+    await fire(b, 'chat.receipts', { account_id: ME })
+    await expect(sw(b)).toHaveAttribute('aria-checked', 'false')
+    // now server flips back from elsewhere; B gets only a focus
+    state.setting = true
+    await b.evaluate(() => window.dispatchEvent(new Event('focus')))
+    await expect(sw(b)).toHaveAttribute('aria-checked', 'true')
+    // stale click: server false, B shows true (no signal), member clicks: asks for off
+    state.setting = false
+    state.settingPuts.length = 0
+    await sw(b).click()
+    await expect.poll(() => state.settingPuts).toEqual([{ read_receipts: false }])
+    await expect(sw(b)).toHaveAttribute('aria-checked', 'false')
+    // overtaken read: GET delayed with the old value; click in between
+    state.setting = true
+    await b.evaluate(() => window.dispatchEvent(new Event('focus')))
+    await expect(sw(b)).toHaveAttribute('aria-checked', 'true')
+    let release: () => void = () => {}
+    const gate = new Promise<void>((r) => { release = r })
+    await b.route(/\/v1\/chat\/settings$/, async (route) => {
+      if (route.request().method() === 'GET') { const snapshot = state.setting; await gate; return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ read_receipts: snapshot }) }) }
+      return route.fallback()
+    })
+    await b.evaluate(() => window.dispatchEvent(new Event('focus'))) // GET in flight, old value true
+    state.settingPuts.length = 0
+    await sw(b).click() // asks false
+    await expect.poll(() => state.settingPuts).toEqual([{ read_receipts: false }])
+    release()
+    await b.waitForTimeout(500)
+    await expect(sw(b)).toHaveAttribute('aria-checked', 'false')
+    // rapid double click does not double-PUT, keeps focus; keyboard
+    await b.unroute(/\/v1\/chat\/settings$/)
+    await sw(b).focus()
+    state.settingPuts.length = 0
+    await b.keyboard.press('Space')
+    await expect(sw(b)).not.toHaveAttribute('aria-busy', 'true')
+    await expect(sw(b)).toBeFocused()
+    await b.keyboard.press('Space')
+    await expect.poll(() => state.settingPuts.length).toBe(2)
+    await expect(sw(b)).toBeFocused()
+    // PUT failure: reverts + error
+    await b.route(/\/v1\/chat\/settings$/, (route) => route.request().method() === 'PUT' ? route.fulfill({ status: 500, contentType: 'application/json', body: '{"error":{"code":"X","message":"x","details":null}}' }) : route.fallback())
+    const before = await sw(b).getAttribute('aria-checked')
+    await sw(b).click()
+    await expect(sw(b)).toHaveAttribute('aria-checked', before!)
+    await expect(b.locator('#receipts-error')).toBeVisible()
+  })
+})
