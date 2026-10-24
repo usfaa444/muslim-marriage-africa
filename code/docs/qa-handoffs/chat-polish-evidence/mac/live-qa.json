@@ -1,0 +1,667 @@
+{
+  "walk": {
+    "L1-open-latest-390": {
+      "ok": false,
+      "lastBubbleInView": false,
+      "composerInView": false,
+      "sendInView": false,
+      "bubbles": 30
+    },
+    "L1-open-latest-1280": {
+      "ok": false,
+      "lastBubbleInView": false,
+      "composerInView": true,
+      "sendInView": true,
+      "bubbles": 30
+    },
+    "L2a-sent": {
+      "ok": true,
+      "state": "sent"
+    },
+    "L2b-read-live": {
+      "ok": true,
+      "msAfterBOpened": 1252,
+      "reloadsA": 0,
+      "readPostsB": 1,
+      "srText": "Lu"
+    },
+    "L3a-hidden-no-read": {
+      "ok": true,
+      "deliveredToB": 1,
+      "readPostsB": 0,
+      "tickA": "sent"
+    },
+    "L3b-visible-reads": {
+      "ok": false,
+      "msToLu": -1,
+      "readPostsB": 0
+    },
+    "L4a-scrolled-up-stays": {
+      "ok": true,
+      "jumpVisible": true,
+      "scrollYBefore": 0,
+      "scrollYAfter": 0,
+      "firstBubbleTopDelta": 0,
+      "readPostsB": 0,
+      "tickA": "sent"
+    },
+    "L4b-jump-returns-and-reads": {
+      "ok": true,
+      "msToLu": 53,
+      "lastInView": true,
+      "jumpHidden": true,
+      "composerInView": true
+    },
+    "L4c-split-pane-jump": {
+      "ok": true,
+      "scrollContainer": "thread-scroll",
+      "jumpVisible": true,
+      "readPostsA": 0
+    },
+    "L4d-split-jump-click": {
+      "ok": true,
+      "readPostsA": 1,
+      "lastInView": true
+    },
+    "L5a-split-list": {
+      "ok": true,
+      "placeholder": true,
+      "order": [
+        "01a16de4-8f79-7faf-ac11-fbcb56f13b0c",
+        "01a16de4-8faf-7d2c-a639-fc1ee5352de3"
+      ],
+      "AB": {
+        "name": "Mariam51943, 30 ans",
+        "preview": "« Test en direct : B écrit pendant que A lit plus haut. »",
+        "time": "12:34",
+        "unread": null,
+        "tick": null,
+        "avatar": "/v1/media/get?token=<redacted>",
+        "boldName": "500"
+      },
+      "AC": {
+        "name": "Mariam58362, 30 ans",
+        "preview": "Note vocale",
+        "time": "12:34",
+        "unread": "22 messages non lus",
+        "tick": null,
+        "avatar": "/v1/media/get?token=<redacted>",
+        "boldName": "700"
+      },
+      "api": [
+        {
+          "id": "01a16de4-8f79-7faf-ac11-fbcb56f13b0c",
+          "unread": 0,
+          "last": {
+            "kind": "text",
+            "mine": false,
+            "read": true
+          },
+          "photo": [
+            "id",
+            "url"
+          ]
+        },
+        {
+          "id": "01a16de4-8faf-7d2c-a639-fc1ee5352de3",
+          "unread": 2,
+          "last": {
+            "kind": "voice",
+            "mine": false,
+            "read": false
+          },
+          "photo": [
+            "id",
+            "url"
+          ]
+        }
+      ]
+    },
+    "L5b-switch-no-reload": {
+      "ok": true,
+      "sameDocument": true,
+      "url": "/discussions/01a16de4-8faf-7d2c-a639-fc1ee5352de3",
+      "h1": "Mariam58362, 30 ans",
+      "title": "AnKanu • Discussion",
+      "acRowAfterOpen": {
+        "name": "Mariam58362, 30 ans",
+        "preview": "Note vocale",
+        "time": "12:34",
+        "unread": null,
+        "tick": null,
+        "avatar": "/v1/media/get?token=<redacted>",
+        "boldName": "500"
+      },
+      "current": "01a16de4-8faf-7d2c-a639-fc1ee5352de3"
+    },
+    "L5c-live-reorder-badge": {
+      "ok": false,
+      "msToReorder": -1,
+      "order": [
+        "01a16de4-8f79-7faf-ac11-fbcb56f13b0c",
+        "01a16de4-8faf-7d2c-a639-fc1ee5352de3"
+      ],
+      "AB": {
+        "name": "Mariam51943, 30 ans",
+        "preview": "« Rafale 3 pendant que A lit une autre discussion. »",
+        "time": "12:34",
+        "unread": "33 messages non lus",
+        "tick": null,
+        "avatar": "/v1/media/get?token=<redacted>",
+        "boldName": "700"
+      },
+      "listRequestsForBurst": 2
+    },
+    "L5d-history": {
+      "ok": true,
+      "abBadgeAfterOpen": null,
+      "back1": "/discussions/01a16de4-8faf-7d2c-a639-fc1ee5352de3",
+      "back2": "/discussions",
+      "placeholderOnBack2": true,
+      "fwd": "/discussions/01a16de4-8faf-7d2c-a639-fc1ee5352de3",
+      "sameDocument": true
+    },
+    "L5e-deep-link": {
+      "ok": true
+    },
+    "L5f-split-768": {
+      "ok": true,
+      "listX": 33,
+      "listW": 318,
+      "threadX": 368,
+      "threadW": 368,
+      "listVisible": true
+    },
+    "L5f-split-1024": {
+      "ok": true,
+      "listX": 33,
+      "listW": 358,
+      "threadX": 408,
+      "threadW": 584,
+      "listVisible": true
+    },
+    "L5f-split-1280": {
+      "ok": true,
+      "listX": 33,
+      "listW": 358,
+      "threadX": 408,
+      "threadW": 840,
+      "listVisible": true
+    },
+    "L5f-split-1440": {
+      "ok": true,
+      "listX": 113,
+      "listW": 358,
+      "threadX": 488,
+      "threadW": 840,
+      "listVisible": true
+    },
+    "L6-phone-360": {
+      "ok": false,
+      "rowAC": {
+        "name": "Mariam58362, 30 ans",
+        "preview": "« Message de C pour le badge sur téléphone. »",
+        "time": "scheduleAujourd'hui à 12:34",
+        "unread": null,
+        "tick": null,
+        "avatar": "/v1/media/get?token=<redacted>",
+        "boldName": "500"
+      },
+      "acAfterRead": null,
+      "threadHiddenOnList": true,
+      "listHiddenOnThread": true,
+      "composer": true,
+      "backOk": true,
+      "browserBack": "/discussions/01a16de4-8faf-7d2c-a639-fc1ee5352de3",
+      "sameDocument": true
+    },
+    "L6-phone-390": {
+      "ok": false,
+      "rowAC": {
+        "name": "Mariam58362, 30 ans",
+        "preview": "« Message de C pour le badge sur téléphone. »",
+        "time": "scheduleAujourd'hui à 12:34",
+        "unread": null,
+        "tick": null,
+        "avatar": "/v1/media/get?token=<redacted>",
+        "boldName": "500"
+      },
+      "acAfterRead": null,
+      "threadHiddenOnList": true,
+      "listHiddenOnThread": true,
+      "composer": true,
+      "backOk": true,
+      "browserBack": "/discussions/01a16de4-8faf-7d2c-a639-fc1ee5352de3",
+      "sameDocument": true
+    },
+    "L7-viewer-B-390": {
+      "ok": false,
+      "theirs": {
+        "name": "Photo de Issa48869",
+        "modal": "true",
+        "focusClose": "photo-viewer-close",
+        "img": {
+          "fit": "contain",
+          "inside": true,
+          "w": 366,
+          "h": 488,
+          "nat": [
+            900,
+            1200
+          ],
+          "src": "blob:"
+        },
+        "scrollLocked": true,
+        "trap": "photo-viewer-close",
+        "escape": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        },
+        "close": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        },
+        "backdrop": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        }
+      },
+      "mine": {
+        "name": "Votre photo",
+        "modal": "true",
+        "focusClose": "photo-viewer-close",
+        "img": {
+          "fit": "contain",
+          "inside": true,
+          "w": 366,
+          "h": 275,
+          "nat": [
+            1200,
+            900
+          ],
+          "src": "blob:"
+        },
+        "scrollLocked": true,
+        "trap": "photo-viewer-close",
+        "escape": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": [
+            "/v1/media/get?token=<redacted>"
+          ]
+        },
+        "close": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        },
+        "backdrop": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        }
+      },
+      "originalRequests": 0
+    },
+    "L7-viewer-A-1280": {
+      "ok": true,
+      "theirs": {
+        "name": "Photo de Mariam51943",
+        "modal": "true",
+        "focusClose": "photo-viewer-close",
+        "img": {
+          "fit": "contain",
+          "inside": true,
+          "w": 1104,
+          "h": 828,
+          "nat": [
+            1200,
+            900
+          ],
+          "src": "blob:"
+        },
+        "scrollLocked": true,
+        "trap": "photo-viewer-close",
+        "escape": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        },
+        "close": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        },
+        "backdrop": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        }
+      },
+      "mine": {
+        "name": "Votre photo",
+        "modal": "true",
+        "focusClose": "photo-viewer-close",
+        "img": {
+          "fit": "contain",
+          "inside": true,
+          "w": 621,
+          "h": 828,
+          "nat": [
+            900,
+            1200
+          ],
+          "src": "blob:"
+        },
+        "scrollLocked": true,
+        "trap": "photo-viewer-close",
+        "escape": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        },
+        "close": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        },
+        "backdrop": {
+          "closed": true,
+          "focusBack": "chat-photo-open",
+          "requestsWhileOpen": []
+        }
+      },
+      "originalRequests": 0
+    },
+    "L7-lite": {
+      "ok": true,
+      "openBefore": 0,
+      "mediaBefore": 0,
+      "openAfter": 1,
+      "requestsWhileViewerOpen": 0,
+      "originalRequests": 0
+    },
+    "L8-read-route-auth": {
+      "ok": true,
+      "outsiderD": "404 ",
+      "signedOut": "401 ",
+      "badId": "400 ",
+      "otherConvMsg": "404 ",
+      "cReadsAB": "404 ",
+      "storedForOutsiders": "0"
+    },
+    "L9-block-hides-read": {
+      "ok": false,
+      "block": 201,
+      "sendWhileBlocked": "refused",
+      "listA_last_read": true,
+      "listB_last_read": null,
+      "headA_other": null,
+      "headB_other": null,
+      "rowTickA": 0,
+      "threadTicksA": 14,
+      "readByAWhileBlocked": 200,
+      "ticksOnB": 16,
+      "bReadTicksBefore": 0,
+      "bReadTicksAfter": 0
+    },
+    "L9b-unblock-restores": {
+      "ok": true,
+      "unblock": 200,
+      "ticksA": 14
+    }
+  },
+  "widths": [
+    {
+      "w": 360,
+      "state": "list",
+      "hscroll": false,
+      "sw": 360,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 360,
+      "state": "thread",
+      "hscroll": false,
+      "sw": 360,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 360,
+      "state": "viewer",
+      "hscroll": false,
+      "sw": 360,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 390,
+      "state": "list",
+      "hscroll": false,
+      "sw": 390,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 390,
+      "state": "thread",
+      "hscroll": false,
+      "sw": 390,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 390,
+      "state": "viewer",
+      "hscroll": false,
+      "sw": 390,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 768,
+      "state": "list",
+      "hscroll": false,
+      "sw": 768,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 768,
+      "state": "thread",
+      "hscroll": false,
+      "sw": 768,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 768,
+      "state": "viewer",
+      "hscroll": false,
+      "sw": 768,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1024,
+      "state": "list",
+      "hscroll": false,
+      "sw": 1024,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1024,
+      "state": "thread",
+      "hscroll": false,
+      "sw": 1024,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1024,
+      "state": "viewer",
+      "hscroll": false,
+      "sw": 1024,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1280,
+      "state": "list",
+      "hscroll": false,
+      "sw": 1280,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1280,
+      "state": "thread",
+      "hscroll": false,
+      "sw": 1280,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1280,
+      "state": "viewer",
+      "hscroll": false,
+      "sw": 1280,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1440,
+      "state": "list",
+      "hscroll": false,
+      "sw": 1440,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1440,
+      "state": "thread",
+      "hscroll": false,
+      "sw": 1440,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1440,
+      "state": "viewer",
+      "hscroll": false,
+      "sw": 1440,
+      "small": [],
+      "tailwind": true,
+      "lang": "fr",
+      "axeSeriousCritical": [],
+      "axeAll": []
+    }
+  ],
+  "console": [],
+  "seeded": {
+    "ab_texts": 33,
+    "photoB": 201,
+    "photoA": 201,
+    "voiceC": 201,
+    "ms": 865
+  },
+  "listApi": [
+    {
+      "id": "01a16de4-8f79-7faf-ac11-fbcb56f13b0c",
+      "unread": 0,
+      "last": {
+        "kind": "text",
+        "mine": false,
+        "read": true
+      },
+      "photo": [
+        "id",
+        "url"
+      ]
+    },
+    {
+      "id": "01a16de4-8faf-7d2c-a639-fc1ee5352de3",
+      "unread": 2,
+      "last": {
+        "kind": "voice",
+        "mine": false,
+        "read": false
+      },
+      "photo": [
+        "id",
+        "url"
+      ]
+    }
+  ],
+  "summary": {
+    "pass": 19,
+    "fail": [
+      "L1-open-latest-390",
+      "L1-open-latest-1280",
+      "L3b-visible-reads",
+      "L5c-live-reorder-badge",
+      "L6-phone-360",
+      "L6-phone-390",
+      "L7-viewer-B-390",
+      "L9-block-hides-read"
+    ],
+    "consoleErrors": 0
+  }
+}
