@@ -4,6 +4,8 @@ import { BrowseController } from './browse.controller.js'
 import { FavouritesController } from './favourites.controller.js'
 import { FiltersController } from './filters.controller.js'
 import { CilController } from './cil.controller.js'
+import { ChatSettingsController } from './chat-settings.controller.js'
+import { NavBadgesController } from './nav-badges.controller.js'
 import { ConversationsController } from './conversations.controller.js'
 import { HealthController } from './health.controller.js'
 import { InvitesController } from './invites.controller.js'
@@ -36,6 +38,8 @@ import { VerificationsController } from './verifications.controller.js'
     FavouritesController,
     InvitesController,
     ConversationsController,
+    ChatSettingsController,
+    NavBadgesController,
     ReportsController,
     BlocksController,
     FiltersController,

@@ -1,0 +1,155 @@
+import type { BrowserContext, Page } from '@playwright/test'
+import { compile } from '@tailwindcss/node'
+import { api, bubbles, FIRST, HIM, id, ME, openThread, serveApi, STUB_SKIP, text, wheelThreadToTop } from './chat-polish-mock'
+import { expect, test } from './fixtures'
+
+let cssCache = ''
+async function tailwindCss(page: Page): Promise<string> {
+  if (cssCache) return cssCache
+  const classes = await page.evaluate(() => {
+    const set = new Set<string>()
+    document.querySelectorAll('[class]').forEach((el) => el.getAttribute('class')!.split(/\s+/).forEach((c) => c && set.add(c)))
+    return [...set]
+  })
+  const compiler = await compile('@import "tailwindcss";', { base: process.cwd(), onDependency: () => {} })
+  cssCache = compiler.build(classes)
+  return cssCache
+}
+
+async function lateCss(context: BrowserContext, css: string, delay: number) {
+  await context.route(/^https:\/\/cdn\.tailwindcss\.com\//, (route) =>
+    route.fulfill({ status: 200, contentType: 'application/javascript', body: `window.tailwind = { config: {} }; setTimeout(function () { var s = document.createElement('style'); s.id='late-style'; s.textContent = ${JSON.stringify(css)}; document.head.appendChild(s) }, ${delay})` }),
+  )
+}
+
+function seed() {
+  const state = api()
+  for (let i = 0; i < 40; i += 1) state.messages.push(text(0x110 + i, FIRST, i % 2 ? ME : HIM, `Message ${i + 1} assez long pour prendre de la place à l'écran, vraiment, encore un peu de texte pour aller à la ligne.`, 39 - i))
+  return state
+}
+
+test.describe('QA round 2 real-CSS probes', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+  for (const delay of []) {
+    for (const [w, h] of [[360, 540], [360, 560], [360, 600], [360, 667], [360, 720], [412, 732]]) {
+      test(`D1 real tailwind CSS at ${delay} ms, ${w}x${h}`, async ({ browser, baseURL }) => {
+        // 1) learn the classes with an unstyled page
+        const ctx0 = await browser.newContext({ baseURL })
+        const p0 = await ctx0.newPage()
+        await serveApi(ctx0, baseURL ?? '', seed())
+        await openThread(p0)
+        const css = await tailwindCss(p0)
+        await ctx0.close()
+        expect(css.length).toBeGreaterThan(5000)
+        const context = await browser.newContext({ baseURL, viewport: { width: w, height: h } })
+        const page = await context.newPage()
+        const errors: string[] = []
+        page.on('pageerror', (e) => errors.push(e.message))
+        await lateCss(context, css, delay)
+        await serveApi(context, baseURL ?? '', seed())
+        await openThread(page)
+        await expect(page.locator('#late-style')).toBeAttached({ timeout: 10000 })
+        await page.waitForTimeout(1500)
+        const m = await page.evaluate(() => {
+          const box = document.querySelector('#thread-scroll') as HTMLElement
+          const last = [...document.querySelectorAll('[data-testid="chat-bubble"]')].pop() as HTMLElement
+          const ta = document.querySelector('textarea') as HTMLElement
+          const r = (e: Element) => e.getBoundingClientRect()
+          return { doc: document.documentElement.scrollHeight, inner: innerHeight, boxH: box.clientHeight, boxGap: box.scrollHeight - box.scrollTop - box.clientHeight, lastBottom: r(last).bottom, boxBottom: r(box).bottom, taTop: r(ta).top, taBottom: r(ta).bottom, boxTop: r(box).top, bodyScroll: window.scrollY, styled: getComputedStyle(document.body).margin }
+        })
+        console.log(JSON.stringify({ delay, w, h, ...m }))
+        await page.screenshot({ path: `docs/qa-handoffs/chat-polish-evidence/r2-d1-${delay}-${w}.png` })
+        expect(m.boxGap).toBeLessThanOrEqual(4)
+        expect(m.lastBottom).toBeLessThanOrEqual(m.boxBottom + 1)
+        expect(m.taBottom).toBeLessThanOrEqual(m.inner)
+        expect(m.doc).toBeLessThanOrEqual(m.inner + 1)
+        
+        expect(errors).toEqual([])
+        // scroll up with wheel: header and composer stay
+        await wheelThreadToTop(page)
+        const after = await page.evaluate(() => ({ ta: document.querySelector('textarea')!.getBoundingClientRect().bottom, y: scrollY, inner: innerHeight, h1: document.querySelector('h1')!.getBoundingClientRect().top }))
+        expect(after.y).toBe(0)
+        expect(after.ta).toBeLessThanOrEqual(after.inner)
+        expect(after.h1).toBeGreaterThanOrEqual(0)
+        await context.close()
+      })
+    }
+  }
+})
+
+import { fire } from './chat-polish-mock'
+import { expectAccessible, expectNoHorizontalOverflow } from './fixtures'
+
+test.describe('QA round 2: badges, one event at a time, and axe with real CSS', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+  for (const ev of ['message.delivered', 'invite.changed', 'conversation.read']) {
+    test(`only ${ev} refreshes the badges on Paramètres`, async ({ page, context, baseURL }) => {
+      const state = api()
+      state.badges = { invitations: 0, discussions: 0 }
+      await serveApi(context, baseURL ?? '', state)
+      await page.goto('/settings')
+      await page.waitForFunction(() => ((window as unknown as { __fake?: { sockets: unknown[] } }).__fake?.sockets.length ?? 0) === 1)
+      state.badges = { invitations: 5, discussions: 7 }
+      await fire(page, ev, ev === 'invite.changed' ? { invite_id: id(1) } : { conversation_id: FIRST, account_id: ME, message_id: id(2), sender_id: HIM })
+      await expect(page.getByRole('link', { name: /Discussions/ })).toHaveAccessibleName('Discussions 7 discussions non lues')
+    })
+  }
+  for (const [w, h] of [[390, 800], [1280, 900]]) {
+    test(`axe with real CSS: thread and list at ${w}`, async ({ browser, baseURL }) => {
+      const ctx0 = await browser.newContext({ baseURL })
+      const p0 = await ctx0.newPage()
+      await serveApi(ctx0, baseURL ?? '', seed())
+      await openThread(p0)
+      const css = await tailwindCss(p0)
+      await ctx0.close()
+      const context = await browser.newContext({ baseURL, viewport: { width: w, height: h } })
+      const page = await context.newPage()
+      await lateCss(context, css, 0)
+      await serveApi(context, baseURL ?? '', seed())
+      await openThread(page)
+      await expect(page.locator('#late-style')).toBeAttached()
+      await expectAccessible(page)
+      await expectNoHorizontalOverflow(page)
+      await page.goto('/discussions')
+      await expect(page.locator('#late-style')).toBeAttached()
+      await page.waitForTimeout(500)
+      await expectAccessible(page)
+      await page.screenshot({ path: `docs/qa-handoffs/chat-polish-evidence/r2-list-${w}.png` })
+      await context.close()
+    })
+  }
+})
+
+test.describe('QA round 2: settings page with real CSS', () => {
+  test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
+  for (const [w, h] of [[390, 800], [1280, 900]]) {
+    test(`settings ${w}`, async ({ browser, baseURL }) => {
+      cssCache = ''
+      const ctx0 = await browser.newContext({ baseURL })
+      const p0 = await ctx0.newPage()
+      const s0 = api(); s0.badges = { invitations: 3, discussions: 12 }
+      await serveApi(ctx0, baseURL ?? '', s0)
+      await p0.goto('/settings')
+      await p0.waitForTimeout(500)
+      const css = await tailwindCss(p0)
+      await ctx0.close()
+      const context = await browser.newContext({ baseURL, viewport: { width: w, height: h } })
+      const page = await context.newPage()
+      await lateCss(context, css, 0)
+      const s = api(); s.badges = { invitations: 3, discussions: 12 }
+      await serveApi(context, baseURL ?? '', s)
+      await page.goto('/settings')
+      await expect(page.locator('#late-style')).toBeAttached()
+      await expect(page.getByRole('switch', { name: 'Confirmations de lecture' })).toBeVisible()
+      await expect(page.locator('#app-header, #app-footer')).toHaveCount(0)
+      await expectAccessible(page, ['#lite-mode-toggle', '#pin-toggle'])
+      await expectNoHorizontalOverflow(page)
+      const box = await page.getByRole('switch', { name: 'Confirmations de lecture' }).boundingBox()
+      expect(box!.width).toBeGreaterThanOrEqual(44 - 1)
+      await page.getByRole('switch', { name: 'Confirmations de lecture' }).focus(); await page.keyboard.press('Space')
+      await expect(page.getByRole('switch', { name: 'Confirmations de lecture' })).toHaveAttribute('aria-checked', 'false')
+      await page.screenshot({ path: `docs/qa-handoffs/chat-polish-evidence/r2-settings-${w}.png`, fullPage: true })
+      await context.close()
+    })
+  }
+})

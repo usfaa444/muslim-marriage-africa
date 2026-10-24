@@ -1,0 +1,73 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+
+Running 60 tests using 2 workers
+
+[1/60] [mobile] › e2e/chat-polish.spec.ts:285:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 13: each row shows the unread count of their messages, and one or two ticks when the last message is mine
+[2/60] [mobile] › e2e/chat-polish.spec.ts:311:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 14: delivered and read events refresh the list once per burst: preview, order, badge and ticks
+[3/60] [mobile] › e2e/chat-polish.spec.ts:345:3 › story chat-polish: read receipts and open at the latest message › AC 6 / 8: my messages show « Envoyé » until he reads them, then « Lu », live and without a refetch
+[4/60] [mobile] › e2e/chat-polish.spec.ts:373:3 › story chat-polish: read receipts and open at the latest message › AC 4 / 7: the thread opens at the latest message with the composer in view, and marks it read
+[5/60] [mobile] › e2e/chat-polish.spec.ts:388:3 › story chat-polish: read receipts and open at the latest message › AC 5 / 7: scrolled up, a new message does not move the view; « Nouveaux messages » brings me back and marks it read
+[6/60] [mobile] › e2e/chat-polish.spec.ts:445:3 › story chat-polish: full-screen Chat Photo › AC 1 / 2 / 3: the recipient and the sender open a Photo full screen, and close it with the button, Escape or the backdrop
+[7/60] [mobile] › e2e/chat-polish.spec.ts:506:3 › story chat-polish: full-screen Chat Photo › AC 3: in Lite mode the Photo stays blurred and cannot open until « Afficher la photo »
+[8/60] [mobile] › e2e/chat-polish.spec.ts:526:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15: list on the left, thread on the right; switching threads keeps the page, the URL and the history
+[9/60] [mobile] › e2e/chat-polish.spec.ts:582:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15 on a phone: the list and the thread stay separate screens, moved between without a reload
+[10/60] [mobile] › e2e/chat-polish.spec.ts:604:3 › story chat-polish: split view from 768 px and in-page navigation › fits every factory width: list, split thread, open viewer
+[11/60] [mobile] › e2e/chat-polish.spec.ts:285:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 13: each row shows the unread count of their messages, and one or two ticks when the last message is mine
+[12/60] [mobile] › e2e/chat-polish.spec.ts:311:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 14: delivered and read events refresh the list once per burst: preview, order, badge and ticks
+[13/60] [mobile] › e2e/chat-polish.spec.ts:345:3 › story chat-polish: read receipts and open at the latest message › AC 6 / 8: my messages show « Envoyé » until he reads them, then « Lu », live and without a refetch
+[14/60] [mobile] › e2e/chat-polish.spec.ts:373:3 › story chat-polish: read receipts and open at the latest message › AC 4 / 7: the thread opens at the latest message with the composer in view, and marks it read
+[15/60] [mobile] › e2e/chat-polish.spec.ts:388:3 › story chat-polish: read receipts and open at the latest message › AC 5 / 7: scrolled up, a new message does not move the view; « Nouveaux messages » brings me back and marks it read
+[16/60] [mobile] › e2e/chat-polish.spec.ts:445:3 › story chat-polish: full-screen Chat Photo › AC 1 / 2 / 3: the recipient and the sender open a Photo full screen, and close it with the button, Escape or the backdrop
+[17/60] [mobile] › e2e/chat-polish.spec.ts:506:3 › story chat-polish: full-screen Chat Photo › AC 3: in Lite mode the Photo stays blurred and cannot open until « Afficher la photo »
+[18/60] [mobile] › e2e/chat-polish.spec.ts:526:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15: list on the left, thread on the right; switching threads keeps the page, the URL and the history
+[19/60] [mobile] › e2e/chat-polish.spec.ts:582:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15 on a phone: the list and the thread stay separate screens, moved between without a reload
+[20/60] [mobile] › e2e/chat-polish.spec.ts:604:3 › story chat-polish: split view from 768 px and in-page navigation › fits every factory width: list, split thread, open viewer
+[21/60] [mobile] › e2e/chat-polish.spec.ts:285:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 13: each row shows the unread count of their messages, and one or two ticks when the last message is mine
+[22/60] [mobile] › e2e/chat-polish.spec.ts:311:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 14: delivered and read events refresh the list once per burst: preview, order, badge and ticks
+[23/60] [mobile] › e2e/chat-polish.spec.ts:345:3 › story chat-polish: read receipts and open at the latest message › AC 6 / 8: my messages show « Envoyé » until he reads them, then « Lu », live and without a refetch
+[24/60] [mobile] › e2e/chat-polish.spec.ts:373:3 › story chat-polish: read receipts and open at the latest message › AC 4 / 7: the thread opens at the latest message with the composer in view, and marks it read
+[25/60] [mobile] › e2e/chat-polish.spec.ts:388:3 › story chat-polish: read receipts and open at the latest message › AC 5 / 7: scrolled up, a new message does not move the view; « Nouveaux messages » brings me back and marks it read
+[26/60] [mobile] › e2e/chat-polish.spec.ts:445:3 › story chat-polish: full-screen Chat Photo › AC 1 / 2 / 3: the recipient and the sender open a Photo full screen, and close it with the button, Escape or the backdrop
+[27/60] [mobile] › e2e/chat-polish.spec.ts:506:3 › story chat-polish: full-screen Chat Photo › AC 3: in Lite mode the Photo stays blurred and cannot open until « Afficher la photo »
+[28/60] [mobile] › e2e/chat-polish.spec.ts:526:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15: list on the left, thread on the right; switching threads keeps the page, the URL and the history
+[29/60] [mobile] › e2e/chat-polish.spec.ts:582:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15 on a phone: the list and the thread stay separate screens, moved between without a reload
+[30/60] [mobile] › e2e/chat-polish.spec.ts:604:3 › story chat-polish: split view from 768 px and in-page navigation › fits every factory width: list, split thread, open viewer
+[31/60] [desktop] › e2e/chat-polish.spec.ts:285:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 13: each row shows the unread count of their messages, and one or two ticks when the last message is mine
+[32/60] [desktop] › e2e/chat-polish.spec.ts:311:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 14: delivered and read events refresh the list once per burst: preview, order, badge and ticks
+[33/60] [desktop] › e2e/chat-polish.spec.ts:345:3 › story chat-polish: read receipts and open at the latest message › AC 6 / 8: my messages show « Envoyé » until he reads them, then « Lu », live and without a refetch
+[34/60] [desktop] › e2e/chat-polish.spec.ts:373:3 › story chat-polish: read receipts and open at the latest message › AC 4 / 7: the thread opens at the latest message with the composer in view, and marks it read
+[35/60] [desktop] › e2e/chat-polish.spec.ts:388:3 › story chat-polish: read receipts and open at the latest message › AC 5 / 7: scrolled up, a new message does not move the view; « Nouveaux messages » brings me back and marks it read
+[36/60] [desktop] › e2e/chat-polish.spec.ts:445:3 › story chat-polish: full-screen Chat Photo › AC 1 / 2 / 3: the recipient and the sender open a Photo full screen, and close it with the button, Escape or the backdrop
+[37/60] [desktop] › e2e/chat-polish.spec.ts:506:3 › story chat-polish: full-screen Chat Photo › AC 3: in Lite mode the Photo stays blurred and cannot open until « Afficher la photo »
+[38/60] [desktop] › e2e/chat-polish.spec.ts:526:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15: list on the left, thread on the right; switching threads keeps the page, the URL and the history
+[39/60] [desktop] › e2e/chat-polish.spec.ts:582:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15 on a phone: the list and the thread stay separate screens, moved between without a reload
+[40/60] [desktop] › e2e/chat-polish.spec.ts:604:3 › story chat-polish: split view from 768 px and in-page navigation › fits every factory width: list, split thread, open viewer
+[41/60] [desktop] › e2e/chat-polish.spec.ts:285:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 13: each row shows the unread count of their messages, and one or two ticks when the last message is mine
+[42/60] [desktop] › e2e/chat-polish.spec.ts:345:3 › story chat-polish: read receipts and open at the latest message › AC 6 / 8: my messages show « Envoyé » until he reads them, then « Lu », live and without a refetch
+[43/60] [desktop] › e2e/chat-polish.spec.ts:311:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 14: delivered and read events refresh the list once per burst: preview, order, badge and ticks
+[44/60] [desktop] › e2e/chat-polish.spec.ts:373:3 › story chat-polish: read receipts and open at the latest message › AC 4 / 7: the thread opens at the latest message with the composer in view, and marks it read
+[45/60] [desktop] › e2e/chat-polish.spec.ts:388:3 › story chat-polish: read receipts and open at the latest message › AC 5 / 7: scrolled up, a new message does not move the view; « Nouveaux messages » brings me back and marks it read
+[46/60] [desktop] › e2e/chat-polish.spec.ts:445:3 › story chat-polish: full-screen Chat Photo › AC 1 / 2 / 3: the recipient and the sender open a Photo full screen, and close it with the button, Escape or the backdrop
+[47/60] [desktop] › e2e/chat-polish.spec.ts:506:3 › story chat-polish: full-screen Chat Photo › AC 3: in Lite mode the Photo stays blurred and cannot open until « Afficher la photo »
+[48/60] [desktop] › e2e/chat-polish.spec.ts:526:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15: list on the left, thread on the right; switching threads keeps the page, the URL and the history
+[49/60] [desktop] › e2e/chat-polish.spec.ts:582:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15 on a phone: the list and the thread stay separate screens, moved between without a reload
+[50/60] [desktop] › e2e/chat-polish.spec.ts:604:3 › story chat-polish: split view from 768 px and in-page navigation › fits every factory width: list, split thread, open viewer
+[51/60] [desktop] › e2e/chat-polish.spec.ts:285:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 13: each row shows the unread count of their messages, and one or two ticks when the last message is mine
+[52/60] [desktop] › e2e/chat-polish.spec.ts:345:3 › story chat-polish: read receipts and open at the latest message › AC 6 / 8: my messages show « Envoyé » until he reads them, then « Lu », live and without a refetch
+[53/60] [desktop] › e2e/chat-polish.spec.ts:311:3 › story chat-polish: Discussions list with unread badges and read ticks › AC 14: delivered and read events refresh the list once per burst: preview, order, badge and ticks
+[54/60] [desktop] › e2e/chat-polish.spec.ts:373:3 › story chat-polish: read receipts and open at the latest message › AC 4 / 7: the thread opens at the latest message with the composer in view, and marks it read
+[55/60] [desktop] › e2e/chat-polish.spec.ts:388:3 › story chat-polish: read receipts and open at the latest message › AC 5 / 7: scrolled up, a new message does not move the view; « Nouveaux messages » brings me back and marks it read
+[56/60] [desktop] › e2e/chat-polish.spec.ts:445:3 › story chat-polish: full-screen Chat Photo › AC 1 / 2 / 3: the recipient and the sender open a Photo full screen, and close it with the button, Escape or the backdrop
+[57/60] [desktop] › e2e/chat-polish.spec.ts:506:3 › story chat-polish: full-screen Chat Photo › AC 3: in Lite mode the Photo stays blurred and cannot open until « Afficher la photo »
+[58/60] [desktop] › e2e/chat-polish.spec.ts:526:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15: list on the left, thread on the right; switching threads keeps the page, the URL and the history
+[59/60] [desktop] › e2e/chat-polish.spec.ts:582:3 › story chat-polish: split view from 768 px and in-page navigation › AC 12 / 15 on a phone: the list and the thread stay separate screens, moved between without a reload
+[60/60] [desktop] › e2e/chat-polish.spec.ts:604:3 › story chat-polish: split view from 768 px and in-page navigation › fits every factory width: list, split thread, open viewer
+  9 skipped
+  51 passed (1.5m)
+done=0

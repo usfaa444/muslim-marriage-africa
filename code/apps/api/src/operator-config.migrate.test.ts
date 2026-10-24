@@ -27,6 +27,7 @@ import { free_unlimited, same_quota_as_brothers } from './operator-config.js'
 import { getChatPort, setChatPort } from './chat.js'
 import { openChatText, sealChatText } from './chat-key.js'
 import { getMessageStore, setMessageStore, type StoredMessage } from './chat-messages.js'
+import { getReadStore, setReadStore } from './chat-read.js'
 import { getModerationPort, setModerationPort } from './moderation.js'
 import { setEvidenceWriter } from './evidence-writer.js'
 import { readGrantedMedia, setMediaClock, setSignedTtlReader } from './media.js'
@@ -204,6 +205,8 @@ function migrationSql(): string {
     '0023_message.sql',
     '0024_report_block.sql',
     '0025_message_media.sql',
+    '0026_conversation_read.sql',
+    '0027_read_receipt_setting.sql',
   ])
   const accountSql = readFileSync(join(drizzleDir, '0001_account_credential.sql'), 'utf8')
   expect(accountSql).toContain('"coc_version" text NOT NULL')
@@ -302,6 +305,7 @@ describe('operator_config migration', () => {
       'block',
       'cil_ticket',
       'conversation',
+      'conversation_read',
       'credential',
       'derivative',
       'discovery_exclusion',
@@ -319,6 +323,7 @@ describe('operator_config migration', () => {
       'pin_lock',
       'profile',
       'profile_visit',
+      'read_receipt_setting',
       'report',
       'session',
       'signed_grant',
@@ -334,6 +339,7 @@ describe('operator_config migration', () => {
       'public.block',
       'public.cil_ticket',
       'public.conversation',
+      'public.conversation_read',
       'public.credential',
       'public.derivative',
       'public.discovery_exclusion',
@@ -351,6 +357,7 @@ describe('operator_config migration', () => {
       'public.pin_lock',
       'public.profile',
       'public.profile_visit',
+      'public.read_receipt_setting',
       'public.report',
       'public.session',
       'public.signed_grant',
@@ -363,7 +370,7 @@ describe('operator_config migration', () => {
     const applied = await db().query<{ count: string }>(
       `select count(*)::text as count from "drizzle"."__drizzle_migrations"`,
     )
-    expect(applied.rows[0]?.count).toBe('26')
+    expect(applied.rows[0]?.count).toBe('28')
 
     const columns = await db().query<{ column_name: string }>(
       `select column_name
@@ -894,6 +901,7 @@ describe('operator_config migration', () => {
       'block',
       'cil_ticket',
       'conversation',
+      'conversation_read',
       'credential',
       'derivative',
       'discovery_exclusion',
@@ -911,6 +919,7 @@ describe('operator_config migration', () => {
       'pin_lock',
       'profile',
       'profile_visit',
+      'read_receipt_setting',
       'report',
       'session',
       'signed_grant',
@@ -926,6 +935,7 @@ describe('operator_config migration', () => {
       'public.block',
       'public.cil_ticket',
       'public.conversation',
+      'public.conversation_read',
       'public.credential',
       'public.derivative',
       'public.discovery_exclusion',
@@ -943,6 +953,7 @@ describe('operator_config migration', () => {
       'public.pin_lock',
       'public.profile',
       'public.profile_visit',
+      'public.read_receipt_setting',
       'public.report',
       'public.session',
       'public.signed_grant',
@@ -1438,6 +1449,116 @@ describe('operator_config migration', () => {
       }
     } finally {
       await db().query(`delete from "moderation_job" where "message_id" in (select "id" from "message" where "conversation_id" = $1)`, [conversationId || newId(at)])
+      await db().query(`delete from "message" where "conversation_id" = $1`, [conversationId || newId(at)])
+      await db().query(`delete from "conversation" where "invite_id" = $1`, [inviteId])
+      await db().query(`delete from "invite" where "id" = $1`, [inviteId])
+      await db().query(`delete from "account" where "id" = any($1::uuid[])`, [[brother, sister]])
+      await closeAccountStore()
+      if (previousDatabaseUrl === undefined) {
+        delete process.env['DATABASE_URL']
+      } else {
+        process.env['DATABASE_URL'] = previousDatabaseUrl
+      }
+    }
+  }, 60_000)
+
+  it('keeps one forward-only read pointer per member and counts unread messages in one query on migrated Postgres (story chat-polish)', async () => {
+    expect(migrated).toBe(true)
+    const previousDatabaseUrl = process.env['DATABASE_URL']
+    process.env['DATABASE_URL'] = databaseUrl
+    setAccountStore(undefined)
+    setInviteStore(undefined)
+    setChatPort(undefined)
+    setMessageStore(undefined)
+    setReadStore(undefined)
+    const at = new Date('2026-10-24T12:00:00.000Z')
+    const brother = newId(at)
+    const sister = newId(at)
+    const inviteId = newId(at)
+    const key = { key: randomBytes(32), kid: 'pg-read-1' }
+    const insertAccount = `insert into "account" ("id", "email", "pseudonym", "gender", "roles", "status", "age_attested", "coc_version", "civil_given_name", "civil_family_name")
+       values ($1, $2, $3, $4, $5, 'Active', true, 'FR-089', 'Awa', 'Sawadogo')`
+    await db().query(insertAccount, [brother, 'read-b@example.bf', 'Read_B', 'brother', ['member']])
+    await db().query(insertAccount, [sister, 'read-s@example.bf', 'Read_S', 'sister', ['member']])
+    await db().query(`insert into "invite" ("id", "from_id", "to_id", "state", "created_at") values ($1, $2, $3, 'pending', $4)`, [inviteId, brother, sister, at.toISOString()])
+    let conversationId = ''
+    try {
+      const accepted = await getInviteStore().accept(inviteId, sister, at.toISOString(), at)
+      conversationId = accepted.ok && accepted.conversation ? accepted.conversation.id : ''
+      expect(conversationId).not.toBe('')
+      const store = getMessageStore()
+      const ids: string[] = []
+      for (let index = 1; index <= 4; index += 1) {
+        const when = new Date(at.getTime() + index * 1000)
+        const id = newId(when)
+        await store.insert({
+          id,
+          conversation_id: conversationId,
+          // Three from him, then one from her.
+          sender_id: index < 4 ? brother : sister,
+          kind: 'text',
+          state: 'delivered',
+          body: sealChatText(`Lu ${index}`, key, conversationId, id),
+          media_id: null,
+          created_at: when.toISOString(),
+        })
+        ids.push(id)
+      }
+      const reads = getReadStore()
+      expect((await store.unreadCounts(sister, [{ id: conversationId, after: null }])).get(conversationId)).toBe(3)
+      expect((await store.unreadCounts(brother, [{ id: conversationId, after: null }])).get(conversationId)).toBe(1)
+
+      expect(await reads.mark(conversationId, sister, ids[1]!, at)).toBe(ids[1])
+      expect((await store.unreadCounts(sister, [{ id: conversationId, after: ids[1]! }])).get(conversationId)).toBe(1)
+      // Forward only: an older id keeps the newer pointer.
+      expect(await reads.mark(conversationId, sister, ids[0]!, at)).toBe(ids[1])
+      expect(await reads.mark(conversationId, sister, ids[3]!, at)).toBe(ids[3])
+      expect((await store.unreadCounts(sister, [{ id: conversationId, after: ids[3]! }])).has(conversationId)).toBe(false)
+      expect(await reads.pointers([conversationId])).toEqual([{ conversation_id: conversationId, account_id: sister, message_id: ids[3] }])
+
+      // A pointer must name a real message of a real conversation and member.
+      for (const [sqlText, values] of [
+        [`insert into "conversation_read" ("conversation_id", "account_id", "last_read_message_id") values ($1, $2, $3)`, [conversationId, brother, newId(at)]],
+        [`insert into "conversation_read" ("conversation_id", "account_id", "last_read_message_id") values ($1, $2, $3)`, [newId(at), brother, ids[0]]],
+        [`insert into "conversation_read" ("conversation_id", "account_id", "last_read_message_id") values ($1, $2, $3)`, [conversationId, newId(at), ids[0]]],
+      ] as const) {
+        let refused = false
+        try {
+          await db().query(sqlText, [...values])
+        } catch (error) {
+          refused = true
+          expect(postgresCode(error), sqlText).toBe('23503')
+        }
+        expect(refused, sqlText).toBe(true)
+      }
+      let duplicate = false
+      try {
+        await db().query(`insert into "conversation_read" ("conversation_id", "account_id", "last_read_message_id") values ($1, $2, $3)`, [conversationId, sister, ids[0]])
+      } catch (error) {
+        duplicate = true
+        expect(postgresCode(error)).toBe('23505')
+      }
+      expect(duplicate).toBe(true)
+
+      // « Confirmations de lecture »: no row is on; a stored choice can change both ways; it must name an account.
+      expect(await reads.receiptsOff([brother, sister])).toEqual(new Set())
+      await reads.setReceipts(sister, false, at)
+      expect(await reads.receiptsOff([brother, sister])).toEqual(new Set([sister]))
+      await reads.setReceipts(sister, true, at)
+      expect(await reads.receiptsOff([sister])).toEqual(new Set())
+      await reads.setReceipts(sister, false, at)
+      expect(await reads.receiptsOff([sister, sister])).toEqual(new Set([sister]))
+      let orphan = false
+      try {
+        await db().query(`insert into "read_receipt_setting" ("account_id", "enabled") values ($1, false)`, [newId(at)])
+      } catch (error) {
+        orphan = true
+        expect(postgresCode(error)).toBe('23503')
+      }
+      expect(orphan).toBe(true)
+    } finally {
+      await db().query(`delete from "read_receipt_setting" where "account_id" = any($1::uuid[])`, [[brother, sister]])
+      await db().query(`delete from "conversation_read" where "conversation_id" = $1`, [conversationId || newId(at)])
       await db().query(`delete from "message" where "conversation_id" = $1`, [conversationId || newId(at)])
       await db().query(`delete from "conversation" where "invite_id" = $1`, [inviteId])
       await db().query(`delete from "invite" where "id" = $1`, [inviteId])

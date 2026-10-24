@@ -37,7 +37,8 @@ describe('screen 23 Report / Block (Stories 8.5, 8.6)', () => {
     expect(html).toContain(`placeholder="${REPORT_COPY.detailsPlaceholder}"`)
     expect(html).toContain('maxlength="1000"')
     expect(html).toContain('data-nav-item="decouvrir" aria-current="page"')
-    expect(html.match(/id="app-header"/g)).toHaveLength(1)
+    // Story chat-polish: app screens have no site header or footer, only the bottom nav.
+    expect(html).not.toContain('id="app-header"')
     expect(html.match(/id="app-bottom-nav"/g)).toHaveLength(1)
     expect(html.indexOf('ankanu_pin_hidden_at')).toBeGreaterThan(-1)
   })

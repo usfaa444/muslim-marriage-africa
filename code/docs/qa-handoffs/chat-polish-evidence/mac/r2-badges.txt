@@ -1,0 +1,9 @@
+# node r2.mjs with ONLY=badges,sweep (2026-10-24 ~13:56 UTC). The sweep part crashed on a script ordering bug and was rerun
+# separately (r2-live-sweep.json), so this run's JSON was never written. Lines copied from its stdout:
+PASS R6a-discussions-badge-live {"start":{"hidden":true,"text":"","sr":"","link":"Discussions"},"after1":{"hidden":false,"text":"1","sr":"1 discussion non lue","link":"1Discussions1 discussion non lue","ms":323},"after2":{"hidden":false,"text":"2","sr":"2 discussions non lues","link":"2Discussions2 discussions non lues","ms":324},"reloads":0,"badgeRequests":4}
+PASS R6b-clears-on-read {"onThreadAfterReadingAB":{"hidden":false,"text":"1","sr":"1 discussion non lue","link":"1Discussions1 discussion non lue"},"onProfil":{"hidden":false,"text":"1","sr":"1 discussion non lue","link":"1Discussions1 discussion non lue"}}
+PASS R6c-block-excluded {"whileABlocksC":{"hidden":true,"text":"","sr":"","link":"Discussions"},"afterUnblock":{"hidden":false,"text":"1","sr":"1 discussion non lue","link":"1Discussions1 discussion non lue"}}
+PASS R6d-hidden-at-0 {"hidden":true,"text":"","sr":"","link":"Discussions"}
+PASS R6e-invitations-badge-live {"invite":201,"start":{"hidden":true,"text":"","sr":"","link":"Invitations"},"after":{"hidden":false,"text":"1","sr":"1 invitation en attente","link":"1Invitations1 invitation en attente","ms":325},"reloads":0}
+PASS R6f-invite-block-excluded {"whileBlocked":{"hidden":true,"text":"","sr":"","link":"Invitations"},"afterUnblock":{"hidden":false,"text":"1","sr":"1 invitation en attente","link":"1Invitations1 invitation en attente"}}
+PASS R6g-clears-on-answer {"decline":200,"ms":397,"after":{"hidden":true,"text":"","sr":"","link":"Invitations"}}

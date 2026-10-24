@@ -1,0 +1,62 @@
+{
+  "res": {
+    "L3-retest-hidden-then-visible": {
+      "ok": true,
+      "hiddenNoRead": true,
+      "lastInViewWhileHidden": true,
+      "readPostsAfterVisible": 1,
+      "msToLuOnA": 116
+    },
+    "L5c-retest-reorder": {
+      "ok": true,
+      "orderBefore": [
+        "AB",
+        "AC"
+      ],
+      "orderAfter": [
+        "AC",
+        "AB"
+      ],
+      "msToReorderWithBadge3": 977,
+      "preview": "« Retest rafale 3. »",
+      "listRequestsFor3Sends": 1
+    },
+    "L5c-retest-mine-on-top": {
+      "ok": true,
+      "preview": "Vous : « Retest : ma réponse. »",
+      "tick": "read"
+    },
+    "L6-retest-360": {
+      "ok": true,
+      "badge": "33 messages non lus",
+      "linkName": "Accéder à la conversation avec Mariam58362, 3 messages non lusarrow_forward",
+      "badgeAfterLiveMessage": "4",
+      "badgeAfterReading": 0,
+      "sameDocument": true
+    },
+    "L6-retest-390": {
+      "ok": true,
+      "badge": "22 messages non lus",
+      "linkName": "Accéder à la conversation avec Mariam58362, 2 messages non lusarrow_forward",
+      "badgeAfterLiveMessage": "3",
+      "badgeAfterReading": 0,
+      "sameDocument": true
+    },
+    "L7-retest-sender-390": {
+      "ok": true,
+      "escape": {
+        "closed": true,
+        "requests": []
+      },
+      "close": {
+        "closed": true,
+        "requests": []
+      },
+      "backdrop": {
+        "closed": true,
+        "requests": []
+      }
+    }
+  },
+  "consoleErrors": []
+}

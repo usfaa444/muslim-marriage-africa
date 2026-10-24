@@ -1,0 +1,143 @@
+---
+title: 'Chat polish: full-screen Chat Photo, open at the latest message, read receipts, split view on tablet and desktop'
+type: 'feature'
+created: '2026-10-24'
+status: 'ready'
+route: 'factory'
+story_id: 'chat-polish'
+depends_on: '5-3-5-4-chat-media (PR #13, open; branch factory/chat-polish is based on factory/chat-media)'
+---
+
+## Intent
+
+**Problem (product owner, Faycal, 2026-10-24, verbatim):** « I cannot click on a sent image to view it in full, neither the sender nor the receiver can, they should be able to. Also when we open the discussion page, we should have the page scroll all the way at the bottom where the text field to send message is, so the user does not have to scroll himself. Also, let's add the marker like we have in whatsapp, that shows if a user has read our message or not. Also, where the width of the screen allows it (maybe desktop and tablette, phone would probably not allow it), we should show the other discussion on the left side as a simplified list, with the sender name, profile picture, last message in the thread, the time of the last message, and wether I read the message or not if the last message was sent by the other user, how many messages I did not read from him, wether the last message if sent by us was read by the other user or not, just like typical whatsapp or telegram does, with all threads of discussion on the left, and the current open discusssion on the right. I want it to feel really like a smooth and live discussion. »
+
+**Approach:**
+
+- **Photo viewer.** A revealed Chat Photo bubble becomes a button. It opens an accessible full-screen dialog that shows the clear copy the page already downloaded through `GET /v1/conversations/:id/messages/:messageId/media` (a fresh URL signed for the caller, Story 5.3). No new rendition, no extra download, never the stored original.
+- **Open at the latest message.** The thread follows the bottom (« pinned ») while the member is at the bottom. It does not move when they scroll up to read history; a « Nouveaux messages » button appears instead.
+- **Read receipts.** A new chat-owned table `conversation_read` (migration `0026`) keeps one read pointer per member and conversation. The pointer only moves forward. `POST /v1/conversations/:id/read` moves it and emits `conversation.read` (ids only) over the existing Socket.IO channel. The list and the thread derive unread counts and « Lu » ticks from the pointers.
+- **Split view from 768 px.** One page serves `/discussions` and `/discussions/<id>`. Under 768 px it shows the list or the thread, as today. From 768 px it shows both: the list on the left, the thread on the right. Switching threads uses `history.pushState`, with no page reload, and back / forward / deep links still work.
+
+**Breakpoint:** 768 px is Tailwind `md` and the app shell's own tablet breakpoint (`app-shell.ts`). At 768 px the thread pane keeps more than 400 px, enough for a Photo or Voice note bubble without a horizontal scroll. Phones, including most phones in landscape (≤ 767 px wide), keep the separate list and thread screens. That was the owner's own guess (« phone would probably not allow it »).
+
+**Delivered state.** AnKanu has one message state, `delivered`, written at persist (AD-10). There is no separate « reached the device » signal. The receipts are therefore one tick « Envoyé » (stored and delivered) and two ticks « Lu ». A WhatsApp-style « two grey ticks » middle state would differ from « Lu » by colour alone, so it is left out (WCAG 1.4.1).
+
+Sources: PRD FR-050 (real-time Chat), FR-036 / D36 (anonymous mode: hide last-seen, NEXT, not offered in MVP), NFR-002, NFR-005; ARCHITECTURE-SPINE AD-7, AD-9, AD-10, AD-15 (events carry ids only; rooms per account), AD-16 (chat first page ≤ 80 KB), AD-21 / AD-29 (no BillingPort on chat GET, list, socket); EXPERIENCE.md « Discussions list » (« unread increment »), « Chat thread »; DESIGN.md `chat-bubble`; Stitch `20-discussions-list`, `21-chat-thread` (the Stitch « 1 non lu » and « Lu » that Story 5.1 dropped now have a feature behind them).
+
+## Boundaries & Constraints
+
+**Always:**
+
+- Server-side authorization on the new route like every chat route: live session, PIN gate, `assertBrowseViewer` (staff / mahram 403), participant check (404 « Cette discussion n'existe pas. »).
+- Read state is shown only to the two members of the conversation: on HTTP through the participant check, on the socket through the `account:<id>` rooms. While a Block holds either way (Story 8.6), the other member's read state is hidden (`null`) and no `conversation.read` reaches them. The reader's own pointer still works, so their own unread counts stay right.
+- Events carry ids only: `conversation.read { conversation_id, account_id, message_id }`.
+- The Photo privacy rules of Story 5.3 do not change: blur first, then the clear `md` copy for the two members only. In Lite mode the Photo stays blurred until « Afficher la photo ». Profile photos in the list stay blurred derivatives (Story 5.1).
+- French only; 44 × 44 targets that hold without the Tailwind CDN; WCAG 2.2 AA (axe: zero serious or critical); no horizontal scroll at 360, 390, 768, 1024, 1280 and 1440 px.
+- NFR-005: one `GET /v1/conversations` per list refresh (debounced 300 ms), no list refresh while the list is hidden (phone thread screen), no new image rendition, and the viewer reuses the clear copy already downloaded.
+
+**Never:**
+
+- No last-seen, online-now or presence (PRD: « Given MVP, online-now is not shown »; D36 is NEXT).
+- No signed URL, text or pseudonym in a realtime event. No `original` served.
+- No BillingPort on the new route or event.
+- No hold, pending or scan wording.
+
+## Acceptance Criteria
+
+Photo viewer:
+
+1. **Given** a Chat Photo bubble whose clear image is shown (mine or theirs), **when** I tap or click it (or press Enter / Space on it), **then** a full-screen dialog opens (`role="dialog"`, `aria-modal="true"`, named « Votre photo » or « Photo de <pseudonyme> ») that shows the whole Photo, uncropped and fitted to the screen.
+2. **Given** the viewer is open, **when** I press « Fermer la photo », press Escape or tap the backdrop, **then** it closes. While it is open, focus is on « Fermer la photo » and Tab cannot leave the dialog, and the page behind does not scroll. On close, focus returns to the Photo I opened.
+3. **Given** Lite mode, **when** a Photo arrives, **then** it stays blurred with « Afficher la photo » and cannot be opened in the viewer until I tap that button. In every mode the viewer shows the copy already downloaded through the media route (signed for me), never the stored original, and opening it makes no extra request.
+
+Open at the latest message:
+
+4. **Given** I open a thread (link, deep link, reload, or a switch in the split view), **when** it has loaded, **then** the latest message and the composer are in view without my scrolling.
+5. **Given** I am at the bottom of the thread, **when** I send a message or one arrives, **then** the view stays at the latest message. **Given** I scrolled up to read history, **when** a message from the other member arrives, **then** the view does not move and a « Nouveaux messages » button appears. Tapping it, or scrolling back to the bottom, brings me to the latest message and hides the button. Sending always brings me to my new message. Loading « Messages précédents » keeps the message I was reading in place.
+
+Read receipts:
+
+6. **Given** a message I sent, **when** the other member has not read it, **then** its meta line shows one tick « Envoyé »; **when** they have read it, **then** two ticks « Lu ». The two states differ by shape (one tick or two), colour and text for assistive technology (« Envoyé » / « Lu », also as a tooltip), never by colour alone.
+7. **Given** the thread is open, the page visible and the latest message in view, **when** a message from the other member is shown, **then** the page calls `POST /v1/conversations/:id/read { message_id }` with the latest message. It does not call it when the tab is hidden or I have scrolled up (it calls it once I come back to the bottom or to the tab).
+8. **Given** my read pointer moves, **when** the other member has the thread open, **then** their ticks turn to « Lu » live (`conversation.read`), without a reload; my other tabs update their unread counts too.
+9. **Given** read state is stored, **when** I read `GET /v1/conversations`, **then** each item carries `unread` (messages from the other member after my pointer) and `last_message.read` (mine: read by the other member, `null` while a Block holds; theirs: read by me). `GET /v1/conversations/:id` carries `read: { me, other }` (`other` is `null` while a Block holds). The pointer is stored server-side in `conversation_read` (migration `0026`) and only moves forward.
+10. **Given** the read route, **when** the caller has no session (401), is staff or mahram (403), is not a member of the conversation or names a malformed or unknown conversation (404 « Cette discussion n'existe pas. »), sends a malformed `message_id` (400 « message_id : valeur non reconnue. ») or a message of another conversation (404 « Ce message est introuvable. »), **then** nothing is stored and no event is sent.
+11. **Given** a Block either way, **when** either member reads, **then** the blocked pair sees no read state of the other (`null`, no ticks) and no `conversation.read` crosses the Block. A closed conversation, paused or ended without a Block, keeps its read state, because its history stays readable.
+
+Split view and list:
+
+12. **Given** a window at least 768 px wide, **when** I open `/discussions`, **then** the list is on the left and the right pane says « Sélectionnez une discussion pour l'afficher ici. ». **When** I open `/discussions/<id>`, **then** the list is on the left, with that conversation marked current (`aria-current="page"`), and the thread is on the right. Under 768 px, `/discussions` shows the list only and `/discussions/<id>` the thread only, as before.
+13. **Given** the list (both layouts), **then** each row shows: the profile photo (blurred as before, or the initial), the pseudonym and age, the time of the last message (split view: « 10:15 », « Hier », « 12 oct. »; phone: « Aujourd'hui à 10:15 » as before), the last message preview (text in « … », « Photo », « Note vocale », « Vous : » when mine), one or two ticks when the last message is mine, and an unread badge with the number of their messages I have not read (« 99+ » above 99, screen-reader text « 1 message non lu » / « N messages non lus »). A row with unread messages has a bold name.
+14. **Given** the list is on screen, **when** a message is delivered in any of my conversations or a read pointer moves, **then** the list refreshes from one `GET /v1/conversations`: preview, order (newest activity first), unread badge and ticks. When I read the open thread, its badge clears.
+15. **Given** the split view, **when** I click another row, **then** the thread switches without a page reload: the URL becomes `/discussions/<id>` (back and forward work, a deep link opens the same view), the title and the current row follow, an unsent draft stays with its thread for the session, and an open recorder or Photo panel of the old thread is cancelled. The same in-page navigation applies to phones between the list and a thread, and to « Retour aux discussions ». A malformed id in the address goes back to the list.
+
+NFR (traced as their own rows):
+
+16. French only, copy consistent with `CHAT_COPY`; 44 × 44 targets; WCAG 2.2 AA (axe) on both layouts, in the viewer, and with unread badges and ticks; no horizontal scroll at the six widths.
+17. NFR-005: the list is still one request; the thread still opens within 4 s on the throttled Fast 3G profile; the viewer adds no request; the list refresh is debounced and skipped while the list is hidden.
+
+Round 2 (Faycal and Mac live QA, 2026-10-24):
+
+« Confirmations de lecture » (Faycal, option B):
+
+18. **Given** Paramètres, **then** a « Confirmations de lecture » switch (`role="switch"`, named by its title, described by its explanation, 44 px target) shows my stored value, on by default. `GET /v1/chat/settings` returns `{ read_receipts }`; `PUT` takes `{ read_receipts: true | false }` (anything else is 400 « read_receipts : valeur non reconnue. » and stores nothing). Both are members only: 401 without a session, 403 for staff and mahram. The value is stored per member in `read_receipt_setting` (migration `0027`). A failed save puts the switch back and says « Réglage non enregistré. Réessayez. ».
+19. **Given** either member of a conversation has receipts off, **then** the server shows no read state between them: the list's `last_message.read` is `false` on my messages, the thread head carries `read.other: null` and `read.receipts: 'off'`, and no `conversation.read` reaches the other member. My own reads still move my pointer and clear my unread badges. My messages show one tick « Envoyé », never « Lu ». Turned back on, the stored pointers show again (WhatsApp rule: reciprocal).
+20. **Given** I change the switch, **then** `chat.receipts { account_id }` (ids only) reaches my other tabs and my chat partners who are not blocked, never a stranger or across a Block, and their open thread refetches its head and redraws the ticks without a reload.
+
+Bottom nav badges (Faycal):
+
+21. **Given** any member page with the bottom nav, **then** « Invitations » shows the number of invites I received that are still pending (not accepted or declined, not from a member hidden by a Block either way), and « Discussions » the number of conversations with unread messages from the other member (not across a Block). One light request, `GET /v1/me/badges` → `{ invitations, discussions }` (members only, 401/403 like AC 18, `no-store`). Above 99 the badge says « 99+ ». At 0 it is hidden. The badge is a visible number and also text for assistive technology after the label (« 3 discussions non lues », « 2 invitations en attente »), never colour only.
+22. **Given** a member page is open, whatever the screen, **when** a message is delivered to me, I read a thread, an invite reaches me or I answer one, **then** the badges refresh live (one debounced `GET /v1/me/badges` per burst; also on focus, visibility and back-forward). Events are per member: `invite.changed { invite_id }` goes to the recipient's room on send and to her own tabs on accept or decline; nothing new goes to the sender. The Discussions page reuses its own socket (one socket per page).
+
+Pinned thread (Faycal):
+
+23. **Given** an open thread, at every width (phone thread, tablet and desktop split view), **then** the page itself never scrolls: the document fills the viewport (`100vh`, then `100dvh`, then the visual viewport when the keyboard is up), the header with who I talk to and the composer stay pinned, and only the messages scroll; the list column scrolls on its own. With the on-screen keyboard up, the composer and the latest message stay in view and the bottom nav steps aside while I type. On very short screens the header and composer compact (city, stage and rule note hidden). « Nouveaux messages », the older-messages anchor, the Photo viewer and « read at the bottom » all use the message box. The phone list (`/discussions` under 768 px) still scrolls as a page.
+
+Open at the latest message, robust (Mac live QA D1, CI race on `chat-polish.spec.ts:99`):
+
+- AC 4 also holds when the layout settles late (the Tailwind CDN, fonts, a Photo): the thread follows the end until I scroll myself. Only my own scrolling (wheel, touch, a scroll key, a held pointer) leaves the end; a layout change re-pins it (`ResizeObserver` on the message box and its content).
+
+Under a Block (Mac live QA D2):
+
+- AC 11 also means: my messages show no tick at all under a Block, not « Envoyé ».
+
+App screens without the site header and footer (Faycal):
+
+24. **Given** a signed-in screen (every member page and the onboarding steps after sign-in), **then** it has no site header and no site footer: member pages keep only the bottom nav; signed-in steps without a nav keep a one-line « Confidentialité » link. The landing page and the signed-out pages (sign-in, sign-up identity and pseudonym, password reset) keep the header and footer. « Confidentialité » stays one tap away in Paramètres. The staff console keeps its own header (it has no bottom nav and carries sign-out). No horizontal scroll at the six widths.
+
+Round 3 (cloud QA round 2 FAIL R2-1, R2-2, R2-4; Mac live QA round 2 minors 1 to 3; 2026-10-24):
+
+25. **Given** a thread on a phone (under 768 px), **then** it is a sub-screen, like WhatsApp: no bottom nav (« Retour aux discussions » leads to the list, where the nav and its badges are); one slim header row with the back arrow, a small photo, the name (one line, cut with « … »), the city under it, and « Signaler / Bloquer » as one icon control (the stage and the button words stay for screen readers only); a composer of one row (Photo and Voice note as icon buttons, a text box of one line that grows with the text up to about five lines and then scrolls, « Envoyer » as an icon button) and the « Règle d'or » line under it, hidden while I type. **Then**, with the real stylesheet, the messages get at least 60 % of the screen at 360 × 640 and 390 × 800, and at least half of what is left with the keyboard up (about 300 px). Every control keeps a 44 × 44 target and its spoken name; no horizontal scroll. From 768 px the split view is unchanged. This replaces AC 23's « the bottom nav steps aside while I type » on phones, and the short-screen compact mode (QA saw it act backwards).
+26. **Given** Paramètres is open in two windows, **when** I change « Confirmations de lecture » in one, **then** the other follows live (`chat.receipts` through the nav's socket) and again whenever it gets focus, becomes visible or comes back from the cache. A click always saves the value the switch offers (the opposite of what it shows), never a flip of the server's value, and a read overtaken by a click cannot repaint the old value. While saving, the switch stays focusable and says it is busy (`aria-busy`). Paramètres passes axe as a whole page: the Lite and PIN switches are named switches (« Mode Allégé (Basse consommation) », « Code secret PIN d'accès »).
+
+AC 22 is now proved one event at a time: a single `message.delivered`, a single `conversation.read` and a single `invite.changed` each update the badge on a screen other than Discussions.
+
+Round 4 (Mac live QA round 3 and CI, QA round 3 R3-1):
+
+- AC 26 also means Paramètres meets AA colour contrast with the real stylesheet. Gold text on cream uses the dark gold #7D5F27 (5.26:1 or more), and the small descriptions use deep-navy at 70 % (5.95:1 or more). The e2e measures it with compiled Tailwind and the page's Stitch colours on every run.
+- AC 25 also means: a phone thread shows the short placeholder « Votre message… » (the label « Réponse réfléchie et posée » is unchanged), and the composer's focus ring follows its rounded box (2 px dark gold, 5.9:1 on white).
+
+Interpretation notes (flagged in the handoff):
+
+- « Two grey ticks » (delivered to the device) is not offered: the platform has no device delivery signal, and a third state would differ from « Lu » by colour only.
+- « Whether I read the message or not if the last message was sent by the other user »: shown as the unread badge and a bold name, like WhatsApp and Telegram.
+- « Mode anonyme » / hide last-seen (D36, FR-036) is NEXT and not implemented. Read receipts are not last-seen, but some Sisters may want to hide them. Answered by Faycal (option B): a separate « Confirmations de lecture » switch, both ways like WhatsApp (AC 18 to 20).
+- The viewer shows the `md` clear copy (≤ 1600 px after browser compression). No larger rendition exists, and the original is never served (Story 5.3).
+
+## Deferred
+
+- Mahram reads (Epic 6): a mahram reading a granted thread must not move the member's pointer. There is no mahram reading today.
+- Push notifications: not asked. (Bottom nav badges are now AC 21 and 22.)
+- Typing and online state in the list rows: not asked (and presence is excluded).
+
+## Code Map
+
+- `code/apps/api/src/account-schema.ts`, `drizzle/0026_conversation_read.sql` (+ snapshot, journal): `conversation_read`.
+- `code/apps/api/src/chat-read.ts` (new): read store (memory, Postgres), forward-only `mark`, `pointers`.
+- `code/apps/api/src/chat-messages.ts`: `unreadCounts` on the message store, `unread` and `last_message.read` in the list, `read` in the thread head, `markRead` command, `conversationRead` event hook.
+- `code/apps/api/src/chat-realtime.ts`: `conversation.read` emit. `conversations.controller.ts`: `POST :id/read`.
+- `code/apps/web/src/discussions-page.ts`: one page for both routes (split view, router, live list, receipts, pinned scroll, Photo viewer).
+- Round 2: `drizzle/0027_read_receipt_setting.sql` (`read_receipt_setting`); `chat-read.ts` (`receiptsOff`, `setReceipts`); `chat-messages.ts` (receipts mode, settings, unread conversation count); `chat-settings.controller.ts`, `nav-badges.ts`, `nav-badges.controller.ts` (new); `invites.ts` (`pendingReceivedCount`, `invite.changed`); `chat-realtime.ts` (`chat.receipts`, `invite.changed`); web `read-receipts-setting.ts` (new), `app-shell.ts` (shell kinds, nav badges), `v2-pages.ts`, `v2-document.ts` (`data-ank-keep`), `discussions-page.ts` (pinned layout, follower, receipts mode).
+- Round 3: `discussions-page.ts` (phone sub-screen `chat-sub`, slim header, growing composer), `read-receipts-setting.ts`, `app-shell.ts` (`chat.receipts` to the page), `v2-pages.ts` (named Lite and PIN switches); `e2e/real-css.ts` (new: compiled Tailwind for layout checks).
+- Tests: `e2e/chat-polish-app.spec.ts` (new), `e2e/app-shell.spec.ts`; `apps/api/src/chat-messages.test.ts`, `chat-media.test.ts`, `operator-config.migrate.test.ts`, `apps/web/src/discussions-page.test.ts`, `e2e/chat.spec.ts`, `e2e/chat-media.spec.ts`, `e2e/chat-polish.spec.ts` (new).

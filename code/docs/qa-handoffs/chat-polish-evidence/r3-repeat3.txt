@@ -1,0 +1,8 @@
+  -  423 [desktop] › e2e/qa-round3-probes.spec.ts:105:3 › QA round 3 probes › error and missing states keep a way back
+  -  424 [desktop] › e2e/qa-round3-probes.spec.ts:126:3 › QA round 3 probes › layout switches at 768 both ways, nav returns, split unchanged
+  -  425 [desktop] › e2e/qa-round3-probes.spec.ts:155:3 › QA round 3 probes › keyboard-typing: typing a message then send, back via keyboard, draft kept
+  ✓  414 [desktop] › e2e/chat-polish.spec.ts:325:3 › story chat-polish: split view from 768 px and in-page navigation › fits every factory width: list, split thread, open viewer (9.6s)
+  ✓  426 [desktop] › e2e/qa-round3-probes.spec.ts:184:3 › QA round 3: stale Paramètres windows › two windows: live event, focus, stale click, overtaken read (2.9s)
+
+  75 skipped
+  351 passed (9.1m)

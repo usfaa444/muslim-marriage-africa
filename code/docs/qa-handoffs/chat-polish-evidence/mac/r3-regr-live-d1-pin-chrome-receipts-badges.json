@@ -1,0 +1,633 @@
+{
+  "walk": {
+    "R1-D1-360": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-390": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-768": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-1024": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-1280": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R1-D1-1440": {
+      "ok": true,
+      "passes": "5/5",
+      "sample": {
+        "last": true,
+        "composer": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      }
+    },
+    "R2-pin-360": {
+      "ok": true,
+      "page": {
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "messagesMovedPx": 3337,
+      "head": {
+        "title": true,
+        "avatar": true,
+        "report": true,
+        "composer": true,
+        "send": true
+      },
+      "typing": {
+        "title": true,
+        "composer": true,
+        "y": 0
+      }
+    },
+    "R2-pin-390": {
+      "ok": true,
+      "page": {
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "messagesMovedPx": 3044,
+      "head": {
+        "title": true,
+        "avatar": true,
+        "report": true,
+        "composer": true,
+        "send": true
+      },
+      "typing": {
+        "title": true,
+        "composer": true,
+        "y": 0
+      }
+    },
+    "R2-pin-768": {
+      "ok": true,
+      "page": {
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "messagesMovedPx": 4277,
+      "head": {
+        "title": true,
+        "avatar": true,
+        "report": true,
+        "composer": true,
+        "send": true
+      },
+      "typing": {
+        "title": true,
+        "composer": true,
+        "y": 0
+      }
+    },
+    "R2-pin-1024": {
+      "ok": true,
+      "page": {
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "messagesMovedPx": 3504,
+      "head": {
+        "title": true,
+        "avatar": true,
+        "report": true,
+        "composer": true,
+        "send": true
+      },
+      "typing": {
+        "title": true,
+        "composer": true,
+        "y": 0
+      }
+    },
+    "R2-pin-1280": {
+      "ok": true,
+      "page": {
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "messagesMovedPx": 3440,
+      "head": {
+        "title": true,
+        "avatar": true,
+        "report": true,
+        "composer": true,
+        "send": true
+      },
+      "typing": {
+        "title": true,
+        "composer": true,
+        "y": 0
+      }
+    },
+    "R2-pin-1440": {
+      "ok": true,
+      "page": {
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "messagesMovedPx": 3440,
+      "head": {
+        "title": true,
+        "avatar": true,
+        "report": true,
+        "composer": true,
+        "send": true
+      },
+      "typing": {
+        "title": true,
+        "composer": true,
+        "y": 0
+      }
+    },
+    "R2-keyboard-360": {
+      "ok": true,
+      "title": true,
+      "composer": true,
+      "send": true,
+      "last": true,
+      "navShown": false,
+      "y": 0,
+      "docH": 380,
+      "vh": 380,
+      "fixed": true,
+      "vv": 380
+    },
+    "R2-keyboard-390": {
+      "ok": true,
+      "title": true,
+      "composer": true,
+      "send": true,
+      "last": true,
+      "navShown": false,
+      "y": 0,
+      "docH": 380,
+      "vh": 380,
+      "fixed": true,
+      "vv": 380
+    },
+    "R2-panels-360": {
+      "ok": true,
+      "photo": {
+        "send": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "rec": {
+        "stop": true,
+        "timer": true,
+        "title": true,
+        "y": 0
+      },
+      "voiceReady": {
+        "send": true,
+        "lang": true,
+        "title": true,
+        "y": 0
+      },
+      "viewer": {
+        "close": true,
+        "img": true
+      }
+    },
+    "R2-panels-768": {
+      "ok": true,
+      "photo": {
+        "send": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "rec": {
+        "stop": true,
+        "timer": true,
+        "title": true,
+        "y": 0
+      },
+      "voiceReady": {
+        "send": true,
+        "lang": true,
+        "title": true,
+        "y": 0
+      },
+      "viewer": {
+        "close": true,
+        "img": true
+      }
+    },
+    "R2-panels-1280": {
+      "ok": true,
+      "photo": {
+        "send": true,
+        "title": true,
+        "y": 0,
+        "docH": 900,
+        "vh": 900,
+        "fixed": true
+      },
+      "rec": {
+        "stop": true,
+        "timer": true,
+        "title": true,
+        "y": 0
+      },
+      "voiceReady": {
+        "send": true,
+        "lang": true,
+        "title": true,
+        "y": 0
+      },
+      "viewer": {
+        "close": true,
+        "img": true
+      }
+    },
+    "R3-member-no-chrome-390": {
+      "ok": true,
+      "rows": {
+        "/decouvrir": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions/<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/invitations": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/profil": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings/bloques": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/signaler/<B>?discussion=<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        }
+      },
+      "privacyHref": "/#legal",
+      "privacyStatus": 200
+    },
+    "R3-member-no-chrome-1280": {
+      "ok": true,
+      "rows": {
+        "/decouvrir": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions/<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/invitations": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/profil": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings/bloques": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/signaler/<B>?discussion=<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        }
+      },
+      "privacyHref": "/#legal",
+      "privacyStatus": 200
+    },
+    "R3-public-keeps-chrome": {
+      "ok": false,
+      "/": {
+        "header": 0,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/auth": {
+        "header": 1,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/signup/identity": {
+        "header": 1,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/password-reset": {
+        "header": 1,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/staff/connexion": {
+        "header": 1,
+        "footer": 0,
+        "nav": false,
+        "hscroll": false
+      }
+    },
+    "R4a-B-off-neither-sees-Lu": {
+      "ok": true,
+      "before": {
+        "switchB": "true",
+        "lastA": "read"
+      },
+      "put": 200,
+      "aTicksAllSentMs": 11,
+      "aReloads": 0,
+      "otherTabSwitchSyncedMs": 1,
+      "m1OnA": "sent",
+      "bTicks": [
+        "sent"
+      ],
+      "bUnread": 0,
+      "mBOnB": "sent"
+    },
+    "R4b-B-on-restores-live": {
+      "ok": true,
+      "m1OnAms": 65,
+      "mBOnBms": 1,
+      "aReloads": 0,
+      "switchTab1": "true"
+    },
+    "R4c-A-off-reciprocal": {
+      "ok": true,
+      "bAllSentMs": 5,
+      "aAllSentMs": 5
+    },
+    "R4d-A-on-restores": {
+      "ok": true,
+      "ms": 66,
+      "switchA": "true"
+    },
+    "R5-D2-block-no-ticks": {
+      "ok": true,
+      "block": 201,
+      "ticksA": 0,
+      "ticksB": 0,
+      "ticksAafterBToggles": 0,
+      "rowTickA": 0
+    },
+    "R5b-unblock-ticks-back": {
+      "ok": true,
+      "unblock": 200,
+      "ticksA": 16
+    },
+    "R6a-discussions-badge-live": {
+      "ok": true,
+      "start": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Discussions"
+      },
+      "after1": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue",
+        "ms": 330
+      },
+      "after2": {
+        "hidden": false,
+        "text": "2",
+        "sr": "2 discussions non lues",
+        "link": "2Discussions2 discussions non lues",
+        "ms": 390
+      },
+      "reloads": 0,
+      "badgeRequests": 4
+    },
+    "R6b-clears-on-read": {
+      "ok": true,
+      "onThreadAfterReadingAB": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue"
+      },
+      "onProfil": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue"
+      }
+    },
+    "R6c-block-excluded": {
+      "ok": true,
+      "whileABlocksC": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Discussions"
+      },
+      "afterUnblock": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 discussion non lue",
+        "link": "1Discussions1 discussion non lue"
+      }
+    },
+    "R6d-hidden-at-0": {
+      "ok": true,
+      "hidden": true,
+      "text": "",
+      "sr": "",
+      "link": "Discussions"
+    },
+    "R6e-invitations-badge-live": {
+      "ok": true,
+      "invite": 201,
+      "start": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations"
+      },
+      "after": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 invitation en attente",
+        "link": "1Invitations1 invitation en attente",
+        "ms": 325
+      },
+      "reloads": 0
+    },
+    "R6f-invite-block-excluded": {
+      "ok": true,
+      "whileBlocked": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations"
+      },
+      "afterUnblock": {
+        "hidden": false,
+        "text": "1",
+        "sr": "1 invitation en attente",
+        "link": "1Invitations1 invitation en attente"
+      }
+    },
+    "R6g-clears-on-answer": {
+      "ok": true,
+      "decline": 200,
+      "ms": 325,
+      "after": {
+        "hidden": true,
+        "text": "",
+        "sr": "",
+        "link": "Invitations"
+      }
+    }
+  },
+  "sweep": [],
+  "console": [
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /staff/connexion: requestStorageAccess: Permission denied.",
+    "signed-out /staff/connexion: requestStorageAccess: Permission denied."
+  ],
+  "summary": {
+    "pass": 32,
+    "fail": [
+      "R3-public-keeps-chrome"
+    ],
+    "consoleErrors": 6
+  }
+}

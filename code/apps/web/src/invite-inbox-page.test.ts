@@ -37,8 +37,9 @@ describe('screen 19 Invite inbox (Stories 4.4, 4.5)', () => {
       expect(html).toContain(`<span>${label}</span>`)
     }
     expect(html).toContain('data-nav-item="invitations" aria-current="page"')
-    expect(html.match(/id="app-header"/g)).toHaveLength(1)
-    expect(html.match(/id="app-footer"/g)).toHaveLength(1)
+    // Story chat-polish: app screens have no site header or footer, only the bottom nav.
+    expect(html).not.toContain('id="app-header"')
+    expect(html).not.toContain('id="app-footer"')
     expect(html.match(/id="app-bottom-nav"/g)).toHaveLength(1)
     expect(html).toContain('id="inbox-status" role="status" aria-live="polite"')
     expect(html).toContain(INBOX_COPY.emptyTitle)

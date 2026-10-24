@@ -1,0 +1,361 @@
+{
+  "walk": {
+    "R3-1-phone-360x640": {
+      "ok": true,
+      "box": 475,
+      "ratio": 0.74,
+      "header": 640,
+      "composer": 108,
+      "navShown": false,
+      "parts": {
+        "back": true,
+        "avatar": true,
+        "title": true,
+        "report": true,
+        "reportName": "shieldSignaler / Bloquer",
+        "titleText": "Mariam51943, 30 ans",
+        "titleTruncated": false
+      },
+      "headerRow": {
+        "tops": [
+          6,
+          9,
+          9,
+          6
+        ],
+        "spread": 9
+      },
+      "smallTargets": [],
+      "axe": [],
+      "hscroll": false,
+      "lastInView": true,
+      "input": {
+        "start": 44,
+        "grow": [
+          66,
+          88,
+          110,
+          132,
+          132,
+          132,
+          132,
+          132
+        ],
+        "capped": true
+      },
+      "rule": {
+        "beforeTyping": false,
+        "whileTyping": false
+      },
+      "typing": {
+        "lastInView": true,
+        "title": true,
+        "ratio": 0.68,
+        "sendVisible": true,
+        "sendName": "Envoyerarrow_forward"
+      },
+      "keyboard": {
+        "h": 340,
+        "box": 136,
+        "ratio": 0.4,
+        "title": true,
+        "back": true,
+        "composer": true,
+        "last": true,
+        "y": 0
+      },
+      "list": {
+        "url": "/discussions",
+        "nav": true,
+        "badge": "1",
+        "rowBadge": "1",
+        "reloads": 0
+      }
+    },
+    "R3-1-phone-390x800": {
+      "ok": true,
+      "box": 635,
+      "ratio": 0.79,
+      "header": 800,
+      "composer": 108,
+      "navShown": false,
+      "parts": {
+        "back": true,
+        "avatar": true,
+        "title": true,
+        "report": true,
+        "reportName": "shieldSignaler / Bloquer",
+        "titleText": "Mariam51943, 30 ans",
+        "titleTruncated": false
+      },
+      "headerRow": {
+        "tops": [
+          6,
+          9,
+          9,
+          6
+        ],
+        "spread": 9
+      },
+      "smallTargets": [],
+      "axe": [],
+      "hscroll": false,
+      "lastInView": true,
+      "input": {
+        "start": 44,
+        "grow": [
+          66,
+          88,
+          110,
+          132,
+          132,
+          132,
+          132,
+          132
+        ],
+        "capped": true
+      },
+      "rule": {
+        "beforeTyping": false,
+        "whileTyping": false
+      },
+      "typing": {
+        "lastInView": true,
+        "title": true,
+        "ratio": 0.74,
+        "sendVisible": true,
+        "sendName": "Envoyerarrow_forward"
+      },
+      "keyboard": {
+        "h": 500,
+        "box": 296,
+        "ratio": 0.59,
+        "title": true,
+        "back": true,
+        "composer": true,
+        "last": true,
+        "y": 0
+      },
+      "list": {
+        "url": "/discussions",
+        "nav": true,
+        "badge": "1",
+        "rowBadge": "1",
+        "reloads": 0
+      }
+    },
+    "R3-1-phone-360x600": {
+      "ok": true,
+      "box": 435,
+      "ratio": 0.72,
+      "header": 600,
+      "composer": 108,
+      "navShown": false,
+      "parts": {
+        "back": true,
+        "avatar": true,
+        "title": true,
+        "report": true,
+        "reportName": "shieldSignaler / Bloquer",
+        "titleText": "Mariam51943, 30 ans",
+        "titleTruncated": false
+      },
+      "headerRow": {
+        "tops": [
+          6,
+          9,
+          9,
+          6
+        ],
+        "spread": 9
+      },
+      "smallTargets": [],
+      "axe": [],
+      "hscroll": false,
+      "lastInView": true,
+      "input": {
+        "start": 44,
+        "grow": [
+          66,
+          88,
+          110,
+          132,
+          132,
+          132,
+          132,
+          132
+        ],
+        "capped": true
+      },
+      "rule": {
+        "beforeTyping": false,
+        "whileTyping": false
+      },
+      "typing": {
+        "lastInView": true,
+        "title": true,
+        "ratio": 0.66,
+        "sendVisible": true,
+        "sendName": "Envoyerarrow_forward"
+      },
+      "keyboard": {
+        "h": 300,
+        "box": 96,
+        "ratio": 0.32,
+        "title": true,
+        "back": true,
+        "composer": true,
+        "last": false,
+        "y": 0
+      },
+      "list": {
+        "url": "/discussions",
+        "nav": true,
+        "badge": "1",
+        "rowBadge": "1",
+        "reloads": 0
+      }
+    },
+    "R3-2-two-windows": {
+      "ok": true,
+      "start": [
+        "true",
+        "true",
+        "true"
+      ],
+      "secondWindowLiveMs": 249,
+      "staleWindowShowed": "true",
+      "staleClickSent": {
+        "read_receipts": false
+      },
+      "stored": {
+        "read_receipts": false
+      },
+      "after": {
+        "w1": "false",
+        "w2": "false",
+        "w3": "false"
+      },
+      "note": "window 3 had Socket.IO blocked and no focus event"
+    },
+    "R3-2b-keyboard-twice": {
+      "ok": true,
+      "v0": "false",
+      "v1": "true",
+      "v2": "false",
+      "duringSave": {
+        "busy": "true",
+        "disabled": false,
+        "focused": true
+      },
+      "stored": {
+        "read_receipts": false
+      }
+    },
+    "R3-4-settings-360": {
+      "ok": false,
+      "switches": {
+        "lite-mode-toggle": "Mode Allégé (Basse consommation)",
+        "pin-toggle": "Code secret PIN d'accès",
+        "read-receipts-toggle": "Confirmations de lecture"
+      },
+      "axeSeriousCritical": [
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ],
+      "hscroll": false
+    },
+    "R3-4-settings-390": {
+      "ok": false,
+      "switches": {
+        "lite-mode-toggle": "Mode Allégé (Basse consommation)",
+        "pin-toggle": "Code secret PIN d'accès",
+        "read-receipts-toggle": "Confirmations de lecture"
+      },
+      "axeSeriousCritical": [
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ],
+      "hscroll": false
+    },
+    "R3-4-settings-768": {
+      "ok": false,
+      "switches": {
+        "lite-mode-toggle": "Mode Allégé (Basse consommation)",
+        "pin-toggle": "Code secret PIN d'accès",
+        "read-receipts-toggle": "Confirmations de lecture"
+      },
+      "axeSeriousCritical": [
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ],
+      "hscroll": false
+    },
+    "R3-4-settings-1024": {
+      "ok": false,
+      "switches": {
+        "lite-mode-toggle": "Mode Allégé (Basse consommation)",
+        "pin-toggle": "Code secret PIN d'accès",
+        "read-receipts-toggle": "Confirmations de lecture"
+      },
+      "axeSeriousCritical": [
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ],
+      "hscroll": false
+    },
+    "R3-4-settings-1280": {
+      "ok": false,
+      "switches": {
+        "lite-mode-toggle": "Mode Allégé (Basse consommation)",
+        "pin-toggle": "Code secret PIN d'accès",
+        "read-receipts-toggle": "Confirmations de lecture"
+      },
+      "axeSeriousCritical": [
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ],
+      "hscroll": false
+    },
+    "R3-4-settings-1440": {
+      "ok": false,
+      "switches": {
+        "lite-mode-toggle": "Mode Allégé (Basse consommation)",
+        "pin-toggle": "Code secret PIN d'accès",
+        "read-receipts-toggle": "Confirmations de lecture"
+      },
+      "axeSeriousCritical": [
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ],
+      "hscroll": false
+    }
+  },
+  "console": [
+    "B-win3-offline-socket: Failed to load resource: net::ERR_FAILED"
+  ],
+  "summary": {
+    "pass": 5,
+    "fail": [
+      "R3-4-settings-360",
+      "R3-4-settings-390",
+      "R3-4-settings-768",
+      "R3-4-settings-1024",
+      "R3-4-settings-1280",
+      "R3-4-settings-1440"
+    ],
+    "consoleErrors": 1
+  }
+}

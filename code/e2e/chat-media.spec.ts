@@ -21,7 +21,8 @@ const CONVERSATION = '01990000-0000-7000-8000-0000000000c1'
 const PHOTO_MESSAGE = '01990000-0000-7000-8000-000000000101'
 const VOICE_MESSAGE = '01990000-0000-7000-8000-000000000102'
 
-const HOLD_COPY = /En cours de vérification|vérification|modération|scan|retenu|en attente de|non lu|\bLu\b|transcri/i
+// Story chat-polish brought read receipts (« Lu ») on purpose; hold, scan and transcript copy stays banned.
+const HOLD_COPY = /En cours de vérification|vérification|modération|scan|retenu|en attente de|transcri/i
 
 type Item = {
   id: string
@@ -209,6 +210,11 @@ async function serveApi(context: BrowserContext, baseURL: string, state: Api): P
       }
       const token = `${item.kind === 'photo' ? 'clear' : 'voice'}-${item.id}`
       await route.fulfill(json({ url: `/v1/media/get?token=${token}`, expires_at: new Date(Date.now() + 60_000).toISOString() }))
+      return
+    }
+    if (/^\/v1\/conversations\/[^/]+\/read$/.test(url.pathname) && method === 'POST') {
+      const body = request.postDataJSON() as { message_id: string }
+      await route.fulfill(json({ read: { message_id: body.message_id } }))
       return
     }
     const thread = /^\/v1\/conversations\/([^/]+)(\/messages)?$/.exec(url.pathname)
@@ -452,14 +458,17 @@ test.describe('Chat Photo and Voice note (Stories 5.3, 5.4, screen 21)', () => {
     expect(state.posts).toEqual([])
   })
 
-  test('QA F2: « Retour », « Signaler / Bloquer », « Signaler ce message » and « Envoyer » are 44 x 44 targets, even unstyled', async ({ page, context, baseURL }) => {
+  test('QA F2: « Retour », « Signaler / Bloquer », « Signaler ce message » and « Envoyer » are 44 x 44 targets, even unstyled', async ({ page, context, baseURL }, testInfo) => {
     const state = api()
     await setLite(context, false)
     await serveApi(context, baseURL ?? '', state)
     await openThread(page)
     await page.getByRole('textbox').first().fill('Bien reçu.')
+    // Story chat-polish: « Retour » is the phone way back; from 768 px the list row beside the thread is the target.
     const targets = [
-      page.getByRole('link', { name: 'Retour aux discussions' }),
+      testInfo.project.name === 'mobile'
+        ? page.getByRole('link', { name: 'Retour aux discussions' })
+        : page.getByTestId('conversation-row').getByRole('link'),
       page.getByRole('link', { name: 'Signaler / Bloquer' }),
       page.getByRole('button', { name: 'Envoyer', exact: true }),
       ...(await bubbles(page).getByRole('link', { name: 'Signaler ce message' }).all()),

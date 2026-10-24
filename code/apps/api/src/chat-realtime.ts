@@ -2,6 +2,7 @@ import type { Server as HttpServer } from 'node:http'
 import { Server, type Socket } from 'socket.io'
 import { clientIp } from './auth-guard.js'
 import { setChatEvents, typingTarget } from './chat-messages.js'
+import { setInviteEvents } from './invites.js'
 import { originForbidden } from './edge-request.js'
 import { applySessionGate, loadLiveSession } from './pin-session.js'
 import { assertBrowseViewer } from './public-profile.js'
@@ -10,7 +11,9 @@ import { assertBrowseViewer } from './public-profile.js'
  * Realtime Chat channel (AD-15, Stories 5.1, 5.2): Socket.IO on `/v1/realtime`. The handshake goes through the same
  * gates as HTTP: Origin (AD-17 CSRF), session and PIN lock, then the member viewer gate. A socket joins only its own
  * room `account:<id>`. Events carry ids only: `message.delivered { conversation_id, message_id, sender_id }` and
- * `conversation.typing { conversation_id, account_id }`. There is no pending, held or blocked event. No BillingPort.
+ * `conversation.typing { conversation_id, account_id }`, and (story chat-polish) `conversation.read { conversation_id,
+ * account_id, message_id }` to the reader and, unless a Block holds, the other member. There is no pending, held or
+ * blocked event. No BillingPort.
  */
 
 export const REALTIME_PATH = '/v1/realtime'
@@ -110,6 +113,20 @@ export function attachRealtime(httpServer: HttpServer): Server {
       const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
       io.to(rooms).emit('message.delivered', { conversation_id: conversationId, message_id: messageId, sender_id: senderId })
     },
+    conversationRead({ conversationId, readerId, messageId, recipients }) {
+      const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
+      io.to(rooms).emit('conversation.read', { conversation_id: conversationId, account_id: readerId, message_id: messageId })
+    },
+    receiptsChanged({ accountId, recipients }) {
+      const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
+      io.to(rooms).emit('chat.receipts', { account_id: accountId })
+    },
+  })
+  setInviteEvents({
+    inviteChanged({ inviteId, recipients }) {
+      const rooms = [...new Set(recipients)].map((id) => `account:${id}`)
+      io.to(rooms).emit('invite.changed', { invite_id: inviteId })
+    },
   })
   current = io
   return io
@@ -120,6 +137,7 @@ export async function closeRealtime(): Promise<void> {
   const io = current
   current = undefined
   setChatEvents(undefined)
+  setInviteEvents(undefined)
   if (io) {
     io.disconnectSockets(true)
     // The HTTP server belongs to Nest; only detach Socket.IO's own engine.

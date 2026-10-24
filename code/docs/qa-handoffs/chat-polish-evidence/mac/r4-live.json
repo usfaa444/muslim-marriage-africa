@@ -1,0 +1,107 @@
+{
+  "res": {
+    "settings-axe-360": {
+      "ok": true,
+      "bad": [],
+      "all": [],
+      "colors": {
+        "eyebrow": "rgb(125, 95, 39)",
+        "formules": "rgb(125, 95, 39)",
+        "desc": "rgba(11, 29, 54, 0.7)"
+      },
+      "hscroll": false
+    },
+    "settings-axe-390": {
+      "ok": true,
+      "bad": [],
+      "all": [],
+      "colors": {
+        "eyebrow": "rgb(125, 95, 39)",
+        "formules": "rgb(125, 95, 39)",
+        "desc": "rgba(11, 29, 54, 0.7)"
+      },
+      "hscroll": false
+    },
+    "settings-axe-768": {
+      "ok": true,
+      "bad": [],
+      "all": [],
+      "colors": {
+        "eyebrow": "rgb(125, 95, 39)",
+        "formules": "rgb(125, 95, 39)",
+        "desc": "rgba(11, 29, 54, 0.7)"
+      },
+      "hscroll": false
+    },
+    "settings-axe-1024": {
+      "ok": true,
+      "bad": [],
+      "all": [],
+      "colors": {
+        "eyebrow": "rgb(125, 95, 39)",
+        "formules": "rgb(125, 95, 39)",
+        "desc": "rgba(11, 29, 54, 0.7)"
+      },
+      "hscroll": false
+    },
+    "settings-axe-1280": {
+      "ok": true,
+      "bad": [],
+      "all": [],
+      "colors": {
+        "eyebrow": "rgb(125, 95, 39)",
+        "formules": "rgb(125, 95, 39)",
+        "desc": "rgba(11, 29, 54, 0.7)"
+      },
+      "hscroll": false
+    },
+    "settings-axe-1440": {
+      "ok": true,
+      "bad": [],
+      "all": [],
+      "colors": {
+        "eyebrow": "rgb(125, 95, 39)",
+        "formules": "rgb(125, 95, 39)",
+        "desc": "rgba(11, 29, 54, 0.7)"
+      },
+      "hscroll": false
+    },
+    "composer-360": {
+      "ok": true,
+      "placeholder": {
+        "text": "Votre message…",
+        "textW": 110,
+        "boxW": 199
+      },
+      "focus": {
+        "inputOutline": "none 3px",
+        "inputShadow": "none",
+        "ringOn": {
+          "el": "flex flex-col sm:flex-row items-stretch sm:items-end gap-2 s",
+          "radius": "22px",
+          "outline": "solid 2px",
+          "shadow": "none"
+        }
+      }
+    },
+    "composer-390": {
+      "ok": true,
+      "placeholder": {
+        "text": "Votre message…",
+        "textW": 110,
+        "boxW": 229
+      },
+      "focus": {
+        "inputOutline": "none 3px",
+        "inputShadow": "none",
+        "ringOn": {
+          "el": "flex flex-col sm:flex-row items-stretch sm:items-end gap-2 s",
+          "radius": "22px",
+          "outline": "solid 2px",
+          "shadow": "none"
+        }
+      }
+    }
+  },
+  "consoleErrors": []
+}

@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Header, HttpCode, HttpException, Param, Post, Query, Req, Res } from '@nestjs/common'
-import { listConversations, listMessages, mediaAccess, readConversation, sendMessage, type ChatFailure } from './chat-messages.js'
+import { listConversations, listMessages, markRead, mediaAccess, readConversation, sendMessage, type ChatFailure } from './chat-messages.js'
 import { requireLiveSession } from './pin-session.js'
 
 type CookieRequest = {
@@ -64,6 +64,22 @@ export class ConversationsController {
     response.setHeader('Cache-Control', 'no-store')
     const session = await requireLiveSession(request.headers?.cookie)
     const result = await sendMessage(session, id, body)
+    return result.ok ? result.body : refuse(result)
+  }
+
+  /** Story chat-polish: the thread is on screen; move my read pointer forward. Participants only. */
+  @Post(':id/read')
+  @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
+  async markAsRead(
+    @Req() request: CookieRequest,
+    @Param('id') id: string,
+    @Body() body: unknown,
+    @Res({ passthrough: true }) response: HeaderResponse,
+  ) {
+    response.setHeader('Cache-Control', 'no-store')
+    const session = await requireLiveSession(request.headers?.cookie)
+    const result = await markRead(session, id, body)
     return result.ok ? result.body : refuse(result)
   }
 

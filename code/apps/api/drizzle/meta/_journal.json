@@ -183,6 +183,20 @@
       "when": 1792808369634,
       "tag": "0025_message_media",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1792838425179,
+      "tag": "0026_conversation_read",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1792845504724,
+      "tag": "0027_read_receipt_setting",
+      "breakpoints": true
     }
   ]
 }
