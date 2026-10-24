@@ -1,6 +1,6 @@
 # Live QA on Faycal's Mac: story chat-polish (full-screen Photo, open at the latest message, read ticks, split view)
 
-**Round 2 (c4274f8): PASS, see [Round 2](#round-2-c4274f8-2026-10-24-utc-1345-1405) at the end.** Round 1 below is kept as it was.
+**Round 3 (0a6beb7): FAIL on one item only.** Paramètres still fails axe colour contrast with the real theme, so 4 new e2e tests are red. Everything Faycal asked for passes. See Round 3 at the end. **Round 2 (c4274f8): PASS.** Round 1 below is kept as it was.
 
 Date 2026-10-24 (UTC 12:27–13:00). Branch `factory/chat-polish` at `b2ccb5b`. Stack `ankanu-local` on http://localhost:4012, left running.
 
@@ -170,3 +170,74 @@ Fixed from round 1: **D1** (30/30 opens, e2e `:99` 10/10), **D2** (0 ticks under
 Not covered: a real phone keyboard (iOS / Android), Safari, real 3G, and the 99+ cap live. No product code was changed.
 
 Committed for round 2: this section, `r2-e2e-fullstack.txt`, `r2-e2e-webonly.txt`, `r2-d1-e2e-repeat5.txt`, `r2-live-d1-pin.json`, `r2-live-chrome-receipts.json`, `r2-receipts-retest.json`, `r2-badges.txt`, `r2-live-sweep.json`. On the Mac only: `shots/r2-*` and `scripts/`.
+
+
+---
+
+# Round 3 (0a6beb7, 2026-10-24, UTC 14:50–15:15)
+
+Changes since round 2: the phone thread is a sub-screen (no nav, one-row header and composer), Paramètres follows « Confirmations de lecture » across windows, the switch stays focusable while saving, and the Lite and PIN switches are named. Same stack and accounts; no new migration.
+
+**Verdict: FAIL, on one item only (R3-A).** Every behaviour Faycal asked for passes live, and round 2's minors 1 and 2 are fixed. But « Paramètres passes axe » (QA R2-4) is not true with the real Tailwind CDN theme. 7 older text elements on Paramètres fail colour contrast, so the 4 new whole-page axe tests fail in the web-only suite on this Mac. The fix is small: darken those texts.
+
+## R3.1 Deploy and e2e
+
+| Step | Result |
+|---|---|
+| `checkout` + `pull`, `npm ci`, `up -d --build --wait`, `migrate` | `0a6beb7`; 6 services healthy; no new migration; `/` 200, `/v1/health` ok |
+| Full-stack e2e | **44 passed, 0 failed**, 284 skipped. `r3-e2e-fullstack.txt` |
+| Web-only e2e (real CDN and fonts) | **279 passed, 4 failed**, 45 skipped. `r3-e2e-webonly.txt`. The 4 failures are `app-shell.spec.ts:78` « member page /settings » and `chat-polish-app.spec.ts:222` « QA R2-4: Paramètres passes axe as a whole page », both projects, all `color-contrast` (R3-A) |
+| Round 2 flaky test `chat-polish-app.spec.ts:158` (AC 18) | **10/10** (`--repeat-each=5`, both projects; `r3-switch-test-repeat.txt`), and it passed inside the full suite on both projects |
+
+## R3.2 Live checks
+
+Scripts (on the Mac): `scripts/r3.mjs`, and `scripts/r2.mjs` for the regression (the invite now goes D → C, because D's invite to B was used up in round 2). Data: `r3-live.json`, `r3-regr-live-d1-pin-chrome-receipts-badges.json`.
+
+**1. Phone thread sub-screen** (A on AB, real CDN):
+
+| Size | Messages box | No nav | Header | Targets < 44 | axe | Composer | Keyboard (300 px less) | Back |
+|---|---|---|---|---|---|---|---|---|
+| 360 × 640 | **475 px = 74 %** | yes | one row (centres within 9 px): ←, photo, name + city, shield « Signaler / Bloquer » | 0 | 0 | 44 px, grows 66 → 88 → 110 → **132 px and caps**; the latest message stays in view while typing (68 %) | 340 px high: messages **136 px = 40 %**; name, back, composer and the latest message visible; page still | to `/discussions` with no reload; nav back with badge « 1 », row badge « 1 » |
+| 390 × 800 | **635 px = 79 %** | yes | same | 0 | 0 | same; 74 % while typing | 500 px high: **296 px = 59 %**, everything visible | same |
+| 360 × 600 | **435 px = 72 %** | yes | same | 0 | 0 | same; 66 % while typing | 300 px high: **96 px = 32 %**; name and composer visible, the latest bubble only partly | same |
+
+Result: PASS (≥ 60 % at every size). With the keyboard up and a 5-line draft, a small phone keeps 1 or 2 bubbles visible; WhatsApp behaves much the same. See R3-B.
+
+**Look and feel compared with WhatsApp:** close. One slim row on top, messages filling the screen, a pill composer with camera, microphone and a round send button that turns navy, and back to a list where the badges are. It reads as AnKanu (cream, navy and gold, the Newsreader name) and no longer as a web page around a chat. Rough edges, all cosmetic (R3-C): at 360 the placeholder is cut mid-word (« Rédigez votre message dans le… »), and the focused text box draws a square gold outline inside the rounded pill. Screenshots: `shots/r3-phone-thread-*.png`, `r3-phone-typing-*.png`, `r3-phone-keyboard-*.png`, `r3-phone-list-after-back-*.png`.
+
+**2. Two Paramètres windows** (B, three windows):
+
+| Check | Actual | Result |
+|---|---|---|
+| Toggle in window 1 | window 2 follows **live in 249 ms**, with no focus | PASS |
+| Window 3 with Socket.IO blocked and no focus (truly stale: it still shows « on » while « off » is stored) | the click sent `{read_receipts:false}`, the value the stale switch offered. Stored `false`, and all three windows show `false`. It never saves the opposite of what it shows | PASS |
+| Keyboard: Space, then Space again right away | during the save `aria-busy="true"`, not disabled, focus kept; the two presses gave on → off, both stored | PASS |
+
+**4. Paramètres:** the switches are named « Mode Allégé (Basse consommation) », « Code secret PIN d'accès » and « Confirmations de lecture » (PASS). axe at 6 widths: **`color-contrast` serious, 7 nodes, at every width** (R3-A).
+
+**5. Round 2 regression** (32 checks, all PASS):
+
+| Check | Result |
+|---|---|
+| Open at the latest message, 6 widths × 5 | 30/30 |
+| Pinned layout, 6 widths (12 wheel scrolls, typing) | the page never scrolls; name, photo, report, composer and send stay visible |
+| Keyboard at 360 / 390 × 380 | name, composer, send and the latest message visible |
+| Panels (Photo preview, recorder, Voice note ready, viewer) at 360 / 768 / 1280 | fit, with the name on top |
+| No site header or footer on 8 member screens at 390 / 1280; « Confidentialité » in Paramètres (200) | PASS. The landing keeps its own header and footer (my selector misses its nested `<header>`, as in round 2); `/auth`, sign-up, password reset and the staff page keep theirs |
+| Receipts: B off → A all « Envoyé » after 11 ms; B's second Paramètres tab synced after 1 ms; B on → « Lu » after 65 ms; A off / on reciprocal | PASS |
+| Block: 0 ticks on both sides, nothing leaks when toggling during the Block; unblock brings back 16 | PASS |
+| Badges on Découvrir / Profil: 1 → 2 in about 0.33–0.39 s with no reload, cleared on read and on decline (325 ms), blocked excluded, hidden at 0, screen-reader text | PASS |
+
+Console: 0 errors on member screens. The 6 errors logged are reCAPTCHA's `requestStorageAccess` on the signed-out `/auth` and `/staff/connexion` (known, tolerated), plus my own blocked socket in window 3.
+
+## R3.3 Findings
+
+| # | Severity | Steps | Expected | Actual | Evidence |
+|---|---|---|---|---|---|
+| R3-A | **Major (gate)**, pre-existing contrast that this story now asserts | axe on `/settings` with the real Tailwind CDN theme, at any width | 0 serious (QA R2-4 « Paramètres passes axe as a whole page ») | `color-contrast` serious ×7. The « PRÉFÉRENCES » eyebrow `text-[11px]` soft gold `#C9A86C` on `#F7F1E3` (**2.0:1**); « Voir les formules » soft gold on `#FBF8F1` (**2.12:1**); 5 `text-deep-navy/60` descriptions (« Burkina Faso (Centre & Nord) », « Format standard textuel & vocal », the export and delete hints) at **4.33–4.38:1**. This makes 4 e2e tests red on the Mac; the cloud did not see it because its axe ran without the theme colours. Fix: the gold eyebrow and link → `#7D5F27` (the dark gold already used for « Lu »), and `text-deep-navy/60` → `/75` on Paramètres | `r3-e2e-webonly.txt`, `r3-live.json` `R3-4-settings-*` |
+| R3-B | Minor (note) | 360 × 600 with the keyboard (300 px high) and a 5-line draft | the latest message readable | the message box is 96 px; the latest bubble is only partly visible. On 640 px and taller phones it is fine (136 px / 40 %, and 296 px / 59 % at 800). Acceptable; it could shrink the draft cap to 3 lines when the screen is under 400 px high | `shots/r3-phone-keyboard-360x340.png` |
+| R3-C | Cosmetic | 360 px thread | a clean composer | the placeholder is cut mid-word; the focus ring is a square inside the rounded pill. Suggest a shorter phone placeholder (« Votre message… ») and a rounded or pill-level focus ring | `shots/r3-phone-thread-360x640.png`, `shots/r3-phone-typing-390x800.png` |
+
+Fixed from round 2: R2-1 (stale second window), R2-2 (flaky switch test, 10/10), R2-3 (phone message area: 72–79 % instead of about 50 %), and the R2-4 unnamed switches (the R2-4 contrast part is still open as R3-A).
+
+Committed for round 3: this section, `r3-e2e-fullstack.txt`, `r3-e2e-webonly.txt`, `r3-switch-test-repeat.txt`, `r3-live.json`, `r3-regr-live-d1-pin-chrome-receipts-badges.json`. On the Mac only: `shots/r3-*`, `scripts/`.
