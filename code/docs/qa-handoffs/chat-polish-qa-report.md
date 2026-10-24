@@ -75,3 +75,73 @@ No blocker, critical or major finding.
 - Lighthouse and real Fast 3G production-build timing; WebKit or iPad Safari; real devices (the 100vh and bottom-nav offset on phones).
 - WCAG contrast on the final styled colours (axe here ran without the CDN stylesheet).
 - Multi-tab "my other tabs update" on a real stack (covered by the API socket test only).
+
+---
+
+# Round 2 (retest of c4274f8)
+
+Verdict: **FAIL** (2026-10-24, cloud container, branch `factory/chat-polish`, commit c4274f8; no staging, no Docker, styled checks on the owner's Mac pending). Two major findings (R2-1 UX, R2-2 test does not protect an AC); D1 and D2 are truly fixed, D3 is fixed on desktop and tablet but not on small phones.
+
+## Spec fidelity to the owner's requests
+
+| Request | Spec | Verdict |
+| --- | --- | --- |
+| (a) Option B, read-receipts switch | AC 18 to 20: `role="switch"`, GET/PUT `/v1/chat/settings`, reciprocal, server-enforced | Faithful |
+| (a) No header/footer on app screens, only on the landing page | AC 24: removed on member pages and signed-in steps; **kept on signed-out pages** (sign-in, sign-up identity and pseudonym, password reset) and on the staff console | Partly. The owner said "only on the landing page". Keeping them on signed-out pages is a reading of "actual app screens", flagged in the handoff. Minor, owner to confirm. |
+| (b) Page never scrolls, banner and composer pinned, all sizes | AC 23 | Faithful on paper; see R2-1 for small phones |
+| (c) Badges: pending invitations, threads with unread messages, always current on every screen | AC 21, 22 | Faithful |
+
+## Gate summary
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS | lint exit 0 (17 pre-existing warnings), typecheck exit 0, migration-check "Everything's fine", `npm audit` 5 vulns (4 high, 1 critical) unchanged (no dependency in the diff; F4). No secrets or debug leftovers seen in the diff. |
+| G2 Tests | PASS with R2-2 | Unit `1 failed (photo-rules, baseline) / 682 passed / 12 skipped`. Full e2e `30 failed / 241 passed / 43 skipped`: exactly the baseline (invite-inbox 3, profile-edit-flow 16, staff-review 6, staff-shell 5); I re-ran staff-shell and invite-inbox on a worktree of the parent commit ad83986 and the same 4 desktop tests fail there. `--repeat-each=3` on chat-polish, gates, app, app-shell: 276 passed, 36 skipped, 0 flaky. API `chat-messages.test.ts` 27 passed. Mutations below. |
+| G3 Functional | PASS with R2-1 | Real-CSS probes below |
+| G4 UI fidelity | Partly BLOCKED | Layout checked with Tailwind 4 compiled from the page's own classes (not the CDN, not the Stitch config colours); Stitch visual compare pending on the Mac |
+| G5 UX | FAIL (R2-1) | |
+| G6 A11y | PASS for this story's screens | axe (WCAG 2.2 AA) with real CSS: thread and list at 390 and 1280, settings at 390 and 1280: 0 serious or critical from this story. Pre-existing R2-4 below. |
+| G7 Non-functional | PASS (API), perf pending | Authz and privacy by API tests and mutations; Lighthouse and Fast 3G pending |
+| G8 Regression | PASS | Full e2e at baseline, chat, report-block, blocked-list, app-shell green |
+
+## D1 to D3 (real stylesheet, late injection)
+
+Method: a throwaway spec (`chat-polish-evidence/qa-round2-probes.spec.ts.txt`, not committed as a test) learns the page's class names, compiles real Tailwind 4 CSS for them, and serves it as the "CDN script" that appends the stylesheet after 0, 2000 and 6000 ms, with 40 long messages, 6 viewports, desktop and mobile projects.
+
+- **D1 fixed.** At 390x800, 768x1024, 1024x768, 1280x900, 1440x900 and 1280x560, after the late CSS lands: `scrollTop` gap to the end 0, last bubble inside the box, composer inside the viewport, `document.scrollHeight == innerHeight`, no page errors. A real mouse wheel to the top keeps the header and composer in place, `scrollY` 0.
+- **D2 fixed.** e2e `Mac QA D2` passes; the Block guard mutation (below) makes it fail on both projects.
+- **D3 fixed at 1280x900** (message box 549 px, was about 400), tablet 592 px at 768x1024, 353 px at 1024x768.
+- **D3 not fixed on small phones: R2-1.**
+
+## Mutation spot-checks (each restored, `git status` clean)
+
+API (`chat-messages.test.ts`, each makes 1 test fail): read event ignores receipts off; Discussions badge ignores Block; Invitations badge ignores Block; `chat.receipts` crosses a Block; list ignores the partner's setting; thread head ignores the setting; members-only gate on badges (my mutation was a crude one, the 403 tests for mahram and moderator exist). Web e2e: member page gets the site header (6 tests fail); badge not hidden at 0 (1 fails); no "99+" (1 fails); shell stops listening to `invite.changed` (1 fails). **Survived: shell stops listening to `message.delivered` (0 fail), see R2-2.**
+
+## Authorization and privacy
+
+- `GET/PUT /v1/chat/settings` and `GET /v1/me/badges`: 401 without session, 403 for mahram and moderator, `no-store`; PUT accepts booleans only (400 and nothing stored otherwise); the value is per session account, no id in the URL, so no IDOR surface. Responses carry only counts or a boolean.
+- Events carry ids only; `chat.receipts` never goes to strangers or across a Block; `conversation.read` is not sent when either side has receipts off; pointers stay in the server (head `read.other: null`).
+- Accepted observation: a chat partner sees "Lu" stop appearing and gets a refetch when I toggle, so they can infer when I changed it. Same as WhatsApp.
+- Not tested live: CSRF/origin on the PUT (same cookie model as the other mutations), cross-browser live sockets (no real stack here).
+
+## Review of changed existing tests
+
+The unit tests in `app-shell.test.tsx`, `app-shell-browser.test.ts`, `blocked-list-page.test.ts`, `invite-inbox-page.test.ts`, `report-block-page.test.ts` and e2e `app-shell.spec.ts` changed from "exactly one header and footer" to "none on app screens, one on signed-out pages, a legal line on signed-in steps". They reflect the new requirement and stay strict (counts of 0 or 1 asserted, per page kind, plus the privacy link in Paramètres at 44 px). The nav-clearance check moved from the footer to the end of `<main>`, which is the right equivalent. The nav label assertion became a prefix-style regex so the badge words can follow the label (slightly looser, accepted). `discussions-page.test.ts` string assertions follow the code. The scroll helper in e2e tests became a real mouse wheel, which is stricter. No weakening found.
+
+## Findings
+
+| # | Severity | Gate | Steps | Expected | Actual | Evidence |
+| --- | --- | --- | --- | --- | --- | --- |
+| R2-1 | **Major** | G5 / G3 | Open a thread with real CSS at 360x600, 360x640, 360x667, 360x720 and 390x800; read the height of `#thread-scroll` | Owner's complaint D3 (small message area) fixed on every screen size; a few messages visible | Message box is **44 px at 360x600**, 84 px at 360x640, 111 px at 360x667, 164 px at 360x720, 244 px at 390x800 (a third of the screen). The back link, a 3-line header, a 3-row composer and the rule note take the rest. The compact mode starts only below 560 px, so a screen of 540 px high gets 204 px but 600 px gets 44 px (backwards). 360 px and low-end phones are the audience (NFR-005). The page does not scroll and nothing is hidden, but a member sees about one bubble. | `chat-polish-evidence/r2-d1-2000-360.png` (gitignored), probe spec |
+| R2-2 | **Major** | G2 | Remove `socket.on('message.delivered', soon)` from `NAV_BADGE_SCRIPT` in `app-shell.ts`; run `chat-polish-app.spec.ts` | A test fails: the owner asked that a new message always reflects in the nav on any screen | All 7 pass. The "AC 21 / 22" test fires three events together (two `message.delivered`, one `conversation.read`) and counts one request, so any one listener satisfies it. My one-event-at-a-time probe (each of `message.delivered`, `invite.changed`, `conversation.read`) passes on the current code and fails under the mutation, so the behaviour works but is unprotected. | probe spec, mutation output |
+| R2-3 | Minor | Spec | AC 24 vs the owner's "header and footer only on the landing page" | | Header and footer remain on sign-in, sign-up identity and pseudonym, password reset (and the staff header). Owner to confirm. | `app-shell.spec.ts` PUBLIC_PAGES |
+| R2-4 | Minor (pre-existing, not this story) | G6 | Real CSS, Paramètres: axe | | `#lite-mode-toggle` and `#pin-toggle` (Stitch buttons with `aria-checked`, no name) give 2 critical `button-name` violations. Untouched by this diff; the e2e does not run axe on that page. Worth a ticket. | probe run |
+| R2-5 | Minor | G5 | Same as R2-1 | | On phones the nav hides while the composer has focus (by design); iOS keyboard behaviour is untested. | handoff |
+
+Carried over unchanged: F2 (product question), F4 (audit, pre-existing).
+
+## Not tested and why (pending, not failures)
+
+- Integration suites (`npm run test:integration`): no Docker here; integration pending CI. The dev's local Postgres 16 run of the migrate test (0027) was not repeated by me.
+- Styled checks on the owner's Mac: the real Tailwind CDN and Stitch colours, fonts, contrast, split view proportions and badge look at 390, 768 and 1280; iOS Safari keyboard and `visualViewport`; real phone 100dvh; Lighthouse and Fast 3G.
+- Live two-browser realtime on a real API and Postgres `unreadCounts` under data.
