@@ -704,6 +704,154 @@ describe('Report with a 24h SLA (8.5) and Block (8.6)', { timeout: 60_000 }, () 
     expect(await browseIds(sister)).not.toContain(brother.id)
     expect((await call(`/v1/profiles/${brother.id}`, sister.cookie)).status).toBe(404)
   })
+
+  function oneEvent(socket: Socket, name: string, waitMs = 2000): Promise<unknown> {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`no ${name}`)), waitMs)
+      socket.once(name, (payload: unknown) => {
+        clearTimeout(timer)
+        resolve(payload)
+      })
+    })
+  }
+
+  it('GET /v1/blocks lists only the Blocks I placed, newest first, with the pseudonym and the blurred photo only', async () => {
+    const sister = await member('sister')
+    const first = await member('brother')
+    const second = await member('brother')
+    const blocker = await member('brother')
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: first.id })).status).toBe(201)
+    now = new Date(now.getTime() + 1000)
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: second.id })).status).toBe(201)
+    // A Block placed on her is never listed to her.
+    expect((await call('/v1/blocks', blocker.cookie, 'POST', { blocked_id: sister.id })).status).toBe(201)
+
+    const response = await call('/v1/blocks', sister.cookie)
+    expect(response.status).toBe(200)
+    expect(response.headers.get('cache-control')).toBe('no-store')
+    const body = (await response.json()) as {
+      count: number
+      items: Array<Record<string, unknown> & { photo: { id: string; url: string } | null }>
+    }
+    expect(body.count).toBe(2)
+    expect(body.items.map((item) => item.blocked_id)).toEqual([second.id, first.id])
+    for (const item of body.items) {
+      // Pseudonym and blurred photo only: no age, city, bio, marital fields, verification or clear photo.
+      expect(Object.keys(item).sort()).toEqual(['blocked_id', 'created_at', 'photo', 'pseudonym'])
+      const token = new URL(item.photo?.url ?? '', 'http://x').searchParams.get('token')
+      const grant = media.grants.find((row) => row.id === token)
+      expect(grant).toMatchObject({ viewer_id: sister.id, derivative: 'blur' })
+    }
+    expect(body.items[0]?.pseudonym).toMatch(/^Trust_/)
+    const theirs = (await (await call('/v1/blocks', blocker.cookie)).json()) as { items: Array<{ blocked_id: string }> }
+    expect(theirs.items.map((item) => item.blocked_id)).toEqual([sister.id])
+    const firstList = (await (await call('/v1/blocks', first.cookie)).json()) as { count: number }
+    expect(firstList.count).toBe(0)
+    // No photo: null, never a placeholder URL.
+    media.assets.length = 0
+    const bare = (await (await call('/v1/blocks', sister.cookie)).json()) as { items: Array<{ photo: unknown }> }
+    expect(bare.items.map((item) => item.photo)).toEqual([null, null])
+    expect(billingCalls).toBe(0)
+  })
+
+  it('GET and DELETE /v1/blocks refuse no session, staff and malformed ids; I can only remove my own Block', async () => {
+    const sister = await member('sister')
+    const brother = await member('brother')
+    expect((await call('/v1/blocks', undefined)).status).toBe(401)
+    expect((await call(`/v1/blocks/${brother.id}`, undefined, 'DELETE')).status).toBe(401)
+    const staff = await openTestStaff(base, staffStore, 'moderator')
+    expect((await call('/v1/blocks', staff.cookie)).status).toBe(403)
+    expect((await call(`/v1/blocks/${brother.id}`, staff.cookie, 'DELETE')).status).toBe(403)
+
+    expect((await call('/v1/blocks', brother.cookie, 'POST', { blocked_id: sister.id })).status).toBe(201)
+    // She did not place this Block, so she cannot lift it, and the answer is the same as for no Block at all.
+    for (const target of [brother.id, newId(now), 'not-a-uuid']) {
+      const refused = await call(`/v1/blocks/${target}`, sister.cookie, 'DELETE')
+      expect(refused.status, target).toBe(404)
+      expect(await refused.json()).toMatchObject({ error: { code: 'NOT_FOUND', message: "Ce blocage n'existe pas." } })
+    }
+    expect(trust.blocks).toHaveLength(1)
+
+    const lifted = await call(`/v1/blocks/${sister.id}`, brother.cookie, 'DELETE')
+    expect(lifted.status).toBe(200)
+    expect(lifted.headers.get('cache-control')).toBe('no-store')
+    expect(await lifted.json()).toEqual({})
+    expect(trust.blocks).toHaveLength(0)
+    const again = await call(`/v1/blocks/${sister.id}`, brother.cookie, 'DELETE')
+    expect(again.status).toBe(404)
+    expect(billingCalls).toBe(0)
+  })
+
+  it('after an unblock browse, profile and favourites come back both ways, and Invites are allowed again', async () => {
+    const sister = await member('sister')
+    const brother = await member('brother')
+    expect((await call('/v1/favourites', brother.cookie, 'POST', { target_id: sister.id })).status).toBe(201)
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect(await browseIds(brother)).not.toContain(sister.id)
+
+    expect((await call(`/v1/blocks/${brother.id}`, sister.cookie, 'DELETE')).status).toBe(200)
+
+    expect(await browseIds(brother)).toContain(sister.id)
+    expect(await browseIds(sister)).toContain(brother.id)
+    expect((await call(`/v1/profiles/${sister.id}`, brother.cookie)).status).toBe(200)
+    expect((await call(`/v1/profiles/${brother.id}`, sister.cookie)).status).toBe(200)
+    // His favourite row was never deleted by the Block, so it shows again.
+    const listed = (await (await call('/v1/favourites', brother.cookie)).json()) as { items: Array<{ target_id: string }> }
+    expect(listed.items.map((item) => item.target_id)).toContain(sister.id)
+    now = new Date(now.getTime() + 1000)
+    expect((await call('/v1/invites', brother.cookie, 'POST', { to_id: sister.id })).status).toBe(201)
+  })
+
+  it('unblocking reopens the conversation the Block closed: sends and typing work again, history intact', async () => {
+    const { brother, sister, conversationId } = await connected()
+    expect((await sendText(brother, conversationId, 'Bonjour.')).status).toBe(201)
+    const before = JSON.stringify(chat.conversations)
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect((await sendText(brother, conversationId, 'Refusé')).status).toBe(409)
+    // The Block wrote nothing on the conversation: the close was computed.
+    expect(JSON.stringify(chat.conversations)).toBe(before)
+
+    expect((await call(`/v1/blocks/${brother.id}`, sister.cookie, 'DELETE')).status).toBe(200)
+
+    for (const who of [brother, sister]) {
+      const head = (await (await call(`/v1/conversations/${conversationId}`, who.cookie)).json()) as {
+        conversation: { closed: boolean; other: { available: boolean } }
+      }
+      expect(head.conversation.closed).toBe(false)
+      expect(head.conversation.other.available).toBe(true)
+    }
+    expect((await sendText(brother, conversationId, 'Merci.')).status).toBe(201)
+    expect((await sendText(sister, conversationId, 'Bienvenue.')).status).toBe(201)
+    expect(messages.rows).toHaveLength(3)
+
+    const herSocket = await connectedSocket(sister)
+    const hisSocket = await connectedSocket(brother)
+    const typing = oneEvent(herSocket, 'conversation.typing')
+    hisSocket.emit('conversation.typing', { conversation_id: conversationId })
+    expect(await typing).toMatchObject({ conversation_id: conversationId })
+  })
+
+  it('when both blocked, one unblock keeps everything hidden and closed until the other also unblocks', async () => {
+    const { brother, sister, conversationId } = await connected()
+    expect((await call('/v1/blocks', sister.cookie, 'POST', { blocked_id: brother.id })).status).toBe(201)
+    expect((await call('/v1/blocks', brother.cookie, 'POST', { blocked_id: sister.id })).status).toBe(201)
+
+    expect((await call(`/v1/blocks/${brother.id}`, sister.cookie, 'DELETE')).status).toBe(200)
+    // His Block still stands: nothing comes back, either way.
+    expect(await browseIds(sister)).not.toContain(brother.id)
+    expect(await browseIds(brother)).not.toContain(sister.id)
+    expect((await call(`/v1/profiles/${brother.id}`, sister.cookie)).status).toBe(404)
+    expect((await sendText(sister, conversationId, 'Bonjour ?')).status).toBe(409)
+    now = new Date(now.getTime() + 1000)
+    expect((await call('/v1/invites', sister.cookie, 'POST', { to_id: brother.id })).status).toBe(404)
+    // Her list is empty; his still holds his own Block.
+    expect(((await (await call('/v1/blocks', sister.cookie)).json()) as { count: number }).count).toBe(0)
+    expect(((await (await call('/v1/blocks', brother.cookie)).json()) as { count: number }).count).toBe(1)
+
+    expect((await call(`/v1/blocks/${sister.id}`, brother.cookie, 'DELETE')).status).toBe(200)
+    expect(await browseIds(sister)).toContain(brother.id)
+    expect((await sendText(sister, conversationId, 'Bonjour.')).status).toBe(201)
+  })
 })
 
 describe('trust boundaries (AD-3, AD-10, AD-21)', () => {

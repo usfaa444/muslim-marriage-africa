@@ -19,6 +19,7 @@ import {
   splashScript,
   statusScript,
 } from './v2-client'
+import { blockedSettingsSection } from './blocked-list-page'
 import {
   dropSignupPseudonym,
   guardAuthPost,
@@ -580,11 +581,17 @@ function neutralizeLiteToggle(html: string): string {
 }
 
 export function settingsHtml(stitch: string): string {
-  const neutral = neutralizeLiteToggle(stitch)
+  const neutral = withBlockedSection(neutralizeLiteToggle(stitch))
   const withHit = neutral.includes('</head>')
     ? neutral.replace('</head>', `${LITE_HIT}</head>`)
     : `${LITE_HIT}${neutral}`
   return guarded(withHit, settingsScript(), PROFILE_SECTION)
+}
+
+/** Story 8.6 follow-up: « Membres bloqués » sits after the PIN card, before « Formules & Packs ». */
+function withBlockedSection(html: string): string {
+  const anchor = '<!-- 4. ABONNEMENT & PACKS DE DÉMARCHE -->'
+  return html.includes(anchor) ? html.replace(anchor, `${blockedSettingsSection()}${anchor}`) : html
 }
 
 export function statusHtml(stitch: string): string {

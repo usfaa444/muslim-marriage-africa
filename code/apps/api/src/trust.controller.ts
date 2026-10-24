@@ -1,6 +1,6 @@
-import { Body, Controller, Header, HttpCode, HttpException, Post, Req, Res } from '@nestjs/common'
+import { Body, Controller, Delete, Get, Header, HttpCode, HttpException, Param, Post, Req, Res } from '@nestjs/common'
 import { requireLiveSession } from './pin-session.js'
-import { blockMember, submitReport, type TrustFailure } from './reports.js'
+import { blockMember, listMyBlocks, submitReport, unblockMember, type TrustFailure } from './reports.js'
 
 type CookieRequest = {
   headers?: { cookie?: string | string[] }
@@ -46,5 +46,24 @@ export class BlocksController {
     }
     response.status(result.status)
     return result.body
+  }
+
+  /** Story 8.6 follow-up: the Blocks I placed, pseudonym and blurred photo only. */
+  @Get()
+  @Header('Cache-Control', 'no-store')
+  async list(@Req() request: CookieRequest) {
+    const session = await requireLiveSession(request.headers?.cookie)
+    const result = await listMyBlocks(session)
+    return result.ok ? result.body : raise(result)
+  }
+
+  /** Removes my own Block on that member only. 404 when I have none. */
+  @Delete(':blockedId')
+  @HttpCode(200)
+  @Header('Cache-Control', 'no-store')
+  async remove(@Param('blockedId') blockedId: string, @Req() request: CookieRequest) {
+    const session = await requireLiveSession(request.headers?.cookie)
+    const result = await unblockMember(session, blockedId)
+    return result.ok ? result.body : raise(result)
   }
 }

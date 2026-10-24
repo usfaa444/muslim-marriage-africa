@@ -1,6 +1,8 @@
 import { isReportReason, isUuidV7, newId, REPORT_DETAILS_MAX, type ReportReason, type ReportTargetKind } from '@ankanu/kernel'
 import { authNow } from './auth-clock.js'
 import { messageForReport } from './chat-messages.js'
+import { discoveryPhoto, signMedia } from './media.js'
+import { getMediaStore } from './media-store.js'
 import {
   assertBrowseViewer,
   loadAccount,
@@ -31,6 +33,7 @@ export const DETAILS_LONG_MESSAGE = `Précisions trop longues (${REPORT_DETAILS_
 export const BLOCK_FLAG_MESSAGE = 'block : valeur non reconnue.'
 export const BLOCKED_ID_MESSAGE = 'blocked_id : valeur non reconnue.'
 export const MESSAGE_MISSING = 'Ce message est introuvable.'
+export const BLOCK_MISSING = "Ce blocage n'existe pas."
 export const REPORT_RATE_MESSAGE = 'Trop de signalements en peu de temps. Réessayez plus tard.'
 
 export type TrustFailure = {
@@ -233,6 +236,73 @@ export async function blockMember(
     status: saved.created ? 201 : 200,
     body: { block: { blocked_id: saved.row.blocked_id, created_at: saved.row.created_at } },
   }
+}
+
+export type BlockedItem = {
+  blocked_id: string
+  pseudonym: string
+  created_at: string
+  /** Always the blurred derivative, whatever Reveal the pair once had; null without a live main photo. */
+  photo: { id: string; url: string } | null
+}
+
+export type BlockedListBody = { count: number; items: BlockedItem[] }
+
+/**
+ * `GET /v1/blocks`: the Blocks I placed, newest first, with the pseudonym and the blurred main photo only. A Block
+ * placed on me is never listed (no one learns who blocked them). A member whose account is gone is left out.
+ */
+export async function listMyBlocks(
+  session: ResolvedSession,
+): Promise<{ ok: true; body: BlockedListBody } | TrustFailure> {
+  const gate = await assertBrowseViewer(session)
+  if (!gate.ok) {
+    return fromViewer(gate)
+  }
+  const viewerId = gate.account.id
+  const rows = await getTrustStore().blocksBy(viewerId)
+  const ids = rows.map((row) => row.blocked_id)
+  const mains = ids.length > 0 ? await getMediaStore().liveMainProfilePhotos(ids) : []
+  const items: BlockedItem[] = []
+  for (const row of rows) {
+    const target = await loadAccount(row.blocked_id)
+    if (!target) {
+      continue
+    }
+    const asset = mains.find((item) => item.owner_id === row.blocked_id) ?? null
+    let photo: BlockedItem['photo'] = null
+    if (asset && discoveryPhoto(asset)) {
+      const signed = await signMedia(getMediaStore(), asset.id, 'blur', viewerId)
+      if (!signed.ok) {
+        return fail(500, 'UNHANDLED', 'Request failed', null, signed.retryable)
+      }
+      photo = { id: asset.id, url: signed.url }
+    }
+    items.push({ blocked_id: row.blocked_id, pseudonym: target.pseudonym, created_at: row.created_at, photo })
+  }
+  return { ok: true, body: { count: items.length, items } }
+}
+
+/**
+ * `DELETE /v1/blocks/:blocked_id`: removes my own Block on that member, never theirs on me. Visibility, Invites and
+ * Chat come back only when no Block is left in either direction (the other member's Block still hides both).
+ */
+export async function unblockMember(
+  session: ResolvedSession,
+  blockedId: string,
+): Promise<{ ok: true; body: Record<string, never> } | TrustFailure> {
+  const gate = await assertBrowseViewer(session)
+  if (!gate.ok) {
+    return fromViewer(gate)
+  }
+  if (!isUuidV7(blockedId)) {
+    return fail(404, 'NOT_FOUND', BLOCK_MISSING, null)
+  }
+  const removed = await getTrustStore().removeBlock(gate.account.id, blockedId.toLowerCase())
+  if (!removed) {
+    return fail(404, 'NOT_FOUND', BLOCK_MISSING, null)
+  }
+  return { ok: true, body: {} }
 }
 
 export type ReportMetrics = { sla_hours: number; open: number; sla_breach: number; oldest_open_started_at: string | null }
