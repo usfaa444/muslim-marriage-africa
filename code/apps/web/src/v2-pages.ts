@@ -602,8 +602,28 @@ function nameSettingsSwitches(html: string): string {
   return named
 }
 
+/**
+ * Mac QA round 3 (story chat-polish touches Paramètres): with the real stylesheet, Stitch's soft-gold text on cream
+ * (2.0 to 2.1:1) and `text-deep-navy/60` descriptions (4.33 to 4.41:1) fail AA. On this page they become the dark gold
+ * #7D5F27 (5.26:1 or more on its cream cards) and deep-navy at 70 % (5.95:1 or more). Hover-only variants are left.
+ */
+export const SETTINGS_AA_TOKENS: ReadonlyArray<readonly [string, string]> = [
+  ['text-soft-gold', 'text-[#7D5F27]'],
+  ['text-deep-navy/60', 'text-deep-navy/70'],
+]
+
+function aaSettingsTokens(html: string): string {
+  return html.replace(/class="([^"]*)"/g, (_, classes: string) => {
+    const fixed = classes
+      .split(' ')
+      .map((token) => SETTINGS_AA_TOKENS.find(([from]) => from === token)?.[1] ?? token)
+      .join(' ')
+    return `class="${fixed}"`
+  })
+}
+
 export function settingsHtml(stitch: string): string {
-  const neutral = withBlockedSection(nameSettingsSwitches(neutralizeLiteToggle(stitch)))
+  const neutral = withBlockedSection(aaSettingsTokens(nameSettingsSwitches(neutralizeLiteToggle(stitch))))
   const style = `${LITE_HIT}${receiptsSettingsStyle()}`
   const withHit = neutral.includes('</head>') ? neutral.replace('</head>', `${style}</head>`) : `${style}${neutral}`
   return guarded(withHit, settingsScript() + receiptsSettingsScript(), PROFILE_SECTION)

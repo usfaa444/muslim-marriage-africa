@@ -113,6 +113,11 @@ Round 3 (cloud QA round 2 FAIL R2-1, R2-2, R2-4; Mac live QA round 2 minors 1 to
 
 AC 22 is now proved one event at a time: a single `message.delivered`, a single `conversation.read` and a single `invite.changed` each update the badge on a screen other than Discussions.
 
+Round 4 (Mac live QA round 3 and CI, QA round 3 R3-1):
+
+- AC 26 also means Paramètres meets AA colour contrast with the real stylesheet. Gold text on cream uses the dark gold #7D5F27 (5.26:1 or more), and the small descriptions use deep-navy at 70 % (5.95:1 or more). The e2e measures it with compiled Tailwind and the page's Stitch colours on every run.
+- AC 25 also means: a phone thread shows the short placeholder « Votre message… » (the label « Réponse réfléchie et posée » is unchanged), and the composer's focus ring follows its rounded box (2 px dark gold, 5.9:1 on white).
+
 Interpretation notes (flagged in the handoff):
 
 - « Two grey ticks » (delivered to the device) is not offered: the platform has no device delivery signal, and a third state would differ from « Lu » by colour only.

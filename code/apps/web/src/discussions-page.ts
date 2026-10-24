@@ -56,6 +56,8 @@ export const CHAT_COPY = {
   typing: '{name} écrit…',
   composeLabel: 'Réponse réfléchie et posée',
   placeholder: 'Rédigez votre message dans le respect des convenances...',
+  /** Mac QA round 3: the long placeholder is cut mid-word at 360 px; a phone thread shows this one (the label stays). */
+  placeholderShort: 'Votre message…',
   send: 'Envoyer',
   sent: 'Message envoyé',
   sendError: 'Envoi impossible. Vérifiez votre connexion et réessayez.',
@@ -173,6 +175,11 @@ const STYLE = `<style id="chat-style">
 /* QA F2: 44 x 44 hit areas that hold even when the Tailwind CDN does not load (2G); the look is unchanged. */
 #chat-thread .chat-hit:not([hidden]) { display: inline-flex; align-items: center; min-width: 44px; min-height: 44px; }
 #chat-app a:focus-visible, #chat-app button:focus-visible, #chat-thread textarea:focus-visible, #photo-viewer button:focus-visible { outline: 2px solid #7D5F27; outline-offset: 2px; }
+/* Mac QA round 3: the composer's focus ring follows its rounded box (dark gold, 5.9:1 on white), not a square inside it. */
+@supports selector(:has(*)) {
+  #chat-thread #thread-input:focus-visible { outline: none; box-shadow: none; }
+  #chat-thread #thread-compose:has(#thread-input:focus-visible) { outline: 2px solid #7D5F27; outline-offset: 2px; }
+}
 .chat-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 #chat-app[data-view="list"] #chat-thread, #chat-app[data-view="thread"] #discussions, #thread-placeholder { display: none; }
 #thread-placeholder { flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem; text-align: center; padding: 2rem; border: 1px dashed #E2D4B8; border-radius: 1rem; background: rgba(255, 255, 255, 0.6); color: rgba(11, 29, 54, 0.8); font-size: 0.875rem; }
@@ -1707,6 +1714,7 @@ function retitle() {
   document.documentElement.classList.toggle('chat-fixed', isSplit() || !!ID)
   // On a phone the thread is a sub-screen (QA R2-1): no bottom nav, « Retour » leads back to the list where it is.
   document.documentElement.classList.toggle('chat-sub', !isSplit() && !!ID)
+  input.placeholder = isSplit() ? COPY.placeholder : COPY.placeholderShort
   var title = el('discussions-title')
   var want = isSplit() && ID ? 'H2' : 'H1'
   if (title && title.tagName !== want) {

@@ -219,9 +219,46 @@ test.describe('story chat-polish: « Confirmations de lecture » in Paramètres 
     await second.close()
   })
 
-  test('QA R2-4: Paramètres passes axe as a whole page; the Lite and PIN switches are named switches', async ({ page, context, baseURL }) => {
-    await serveApi(context, baseURL ?? '', api())
+  test('QA R3-1: a read that a click overtook cannot repaint the old value', async ({ page, context, baseURL }) => {
+    const state = api()
+    state.setting = true
+    await serveApi(context, baseURL ?? '', state)
     await page.goto('/settings')
+    const toggle = page.getByRole('switch', { name: 'Confirmations de lecture' })
+    await expect(toggle).toBeEnabled()
+    await expect(toggle).toHaveAttribute('aria-checked', 'true')
+    // A read starts (focus) and is held with the old value « on »; the member turns it off meanwhile.
+    let release: () => void = () => {}
+    const gate = new Promise<void>((resolve) => { release = resolve })
+    let heldReads = 0
+    await page.route(/\/v1\/chat\/settings$/, async (route) => {
+      if (route.request().method() !== 'GET') return route.fallback()
+      heldReads += 1
+      const snapshot = state.setting
+      await gate
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ read_receipts: snapshot }) })
+    })
+    await page.evaluate(() => window.dispatchEvent(new Event('focus')))
+    await expect.poll(() => heldReads).toBe(1)
+    await toggle.click()
+    await expect.poll(() => state.settingPuts).toEqual([{ read_receipts: false }])
+    await expect(toggle).not.toHaveAttribute('aria-busy', 'true')
+    // The late answer (« on ») must not win.
+    const late = page.waitForResponse((response) => response.url().endsWith('/v1/chat/settings') && response.request().method() === 'GET')
+    release()
+    await late
+    await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+    await expect(toggle).toHaveAttribute('aria-checked', 'false')
+    expect(state.setting).toBe(false)
+  })
+
+  test('QA R2-4 / Mac QA round 3: Paramètres passes axe as a whole page with the real stylesheet; the Lite and PIN switches are named', async ({ page, context, baseURL }) => {
+    await serveApi(context, baseURL ?? '', api())
+    // The CDN is blocked here and its stylesheet lands at any time on CI: serve compiled Tailwind with the page's Stitch
+    // colours, so colour-contrast is measured on the real tokens every run.
+    await serveTailwind(context, await compiledTailwind(page, '/settings'))
+    await page.goto('/settings')
+    await expect(page.locator('#real-tailwind')).toBeAttached()
     await expect(page.getByRole('switch', { name: 'Confirmations de lecture' })).toBeEnabled()
     await expect(page.getByRole('switch', { name: 'Mode Allégé (Basse consommation)' })).toBeVisible()
     await expect(page.getByRole('switch', { name: "Code secret PIN d'accès" })).toBeVisible()
@@ -361,6 +398,27 @@ test.describe('story chat-polish: a phone thread gives the messages most of the 
       await expectNoHorizontalOverflow(page)
       await expectTargets(page)
       await expectAccessible(page)
+
+      // Mac QA round 3: a short placeholder that fits (the label is unchanged), and a focus ring that follows the
+      // rounded composer box in dark gold (5.9:1 on white), instead of a square inside it.
+      await expect(composer(page)).toHaveAttribute('placeholder', 'Votre message…')
+      expect(await composer(page).evaluate((node: HTMLTextAreaElement) => {
+        const probe = document.createElement('span')
+        probe.style.cssText = `position:absolute;visibility:hidden;white-space:nowrap;font:${getComputedStyle(node).font}`
+        probe.textContent = node.placeholder
+        document.body.appendChild(probe)
+        const fits = probe.offsetWidth <= node.clientWidth - parseFloat(getComputedStyle(node).paddingLeft) - parseFloat(getComputedStyle(node).paddingRight)
+        probe.remove()
+        return fits
+      })).toBe(true)
+      await composer(page).focus()
+      const ring = await page.evaluate(() => {
+        const box = getComputedStyle(document.getElementById('thread-compose') as HTMLElement)
+        const field = getComputedStyle(document.getElementById('thread-input') as HTMLElement)
+        return { style: box.outlineStyle, width: parseFloat(box.outlineWidth), color: box.outlineColor, radius: parseFloat(box.borderTopLeftRadius), field: field.outlineStyle }
+      })
+      expect(ring).toEqual({ style: 'solid', width: 2, color: 'rgb(125, 95, 39)', radius: expect.any(Number), field: 'none' })
+      expect(ring.radius).toBeGreaterThan(8)
 
       // The keyboard takes about 300 px.
       await composer(page).focus()

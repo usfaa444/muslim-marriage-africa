@@ -140,6 +140,14 @@ describe('settings lite switch', () => {
 describe('QA R2-4 and Mac QA round 2: the Paramètres switches', () => {
   const html = settingsHtml(stitch())
 
+  it('Mac QA round 3: no soft-gold text and no deep-navy/60 descriptions are left on Paramètres (AA tokens)', () => {
+    const classes = [...html.matchAll(/class="([^"]*)"/g)].flatMap((match) => (match[1] ?? '').split(' '))
+    expect(classes).not.toContain('text-soft-gold')
+    expect(classes).not.toContain('text-deep-navy/60')
+    expect(classes).toContain('text-[#7D5F27]')
+    expect(classes).toContain('text-deep-navy/70')
+  })
+
   it('names the Lite and PIN switches after their cards, as switches', () => {
     expect(html).toContain('id="lite-mode-toggle" role="switch" aria-label="Mode Allégé (Basse consommation)"')
     expect(html).toContain(`id="pin-toggle" role="switch" aria-label="Code secret PIN d'accès"`)

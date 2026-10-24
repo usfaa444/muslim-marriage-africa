@@ -262,3 +262,20 @@ Retest self-check, round 3 (this container, 2026-10-24):
 - `npm run test:unit`: `Test Files  1 failed | 82 passed | 2 skipped (85)`, `Tests  1 failed | 684 passed | 12 skipped (697)` (`photo-rules`, baseline).
 - `npm run migration-check`: « Everything's fine ». No schema change this round.
 - Full e2e, both projects: `253 passed (7.3m)`, `45 skipped`, `30 failed`. The 30 failures are exactly the baseline: `invite-inbox` 3, `profile-edit-flow` 16, `staff-review` 6, `staff-shell` 5.
+
+## Retest, round 4 (Mac live QA round 3 FAIL on Paramètres contrast, CI red; QA round 3 R3-1)
+
+| Finding | Fix | Proof |
+| --- | --- | --- |
+| CI and Mac (major): whole-page axe on Paramètres fails `color-contrast` with the real CDN CSS (`app-shell.spec.ts:78` `/settings`, `chat-polish-app.spec.ts:222`) | Reproduced here: `e2e/real-css.ts` now gives compiled Tailwind the page's Stitch colours (its `tailwind-config`) as a `@theme`. axe then reported the same 7 nodes as the Mac: « PRÉFÉRENCES & CONFIDENTIALITÉ » 2.0:1, « Voir les formules » 2.12:1, and five `text-deep-navy/60` descriptions at 4.33 to 4.41:1. Fix on Paramètres only (`settingsHtml`, `SETTINGS_AA_TOKENS`): `text-soft-gold` becomes `text-[#7D5F27]` (5.26:1 on #F7F1E3, 5.6:1 on #FBF8F1), and `text-deep-navy/60` becomes `/70` (5.95:1 on #F4F1EB, the worst background). Every soft-gold text sat on a light card, never on navy. Hover-only variants are left. The axe check stays strict (serious or critical fail). | e2e `QA R2-4 / Mac QA round 3: Paramètres passes axe as a whole page with the real stylesheet; …` now serves compiled CSS with the Stitch colours, so the cloud run measures contrast on the real tokens on both projects. Unit `settings-lite.test.ts` (no old tokens left). Mutation: the AA token pass removed (that e2e fails on both projects). |
+| R3-1 (test gap): the `asked !== version` guard | QA's overtaken-read probe is now a kept test. A focus starts a GET that is held with the old value « on ». The member clicks « off » and the PUT settles. The held GET is then released, and the switch must still say « off ». | e2e `QA R3-1: a read that a click overtook cannot repaint the old value`. Mutation: the guard removed (fails on both projects). |
+| Mac cosmetic: placeholder cut mid-word at 360 px | A phone thread (under 768 px) shows « Votre message… »; the split view keeps the full placeholder. The label « Réponse réfléchie et posée » is unchanged. | AC 25 e2e: the placeholder value, and a measurement that it fits the text box at 360 and 390 px. `chat.spec.ts` AC 5.1-1 expects the short placeholder on mobile (changed test: the copy is the fix). Mutation: the swap removed (both AC 25 tests fail). |
+| Mac cosmetic: square focus ring inside the rounded composer | The ring moved to the rounded composer box (`#thread-compose:has(#thread-input:focus-visible)`): 2 px dark gold #7D5F27, offset 2 px, 5.9:1 on white. The text box's own outline is removed only where `:has` is supported, so older browsers keep their square ring rather than none. | AC 25 e2e: on focus the box has a 2 px solid rgb(125, 95, 39) outline with a radius over 8 px, and the text box has none. Mutation: the box ring removed (both fail). |
+
+Retest self-check, round 4 (this container, 2026-10-24):
+
+- `npm run lint`: exit 0, 17 warnings, all pre-existing.
+- `npm run typecheck`: exit 0.
+- `npm run test:unit`: `Test Files  1 failed | 82 passed | 2 skipped (85)`, `Tests  1 failed | 685 passed | 12 skipped (698)` (`photo-rules`, baseline).
+- Chat-area e2e, both projects (`chat-polish-gates`, `chat-polish`, `chat-polish-app`, `chat`, `chat-media`, `report-block`, `app-shell`, `blocked-list`, `invite-inbox`): `192 passed`, `25 skipped`, `3 failed`, the known `invite-inbox` baseline.
+- Not seen here: the real Tailwind CDN. `app-shell.spec.ts` `/settings` runs axe unstyled locally; on CI it gets the CDN, and the tokens it failed on are gone from the page.

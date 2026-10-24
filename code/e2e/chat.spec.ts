@@ -325,7 +325,8 @@ test.describe('Chat thread (screen 21)', () => {
     // The meta line is the time only.
     await expect(bubbles(page).nth(1).locator('time')).toHaveText(/^\d{2}:\d{2}$/)
     await expect(page.locator('main')).not.toContainText(HOLD_COPY)
-    await expect(page.getByLabel('Réponse réfléchie et posée')).toHaveAttribute('placeholder', 'Rédigez votre message dans le respect des convenances...')
+    // Story chat-polish (Mac QA round 3): a phone thread shows a short placeholder, the split view the full one.
+    await expect(page.getByLabel('Réponse réfléchie et posée')).toHaveAttribute('placeholder', testInfo.project.name === 'mobile' ? 'Votre message…' : 'Rédigez votre message dans le respect des convenances...')
     await expect(page.getByText("Règle d'or AnKanu :")).toBeVisible()
     await expectAccessible(page)
     await expectNoHorizontalOverflow(page)
