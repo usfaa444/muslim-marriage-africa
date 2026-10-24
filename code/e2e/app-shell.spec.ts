@@ -10,16 +10,19 @@ import { expect, expectAccessible, expectNoHorizontalOverflow, test, WIDTHS } fr
 const STUB_SKIP = 'A built image ignores stub cookies (Story 12.1); these run on the web-only dev server.'
 const TARGET = '01990000-0000-7000-8000-000000000099'
 
-// `wholePage: false`: /settings and /profile-edit carry axe findings inside their own content (Stitch toggles and
-// buttons this story does not touch), so axe runs on the shared shell there and on the whole page elsewhere.
-const MEMBER_PAGES = [
-  { path: '/settings', active: 'Profil', wholePage: false },
+// `wholePage: false`: /profile-edit carries axe findings inside its own content (Stitch buttons this story does not
+// touch), so axe runs on the shared shell there and on the whole page elsewhere. /settings joined the whole-page pages
+// once its Lite and PIN switches got names (story chat-polish, QA R2-4).
+// `subScreen`: on a phone a thread is a sub-screen without the bottom nav (story chat-polish, AC 25); from 768 px it
+// sits in the split view, with the nav.
+const MEMBER_PAGES: ReadonlyArray<{ path: string; active: string; wholePage: boolean; subScreen?: boolean }> = [
+  { path: '/settings', active: 'Profil', wholePage: true },
   { path: '/profile-edit', active: 'Profil', wholePage: false },
   { path: `/invitations/envoyer/${TARGET}`, active: 'Invitations', wholePage: true },
   { path: '/invitations', active: 'Invitations', wholePage: true },
   { path: '/discussions', active: 'Discussions', wholePage: true },
-  { path: `/discussions/${TARGET}`, active: 'Discussions', wholePage: true },
-] as const
+  { path: `/discussions/${TARGET}`, active: 'Discussions', wholePage: true, subScreen: true },
+]
 
 /** Zero serious or critical WCAG 2.2 AA violations inside the shared bottom nav. */
 async function expectShellAccessible(page: Page) {
@@ -68,7 +71,7 @@ async function contentClearOfNav(page: Page) {
   expect(Math.round(end ?? 0)).toBeLessThanOrEqual(Math.round(nav?.y ?? 0))
 }
 
-for (const { path, active, wholePage } of MEMBER_PAGES) {
+for (const { path, active, wholePage, subScreen } of MEMBER_PAGES) {
   test.describe(`member page ${path}`, () => {
     test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
 
@@ -79,6 +82,12 @@ for (const { path, active, wholePage } of MEMBER_PAGES) {
       await expect(page.locator('#app-header, #app-footer')).toHaveCount(0)
       await expect(page.getByRole('link', { name: 'AnKanu, accueil' })).toHaveCount(0)
       await expect(page.getByRole('navigation', { name: /Navigation (mobile|membre)/ })).toHaveCount(0)
+      if (subScreen && (page.viewportSize()?.width ?? 0) < 768) {
+        // A phone thread: no bottom nav, « Retour aux discussions » leads to the list where it is.
+        await expect(page.locator('#app-bottom-nav')).toBeHidden()
+        await expect(page.getByRole('link', { name: 'Retour aux discussions' })).toBeVisible()
+        await page.setViewportSize({ width: 1024, height: 900 })
+      }
       const nav = bottomNav(page)
       await expect(nav).toHaveCount(1)
       await expect(nav).toBeVisible()
@@ -103,8 +112,12 @@ for (const { path, active, wholePage } of MEMBER_PAGES) {
       for (const width of WIDTHS) {
         await page.setViewportSize({ width, height: 900 })
         await page.goto(path)
-        await expect(bottomNav(page)).toBeVisible()
         await expectNoHorizontalOverflow(page)
+        if (subScreen && width < 768) {
+          await expect(page.locator('#app-bottom-nav')).toBeHidden()
+          continue
+        }
+        await expect(bottomNav(page)).toBeVisible()
         await contentClearOfNav(page)
       }
     })

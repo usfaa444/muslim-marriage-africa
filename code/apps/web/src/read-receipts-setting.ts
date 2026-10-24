@@ -1,4 +1,4 @@
-import { FOOTER_PRIVACY_HREF } from './app-shell'
+import { FOOTER_PRIVACY_HREF, RECEIPTS_DOM_EVENT } from './app-shell'
 
 /**
  * Story chat-polish (Faycal, option B): the « Confirmations de lecture » switch in Paramètres, on by default. Off, the
@@ -25,6 +25,7 @@ const SWITCH_STYLE = `<style id="receipts-switch-style">
 .ank-switch[aria-checked="true"] .ank-switch-thumb { transform: translateX(20px); background: #F7F1E3; }
 .ank-switch:focus-visible { outline: 2px solid #7D5F27; outline-offset: 3px; }
 .ank-switch[disabled] { cursor: progress; opacity: 0.7; }
+.ank-switch[aria-busy="true"] { cursor: progress; }
 .ank-setting-link { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
 </style>`
 
@@ -49,42 +50,53 @@ export function receiptsSettingsScript(): string {
       var error = document.getElementById('receipts-error')
       if (!toggle) return
       var saving = false
+      var version = 0
       function paint(on) { toggle.setAttribute('aria-checked', on ? 'true' : 'false') }
       function load() {
         if (saving) return
+        var asked = ++version
         fetch('${RECEIPTS_SETTINGS_PATH}', { credentials: 'same-origin' })
           .then(function (response) { return response.ok ? response.json() : null })
           .then(function (body) {
-            if (saving || !body || typeof body.read_receipts !== 'boolean') return
+            // A read that a click overtook says nothing about the value now.
+            if (saving || asked !== version || !body || typeof body.read_receipts !== 'boolean') return
             paint(body.read_receipts)
             toggle.disabled = false
           })
           .catch(function () {})
       }
+      // A click saves what the member asks for, the opposite of what the switch shows, never a flip of the server's
+      // value: a window left open on an old value cannot save the reverse of what it shows (Mac QA round 2).
       toggle.addEventListener('click', function () {
         if (saving || toggle.disabled) return
         var before = toggle.getAttribute('aria-checked') === 'true'
+        var want = !before
+        version += 1
         saving = true
-        toggle.disabled = true
+        toggle.setAttribute('aria-busy', 'true')
         error.hidden = true
-        paint(!before)
+        paint(want)
         fetch('${RECEIPTS_SETTINGS_PATH}', {
           method: 'PUT',
           credentials: 'same-origin',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ read_receipts: !before })
+          body: JSON.stringify({ read_receipts: want })
         })
           .then(function (response) { return response.ok ? response.json() : null })
           .then(function (body) {
-            saving = false
-            toggle.disabled = false
+            settled()
             if (body && typeof body.read_receipts === 'boolean') { paint(body.read_receipts); return }
             paint(before)
             error.hidden = false
           })
-          .catch(function () { saving = false; toggle.disabled = false; paint(before); error.hidden = false })
+          .catch(function () { settled(); paint(before); error.hidden = false })
       })
+      function settled() { saving = false; toggle.removeAttribute('aria-busy') }
+      // Another window, or another device, changed it: follow live, and again whenever this window comes back.
+      document.addEventListener('${RECEIPTS_DOM_EVENT}', load)
       document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') load() })
+      window.addEventListener('focus', load)
+      window.addEventListener('pageshow', function (event) { if (event.persisted) load() })
       load()
     })()
   `

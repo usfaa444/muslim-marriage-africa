@@ -157,6 +157,9 @@ function badgeWords(section: NavSection): string {
  * delivered or read, an invite received or answered). The Discussions page has its own socket and calls
  * `window.__ankBadges.refresh()`; every other page opens one here. ES5, no backslashes or backticks.
  */
+/** The DOM event the nav's socket fires on the page for `chat.receipts`, so Paramètres can follow it live. */
+export const RECEIPTS_DOM_EVENT = 'ank:chat-receipts'
+
 export const NAV_BADGE_SCRIPT = `(function () {
   var nav = document.getElementById('app-bottom-nav')
   if (!nav || !window.fetch) return
@@ -192,6 +195,10 @@ export const NAV_BADGE_SCRIPT = `(function () {
     timer = setTimeout(function () { timer = null; load() }, ${BADGE_REFRESH_MS})
   }
   window.__ankBadges = { refresh: soon }
+  var RECEIPTS_EVENT = '${RECEIPTS_DOM_EVENT}'
+  function tell(name, detail) {
+    try { document.dispatchEvent(new CustomEvent(name, { detail: detail })) } catch (error) { /* An old browser: focus still reloads. */ }
+  }
   load()
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') soon() })
   window.addEventListener('focus', soon)
@@ -208,6 +215,8 @@ export const NAV_BADGE_SCRIPT = `(function () {
       socket.on('conversation.read', soon)
       socket.on('invite.changed', soon)
       socket.on('connect', soon)
+      // Mac QA round 2: Paramètres follows a « Confirmations de lecture » change made in another window.
+      socket.on('chat.receipts', function (payload) { tell(RECEIPTS_EVENT, payload) })
     } catch (error) { /* No realtime: the badges still reload on focus. */ }
   }
   script.onerror = function () { /* No realtime: the badges still reload on focus. */ }

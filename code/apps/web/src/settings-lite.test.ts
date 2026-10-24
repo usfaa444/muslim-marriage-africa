@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { settingsScript } from './v2-client.js'
 import { settingsHtml } from './v2-pages.js'
+import { NAV_BADGE_SCRIPT, RECEIPTS_DOM_EVENT } from './app-shell.js'
+import { receiptsSettingsScript } from './read-receipts-setting.js'
 
 function stitch(): string {
   return readFileSync(
@@ -132,5 +134,23 @@ describe('settings lite switch', () => {
     storageHandler?.({ key: 'ankanu_lite' })
     expect(toggleNode.getAttribute('aria-checked')).toBe('true')
     expect(thumb.getAttribute('aria-checked')).toBeNull()
+  })
+})
+
+describe('QA R2-4 and Mac QA round 2: the Paramètres switches', () => {
+  const html = settingsHtml(stitch())
+
+  it('names the Lite and PIN switches after their cards, as switches', () => {
+    expect(html).toContain('id="lite-mode-toggle" role="switch" aria-label="Mode Allégé (Basse consommation)"')
+    expect(html).toContain(`id="pin-toggle" role="switch" aria-label="Code secret PIN d'accès"`)
+  })
+
+  it('« Confirmations de lecture » follows chat.receipts from the nav socket and saves the value the member asked for', () => {
+    expect(NAV_BADGE_SCRIPT).toContain(`socket.on('chat.receipts'`)
+    expect(NAV_BADGE_SCRIPT).toContain(RECEIPTS_DOM_EVENT)
+    const script = receiptsSettingsScript()
+    expect(script).toContain(`document.addEventListener('${RECEIPTS_DOM_EVENT}', load)`)
+    expect(script).toContain("window.addEventListener('focus', load)")
+    expect(script).toContain('body: JSON.stringify({ read_receipts: want })')
   })
 })

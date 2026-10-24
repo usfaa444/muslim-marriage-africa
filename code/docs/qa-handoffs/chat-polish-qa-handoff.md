@@ -229,3 +229,36 @@ Retest self-check, round 2 (this container, 2026-10-24):
 - `operator-config.migrate.test.ts` on a local Postgres 16 (no Docker here, so it ran through a temporary copy pointed at a fresh database, deleted afterwards): `Tests  20 passed (20)`, including `0027` and the `read_receipt_setting` foreign key.
 - Chat-area e2e, both projects (`chat-polish-gates`, `chat-polish`, `chat-polish-app`, `chat`, `chat-media`, `report-block`, `app-shell`, `blocked-list`, `invite-inbox`): `178 passed`, `23 skipped`, 3 failed. The 3 failures are the known `invite-inbox` baseline, and they fail the same way with these changes stashed.
 - Full e2e, both projects: `241 passed (6.9m)`, `43 skipped`, `30 failed`. The 30 are exactly the known baseline: `invite-inbox` 3, `profile-edit-flow` 16, `staff-review` 6, `staff-shell` 5.
+
+## Retest, round 3 (cloud QA round 2 FAIL; Mac live QA round 2 minors)
+
+Spec: AC 25 and AC 26, and the note under AC 22, in `spec-chat-polish.md`. R2-3 (the header and footer kept on signed-out pages and the staff console) is unchanged, as asked; the coordinator is confirming it with Faycal.
+
+| Finding | Fix | Proof |
+| --- | --- | --- |
+| R2-1 (major) and Mac issue 3: on phones the messages got 44 to 244 px | A phone thread (under 768 px) is now a sub-screen, like WhatsApp (AC 25). There is no bottom nav; « Retour aux discussions » goes back to the list, where the nav is. The header is one slim row: a back arrow, a 36 px photo, the name on one line with the city under it, and « Signaler / Bloquer » as a shield icon. The stage pill is kept for screen readers only. The composer is one row: Photo and Voice note icons, a text box that starts on one line and grows to about five lines (132 px) and then scrolls, and « Envoyer » as an icon button. The « Règle d'or » line stays under it and is hidden while typing. The short-screen compact mode, which QA saw act backwards, is gone; below 560 px high only the city, the stage and the rule step aside. The split view from 768 px is unchanged. | Measured with compiled Tailwind (the QA probe's method, now `e2e/real-css.ts`), message box height: **360 × 600: 435 px (73 %); 360 × 640: 475 px (74 %); 360 × 667: 502 px (75 %); 360 × 720: 555 px (77 %); 390 × 800: 635 px (79 %)**. Round 2 gave 44, 84, 111, 164 and 244 px. e2e `AC 25: at 360x640 …` and `AC 25: at 390x800 the messages get at least 60 % of the screen; with the keyboard up they still get half`. Each run checks: ratio ≥ 0.6; no nav; name and composer in view; page still; no horizontal scroll; five 44 × 44 named targets; axe. With the keyboard (300 px less): ratio ≥ 0.5 and the latest message in view. The composer grows and caps, and the view stays at the end. Mutations: `chat-sub` never set (both AC 25 tests fail); `grow()` returning at once (both fail). |
+| R2-2 (major test gap): `message.delivered` was not protected on its own | Three one-event tests on Paramètres. Découvrir needs a live session on the server, so the web-only harness cannot open it (`app-shell.spec.ts` says so too); Paramètres is another screen with the same nav script. A single `message.delivered`, a single `conversation.read` and a single `invite.changed` each update the badge with exactly one request. | e2e `QA R2-2: a single message.delivered / conversation.read / invite.changed on Paramètres updates the « … » badge`. Mutations: the shell's `message.delivered` listener removed (that test fails on both projects); `conversation.read` removed (that test fails on both). `invite.changed` was already proved in round 2. |
+| Mac 1: a stale Paramètres window | The nav's socket now hands `chat.receipts` to the page (a DOM event). « Confirmations de lecture » reloads on it, and on focus, visibility and back-forward. A click saves the value the switch offers, `!shown`, sent explicitly. A read that a click overtook is ignored (version counter), so it cannot repaint the old value. | e2e `Mac QA round 2: a second Paramètres window follows a change live and on focus; a click saves what it shows the member asking for`. Unit `settings-lite.test.ts` (wiring). Mutations: the DOM event listener removed (fails on both projects); the focus listener removed (fails on both). |
+| Mac 2: the flaky switch test | The switch is no longer `disabled` during a save (`aria-busy` instead, so it keeps focus). The test waits for `aria-busy` to clear and for focus before pressing Space. No sleeps. | `AC 18` test. Stability: run with the full suite (below), and repeated runs of `chat-polish-app.spec.ts` throughout this round. |
+| R2-4: the unnamed Lite and PIN switches | `settingsHtml` makes both `role="switch"` with the names of their cards: « Mode Allégé (Basse consommation) » and « Code secret PIN d'accès ». `app-shell.spec.ts` now runs whole-page axe on `/settings`. | e2e `QA R2-4: Paramètres passes axe as a whole page; …`, `app-shell.spec.ts` `/settings` (`wholePage: true`). Unit `settings-lite.test.ts`. Mutation: names removed (fails on both projects). |
+
+**Changed existing tests and why:**
+- `chat-polish-app.spec.ts`:
+  - The AC 23 width sweep and the keyboard test now expect no nav on a phone thread, and the nav back on the list.
+  - The AC 22 test goes back to the list on phones before it reads the nav. Same page and same socket.
+- `app-shell.spec.ts`: the thread path is a `subScreen`. Under 768 px it must have no nav and a visible back link; the nav checks run from 1024 px.
+- `discussions-page.test.ts`: two string assertions follow the new `chat-send-text` and `chat-report-text` classes. The words are unchanged and still give the accessible names.
+
+**Judgement calls:**
+- On a phone thread the bottom nav is hidden all the time, not only while typing (the stronger of the two options offered). Its badges show again on the list.
+- The stage pill is hidden on phones but still read by screen readers.
+- The name can be cut with « … » at 360 px when the verified badge is shown.
+- The real-CSS check compiles Tailwind 4 from the page's own tokens. It applies layout, not the Stitch colours. Seeing it in the real CDN theme is for the Mac run.
+
+Retest self-check, round 3 (this container, 2026-10-24):
+
+- `npm run lint`: exit 0, 17 warnings, all pre-existing.
+- `npm run typecheck`: exit 0.
+- `npm run test:unit`: `Test Files  1 failed | 82 passed | 2 skipped (85)`, `Tests  1 failed | 684 passed | 12 skipped (697)` (`photo-rules`, baseline).
+- `npm run migration-check`: « Everything's fine ». No schema change this round.
+- Full e2e, both projects: `253 passed (7.3m)`, `45 skipped`, `30 failed`. The 30 failures are exactly the baseline: `invite-inbox` 3, `profile-edit-flow` 16, `staff-review` 6, `staff-shell` 5.

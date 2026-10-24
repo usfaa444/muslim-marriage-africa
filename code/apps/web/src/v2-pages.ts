@@ -585,8 +585,25 @@ function neutralizeLiteToggle(html: string): string {
   )
 }
 
+/**
+ * QA R2-4 (story chat-polish touches Paramètres): Stitch's Lite and PIN switches are buttons with `aria-checked` and no
+ * name. They become named switches, named after their card titles.
+ */
+export const SETTINGS_SWITCH_NAMES = {
+  'lite-mode-toggle': 'Mode Allégé (Basse consommation)',
+  'pin-toggle': "Code secret PIN d'accès",
+} as const
+
+function nameSettingsSwitches(html: string): string {
+  let named = html
+  for (const [id, name] of Object.entries(SETTINGS_SWITCH_NAMES)) {
+    named = named.replace(`id="${id}"`, `id="${id}" role="switch" aria-label="${name.replace(/"/g, '&quot;')}"`)
+  }
+  return named
+}
+
 export function settingsHtml(stitch: string): string {
-  const neutral = withBlockedSection(neutralizeLiteToggle(stitch))
+  const neutral = withBlockedSection(nameSettingsSwitches(neutralizeLiteToggle(stitch)))
   const style = `${LITE_HIT}${receiptsSettingsStyle()}`
   const withHit = neutral.includes('</head>') ? neutral.replace('</head>', `${style}</head>`) : `${style}${neutral}`
   return guarded(withHit, settingsScript() + receiptsSettingsScript(), PROFILE_SECTION)

@@ -154,6 +154,8 @@ export const UNREAD_CAP = 99
  * do not post it again, a newer message of theirs or reopening the thread does. The member never sees an error.
  */
 export const READ_RETRY_MS = 2000
+/** QA R2-1: the composer starts on one line and grows with the text up to about five lines, then scrolls. */
+export const COMPOSER_MAX_PX = 132
 
 const STYLE = `<style id="chat-style">
 #chat-app [hidden], #photo-viewer[hidden] { display: none !important; }
@@ -204,17 +206,42 @@ html.chat-fixed #chat-app[data-view="thread"] #chat-thread { flex: 1 1 auto; min
 #chat-thread #thread > div:first-child > div:first-child { display: flex; align-items: center; gap: 0.75rem; }
 #chat-thread #thread-form { gap: 0.375rem; padding: 0.5rem 0.75rem; }
 #chat-thread #thread-rule { margin: 0; }
-/* A short screen (a phone with its keyboard open): only who I talk to, the messages and the composer. */
+#chat-thread #thread-input::placeholder { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#chat-thread #thread-input { box-sizing: border-box; min-height: 44px; max-height: ${COMPOSER_MAX_PX}px; line-height: 1.375rem; overflow-y: hidden; }
+/* A short split view (a tablet on its side with the keyboard open): the details step aside. */
 @media (max-height: 560px) {
-  #chat-thread #thread-city, #chat-thread #thread-stage, #chat-thread #thread-rule, #chat-thread label[for="thread-input"] + #thread-counter[hidden] { display: none !important; }
-  #chat-thread label[for="thread-input"] { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
-  html.chat-fixed #chat-app[data-view="thread"] #chat-thread { padding-top: 0.25rem; padding-bottom: 0.25rem; gap: 0.25rem; }
-  #chat-thread #thread-compose { flex-direction: row !important; align-items: flex-end !important; padding: 0.25rem !important; }
-  #chat-thread #thread-compose > div:first-child { align-self: flex-end !important; }
-  #chat-thread #thread-input { min-height: 44px; height: 44px; }
-  #chat-thread #thread-send { width: auto !important; padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
-  #chat-thread #thread > div:first-child { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+  #chat-thread #thread-city, #chat-thread #thread-stage, #chat-thread #thread-rule { display: none !important; }
 }
+/*
+ * The thread on a phone (QA R2-1, Faycal): a sub-screen like WhatsApp. No bottom nav (« Retour » goes back to the
+ * list, where it is), one slim header row (back, small photo, name, « Signaler / Bloquer » as an icon) and a one-line
+ * composer that grows to a few lines, so the messages keep most of the screen. Targets stay 44 px; names stay spoken.
+ */
+html.chat-sub body.ank-has-nav { padding-bottom: 0 !important; }
+html.chat-sub #app-bottom-nav { display: none !important; }
+html.chat-sub #thread-stage, html.chat-sub .chat-back-text, html.chat-sub .chat-report-text, html.chat-sub .chat-send-text, html.chat-sub #thread-label-row { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+html.chat-sub #thread-label-row:has(#thread-counter:not([hidden])) { position: static !important; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; }
+html.chat-sub #chat-app[data-view="thread"] #chat-thread { position: relative; padding: 0 !important; gap: 0 !important; }
+html.chat-sub #thread-backbar { position: absolute; top: 0; left: 0; z-index: 3; width: auto; height: 3.5rem; padding-left: 0.25rem; }
+html.chat-sub #thread-back { justify-content: center; width: 44px; gap: 0; }
+html.chat-sub #thread-loading, html.chat-sub #thread-missing, html.chat-sub #thread-load-error { margin: 3.5rem 0.75rem 0; }
+html.chat-sub #chat-thread #thread { border-radius: 0; border-left: 0; border-right: 0; border-top: 0; box-shadow: none; }
+html.chat-sub #chat-thread #thread-head { flex-wrap: nowrap; min-height: 3.5rem; padding: 0.375rem 0.25rem 0.375rem 3.25rem; gap: 0.5rem; }
+html.chat-sub #chat-thread #thread-head > div:first-child { flex: 1 1 auto; gap: 0.625rem; }
+html.chat-sub #thread-avatar > * { width: 2.25rem !important; height: 2.25rem !important; font-size: 0.875rem; }
+html.chat-sub #thread-nameline { flex-wrap: nowrap; }
+html.chat-sub #chat-thread #thread-title { font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+html.chat-sub #chat-thread #thread-city { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+html.chat-sub #chat-thread #thread-head > div:last-child { flex: none; gap: 0; }
+html.chat-sub #chat-thread #thread-report { width: 44px; padding: 0; }
+html.chat-sub #chat-thread #thread-scroll { padding: 0.75rem; gap: 0.75rem; }
+html.chat-sub #chat-thread #thread-form { gap: 0.25rem; padding: 0.375rem 0.5rem calc(0.375rem + env(safe-area-inset-bottom, 0px)); }
+html.chat-sub #chat-thread #thread-compose { flex-direction: row; align-items: flex-end; gap: 0; padding: 0 0.1875rem 0 0; border-radius: 1.375rem; }
+html.chat-sub #chat-thread #thread-compose > div:first-child { align-self: flex-end; gap: 0; }
+html.chat-sub #chat-thread #thread-input { padding: 0.6875rem 0.25rem; }
+html.chat-sub #chat-thread #thread-send { flex: none; width: 44px; height: 44px; padding: 0; gap: 0; border-radius: 9999px; }
+html.chat-sub #chat-thread #thread-rule { padding: 0 0.25rem; line-height: 1.35; }
+html.chat-sub.chat-typing #chat-thread #thread-rule { display: none; }
 /* « Nouveaux messages » sits at the bottom of the messages pane, above the composer. */
 #thread-jump { position: sticky; bottom: 0.5rem; align-self: center; z-index: 5; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.375rem; min-height: 44px; padding: 0 1rem; border-radius: 9999px; border: 1px solid #C9A86C; background: #0B1D36; color: #F7F1E3; font-size: 0.8125rem; font-weight: 600; box-shadow: 0 4px 14px rgba(11, 29, 54, 0.18); cursor: pointer; }
 #thread-form { scroll-margin-bottom: calc(6.5rem + env(safe-area-inset-bottom, 0px)); }
@@ -1048,6 +1075,23 @@ function updateSend() {
   var raw = Array.from ? Array.from(input.value).length : input.value.length
   counter.textContent = raw + '/${TEXT_MAX}'
   counter.hidden = raw < ${COUNTER_FROM}
+  grow()
+}
+/** One line when empty, then as tall as the text, up to ${COMPOSER_MAX_PX} px (then the box scrolls). */
+function grow() {
+  var before = input.offsetHeight
+  // Empty: one line (Chrome counts a wrapped placeholder in scrollHeight).
+  if (!input.value) {
+    input.style.height = ''
+    input.style.overflowY = 'hidden'
+    if (input.offsetHeight !== before && conversation && pinned) scrollToEnd()
+    return
+  }
+  input.style.height = 'auto'
+  var want = Math.min(input.scrollHeight + (input.offsetHeight - input.clientHeight), ${COMPOSER_MAX_PX})
+  input.style.height = want + 'px'
+  input.style.overflowY = input.scrollHeight > input.clientHeight + 1 ? 'auto' : 'hidden'
+  if (want !== before && conversation && pinned) scrollToEnd()
 }
 function fail(id, text) { el(id + '-text').textContent = text; show(id, true) }
 /**
@@ -1661,6 +1705,8 @@ function leaveThread() {
 function retitle() {
   // A thread on a phone, and the split view, use the fixed messaging layout; the phone list scrolls like a page.
   document.documentElement.classList.toggle('chat-fixed', isSplit() || !!ID)
+  // On a phone the thread is a sub-screen (QA R2-1): no bottom nav, « Retour » leads back to the list where it is.
+  document.documentElement.classList.toggle('chat-sub', !isSplit() && !!ID)
   var title = el('discussions-title')
   var want = isSplit() && ID ? 'H2' : 'H1'
   if (title && title.tagName !== want) {
@@ -1778,8 +1824,8 @@ function listPane(heading: 'h1' | 'h2'): string {
 /** Screen 21, the thread: the whole page under 768 px, the right pane from there. */
 function threadPane(id: string): string {
   return `<div id="chat-thread" data-conversation-id="${id}" aria-busy="${id ? 'true' : 'false'}">
-<div class="w-full flex items-center">
-<a id="thread-back" href="${DISCUSSIONS_PATH}" class="chat-hit inline-flex items-center gap-2 min-h-[44px] text-sm text-deep-navy/80 hover:text-deep-navy font-medium"><span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span><span>${CHAT_COPY.back}</span></a>
+<div id="thread-backbar" class="w-full flex items-center">
+<a id="thread-back" href="${DISCUSSIONS_PATH}" class="chat-hit inline-flex items-center gap-2 min-h-[44px] text-sm text-deep-navy/80 hover:text-deep-navy font-medium"><span class="material-symbols-outlined text-base" aria-hidden="true">arrow_back</span><span class="chat-back-text">${CHAT_COPY.back}</span></a>
 </div>
 <div id="thread-placeholder" class="flex-1 flex-col items-center justify-center gap-3 text-center rounded-2xl border border-dashed border-hairline bg-white/60 p-8">
 <span class="material-symbols-outlined text-4xl text-deep-navy/60" aria-hidden="true">forum</span>
@@ -1796,11 +1842,11 @@ function threadPane(id: string): string {
 <a id="thread-signin" hidden href="/auth" class="${quiet}">${CHAT_COPY.signInAgain}</a>
 </div>
 <section id="thread" hidden aria-labelledby="thread-title" class="bg-white/90 rounded-xl sm:rounded-2xl border border-hairline shadow-sm flex flex-col overflow-hidden">
-<div class="px-3.5 sm:px-6 py-3.5 sm:py-4 border-b border-hairline/70 flex flex-wrap items-center justify-between gap-3 bg-white">
+<div id="thread-head" class="px-3.5 sm:px-6 py-3.5 sm:py-4 border-b border-hairline/70 flex flex-wrap items-center justify-between gap-3 bg-white">
 <div class="flex items-center gap-3 sm:gap-4 min-w-0">
 <div id="thread-avatar"></div>
 <div class="min-w-0 flex-1">
-<div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+<div id="thread-nameline" class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
 <h1 id="thread-title" class="chat-name font-display text-base sm:text-lg md:text-xl font-bold text-deep-navy"></h1>
 <span id="thread-verified" hidden role="img" aria-label="${CHAT_COPY.verified}" title="${CHAT_COPY.verified}" class="inline-flex items-center px-1.5 py-0.5 rounded-full bg-soft-gold/20 border border-soft-gold/40"><span class="material-symbols-outlined text-[13px] text-[#7D5F27]" aria-hidden="true">verified</span></span>
 </div>
@@ -1809,7 +1855,7 @@ function threadPane(id: string): string {
 </div>
 <div class="flex items-center gap-2 flex-wrap">
 <span id="thread-stage" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold-soft/40 text-deep-navy border border-soft-gold/40"></span>
-<a id="thread-report" hidden href="${REPORT_PATH}" class="chat-hit inline-flex items-center justify-center gap-1 min-h-[44px] px-3 rounded-md border border-transparent hover:border-hairline hover:bg-cream text-xs text-deep-navy/80 hover:text-deep-navy"><span class="material-symbols-outlined text-base leading-none text-red-700/80" aria-hidden="true">shield</span><span>${CHAT_COPY.reportBlock}</span></a>
+<a id="thread-report" hidden href="${REPORT_PATH}" class="chat-hit inline-flex items-center justify-center gap-1 min-h-[44px] px-3 rounded-md border border-transparent hover:border-hairline hover:bg-cream text-xs text-deep-navy/80 hover:text-deep-navy"><span class="material-symbols-outlined text-base leading-none text-red-700/80" aria-hidden="true">shield</span><span class="chat-report-text">${CHAT_COPY.reportBlock}</span></a>
 </div>
 </div>
 <p id="thread-unavailable" hidden class="px-3.5 sm:px-6 py-2.5 bg-cream border-b border-hairline text-sm text-deep-navy">${CHAT_COPY.unavailable}</p>
@@ -1822,7 +1868,7 @@ function threadPane(id: string): string {
 <button id="thread-jump" type="button" hidden data-testid="thread-jump"><span class="material-symbols-outlined text-base leading-none" aria-hidden="true">arrow_downward</span><span>${CHAT_COPY.newMessages}</span></button>
 </div>
 <form id="thread-form" class="p-3 sm:p-4 md:p-5 bg-white border-t border-hairline flex flex-col gap-2.5" novalidate>
-<div class="flex items-center justify-between gap-2 text-[11px] px-1">
+<div id="thread-label-row" class="flex items-center justify-between gap-2 text-[11px] px-1">
 <label for="thread-input" class="font-medium text-deep-navy">${CHAT_COPY.composeLabel}</label>
 <span id="thread-counter" hidden class="text-deep-navy/80">0/${TEXT_MAX}</span>
 </div>
@@ -1833,8 +1879,8 @@ function threadPane(id: string): string {
 <button id="thread-voice" type="button" title="${CHAT_COPY.voiceButton}" class="chat-target inline-flex items-center justify-center w-11 h-11 rounded-md text-deep-navy/80 hover:text-deep-navy hover:bg-cream"><span class="material-symbols-outlined text-xl leading-none" aria-hidden="true">mic</span><span class="chat-sr">${CHAT_COPY.voiceButton}</span></button>
 <input id="thread-photo-input" type="file" accept="image/*" hidden/>
 </div>
-<textarea id="thread-input" rows="2" placeholder="${CHAT_COPY.placeholder}" class="flex-1 w-full border-0 focus:ring-0 p-1.5 text-sm text-deep-navy placeholder-[#0B1D36]/60 resize-none bg-transparent"></textarea>
-<button id="thread-send" type="submit" class="chat-hit w-full sm:w-auto inline-flex items-center justify-center gap-1.5 min-h-[44px] px-5 rounded-lg bg-deep-navy hover:bg-deep-navy/90 text-cream text-sm font-semibold"><span>${CHAT_COPY.send}</span><span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span></button>
+<textarea id="thread-input" rows="1" placeholder="${CHAT_COPY.placeholder}" class="flex-1 w-full border-0 focus:ring-0 p-1.5 text-sm text-deep-navy placeholder-[#0B1D36]/60 resize-none bg-transparent"></textarea>
+<button id="thread-send" type="submit" class="chat-hit w-full sm:w-auto inline-flex items-center justify-center gap-1.5 min-h-[44px] px-5 rounded-lg bg-deep-navy hover:bg-deep-navy/90 text-cream text-sm font-semibold"><span class="chat-send-text">${CHAT_COPY.send}</span><span class="material-symbols-outlined text-sm" aria-hidden="true">arrow_forward</span></button>
 </div>
 <p id="thread-error" role="alert" hidden class="text-sm text-[#9B2C2C] break-words px-1"></p>
 <p id="thread-status" role="status" aria-live="polite" class="chat-sr"></p>

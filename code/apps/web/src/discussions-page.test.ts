@@ -122,7 +122,7 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     expect(html).toContain('id="thread-typing" role="status" aria-live="polite"')
     expect(html).toContain(`<label for="thread-input" class="font-medium text-deep-navy">${CHAT_COPY.composeLabel}</label>`)
     expect(html).toContain(`placeholder="${CHAT_COPY.placeholder}"`)
-    expect(html).toContain(`<span>${CHAT_COPY.send}</span>`)
+    expect(html).toContain(`<span class="chat-send-text">${CHAT_COPY.send}</span>`)
     expect(html).toContain(CHAT_COPY.rule)
     expect(html).toContain('data-nav-item="discussions" aria-current="page"')
     expect(STAGE_LABEL['chat']).toBe('Étape : discussion')
@@ -139,7 +139,7 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
   })
 
   it('Stories 8.5, 8.6: the header links « Signaler / Bloquer » and each of their bubbles « Signaler ce message » to screen 23', () => {
-    expect(html).toContain(`<span>${CHAT_COPY.reportBlock}</span></a>`)
+    expect(html).toContain(`<span class="chat-report-text">${CHAT_COPY.reportBlock}</span></a>`)
     expect(html).toContain('id="thread-report" hidden href="/signaler"')
     expect(html).toContain('report.href = "/signaler" + \'/\' + encodeURIComponent(conversation.other_id) + \'?discussion=\' + encodeURIComponent(ID)')
     expect(html).toContain("'&message=' + encodeURIComponent(item.id)")
