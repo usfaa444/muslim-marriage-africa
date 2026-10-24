@@ -1,0 +1,431 @@
+{
+  "walk": {},
+  "sweep": [
+    {
+      "w": 360,
+      "state": "decouvrir",
+      "hscroll": false,
+      "small": [
+        "BUTTON#:Enregistrer en toute discrétio 38x46"
+      ],
+      "axeSeriousCritical": [
+        "color-contrast(3) .tracking-widest > span:nth-child(2)"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 360,
+      "state": "invitations",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 360,
+      "state": "list",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 360,
+      "state": "thread",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 360,
+      "state": "viewer",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 360,
+      "state": "settings",
+      "hscroll": false,
+      "small": [
+        "A#:arrow_back\nRetour au profil 109x20",
+        "BUTTON#lite-mode-toggle: 44x24",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "BUTTON#pin-toggle: 44x24",
+        "BUTTON#read-receipts-toggle: 46x26",
+        "BUTTON#:Télécharger 102x34",
+        "BUTTON#:Supprimer 95x34"
+      ],
+      "axeSeriousCritical": [
+        "button-name(2) #lite-mode-toggle",
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "button-name:critical",
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 390,
+      "state": "decouvrir",
+      "hscroll": false,
+      "small": [
+        "BUTTON#:Enregistrer en toute discrétio 38x46"
+      ],
+      "axeSeriousCritical": [
+        "color-contrast(3) .tracking-widest > span:nth-child(2)"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 390,
+      "state": "invitations",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 390,
+      "state": "list",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 390,
+      "state": "thread",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 390,
+      "state": "viewer",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 390,
+      "state": "settings",
+      "hscroll": false,
+      "small": [
+        "A#:arrow_back\nRetour au profil 109x20",
+        "BUTTON#lite-mode-toggle: 44x24",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "BUTTON#pin-toggle: 44x24",
+        "BUTTON#read-receipts-toggle: 46x26",
+        "BUTTON#:Télécharger 102x34",
+        "BUTTON#:Supprimer 95x34"
+      ],
+      "axeSeriousCritical": [
+        "button-name(2) #lite-mode-toggle",
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "button-name:critical",
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 768,
+      "state": "decouvrir",
+      "hscroll": false,
+      "small": [
+        "BUTTON#:Enregistrer en toute discrétio 38x46"
+      ],
+      "axeSeriousCritical": [
+        "color-contrast(3) .tracking-widest > span:nth-child(2)"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 768,
+      "state": "invitations",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 768,
+      "state": "list",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 768,
+      "state": "thread",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 768,
+      "state": "viewer",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 768,
+      "state": "settings",
+      "hscroll": false,
+      "small": [
+        "A#:arrow_back\nRetour au profil 109x20",
+        "BUTTON#lite-mode-toggle: 44x24",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "BUTTON#pin-toggle: 44x24",
+        "BUTTON#read-receipts-toggle: 46x26",
+        "BUTTON#:Télécharger 102x34",
+        "BUTTON#:Supprimer 95x34"
+      ],
+      "axeSeriousCritical": [
+        "button-name(2) #lite-mode-toggle",
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "button-name:critical",
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 1024,
+      "state": "decouvrir",
+      "hscroll": false,
+      "small": [
+        "BUTTON#:Enregistrer en toute discrétio 38x46"
+      ],
+      "axeSeriousCritical": [
+        "color-contrast(3) .tracking-widest > span:nth-child(2)"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 1024,
+      "state": "invitations",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1024,
+      "state": "list",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1024,
+      "state": "thread",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1024,
+      "state": "viewer",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1024,
+      "state": "settings",
+      "hscroll": false,
+      "small": [
+        "A#:arrow_back\nRetour au profil 109x20",
+        "BUTTON#lite-mode-toggle: 44x24",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "BUTTON#pin-toggle: 44x24",
+        "BUTTON#read-receipts-toggle: 46x26",
+        "BUTTON#:Télécharger 102x34",
+        "BUTTON#:Supprimer 95x34"
+      ],
+      "axeSeriousCritical": [
+        "button-name(2) #lite-mode-toggle",
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "button-name:critical",
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 1280,
+      "state": "decouvrir",
+      "hscroll": false,
+      "small": [
+        "BUTTON#:Enregistrer en toute discrétio 38x46"
+      ],
+      "axeSeriousCritical": [
+        "color-contrast(3) .tracking-widest > span:nth-child(2)"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 1280,
+      "state": "invitations",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1280,
+      "state": "list",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1280,
+      "state": "thread",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1280,
+      "state": "viewer",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1280,
+      "state": "settings",
+      "hscroll": false,
+      "small": [
+        "A#:arrow_back\nRetour au profil 109x20",
+        "BUTTON#lite-mode-toggle: 44x24",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "BUTTON#pin-toggle: 44x24",
+        "BUTTON#read-receipts-toggle: 46x26",
+        "BUTTON#:Télécharger 102x34",
+        "BUTTON#:Supprimer 95x34"
+      ],
+      "axeSeriousCritical": [
+        "button-name(2) #lite-mode-toggle",
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "button-name:critical",
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 1440,
+      "state": "decouvrir",
+      "hscroll": false,
+      "small": [
+        "BUTTON#:Enregistrer en toute discrétio 38x46"
+      ],
+      "axeSeriousCritical": [
+        "color-contrast(3) .tracking-widest > span:nth-child(2)"
+      ],
+      "axeAll": [
+        "color-contrast:serious"
+      ]
+    },
+    {
+      "w": 1440,
+      "state": "invitations",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1440,
+      "state": "list",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1440,
+      "state": "thread",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1440,
+      "state": "viewer",
+      "hscroll": false,
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeAll": []
+    },
+    {
+      "w": 1440,
+      "state": "settings",
+      "hscroll": false,
+      "small": [
+        "A#:arrow_back\nRetour au profil 109x20",
+        "BUTTON#lite-mode-toggle: 44x24",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "INPUT#: 1x1",
+        "BUTTON#pin-toggle: 44x24",
+        "BUTTON#read-receipts-toggle: 46x26",
+        "BUTTON#:Télécharger 102x34",
+        "BUTTON#:Supprimer 95x34"
+      ],
+      "axeSeriousCritical": [
+        "button-name(2) #lite-mode-toggle",
+        "color-contrast(7) .text-\\[11px\\]"
+      ],
+      "axeAll": [
+        "button-name:critical",
+        "color-contrast:serious"
+      ]
+    }
+  ],
+  "console": [],
+  "summary": {
+    "pass": 0,
+    "fail": [],
+    "consoleErrors": 0
+  }
+}

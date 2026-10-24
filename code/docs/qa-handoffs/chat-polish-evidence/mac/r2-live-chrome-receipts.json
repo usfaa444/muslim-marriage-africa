@@ -1,0 +1,212 @@
+{
+  "walk": {
+    "R3-member-no-chrome-390": {
+      "ok": true,
+      "rows": {
+        "/decouvrir": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions/<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/invitations": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/profil": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings/bloques": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/signaler/<B>?discussion=<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        }
+      },
+      "privacyHref": "/#legal",
+      "privacyStatus": 200
+    },
+    "R3-member-no-chrome-1280": {
+      "ok": true,
+      "rows": {
+        "/decouvrir": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/discussions/<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/invitations": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/profil": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/settings/bloques": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        },
+        "/signaler/<B>?discussion=<AB>": {
+          "header": 0,
+          "footer": 0,
+          "nav": true,
+          "hscroll": false
+        }
+      },
+      "privacyHref": "/#legal",
+      "privacyStatus": 200
+    },
+    "R3-public-keeps-chrome": {
+      "ok": false,
+      "/": {
+        "header": 0,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/auth": {
+        "header": 1,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/signup/identity": {
+        "header": 1,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/password-reset": {
+        "header": 1,
+        "footer": 1,
+        "nav": false,
+        "hscroll": false
+      },
+      "/staff/connexion": {
+        "header": 1,
+        "footer": 0,
+        "nav": false,
+        "hscroll": false
+      }
+    },
+    "R4a-B-off-neither-sees-Lu": {
+      "ok": true,
+      "before": {
+        "switchB": "true",
+        "lastA": "read"
+      },
+      "put": 200,
+      "aTicksAllSentMs": 17,
+      "aReloads": 0,
+      "otherTabSwitchSyncedMs": -1,
+      "m1OnA": "sent",
+      "bTicks": [
+        "sent"
+      ],
+      "bUnread": 0,
+      "mBOnB": "sent"
+    },
+    "R4b-B-on-restores-live": {
+      "ok": false,
+      "m1OnAms": -1,
+      "mBOnBms": -1,
+      "aReloads": 0,
+      "switchTab1": "false"
+    },
+    "R4c-A-off-reciprocal": {
+      "ok": true,
+      "bAllSentMs": 5,
+      "aAllSentMs": 2
+    },
+    "R4d-A-on-restores": {
+      "ok": false,
+      "ms": -1,
+      "switchA": "true"
+    },
+    "R5-D2-block-no-ticks": {
+      "ok": true,
+      "block": 201,
+      "ticksA": 0,
+      "ticksB": 0,
+      "ticksAafterBToggles": 0,
+      "rowTickA": 0
+    },
+    "R5b-unblock-ticks-back": {
+      "ok": true,
+      "unblock": 200,
+      "ticksA": 16
+    }
+  },
+  "sweep": [],
+  "console": [
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /auth: requestStorageAccess: Permission denied.",
+    "signed-out /staff/connexion: requestStorageAccess: Permission denied.",
+    "signed-out /staff/connexion: requestStorageAccess: Permission denied."
+  ],
+  "summary": {
+    "pass": 6,
+    "fail": [
+      "R3-public-keeps-chrome",
+      "R4b-B-on-restores-live",
+      "R4d-A-on-restores"
+    ],
+    "consoleErrors": 6
+  }
+}

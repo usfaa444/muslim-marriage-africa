@@ -1,5 +1,7 @@
 # Live QA on Faycal's Mac: story chat-polish (full-screen Photo, open at the latest message, read ticks, split view)
 
+**Round 2 (c4274f8): PASS, see [Round 2](#round-2-c4274f8-2026-10-24-utc-1345-1405) at the end.** Round 1 below is kept as it was.
+
 Date 2026-10-24 (UTC 12:27–13:00). Branch `factory/chat-polish` at `b2ccb5b`. Stack `ankanu-local` on http://localhost:4012, left running.
 
 **Verdict: FAIL (one major finding).** The thread does not open at the latest message on the real stack (D1). This is the story's AC 4 and the first thing the owner asked for. Everything else works live: ticks, the hidden-tab and scrolled-up guards, « Nouveaux messages », the split view, live list updates, the Photo viewer, Lite, the read route's authorization, and the Block. There is one minor finding (D2). D3 is a note for the next round.
@@ -89,3 +91,82 @@ Not covered here: a real phone, Safari, real 3G timing, a real hidden tab (the h
 ## Files
 
 Committed: this file, `e2e-fullstack.txt`, `e2e-webonly.txt`, `live-qa.json`, `retest.json`. Kept on the Mac only: `shots/` (gitignored) and `scripts/` (`setup.mjs`, `live.mjs`, `retest.mjs`, `probe-open.mjs`). Session cookies and passwords stayed outside the repo.
+
+
+---
+
+# Round 2 (c4274f8, 2026-10-24, UTC 13:45–14:05)
+
+Faycal's changes after round 1: the « Confirmations de lecture » setting (option B), no site header or footer on member screens, the thread pinned (only the messages scroll), and the bottom-nav badges. Also the fixes for D1, D2 and D3. Same stack, same accounts (A, B, C, D) and the same conversations as round 1.
+
+**Verdict: PASS.** D1 (major), D2 and D3 are fixed. Every requested behaviour works live. There are three minor findings (R2-1 to R2-3). The accessibility findings in older screens (R2-4) are out of this story.
+
+## R2.1 Deploy and e2e
+
+| Step | Result |
+|---|---|
+| `checkout` + `pull` | `c4274f8` (includes round 1 `ad83986`) |
+| `npm ci`, `up -d --build --wait` (temporary `DOCKER_CONFIG`) | OK, all 6 services healthy |
+| `drizzle-kit migrate` | applied `0027_read_receipt_setting` |
+| `/`, `/v1/health` | 200, `{"status":"ok"}` |
+| Full-stack e2e (`E2E_BASE_URL=http://localhost:4012`) | **44 passed, 0 failed**, 270 skipped. `r2-e2e-fullstack.txt` |
+| Web-only e2e (real CDN and fonts) | **269 passed, 2 failed**, 43 skipped. `r2-e2e-webonly.txt`. Both failures are `chat-polish-app.spec.ts:148` (AC 18), mobile and desktop. Alone it passes **6/6** (`--repeat-each=3`). See R2-2 |
+| Round 1's failing test `chat-polish.spec.ts:99`, `--repeat-each=5`, both projects | **10 passed**. `r2-d1-e2e-repeat5.txt` |
+
+## R2.2 Live checks (real accounts, real Socket.IO, real CDN)
+
+Scripts (on the Mac, not committed): `scripts/r2.mjs`, `scripts/r2-receipts-retest.mjs`, `scripts/axe-settings.mjs`. Data: `r2-live-d1-pin.json`, `r2-live-chrome-receipts.json`, `r2-receipts-retest.json`, `r2-badges.txt`, `r2-live-sweep.json`.
+
+| # | Check | Actual | Result |
+|---|---|---|---|
+| R1 | D1: open AB (45+ messages) in a fresh browser, 6 widths × 5 | **30/30**: the last bubble is fully visible inside the message box, the composer and the name are visible, and `scrollY` is 0 | PASS |
+| R2 | Pinned: 12 mouse-wheel scrolls up over the messages, then typing | at all 6 widths the page never scrolls (`scrollY` 0, document height = window height). The messages moved 3,500 to 4,500 px. The name, photo, « Signaler / Bloquer », textarea and « Envoyer » stay visible while scrolled up and while typing | PASS |
+| R2k | Phone keyboard: composer focused, window cut to 360/390 × 380 | name, composer, « Envoyer » and the last message are visible; the bottom nav steps aside; the page does not scroll | PASS |
+| R2p | Panels at 360 / 768 / 1280: Photo preview, recorder (synthetic mic), Voice note ready, viewer | « Envoyer la photo », « Arrêter », the timer, the language select and « Envoyer la note vocale » are all visible, with the name still on top and no page scroll; the viewer's × and the image fit | PASS |
+| R3 | No site chrome on member screens, 390 and 1280: `/decouvrir`, `/discussions`, a thread, `/invitations`, `/profil`, `/settings`, `/settings/bloques`, `/signaler/<id>` | 0 header, 0 footer, bottom nav present, no horizontal scroll on all 16 | PASS |
+| R3b | Public pages | `/auth`, `/signup/identity` and `/password-reset` keep the header and footer, with no nav. The landing `/` keeps its own header and footer (my selector missed the nested `<header>`, but the page has one). `/staff/connexion` keeps its header. « Confidentialité » in Paramètres → `/#legal`, 200 | PASS |
+| R4 | B turns receipts off in Paramètres | PUT 200. A's open thread turned every « Lu » into « Envoyé » **live** (17 ms after the save, no reload). A's next message, read by B, stays « Envoyé ». B's own messages show « Envoyé » only. B's unread count still clears | PASS |
+| R4b | B back on | A's last message turns « Lu » **65 ms** after the save, and B's own **1 ms** after; no reload. The reads made while off show up | PASS |
+| R4c | A off, then on (reciprocal) | off: B's thread all « Envoyé » after 63 ms and A's after 3 ms; on: « Lu » again after 68 ms / 2 ms | PASS |
+| R4x | A second Paramètres tab of B | not updated live; it shows the new value after a focus / visibility event. See R2-1 | Minor |
+| R5 | D2: B blocks A | **0 ticks** on either side (A 0, B 0) and no tick on A's row. B turning receipts off and on during the Block changes nothing on A (0). After the unblock, 16 ticks come back | PASS |
+| R6a | Discussions badge, A on Découvrir (390) | hidden at start. B sends → « 1 » after **323 ms**; C sends 2 → « 2 » after **324 ms**. Screen reader text « 1 discussion non lue » / « 2 discussions non lues », part of the nav link's name. 0 reloads | PASS |
+| R6b | Read AB from the nav, then Profil | « 1 » (AC still unread) on the thread and on Profil | PASS |
+| R6c | A blocks C | the badge hides (AC excluded) at the next focus; after unblocking it comes back to « 1 » | PASS |
+| R6d | Read everything | badge hidden at 0 | PASS |
+| R6e | Invitations badge: B on Profil (1280), D invites B | « 1 » after **325 ms**, « 1 invitation en attente », 0 reloads | PASS |
+| R6f | B blocks D | hidden at the next focus; after unblocking, back to 1 | PASS |
+| R6g | B declines (from the API, as from another tab) | the badge hides after **397 ms** (`invite.changed`) | PASS |
+| R6h | 99+ cap | not driven live (it would need 100 conversations or invites); covered by e2e AC 21 / 22 | e2e only |
+
+## R2.3 Styled sweep
+
+A, 6 states × 6 widths (360 to 1440): Découvrir, Invitations, the Discussions list, the thread, the viewer, Paramètres. `r2-live-sweep.json`.
+
+| Check | Chat screens (list, thread, viewer, Invitations): 24 states | Découvrir, Paramètres: 12 states |
+|---|---|---|
+| Horizontal scroll | none | none |
+| Targets < 44 px | 0 | see R2-4 (older parts) |
+| axe serious / critical | **0** | see R2-4 (none in the new receipts section) |
+| Console errors on member screens | **0** | 0 |
+
+The signed-out `/auth` and `/staff/connexion` log `requestStorageAccess: Permission denied` from the reCAPTCHA frame in headless Chromium. The `known-issues` spec already tolerates it; it does not come from a member screen.
+
+**Compared with Stitch 20 and 21:** the same as in round 1, plus what changed. On phones the thread looks like screen 21 in a frame: the « Retour aux discussions » link, the header card, the message box, and the composer card at the bottom. The bottom nav replaces the site chrome, which Stitch also shows on its app screens. The nav badges are small navy-ringed white pills on the icons; Stitch 53 has no badge to compare with.
+
+**Feel:** this time it feels like a messaging app. A conversation opens on the latest message every time (30/30). The name stays on top while you scroll back and while you type. Ticks change within 0.07 s of the other side opening the conversation or toggling the setting. Badges change within about 0.3 s on any screen. Rough edges: R2-3 on small phones, and R2-1.
+
+## R2.4 Findings
+
+| # | Severity | Steps | Expected | Actual | Evidence |
+|---|---|---|---|---|---|
+| R2-1 | Minor | B has Paramètres open in two tabs or windows and changes « Confirmations de lecture » in the first | the second follows | the second keeps the old position until it gets focus or a visibility change (then it corrects itself). With two windows side by side, a click on the stale one can save the opposite of what it shows (my headless run saved `false` from a tab that showed « on »). The open threads do follow live | `r2-receipts-retest.json` (`secondTabLiveMs: -1`, `secondTabAfterFocus: "false"`) |
+| R2-2 | Minor (test) | full web-only suite | `chat-polish-app.spec.ts:148` stable | fails on both projects under full-suite load, and passes 6/6 alone. It presses Space right after the first click, while the switch is still `disabled` during the save, so the key is dropped. Make the test wait for `toBeEnabled()` before the second toggle. Optionally, the switch could stay focusable during a save (`aria-disabled`) | `r2-e2e-webonly.txt` |
+| R2-3 | Minor (UX) | 360 / 390 phone, thread open | most of the screen for messages | the pinned header (back link, name, city, stage, « Signaler / Bloquer ») and composer (label, icons, textarea, full-width « Envoyer », « Règle d'or ») leave about **450 px of 900** for messages, and about **145 px** with the keyboard at 380 px high. Suggest a more compact phone layout: stage and report on the name line, the « Règle d'or » line only when the box is empty, « Envoyer » beside the textarea | `shots/r2-pin-scrolled-up-390.png`, `shots/r2-pin-keyboard-390.png` |
+| R2-4 | Pre-existing, outside this story | axe on Paramètres and Découvrir | 0 serious / critical | Paramètres: **critical** `button-name` on the Lite switch `#lite-mode-toggle` and `#pin-toggle` (no accessible name); `color-contrast` on `text-[11px]` / `text-deep-navy/60` texts. Découvrir: `color-contrast` (3 nodes). Targets: the Découvrir save button is 38 px wide; on Paramètres, « Retour au profil » is 20 px high and « Télécharger » / « Supprimer » are 34 px high. The new « Confirmations de lecture » switch is clean (a 48 px hit area, named, described). These parts are unchanged since stories 2950d5e / 103b8ad. Worth a small follow-up | `scripts/axe-settings.mjs` output |
+
+Fixed from round 1: **D1** (30/30 opens, e2e `:99` 10/10), **D2** (0 ticks under a Block), **D3** (at 1280 × 900 the thread now fills the space above the nav, with about 550 px for messages, against about 400 before).
+
+Not covered: a real phone keyboard (iOS / Android), Safari, real 3G, and the 99+ cap live. No product code was changed.
+
+Committed for round 2: this section, `r2-e2e-fullstack.txt`, `r2-e2e-webonly.txt`, `r2-d1-e2e-repeat5.txt`, `r2-live-d1-pin.json`, `r2-live-chrome-receipts.json`, `r2-receipts-retest.json`, `r2-badges.txt`, `r2-live-sweep.json`. On the Mac only: `shots/r2-*` and `scripts/`.

@@ -1,0 +1,33 @@
+{
+  "res": {
+    "cross-tab-settings": {
+      "ok": true,
+      "start": {
+        "aLast": "read",
+        "bLast": "read",
+        "s1": "true",
+        "s2": "true"
+      },
+      "secondTabLiveMs": -1,
+      "secondTabAfterFocus": "false",
+      "bThreadAllSentMs": 36,
+      "aThreadAllSentMs": 18
+    },
+    "B-on-restores-live": {
+      "ok": true,
+      "aLastMineReadMs": 65,
+      "bLastMineReadMs": 1,
+      "stored": {
+        "read_receipts": true
+      }
+    },
+    "A-off-on-reciprocal": {
+      "ok": true,
+      "offBms": 63,
+      "offAms": 3,
+      "onAms": 68,
+      "onBms": 2
+    }
+  },
+  "consoleErrors": []
+}
