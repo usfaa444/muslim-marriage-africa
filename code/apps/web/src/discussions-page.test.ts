@@ -9,6 +9,7 @@ import {
   discussionsHtml,
   PHOTO_MAX_BYTES,
   REALTIME_SCRIPT,
+  SPLIT_MIN_PX,
   STAGE_LABEL,
   TEXT_MAX,
   VOICE_LANGUAGES,
@@ -26,7 +27,9 @@ const ID = '01990000-0000-7000-8000-0000000000c1'
 const HOLD_COPY = /En cours de vérification|en vérification|vérification en cours|modération|scan|retenu|en attente de|pending|held/i
 
 /**
- * Stitch lines the product does not do, read receipts, the quota of Story 5.11, and Stitch sample data. The camera and
+ * Stitch lines the product does not do, the quota of Story 5.11, and Stitch sample data. Read receipts (« Lu »,
+ * « messages non lus ») left this list with story chat-polish; the Stitch `done_all` ligature stays out (the ticks are
+ * inline SVG, so they show without the icon font on 2G). The camera and
  * microphone buttons and the Voice note bubble left this list with Stories 5.3 and 5.4; the Stitch sample title
  * « Note vocale de présentation sobre » stays out.
  */
@@ -38,7 +41,6 @@ const DROPPED = [
   'Quota du jour',
   'Non lues',
   'Sans réponse',
-  'non lu',
   'done_all',
   'Note vocale de présentation sobre',
   'sécurisés sur AnKanu',
@@ -62,7 +64,7 @@ describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
 
   it('renders the list inside the shared shell with the Stitch eyebrow, title and footer note', () => {
     expect(html).toContain("<title>AnKanu • Discussions Ta'aruf</title>")
-    expect(html).toContain(`>${CHAT_COPY.listTitle}</h1>`)
+    expect(html).toContain(`id="discussions-title" class="font-display text-3xl md:text-4xl text-deep-navy font-normal tracking-tight">${CHAT_COPY.listTitle}</h1>`)
     expect(html).toContain('Échanges concertés &amp; bienséance')
     expect(html).toContain('text-[#7D5F27] uppercase')
     expect(html).toContain(CHAT_COPY.pendingNote)
@@ -76,7 +78,7 @@ describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
     expect(html.indexOf('ankanu_pin_hidden_at')).toBeGreaterThan(-1)
   })
 
-  it('AC 5.1-1: no hold badge, no scan wording, no read receipt, no dropped Stitch line', () => {
+  it('AC 5.1-1: no hold badge, no scan wording, no dropped Stitch line', () => {
     // Stories 5.3, 5.4: a Photo or Voice note last message reads « Photo » / « Note vocale », never a URL.
     expect(html).toContain("quote.textContent = (last.mine ? COPY.you + ' : ' : '') + (last.kind === 'photo' ? COPY.photo : COPY.voice)")
     expect(visibleText(html)).not.toMatch(HOLD_COPY)
@@ -89,14 +91,17 @@ describe('screen 20 Discussions list (Stories 5.1, 5.2)', () => {
   it('loads /v1/conversations, links each row to its thread, and refreshes on message.delivered', () => {
     expect(html).toContain("fetch('/v1/conversations', { credentials: 'same-origin' })")
     expect(html).toContain('link.href = "/discussions" + \'/\' + encodeURIComponent(item.id)')
-    expect(html).toContain("'message.delivered': reloadSoon")
+    // A delivered event refreshes the list (story chat-polish: and catches the open thread up).
+    expect(html).toContain("'message.delivered': onDelivered")
+    expect(html).toContain('function onDelivered(payload) {\n  if (!payload) return\n  // Any conversation: the list shows the new preview, order and unread badge.\n  reloadSoon()')
     expect(html).toContain(REALTIME_SCRIPT)
     // QA F1, F5: the row link is named by its content (no aria-label); an unavailable member gets no link.
     expect(html).not.toContain("link.setAttribute('aria-label'")
     expect(html).toContain("if (!other.available) {")
-    // QA D2: on phones the city has its own line and no « · »; the dot shows only from md up.
-    expect(html).toContain("'chat-city w-full md:w-auto inline-flex")
-    expect(html).toContain("make('span', 'hidden md:inline', '·')")
+    // QA D2: on phones the city has its own line and no « · » (from 768 px the split-view row hides the city).
+    expect(html).toContain('.conv-city { width: 100%; display: inline-flex;')
+    expect(html).toContain("line.appendChild(make('span', 'chat-city conv-city', city))")
+    expect(html).not.toContain("'·'")
     // API text goes through textContent, never innerHTML.
     expect(html).not.toMatch(/\.innerHTML\s*=/)
   })
@@ -107,7 +112,8 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
 
   it('renders the thread shell with the back link, a log region, the labelled composer and the golden rule', () => {
     expect(html).toContain('<title>AnKanu • Discussion</title>')
-    expect(html).toContain(`data-conversation-id="${ID}"`)
+    expect(html).toContain(`<div id="chat-thread" data-conversation-id="${ID}"`)
+    expect(html).toContain(`<main id="chat-app" data-view="thread" data-conversation-id="${ID}"`)
     expect(html).toContain(`>${CHAT_COPY.back}</span>`)
     expect(html).toContain('href="/discussions"')
     expect(html).toContain('id="thread-messages" role="log" aria-live="polite" aria-label="Messages"')
@@ -155,7 +161,7 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     expect(html).toContain(`<p id="thread-closed" hidden`)
     expect(html).toContain(CHAT_COPY.closed)
     expect(html).toContain('input.disabled = unavailable || closed')
-    expect(html).toContain("var DRAFT_KEY = 'ankanu_chat_draft:' + ID")
+    expect(html).toContain("function draftKey(id) { return 'ankanu_chat_draft:' + id }")
     expect(html).toContain(`<a id="thread-signin" hidden href="/auth"`)
     expect(html).not.toMatch(/\.innerHTML\s*=/)
   })
@@ -215,6 +221,87 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
 
   it('refuses to build a page for an id that is not a UUID', () => {
     expect(() => chatThreadHtml(stitch('21-chat-thread'), '"><script>alert(1)</script>')).toThrow()
+  })
+})
+
+describe('story chat-polish: one page for both routes, split view, read receipts, Photo viewer', () => {
+  const list = discussionsHtml(stitch('20-discussions-list'))
+  const thread = chatThreadHtml(stitch('21-chat-thread'), ID)
+  /** The page's own script (the pin guard and the shell come with their own). */
+  const script = /<script>(var COPY = [\s\S]*?)<\/script>/.exec(list)?.[1] ?? ''
+
+  it('AC 12: both routes serve the list and the thread; the split view starts at 768 px', () => {
+    expect(SPLIT_MIN_PX).toBe(768)
+    for (const html of [list, thread]) {
+      expect(html).toContain('<section id="discussions" aria-labelledby="discussions-title"')
+      expect(html).toContain('<div id="chat-thread" data-conversation-id=')
+      expect(html).toContain('@media (min-width: 768px) {')
+      expect(html).toContain("window.matchMedia('(min-width: 768px)')")
+      expect(html).toContain(CHAT_COPY.pickThread)
+      expect(html.match(/<main\b/g)).toHaveLength(1)
+    }
+    expect(list).toContain('<main id="chat-app" data-view="list" data-conversation-id=""')
+    expect(list).toContain(`<h1 id="discussions-title"`)
+    // On the thread route the thread's name is the h1; the script steps the list title down in split view only.
+    expect(thread).toContain(`<h2 id="discussions-title"`)
+    expect(thread).toContain("var want = isSplit() && ID ? 'H2' : 'H1'")
+  })
+
+  it('AC 15: moving between threads uses pushState and popstate, never a reload, and drops answers for an old thread', () => {
+    expect(list).toContain("history.pushState({ chat: id }, '', \"/discussions\" + '/' + id)")
+    expect(list).toContain("window.addEventListener('popstate', function () { routeFromLocation() })")
+    expect(list).toContain('openThread(link.getAttribute(\'data-conversation-id\'), true)')
+    expect(list).toContain('if (!link || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return')
+    expect(list).toContain('if (started !== gen) return false')
+    expect(list).toContain('if (ID) drafts[ID] = input.value')
+    expect(list).toContain('closePanel()\n  if (playing)')
+    expect(script).toContain('function openThread(id, push) {')
+    expect(script).not.toMatch(/location\.(reload|assign|replace)\(|location\.href\s*=/)
+  })
+
+  it('AC 6 / 8: my bubbles carry one tick « Envoyé » or two ticks « Lu » (shape and text, not colour alone), updated from conversation.read', () => {
+    expect(CHAT_COPY.receiptSent).toBe('Envoyé')
+    expect(CHAT_COPY.receiptRead).toBe('Lu')
+    expect(list).toContain("box.appendChild(svgIcon(read ? ['M1 6.5 4.5 10 11.5 2', 'M7.5 9.5 8 10 15 2'] : ['M3 6.5 6.5 10 13.5 2'], 18, 12))")
+    expect(list).toContain("box.appendChild(make('span', 'chat-sr', read ? COPY.receiptRead : COPY.receiptSent))")
+    expect(list).toContain("if (mine) meta.appendChild(receipt(isRead(item), 'chat-receipt'))")
+    expect(list).toContain("'conversation.read': onRead")
+    expect(list).toContain('readOther = payload.message_id\n    refreshReceipts()')
+  })
+
+  it('AC 7: the page marks read only when visible and at the latest message, with the latest message id', () => {
+    expect(list).toContain("if (document.visibilityState === 'hidden') return\n  if (!nearBottom()) return")
+    expect(list).toContain("fetch('/v1/conversations/' + encodeURIComponent(conversationId) + '/read', {")
+    expect(list).toContain('body: JSON.stringify({ message_id: latest.id })')
+  })
+
+  it('AC 13 / 14: rows show an unread badge (99+ cap, screen-reader count) and ticks for my last message; refreshes are debounced', () => {
+    expect(CHAT_COPY.unreadOne).toBe('1 message non lu')
+    expect(CHAT_COPY.unreadMany).toBe('{n} messages non lus')
+    expect(list).toContain("var count = make('span', '', unread > 99 ? '99+' : String(unread))")
+    expect(list).toContain("badge.appendChild(make('span', 'chat-sr', unreadText(unread)))")
+    expect(list).toContain("if (last && last.mine && other.available && (last.read === true || last.read === false)) previewLine.appendChild(receipt(last.read, 'conversation-receipt'))")
+    expect(list).toContain('reloadTimer = setTimeout(function () { reloadTimer = null; loadList() }, 300)')
+    expect(list).toContain('if (!listVisible()) return')
+  })
+
+  it('AC 1 / 2 / 3: a revealed Photo opens an accessible full-screen viewer with the copy already downloaded', () => {
+    expect(list).toContain('<div id="photo-viewer" hidden role="dialog" aria-modal="true" aria-labelledby="photo-viewer-title"')
+    expect(list).toContain(`<span class="chat-sr">${CHAT_COPY.photoClose}</span></button>`)
+    expect(list).toContain("open.addEventListener('click', function (event) { event.preventDefault(); openViewer(url, name, open) })")
+    expect(list).toContain("if (event.key === 'Escape' || event.key === 'Esc') { event.preventDefault(); closeViewer(); return }")
+    expect(list).toContain("if (event.key === 'Tab') { event.preventDefault(); el('photo-viewer-close').focus() }")
+    expect(list).toContain('if (opener && document.body.contains(opener)) opener.focus()')
+    // The viewer only exists after the reveal, so Lite mode still waits for « Afficher la photo ».
+    expect(list).toContain('if (mediaCache[item.id] || !liteEnabled()) setTimeout(function () { reveal(true) }, 0)')
+    expect(script).not.toMatch(/original/)
+  })
+
+  it('AC 4 / 5: the thread opens at the latest message and only follows new ones while pinned; « Nouveaux messages » otherwise', () => {
+    expect(list).toContain('settleAtEnd()\n    markSeen()')
+    expect(list).toContain("if (mineAdded || follow) { scrollToEnd(); markSeen() }\n  else if (theirsAdded) show('thread-jump', true)")
+    expect(list).toContain(`<span>${CHAT_COPY.newMessages}</span></button>`)
+    expect(list).toContain('#thread-form { scroll-margin-bottom:')
   })
 })
 

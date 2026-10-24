@@ -14,7 +14,8 @@ const CONVERSATION = '01990000-0000-7000-8000-0000000000c1'
 const SECOND = '01990000-0000-7000-8000-0000000000c2'
 
 /** Copy a member must never see on Chat (AD-10, DESIGN.md chat-bubble). */
-const HOLD_COPY = /En cours de vérification|vérification|modération|scan|retenu|en attente de|non lu|\bLu\b/i
+// Story chat-polish brought read receipts (« Lu », « messages non lus ») on purpose; hold and scan copy stays banned.
+const HOLD_COPY = /En cours de vérification|vérification|modération|scan|retenu|en attente de/i
 
 type Message = { id: string; conversation_id: string; sender_id: string; mine?: boolean; kind: 'text'; state: 'delivered'; text: string; created_at: string }
 
@@ -31,6 +32,8 @@ type Api = {
   /** Added to every mocked /v1 answer: requests a route fulfils never reach the CDP network throttle. */
   latencyMs?: number
   serial: number
+  /** Story chat-polish: every POST …/read the page sent. */
+  reads: Array<{ conversation_id: string; message_id: string }>
 }
 
 const OTHER_AVAILABLE = {
@@ -82,6 +85,7 @@ function api(): Api {
     posts: [],
     available: true,
     serial: 10,
+    reads: [],
   }
 }
 
@@ -122,6 +126,13 @@ async function serveApi(context: BrowserContext, baseURL: string, state: Api): P
         return
       }
       await route.fulfill(json({ count: state.conversations.length, items: state.conversations }))
+      return
+    }
+    const read = /^\/v1\/conversations\/([^/]+)\/read$/.exec(url.pathname)
+    if (read && method === 'POST') {
+      const body = request.postDataJSON() as { message_id: string }
+      state.reads.push({ conversation_id: read[1] ?? '', message_id: body.message_id })
+      await route.fulfill(json({ read: { message_id: body.message_id } }))
       return
     }
     const thread = /^\/v1\/conversations\/([^/]+)(\/messages)?$/.exec(url.pathname)
@@ -286,7 +297,7 @@ test.describe('Discussions list (screen 20)', () => {
 test.describe('Chat thread (screen 21)', () => {
   test.skip(!!process.env.E2E_BASE_URL, STUB_SKIP)
 
-  test('AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy', async ({ page, context, baseURL }) => {
+  test('AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy', async ({ page, context, baseURL }, testInfo) => {
     // Pin the two messages to yesterday noon and earlier today (Ouagadougou is UTC), so the day
     // separators read « Hier » / « Aujourd'hui » at any time of day, including just after midnight.
     const fixture = api()
@@ -304,7 +315,9 @@ test.describe('Chat thread (screen 21)', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Al-Hassan_BF, 29 ans')
     await expect(page.getByRole('img', { name: 'Identité vérifiée' })).toBeVisible()
     await expect(page.getByText('Étape : discussion')).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Retour aux discussions' })).toHaveAttribute('href', '/discussions')
+    // Story chat-polish: from 768 px the list sits beside the thread, so the back link is for phones only.
+    if (testInfo.project.name === 'mobile') await expect(page.getByRole('link', { name: 'Retour aux discussions' })).toHaveAttribute('href', '/discussions')
+    else await expect(page.getByTestId('conversation-row')).toHaveCount(2)
     await expect(bubbles(page).first()).toHaveAttribute('data-mine', 'true')
     await expect(bubbles(page).nth(1)).toHaveAttribute('data-mine', 'false')
     await expect(bubbles(page).nth(1)).toContainText("J'ai bien pris note de votre projet de foyer.")
