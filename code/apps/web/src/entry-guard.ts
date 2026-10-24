@@ -33,6 +33,7 @@ const ACCOUNT = new Set([
   '/profile-edit',
   '/profile-review',
   '/settings',
+  '/settings/bloques',
   '/pin',
   '/decouvrir',
   '/discussions',

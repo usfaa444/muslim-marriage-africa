@@ -1,6 +1,6 @@
 import { newId, type ReportReason, type ReportTargetKind } from '@ankanu/kernel'
 import type { TrustPort } from '@ankanu/ports'
-import { and, count, eq, gte, isNull, lt, min, or } from 'drizzle-orm'
+import { and, count, desc, eq, gte, isNull, lt, min, or } from 'drizzle-orm'
 import { block, moderationCase, report } from './account-schema.js'
 import { accountStoreIsMemory, getIdentityDatabase } from './account-store.js'
 import { operatorConfig } from './operator-config.js'
@@ -46,6 +46,10 @@ export type TrustStore = {
   fileReport(input: { report: ReportRow; case: CaseRow; block: BlockRow | null }): Promise<{ blockCreated: boolean }>
   reportsSince(reporterId: string, since: string): Promise<number>
   insertBlock(row: BlockRow): Promise<{ created: boolean; row: BlockRow }>
+  /** The Blocks this member placed (never the ones placed on them), newest first. */
+  blocksBy(blockerId: string): Promise<BlockRow[]>
+  /** Deletes the blocker's own row for this pair only. False when there is none. */
+  removeBlock(blockerId: string, blockedId: string): Promise<boolean>
   blockedBetween(a: string, b: string): Promise<boolean>
   hiddenFor(accountId: string): Promise<string[]>
   /** Open cases are those with no first human touch; breach is open and started before `breachBefore`. */
@@ -78,6 +82,20 @@ export function memoryTrustStore(): TrustStore & { reports: ReportRow[]; cases: 
     },
     async insertBlock(row) {
       return insertBlock(row)
+    },
+    async blocksBy(blockerId) {
+      return blocks
+        .filter((row) => row.blocker_id === blockerId)
+        .map((row) => ({ ...row }))
+        .sort((left, right) => (left.created_at < right.created_at ? 1 : left.created_at > right.created_at ? -1 : 0))
+    },
+    async removeBlock(blockerId, blockedId) {
+      const index = blocks.findIndex((row) => row.blocker_id === blockerId && row.blocked_id === blockedId)
+      if (index < 0) {
+        return false
+      }
+      blocks.splice(index, 1)
+      return true
     },
     async blockedBetween(a, b) {
       return blocks.some((row) => (row.blocker_id === a && row.blocked_id === b) || (row.blocker_id === b && row.blocked_id === a))
@@ -147,6 +165,21 @@ function postgresTrustStore(): TrustStore {
         throw new Error('block insert missed the existing row')
       }
       return { created: false, row: { ...found, created_at: new Date(found.created_at).toISOString() } }
+    },
+    async blocksBy(blockerId) {
+      const rows = await getIdentityDatabase()
+        .select(blockColumns)
+        .from(block)
+        .where(eq(block.blocker_id, blockerId))
+        .orderBy(desc(block.created_at), desc(block.id))
+      return rows.map((row) => ({ ...row, created_at: new Date(row.created_at).toISOString() }))
+    },
+    async removeBlock(blockerId, blockedId) {
+      const removed = await getIdentityDatabase()
+        .delete(block)
+        .where(and(eq(block.blocker_id, blockerId), eq(block.blocked_id, blockedId)))
+        .returning({ id: block.id })
+      return removed.length > 0
     },
     async blockedBetween(a, b) {
       const rows = await getIdentityDatabase()

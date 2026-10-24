@@ -1445,7 +1445,7 @@ describe('operator_config migration', () => {
     }
   }, 60_000)
 
-  it('files a Report with its moderation_case, keeps Blocks both ways, and counts SLA-breach on migrated Postgres (Stories 8.5, 8.6)', async () => {
+  it('files a Report with its moderation_case, keeps Blocks both ways, lifts only my own Block, and counts SLA-breach on migrated Postgres (Stories 8.5, 8.6)', async () => {
     expect(migrated).toBe(true)
     const previousDatabaseUrl = process.env['DATABASE_URL']
     process.env['DATABASE_URL'] = databaseUrl
@@ -1495,6 +1495,19 @@ describe('operator_config migration', () => {
       expect(await store.hiddenFor(brother)).toEqual([sister])
       expect(await store.hiddenFor(sister)).toEqual([brother])
       expect((await store.insertBlock({ id: newId(at), blocker_id: sister, blocked_id: brother, created_at: at.toISOString() })).created).toBe(false)
+
+      // Unblock: the blocker's list, then DELETE of her own row only; his Block on her survives hers being lifted.
+      const later = new Date(at.getTime() + 60_000)
+      await store.insertBlock({ id: newId(later), blocker_id: brother, blocked_id: sister, created_at: later.toISOString() })
+      expect((await store.blocksBy(sister)).map((row) => [row.blocker_id, row.blocked_id, row.created_at])).toEqual([[sister, brother, at.toISOString()]])
+      expect(await store.removeBlock(brother, newId(at))).toBe(false)
+      expect(await store.removeBlock(sister, brother)).toBe(true)
+      expect(await store.removeBlock(sister, brother)).toBe(false)
+      expect(await store.blocksBy(sister)).toEqual([])
+      expect(await store.blockedBetween(sister, brother)).toBe(true)
+      expect(await store.removeBlock(brother, sister)).toBe(true)
+      expect(await store.blockedBetween(sister, brother)).toBe(false)
+      expect(await store.hiddenFor(sister)).toEqual([])
 
       // SLA-breach: open and older than the window.
       expect(await store.openCases(new Date(at.getTime() - 1).toISOString())).toEqual({ open: 1, slaBreach: 0, oldestOpenStartedAt: at.toISOString() })

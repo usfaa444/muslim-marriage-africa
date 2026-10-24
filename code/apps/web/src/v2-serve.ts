@@ -4,6 +4,7 @@ import { ERROR_CODES, errorEnvelope } from '@ankanu/kernel'
 import { discoverHtml } from './discover-page'
 import { chatThreadHtml, discussionsHtml, isConversationId } from './discussions-page'
 import { isReportId, reportBlockHtml, reportContext } from './report-block-page'
+import { BLOCKED_PATH, blockedListHtml } from './blocked-list-page'
 import { notListablePage } from './not-listable'
 import { favouritesHtml } from './favourites-page'
 import { inviteComposeHtml, isInviteTargetId } from './invite-compose-page'
@@ -482,6 +483,23 @@ export async function reportBlockResponse(request: Request, id: string): Promise
     return redirectTo(request, '/decouvrir')
   }
   return htmlResponse(reportBlockHtml(stitchFile('23-report-block'), reportContext(id, new URL(request.url).searchParams)))
+}
+
+/**
+ * `/settings/bloques` (Story 8.6 follow-up): the Blocks I placed and Unblock. Same refusals as screen 23: staff and
+ * mahram stubs get the member-route answer; the list loads in the browser, so the API decides every refusal.
+ */
+export async function blockedListResponse(request: Request): Promise<Response> {
+  const redirect = await entryRedirect(request, BLOCKED_PATH)
+  if (redirect) {
+    return redirect
+  }
+  const cookie = request.headers.get('cookie')
+  const kind = sessionKind(cookie)
+  if (kind === 'staff' || kind === 'mahram' || (kind === null && readSessionCookie(cookie) === null)) {
+    return memberRouteResponse(cookie, '/decouvrir')
+  }
+  return htmlResponse(blockedListHtml(stitchFile('27-settings')))
 }
 
 /**
