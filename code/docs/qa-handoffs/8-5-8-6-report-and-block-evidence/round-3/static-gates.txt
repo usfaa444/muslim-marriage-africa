@@ -1,0 +1,11 @@
+apps/api/src/qa-round3-gates.test.ts:304:18: warning eslint(no-unused-vars): Function 'browseIds' is declared but never used. help: Consider removing this declaration.
+apps/api/src/qa-round3-gates.test.ts:310:18: warning eslint(no-unused-vars): Function 'staffMetrics' is declared but never used. help: Consider removing this declaration.
+apps/api/src/qa-round3-gates.test.ts:316:12: warning eslint(no-unused-vars): Function 'connectedSocket' is declared but never used. help: Consider removing this declaration.
+apps/api/src/qa-round3-gates.test.ts:332:12: warning eslint(no-unused-vars): Function 'noEvent' is declared but never used. help: Consider removing this declaration.
+> typecheck
+> tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.tests.json
+
+> tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json
+
+Reading config file '/home/claude/muslim-marriage-africa/code/apps/api/drizzle.config.ts'
+Everything's fine 🐶🔥

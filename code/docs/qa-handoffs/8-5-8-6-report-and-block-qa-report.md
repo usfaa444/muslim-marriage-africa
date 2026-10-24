@@ -146,3 +146,63 @@ No blocker, critical or major finding.
 ## Retest guidance
 
 After F-1 is decided (allow list and unblock for any signed-in member regardless of listability, or accept and show a block-specific message with no « Réessayer ») and F-2 is covered (keep or merge `QA: DELETE with my OWN id…`), re-run G2, G6, G7, G8 in full.
+
+
+---
+
+# Round 3: retest of round 2 findings
+
+**Verdict: PASS** (2026-10-24, Retest of F-1 to F-4 plus full G2, G6, G7, G8; styled checks and the full compose stack stay pending on Fay's Mac)
+
+- Model: this QA round ran on **Claude Sonnet 5.5** (`claude-sonnet-5-5`).
+- Branch `factory/report-block`, commit `0557ae6` (fix commit `78c7273`; delta from round 2 is `assertMemberViewer`, the list cap, tests, handoff).
+- Environment: same as round 2 (cloud container, in-memory API stores through a real Nest server, Postgres 17 for the migrate test, web-only e2e unstyled with `E2E_ALLOW_ERRORS` for Tailwind CDN and Google Fonts).
+- Evidence: `code/docs/qa-handoffs/8-5-8-6-report-and-block-evidence/round-3/` (`static-gates.txt`, `unit-suite.txt`, `integration.txt`, `e2e-full-branch.txt`, `qa-api-tests.txt`, `mutations.txt`, `npm-audit.txt`).
+- Independence: QA wrote new tests, `apps/api/src/qa-round3-gates.test.ts` (4 API tests, left in the repo untracked for the developer to keep or fold in). The round 2 QA files were folded into the dev suites by the developer; I re-checked their behaviour with my own tests rather than trusting the fold.
+
+## Retest of round 2 findings
+
+| # | Round 2 finding | Retest | Result |
+| --- | --- | --- | --- |
+| F-1 | Non-listable blocker got 403 on list, unblock (and Block/Report) | New `assertMemberViewer`. QA test walks 7 states (`unpublished/Active`, `held`, `private`, no visibility, `public/deactivated`, `public/held`, `public/pending_deletion`): Report with Block 201, list 200 with her Block, DELETE 200, target rules intact (same-gender 404, self 400, no BillingPort call). In every one of those states browse, a profile read, favourites (GET and POST), invites (GET and POST), conversations (list, one, send) and filters remain 403. Staff (`moderator`, `operator`, staff session) get 403 `staff_session`, `mahram` and no-role accounts get 403 `mahram_session`, no session 401, on all four safety paths, and nothing was written. The web page needs no change; the 403 message of `state-403.png` can no longer be produced for a member. | **FIXED** |
+| F-2 | Dev tests did not protect « I cannot remove the other member's Block » | M1 re-run (`removeBlock` ignores `blocker_id`): the dev test « QA F-2 … » and my test now fail, real code passes. | **FIXED** |
+| F-3 | N+1 and no cap on `GET /v1/blocks` | Cap of 100 newest (limit pushed into the Postgres query), `has_more`, one batch photo read, account and blur reads in parallel. QA test with 101 rows: first page shows the newest first, `has_more: true`; with exactly 100 rows `has_more: false`; ghost accounts are left out and `count` equals `items.length`. Per-row account and blur reads remain but are bounded by 100. | **FIXED** (see M-1) |
+| F-4 | Upper-case UUID accepted | Kept by design, asserted: `DELETE /v1/blocks/<UPPER>` returns 200 and removes my row only. | **ACCEPTED** |
+
+## Mutation spot-check (round 3)
+
+| # | Mutation (restored afterwards) | Result |
+| --- | --- | --- |
+| M1 | `removeBlock` ignores `blocker_id` | Caught by the dev F-2 test and by QA |
+| M5 | `assertMemberViewer` staff check disabled | Dev suite stays green (staff falls to the mahram branch, still 403); QA test fails on the reason code `staff_session`. Minor gap, see M-2 |
+| M6 | Invites POST gate swapped to `assertMemberViewer` | Dev suite stays green; QA test fails (non-listable viewer must stay 403 on invites). Minor gap, see M-2 |
+
+## Gate summary (round 3)
+
+| Gate | Result | Evidence |
+| --- | --- | --- |
+| G1 Static | PASS | Lint exit 0 (pre-existing warnings plus unused helper warnings in QA's own test file), typecheck, build, `migration-check` clean; `package-lock.json` and `package.json` unchanged since round 2, so the `npm audit` high advisories are the same pre-existing ones (round-1 F3). No secrets or debug leftovers in the delta. `static-gates.txt`, `npm-audit.txt` |
+| G2 Automated tests | PASS | Unit 643 passed, 1 failed (`photo-rules` Chrome check, same environmental failure as rounds 1 and 2). Integration 33 passed; `compose.test.ts` fails only because `npm ci` in the docker build has no network (same as before); the Postgres migrate test (includes `blocksBy` with limit and `removeBlock`) is green. `blocked-list`, `report-block`, `app-shell` e2e: 147 passed over `--repeat-each=3`, 0 flaky. Mutations above. |
+| G3 Functional | PASS | QA API tests and the folded browser edges (hostile, long and Arabic names, failed DELETE keeps the row, signed out to sign-in) green. |
+| G4 UI fidelity | PASS for layout and copy, **styled pass pending** | Unchanged page; round-2 screenshots still valid, no web file changed except the e2e spec. |
+| G5 UX | PASS | The dead end of F-1 is gone; load error, empty state, confirm and success states unchanged. |
+| G6 Accessibility | PASS (automated and keyboard) | axe serious or critical: 0 in the blocked-list e2e on every state; keyboard path green. Contrast and 44 px targets pending (unstyled). |
+| G7 Non-functional | PASS | Authorization matrix above, IDOR and payload checks from round 2 still hold (dev F-2 test covers hostile ids). No Lighthouse here. |
+| G8 Regression | PASS | Full e2e: 154 passed, 36 skipped, 32 failed. The sorted list of the 32 failures is identical to round 2, and those 32 were shown in round 2 to fail identically on round-1 commit `ba61db0`. Causes: Tailwind CDN missing, axe contrast and layout checks on unstyled pages, and the two chat « AC 5.1-1 » tests, which are clock-dependent: the fixture message is 26 h old, which is labelled « Hier » only after about 02:00 Ouagadougou time, and this run was at 01:1x (shows « 22 octobre »). No Report/Block test is among them. |
+
+## Findings (round 3)
+
+| # | Severity | Gate | Observation |
+| --- | --- | --- | --- |
+| M-1 | Minor | G5 | A member with more than 100 Blocks sees only the newest 100 and the page does not use `has_more`; older ones cannot be lifted from the UI. Accepted by the developer as not expected; worth a line of copy or paging if it ever happens. |
+| M-2 | Minor | G2 | The dev suite does not guard the staff-reason branch of `assertMemberViewer` (M5) nor that invites stay behind the listable gate (M6); QA's `qa-round3-gates.test.ts` does. Suggest keeping it. |
+| M-3 | Minor | G7 | `assertMemberViewer` requires only an existing account with the `member` role, so a member in `held`, `deactivated` or `pending_deletion` status can still Report, Block and Unblock. This is the intended design (safety paths), tested in all three; noted so it is a conscious choice. Report rate limit still applies. |
+| M-4 | Minor (pre-existing) | G1, G2 | `npm audit`, `photo-rules` Chrome test, `compose.test.ts`, and the unstyled/CDN e2e failures are environmental and unchanged. |
+
+No blocker, critical or major finding.
+
+## Not tested and why (round 3)
+
+- Styled visual fidelity of « Membres bloqués » and the Paramètres card (colours, spacing, icons, contrast, measured 44 x 44 px targets): Tailwind CDN and fonts are unreachable here. Pending live QA on the owner's Mac.
+- Full compose stack: `GET` and `DELETE /v1/blocks` over HTTP against real Postgres rows and the built web image (including whether the web entry guard lets a non-listable member reach `/settings/bloques` in the built image; the web-only stub session was used here). Pending on the Mac.
+- Lighthouse, 3G throttling of the styled page, TalkBack, 200 % zoom on a device, ZAP and security headers.
