@@ -1,0 +1,13 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 1 test using 1 worker
+
+VITALS {"lcp":1120,"cls":0,"domContentLoaded":993.1000000005588,"transferKB":0.9287109375,"inpProxy":108}
+  ✓  1 [mobile] › e2e/qa-vitals.spec.ts:3:1 › vitals on /signaler (unstyled, no CDN) (3.2s)
+
+  1 passed (6.8s)

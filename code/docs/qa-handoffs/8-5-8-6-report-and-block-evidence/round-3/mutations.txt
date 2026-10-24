@@ -1,0 +1,4 @@
+Round 3 mutations (each applied to product code, tests run, file restored; git status clean afterwards)
+M1 memoryTrustStore.removeBlock ignores blocker_id: reports-blocks.test.ts 1 failed ("QA F-2 ..."), qa-round3-gates 1 failed ("F-2 own id and F-4") -> caught
+M5 assertMemberViewer staff check disabled (if (false)): reports-blocks.test.ts 0 failed (staff falls to the mahram branch, still 403), qa-round3-gates 1 failed (reason code staff_session) -> caught only by QA test
+M6 invites POST gate swapped to assertMemberViewer: reports-blocks.test.ts 0 failed, qa-round3-gates 1 failed (non-listable viewer must stay 403 on invites) -> caught only by QA test

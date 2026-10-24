@@ -20,7 +20,6 @@ const DROPPED = [
   'Accord mutuel validé',
   'Un wali peut lire cette conversation',
   'Demander la levée du flou',
-  'Signaler / Bloquer',
   'Quota du jour',
   'Non lues',
   'Sans réponse',
@@ -114,6 +113,18 @@ describe('screen 21 Chat thread (Stories 5.1, 5.2)', () => {
     }
     // The meta line under a bubble is the time only (DESIGN.md chat-bubble).
     expect(html).toContain("var time = make('time', '', timeText(item.created_at))")
+  })
+
+  it('Stories 8.5, 8.6: the header links « Signaler / Bloquer » and each of their bubbles « Signaler ce message » to screen 23', () => {
+    expect(html).toContain(`<span>${CHAT_COPY.reportBlock}</span></a>`)
+    expect(html).toContain('id="thread-report" hidden href="/signaler"')
+    expect(html).toContain('report.href = "/signaler" + \'/\' + encodeURIComponent(conversation.other_id) + \'?discussion=\' + encodeURIComponent(ID)')
+    expect(html).toContain("'&message=' + encodeURIComponent(item.id)")
+    // Only the other member's messages can be reported; the link is named by its content, 44 px square.
+    expect(html).toContain('if (!mine && conversation && conversation.other_id) {')
+    expect(html).toContain("flag.appendChild(make('span', 'chat-sr', COPY.reportMessage))")
+    expect(html).toContain('w-[44px] h-[44px]')
+    expect(CHAT_COPY.reportMessage).toBe('Signaler ce message')
   })
 
   it('AC 5.2-1 / 5.1-2: posts kind text once, fetches the text after a delivered event, and shows and emits typing', () => {

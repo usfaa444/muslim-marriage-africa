@@ -528,6 +528,86 @@ export const moderationJob = pgTable(
   ],
 )
 
+/**
+ * Trust-owned Member Report (Story 8.5, FR-083). `target_id` is the reported account for a Profile Report and the
+ * message id for a message Report; `reported_account_id` is always the member reported. `sla_started_at` is submit
+ * time. `first_human_at` stays null until a moderator first touches the case (Story 8.7).
+ */
+export const report = pgTable(
+  'report',
+  {
+    id: uuid('id').primaryKey(),
+    reporter_id: uuid('reporter_id')
+      .notNull()
+      .references(() => account.id),
+    target_kind: text('target_kind').notNull(),
+    target_id: uuid('target_id').notNull(),
+    reported_account_id: uuid('reported_account_id')
+      .notNull()
+      .references(() => account.id),
+    conversation_id: uuid('conversation_id'),
+    reason: text('reason').notNull(),
+    details: text('details'),
+    sla_started_at: timestamp('sla_started_at', { withTimezone: true, mode: 'string' }).notNull(),
+    first_human_at: timestamp('first_human_at', { withTimezone: true, mode: 'string' }),
+  },
+  (table) => [
+    check('report_target_kind_check', sql`${table.target_kind} in ('profile', 'message')`),
+    check(
+      'report_reason_check',
+      sql`${table.reason} in ('indecency', 'sexual_content', 'impersonation', 'multiple_accounts', 'harassment', 'money_scam', 'hateful', 'non_matrimonial', 'misrepresented_marital_status')`,
+    ),
+    check(
+      'report_target_shape_check',
+      sql`(${table.target_kind} = 'profile' and ${table.target_id} = ${table.reported_account_id} and ${table.conversation_id} is null) or (${table.target_kind} = 'message' and ${table.conversation_id} is not null)`,
+    ),
+    check('report_not_self_check', sql`${table.reporter_id} <> ${table.reported_account_id}`),
+    check('report_details_length_check', sql`${table.details} is null or char_length(${table.details}) <= 1000`),
+    index('report_reporter_id_idx').on(table.reporter_id, table.id),
+  ],
+)
+
+/**
+ * Trust-owned moderation case (AD-10). A Member Report opens one (`report_id`); an admin action on a flag may open one
+ * later (`flag_queue_id`, Story 8.3). The SLA clock is `sla_started_at`; a case with `first_human_at` null past
+ * `operator_config.report_sla_hours` is SLA-breach in operator metrics.
+ */
+export const moderationCase = pgTable(
+  'moderation_case',
+  {
+    id: uuid('id').primaryKey(),
+    report_id: uuid('report_id').references(() => report.id),
+    flag_queue_id: uuid('flag_queue_id'),
+    sla_started_at: timestamp('sla_started_at', { withTimezone: true, mode: 'string' }).notNull(),
+    first_human_at: timestamp('first_human_at', { withTimezone: true, mode: 'string' }),
+  },
+  (table) => [
+    check('moderation_case_origin_check', sql`num_nonnulls(${table.report_id}, ${table.flag_queue_id}) >= 1`),
+    uniqueIndex('moderation_case_one_per_report').on(table.report_id),
+    index('moderation_case_open_idx').on(table.sla_started_at).where(sql`${table.first_human_at} is null`),
+  ],
+)
+
+/** Trust-owned Block (Story 8.6, FR-084). One row per blocker and blocked member; it hides both ways. */
+export const block = pgTable(
+  'block',
+  {
+    id: uuid('id').primaryKey(),
+    blocker_id: uuid('blocker_id')
+      .notNull()
+      .references(() => account.id),
+    blocked_id: uuid('blocked_id')
+      .notNull()
+      .references(() => account.id),
+    created_at: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  },
+  (table) => [
+    check('block_not_self_check', sql`${table.blocker_id} <> ${table.blocked_id}`),
+    uniqueIndex('block_one_per_pair').on(table.blocker_id, table.blocked_id),
+    index('block_blocked_id_idx').on(table.blocked_id),
+  ],
+)
+
 /** Append-only hash chain. Application roles insert and select. A trigger rejects update and delete. */
 export const auditEvent = pgTable('audit_event', {
   id: uuid('id').primaryKey(),

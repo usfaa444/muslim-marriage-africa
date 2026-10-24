@@ -1,0 +1,3739 @@
+[WebServer] ⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+[WebServer] 
+[WebServer]   To migrate automatically, run:
+[WebServer]   npx @next/codemod@canary middleware-to-proxy .
+[WebServer] 
+[WebServer]   Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+Running 210 tests using 2 workers
+
+  -    2 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /settings › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓    1 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /settings › has the one header, footer and bottom nav, with its section current (2.8s)
+  -    4 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /profile-edit › fits every factory width with the footer above the bar
+  ✓    3 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (2.6s)
+  -    6 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓    7 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /invitations › has the one header, footer and bottom nav, with its section current (2.8s)
+  -    8 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /invitations › fits every factory width with the footer above the bar
+  ✓    5 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.6s)
+  -   10 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /discussions › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓    9 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /discussions › has the one header, footer and bottom nav, with its section current (2.7s)
+  -   12 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓   11 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.6s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓   14 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /auth has the header and footer but no bottom nav (2.4s)
+  ✓   13 [mobile] › e2e/app-shell.spec.ts:109:3 › bottom nav navigation › each item opens its section, from the keyboard too (3.5s)
+  ✓   15 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /signup/identity has the header and footer but no bottom nav (2.2s)
+  ✓   16 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.4s)
+  ✓   17 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /password-reset has the header and footer but no bottom nav (2.2s)
+  ✓   18 [mobile] › e2e/app-shell.spec.ts:145:1 › the landing page keeps its own header and footer (2.4s)
+  ✓   19 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.6s)
+  ✓   20 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.5s)
+  ✓   21 [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.8s)
+  ✓   22 [mobile] › e2e/chat.spec.ts:200:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (2.3s)
+  ✓   23 [mobile] › e2e/chat.spec.ts:222:3 › Discussions list (screen 20) › QA F5: a row for a member who is no longer available says « Profil indisponible » and has no link (2.0s)
+  ✓   24 [mobile] › e2e/chat.spec.ts:235:3 › Discussions list (screen 20) › QA F1: the row link is named by its visible words, with no aria-label and the icon kept out of the name (2.3s)
+  ✓   25 [mobile] › e2e/chat.spec.ts:247:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (2.1s)
+  -   27 [mobile] › e2e/chat.spec.ts:275:3 › Discussions list (screen 20) › fits every factory width
+  ✓   26 [mobile] › e2e/chat.spec.ts:263:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.5s)
+  ✓   28 [mobile] › e2e/chat.spec.ts:289:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (3.0s)
+  ✓   29 [mobile] › e2e/chat.spec.ts:314:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (3.4s)
+  ✓   31 [mobile] › e2e/chat.spec.ts:359:3 › Chat thread (screen 21) › QA F3: a paused or ended conversation says so up front and the composer is disabled before any send (2.2s)
+  ✓   30 [mobile] › e2e/chat.spec.ts:342:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (2.7s)
+  ✓   33 [mobile] › e2e/chat.spec.ts:403:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (1.3s)
+  ✓   32 [mobile] › e2e/chat.spec.ts:373:3 › Chat thread (screen 21) › QA F4: a session that expires mid-thread offers « Se reconnecter » and keeps the draft for the next visit (3.9s)
+  ✓   35 [mobile] › e2e/chat.spec.ts:455:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.7s)
+  ✓   34 [mobile] › e2e/chat.spec.ts:428:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (6.0s)
+  ✓   36 [mobile] › e2e/chat.spec.ts:471:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (1.2s)
+  -   38 [mobile] › e2e/chat.spec.ts:512:3 › Chat thread (screen 21) › fits every factory width
+  ✓   37 [mobile] › e2e/chat.spec.ts:477:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload) (3.1s)
+  ✓   39 [mobile] › e2e/invite-compose.spec.ts:104:3 › Invite compose (Stories 4.1, 4.2) › a Free member sees the remaining Invites, sends once, and the button locks (3.0s)
+  ✓   41 [mobile] › e2e/invite-compose.spec.ts:144:3 › Invite compose (Stories 4.1, 4.2) › a QUOTA_EXCEEDED answer on send opens the quota wall (1.1s)
+  ✓   40 [mobile] › e2e/invite-compose.spec.ts:132:3 › Invite compose (Stories 4.1, 4.2) › the quota wall shows the Ouaga reset time when the day is used up, and blocks the send (2.1s)
+  ✓   42 [mobile] › e2e/invite-compose.spec.ts:167:3 › Invite compose (Stories 4.1, 4.2) › no Profile Photo: the prompt to add one is shown, and a refused send keeps it (2.1s)
+  ✓   43 [mobile] › e2e/invite-compose.spec.ts:194:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: after her decline the send stays closed, with a quiet message (no resend) (2.2s)
+  ✓   45 [mobile] › e2e/invite-compose.spec.ts:242:3 › Invite compose (Stories 4.1, 4.2) › a Sister in free_unlimited sees unlimited Invites with no count and no pack offer (1.0s)
+  ✓   44 [mobile] › e2e/invite-compose.spec.ts:218:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: when she already invited him, the send points to the inbox instead (2.3s)
+  ✓   46 [mobile] › e2e/invite-compose.spec.ts:256:3 › Invite compose (Stories 4.1, 4.2) › an unavailable recipient shows one quiet message and no send button (1.2s)
+  ✘   48 [mobile] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell (1.5s)
+  ✓   47 [mobile] › e2e/invite-compose.spec.ts:264:3 › Invite compose (Stories 4.1, 4.2) › fits every required width with no horizontal scroll (3.8s)
+  ✓   49 [mobile] › e2e/invite-inbox.spec.ts:185:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-2: Sent shows pending, accepted and declined, and a declined row carries no guilt copy, receipt or timer (2.3s)
+  ✓   50 [mobile] › e2e/invite-inbox.spec.ts:206:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-1: accept posts once, then the row moves to Acceptées with the discussion link (2.3s)
+  ✓   51 [mobile] › e2e/invite-inbox.spec.ts:228:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-2: decline is quiet: one post, a short status, the row leaves Reçues, no confirmation or lecture (2.4s)
+  ✘   52 [mobile] › e2e/invite-inbox.spec.ts:253:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message (2.6s)
+  ✓   53 [mobile] › e2e/invite-inbox.spec.ts:269:3 › Invite inbox (Stories 4.4, 4.5) › the tabs work from the keyboard, and accept is reachable without a mouse (1.2s)
+  -   54 [mobile] › e2e/invite-inbox.spec.ts:304:3 › Invite inbox (Stories 4.4, 4.5) › when the city wraps under a long name, the « • » wraps with it on Envoyées and Acceptées
+  -   55 [mobile] › e2e/invite-inbox.spec.ts:345:3 › Invite inbox (Stories 4.4, 4.5) › fits every factory width on each tab
+  -   56 [mobile] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key
+  -   57 [mobile] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them
+  -   58 [mobile] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts
+  -   59 [mobile] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack
+  ✓   61 [mobile] › e2e/invite-inbox.spec.ts:289:3 › Invite inbox (Stories 4.4, 4.5) › a load failure shows the retry, and the retry loads the inbox (1.4s)
+  ✘   60 [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (6.2s)
+  ✘   62 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (6.4s)
+  ✘   63 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (6.6s)
+  ✘   64 [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (6.2s)
+  ✓   66 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (2.4s)
+  ✓   67 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (2.5s)
+  ✘   65 [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (7.0s)
+  ✘   69 [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (6.6s)
+  ✘   68 [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (15.1s)
+  -   71 [mobile] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -   72 [mobile] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✘   70 [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (6.5s)
+  ✓   74 [mobile] › e2e/report-block.spec.ts:187:3 › Report / Block (screen 23) › AC 8.6: « Bloquer ce profil » blocks without a Report (1.7s)
+  -   75 [mobile] › e2e/report-block.spec.ts:201:3 › Report / Block (screen 23) › keyboard only: pick a reason, untick Block, and send with the keyboard
+  ✓   73 [mobile] › e2e/report-block.spec.ts:147:3 › Report / Block (screen 23) › AC 8.5-1 and AC 4.4-3: a Profile Report with « misrepresented marital status », Block on, reaches the API and shows the 24 h SLA (3.7s)
+  -   77 [mobile] › e2e/report-block.spec.ts:245:3 › Report / Block (screen 23) › fits every factory width
+  ✓   76 [mobile] › e2e/report-block.spec.ts:224:3 › Report / Block (screen 23) › shows the API message on a rate limit, the sign-in link on 401, and « Ce profil n'est pas disponible. » on 404 (2.1s)
+  ✓   78 [mobile] › e2e/report-block.spec.ts:259:3 › Report / Block from the Chat thread (screen 21) › AC 8.5-1 from Chat: « Signaler ce message » on his bubble sends a message Report with the message id (2.8s)
+  -   80 [mobile] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width
+  ✓   79 [mobile] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.5s)
+  -   82 [mobile] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width
+  ✓   81 [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.3s)
+  -   84 [mobile] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width
+  ✓   83 [mobile] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.8s)
+  -   86 [mobile] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width
+  ✓   87 [mobile] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (1.1s)
+  ✓   85 [mobile] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (2.1s)
+  -   89 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -   90 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✘   88 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (2.3s)
+  ✘   91 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.9s)
+  ✓   92 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (820ms)
+  ✓   93 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (438ms)
+  -   94 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓   96 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (1.6s)
+  ✓   97 [mobile] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (1.2s)
+  ✘   95 [mobile] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (3.4s)
+  ✓   98 [mobile] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (1.1s)
+  ✓   99 [mobile] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (1.3s)
+  ✓  101 [mobile] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (330ms)
+  ✓  102 [mobile] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (281ms)
+  -  103 [mobile] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose
+  -  104 [mobile] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409
+  -  105 [mobile] › e2e/staff-review.spec.ts:551:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✘  100 [mobile] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (2.6s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  106 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /settings › has the one header, footer and bottom nav, with its section current (2.5s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  107 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /settings › fits every factory width with the footer above the bar (3.5s)
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  108 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current (2.7s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/me/profile Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  109 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /profile-edit › fits every factory width with the footer above the bar (3.4s)
+  ✓  110 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.0s)
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/profiles/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites/quota Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  111 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar (3.1s)
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  112 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /invitations › has the one header, footer and bottom nav, with its section current (3.1s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  113 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /invitations › fits every factory width with the footer above the bar (2.6s)
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  114 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /discussions › has the one header, footer and bottom nav, with its section current (2.8s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  115 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /discussions › fits every factory width with the footer above the bar (3.0s)
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  116 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current (3.0s)
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=received Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=sent Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/invites?box=accepted Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099 Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/conversations/01990000-0000-7000-8000-000000000099/messages Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  117 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar (3.1s)
+[WebServer] Failed to proxy http://api:3000/v1/conversations Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/realtime/socket.io.min.js Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/pin Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  118 [desktop] › e2e/app-shell.spec.ts:109:3 › bottom nav navigation › each item opens its section, from the keyboard too (3.6s)
+  ✓  119 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /auth has the header and footer but no bottom nav (2.1s)
+  ✓  120 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /signup/identity has the header and footer but no bottom nav (1.9s)
+  ✓  121 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (2.1s)
+  ✓  122 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /password-reset has the header and footer but no bottom nav (2.2s)
+  ✓  123 [desktop] › e2e/app-shell.spec.ts:145:1 › the landing page keeps its own header and footer (2.2s)
+  ✓  124 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (1.5s)
+  ✓  125 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (1.4s)
+  ✓  126 [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (1.8s)
+  ✓  127 [desktop] › e2e/chat.spec.ts:200:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge (2.3s)
+  ✓  128 [desktop] › e2e/chat.spec.ts:222:3 › Discussions list (screen 20) › QA F5: a row for a member who is no longer available says « Profil indisponible » and has no link (2.1s)
+  ✓  129 [desktop] › e2e/chat.spec.ts:235:3 › Discussions list (screen 20) › QA F1: the row link is named by its visible words, with no aria-label and the icon kept out of the name (2.5s)
+  ✓  130 [desktop] › e2e/chat.spec.ts:247:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error (2.3s)
+  ✓  131 [desktop] › e2e/chat.spec.ts:263:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API) (1.5s)
+  ✓  132 [desktop] › e2e/chat.spec.ts:275:3 › Discussions list (screen 20) › fits every factory width (3.8s)
+  ✓  133 [desktop] › e2e/chat.spec.ts:289:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy (3.0s)
+  ✓  135 [desktop] › e2e/chat.spec.ts:342:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message (2.3s)
+  ✓  134 [desktop] › e2e/chat.spec.ts:314:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears (3.9s)
+  ✓  136 [desktop] › e2e/chat.spec.ts:359:3 › Chat thread (screen 21) › QA F3: a paused or ended conversation says so up front and the composer is disabled before any send (2.4s)
+  ✓  138 [desktop] › e2e/chat.spec.ts:403:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log (1.2s)
+  ✓  137 [desktop] › e2e/chat.spec.ts:373:3 › Chat thread (screen 21) › QA F4: a session that expires mid-thread offers « Se reconnecter » and keeps the draft for the next visit (4.1s)
+  ✓  140 [desktop] › e2e/chat.spec.ts:455:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer (2.6s)
+  ✓  141 [desktop] › e2e/chat.spec.ts:471:3 › Chat thread (screen 21) › a malformed thread id goes back to the list (1.0s)
+  -  142 [desktop] › e2e/chat.spec.ts:477:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload)
+  ✓  139 [desktop] › e2e/chat.spec.ts:428:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s (6.0s)
+  ✓  143 [desktop] › e2e/chat.spec.ts:512:3 › Chat thread (screen 21) › fits every factory width (3.6s)
+  ✓  144 [desktop] › e2e/invite-compose.spec.ts:104:3 › Invite compose (Stories 4.1, 4.2) › a Free member sees the remaining Invites, sends once, and the button locks (3.5s)
+  ✓  146 [desktop] › e2e/invite-compose.spec.ts:144:3 › Invite compose (Stories 4.1, 4.2) › a QUOTA_EXCEEDED answer on send opens the quota wall (1.4s)
+  ✓  145 [desktop] › e2e/invite-compose.spec.ts:132:3 › Invite compose (Stories 4.1, 4.2) › the quota wall shows the Ouaga reset time when the day is used up, and blocks the send (2.4s)
+  ✓  147 [desktop] › e2e/invite-compose.spec.ts:167:3 › Invite compose (Stories 4.1, 4.2) › no Profile Photo: the prompt to add one is shown, and a refused send keeps it (2.4s)
+  ✓  148 [desktop] › e2e/invite-compose.spec.ts:194:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: after her decline the send stays closed, with a quiet message (no resend) (2.3s)
+  ✓  150 [desktop] › e2e/invite-compose.spec.ts:242:3 › Invite compose (Stories 4.1, 4.2) › a Sister in free_unlimited sees unlimited Invites with no count and no pack offer (1.2s)
+  ✓  149 [desktop] › e2e/invite-compose.spec.ts:218:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: when she already invited him, the send points to the inbox instead (2.3s)
+  ✓  151 [desktop] › e2e/invite-compose.spec.ts:256:3 › Invite compose (Stories 4.1, 4.2) › an unavailable recipient shows one quiet message and no send button (1.1s)
+  ✘  153 [desktop] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell (1.5s)
+  ✓  152 [desktop] › e2e/invite-compose.spec.ts:264:3 › Invite compose (Stories 4.1, 4.2) › fits every required width with no horizontal scroll (3.7s)
+  ✓  155 [desktop] › e2e/invite-inbox.spec.ts:206:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-1: accept posts once, then the row moves to Acceptées with the discussion link (2.6s)
+  ✓  154 [desktop] › e2e/invite-inbox.spec.ts:185:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-2: Sent shows pending, accepted and declined, and a declined row carries no guilt copy, receipt or timer (2.8s)
+  ✓  156 [desktop] › e2e/invite-inbox.spec.ts:228:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-2: decline is quiet: one post, a short status, the row leaves Reçues, no confirmation or lecture (2.6s)
+  ✓  157 [desktop] › e2e/invite-inbox.spec.ts:253:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message (2.4s)
+  ✓  159 [desktop] › e2e/invite-inbox.spec.ts:289:3 › Invite inbox (Stories 4.4, 4.5) › a load failure shows the retry, and the retry loads the inbox (1.4s)
+  ✓  158 [desktop] › e2e/invite-inbox.spec.ts:269:3 › Invite inbox (Stories 4.4, 4.5) › the tabs work from the keyboard, and accept is reachable without a mouse (1.5s)
+  ✓  160 [desktop] › e2e/invite-inbox.spec.ts:304:3 › Invite inbox (Stories 4.4, 4.5) › when the city wraps under a long name, the « • » wraps with it on Envoyées and Acceptées (3.2s)
+  ✓  162 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (11ms)
+  ✓  163 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them (4ms)
+  ✓  164 [desktop] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts (8ms)
+  ✓  165 [desktop] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack (1ms)
+  ✓  161 [desktop] › e2e/invite-inbox.spec.ts:345:3 › Invite inbox (Stories 4.4, 4.5) › fits every factory width on each tab (4.4s)
+  ✘  166 [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile (6.2s)
+  ✘  167 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px (6.4s)
+  ✘  168 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px (6.6s)
+  ✘  169 [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button (6.2s)
+  ✓  171 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780 (2.5s)
+  ✓  172 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800 (2.3s)
+  ✘  170 [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen (7.0s)
+  ✘  174 [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload (6.5s)
+  ✘  173 [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin (15.2s)
+  -  176 [desktop] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error
+  -  177 [desktop] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page
+  ✘  175 [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants (6.4s)
+  ✓  179 [desktop] › e2e/report-block.spec.ts:187:3 › Report / Block (screen 23) › AC 8.6: « Bloquer ce profil » blocks without a Report (1.6s)
+  ✓  178 [desktop] › e2e/report-block.spec.ts:147:3 › Report / Block (screen 23) › AC 8.5-1 and AC 4.4-3: a Profile Report with « misrepresented marital status », Block on, reaches the API and shows the 24 h SLA (2.8s)
+  ✓  180 [desktop] › e2e/report-block.spec.ts:201:3 › Report / Block (screen 23) › keyboard only: pick a reason, untick Block, and send with the keyboard (1.0s)
+  ✓  181 [desktop] › e2e/report-block.spec.ts:224:3 › Report / Block (screen 23) › shows the API message on a rate limit, the sign-in link on 401, and « Ce profil n'est pas disponible. » on 404 (2.2s)
+  ✓  182 [desktop] › e2e/report-block.spec.ts:245:3 › Report / Block (screen 23) › fits every factory width (1.8s)
+  ✓  183 [desktop] › e2e/report-block.spec.ts:259:3 › Report / Block from the Chat thread (screen 21) › AC 8.5-1 from Chat: « Signaler ce message » on his bubble sends a message Report with the message id (3.1s)
+  ✓  184 [desktop] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.6s)
+  ✓  186 [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.5s)
+  ✓  185 [desktop] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width (2.6s)
+  ✓  188 [desktop] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.9s)
+  ✓  187 [desktop] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width (2.4s)
+  ✓  189 [desktop] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width (1.3s)
+  ✓  190 [desktop] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (2.0s)
+  ✓  192 [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (985ms)
+  ✓  191 [desktop] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width (2.3s)
+  ✘  194 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll (1.4s)
+  ✘  193 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe (2.2s)
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Failed to proxy http://api:3000/v1/staff/signals/visits Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+[WebServer] Error: getaddrinfo ENOTFOUND api
+[WebServer]     at ignore-listed frames {
+[WebServer]   errno: -3008,
+[WebServer]   code: 'ENOTFOUND',
+[WebServer]   syscall: 'getaddrinfo',
+[WebServer]   hostname: 'api'
+[WebServer] }
+  ✓  195 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width (2.9s)
+  ✘  196 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (2.1s)
+  ✓  197 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (613ms)
+  -  198 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  199 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home (349ms)
+  ✓  201 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1) (1.5s)
+  ✘  200 [desktop] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides (2.9s)
+  ✓  202 [desktop] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3) (1.1s)
+  ✓  204 [desktop] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8) (1.0s)
+  ✘  203 [desktop] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list (2.3s)
+  ✓  205 [desktop] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console (1.4s)
+  ✓  206 [desktop] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console (236ms)
+  ✓  207 [desktop] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (447ms)
+  ✘  208 [desktop] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose (2.4s)
+  ✘  209 [desktop] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409 (2.3s)
+  -  210 [desktop] › e2e/staff-review.spec.ts:551:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+
+
+  1) [mobile] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 44
+    Received:    33
+
+      177 |     for (const button of await page.getByTestId('invite-row').getByRole('button').all()) {
+      178 |       const box = await button.boundingBox()
+    > 179 |       expect(Math.min(box?.width ?? 0, box?.height ?? 0)).toBeGreaterThanOrEqual(44)
+          |                                                           ^
+      180 |     }
+      181 |     await expectAccessible(page)
+      182 |     await expectNoHorizontalOverflow(page)
+        at /home/claude/muslim-marriage-africa/code/e2e/invite-inbox.spec.ts:179:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [mobile] › e2e/invite-inbox.spec.ts:253:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at .md\\:p-8:nth-child(1) > .md\\:items-start.gap-6.md\\:flex-row > .sm\\:flex-row.md\\:flex-col.md\\:w-\\[220px\\] > .bg-transparent.underline-offset-4.hover\\:underline: Target has insufficient size (142.7px by 21px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/invite-inbox.spec.ts:266:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--84878-pt-reloads-with-its-message-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/invite-inbox-Invite-inbox--84878-pt-reloads-with-its-message-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--84878-pt-reloads-with-its-message-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/invite-inbox-Invite-inbox--84878-pt-reloads-with-its-message-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:237:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:298:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:298:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:306:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:340:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:405:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:421:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:437:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [mobile] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:198:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [mobile] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-shell.spec.ts:67:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-shell.spec.ts:99:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-mobile/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-mobile/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-mobile/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-mobile/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [desktop] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 44
+    Received:    33
+
+      177 |     for (const button of await page.getByTestId('invite-row').getByRole('button').all()) {
+      178 |       const box = await button.boundingBox()
+    > 179 |       expect(Math.min(box?.width ?? 0, box?.height ?? 0)).toBeGreaterThanOrEqual(44)
+          |                                                           ^
+      180 |     }
+      181 |     await expectAccessible(page)
+      182 |     await expectNoHorizontalOverflow(page)
+        at /home/claude/muslim-marriage-africa/code/e2e/invite-inbox.spec.ts:179:59
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/invite-inbox-Invite-inbox--9ac1f-ept-inside-the-shared-shell-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:237:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6890d--and-returns-to-the-profile-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:298:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--3002c-beside-the-switch-at-390-px-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:298:13
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--6d73a-eside-the-switch-at-1440-px-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:306:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--8ca80-ocks-with-the-unlock-button-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:340:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--7cf6e--are-said-on-the-PIN-screen-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:405:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--536b1-r-returns-to-another-origin-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:421:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--d3833--and-shown-without-a-reload-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+
+    Error: The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      167 |       message: 'The Tailwind CDN did not load, so the Stitch screen is unstyled and cannot be checked as shipped.',
+      168 |     })
+    > 169 |     .toBe(true)
+          |      ^
+      170 | }
+      171 |
+      172 | type PreExisting = { selector: string; count: number; what: string }
+        at expectStyled (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:169:6)
+        at expectAccessibleAsShipped (/home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:193:9)
+        at /home/claude/muslim-marriage-africa/code/e2e/profile-edit-flow.spec.ts:437:11
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/profile-edit-flow-profile--150a3-he-reads-fresh-photo-grants-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [desktop] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:198:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-review-staff-review--70cd4-s-with-a-reason-and-decides-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [desktop] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:332:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-review-staff-review--cd49b-unts-only-with-no-case-list-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [desktop] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose › ID and selfie steps with a pose at 360 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "critical label at input: Element does not have an implicit (wrapped) <label>",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:369:7
+        at sweep (/home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:368:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:419:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-contrast-swee-8b648-xpired-and-unavailable-pose-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-review-contrast-swee-8b648-xpired-and-unavailable-pose-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-contrast-swee-8b648-xpired-and-unavailable-pose-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-review-contrast-swee-8b648-xpired-and-unavailable-pose-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [desktop] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409 › queue at 360 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:369:7
+        at sweep (/home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:368:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-review.spec.ts:473:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-contrast-swee-84a71-w-and-the-alert-after-a-409-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-review-contrast-swee-84a71-w-and-the-alert-after-a-409-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-review-contrast-swee-84a71-w-and-the-alert-after-a-409-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-review-contrast-swee-84a71-w-and-the-alert-after-a-409-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-shell.spec.ts:67:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-shell-staff-shell-th-d2c10-o-member-nav-and-passes-axe-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  29) [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll 
+
+    Error: 768: case beside the queue
+
+    expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 760
+    Received:    8
+
+      38 |     const { queue, pane } = await paneBoxes(page)
+      39 |     if (width >= 768) {
+    > 40 |       expect(pane.x, `${width}: case beside the queue`).toBeGreaterThanOrEqual(queue.x + queue.width)
+         |                                                         ^
+      41 |       expect(Math.abs(pane.y - queue.y), `${width}: panes share a top`).toBeLessThan(2)
+      42 |     } else {
+      43 |       expect(pane.y, `${width}: case below the queue`).toBeGreaterThanOrEqual(queue.y + queue.height)
+        at expectPanes (/home/claude/muslim-marriage-africa/code/e2e/staff-shell.spec.ts:40:57)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-shell.spec.ts:75:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-tw-d3e72--below-no-horizontal-scroll-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-shell-staff-shell-tw-d3e72--below-no-horizontal-scroll-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-tw-d3e72--below-no-horizontal-scroll-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-shell-staff-shell-tw-d3e72--below-no-horizontal-scroll-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  30) [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width 
+
+    Error: serious or critical accessibility violations
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "serious target-size at #staff-leave: Target has insufficient size (97.3px by 17px, should be at least 24px by 24px)",
+    + ]
+
+       at fixtures.ts:55
+
+      53 |     ),
+      54 |     'serious or critical accessibility violations',
+    > 55 |   ).toEqual([])
+         |     ^
+      56 |   return violations
+      57 | }
+      58 |
+        at expectAccessible (/home/claude/muslim-marriage-africa/code/e2e/fixtures.ts:55:5)
+        at /home/claude/muslim-marriage-africa/code/e2e/staff-shell.spec.ts:99:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-desktop/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-desktop/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-desktop/trace.zip
+    Usage:
+
+        npx playwright show-trace e2e/test-results/staff-shell-staff-shell-th-0e14f-badged-and-fits-every-width-desktop/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  30 failed
+    [mobile] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+    [mobile] › e2e/invite-inbox.spec.ts:253:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message 
+    [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px 
+    [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px 
+    [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+    [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+    [mobile] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides 
+    [mobile] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list 
+    [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe 
+    [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width 
+    [desktop] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell 
+    [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile 
+    [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px 
+    [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px 
+    [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button 
+    [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen 
+    [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin 
+    [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload 
+    [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants 
+    [desktop] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides 
+    [desktop] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list 
+    [desktop] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose 
+    [desktop] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409 
+    [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe 
+    [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll 
+    [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width 
+  33 skipped
+  147 passed (4.5m)

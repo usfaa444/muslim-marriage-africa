@@ -33,6 +33,7 @@ const ACCOUNT = new Set([
   '/profile-edit',
   '/profile-review',
   '/settings',
+  '/settings/bloques',
   '/pin',
   '/decouvrir',
   '/discussions',
@@ -96,13 +97,18 @@ export function entryLocation(path: string, step: GateStep): string | null {
     }
     return step === owned ? null : STEP_PATH[step]
   }
-  if (ACCOUNT.has(normalized) || isPublicProfilePath(normalized) || isInviteComposePath(normalized) || isChatThreadPath(normalized)) {
+  if (ACCOUNT.has(normalized) || isPublicProfilePath(normalized) || isInviteComposePath(normalized) || isChatThreadPath(normalized) || isReportPath(normalized)) {
     if (step === 'anon') {
       return '/auth'
     }
     return step === 'account' ? null : STEP_PATH[step]
   }
   return null
+}
+
+/** Screen 23. Report or Block one member (Stories 8.5, 8.6). */
+export function isReportPath(path: string): boolean {
+  return /^\/signaler\/[^/]+$/.test(path)
 }
 
 /** Screen 21. One Chat thread (Stories 5.1, 5.2). */

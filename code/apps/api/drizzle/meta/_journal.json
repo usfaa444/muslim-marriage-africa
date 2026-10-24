@@ -169,6 +169,13 @@
       "when": 1792782409903,
       "tag": "0023_message",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1792795827741,
+      "tag": "0024_report_block",
+      "breakpoints": true
     }
   ]
 }

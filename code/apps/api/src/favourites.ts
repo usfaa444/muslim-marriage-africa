@@ -16,6 +16,7 @@ import {
   type PublicProfileFailure,
 } from './public-profile.js'
 import type { ResolvedSession } from './session-store.js'
+import { getTrustPort } from './trust-port.js'
 
 const TARGET_MESSAGE = 'target_id : valeur non reconnue.'
 const MISSING_FAVOURITE = "Ce favori n'existe pas."
@@ -312,7 +313,8 @@ async function listableOpposite(
     !profile ||
     !target.roles.includes('member') ||
     target.gender === viewer.gender ||
-    !isListableProfile(profile.visibility, target.status)
+    !isListableProfile(profile.visibility, target.status) ||
+    (await getTrustPort().blockedBetween(viewer.id, target.id))
   ) {
     return fail(404, 'NOT_FOUND', PROFILE_UNAVAILABLE, null, false)
   }
@@ -423,8 +425,12 @@ export async function readFavourites(
     return opened
   }
   const rows = await getFavouriteStore().list(opened.account.id)
+  const hidden = new Set(await getTrustPort().hiddenFor(opened.account.id))
   const items: FavouriteItem[] = []
   for (const row of rows) {
+    if (hidden.has(row.target_id)) {
+      continue
+    }
     const item = await presentItem(row, opened.account.id)
     if (item === null) {
       continue

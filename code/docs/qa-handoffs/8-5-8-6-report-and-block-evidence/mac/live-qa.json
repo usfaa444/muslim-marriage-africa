@@ -1,0 +1,1210 @@
+{
+  "widths": [
+    {
+      "screen": "report-from-profile",
+      "width": 360,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-profile",
+      "width": 390,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-profile",
+      "width": 768,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-profile",
+      "width": 1024,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-profile",
+      "width": 1280,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-profile",
+      "width": 1440,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-chat",
+      "width": 360,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97&message=01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-chat",
+      "width": 390,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97&message=01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-chat",
+      "width": 768,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97&message=01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-chat",
+      "width": 1024,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97&message=01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-chat",
+      "width": 1280,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97&message=01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "report-from-chat",
+      "width": 1440,
+      "url": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97&message=01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "settings-card",
+      "width": 360,
+      "url": "/settings",
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [
+        "a \"arrow_back Retour au profil\" 109x20",
+        "button \"\" 44x24",
+        "button \"\" 44x24",
+        "button \"Télécharger\" 102x34",
+        "button \"Supprimer\" 95x34"
+      ],
+      "axeSeriousCritical": [
+        {
+          "id": "button-name",
+          "impact": "critical",
+          "nodes": [
+            "#lite-mode-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers",
+            "#pin-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers"
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            ".text-\\[11px\\] :: Fix any of the following:   Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1",
+            ".border-2.border-soft-gold.bg-deep-navy\\/\\[0\\.03\\] > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.33 (foreground color: #68727e, background color: #f4f1eb, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(2) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(3) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".gap-4.group[href=\"#\"] > .group-hover\\:translate-x-1.whitespace-nowrap.transition-transform > span:nth-child(1) :: Fix any of the following:   Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+          ]
+        }
+      ],
+      "axeOther": []
+    },
+    {
+      "screen": "settings-card",
+      "width": 390,
+      "url": "/settings",
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [
+        "a \"arrow_back Retour au profil\" 109x20",
+        "button \"\" 44x24",
+        "button \"\" 44x24",
+        "button \"Télécharger\" 102x34",
+        "button \"Supprimer\" 95x34"
+      ],
+      "axeSeriousCritical": [
+        {
+          "id": "button-name",
+          "impact": "critical",
+          "nodes": [
+            "#lite-mode-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers",
+            "#pin-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers"
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            ".text-\\[11px\\] :: Fix any of the following:   Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1",
+            ".border-2.border-soft-gold.bg-deep-navy\\/\\[0\\.03\\] > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.33 (foreground color: #68727e, background color: #f4f1eb, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(2) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(3) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".gap-4.group[href=\"#\"] > .group-hover\\:translate-x-1.whitespace-nowrap.transition-transform > span:nth-child(1) :: Fix any of the following:   Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1"
+          ]
+        }
+      ],
+      "axeOther": []
+    },
+    {
+      "screen": "settings-card",
+      "width": 768,
+      "url": "/settings",
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [
+        "a \"arrow_back Retour au profil\" 109x20",
+        "button \"\" 44x24",
+        "button \"\" 44x24",
+        "button \"Télécharger\" 102x34",
+        "button \"Supprimer\" 95x34"
+      ],
+      "axeSeriousCritical": [
+        {
+          "id": "button-name",
+          "impact": "critical",
+          "nodes": [
+            "#lite-mode-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers",
+            "#pin-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers"
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            ".text-\\[11px\\] :: Fix any of the following:   Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1",
+            ".border-2.border-soft-gold.bg-deep-navy\\/\\[0\\.03\\] > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.33 (foreground color: #68727e, background color: #f4f1eb, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(2) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(3) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".gap-4.group[href=\"#\"] > .group-hover\\:translate-x-1.whitespace-nowrap.transition-transform > span:nth-child(1) :: Fix any of the following:   Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          ]
+        }
+      ],
+      "axeOther": []
+    },
+    {
+      "screen": "settings-card",
+      "width": 1024,
+      "url": "/settings",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [
+        "a \"arrow_back Retour au profil\" 109x20",
+        "button \"\" 44x24",
+        "button \"\" 44x24",
+        "button \"Télécharger\" 102x34",
+        "button \"Supprimer\" 95x34"
+      ],
+      "axeSeriousCritical": [
+        {
+          "id": "button-name",
+          "impact": "critical",
+          "nodes": [
+            "#lite-mode-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers",
+            "#pin-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers"
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            ".text-\\[11px\\] :: Fix any of the following:   Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1",
+            ".border-2.border-soft-gold.bg-deep-navy\\/\\[0\\.03\\] > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.33 (foreground color: #68727e, background color: #f4f1eb, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(2) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(3) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".gap-4.group[href=\"#\"] > .group-hover\\:translate-x-1.whitespace-nowrap.transition-transform > span:nth-child(1) :: Fix any of the following:   Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          ]
+        }
+      ],
+      "axeOther": []
+    },
+    {
+      "screen": "settings-card",
+      "width": 1280,
+      "url": "/settings",
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [
+        "a \"arrow_back Retour au profil\" 109x20",
+        "button \"\" 44x24",
+        "button \"\" 44x24",
+        "button \"Télécharger\" 102x34",
+        "button \"Supprimer\" 95x34"
+      ],
+      "axeSeriousCritical": [
+        {
+          "id": "button-name",
+          "impact": "critical",
+          "nodes": [
+            "#lite-mode-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers",
+            "#pin-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers"
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            ".text-\\[11px\\] :: Fix any of the following:   Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1",
+            ".border-2.border-soft-gold.bg-deep-navy\\/\\[0\\.03\\] > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.33 (foreground color: #68727e, background color: #f4f1eb, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(2) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(3) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".gap-4.group[href=\"#\"] > .group-hover\\:translate-x-1.whitespace-nowrap.transition-transform > span:nth-child(1) :: Fix any of the following:   Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          ]
+        }
+      ],
+      "axeOther": []
+    },
+    {
+      "screen": "settings-card",
+      "width": 1440,
+      "url": "/settings",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [
+        "a \"arrow_back Retour au profil\" 109x20",
+        "button \"\" 44x24",
+        "button \"\" 44x24",
+        "button \"Télécharger\" 102x34",
+        "button \"Supprimer\" 95x34"
+      ],
+      "axeSeriousCritical": [
+        {
+          "id": "button-name",
+          "impact": "critical",
+          "nodes": [
+            "#lite-mode-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers",
+            "#pin-toggle :: Fix any of the following:   Element does not have inner text that is visible to screen readers"
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            ".text-\\[11px\\] :: Fix any of the following:   Element has insufficient color contrast of 2 (foreground color: #c9a86c, background color: #f7f1e3, font size: 8.3pt (11px), font weight: bold). Expected contrast ratio of 4.5:1",
+            ".border-2.border-soft-gold.bg-deep-navy\\/\\[0\\.03\\] > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.33 (foreground color: #68727e, background color: #f4f1eb, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(2) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".hover\\:border-soft-gold\\/60:nth-child(3) > .text-deep-navy\\/60.text-xs :: Fix any of the following:   Element has insufficient color contrast of 4.34 (foreground color: #69727b, background color: #f7f1e3, font size: 9.0pt (12px), font weight: normal). Expected contrast ratio of 4.5:1",
+            ".gap-4.group[href=\"#\"] > .group-hover\\:translate-x-1.whitespace-nowrap.transition-transform > span:nth-child(1) :: Fix any of the following:   Element has insufficient color contrast of 2.12 (foreground color: #c9a86c, background color: #fbf8f1, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1"
+          ]
+        }
+      ],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-empty",
+      "width": 360,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-empty",
+      "width": 390,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-empty",
+      "width": 768,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-empty",
+      "width": 1024,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-empty",
+      "width": 1280,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-empty",
+      "width": 1440,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-closed-A",
+      "width": 360,
+      "url": "/discussions/01a16b90-6452-7901-a957-42c07ca65a97",
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-closed-A",
+      "width": 390,
+      "url": "/discussions/01a16b90-6452-7901-a957-42c07ca65a97",
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-closed-A",
+      "width": 768,
+      "url": "/discussions/01a16b90-6452-7901-a957-42c07ca65a97",
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-closed-A",
+      "width": 1024,
+      "url": "/discussions/01a16b90-6452-7901-a957-42c07ca65a97",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-closed-A",
+      "width": 1280,
+      "url": "/discussions/01a16b90-6452-7901-a957-42c07ca65a97",
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "thread-closed-A",
+      "width": 1440,
+      "url": "/discussions/01a16b90-6452-7901-a957-42c07ca65a97",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Newsreader",
+        "Plus Jakarta Sans",
+        "Material Symbols Outlined"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-list",
+      "width": 360,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-list",
+      "width": 390,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-list",
+      "width": 768,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-list",
+      "width": 1024,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-list",
+      "width": 1280,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-list",
+      "width": 1440,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-confirm",
+      "width": 360,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 360,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-confirm",
+      "width": 390,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 390,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-confirm",
+      "width": 768,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 768,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-confirm",
+      "width": 1024,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1024,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-confirm",
+      "width": 1280,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1280,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    },
+    {
+      "screen": "bloques-confirm",
+      "width": 1440,
+      "url": "/settings/bloques",
+      "overflow": false,
+      "scrollWidth": 1440,
+      "iconFont": true,
+      "tailwind": true,
+      "lang": "fr",
+      "fonts": [
+        "Material Symbols Outlined",
+        "Newsreader",
+        "Plus Jakarta Sans"
+      ],
+      "small": [],
+      "axeSeriousCritical": [],
+      "axeOther": []
+    }
+  ],
+  "walk": {
+    "profileEntryHref": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+    "profileEntryLanded": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+    "profileChip": "Profil concerné : Mariam85861 (Ouagadougou)",
+    "flagsUnderOtherBubbles": 1,
+    "headerLink": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97",
+    "flagLanded": "/signaler/01a16b90-5f06-7ad2-8256-8b6f4befd48f?discussion=01a16b90-6452-7901-a957-42c07ca65a97&message=01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+    "messageNote": true,
+    "blockCheckedByDefault": true,
+    "reportPost": {
+      "status": 201,
+      "body": {
+        "report": {
+          "id": "01a16b93-0569-7b5c-adb4-69643c8ef594",
+          "target_kind": "message",
+          "reason": "misrepresented_marital_status",
+          "sla_started_at": "2026-10-24T01:42:39.721Z"
+        },
+        "case": {
+          "id": "01a16b93-0569-7d50-9cca-9afee44245b2",
+          "sla_started_at": "2026-10-24T01:42:39.721Z",
+          "sla_state": "open"
+        },
+        "blocked": true,
+        "sla_hours": 24
+      },
+      "clickAt": "2026-10-24T01:42:39.676Z",
+      "responseAt": "2026-10-24T01:42:39.733Z",
+      "requestBody": {
+        "target_kind": "message",
+        "target_id": "01a16b90-648a-7ccf-bd0b-9d2a14bff87c",
+        "reason": "misrepresented_marital_status",
+        "block": true,
+        "details": "Déclare une situation qui semble inexacte ; test QA local."
+      }
+    },
+    "sentFocused": "Signalement transmis",
+    "sentText": "arrow_back\nRetour à la discussion\nverified_user\nSignalement transmis\n\nUn membre de l'équipe de modération l'examinera dans les 24 heures.\n\nCe membre ne peut plus consulter votre fiche ni vous contacter.\n\nRetour aux discussions",
+    "closed_B": {
+      "unavailableText": true,
+      "composerDisabled": true,
+      "sendDisabled": true
+    },
+    "profileRedirect_B": "/decouvrir",
+    "discoverShowsOther_B": false,
+    "discussionsList_B": "ÉCHANGES CONCERTÉS & BIENSÉANCE\n\nDiscussions Ta'aruf\n?\nProfil indisponible\nVous : « Wa ʿalaykum as-salām. Je suis célibataire, jamais mariée. »\n\nschedule\nAujourd'hui à 01:39\n\nPour les invitations envoyées en attente, le fil de discussion ne s'ouvre qu'après acceptation formelle de la sœur.\n\nRegistre des échanges : 1 fil actif",
+    "closed_A": {
+      "unavailableText": true,
+      "composerDisabled": true,
+      "sendDisabled": true
+    },
+    "profileRedirect_A": "/decouvrir",
+    "discoverShowsOther_A": false,
+    "discussionsList_A": "ÉCHANGES CONCERTÉS & BIENSÉANCE\n\nDiscussions Ta'aruf\n?\nProfil indisponible\n« Wa ʿalaykum as-salām. Je suis célibataire, jamais mariée. »\n\nschedule\nAujourd'hui à 01:39\n\nPour les invitations envoyées en attente, le fil de discussion ne s'ouvre qu'après acceptation formelle de la sœur.\n\nRegistre des échanges : 1 fil actif",
+    "listUrl": "/settings/bloques",
+    "listText": "arrow_back\nRetour aux paramètres\n\nPRÉFÉRENCES & CONFIDENTIALITÉ\n\nMembres bloqués\n\nLes membres que vous avez bloqués ne voient pas votre fiche et ne peuvent pas vous contacter. Vous pouvez lever un blocage à tout moment.\n\n1 membre bloqué\n\nMariam85861\n\nBloqué le 24 octobre 2026\n\nDébloquer",
+    "listPhoto": {
+      "src": "/v1/media/get?token=01a16b93-b3cb-7e1a-9133-ca27cc956cdb",
+      "natural": [
+        32,
+        32
+      ],
+      "box": [
+        54,
+        54
+      ],
+      "alt": ""
+    },
+    "confirmFocused": "Débloquer Mariam85861 ?",
+    "cancelFocus": "Débloquer Mariam85861",
+    "afterCancel": {
+      "deletes": [],
+      "block": "count\n1\n(1 row)"
+    },
+    "afterConfirm": {
+      "deletes": [
+        "/v1/blocks/01a16b90-5f06-7ad2-8256-8b6f4befd48f"
+      ],
+      "focused": "H1 Membres bloqués",
+      "block": "count\n0\n(1 row)",
+      "text": "arrow_back\nRetour aux paramètres\n\nPRÉFÉRENCES & CONFIDENTIALITÉ\n\nMembres bloqués\n\nLes membres que vous avez bloqués ne voient pas votre fiche et ne peuvent pas vous contacter. Vous pouvez lever un blocage à tout moment.\n\nBlocage levé pour Mariam85861.\n\nVous n'avez bloqué aucun membre."
+    },
+    "reopened": {
+      "unavailableText": false,
+      "composerDisabled": false
+    },
+    "profileAfterUnblock": "/profil/01a16b90-5f06-7ad2-8256-8b6f4befd48f"
+  },
+  "api": {
+    "before": {
+      "A_sees_B": {
+        "browseStatus": 200,
+        "inBrowse": true,
+        "profile": 200
+      },
+      "B_sees_A": {
+        "browseStatus": 200,
+        "inBrowse": true,
+        "profile": 200
+      }
+    },
+    "afterBlock": {
+      "A_sees_B": {
+        "browseStatus": 200,
+        "inBrowse": false,
+        "profile": 404
+      },
+      "B_sees_A": {
+        "browseStatus": 200,
+        "inBrowse": false,
+        "profile": 404
+      }
+    },
+    "afterBlock_sends": {
+      "B_send": {
+        "status": 409,
+        "json": {
+          "error": {
+            "code": "UNHANDLED",
+            "message": "Cette discussion est fermée.",
+            "details": {
+              "reason": "conversation_closed"
+            },
+            "request_id": "01a16b93-0928-7202-b1cc-2dff128eebc2",
+            "retryable": false
+          }
+        },
+        "text": "{\"error\":{\"code\":\"UNHANDLED\",\"message\":\"Cette discussion est fermée.\",\"details\":{\"reason\":\"conversation_closed\"},\"request_id\":\"01a16b93-0928-7202-b1cc-2dff128eebc2\",\"retryable\":false}}"
+      },
+      "A_send": {
+        "status": 409,
+        "json": {
+          "error": {
+            "code": "UNHANDLED",
+            "message": "Cette discussion est fermée.",
+            "details": {
+              "reason": "conversation_closed"
+            },
+            "request_id": "01a16b93-092d-7deb-9f4d-eb706dc0eb3d",
+            "retryable": false
+          }
+        },
+        "text": "{\"error\":{\"code\":\"UNHANDLED\",\"message\":\"Cette discussion est fermée.\",\"details\":{\"reason\":\"conversation_closed\"},\"request_id\":\"01a16b93-092d-7deb-9f4d-eb706dc0eb3d\",\"retryable\":false}}"
+      },
+      "B_invite": {
+        "status": 404,
+        "json": {
+          "error": {
+            "code": "NOT_FOUND",
+            "message": "Ce profil n'est pas disponible.",
+            "details": null,
+            "request_id": "01a16b93-0934-7e60-b581-1f3e9a502cc8",
+            "retryable": false
+          }
+        },
+        "text": "{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Ce profil n'est pas disponible.\",\"details\":null,\"request_id\":\"01a16b93-0934-7e60-b581-1f3e9a502cc8\",\"retryable\":false}}"
+      },
+      "A_invite": {
+        "status": 404,
+        "json": {
+          "error": {
+            "code": "NOT_FOUND",
+            "message": "Ce profil n'est pas disponible.",
+            "details": null,
+            "request_id": "01a16b93-093b-77d2-9f97-b832f2b296a0",
+            "retryable": false
+          }
+        },
+        "text": "{\"error\":{\"code\":\"NOT_FOUND\",\"message\":\"Ce profil n'est pas disponible.\",\"details\":null,\"request_id\":\"01a16b93-093b-77d2-9f97-b832f2b296a0\",\"retryable\":false}}"
+      },
+      "storedAfterBlock": "count\n2\n(1 row)"
+    },
+    "metricsAfterReport": {
+      "status": 200,
+      "json": {
+        "free_review": {
+          "sla_hours": 24,
+          "waiting": 16,
+          "sla_breach": 0
+        },
+        "reports": {
+          "sla_hours": 24,
+          "open": 1,
+          "sla_breach": 0,
+          "oldest_open_started_at": "2026-10-24T01:42:39.721Z"
+        }
+      },
+      "text": "{\"free_review\":{\"sla_hours\":24,\"waiting\":16,\"sla_breach\":0},\"reports\":{\"sla_hours\":24,\"open\":1,\"sla_breach\":0,\"oldest_open_started_at\":\"2026-10-24T01:42:39.721Z\"}}"
+    },
+    "blocksListA": {
+      "status": 200,
+      "json": {
+        "count": 1,
+        "items": [
+          {
+            "blocked_id": "01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+            "pseudonym": "Mariam85861",
+            "created_at": "2026-10-24T01:42:39.721Z",
+            "photo": {
+              "id": "01a16b90-6205-73a4-b9b9-d3d2b0a63fa0",
+              "url": "/v1/media/get?token=01a16b93-aed8-724b-b9b3-fc7c5ace907b"
+            }
+          }
+        ],
+        "has_more": false
+      },
+      "text": "{\"count\":1,\"items\":[{\"blocked_id\":\"01a16b90-5f06-7ad2-8256-8b6f4befd48f\",\"pseudonym\":\"Mariam85861\",\"created_at\":\"2026-10-24T01:42:39.721Z\",\"photo\":{\"id\":\"01a16b90-6205-73a4-b9b9-d3d2b0a63fa0\",\"url\":\"/v1/media/get?token=01a16b93-aed8-724b-b9b3-fc7c5ace907b\"}}],\"has_more\":false}"
+    },
+    "blocksListB": {
+      "status": 200,
+      "json": {
+        "count": 0,
+        "items": [],
+        "has_more": false
+      },
+      "text": "{\"count\":0,\"items\":[],\"has_more\":false}"
+    },
+    "afterUnblock": {
+      "A_sees_B": {
+        "browseStatus": 200,
+        "inBrowse": true,
+        "profile": 200
+      },
+      "B_sees_A": {
+        "browseStatus": 200,
+        "inBrowse": true,
+        "profile": 200
+      }
+    },
+    "afterUnblock_sends": {
+      "B_send": {
+        "status": 201,
+        "json": {
+          "message": {
+            "id": "01a16b93-b701-7949-9104-c64192ea1b41",
+            "conversation_id": "01a16b90-6452-7901-a957-42c07ca65a97",
+            "sender_id": "01a16b90-5f06-7ad2-8256-8b6f4befd48f",
+            "mine": true,
+            "kind": "text",
+            "state": "delivered",
+            "text": "Message après déblocage (B)",
+            "created_at": "2026-10-24T01:43:25.185Z"
+          }
+        },
+        "text": "{\"message\":{\"id\":\"01a16b93-b701-7949-9104-c64192ea1b41\",\"conversation_id\":\"01a16b90-6452-7901-a957-42c07ca65a97\",\"sender_id\":\"01a16b90-5f06-7ad2-8256-8b6f4befd48f\",\"mine\":true,\"kind\":\"text\",\"state\":\"delivered\",\"text\":\"Message après déblocage (B)\",\"created_at\":\"2026-10-24T01:43:25.185Z\"}}"
+      },
+      "A_send": {
+        "status": 201,
+        "json": {
+          "message": {
+            "id": "01a16b93-b70a-752f-b315-4a8723dac06a",
+            "conversation_id": "01a16b90-6452-7901-a957-42c07ca65a97",
+            "sender_id": "01a16b90-5a79-75ae-986a-7c14b337ef4a",
+            "mine": true,
+            "kind": "text",
+            "state": "delivered",
+            "text": "Message après déblocage (A)",
+            "created_at": "2026-10-24T01:43:25.194Z"
+          }
+        },
+        "text": "{\"message\":{\"id\":\"01a16b93-b70a-752f-b315-4a8723dac06a\",\"conversation_id\":\"01a16b90-6452-7901-a957-42c07ca65a97\",\"sender_id\":\"01a16b90-5a79-75ae-986a-7c14b337ef4a\",\"mine\":true,\"kind\":\"text\",\"state\":\"delivered\",\"text\":\"Message après déblocage (A)\",\"created_at\":\"2026-10-24T01:43:25.194Z\"}}"
+      }
+    },
+    "metricsEnd": {
+      "status": 200,
+      "json": {
+        "free_review": {
+          "sla_hours": 24,
+          "waiting": 16,
+          "sla_breach": 0
+        },
+        "reports": {
+          "sla_hours": 24,
+          "open": 1,
+          "sla_breach": 0,
+          "oldest_open_started_at": "2026-10-24T01:42:39.721Z"
+        }
+      },
+      "text": "{\"free_review\":{\"sla_hours\":24,\"waiting\":16,\"sla_breach\":0},\"reports\":{\"sla_hours\":24,\"open\":1,\"sla_breach\":0,\"oldest_open_started_at\":\"2026-10-24T01:42:39.721Z\"}}"
+    }
+  },
+  "db": {
+    "before": {
+      "report": "count\n0\n(1 row)",
+      "block": "count\n0\n(1 row)"
+    },
+    "afterReport": {
+      "report": "id|reporter_id|target_kind|target_id|conversation_id|reason|details|sla_started_at\n01a16b93-0569-7b5c-adb4-69643c8ef594|01a16b90-5a79-75ae-986a-7c14b337ef4a|message|01a16b90-648a-7ccf-bd0b-9d2a14bff87c|01a16b90-6452-7901-a957-42c07ca65a97|misrepresented_marital_status|Déclare une situation qui semble inexacte ; test QA local.|2026-10-24 01:42:39.721+00\n(1 row)",
+      "moderation_case": "id|report_id|flag_queue_id|sla_started_at|first_human_at\n01a16b93-0569-7d50-9cca-9afee44245b2|01a16b93-0569-7b5c-adb4-69643c8ef594||2026-10-24 01:42:39.721+00|\n(1 row)",
+      "block": "id|blocker_id|blocked_id|created_at\n01a16b93-0569-7e96-b85e-86a0d90d47b4|01a16b90-5a79-75ae-986a-7c14b337ef4a|01a16b90-5f06-7ad2-8256-8b6f4befd48f|2026-10-24 01:42:39.721+00\n(1 row)",
+      "messageTextInReport": "count\n0\n(1 row)"
+    }
+  },
+  "console": []
+}

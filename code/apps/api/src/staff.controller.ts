@@ -5,6 +5,7 @@ import {
   readReviewMetrics,
   type ReviewFailure,
 } from './profile-review.js'
+import { readReportMetrics } from './reports.js'
 import { requireStaffSession } from './staff-session.js'
 import { moderatorGate } from './staff-review.js'
 import { grantStagingVerification, stagingStaffGrantEnabled } from './staff-verification-grant.js'
@@ -87,7 +88,15 @@ export class StaffController {
     if (!metrics.ok) {
       fail(metrics)
     }
-    return { free_review: metrics.free_review }
+    // Story 8.5: Member Report cases with no first human touch past `report_sla_hours` are SLA-breach.
+    const reports = await readReportMetrics()
+    if (!reports.ok) {
+      throw new HttpException(
+        { code: reports.code, message: reports.message, details: reports.details, retryable: reports.retryable },
+        reports.status,
+      )
+    }
+    return { free_review: metrics.free_review, reports: reports.reports }
   }
 
   @Post('verifications/grant')

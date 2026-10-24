@@ -452,6 +452,13 @@ export function profileDetailHtml(stitch: string, view: ProfileDetailView): stri
       encodeURIComponent(view.profile.id) +
       '"><span class="material-symbols-outlined text-soft-gold text-lg" data-icon="send" aria-hidden="true">send</span><span>Envoyer une invitation Ta\'aruf</span></a>',
   )
+  // Stories 8.5, 8.6: the Stitch « Signaler / Bloquer le profil » button opens the Report / Block screen (23).
+  html = html.replace(
+    /<button class="w-full sm:w-auto min-h-\[44px\]([^"]*)" type="button">\s*<span class="material-symbols-outlined text-base" data-icon="flag">flag<\/span>\s*<span class="">Signaler \/ Bloquer le profil<\/span>\s*<\/button>/,
+    '<a data-report-link class="w-full sm:w-auto min-h-[44px]$1" href="/signaler/' +
+      encodeURIComponent(view.profile.id) +
+      '"><span class="material-symbols-outlined text-base" data-icon="flag" aria-hidden="true">flag</span><span>Signaler / Bloquer le profil</span></a>',
+  )
   const page = prepareV2(withAppShell(html, { kind: 'member', active: 'decouvrir' }), BOOKMARK_SCRIPT)
   const guard = pinGuardScript()
   return page.includes('</body>') ? page.replace('</body>', `${guard}</body>`) : `${page}${guard}`

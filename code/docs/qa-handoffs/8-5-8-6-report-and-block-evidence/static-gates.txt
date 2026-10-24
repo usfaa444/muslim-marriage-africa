@@ -1,0 +1,23 @@
+# Static and suite runs (QA, 2026-10-23, commit db16287, branch factory/report-block)
+
+## lint
+apps/api/src/qa-reports-blocks.test.ts:8:38: warning eslint(no-unused-vars): Identifier 'REPORT_REASONS' is imported but never used. help: Consider removing this import.
+apps/api/src/qa-reports-blocks.test.ts:52:7: warning eslint(no-unused-vars): Variable 'srcDir' is declared but never used. Unused variables should start with a '_'. help: Consider removing this declaration.
+apps/api/src/qa-reports-blocks.test.ts:315:12: warning eslint(no-unused-vars): Function 'connectedSocket' is declared but never used. help: Consider removing this declaration.
+apps/api/src/qa-reports-blocks.test.ts:331:12: warning eslint(no-unused-vars): Function 'noEvent' is declared but never used. help: Consider removing this declaration.
+apps/api/src/life-pause.ts:18:19: warning eslint(no-control-regex): Unexpected control characters help: Avoid matching control characters in regular expressions. If intentional, disable this rule for the expression.
+apps/web/src/v2-flow.test.ts:497:9: warning eslint(no-unused-vars): Variable 'editBtn' is declared but never used. Unused variables should start with a '_'. help: Consider removing this declaration.
+
+## typecheck
+> typecheck
+> tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json && tsc -p apps/web/tsconfig.json && tsc -p tsconfig.tests.json
+
+
+## build
+> build
+> tsc -p packages/kernel/tsconfig.json && tsc -p packages/ports/tsconfig.json && tsc -p apps/api/tsconfig.json
+
+
+## migration-check
+Reading config file '/home/claude/muslim-marriage-africa/code/apps/api/drizzle.config.ts'
+Everything's fine 🐶🔥

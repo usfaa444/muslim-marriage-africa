@@ -1,0 +1,232 @@
+
+> test:e2e
+> playwright test
+
+
+Running 222 tests using 5 workers
+
+  -    1 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /settings › has the one header, footer and bottom nav, with its section current
+  -    2 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /settings › fits every factory width with the footer above the bar
+  -    3 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current
+  -    4 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /profile-edit › fits every factory width with the footer above the bar
+  -    5 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current
+  -    6 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+  -    7 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /invitations › has the one header, footer and bottom nav, with its section current
+  -    8 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /invitations › fits every factory width with the footer above the bar
+  -    9 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /discussions › has the one header, footer and bottom nav, with its section current
+  -   10 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /discussions › fits every factory width with the footer above the bar
+  -   11 [mobile] › e2e/app-shell.spec.ts:66:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current
+  -   12 [mobile] › e2e/app-shell.spec.ts:92:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+  -   13 [mobile] › e2e/app-shell.spec.ts:109:3 › bottom nav navigation › each item opens its section, from the keyboard too
+  ✓   16 [mobile] › e2e/app-shell.spec.ts:145:1 › the landing page keeps its own header and footer (1.8s)
+  ✓   18 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /password-reset has the header and footer but no bottom nav (1.8s)
+  ✓   15 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /signup/identity has the header and footer but no bottom nav (2.0s)
+  ✓   17 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (1.9s)
+  -   21 [mobile] › e2e/blocked-list.spec.ts:98:3 › Membres bloqués (Story 8.6 follow-up) › from Paramètres: lists pseudonym and blurred photo, asks to confirm, then unblocks one member
+  -   22 [mobile] › e2e/blocked-list.spec.ts:152:3 › Membres bloqués (Story 8.6 follow-up) › shows the empty state, a load error with retry, the sign-in link on 401, and drops a Block already lifted
+  -   23 [mobile] › e2e/blocked-list.spec.ts:183:3 › Membres bloqués (Story 8.6 follow-up) › QA round 2: hostile, long and Arabic pseudonyms render as text and fit; the date is in Ouagadougou time
+  -   24 [mobile] › e2e/blocked-list.spec.ts:208:3 › Membres bloqués (Story 8.6 follow-up) › QA round 2: a failed DELETE (network, 500) keeps the row and says why; the retry works; signed out goes to sign-in
+  -   25 [mobile] › e2e/blocked-list.spec.ts:235:3 › Membres bloqués (Story 8.6 follow-up) › keyboard only: open the confirmation and unblock with the keyboard
+  -   26 [mobile] › e2e/blocked-list.spec.ts:253:3 › Membres bloqués (Story 8.6 follow-up) › fits every factory width, with the confirmation open
+  -   27 [mobile] › e2e/chat.spec.ts:200:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge
+  -   28 [mobile] › e2e/chat.spec.ts:222:3 › Discussions list (screen 20) › QA F5: a row for a member who is no longer available says « Profil indisponible » and has no link
+  -   29 [mobile] › e2e/chat.spec.ts:235:3 › Discussions list (screen 20) › QA F1: the row link is named by its visible words, with no aria-label and the icon kept out of the name
+  -   30 [mobile] › e2e/chat.spec.ts:247:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error
+  -   31 [mobile] › e2e/chat.spec.ts:263:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API)
+  -   32 [mobile] › e2e/chat.spec.ts:275:3 › Discussions list (screen 20) › fits every factory width
+  -   33 [mobile] › e2e/chat.spec.ts:289:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy
+  -   34 [mobile] › e2e/chat.spec.ts:314:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears
+  -   35 [mobile] › e2e/chat.spec.ts:342:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message
+  -   36 [mobile] › e2e/chat.spec.ts:359:3 › Chat thread (screen 21) › QA F3: a paused or ended conversation says so up front and the composer is disabled before any send
+  -   37 [mobile] › e2e/chat.spec.ts:373:3 › Chat thread (screen 21) › QA F4: a session that expires mid-thread offers « Se reconnecter » and keeps the draft for the next visit
+  -   38 [mobile] › e2e/chat.spec.ts:403:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log
+  -   39 [mobile] › e2e/chat.spec.ts:428:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s
+  -   40 [mobile] › e2e/chat.spec.ts:455:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer
+  -   41 [mobile] › e2e/chat.spec.ts:471:3 › Chat thread (screen 21) › a malformed thread id goes back to the list
+  -   42 [mobile] › e2e/chat.spec.ts:477:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload)
+  -   43 [mobile] › e2e/chat.spec.ts:512:3 › Chat thread (screen 21) › fits every factory width
+  -   44 [mobile] › e2e/invite-compose.spec.ts:104:3 › Invite compose (Stories 4.1, 4.2) › a Free member sees the remaining Invites, sends once, and the button locks
+  -   45 [mobile] › e2e/invite-compose.spec.ts:132:3 › Invite compose (Stories 4.1, 4.2) › the quota wall shows the Ouaga reset time when the day is used up, and blocks the send
+  -   46 [mobile] › e2e/invite-compose.spec.ts:144:3 › Invite compose (Stories 4.1, 4.2) › a QUOTA_EXCEEDED answer on send opens the quota wall
+  -   47 [mobile] › e2e/invite-compose.spec.ts:167:3 › Invite compose (Stories 4.1, 4.2) › no Profile Photo: the prompt to add one is shown, and a refused send keeps it
+  -   48 [mobile] › e2e/invite-compose.spec.ts:194:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: after her decline the send stays closed, with a quiet message (no resend)
+  -   49 [mobile] › e2e/invite-compose.spec.ts:218:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: when she already invited him, the send points to the inbox instead
+  -   50 [mobile] › e2e/invite-compose.spec.ts:242:3 › Invite compose (Stories 4.1, 4.2) › a Sister in free_unlimited sees unlimited Invites with no count and no pack offer
+  -   51 [mobile] › e2e/invite-compose.spec.ts:256:3 › Invite compose (Stories 4.1, 4.2) › an unavailable recipient shows one quiet message and no send button
+  -   52 [mobile] › e2e/invite-compose.spec.ts:264:3 › Invite compose (Stories 4.1, 4.2) › fits every required width with no horizontal scroll
+  -   53 [mobile] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell
+  -   54 [mobile] › e2e/invite-inbox.spec.ts:185:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-2: Sent shows pending, accepted and declined, and a declined row carries no guilt copy, receipt or timer
+  -   55 [mobile] › e2e/invite-inbox.spec.ts:206:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-1: accept posts once, then the row moves to Acceptées with the discussion link
+  -   56 [mobile] › e2e/invite-inbox.spec.ts:228:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-2: decline is quiet: one post, a short status, the row leaves Reçues, no confirmation or lecture
+  -   57 [mobile] › e2e/invite-inbox.spec.ts:253:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message
+  -   58 [mobile] › e2e/invite-inbox.spec.ts:269:3 › Invite inbox (Stories 4.4, 4.5) › the tabs work from the keyboard, and accept is reachable without a mouse
+  -   59 [mobile] › e2e/invite-inbox.spec.ts:289:3 › Invite inbox (Stories 4.4, 4.5) › a load failure shows the retry, and the retry loads the inbox
+  -   60 [mobile] › e2e/invite-inbox.spec.ts:304:3 › Invite inbox (Stories 4.4, 4.5) › when the city wraps under a long name, the « • » wraps with it on Envoyées and Acceptées
+  -   61 [mobile] › e2e/invite-inbox.spec.ts:345:3 › Invite inbox (Stories 4.4, 4.5) › fits every factory width on each tab
+  -   63 [mobile] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key
+  -   64 [mobile] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them
+  -   65 [mobile] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts
+  -   66 [mobile] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack
+  -   67 [mobile] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile
+  -   68 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px
+  -   69 [mobile] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px
+  -   70 [mobile] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button
+  -   71 [mobile] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen
+  -   72 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780
+  -   73 [mobile] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800
+  -   74 [mobile] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin
+  -   75 [mobile] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload
+  -   76 [mobile] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants
+  ✓   77 [mobile] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error (116ms)
+  ✓   78 [mobile] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page (147ms)
+  -   79 [mobile] › e2e/report-block.spec.ts:147:3 › Report / Block (screen 23) › AC 8.5-1 and AC 4.4-3: a Profile Report with « misrepresented marital status », Block on, reaches the API and shows the 24 h SLA
+  -   80 [mobile] › e2e/report-block.spec.ts:187:3 › Report / Block (screen 23) › AC 8.6: « Bloquer ce profil » blocks without a Report
+  -   81 [mobile] › e2e/report-block.spec.ts:201:3 › Report / Block (screen 23) › keyboard only: pick a reason, untick Block, and send with the keyboard
+  -   82 [mobile] › e2e/report-block.spec.ts:224:3 › Report / Block (screen 23) › shows the API message on a rate limit, the sign-in link on 401, and « Ce profil n'est pas disponible. » on 404
+  -   83 [mobile] › e2e/report-block.spec.ts:245:3 › Report / Block (screen 23) › fits every factory width
+  -   84 [mobile] › e2e/report-block.spec.ts:259:3 › Report / Block from the Chat thread (screen 21) › AC 8.5-1 from Chat: « Signaler ce message » on his bubble sends a message Report with the message id
+  ✓   14 [mobile] › e2e/app-shell.spec.ts:131:3 › gated page /auth has the header and footer but no bottom nav (2.5s)
+  -   86 [mobile] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width
+  ✓   19 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (2.1s)
+  ✓   20 [mobile] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (2.2s)
+  ✓   85 [mobile] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (1.9s)
+  -   88 [mobile] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width
+  -   90 [mobile] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width
+  -   92 [mobile] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width
+  ✓   87 [mobile] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.0s)
+  -   94 [mobile] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe
+  -   95 [mobile] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  ✓   62 [mobile] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (3.0s)
+  -   96 [mobile] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  ✓   89 [mobile] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (853ms)
+  -   99 [mobile] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home
+  -  100 [mobile] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓   91 [mobile] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (1.1s)
+  ✓   93 [mobile] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (1.1s)
+  ✓   97 [mobile] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (969ms)
+  -  101 [mobile] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides
+  -  102 [mobile] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1)
+  -  104 [mobile] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list
+  -  105 [mobile] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console
+  -  103 [mobile] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3)
+  -  108 [mobile] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose
+  -  109 [mobile] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409
+  ✓  106 [mobile] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (129ms)
+  -  112 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /settings › has the one header, footer and bottom nav, with its section current
+  -  113 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /settings › fits every factory width with the footer above the bar
+  -  114 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /profile-edit › has the one header, footer and bottom nav, with its section current
+  -  115 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /profile-edit › fits every factory width with the footer above the bar
+  -  116 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current
+  -  117 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /invitations/envoyer/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+  -  118 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /invitations › has the one header, footer and bottom nav, with its section current
+  -  119 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /invitations › fits every factory width with the footer above the bar
+  -  120 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /discussions › has the one header, footer and bottom nav, with its section current
+  -  121 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /discussions › fits every factory width with the footer above the bar
+  -  122 [desktop] › e2e/app-shell.spec.ts:66:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › has the one header, footer and bottom nav, with its section current
+  -  123 [desktop] › e2e/app-shell.spec.ts:92:5 › member page /discussions/01990000-0000-7000-8000-000000000099 › fits every factory width with the footer above the bar
+  -  124 [desktop] › e2e/app-shell.spec.ts:109:3 › bottom nav navigation › each item opens its section, from the keyboard too
+  -  110 [mobile] › e2e/staff-review.spec.ts:551:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  -  107 [mobile] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console
+  ✓   98 [mobile] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.5s)
+  -  111 [mobile] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8)
+  ✓  129 [desktop] › e2e/app-shell.spec.ts:145:1 › the landing page keeps its own header and footer (1.1s)
+  ✓  128 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /password-reset has the header and footer but no bottom nav (1.4s)
+  ✓  127 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /signup/identity has the header and footer but no bottom nav (1.4s)
+  ✓  126 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /signup/pseudonym has the header and footer but no bottom nav (1.5s)
+  -  133 [desktop] › e2e/blocked-list.spec.ts:98:3 › Membres bloqués (Story 8.6 follow-up) › from Paramètres: lists pseudonym and blurred photo, asks to confirm, then unblocks one member
+  -  134 [desktop] › e2e/blocked-list.spec.ts:152:3 › Membres bloqués (Story 8.6 follow-up) › shows the empty state, a load error with retry, the sign-in link on 401, and drops a Block already lifted
+  -  135 [desktop] › e2e/blocked-list.spec.ts:183:3 › Membres bloqués (Story 8.6 follow-up) › QA round 2: hostile, long and Arabic pseudonyms render as text and fit; the date is in Ouagadougou time
+  -  136 [desktop] › e2e/blocked-list.spec.ts:208:3 › Membres bloqués (Story 8.6 follow-up) › QA round 2: a failed DELETE (network, 500) keeps the row and says why; the retry works; signed out goes to sign-in
+  -  137 [desktop] › e2e/blocked-list.spec.ts:235:3 › Membres bloqués (Story 8.6 follow-up) › keyboard only: open the confirmation and unblock with the keyboard
+  -  138 [desktop] › e2e/blocked-list.spec.ts:253:3 › Membres bloqués (Story 8.6 follow-up) › fits every factory width, with the confirmation open
+  -  139 [desktop] › e2e/chat.spec.ts:200:3 › Discussions list (screen 20) › AC 5.1-1: lists each Chat with the other member, the last message and a link, with no hold badge
+  -  140 [desktop] › e2e/chat.spec.ts:222:3 › Discussions list (screen 20) › QA F5: a row for a member who is no longer available says « Profil indisponible » and has no link
+  -  141 [desktop] › e2e/chat.spec.ts:235:3 › Discussions list (screen 20) › QA F1: the row link is named by its visible words, with no aria-label and the icon kept out of the name
+  -  142 [desktop] › e2e/chat.spec.ts:247:3 › Discussions list (screen 20) › shows the empty state with a way to the invitations, and a retry after a load error
+  -  143 [desktop] › e2e/chat.spec.ts:263:3 › Discussions list (screen 20) › a delivered event refreshes the list (ids only, the preview comes from the API)
+  -  144 [desktop] › e2e/chat.spec.ts:275:3 › Discussions list (screen 20) › fits every factory width
+  -  145 [desktop] › e2e/chat.spec.ts:289:3 › Chat thread (screen 21) › AC 5.1-1: the thread opens within 4 s with delivered bubbles, day separators, and no scan or hold copy
+  -  146 [desktop] › e2e/chat.spec.ts:314:3 › Chat thread (screen 21) › AC 5.2-1: send posts kind text once, the bubble appears as delivered at once, and the box clears
+  -  147 [desktop] › e2e/chat.spec.ts:342:3 › Chat thread (screen 21) › a refused send keeps the text and shows the API message; a network failure shows the connection message
+  -  148 [desktop] › e2e/chat.spec.ts:359:3 › Chat thread (screen 21) › QA F3: a paused or ended conversation says so up front and the composer is disabled before any send
+  -  149 [desktop] › e2e/chat.spec.ts:373:3 › Chat thread (screen 21) › QA F4: a session that expires mid-thread offers « Se reconnecter » and keeps the draft for the next visit
+  -  150 [desktop] › e2e/chat.spec.ts:403:3 › Chat thread (screen 21) › AC 5.2-1 realtime: a delivered event fetches only the new message and shows it in the log
+  -  151 [desktop] › e2e/chat.spec.ts:428:3 › Chat thread (screen 21) › AC 5.1-2: typing shows « <pseudonyme> écrit… » and clears, and the page emits typing at most every 1.5 s
+  -  152 [desktop] › e2e/chat.spec.ts:455:3 › Chat thread (screen 21) › a conversation that is not mine says it does not exist; an unavailable member disables the composer
+  -  153 [desktop] › e2e/chat.spec.ts:471:3 › Chat thread (screen 21) › a malformed thread id goes back to the list
+  -  154 [desktop] › e2e/chat.spec.ts:477:3 › Chat thread (screen 21) › AC 5.1-1 / NFR-005 on a throttled 3G profile: the thread opens within 4 s and a send acknowledges within 2 s (first-party payload)
+  -  155 [desktop] › e2e/chat.spec.ts:512:3 › Chat thread (screen 21) › fits every factory width
+  -  156 [desktop] › e2e/invite-compose.spec.ts:104:3 › Invite compose (Stories 4.1, 4.2) › a Free member sees the remaining Invites, sends once, and the button locks
+  -  157 [desktop] › e2e/invite-compose.spec.ts:132:3 › Invite compose (Stories 4.1, 4.2) › the quota wall shows the Ouaga reset time when the day is used up, and blocks the send
+  -  158 [desktop] › e2e/invite-compose.spec.ts:144:3 › Invite compose (Stories 4.1, 4.2) › a QUOTA_EXCEEDED answer on send opens the quota wall
+  -  159 [desktop] › e2e/invite-compose.spec.ts:167:3 › Invite compose (Stories 4.1, 4.2) › no Profile Photo: the prompt to add one is shown, and a refused send keeps it
+  -  160 [desktop] › e2e/invite-compose.spec.ts:194:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: after her decline the send stays closed, with a quiet message (no resend)
+  -  161 [desktop] › e2e/invite-compose.spec.ts:218:3 › Invite compose (Stories 4.1, 4.2) › Story 4.5: when she already invited him, the send points to the inbox instead
+  -  162 [desktop] › e2e/invite-compose.spec.ts:242:3 › Invite compose (Stories 4.1, 4.2) › a Sister in free_unlimited sees unlimited Invites with no count and no pack offer
+  -  163 [desktop] › e2e/invite-compose.spec.ts:256:3 › Invite compose (Stories 4.1, 4.2) › an unavailable recipient shows one quiet message and no send button
+  -  164 [desktop] › e2e/invite-compose.spec.ts:264:3 › Invite compose (Stories 4.1, 4.2) › fits every required width with no horizontal scroll
+  -  165 [desktop] › e2e/invite-inbox.spec.ts:149:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-1: received rows show marital status and polygamy intent before accept, inside the shared shell
+  -  166 [desktop] › e2e/invite-inbox.spec.ts:185:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.4-2: Sent shows pending, accepted and declined, and a declined row carries no guilt copy, receipt or timer
+  -  167 [desktop] › e2e/invite-inbox.spec.ts:206:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-1: accept posts once, then the row moves to Acceptées with the discussion link
+  -  168 [desktop] › e2e/invite-inbox.spec.ts:228:3 › Invite inbox (Stories 4.4, 4.5) › AC 4.5-2: decline is quiet: one post, a short status, the row leaves Reçues, no confirmation or lecture
+  -  169 [desktop] › e2e/invite-inbox.spec.ts:253:3 › Invite inbox (Stories 4.4, 4.5) › a sender who is no longer available shows only the quiet decline; a refused accept reloads with its message
+  -  170 [desktop] › e2e/invite-inbox.spec.ts:269:3 › Invite inbox (Stories 4.4, 4.5) › the tabs work from the keyboard, and accept is reachable without a mouse
+  -  171 [desktop] › e2e/invite-inbox.spec.ts:289:3 › Invite inbox (Stories 4.4, 4.5) › a load failure shows the retry, and the retry loads the inbox
+  -  172 [desktop] › e2e/invite-inbox.spec.ts:304:3 › Invite inbox (Stories 4.4, 4.5) › when the city wraps under a long name, the « • » wraps with it on Envoyées and Acceptées
+  -  173 [desktop] › e2e/invite-inbox.spec.ts:345:3 › Invite inbox (Stories 4.4, 4.5) › fits every factory width on each tab
+  ✓  174 [desktop] › e2e/known-issues.spec.ts:28:3 › known issues › tolerates the storage-access message only from Google's reCAPTCHA iframes for the test key (7ms)
+  ✓  175 [desktop] › e2e/known-issues.spec.ts:42:3 › known issues › tolerates Google's reCAPTCHA stylesheet and report-only framing messages, and nothing near them (2ms)
+  ✓  176 [desktop] › e2e/known-issues.spec.ts:61:3 › known issues › tolerates failed network requests only to Google's reCAPTCHA hosts (2ms)
+  ✓  177 [desktop] › e2e/known-issues.spec.ts:86:3 › known issues › never tolerates the sign-in gate 401 against a running stack (0ms)
+  -  178 [desktop] › e2e/profile-edit-flow.spec.ts:233:3 › profile edit and the PIN screen › turning the PIN on saves unsaved edits, sets a six-digit PIN and returns to the profile
+  -  179 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 390 px
+  -  180 [desktop] › e2e/profile-edit-flow.spec.ts:270:5 › profile edit and the PIN screen › a refused save keeps the member on the profile, PIN off, with the reason on screen beside the switch at 1440 px
+  -  181 [desktop] › e2e/profile-edit-flow.spec.ts:302:3 › profile edit and the PIN screen › a PIN saved with four digits before the six-digit rule still unlocks with the unlock button
+  -  182 [desktop] › e2e/profile-edit-flow.spec.ts:315:3 › profile edit and the PIN screen › a wrong PIN and the lockout are said on the PIN screen
+  -  183 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 360x780
+  -  184 [desktop] › e2e/profile-edit-flow.spec.ts:348:5 › profile edit and the PIN screen › the PIN screen brings what it says into view at 1280x800
+  -  185 [desktop] › e2e/profile-edit-flow.spec.ts:385:3 › profile edit and the PIN screen › the PIN screen never returns to another origin
+  -  186 [desktop] › e2e/profile-edit-flow.spec.ts:411:3 › profile edit photos › a photo whose signed URL expired is read again and shown without a reload
+  -  187 [desktop] › e2e/profile-edit-flow.spec.ts:424:3 › profile edit photos › a page restored from the back/forward cache reads fresh photo grants
+  ✓  188 [desktop] › e2e/profile-edit-flow.spec.ts:444:3 › web image screens › screens read from the image answer without a server error (113ms)
+  ✓  125 [desktop] › e2e/app-shell.spec.ts:131:3 › gated page /auth has the header and footer but no bottom nav (1.8s)
+  -  190 [desktop] › e2e/report-block.spec.ts:147:3 › Report / Block (screen 23) › AC 8.5-1 and AC 4.4-3: a Profile Report with « misrepresented marital status », Block on, reaches the API and shows the 24 h SLA
+  -  191 [desktop] › e2e/report-block.spec.ts:187:3 › Report / Block (screen 23) › AC 8.6: « Bloquer ce profil » blocks without a Report
+  -  192 [desktop] › e2e/report-block.spec.ts:201:3 › Report / Block (screen 23) › keyboard only: pick a reason, untick Block, and send with the keyboard
+  -  193 [desktop] › e2e/report-block.spec.ts:224:3 › Report / Block (screen 23) › shows the API message on a rate limit, the sign-in link on 401, and « Ce profil n'est pas disponible. » on 404
+  -  194 [desktop] › e2e/report-block.spec.ts:245:3 › Report / Block (screen 23) › fits every factory width
+  -  195 [desktop] › e2e/report-block.spec.ts:259:3 › Report / Block from the Chat thread (screen 21) › AC 8.5-1 from Chat: « Signaler ce message » on his bubble sends a message Report with the message id
+  ✓  189 [desktop] › e2e/profile-edit-flow.spec.ts:452:3 › web image screens › the image ignores stub cookies: a forged staff cookie gets no staff page (136ms)
+  ✓  130 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /auth gets the sign-in form with no browser gate read (2.1s)
+  ✓  131 [desktop] › e2e/auth-entry.spec.ts:15:3 › a signed-out visitor opening /decouvrir gets the sign-in form with no browser gate read (2.1s)
+  ✓  197 [desktop] › e2e/smoke.spec.ts:15:5 › public page / › fits every factory width (1.8s)
+  ✓  196 [desktop] › e2e/smoke.spec.ts:7:5 › public page / › renders without console errors and passes axe AA (2.0s)
+  ✓  201 [desktop] › e2e/smoke.spec.ts:15:5 › public page /signup › fits every factory width (722ms)
+  ✓  132 [desktop] › e2e/auth-entry.spec.ts:27:1 › a sign-in page restored from the back-forward cache reloads so the server guard decides (3.0s)
+  ✓  200 [desktop] › e2e/smoke.spec.ts:7:5 › public page /signup › renders without console errors and passes axe AA (1.2s)
+  ✓  198 [desktop] › e2e/smoke.spec.ts:7:5 › public page /auth › renders without console errors and passes axe AA (2.3s)
+  -  205 [desktop] › e2e/staff-shell.spec.ts:58:3 › staff shell › the staff home shows the badge, no member nav, and passes axe
+  ✓  202 [desktop] › e2e/smoke.spec.ts:7:5 › public page /password-reset › renders without console errors and passes axe AA (1.7s)
+  ✓  203 [desktop] › e2e/smoke.spec.ts:15:5 › public page /password-reset › fits every factory width (1.7s)
+  ✓  204 [desktop] › e2e/smoke.spec.ts:26:1 › a signed-out visitor is sent from Discover to sign-in (1.4s)
+  -  206 [desktop] › e2e/staff-shell.spec.ts:70:3 › staff shell › two panes from 768 px, the queue above the case below, no horizontal scroll
+  -  207 [desktop] › e2e/staff-shell.spec.ts:78:3 › staff shell › the visit-signals page carries the badge and no member nav at every width
+  -  210 [desktop] › e2e/staff-shell.spec.ts:116:3 › staff shell › a member stub cookie is sent away from the staff home
+  -  211 [desktop] › e2e/staff-shell.spec.ts:129:3 › staff first sign-in on a full stack › new password, QR enrollment, a wrong then a valid code, then no member chrome
+  ✓  199 [desktop] › e2e/smoke.spec.ts:15:5 › public page /auth › fits every factory width (3.6s)
+  ✓  209 [desktop] › e2e/staff-shell.spec.ts:107:3 › staff shell › a leftover member session cookie does not send the staff sign-in to /pin or the member flow (1.1s)
+  -  212 [desktop] › e2e/staff-review.spec.ts:179:3 › staff review console (web-only, synthetic data) › a Moderator opens a case, views evidence, unblurs with a reason and decides
+  -  213 [desktop] › e2e/staff-review.spec.ts:273:3 › staff review console (web-only, synthetic data) › a stale decision says so in an alert, in view, and reloads the case (QA round 1, F1)
+  -  214 [desktop] › e2e/staff-review.spec.ts:324:3 › staff review console (web-only, synthetic data) › an Operator sees the counts only, with no case list
+  -  215 [desktop] › e2e/staff-review.spec.ts:335:3 › staff review console (web-only, synthetic data) › the staff home links to the console
+  -  216 [desktop] › e2e/staff-review.spec.ts:350:3 › staff review console (web-only, synthetic data) › a member stub cookie is sent away from the console
+  -  218 [desktop] › e2e/staff-review.spec.ts:413:3 › contrast sweep of the touched states (web-only, synthetic data) › /id-liveness: ID and selfie steps with a pose, both refusal notices, held, expired and unavailable pose
+  -  219 [desktop] › e2e/staff-review.spec.ts:466:3 › contrast sweep of the touched states (web-only, synthetic data) › /staff/revue: queue, case, Operator view and the alert after a 409
+  ✓  217 [desktop] › e2e/staff-review.spec.ts:344:3 › staff review console (web-only, synthetic data) › a signed-out visitor is sent to the staff sign-in (139ms)
+  -  220 [desktop] › e2e/staff-review.spec.ts:551:3 › staff review console on a full stack › capture to publish: random pose, a refused then approved selfie, unblur with a reason, profile review, and an Operator sees counts only
+  ✓  208 [desktop] › e2e/staff-shell.spec.ts:91:3 › staff shell › the staff sign-in page is labelled, badged and fits every width (1.7s)
+  -  221 [desktop] › e2e/staff-review.spec.ts:296:3 › staff review console (web-only, synthetic data) › the case shows French values and labels replaced captures (QA round 1, F2 and F3)
+  -  222 [desktop] › e2e/staff-review.spec.ts:311:3 › staff review console (web-only, synthetic data) › a queue that fails to load says so in French (QA round 1, F8)
+
+  178 skipped
+  44 passed (16.4s)
